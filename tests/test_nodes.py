@@ -1,0 +1,894 @@
+import importlib.util
+import io
+import json
+import os
+import sys
+import tempfile
+import unittest
+from contextlib import redirect_stderr
+from pathlib import Path
+from unittest.mock import patch
+
+import requests
+import torch
+
+
+COMFYUI_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(COMFYUI_ROOT))
+NODES_PATH = Path(__file__).resolve().parents[1] / "nodes.py"
+SPEC = importlib.util.spec_from_file_location("minimax_h3_prompt_enhancer_nodes", NODES_PATH)
+nodes = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(nodes)
+
+SMOKE_SPEC = importlib.util.spec_from_file_location("minimax_h3_prompt_enhancer_live_smoke", NODES_PATH.parent / "live_smoke.py")
+live_smoke = importlib.util.module_from_spec(SMOKE_SPEC)
+SMOKE_SPEC.loader.exec_module(live_smoke)
+
+
+class FakeResponse:
+    def __init__(self, status_code=200, payload=None, text="", headers=None):
+        self.status_code = status_code
+        self.payload = payload
+        self.text = text
+        self.headers = headers or {}
+
+    def json(self):
+        if isinstance(self.payload, Exception):
+            raise self.payload
+        return self.payload
+
+
+class FakeSession:
+    def __init__(self, completion, chat_status=200, chat_payload=None, chat_exception=None, upload_status=200):
+        self.completion = completion
+        self.chat_status = chat_status
+        self.chat_payload = chat_payload
+        self.chat_exception = chat_exception
+        self.upload_status = upload_status
+        self.uploads = []
+        self.upload_urls = []
+        self.chat_requests = []
+        self.chat_urls = []
+        self.closed = False
+
+    def post(self, url, **kwargs):
+        if "files" in kwargs:
+            filename, data, mime_type = kwargs["files"]["file"]
+            self.uploads.append((filename, data, mime_type, kwargs))
+            self.upload_urls.append(url)
+            if self.upload_status != 200:
+                return FakeResponse(self.upload_status, {"error": {"message": "upload failed"}})
+            return FakeResponse(200, {"url": f"https://assets.example/{filename}", "expires_in": 86400})
+
+        if "json" in kwargs:
+            self.chat_requests.append(kwargs)
+            self.chat_urls.append(url)
+            if self.chat_exception:
+                raise self.chat_exception
+            if self.chat_status != 200:
+                return FakeResponse(self.chat_status, self.chat_payload or {"error": {"message": "chat failed"}})
+            payload = self.chat_payload
+            if payload is None:
+                payload = {
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {"content": self.completion},
+                    }]
+                }
+            return FakeResponse(200, payload)
+
+        raise AssertionError(f"Unexpected URL: {url}")
+
+    def close(self):
+        self.closed = True
+
+
+class FakeVideo:
+    def __init__(self, data=b"complete-video-stream", duration=3.0, container="mp4"):
+        self.data = data
+        self.duration = duration
+        self.container = container
+
+    def get_stream_source(self):
+        return io.BytesIO(self.data)
+
+    def get_duration(self):
+        return self.duration
+
+    def get_container_format(self):
+        return self.container
+
+
+def basic_output(task_type="T2VA", duration=5, shots=1):
+    description = "[Shot 1] A medium shot shows a cyclist crossing a quiet street under soft daylight."
+    if shots > 1:
+        description += " [Shot 2] At 00:03.000, the camera cuts to the bicycle wheels rolling over wet pavement."
+    fields = (
+        f"integrated_multimodal_description: {description}\n\n"
+        "overall_soundscape: Light traffic and bicycle-chain sounds continue beneath distant birds.\n\n"
+        "non_diegetic_music: N/A"
+    )
+    if task_type == "T2VA":
+        return fields
+    if task_type == "I2VA":
+        return f"{nodes.I2VA_INSTRUCTION}\n\n{fields}"
+    if task_type == "FL2VA":
+        return (
+            "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with "
+            f"the 0.00-second mark of the target video; Picture 2 (from Shot {shots}) aligns with "
+            f"the {duration:.2f}-second mark of the target video.\n\n{fields}"
+        )
+    if task_type == "L2VA":
+        return (
+            "How the reference pictures align with the target video — "
+            f"<Picture 1> (from [Shot {shots}]) aligns with the {duration:.2f}-second mark of the target video.\n\n{fields}"
+        )
+    raise AssertionError(task_type)
+
+
+def basic_output_with_word_count(words=180):
+    description = "[Shot 1] " + " ".join("detail" for _ in range(words - 2))
+    return (
+        f"integrated_multimodal_description: {description}\n\n"
+        "overall_soundscape: Quiet room tone.\n\n"
+        "non_diegetic_music: N/A"
+    )
+
+
+def reference_output(include_video=True):
+    video_definition = "\n<Video 1> supplies the source action order and cut rhythm." if include_video else ""
+    video_retention = "\n<Video 1> (action and cut structure): weak_reference - its temporal order guides the target sequence." if include_video else ""
+    return (
+        "subject_definitions:\n"
+        "<Picture 1> is the visual identity and composition reference for <Subject 1>."
+        f"{video_definition}\n\n"
+        "summary:\n"
+        "[reference generation] The target video uses <Picture 1> for the subject and follows the referenced motion structure.\n\n"
+        "retention_analysis:\n"
+        "<Picture 1> ([Shot 1] identity reference): fully_preserved - the observable subject and composition are retained."
+        f"{video_retention}\n\n"
+        "detailed_description:\n"
+        "The target video uses a natural cinematic style with soft daylight.\n"
+        "[Shot 1] <Subject 1> appears in the composition established by <Picture 1> and performs the referenced action smoothly.\n\n"
+        "overall_soundscape:\n"
+        "Quiet environmental ambience and soft movement sounds continue throughout.\n\n"
+        "non_diegetic_music:\n"
+        "N/A"
+    )
+
+
+class PromptEnhancerTests(unittest.TestCase):
+    def run_enhancer(self, session, **kwargs):
+        defaults = {
+            "prompt": "A cyclist crosses the street.",
+            "task_type": "T2VA",
+            "duration_seconds": 5,
+            "rewrite_mode": "balanced",
+            "description_word_target": 0,
+            "session": session,
+        }
+        defaults.update(kwargs)
+        with patch.dict(os.environ, {"SEEDANCE_API_KEY": "secret-key"}):
+            return nodes.enhance_prompt(**defaults)
+
+    def test_schema_has_one_model_free_string_output_and_native_autogrow_media(self):
+        schema = nodes.MiniMaxH3PromptEnhancer.define_schema()
+        input_names = [item.id for item in schema.inputs]
+        self.assertEqual(schema.node_id, "MiniMaxH3PromptEnhancerT8")
+        self.assertNotIn("model", input_names)
+        self.assertIn("api_key", input_names)
+        self.assertIn("output_language", input_names)
+        self.assertIn("prompt_mode", input_names)
+        self.assertIn("reference_template", input_names)
+        self.assertIn("api_mode", input_names)
+        self.assertIn("openai_base_url", input_names)
+        self.assertIn("openai_upload_url", input_names)
+        self.assertIn("seed", input_names)
+        self.assertLess(input_names.index("api_key"), input_names.index("output_language"))
+        self.assertEqual([output.display_name for output in schema.outputs], ["enhanced_prompt"])
+        images = next(item for item in schema.inputs if item.id == "reference_images")
+        videos = next(item for item in schema.inputs if item.id == "reference_videos")
+        api_key = next(item for item in schema.inputs if item.id == "api_key")
+        reference_context = next(item for item in schema.inputs if item.id == "reference_context")
+        constraints = next(item for item in schema.inputs if item.id == "constraints")
+        output_language = next(item for item in schema.inputs if item.id == "output_language")
+        prompt_mode = next(item for item in schema.inputs if item.id == "prompt_mode")
+        task_type = next(item for item in schema.inputs if item.id == "task_type")
+        api_mode = next(item for item in schema.inputs if item.id == "api_mode")
+        seed = next(item for item in schema.inputs if item.id == "seed")
+        self.assertEqual((images.template.min, images.template.max), (0, 9))
+        self.assertEqual((videos.template.min, videos.template.max), (0, 3))
+        self.assertTrue(api_key.socketless)
+        self.assertTrue(reference_context.advanced)
+        self.assertTrue(constraints.advanced)
+        self.assertEqual(output_language.default, "中文")
+        self.assertEqual(prompt_mode.default, "官方增强")
+        self.assertEqual(task_type.default, "T2VA（文生音视频）")
+        self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
+        self.assertEqual(api_mode.default, nodes.SEEDANCE_API_MODE)
+        self.assertTrue(seed.optional)
+        self.assertEqual((seed.default, seed.min, seed.max), (0, 0, 0xffffffffffffffff))
+        self.assertTrue(seed.control_after_generate)
+
+    def test_frontend_masks_api_key_and_has_signup_button(self):
+        source = (NODES_PATH.parent / "web" / "js" / "minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")
+        self.assertIn('input.type = "password"', source)
+        self.assertIn("💾 保存到工作流", source)
+        self.assertIn('clear.textContent = "清空"', source)
+        self.assertIn("node.t8CommitApiKey = commit", source)
+        self.assertIn("node.graph?.change?.()", source)
+        self.assertIn("this.t8CommitApiKey?.()", source)
+        self.assertIn("https://api.seedance.nz/sign-up?aff=5f4w", source)
+        self.assertIn("window.open", source)
+        self.assertIn("⚙️ 高级选项（可选）", source)
+        self.assertIn("const advancedWidgets = [referenceContextWidget, constraintsWidget]", source)
+        self.assertIn("API_KEY_PATTERN.test(value)", source)
+        self.assertIn('T2VA: "T2VA（文生音视频）"', source)
+        self.assertIn('const OPENAI_API_MODE = "OpenAI兼容接口（备用）"', source)
+        self.assertIn("addApiModeBehavior", source)
+        self.assertIn("▶ 运行提示词优化", source)
+        self.assertIn("app.queuePrompt(0, 1, [String(this.id)])", source)
+        self.assertIn('mode === "参考模板融合"', source)
+        self.assertIn('widget.name === "reference_template"', source)
+        self.assertIn('normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文")', source)
+        self.assertIn('normalizeChoice(promptModeWidget, ["官方增强", "参考模板融合"], "官方增强")', source)
+        self.assertIn("LEGACY_UI_VALUES.has(String(templateWidget.value", source)
+        self.assertIn("SERIALIZED_WIDGET_NAMES.map", source)
+        self.assertIn("nodeType.prototype.onSerialize", source)
+        self.assertIn("beforeResize()", source)
+        self.assertIn("afterResize(resizedNode)", source)
+        self.assertIn('delete secureWidget.width', source)
+        self.assertIn('"control_after_generate"', source)
+        self.assertIn('seedControlWidget.label = "种子状态（运行后）"', source)
+        self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
+        self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
+
+    def test_example_workflow_is_importable_and_contains_no_api_key(self):
+        path = NODES_PATH.parent / "example" / "minimax_h3_prompt_enhancer_example.json"
+        source = path.read_text(encoding="utf-8")
+        workflow = json.loads(source)
+        node = workflow["nodes"][0]
+        self.assertEqual(node["type"], "MiniMaxH3PromptEnhancerT8")
+        self.assertEqual(len(node["widgets_values"]), 16)
+        self.assertEqual(node["widgets_values"][1], "T2VA（文生音视频）")
+        self.assertEqual(node["widgets_values"][5:8], ["中文", "官方增强", nodes.SEEDANCE_API_MODE])
+        self.assertEqual(node["widgets_values"][-2:], [0, "randomize"])
+        self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
+
+    def test_output_language_rules_and_length_units_reach_the_model(self):
+        chinese_session = FakeSession(basic_output())
+        self.run_enhancer(chinese_session, description_word_target=200)
+        chinese_messages = chinese_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("Output language: Simplified Chinese", chinese_messages[0]["content"])
+        self.assertIn("Selected output language: 中文", chinese_messages[1]["content"])
+        self.assertIn("approximately 200 Chinese characters", chinese_messages[1]["content"])
+
+        english_session = FakeSession(basic_output())
+        self.run_enhancer(english_session, output_language="English", description_word_target=200)
+        english_messages = english_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("Output language: English", english_messages[0]["content"])
+        self.assertIn("approximately 200 English words", english_messages[1]["content"])
+
+        legacy_session = FakeSession(basic_output())
+        self.run_enhancer(legacy_session, output_language="", prompt_mode="")
+        legacy_messages = legacy_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("Output language: Simplified Chinese", legacy_messages[0]["content"])
+        self.assertIn("Prompt construction mode: 官方增强", legacy_messages[1]["content"])
+
+    def test_reference_template_mode_requires_and_sends_template(self):
+        missing_session = FakeSession(basic_output())
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "reference_template is required"):
+            self.run_enhancer(missing_session, prompt_mode="参考模板融合")
+        self.assertEqual(missing_session.chat_requests, [])
+
+        legacy_session = FakeSession(basic_output())
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "reference_template is required"):
+            self.run_enhancer(
+                legacy_session,
+                prompt_mode="参考模板融合",
+                reference_template="打开 Seedance 注册页面",
+            )
+        self.assertEqual(legacy_session.chat_requests, [])
+
+        template = "[镜头1] 水墨滴落；[镜头2] 高频快切；最后收束为纯白背景。"
+        reference_session = FakeSession(basic_output())
+        self.run_enhancer(
+            reference_session,
+            prompt_mode="参考模板融合",
+            reference_template=template,
+        )
+        reference_messages = reference_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("reference-template fusion", reference_messages[0]["content"])
+        self.assertIn("Compress, merge, or redesign template beats", reference_messages[0]["content"])
+        self.assertIn(template, reference_messages[1]["content"])
+
+        official_session = FakeSession(basic_output())
+        self.run_enhancer(
+            official_session,
+            prompt_mode="官方增强",
+            reference_template=template,
+        )
+        self.assertNotIn(template, official_session.chat_requests[0]["json"]["messages"][1]["content"])
+
+    def test_fixed_model_and_mode_temperature_mapping(self):
+        for mode, temperature in nodes.MODE_TEMPERATURES.items():
+            with self.subTest(mode=mode):
+                session = FakeSession(basic_output())
+                self.run_enhancer(session, rewrite_mode=mode)
+                request = session.chat_requests[0]
+                self.assertEqual(request["json"]["model"], "bytedance/doubao-seed-evolving")
+                self.assertEqual(request["json"]["temperature"], temperature)
+                self.assertFalse(request["json"]["stream"])
+
+    def test_seed_reaches_the_prompt_as_a_variation_marker_not_an_undocumented_api_field(self):
+        first_session = FakeSession(basic_output())
+        self.run_enhancer(first_session, seed=123456)
+        first_request = first_session.chat_requests[0]["json"]
+        self.assertNotIn("seed", first_request)
+        self.assertIn("Variation seed: 123456", first_request["messages"][1]["content"])
+        self.assertIn("Never print it in the result", first_request["messages"][1]["content"])
+
+        second_session = FakeSession(basic_output())
+        self.run_enhancer(second_session, seed=654321)
+        self.assertNotEqual(
+            first_request["messages"][1]["content"],
+            second_session.chat_requests[0]["json"]["messages"][1]["content"],
+        )
+
+    def test_labeled_task_type_is_normalized_to_the_fixed_h3_contract(self):
+        session = FakeSession(basic_output())
+        result = self.run_enhancer(session, task_type="T2VA（文生音视频）")
+        self.assertEqual(result, basic_output())
+        self.assertIn("H3 task type: T2VA", session.chat_requests[0]["json"]["messages"][1]["content"])
+
+    def test_openai_compatible_mode_uses_custom_chat_url_and_fixed_model(self):
+        session = FakeSession(basic_output())
+        with patch.dict(os.environ, {}, clear=True):
+            result = nodes.enhance_prompt(
+                prompt="A cyclist crosses the street.",
+                api_key="compatible-key",
+                api_mode=nodes.OPENAI_API_MODE,
+                openai_base_url="https://gateway.example/v1",
+                session=session,
+            )
+        self.assertEqual(result, basic_output())
+        self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
+        self.assertEqual(session.chat_requests[0]["json"]["model"], nodes.MODEL_ID)
+        self.assertEqual(session.chat_requests[0]["headers"]["Authorization"], "Bearer compatible-key")
+
+    def test_openai_compatible_media_uses_explicit_upload_contract(self):
+        session = FakeSession(basic_output("I2VA"))
+        with patch.dict(os.environ, {}, clear=True):
+            nodes.enhance_prompt(
+                prompt="A cyclist crosses the street.",
+                task_type="I2VA（首帧图生音视频）",
+                first_frame=torch.zeros((1, 1, 1, 3)),
+                api_key="compatible-key",
+                api_mode=nodes.OPENAI_API_MODE,
+                openai_base_url="https://gateway.example",
+                openai_upload_url="https://uploads.example/media",
+                session=session,
+            )
+        self.assertEqual(session.upload_urls, ["https://uploads.example/media"])
+        self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
+        parts = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url"])
+
+    def test_openai_compatible_media_requires_explicit_upload_url(self):
+        session = FakeSession(basic_output("I2VA"))
+        with patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(nodes.PromptEnhancerError, "openai_upload_url"):
+            nodes.enhance_prompt(
+                prompt="A cyclist crosses the street.",
+                task_type="I2VA",
+                first_frame=torch.zeros((1, 1, 1, 3)),
+                api_key="compatible-key",
+                api_mode=nodes.OPENAI_API_MODE,
+                openai_base_url="https://gateway.example/v1",
+                session=session,
+            )
+        self.assertEqual(session.uploads, [])
+        self.assertEqual(session.chat_requests, [])
+
+    def test_openai_compatible_ref2va_keeps_complete_video_url_part(self):
+        session = FakeSession(reference_output())
+        with patch.dict(os.environ, {}, clear=True):
+            nodes.enhance_prompt(
+                prompt="Transfer the referenced action to the pictured subject.",
+                task_type="Ref2VA（参考图/视频生音视频）",
+                reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
+                reference_videos={"reference_video_0": FakeVideo()},
+                api_key="compatible-key",
+                api_mode=nodes.OPENAI_API_MODE,
+                openai_base_url="https://gateway.example/v1/chat/completions",
+                openai_upload_url="https://uploads.example/media",
+                session=session,
+            )
+        self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
+        self.assertEqual(session.upload_urls, ["https://uploads.example/media", "https://uploads.example/media"])
+        parts = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url", "text", "video_url"])
+
+    def test_node_api_key_overrides_environment_key(self):
+        session = FakeSession(basic_output())
+        self.run_enhancer(session, api_key="node-key")
+        self.assertEqual(session.chat_requests[0]["headers"]["Authorization"], "Bearer node-key")
+
+    def test_legacy_workflow_key_and_button_values_are_migrated_before_request(self):
+        session = FakeSession(basic_output())
+        migrated_key = "sk-" + "legacy-workflow-key-1234567890"
+        with patch.dict(os.environ, {}, clear=True):
+            result = nodes.enhance_prompt(
+                prompt="A cyclist crosses the street.",
+                reference_context=migrated_key,
+                constraints="收起",
+                api_key="打开 Seedance 注册页面",
+                session=session,
+            )
+        self.assertEqual(result, basic_output())
+        self.assertEqual(session.chat_requests[0]["headers"]["Authorization"], f"Bearer {migrated_key}")
+        user_content = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertNotIn(migrated_key, user_content)
+        self.assertNotIn("收起", user_content)
+
+    def test_legacy_button_value_is_cleared_from_openai_compatible_url(self):
+        session = FakeSession(basic_output())
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "requires openai_base_url"):
+            self.run_enhancer(
+                session,
+                api_mode=nodes.OPENAI_API_MODE,
+                api_key="test-key",
+                openai_base_url="提交当前工作流",
+            )
+        self.assertEqual(session.chat_requests, [])
+
+    def test_api_key_like_secret_inside_prompt_fields_fails_before_network(self):
+        session = FakeSession(basic_output())
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "Remove the API-key-like secret"):
+            self.run_enhancer(
+                session,
+                prompt_mode="参考模板融合",
+                reference_template="镜头模板中误粘贴 " + "sk-" + "secret-value-1234567890 请删除",
+            )
+        self.assertEqual(session.chat_requests, [])
+
+    def test_existing_positional_enhance_prompt_call_remains_compatible(self):
+        session = FakeSession(basic_output())
+        with patch.dict(os.environ, {"SEEDANCE_API_KEY": "secret-key"}):
+            result = nodes.enhance_prompt(
+                "A cyclist crosses the street.", "T2VA", 5, "balanced", 0,
+                None, None, None, None, "", "", "", session,
+            )
+        self.assertEqual(result, basic_output())
+
+    def test_t2va_has_no_upload_and_returns_raw_nonempty_prompt(self):
+        expected = basic_output()
+        raw = f"```text\n{expected}\n```"
+        session = FakeSession(raw)
+        result = self.run_enhancer(session)
+        self.assertEqual(result, raw)
+        self.assertEqual(session.uploads, [])
+        self.assertIsInstance(session.chat_requests[0]["json"]["messages"][1]["content"], str)
+
+    def test_i2va_uploads_first_frame_as_picture_one(self):
+        session = FakeSession(basic_output("I2VA"))
+        image = torch.zeros((1, 2, 3, 3), dtype=torch.float32)
+        result = self.run_enhancer(session, task_type="I2VA", first_frame=image)
+        self.assertTrue(result.startswith(nodes.I2VA_INSTRUCTION))
+        self.assertEqual(session.uploads[0][0:3:2], ("picture_1.png", "image/png"))
+        parts = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url"])
+        self.assertEqual(parts[2]["image_url"]["url"], "https://assets.example/picture_1.png")
+
+    def test_fl2va_uploads_first_and_last_frames_in_order(self):
+        session = FakeSession(basic_output("FL2VA", duration=8, shots=1))
+        first = torch.zeros((1, 2, 2, 3))
+        last = torch.ones((1, 2, 2, 3))
+        result = self.run_enhancer(
+            session,
+            task_type="FL2VA",
+            duration_seconds=8,
+            first_frame=first,
+            last_frame=last,
+        )
+        self.assertIn("8.00-second", result.splitlines()[0])
+        self.assertEqual([upload[0] for upload in session.uploads], ["picture_1.png", "picture_2.png"])
+
+    def test_l2va_uploads_only_last_frame(self):
+        session = FakeSession(basic_output("L2VA", duration=6, shots=1))
+        result = self.run_enhancer(
+            session,
+            task_type="L2VA",
+            duration_seconds=6,
+            last_frame=torch.zeros((1, 2, 2, 3)),
+        )
+        self.assertIn("[Shot 1]", result.splitlines()[0])
+        self.assertEqual([upload[0] for upload in session.uploads], ["picture_1.png"])
+
+    def test_ref2va_sends_complete_image_and_video_in_one_chat_request(self):
+        session = FakeSession(reference_output())
+        video_bytes = b"not-frames-the-complete-video-file"
+        result = self.run_enhancer(
+            session,
+            task_type="Ref2VA",
+            reference_images={"reference_image_0": torch.zeros((1, 2, 2, 3))},
+            reference_videos={"reference_video_0": FakeVideo(video_bytes)},
+        )
+        self.assertTrue(result.startswith("subject_definitions:"))
+        self.assertEqual([upload[0] for upload in session.uploads], ["picture_1.png", "video_1.mp4"])
+        self.assertEqual(session.uploads[1][1], video_bytes)
+        parts = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertEqual(
+            [part["type"] for part in parts],
+            ["text", "text", "image_url", "text", "video_url"],
+        )
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_ref2va_expands_image_batches_and_uses_numeric_slot_order(self):
+        output = reference_output(include_video=False).replace(
+            "<Picture 1> is the visual identity and composition reference for <Subject 1>.",
+            "<Picture 1> and <Picture 2> are visual identity and composition references for <Subject 1>.",
+        )
+        output = output.replace(
+            "<Picture 1> ([Shot 1] identity reference): fully_preserved -",
+            "<Picture 1> and <Picture 2> ([Shot 1] identity reference): fully_preserved -",
+        )
+        session = FakeSession(output)
+        self.run_enhancer(
+            session,
+            task_type="Ref2VA",
+            reference_images={"reference_image_2": torch.zeros((2, 1, 1, 3))},
+        )
+        self.assertEqual([upload[0] for upload in session.uploads], ["picture_1.png", "picture_2.png"])
+
+    def test_ref2va_orders_multiple_complete_videos_in_one_request(self):
+        output = reference_output().replace(
+            "<Video 1> supplies the source action order and cut rhythm.",
+            "<Video 1> supplies the first action order.\n<Video 2> supplies the second action order.",
+        ).replace(
+            "<Video 1> (action and cut structure): weak_reference - its temporal order guides the target sequence.",
+            "<Video 1> (first action): weak_reference - its order guides phase one.\n"
+            "<Video 2> (second action): weak_reference - its order guides phase two.",
+        )
+        session = FakeSession(output)
+        self.run_enhancer(
+            session,
+            task_type="Ref2VA",
+            reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
+            reference_videos={
+                "reference_video_10": FakeVideo(b"second-complete-video"),
+                "reference_video_2": FakeVideo(b"first-complete-video"),
+            },
+        )
+        self.assertEqual(
+            [upload[0] for upload in session.uploads],
+            ["picture_1.png", "video_1.mp4", "video_2.mp4"],
+        )
+        self.assertEqual(session.uploads[1][1], b"first-complete-video")
+        self.assertEqual(session.uploads[2][1], b"second-complete-video")
+        parts = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertEqual([part["type"] for part in parts].count("video_url"), 2)
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_multilingual_intent_and_exact_language_rules_reach_the_model(self):
+        output = basic_output().replace(
+            "A medium shot shows a cyclist crossing a quiet street under soft daylight.",
+            'A woman says <d>[Chinese] 你好，世界！</d> beside the visible sign "星港-7".',
+        )
+        session = FakeSession(output)
+        result = self.run_enhancer(
+            session,
+            prompt='女孩说“你好，世界！”，画面文字是 "星港-7"。 Keep the camera locked.',
+            constraints="对白、标点和画面文字必须逐字保留。",
+            rewrite_mode="strict",
+        )
+        messages = session.chat_requests[0]["json"]["messages"]
+        self.assertIn("你好，世界！", messages[1]["content"])
+        self.assertIn("星港-7", messages[1]["content"])
+        self.assertIn("对白、标点和画面文字必须逐字保留。", messages[1]["content"])
+        self.assertIn("Preserve user-provided dialogue, lyrics, and visible on-screen text verbatim", messages[0]["content"])
+        self.assertIn("<d>[Chinese] 你好，世界！</d>", result)
+        self.assertIn('"星港-7"', result)
+
+    def test_task_specific_missing_or_irrelevant_media_fails_before_network(self):
+        cases = [
+            {"task_type": "I2VA"},
+            {"task_type": "FL2VA", "first_frame": torch.zeros((1, 1, 1, 3))},
+            {"task_type": "L2VA"},
+            {"task_type": "Ref2VA"},
+            {"task_type": "T2VA", "first_frame": torch.zeros((1, 1, 1, 3))},
+        ]
+        for case in cases:
+            with self.subTest(case=case):
+                session = FakeSession(basic_output())
+                with self.assertRaises(nodes.PromptEnhancerError):
+                    self.run_enhancer(session, **case)
+                self.assertEqual(session.uploads, [])
+                self.assertEqual(session.chat_requests, [])
+
+    def test_duration_and_word_target_boundaries(self):
+        four_second = FakeSession(basic_output(shots=2))
+        self.run_enhancer(four_second, duration_seconds=4)
+        fifteen_second_output = basic_output(shots=2).replace("00:03.000", "00:14.999")
+        self.run_enhancer(FakeSession(fifteen_second_output), duration_seconds=15)
+
+        for kwargs in (
+            {"duration_seconds": 3},
+            {"duration_seconds": 16},
+            {"description_word_target": 79},
+            {"description_word_target": 1001},
+        ):
+            with self.subTest(kwargs=kwargs):
+                session = FakeSession(basic_output())
+                with self.assertRaises(nodes.PromptEnhancerError):
+                    self.run_enhancer(session, **kwargs)
+                self.assertEqual(session.uploads, [])
+                self.assertEqual(session.chat_requests, [])
+
+    def test_ref2va_limits_are_checked_before_upload(self):
+        cases = [
+            {"reference_images": {"reference_image_0": torch.zeros((10, 1, 1, 3))}},
+            {"reference_videos": {f"reference_video_{i}": FakeVideo() for i in range(4)}},
+            {"reference_videos": {"reference_video_0": FakeVideo(duration=1.9)}},
+            {
+                "reference_videos": {
+                    "reference_video_0": FakeVideo(duration=8),
+                    "reference_video_1": FakeVideo(duration=8),
+                }
+            },
+        ]
+        for case in cases:
+            with self.subTest(case=list(case)):
+                session = FakeSession(reference_output())
+                with self.assertRaises(nodes.PromptEnhancerError):
+                    self.run_enhancer(session, task_type="Ref2VA", **case)
+                self.assertEqual(session.uploads, [])
+                self.assertEqual(session.chat_requests, [])
+
+    def test_unsupported_video_never_falls_back_to_frames_or_text(self):
+        session = FakeSession(reference_output())
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "MP4, AVI, MOV, or MKV"):
+            self.run_enhancer(
+                session,
+                task_type="Ref2VA",
+                reference_videos={"reference_video_0": FakeVideo(container="webm")},
+            )
+        self.assertEqual(session.uploads, [])
+        self.assertEqual(session.chat_requests, [])
+
+    def test_native_trimmed_video_is_rejected_before_untrimmed_source_upload(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "source.mp4"
+            live_smoke.make_video_fixture(path)
+            trimmed = live_smoke.VideoFromFile(str(path), start_time=1, duration=2)
+            session = FakeSession(reference_output())
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "Trimmed VIDEO inputs cannot be uploaded safely"):
+                self.run_enhancer(
+                    session,
+                    task_type="Ref2VA",
+                    reference_videos={"reference_video_0": trimmed},
+                )
+            self.assertEqual(session.uploads, [])
+            self.assertEqual(session.chat_requests, [])
+
+    def test_word_target_and_mode_rules_are_in_messages(self):
+        session = FakeSession(basic_output_with_word_count())
+        self.run_enhancer(session, rewrite_mode="strict", output_language="English", description_word_target=200)
+        messages = session.chat_requests[0]["json"]["messages"]
+        self.assertIn("Rewrite mode: strict", messages[0]["content"])
+        self.assertIn("approximately 200 English words", messages[1]["content"])
+
+    def test_word_target_is_soft_and_short_upstream_output_is_returned(self):
+        short_output = basic_output()
+        session = FakeSession(short_output)
+        self.assertEqual(self.run_enhancer(session, description_word_target=350), short_output)
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_http_errors_are_actionable_and_do_not_retry_chat(self):
+        for status, phrase in ((401, "configured API Key"), (402, "insufficient balance"), (429, "rate limited"), (503, "server error")):
+            with self.subTest(status=status):
+                session = FakeSession("", chat_status=status)
+                with self.assertRaisesRegex(nodes.PromptEnhancerError, phrase):
+                    self.run_enhancer(session)
+                self.assertEqual(len(session.chat_requests), 1)
+
+        gateway = FakeSession(
+            "",
+            chat_status=502,
+            chat_payload=ValueError("not json"),
+        )
+        gateway_response = FakeResponse(502, ValueError("not json"), text="<html><h1>502 Bad Gateway</h1><p>nginx</p></html>")
+        gateway.post = lambda url, **kwargs: gateway_response
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "temporary upstream gateway failure; retry manually") as raised:
+            self.run_enhancer(gateway)
+        self.assertNotIn("<html>", str(raised.exception))
+
+    def test_http_error_redacts_api_keys(self):
+        leaked_key = "sk-" + "leaked-value-1234567890"
+        session = FakeSession(
+            "",
+            chat_status=401,
+            chat_payload={"error": {"message": f"bad secret-key and {leaked_key}"}},
+        )
+        with self.assertRaises(nodes.PromptEnhancerError) as raised:
+            self.run_enhancer(session)
+        self.assertNotIn("secret-key", str(raised.exception))
+        self.assertNotIn(leaked_key, str(raised.exception))
+
+    def test_timeout_is_not_retried(self):
+        session = FakeSession("", chat_exception=requests.Timeout("secret-key must not leak"))
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "not retried"):
+            self.run_enhancer(session)
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_free_upload_429_retries_once_without_duplicate_chat(self):
+        class RateLimitedUploadSession(FakeSession):
+            def post(self, url, **kwargs):
+                if url == nodes.UPLOAD_URL and not self.uploads:
+                    filename, data, mime_type = kwargs["files"]["file"]
+                    self.uploads.append((filename, data, mime_type, kwargs))
+                    return FakeResponse(429, {"error": {"message": "slow down"}}, headers={"Retry-After": "1"})
+                return super().post(url, **kwargs)
+
+        session = RateLimitedUploadSession(basic_output("I2VA"))
+        with patch.object(nodes.time, "sleep") as sleep:
+            self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
+        sleep.assert_called_once_with(1)
+        self.assertEqual(len(session.uploads), 2)
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_invalid_json_and_empty_responses_fail_but_length_content_is_returned(self):
+        payloads = [
+            ValueError("not json"),
+            {"choices": [{"finish_reason": "stop", "message": {"content": ""}}]},
+        ]
+        for payload in payloads:
+            with self.subTest(payload=type(payload).__name__):
+                if isinstance(payload, Exception):
+                    session = FakeSession("", chat_payload=payload)
+                else:
+                    session = FakeSession("", chat_payload=payload)
+                with self.assertRaises(nodes.PromptEnhancerError):
+                    self.run_enhancer(session)
+
+        truncated = basic_output().replace("non_diegetic_music: N/A", "non_diegetic_music: par")
+        session = FakeSession(
+            "",
+            chat_payload={"choices": [{"finish_reason": "length", "message": {"content": truncated}}]},
+        )
+        self.assertEqual(self.run_enhancer(session), truncated)
+
+    def test_reasoning_content_is_never_included_in_string_output(self):
+        expected = basic_output()
+        session = FakeSession(
+            "",
+            chat_payload={
+                "choices": [{
+                    "finish_reason": "stop",
+                    "message": {
+                        "reasoning_content": "private upstream chain of thought",
+                        "content": expected,
+                    },
+                }]
+            },
+        )
+        result = self.run_enhancer(session)
+        self.assertEqual(result, expected)
+        self.assertNotIn("private upstream chain of thought", result)
+
+    def test_nonempty_upstream_format_variants_are_returned_unchanged(self):
+        outputs = [
+            basic_output().replace("overall_soundscape:", "missing_soundscape:"),
+            basic_output().replace("overall_soundscape: Light traffic and bicycle-chain sounds continue beneath distant birds.", "overall_soundscape: "),
+            basic_output().replace("non_diegetic_music: N/A", "non_diegetic_music: "),
+            basic_output().replace("[Shot 1]", "[Shot N]"),
+            basic_output(shots=2).replace("00:03.000", "00:05.000"),
+            basic_output().replace("integrated_multimodal_description:", "Here is the prompt:\nintegrated_multimodal_description:"),
+            basic_output(shots=2).replace("00:03.000,", "0:03.000，"),
+            basic_output().replace("integrated_multimodal_description:", "**integrated_multimodal_description：**", 1),
+            basic_output().replace("\n", "\r\n"),
+        ]
+        for output in outputs:
+            with self.subTest(output=output[:30]):
+                self.assertEqual(self.run_enhancer(FakeSession(output)), output)
+
+    def test_complete_out_of_order_i2va_fields_are_reordered(self):
+        description = "[Shot 1] A red square moves right."
+        soundscape = "A quiet electronic hum."
+        music = "N/A"
+        upstream_order = (
+            f"{nodes.I2VA_INSTRUCTION}\n\n"
+            f"overall_soundscape: {soundscape}\n"
+            f"non_diegetic_music: {music}\n"
+            f"integrated_multimodal_description: {description}"
+        )
+
+        result = self.run_enhancer(
+            FakeSession(upstream_order),
+            task_type="I2VA",
+            first_frame=torch.zeros((1, 1, 1, 3)),
+        )
+        expected = (
+            f"{nodes.I2VA_INSTRUCTION}\n\n"
+            f"integrated_multimodal_description: {description}\n\n"
+            f"overall_soundscape: {soundscape}\n\n"
+            f"non_diegetic_music: {music}"
+        )
+        self.assertEqual(result, expected)
+
+    def test_incomplete_or_duplicate_field_sets_are_returned_unchanged(self):
+        expected = basic_output("I2VA")
+        missing = expected.replace("overall_soundscape:", "missing_soundscape:")
+        duplicate = expected + "\n\noverall_soundscape: duplicate"
+
+        for output in (missing, duplicate):
+            with self.subTest(output=output[-80:]):
+                result = self.run_enhancer(
+                    FakeSession(output),
+                    task_type="I2VA",
+                    first_frame=torch.zeros((1, 1, 1, 3)),
+                )
+                self.assertEqual(result, output)
+
+    def test_missing_api_key_fails_without_network(self):
+        session = FakeSession(basic_output())
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "SEEDANCE_API_KEY"):
+                nodes.enhance_prompt("A cyclist", session=session)
+        self.assertEqual(session.uploads, [])
+        self.assertEqual(session.chat_requests, [])
+
+    def test_live_smoke_requires_explicit_paid_confirmation(self):
+        with patch.object(live_smoke, "run_paid_smoke") as run_paid_smoke:
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                live_smoke.main([])
+        run_paid_smoke.assert_not_called()
+        with self.assertRaisesRegex(RuntimeError, "explicit confirmation"):
+            live_smoke.run_paid_smoke()
+
+    def test_live_smoke_fixture_is_a_four_second_temporal_video(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "fixture.mp4"
+            live_smoke.make_video_fixture(path)
+            self.assertGreater(path.stat().st_size, 1_000)
+            video = live_smoke.av.open(str(path))
+            try:
+                stream = video.streams.video[0]
+                self.assertAlmostEqual(float(stream.duration * stream.time_base), 4.0, places=1)
+                self.assertEqual(stream.frames, 96)
+                frames = [frame.to_ndarray(format="rgb24") for frame in video.decode(video=0)]
+                self.assertEqual(len(frames), 96)
+                first_blue = frames[0][175, 80]
+                second_green = frames[60][150, 320]
+                self.assertGreater(int(first_blue[2]), int(first_blue[0]) + 80)
+                self.assertGreater(int(second_green[1]), int(second_green[0]) + 80)
+                self.assertGreater(int(frames[0][300, 600].mean()), int(frames[60][300, 600].mean()) + 100)
+            finally:
+                video.close()
+
+        image = live_smoke.make_image_fixture()[0].numpy()
+        triangle = image[150, 190]
+        circle = image[170, 490]
+        self.assertGreater(float(triangle[0]), float(triangle[1]) + 0.4)
+        self.assertGreater(float(circle[0]), 0.8)
+        self.assertGreater(float(circle[1]), 0.6)
+
+    def test_live_smoke_result_checks_both_media_and_temporal_order(self):
+        valid = (
+            "subject_definitions:\n<Picture 1> carries MANGO-47 with a magenta triangle and yellow circle. "
+            "<Video 1> carries RIVER-83, with a blue square before a hard cut and then a green circle.\n\n"
+            "retention_analysis:\n<Subject 1>: attribute_transfer - picture identity follows video motion.\n\n"
+            "detailed_description:\n[Shot 1] In phase one, the magenta triangle moves left-to-right. "
+            "[Shot 2] At 00:02.500, a hard cut starts phase two, where the yellow circle moves downward.\n\n"
+            "overall_soundscape:\nN/A"
+        )
+        self.assertEqual(live_smoke.evaluate_result(valid), [])
+        failures = live_smoke.evaluate_result(valid.replace("MANGO-47", "missing").replace("blue square", "green circle"))
+        self.assertTrue(any("image code" in failure for failure in failures))
+        self.assertTrue(any("blue square" in failure for failure in failures))
+
+        real_response = (NODES_PATH.parent / "tests" / "fixtures" / "live_smoke_2026-08-04.txt").read_text(encoding="utf-8")
+        self.assertEqual(live_smoke.evaluate_result(real_response), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

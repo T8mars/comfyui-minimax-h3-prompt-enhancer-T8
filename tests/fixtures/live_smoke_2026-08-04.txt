@@ -1,0 +1,29 @@
+subject_definitions:
+<Subject 1>: Magenta equilateral triangle with dark purple outline from <Picture 1>, positioned on the left.
+<Subject 2>: Yellow circle with dark brown outline from <Picture 1>, positioned on the right.
+<Subject 3>: White rectangular label with black border and black text "MANGO-47" from <Picture 1>, centered below the shapes.
+<Subject 4>: Blue square with dark blue outline from phase one of <Video 1>, moving left to right.
+<Subject 5>: Green circle with darker green outline from phase two of <Video 1>, moving top to bottom.
+<Picture 1>: Flat vector reference image on a pale gray background containing <Subject 1>, <Subject 2>, and <Subject 3>.
+<Video 1>: Four-second flat vector reference video with a hard cut near 00:02.000; phase one has a pale gray background, <Subject 4>, "RIVER-83", and "PHASE ONE"; phase two has a dark charcoal background, <Subject 5>, "RIVER-83", and "PHASE TWO".
+
+summary: [reference generation] A five-second flat vector video transfers the magenta triangle and yellow circle from <Picture 1> into the two-phase motion structure of <Video 1>, preserving exact codes "MANGO-47" and "RIVER-83", retaining the hard-cut order, and naming each phase's shape, color, and direction.
+
+retention_analysis:
+<Picture 1>: partially_preserved (subject designs, colors, code, and left/right/bottom layout are retained, while motion is adapted from <Video 1>).
+<Video 1>: fully_preserved (two-phase structure, hard-cut order, text labels, and motion directions are retained).
+<Subject 1>: attribute_transfer (magenta triangle replaces the phase-one square and inherits its left-to-right motion).
+<Subject 2>: attribute_transfer (yellow circle replaces the phase-two circle and inherits its downward motion).
+<Subject 3>: fully_preserved (label and exact "MANGO-47" text remain).
+<Subject 4>: weak_reference (provides phase-one motion only; its blue square design is replaced).
+<Subject 5>: weak_reference (provides phase-two motion only; its green circle design is replaced).
+
+detailed_description: Flat vector motion-graphic style with solid fills, crisp dark outlines, static framing, and no gradients or shadows. Phase one uses the pale gray background from <Picture 1> and <Video 1>; phase two uses the dark charcoal background from <Video 1>. All text remains sharp and legible, and the label's black border and white field stay unchanged across both phases.
+
+[Shot 1] The frame opens on the pale gray field. In the top-left corner, black sans-serif text reads "RIVER-83". In the bottom-left corner, dark blue sans-serif text reads "PHASE ONE". Centered near the bottom is <Subject 3>, the white rectangle with black border containing exact black text "MANGO-47". <Subject 2> holds its fixed position at the right, preserving the picture's layout, while <Subject 1> starts at the left with its magenta fill and dark purple outline. The triangle then glides smoothly and horizontally left-to-right across the frame over 2.5 seconds, maintaining its size, outline weight, and upright orientation in a steady linear motion until it rests just left of <Subject 2> near the right edge. This is phase one: a magenta triangle moving left to right.
+
+[Shot 2] At 00:02.500, a hard cut switches instantly to the dark charcoal field, with no crossfade. The top-left text remains "RIVER-83", now rendered in white, and the bottom-left text reads "PHASE TWO" in light green. The "MANGO-47" label remains centered near the bottom. <Subject 1> returns to a static left-side position, preserving the picture's horizontal arrangement, while <Subject 2> starts at the right with its yellow fill and dark brown outline. The circle then travels straight downward over 2.5 seconds in a steady linear motion, keeping its size and outline until it reaches the bottom edge. This is phase two: a yellow circle moving top to bottom. The video ends at 00:05.000.
+
+overall_soundscape: No environmental ambience is present. Soft, neutral graphic whooshes accompany the triangle's horizontal traverse and the circle's vertical descent, and a crisp edit click sounds on the hard cut.
+
+non_diegetic_music: N/A

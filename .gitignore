@@ -1,0 +1,9 @@
+roadmap.md
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.log
+.idea/
+.vscode/

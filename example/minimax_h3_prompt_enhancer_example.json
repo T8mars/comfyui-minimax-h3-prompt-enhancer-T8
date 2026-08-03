@@ -1,0 +1,239 @@
+{
+  "id": "5e5babfd-0871-4eaf-96bb-a03b238ee51f",
+  "revision": 0,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MiniMaxH3PromptEnhancerT8",
+      "pos": [
+        1059.7734375,
+        1.125925925925908
+      ],
+      "size": [
+        400,
+        470
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "reference_image_0",
+          "localized_name": "reference_images.reference_image_0",
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "reference_video_0",
+          "localized_name": "reference_videos.reference_video_0",
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "task_type",
+          "name": "task_type",
+          "type": "COMBO",
+          "widget": {
+            "name": "task_type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "duration_seconds",
+          "name": "duration_seconds",
+          "type": "INT",
+          "widget": {
+            "name": "duration_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "rewrite_mode",
+          "name": "rewrite_mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "rewrite_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "description_word_target",
+          "name": "description_word_target",
+          "type": "INT",
+          "widget": {
+            "name": "description_word_target"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "output_language",
+          "name": "output_language",
+          "type": "COMBO",
+          "widget": {
+            "name": "output_language"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt_mode",
+          "name": "prompt_mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "prompt_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "api_mode",
+          "name": "api_mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "api_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "reference_context",
+          "name": "reference_context",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "reference_context"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "constraints",
+          "name": "constraints",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "constraints"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "api_key",
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "reference_template",
+          "name": "reference_template",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "reference_template"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "openai_base_url",
+          "name": "openai_base_url",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "openai_base_url"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "openai_upload_url",
+          "name": "openai_upload_url",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "openai_upload_url"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "enhanced_prompt",
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "雨夜的霓虹街道上，一名穿红色风衣的女人缓步走向镜头，镜头低机位跟拍，风吹动衣摆，远处雷声与城市环境声交织。",
+        "T2VA（文生音视频）",
+        5,
+        "balanced",
+        0,
+        "中文",
+        "官方增强",
+        "贞贞平价小屋（推荐）",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "randomize"
+      ]
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.1637931034482756,
+      "offset": [
+        -709.847511574074,
+        52.62222222222226
+      ]
+    }
+  },
+  "version": 0.4
+}
