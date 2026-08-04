@@ -5,6 +5,8 @@ const NODE_ID = "MiniMaxH3PromptEnhancerT8";
 const SIGN_UP_URL = "https://api.seedance.nz/sign-up?aff=5f4w";
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
+const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
+const SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))];
 const TASK_TYPE_LABELS = {
     T2VA: "T2VA（文生音视频）",
     I2VA: "I2VA（首帧图生音视频）",
@@ -18,6 +20,7 @@ const SERIALIZED_WIDGET_NAMES = [
     "prompt",
     "task_type",
     "duration_seconds",
+    "shot_count",
     "rewrite_mode",
     "description_word_target",
     "output_language",
@@ -315,6 +318,7 @@ app.registerExtension({
 
             const outputLanguageWidget = this.widgets?.find((widget) => widget.name === "output_language");
             const taskTypeWidget = this.widgets?.find((widget) => widget.name === "task_type");
+            const shotCountWidget = this.widgets?.find((widget) => widget.name === "shot_count");
             const promptModeWidget = this.widgets?.find((widget) => widget.name === "prompt_mode");
             const referenceTemplateWidget = this.widgets?.find((widget) => widget.name === "reference_template");
             const referenceContextWidget = this.widgets?.find((widget) => widget.name === "reference_context");
@@ -339,6 +343,7 @@ app.registerExtension({
             this.t8NormalizePromptOptions = () => {
                 if (TASK_TYPE_LABELS[taskTypeWidget?.value]) taskTypeWidget.value = TASK_TYPE_LABELS[taskTypeWidget.value];
                 normalizeChoice(taskTypeWidget, Object.values(TASK_TYPE_LABELS), TASK_TYPE_LABELS.T2VA);
+                normalizeChoice(shotCountWidget, SHOT_COUNT_OPTIONS, AUTO_SHOT_COUNT);
                 normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
                 normalizeChoice(promptModeWidget, ["官方增强", "参考模板融合"], "官方增强");
                 normalizeChoice(apiModeWidget, [SEEDANCE_API_MODE, OPENAI_API_MODE], SEEDANCE_API_MODE);
@@ -393,7 +398,13 @@ app.registerExtension({
             resizeNode(this);
         };
         nodeType.prototype.onConfigure = function () {
-            originalOnConfigure?.apply(this, arguments);
+            const args = [...arguments];
+            const serialized = args[0];
+            if (Array.isArray(serialized?.widgets_values) && serialized.widgets_values.length === 16) {
+                args[0] = { ...serialized, widgets_values: [...serialized.widgets_values] };
+                args[0].widgets_values.splice(3, 0, AUTO_SHOT_COUNT);
+            }
+            originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => this.t8NormalizePromptOptions?.());
         };
         nodeType.prototype.onSerialize = function (serialized) {

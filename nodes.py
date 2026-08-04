@@ -32,6 +32,8 @@ REWRITE_MODES = ["strict", "balanced", "creative"]
 MODE_TEMPERATURES = {"strict": 0.2, "balanced": 0.7, "creative": 1.2}
 OUTPUT_LANGUAGES = ["中文", "English"]
 PROMPT_MODES = ["官方增强", "参考模板融合"]
+AUTO_SHOT_COUNT = "AUTO（系统自动判断）"
+SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT] + [str(count) for count in range(1, 21)]
 SEEDANCE_API_MODE = "贞贞平价小屋（推荐）"
 OPENAI_API_MODE = "OpenAI兼容接口（备用）"
 API_MODES = [SEEDANCE_API_MODE, OPENAI_API_MODE]
@@ -128,6 +130,19 @@ class PromptEnhancerError(RuntimeError):
 def _canonical_task_type(task_type: str) -> str:
     value = str(task_type or "T2VA")
     return TASK_TYPE_ALIASES.get(value, value)
+
+
+def _normalize_shot_count(shot_count: Any) -> int:
+    value = str(shot_count if shot_count is not None else "").strip()
+    if value in {"", "0", "AUTO", "auto", "自动", AUTO_SHOT_COUNT}:
+        return 0
+    try:
+        count = int(value)
+    except (TypeError, ValueError) as error:
+        raise PromptEnhancerError("shot_count must be AUTO or an integer from 1 to 20.") from error
+    if not 1 <= count <= 20:
+        raise PromptEnhancerError("shot_count must be AUTO or an integer from 1 to 20.")
+    return count
 
 
 def _openai_chat_url(base_url: str) -> str:
@@ -544,6 +559,22 @@ def _length_target_instruction(task_type: str, description_word_target: int, out
     return f"Choose a concise but complete length for {field} based on the requested duration and information density."
 
 
+def _shot_count_instruction(shot_count: int) -> str:
+    if shot_count == 0:
+        return (
+            "Shot count mode: AUTO. Decide the most suitable number of timeline shots from the user's intent, "
+            "attached media, target duration, action density, and pacing. Prefer camera movement within one shot "
+            "when a separate cut is not useful."
+        )
+    return (
+        f"Shot count mode: fixed. The timeline must contain exactly {shot_count} shots, numbered consecutively "
+        f"from [Shot 1] through [Shot {shot_count}], with each label appearing exactly once. [Shot 1] has no "
+        "timestamp; every later shot has a valid strictly increasing timestamp below the target duration. This "
+        "explicit fixed count overrides any approximate shot-count number or range in the user's prompt or "
+        "reference template. Do not report or explain the count outside the required timeline."
+    )
+
+
 def _build_user_instruction(
     prompt: str,
     task_type: str,
@@ -557,8 +588,10 @@ def _build_user_instruction(
     constraints: str,
     media_plan: list[dict[str, Any]],
     seed: int,
+    shot_count: int,
 ) -> str:
     media_labels = ", ".join(asset["label"] for asset in media_plan) or "none"
+    shot_count_control = "AUTO" if shot_count == 0 else f"exactly {shot_count}"
     return "\n".join([
         f"H3 task type: {task_type}",
         f"Target duration: {duration_seconds:.2f} seconds",
@@ -567,6 +600,7 @@ def _build_user_instruction(
         f"Prompt construction mode: {prompt_mode}",
         f"Variation seed: {seed}",
         "Use the variation seed only as an opaque tie-breaker for allowed creative choices. Never print it in the result.",
+        f"Shot count control: {shot_count_control}",
         f"Attached media labels: {media_labels}",
         _length_target_instruction(task_type, description_word_target, output_language),
         "Original user intent (preserve its meaning and exact quoted language):",
@@ -595,6 +629,7 @@ def _build_messages(
     media_plan: list[dict[str, Any]],
     media_parts: list[dict[str, Any]],
     seed: int,
+    shot_count: int,
 ) -> list[dict[str, Any]]:
     system_content = "\n\n".join([
         COMMON_SYSTEM_RULES,
@@ -602,6 +637,7 @@ def _build_messages(
         MODE_RULES[rewrite_mode],
         PROMPT_MODE_RULES[prompt_mode],
         TASK_RULES[task_type],
+        _shot_count_instruction(shot_count),
     ])
     user_text = _build_user_instruction(
         prompt,
@@ -616,6 +652,7 @@ def _build_messages(
         constraints,
         media_plan,
         seed,
+        shot_count,
     )
     user_content: str | list[dict[str, Any]]
     if media_parts:
@@ -719,8 +756,10 @@ def enhance_prompt(
     openai_base_url: str = "",
     openai_upload_url: str = "",
     seed: int = 0,
+    shot_count: Any = AUTO_SHOT_COUNT,
 ) -> str:
     task_type = _canonical_task_type(task_type)
+    shot_count = _normalize_shot_count(shot_count)
     output_language = str(output_language or "中文")
     prompt_mode = str(prompt_mode or "官方增强")
     api_key = str(api_key or "").strip()
@@ -792,6 +831,7 @@ def enhance_prompt(
             media_plan,
             media_parts,
             seed,
+            shot_count,
         )
         response_text = _request_completion(session, api_key, messages, rewrite_mode, chat_url, provider_name)
         return _reorder_complete_fields(response_text, task_type)
@@ -827,6 +867,13 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     default=TASK_TYPE_LABELS["T2VA"],
                 ),
                 io.Int.Input("duration_seconds", display_name="目标时长（秒）", default=5, min=4, max=15, step=1),
+                io.Combo.Input(
+                    "shot_count",
+                    display_name="镜头数量",
+                    options=SHOT_COUNT_OPTIONS,
+                    default=AUTO_SHOT_COUNT,
+                    tooltip="AUTO 由模型结合时长、内容与节奏判断；1-20 要求输出对应数量的 [Shot N]。",
+                ),
                 io.Combo.Input("rewrite_mode", display_name="改写模式", options=REWRITE_MODES, default="balanced"),
                 io.Int.Input(
                     "description_word_target",
@@ -951,6 +998,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         openai_base_url="",
         openai_upload_url="",
         seed=0,
+        shot_count=AUTO_SHOT_COUNT,
     ) -> io.NodeOutput:
         result = enhance_prompt(
             prompt=prompt,
@@ -972,6 +1020,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             openai_base_url=openai_base_url,
             openai_upload_url=openai_upload_url,
             seed=seed,
+            shot_count=shot_count,
         )
         return io.NodeOutput(result)
 

@@ -13,7 +13,7 @@
       ],
       "size": [
         400,
-        470
+        500
       ],
       "flags": {},
       "order": 0,
@@ -73,6 +73,15 @@
           "type": "INT",
           "widget": {
             "name": "duration_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "shot_count",
+          "name": "shot_count",
+          "type": "COMBO",
+          "widget": {
+            "name": "shot_count"
           },
           "link": null
         },
@@ -207,6 +216,7 @@
         "雨夜的霓虹街道上，一名穿红色风衣的女人缓步走向镜头，镜头低机位跟拍，风吹动衣摆，远处雷声与城市环境声交织。",
         "T2VA（文生音视频）",
         5,
+        "AUTO（系统自动判断）",
         "balanced",
         0,
         "中文",
