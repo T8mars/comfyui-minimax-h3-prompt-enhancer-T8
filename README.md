@@ -21,6 +21,7 @@
 - 集成 MiniMax-H3 官方基础与完整参考提示词规则。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
+- 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
 - 支持用户参考模板融合，主提示词与可观察媒体事实优先。
 - 提供随机种子以及 `fixed / randomize / increment / decrement` 状态。
 - 提供节点内 API Key 输入、遮罩显示、保存、清空和注册链接。
@@ -55,7 +56,7 @@ MiniMax H3 Prompt Enhancer (Seedance / OpenAI)
 
 1. 添加 `MiniMax H3 Prompt Enhancer (Seedance / OpenAI)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
-3. 选择生成类型、时长、改写模式和输出语言。
+3. 选择生成类型、时长、镜头数量、改写模式和输出语言。
 4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
 5. 填写 API Key，点击“保存到工作流”；或者使用环境变量。
 6. 点击节点底部的“运行提示词优化”。
@@ -106,6 +107,7 @@ MiniMax H3 Prompt Enhancer (Seedance / OpenAI)
 | `prompt` | 用户基础视频意图，不能为空 |
 | `task_type` | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
 | `duration_seconds` | 目标时长，4–15 秒 |
+| `shot_count` | `AUTO` 由模型按内容、素材、时长和节奏判断；也可固定为 1–20 个镜头 |
 | `rewrite_mode` | `strict / balanced / creative` |
 | `description_word_target` | `0` 为自动；非零为 80–1000，中文按约数汉字、英文按单词理解 |
 | `output_language` | `中文 / English`，默认中文 |
@@ -120,6 +122,14 @@ MiniMax H3 Prompt Enhancer (Seedance / OpenAI)
 | `seed` | 随机种子，配合运行后状态控制缓存和变体 |
 
 `reference_context` 和 `constraints` 默认折叠。正常使用不需要填写，避免把简单任务变成大量表单输入。
+
+## 镜头数量
+
+- `AUTO（系统自动判断）`：结合基础提示词、参考素材、目标时长、动作密度和节奏决定镜头数；没有必要切镜时优先使用单镜头内运镜。
+- `1–20`：要求 LLM 在时间线中使用恰好对应数量的 `[Shot N]`，连续编号，并让后续镜头的时间码严格递增且小于目标时长。
+- 固定数量优先于基础提示词或参考模板中的模糊镜头数量范围。选择 `AUTO` 时，基础提示词中的镜头要求仍会参与模型判断。
+
+镜头数量是传给上游模型的明确生成约束，不是本地响应验收条件；只要上游返回非空内容，节点仍按“输出与错误行为”中的规则放行。
 
 ## 随机种子
 

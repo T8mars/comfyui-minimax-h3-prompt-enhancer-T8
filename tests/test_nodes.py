@@ -184,6 +184,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("openai_base_url", input_names)
         self.assertIn("openai_upload_url", input_names)
         self.assertIn("seed", input_names)
+        self.assertIn("shot_count", input_names)
         self.assertLess(input_names.index("api_key"), input_names.index("output_language"))
         self.assertEqual([output.display_name for output in schema.outputs], ["enhanced_prompt"])
         images = next(item for item in schema.inputs if item.id == "reference_images")
@@ -196,6 +197,7 @@ class PromptEnhancerTests(unittest.TestCase):
         task_type = next(item for item in schema.inputs if item.id == "task_type")
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
         seed = next(item for item in schema.inputs if item.id == "seed")
+        shot_count = next(item for item in schema.inputs if item.id == "shot_count")
         self.assertEqual((images.template.min, images.template.max), (0, 9))
         self.assertEqual((videos.template.min, videos.template.max), (0, 3))
         self.assertTrue(api_key.socketless)
@@ -209,6 +211,10 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertTrue(seed.optional)
         self.assertEqual((seed.default, seed.min, seed.max), (0, 0, 0xffffffffffffffff))
         self.assertTrue(seed.control_after_generate)
+        self.assertEqual(shot_count.default, nodes.AUTO_SHOT_COUNT)
+        self.assertEqual(shot_count.options, nodes.SHOT_COUNT_OPTIONS)
+        self.assertEqual(shot_count.options[1:], [str(count) for count in range(1, 21)])
+        self.assertEqual(input_names.index("shot_count"), input_names.index("duration_seconds") + 1)
 
     def test_frontend_masks_api_key_and_has_signup_button(self):
         source = (NODES_PATH.parent / "web" / "js" / "minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")
@@ -240,6 +246,10 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('delete secureWidget.width', source)
         self.assertIn('"control_after_generate"', source)
         self.assertIn('seedControlWidget.label = "种子状态（运行后）"', source)
+        self.assertIn('const AUTO_SHOT_COUNT = "AUTO（系统自动判断）"', source)
+        self.assertIn('"shot_count"', source)
+        self.assertIn("serialized.widgets_values.length === 16", source)
+        self.assertIn("widgets_values.splice(3, 0, AUTO_SHOT_COUNT)", source)
         self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
         self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
 
@@ -249,9 +259,10 @@ class PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(source)
         node = workflow["nodes"][0]
         self.assertEqual(node["type"], "MiniMaxH3PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 16)
+        self.assertEqual(len(node["widgets_values"]), 17)
         self.assertEqual(node["widgets_values"][1], "T2VA（文生音视频）")
-        self.assertEqual(node["widgets_values"][5:8], ["中文", "官方增强", nodes.SEEDANCE_API_MODE])
+        self.assertEqual(node["widgets_values"][3], nodes.AUTO_SHOT_COUNT)
+        self.assertEqual(node["widgets_values"][6:9], ["中文", "官方增强", nodes.SEEDANCE_API_MODE])
         self.assertEqual(node["widgets_values"][-2:], [0, "randomize"])
         self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
 
@@ -334,6 +345,23 @@ class PromptEnhancerTests(unittest.TestCase):
             first_request["messages"][1]["content"],
             second_session.chat_requests[0]["json"]["messages"][1]["content"],
         )
+
+    def test_auto_and_fixed_shot_count_rules_reach_the_model(self):
+        auto_session = FakeSession(basic_output())
+        self.run_enhancer(auto_session)
+        auto_messages = auto_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("Shot count mode: AUTO", auto_messages[0]["content"])
+        self.assertIn("Shot count control: AUTO", auto_messages[1]["content"])
+
+        fixed_session = FakeSession(basic_output())
+        result = self.run_enhancer(fixed_session, shot_count="12")
+        fixed_request = fixed_session.chat_requests[0]["json"]
+        self.assertEqual(result, basic_output())
+        self.assertNotIn("shot_count", fixed_request)
+        self.assertIn("exactly 12 shots", fixed_request["messages"][0]["content"])
+        self.assertIn("from [Shot 1] through [Shot 12]", fixed_request["messages"][0]["content"])
+        self.assertIn("overrides any approximate shot-count number or range", fixed_request["messages"][0]["content"])
+        self.assertIn("Shot count control: exactly 12", fixed_request["messages"][1]["content"])
 
     def test_labeled_task_type_is_normalized_to_the_fixed_h3_contract(self):
         session = FakeSession(basic_output())
@@ -605,7 +633,7 @@ class PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(session.uploads, [])
                 self.assertEqual(session.chat_requests, [])
 
-    def test_duration_and_word_target_boundaries(self):
+    def test_duration_word_target_and_shot_count_boundaries(self):
         four_second = FakeSession(basic_output(shots=2))
         self.run_enhancer(four_second, duration_seconds=4)
         fifteen_second_output = basic_output(shots=2).replace("00:03.000", "00:14.999")
@@ -616,6 +644,9 @@ class PromptEnhancerTests(unittest.TestCase):
             {"duration_seconds": 16},
             {"description_word_target": 79},
             {"description_word_target": 1001},
+            {"shot_count": -1},
+            {"shot_count": 21},
+            {"shot_count": "many"},
         ):
             with self.subTest(kwargs=kwargs):
                 session = FakeSession(basic_output())
