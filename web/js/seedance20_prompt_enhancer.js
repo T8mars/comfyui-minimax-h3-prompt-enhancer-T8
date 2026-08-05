@@ -3,8 +3,12 @@ import { app } from "../../scripts/app.js";
 
 const NODE_ID = "Seedance20PromptEnhancerT8";
 const SIGN_UP_URL = "https://api.seedance.nz/sign-up?aff=5f4w";
+const AI_WORKSHOP_SIGN_UP_URL = "https://ai.t8star.org/register?aff=dP7j";
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
+const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
+const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
+const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const AUTO_DURATION = "AUTO（模型智能选择）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
 const TASK_LABELS = {
@@ -38,6 +42,8 @@ const SERIALIZED_WIDGET_NAMES = [
     "api_key",
     "reference_template",
     "api_mode",
+    "ai_workshop_model",
+    "custom_model",
     "openai_base_url",
     "openai_upload_url",
     "seed",
@@ -129,12 +135,31 @@ function addConditionalWidget(node, controller, target, predicate) {
 }
 
 
-function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget) {
+function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget, modelWidget, customModelWidget) {
+    const updateModel = () => {
+        const workshop = modeWidget.value === AI_WORKSHOP_API_MODE;
+        setWidgetVisible(modelWidget, workshop);
+        setWidgetVisible(customModelWidget, workshop && modelWidget.value === CUSTOM_MODEL_OPTION);
+    };
+    const originalModelCallback = modelWidget.callback;
+    modelWidget.callback = function (value) {
+        originalModelCallback?.apply(this, arguments);
+        updateModel();
+        resizeNode(node);
+    };
     const update = (mode = modeWidget.value) => {
         const compatible = mode === OPENAI_API_MODE;
         setWidgetVisible(baseUrlWidget, compatible);
         setWidgetVisible(uploadUrlWidget, compatible);
-        if (node.s20SignUpWidget) setWidgetVisible(node.s20SignUpWidget, !compatible);
+        updateModel();
+        if (node.s20SignUpWidget) {
+            setWidgetVisible(node.s20SignUpWidget, !compatible);
+            const signupLabel = mode === AI_WORKSHOP_API_MODE
+                ? "🔑 获取 AI 工坊 API Key"
+                : "🔑 获取贞贞提示词增强 API Key";
+            node.s20SignUpWidget.label = signupLabel;
+            node.s20SignUpWidget.name = signupLabel;
+        }
         node.s20UpdateApiKeyPlaceholder?.();
         resizeNode(node);
     };
@@ -164,9 +189,13 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
         "background:var(--comfy-input-bg, #1f1f1f)", "color:var(--input-text, #ddd)", "padding:0 9px",
     ].join(";");
     const updatePlaceholder = () => {
-        input.placeholder = apiModeWidget?.value === OPENAI_API_MODE
-            ? "提示词增强 LLM 的 OpenAI 兼容 API Key"
-            : "贞贞提示词增强 LLM API Key（可保存到工作流）";
+        if (apiModeWidget?.value === OPENAI_API_MODE) {
+            input.placeholder = "提示词增强 LLM 的 OpenAI 兼容 API Key";
+        } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
+            input.placeholder = "AI 工坊 API Key（可保存到工作流）";
+        } else {
+            input.placeholder = "贞贞提示词增强 LLM API Key（可保存到工作流）";
+        }
     };
     node.s20UpdateApiKeyPlaceholder = updatePlaceholder;
     updatePlaceholder();
@@ -275,6 +304,8 @@ app.registerExtension({
             const promptModeWidget = find("prompt_mode");
             const templateWidget = find("reference_template");
             const apiModeWidget = find("api_mode");
+            const aiWorkshopModelWidget = find("ai_workshop_model");
+            const customModelWidget = find("custom_model");
             const baseUrlWidget = find("openai_base_url");
             const uploadUrlWidget = find("openai_upload_url");
             const apiKeyWidget = find("api_key");
@@ -292,7 +323,10 @@ app.registerExtension({
                 templateWidget,
                 (value) => value === "参考模板融合",
             );
-            addApiModeBehavior(this, apiModeWidget, baseUrlWidget, uploadUrlWidget);
+            addApiModeBehavior(
+                this, apiModeWidget, baseUrlWidget, uploadUrlWidget,
+                aiWorkshopModelWidget, customModelWidget,
+            );
 
             this.s20NormalizeOptions = () => {
                 if (TASK_LABELS[taskWidget?.value]) taskWidget.value = TASK_LABELS[taskWidget.value];
@@ -302,7 +336,16 @@ app.registerExtension({
                 normalizeChoice(shotCountWidget, [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))], AUTO_SHOT_COUNT);
                 normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
                 normalizeChoice(promptModeWidget, ["官方优化", "参考模板融合"], "官方优化");
-                normalizeChoice(apiModeWidget, [SEEDANCE_API_MODE, OPENAI_API_MODE], SEEDANCE_API_MODE);
+                normalizeChoice(
+                    apiModeWidget,
+                    [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE],
+                    SEEDANCE_API_MODE,
+                );
+                normalizeChoice(
+                    aiWorkshopModelWidget,
+                    [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION],
+                    AI_WORKSHOP_DEFAULT_MODEL,
+                );
                 this.s20UpdateTemplate?.();
                 this.s20UpdateApiMode?.();
             };
@@ -336,8 +379,12 @@ app.registerExtension({
             const signUpWidget = this.addWidget(
                 "button",
                 "🔑 获取贞贞提示词增强 API Key",
-                "打开 Seedance 注册页面",
-                () => window.open(SIGN_UP_URL, "_blank", "noopener,noreferrer"),
+                "打开当前渠道注册页面",
+                () => window.open(
+                    apiModeWidget?.value === AI_WORKSHOP_API_MODE ? AI_WORKSHOP_SIGN_UP_URL : SIGN_UP_URL,
+                    "_blank",
+                    "noopener,noreferrer",
+                ),
                 { serialize: false },
             );
             signUpWidget.serializeValue = () => undefined;
@@ -347,7 +394,12 @@ app.registerExtension({
         };
 
         nodeType.prototype.onConfigure = function () {
-            originalOnConfigure?.apply(this, arguments);
+            const args = [...arguments];
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 23) {
+                args[0] = { ...args[0], widgets_values: [...args[0].widgets_values] };
+                args[0].widgets_values.splice(19, 0, AI_WORKSHOP_DEFAULT_MODEL, "");
+            }
+            originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => this.s20NormalizeOptions?.());
         };
 

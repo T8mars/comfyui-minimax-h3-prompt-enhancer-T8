@@ -1,3 +1,4 @@
+import base64
 import importlib.util
 import io
 import json
@@ -183,6 +184,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("creative_preset", input_names)
         self.assertIn("reference_template", input_names)
         self.assertIn("api_mode", input_names)
+        self.assertIn("ai_workshop_model", input_names)
+        self.assertIn("custom_model", input_names)
         self.assertIn("openai_base_url", input_names)
         self.assertIn("openai_upload_url", input_names)
         self.assertIn("seed", input_names)
@@ -200,6 +203,7 @@ class PromptEnhancerTests(unittest.TestCase):
         creative_preset = next(item for item in schema.inputs if item.id == "creative_preset")
         task_type = next(item for item in schema.inputs if item.id == "task_type")
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
+        ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
         seed = next(item for item in schema.inputs if item.id == "seed")
         shot_count = next(item for item in schema.inputs if item.id == "shot_count")
         self.assertEqual((images.template.min, images.template.max), (0, 9))
@@ -217,6 +221,9 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
         self.assertEqual(api_mode.default, nodes.SEEDANCE_API_MODE)
+        self.assertEqual(api_mode.options, nodes.API_MODES)
+        self.assertEqual(ai_workshop_model.default, nodes.AI_WORKSHOP_DEFAULT_MODEL)
+        self.assertEqual(ai_workshop_model.options, nodes.AI_WORKSHOP_MODEL_OPTIONS)
         self.assertTrue(seed.optional)
         self.assertEqual((seed.default, seed.min, seed.max), (0, 0, 0xffffffffffffffff))
         self.assertTrue(seed.control_after_generate)
@@ -235,6 +242,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("node.graph?.change?.()", source)
         self.assertIn("this.t8CommitApiKey?.()", source)
         self.assertIn("https://api.seedance.nz/sign-up?aff=5f4w", source)
+        self.assertIn("https://ai.t8star.org/register?aff=dP7j", source)
         self.assertIn("window.open", source)
         self.assertIn("⚙️ 高级选项（可选）", source)
         self.assertIn("const advancedWidgets = [referenceContextWidget, constraintsWidget]", source)
@@ -262,10 +270,12 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('seedControlWidget.label = "种子状态（运行后）"', source)
         self.assertIn('const AUTO_SHOT_COUNT = "AUTO（系统自动判断）"', source)
         self.assertIn('"shot_count"', source)
-        self.assertIn("serialized.widgets_values.length === 16", source)
-        self.assertIn("serialized.widgets_values.length === 17", source)
+        self.assertIn("[16, 17, 19].includes(serialized.widgets_values.length)", source)
         self.assertIn("widgets_values.splice(3, 0, AUTO_SHOT_COUNT)", source)
         self.assertIn("widgets_values.splice(8, 0, COMPAT_SKILL_PROFILE, NO_CREATIVE_PRESET)", source)
+        self.assertIn('widgets_values.splice(11, 0, AI_WORKSHOP_DEFAULT_MODEL, "")', source)
+        self.assertIn('const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）"', source)
+        self.assertIn('const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash"', source)
         self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
         self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
         self.assertIn('const MV_CREATIVE_PRESET = "MV / 歌词贴字"', source)
@@ -287,13 +297,14 @@ class PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(source)
         node = workflow["nodes"][0]
         self.assertEqual(node["type"], "MiniMaxH3PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 19)
+        self.assertEqual(len(node["widgets_values"]), 21)
         self.assertEqual(node["widgets_values"][1], "T2VA（文生音视频）")
         self.assertEqual(node["widgets_values"][3], nodes.AUTO_SHOT_COUNT)
         self.assertEqual(
             node["widgets_values"][6:11],
             ["中文", "官方增强", nodes.COMPAT_SKILL_PROFILE, nodes.NO_CREATIVE_PRESET, nodes.SEEDANCE_API_MODE],
         )
+        self.assertEqual(node["widgets_values"][11:13], [nodes.AI_WORKSHOP_DEFAULT_MODEL, ""])
         self.assertEqual(node["widgets_values"][-2:], [0, "randomize"])
         self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
 
@@ -619,6 +630,54 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
         self.assertEqual(session.chat_requests[0]["json"]["model"], nodes.MODEL_ID)
         self.assertEqual(session.chat_requests[0]["headers"]["Authorization"], "Bearer compatible-key")
+
+    def test_ai_workshop_uses_default_model_and_inline_complete_image_and_video(self):
+        session = FakeSession(reference_output())
+        video_bytes = b"complete-video-including-final-segment"
+        with patch.dict(os.environ, {}, clear=True):
+            result = nodes.enhance_prompt(
+                prompt="Transfer the complete temporal reference to the pictured subject.",
+                task_type="Ref2VA",
+                reference_images={"reference_image_0": torch.zeros((1, 2, 2, 3))},
+                reference_videos={"reference_video_0": FakeVideo(data=video_bytes)},
+                api_key="workshop-key",
+                api_mode=nodes.AI_WORKSHOP_API_MODE,
+                session=session,
+            )
+        self.assertEqual(result, reference_output())
+        self.assertEqual(session.uploads, [])
+        self.assertEqual(session.chat_urls, [nodes.AI_WORKSHOP_CHAT_COMPLETIONS_URL])
+        request = session.chat_requests[0]
+        self.assertEqual(request["json"]["model"], nodes.AI_WORKSHOP_DEFAULT_MODEL)
+        parts = request["json"]["messages"][1]["content"]
+        self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url", "text", "image_url"])
+        image_url = parts[2]["image_url"]["url"]
+        video_url = parts[4]["image_url"]["url"]
+        self.assertTrue(image_url.startswith("data:image/png;base64,"))
+        self.assertTrue(video_url.startswith("data:video/mp4;base64,"))
+        self.assertEqual(base64.b64decode(video_url.split(",", 1)[1]), video_bytes)
+
+    def test_ai_workshop_custom_model_is_explicit_and_required(self):
+        session = FakeSession(basic_output())
+        with patch.dict(os.environ, {}, clear=True):
+            nodes.enhance_prompt(
+                prompt="A cyclist crosses the street.",
+                api_key="workshop-key",
+                api_mode=nodes.AI_WORKSHOP_API_MODE,
+                ai_workshop_model=nodes.CUSTOM_MODEL_OPTION,
+                custom_model="gemini-3.5-flash-thinking-low",
+                session=session,
+            )
+        self.assertEqual(session.chat_requests[0]["json"]["model"], "gemini-3.5-flash-thinking-low")
+
+        with patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(nodes.PromptEnhancerError, "custom_model is empty"):
+            nodes.enhance_prompt(
+                prompt="A cyclist crosses the street.",
+                api_key="workshop-key",
+                api_mode=nodes.AI_WORKSHOP_API_MODE,
+                ai_workshop_model=nodes.CUSTOM_MODEL_OPTION,
+                session=FakeSession(basic_output()),
+            )
 
     def test_openai_compatible_media_uses_explicit_upload_contract(self):
         session = FakeSession(basic_output("I2VA"))
@@ -1111,6 +1170,22 @@ class PromptEnhancerTests(unittest.TestCase):
         run_paid_smoke.assert_not_called()
         with self.assertRaisesRegex(RuntimeError, "explicit confirmation"):
             live_smoke.run_paid_smoke()
+
+    def test_ai_workshop_live_smoke_guard_and_visual_evaluator(self):
+        smoke_spec = importlib.util.spec_from_file_location(
+            "ai_workshop_live_smoke_test_module",
+            NODES_PATH.parent / "workshop_live_smoke.py",
+        )
+        smoke = importlib.util.module_from_spec(smoke_spec)
+        smoke_spec.loader.exec_module(smoke)
+        verified = (
+            f"{smoke.IMAGE_CODE} magenta triangle yellow circle "
+            f"{smoke.EARLY_VIDEO_CODE} blue square moves left to right "
+            f"{smoke.LATE_VIDEO_CODE} green circle moves top to bottom"
+        )
+        self.assertEqual(smoke.evaluate_result(verified), [])
+        with patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(RuntimeError, "explicit confirmation"):
+            smoke.run_paid_smoke(False)
 
     def test_live_smoke_fixture_is_a_four_second_temporal_video(self):
         with tempfile.TemporaryDirectory() as directory:
