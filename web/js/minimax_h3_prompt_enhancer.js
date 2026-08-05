@@ -7,6 +7,22 @@ const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
 const SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))];
+const COMPAT_SKILL_PROFILE = "现有兼容（保留中英文）";
+const STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）";
+const OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE];
+const NO_CREATIVE_PRESET = "无（仅核心规则）";
+const CREATIVE_PRESET_OPTIONS = [
+    NO_CREATIVE_PRESET,
+    "AUTO（根据意图判断）",
+    "极简产品广告",
+    "3D 动画短片",
+    "品牌宣传短片",
+    "MV / 歌词贴字",
+    "双人合作游戏开场",
+    "纸拼贴讲解",
+    "立体纸艺停格讲解",
+    "手绘实拍融合",
+];
 const TASK_TYPE_LABELS = {
     T2VA: "T2VA（文生音视频）",
     I2VA: "I2VA（首帧图生音视频）",
@@ -25,6 +41,8 @@ const SERIALIZED_WIDGET_NAMES = [
     "description_word_target",
     "output_language",
     "prompt_mode",
+    "official_skill_profile",
+    "creative_preset",
     "api_mode",
     "reference_context",
     "constraints",
@@ -320,6 +338,8 @@ app.registerExtension({
             const taskTypeWidget = this.widgets?.find((widget) => widget.name === "task_type");
             const shotCountWidget = this.widgets?.find((widget) => widget.name === "shot_count");
             const promptModeWidget = this.widgets?.find((widget) => widget.name === "prompt_mode");
+            const officialSkillProfileWidget = this.widgets?.find((widget) => widget.name === "official_skill_profile");
+            const creativePresetWidget = this.widgets?.find((widget) => widget.name === "creative_preset");
             const referenceTemplateWidget = this.widgets?.find((widget) => widget.name === "reference_template");
             const referenceContextWidget = this.widgets?.find((widget) => widget.name === "reference_context");
             const constraintsWidget = this.widgets?.find((widget) => widget.name === "constraints");
@@ -346,6 +366,8 @@ app.registerExtension({
                 normalizeChoice(shotCountWidget, SHOT_COUNT_OPTIONS, AUTO_SHOT_COUNT);
                 normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
                 normalizeChoice(promptModeWidget, ["官方增强", "参考模板融合"], "官方增强");
+                normalizeChoice(officialSkillProfileWidget, OFFICIAL_SKILL_PROFILES, COMPAT_SKILL_PROFILE);
+                normalizeChoice(creativePresetWidget, CREATIVE_PRESET_OPTIONS, NO_CREATIVE_PRESET);
                 normalizeChoice(apiModeWidget, [SEEDANCE_API_MODE, OPENAI_API_MODE], SEEDANCE_API_MODE);
                 if (LEGACY_UI_VALUES.has(String(apiKeyWidget?.value || "").trim())) apiKeyWidget.value = "";
                 for (const widget of [referenceContextWidget, constraintsWidget, referenceTemplateWidget, openaiBaseUrlWidget, openaiUploadUrlWidget]) {
@@ -400,9 +422,15 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
             const serialized = args[0];
-            if (Array.isArray(serialized?.widgets_values) && serialized.widgets_values.length === 16) {
+            if (Array.isArray(serialized?.widgets_values)
+                && (serialized.widgets_values.length === 16 || serialized.widgets_values.length === 17)) {
                 args[0] = { ...serialized, widgets_values: [...serialized.widgets_values] };
+            }
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 16) {
                 args[0].widgets_values.splice(3, 0, AUTO_SHOT_COUNT);
+            }
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 17) {
+                args[0].widgets_values.splice(8, 0, COMPAT_SKILL_PROFILE, NO_CREATIVE_PRESET);
             }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => this.t8NormalizePromptOptions?.());

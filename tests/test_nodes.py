@@ -179,6 +179,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("api_key", input_names)
         self.assertIn("output_language", input_names)
         self.assertIn("prompt_mode", input_names)
+        self.assertIn("official_skill_profile", input_names)
+        self.assertIn("creative_preset", input_names)
         self.assertIn("reference_template", input_names)
         self.assertIn("api_mode", input_names)
         self.assertIn("openai_base_url", input_names)
@@ -194,6 +196,8 @@ class PromptEnhancerTests(unittest.TestCase):
         constraints = next(item for item in schema.inputs if item.id == "constraints")
         output_language = next(item for item in schema.inputs if item.id == "output_language")
         prompt_mode = next(item for item in schema.inputs if item.id == "prompt_mode")
+        official_skill_profile = next(item for item in schema.inputs if item.id == "official_skill_profile")
+        creative_preset = next(item for item in schema.inputs if item.id == "creative_preset")
         task_type = next(item for item in schema.inputs if item.id == "task_type")
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
         seed = next(item for item in schema.inputs if item.id == "seed")
@@ -205,6 +209,11 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertTrue(constraints.advanced)
         self.assertEqual(output_language.default, "中文")
         self.assertEqual(prompt_mode.default, "官方增强")
+        self.assertEqual(official_skill_profile.default, nodes.COMPAT_SKILL_PROFILE)
+        self.assertEqual(official_skill_profile.options, nodes.OFFICIAL_SKILL_PROFILES)
+        self.assertEqual(creative_preset.default, nodes.NO_CREATIVE_PRESET)
+        self.assertEqual(creative_preset.options, nodes.CREATIVE_PRESET_OPTIONS)
+        self.assertEqual(len(creative_preset.options), 10)
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
         self.assertEqual(api_mode.default, nodes.SEEDANCE_API_MODE)
@@ -215,6 +224,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(shot_count.options, nodes.SHOT_COUNT_OPTIONS)
         self.assertEqual(shot_count.options[1:], [str(count) for count in range(1, 21)])
         self.assertEqual(input_names.index("shot_count"), input_names.index("duration_seconds") + 1)
+        self.assertFalse(any(item.id.lower().startswith("audio") for item in schema.inputs))
 
     def test_frontend_masks_api_key_and_has_signup_button(self):
         source = (NODES_PATH.parent / "web" / "js" / "minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")
@@ -238,6 +248,10 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('widget.name === "reference_template"', source)
         self.assertIn('normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文")', source)
         self.assertIn('normalizeChoice(promptModeWidget, ["官方增强", "参考模板融合"], "官方增强")', source)
+        self.assertIn("OFFICIAL_SKILL_PROFILES", source)
+        self.assertIn("CREATIVE_PRESET_OPTIONS", source)
+        self.assertIn("normalizeChoice(officialSkillProfileWidget", source)
+        self.assertIn("normalizeChoice(creativePresetWidget", source)
         self.assertIn("LEGACY_UI_VALUES.has(String(templateWidget.value", source)
         self.assertIn("SERIALIZED_WIDGET_NAMES.map", source)
         self.assertIn("nodeType.prototype.onSerialize", source)
@@ -249,7 +263,9 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('const AUTO_SHOT_COUNT = "AUTO（系统自动判断）"', source)
         self.assertIn('"shot_count"', source)
         self.assertIn("serialized.widgets_values.length === 16", source)
+        self.assertIn("serialized.widgets_values.length === 17", source)
         self.assertIn("widgets_values.splice(3, 0, AUTO_SHOT_COUNT)", source)
+        self.assertIn("widgets_values.splice(8, 0, COMPAT_SKILL_PROFILE, NO_CREATIVE_PRESET)", source)
         self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
         self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
 
@@ -259,10 +275,13 @@ class PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(source)
         node = workflow["nodes"][0]
         self.assertEqual(node["type"], "MiniMaxH3PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 17)
+        self.assertEqual(len(node["widgets_values"]), 19)
         self.assertEqual(node["widgets_values"][1], "T2VA（文生音视频）")
         self.assertEqual(node["widgets_values"][3], nodes.AUTO_SHOT_COUNT)
-        self.assertEqual(node["widgets_values"][6:9], ["中文", "官方增强", nodes.SEEDANCE_API_MODE])
+        self.assertEqual(
+            node["widgets_values"][6:11],
+            ["中文", "官方增强", nodes.COMPAT_SKILL_PROFILE, nodes.NO_CREATIVE_PRESET, nodes.SEEDANCE_API_MODE],
+        )
         self.assertEqual(node["widgets_values"][-2:], [0, "randomize"])
         self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
 
@@ -285,6 +304,93 @@ class PromptEnhancerTests(unittest.TestCase):
         legacy_messages = legacy_session.chat_requests[0]["json"]["messages"]
         self.assertIn("Output language: Simplified Chinese", legacy_messages[0]["content"])
         self.assertIn("Prompt construction mode: 官方增强", legacy_messages[1]["content"])
+
+    def test_official_skill_strict_profile_forces_english_contract_without_breaking_compatibility(self):
+        compatibility_session = FakeSession(basic_output())
+        self.run_enhancer(
+            compatibility_session,
+            output_language="中文",
+            description_word_target=200,
+            official_skill_profile=nodes.COMPAT_SKILL_PROFILE,
+        )
+        compatibility_messages = compatibility_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("Output language: Simplified Chinese", compatibility_messages[0]["content"])
+        self.assertIn("approximately 200 Chinese characters", compatibility_messages[1]["content"])
+
+        strict_session = FakeSession(basic_output())
+        self.run_enhancer(
+            strict_session,
+            output_language="中文",
+            description_word_target=200,
+            official_skill_profile=nodes.STRICT_SKILL_PROFILE,
+        )
+        strict_messages = strict_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("strict all-English contract", strict_messages[0]["content"])
+        self.assertIn("Output language: English", strict_messages[0]["content"])
+        self.assertNotIn("Output language: Simplified Chinese", strict_messages[0]["content"])
+        self.assertIn("Effective descriptive output language: English", strict_messages[1]["content"])
+        self.assertIn("approximately 200 English words", strict_messages[1]["content"])
+
+        strict_ref_session = FakeSession(reference_output(include_video=False))
+        self.run_enhancer(
+            strict_ref_session,
+            task_type="Ref2VA",
+            reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
+            output_language="中文",
+            official_skill_profile=nodes.STRICT_SKILL_PROFILE,
+        )
+        strict_ref_user = strict_ref_session.chat_requests[0]["json"]["messages"][1]["content"][0]["text"]
+        self.assertIn("detailed_description is normally 350-500 English words", strict_ref_user)
+
+    def test_official_core_contract_and_frozen_source_reach_the_model(self):
+        session = FakeSession(basic_output())
+        self.run_enhancer(session)
+        system = session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertEqual(nodes.OFFICIAL_SKILL_SOURCE_SHA, "093f3129a3f7bd27c74928b1cd31a54fbdebe057")
+        for required in (
+            "Simultaneous group speech uses a compact group identifier such as (S1,S2)",
+            "place <scenetrans> on both sides of the cut",
+            "Never put (S1), (S2), or other speaker identifiers in retention_analysis",
+            "ordinary sound embedded in <Video N> does not automatically create an <Audio N> role",
+            "newly requested action or background is not by itself evidence",
+        ):
+            self.assertIn(required, system)
+
+    def test_all_official_creative_presets_are_available_and_injected_as_prompt_profiles(self):
+        expected = {
+            nodes.NO_CREATIVE_PRESET: ("Creative preset: none", "only the H3 core contract"),
+            nodes.AUTO_CREATIVE_PRESET: ("Creative preset: AUTO", "Infer at most one"),
+            "极简产品广告": ("minimalist product advertisement", "one concise single-line text event"),
+            "3D 动画短片": ("3D animation short", "squash-and-stretch"),
+            "品牌宣传短片": ("brand promotional video", "never fabricate a capability or claim"),
+            "MV / 歌词贴字": ("music-video lyric typography", "one main text event per shot"),
+            "双人合作游戏开场": ("two-player cooperative game intro", "five main colors"),
+            "纸拼贴讲解": ("paper-collage explainer", "press-flat"),
+            "立体纸艺停格讲解": ("papercraft stop-motion explainer", "pull-tabs"),
+            "手绘实拍融合": ("hand-drawn/live-action fusion", "first 20 percent"),
+        }
+        self.assertEqual(list(expected), nodes.CREATIVE_PRESET_OPTIONS)
+        for preset, markers in expected.items():
+            with self.subTest(preset=preset):
+                session = FakeSession(basic_output())
+                self.run_enhancer(session, creative_preset=preset)
+                messages = session.chat_requests[0]["json"]["messages"]
+                for marker in markers:
+                    self.assertIn(marker, messages[0]["content"])
+                self.assertIn("prompt-writing profile only", messages[0]["content"])
+                self.assertIn(f"Creative preset: {preset}", messages[1]["content"])
+
+    def test_invalid_skill_profile_and_preset_fail_before_network(self):
+        for kwargs, phrase in (
+            ({"official_skill_profile": "future-profile"}, "official_skill_profile"),
+            ({"creative_preset": "future-preset"}, "creative_preset"),
+        ):
+            with self.subTest(kwargs=kwargs):
+                session = FakeSession(basic_output())
+                with self.assertRaisesRegex(nodes.PromptEnhancerError, phrase):
+                    self.run_enhancer(session, **kwargs)
+                self.assertEqual(session.uploads, [])
+                self.assertEqual(session.chat_requests, [])
 
     def test_reference_template_mode_requires_and_sends_template(self):
         missing_session = FakeSession(basic_output())

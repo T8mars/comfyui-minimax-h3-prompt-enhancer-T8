@@ -122,6 +122,24 @@
           "link": null
         },
         {
+          "localized_name": "official_skill_profile",
+          "name": "official_skill_profile",
+          "type": "COMBO",
+          "widget": {
+            "name": "official_skill_profile"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "creative_preset",
+          "name": "creative_preset",
+          "type": "COMBO",
+          "widget": {
+            "name": "creative_preset"
+          },
+          "link": null
+        },
+        {
           "localized_name": "api_mode",
           "name": "api_mode",
           "type": "COMBO",
@@ -221,6 +239,8 @@
         0,
         "中文",
         "官方增强",
+        "现有兼容（保留中英文）",
+        "无（仅核心规则）",
         "贞贞平价小屋（推荐）",
         "",
         "",

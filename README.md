@@ -18,7 +18,9 @@
 - 固定视觉模型 `bytedance/doubao-seed-evolving`，没有纯文本模型回退。
 - 同时分析文字、图片和完整视频，不用抽帧冒充视频理解。
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
-- 集成 MiniMax-H3 官方基础与完整参考提示词规则。
+- 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
+- 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
+- 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；预设只优化提示词，不运行完整制作工作流。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -58,7 +60,7 @@ Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)
 
 1. 添加 `MiniMax H3 Prompt Enhancer (Seedance / OpenAI)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
-3. 选择生成类型、时长、镜头数量、改写模式和输出语言。
+3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和创意预设。
 4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
 5. 填写 API Key，点击“保存到工作流”；或者使用环境变量。
 6. 点击节点底部的“运行提示词优化”。
@@ -132,8 +134,36 @@ Seedance 2.0 目标视频模型能够处理音频，不代表本项目固定使�
 优先级为：
 
 ```text
-硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 规则 > 参考模板
+硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 核心规则 > 创意预设 > 参考模板
 ```
+
+## MiniMax-H3 官方 Skill 协议
+
+| 选项 | 行为 |
+| --- | --- |
+| `现有兼容（保留中英文）` | 默认值；保留现有中文 / English 正文体验，同时使用新版结构、说话人、声音和 Ref2VA 素材角色规则 |
+| `官方 Skill 严格（全英文协议）` | 所有说明字段和描述正文强制使用英文；仅用户原始对白、歌词、品牌/UI 文案和画面可见文字保留原语言 |
+
+严格档位优先于“输出语言”选择。例如同时选择“中文”和“官方 Skill 严格”，实际说明正文仍为英文。这样不会静默改变旧工作流，新节点也继续默认中文兼容模式。Ref2VA 生成类任务在严格档位下默认以约 350–500 English words 作为软目标；未达到目标字数仍不是节点错误。
+
+新版核心规则还包括：按目标视频首次真实发声顺序分配 `(S1)`，多人同声使用 `(S1,S2)`，跨切镜对白在两侧使用 `<scenetrans>`，只在片尾截断时使用 `<cutoff>`；Ref2VA 严格区分 Subject、Picture、Video 的实际角色，普通视频内声音不会被伪装成独立 Audio 素材。
+
+## MiniMax-H3 创意预设
+
+| 预设 | 主要强化内容 |
+| --- | --- |
+| `无（仅核心规则）` | 不附加场景风格规则 |
+| `AUTO（根据意图判断）` | 意图明确时最多选择一个匹配预设，否则只用核心规则 |
+| `极简产品广告` | 产品身份、材质、负空间、单节拍主动作、稳定闭幕和品牌事实安全 |
+| `3D 动画短片` | 角色/场景连续性、可读轮廓、动作预备与跟随、单镜重要角色控制 |
+| `品牌宣传短片` | 可核验品牌事实、精确文案、安全空间和具体功能证明 |
+| `MV / 歌词贴字` | 歌词原文、口型/表演、空间文字层级和文本已知节拍；不假装分析音频附件 |
+| `双人合作游戏开场` | 双人身份与左右位置、玩家名、UI 文案、按钮层级和颜色控制 |
+| `纸拼贴讲解` | 半调纸片、视觉隐喻、停格组装动作和触感音效 |
+| `立体纸艺停格讲解` | 分层纸景、折叠/弹起/翻页/纸偶动作、材料与景深连续性 |
+| `手绘实拍融合` | 实拍接触、同一实体连续变形、慢半拍追拍、粗糙发光笔触和非恐怖基调 |
+
+这些选项只把官方场景 Skill 中适合“单次 H3 提示词改写”的规则传给 LLM。节点不会安装远程 Skill、生成角色卡或锚点图、研究官网、分析音频文件、调用 H3 视频生成、拼接片段或执行交付流程。
 
 ## 改写模式
 
@@ -157,6 +187,8 @@ Seedance 2.0 目标视频模型能够处理音频，不代表本项目固定使�
 | `description_word_target` | `0` 为自动；非零为 80–1000，中文按约数汉字、英文按单词理解 |
 | `output_language` | `中文 / English`，默认中文 |
 | `prompt_mode` | `官方增强 / 参考模板融合` |
+| `official_skill_profile` | `现有兼容 / 官方 Skill 严格`；默认兼容，严格档位强制英文说明正文 |
+| `creative_preset` | `无 / AUTO / 8 个官方场景写作预设` |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |
@@ -298,6 +330,8 @@ Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；
 
 - [MiniMax-H3 基础提示词指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md)
 - [MiniMax-H3 完整参考模式指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md)
+- [MiniMax-H3 官方 Skills 目录](https://github.com/MiniMax-AI/MiniMax-H3/tree/093f3129a3f7bd27c74928b1cd31a54fbdebe057/skills)
+- [MiniMax-H3 官方核心 Prompt Writing Skill](https://github.com/MiniMax-AI/MiniMax-H3/blob/093f3129a3f7bd27c74928b1cd31a54fbdebe057/skills/h3-prompt-writing/SKILL.md)
 - [Seedance API 文档](https://api.seedance.nz/docs/llms.txt)
 - [Seedance 模型页面](https://api.seedance.nz/pricing/bytedance%2Fdoubao-seed-evolving)
 - [Seedance 2.0 官方模型页](https://seed.bytedance.com/en/seedance2_0)
