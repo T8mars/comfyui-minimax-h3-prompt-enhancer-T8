@@ -1,8 +1,17 @@
-# ComfyUI MiniMax-H3 Prompt Enhancer T8
+# ComfyUI MiniMax-H3 / Seedance 2.0 Prompt Enhancer T8
 
-一个面向 MiniMax-H3 视频生成的 ComfyUI 提示词增强节点。节点固定调用 `bytedance/doubao-seed-evolving`，能够把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求，输出可连接下游节点的 `STRING`。
+一组面向 MiniMax-H3 与 Seedance 2.0 视频生成的 ComfyUI 提示词增强节点。两个节点固定调用 `bytedance/doubao-seed-evolving`，能够把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求，输出可连接下游节点的 `STRING`。
 
-支持 T2VA、I2VA、FL2VA、L2VA、Ref2VA，默认输出中文，也可切换 English；同时提供严格、平衡、创意三档改写，以及官方增强和参考模板融合两种提示词模式。
+两个节点共享已经验证的 API、上传、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法，绝不是把 H3 节点换名字。
+
+## 两个独立节点
+
+| 节点 | 用途 | 主要任务 |
+| --- | --- | --- |
+| `MiniMax H3 Prompt Enhancer (Seedance / OpenAI)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
+| `Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
+
+本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频生成、轮询或下载接口。
 
 ## 功能特点
 
@@ -18,6 +27,7 @@
 - 提供节点内 API Key 输入、遮罩显示、保存、清空和注册链接。
 - 支持贞贞平价小屋固定接口和显式配置的 OpenAI 兼容备用接口。
 - 输出单一 `STRING`，可直接连接下游提示词输入。
+- 新增独立 Seedance 2.0 节点：简单/复杂双路径、AUTO/固定 1–20 镜头、官方/Seedance.nz 引用语法、字幕与稳定性策略。
 
 ## 安装
 
@@ -37,10 +47,11 @@ ComfyUI/
 
 本节点不增加额外 Python 依赖，使用 ComfyUI 已安装的 `requests`、NumPy、Pillow 和原生媒体类型。安装后重启 ComfyUI；如果节点或前端界面没有更新，请对浏览器执行一次 `Ctrl+F5`。
 
-在节点菜单中搜索：
+在节点菜单中搜索任一节点：
 
 ```text
 MiniMax H3 Prompt Enhancer (Seedance / OpenAI)
+Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)
 ```
 
 ## 快速使用
@@ -54,6 +65,49 @@ MiniMax H3 Prompt Enhancer (Seedance / OpenAI)
 7. 从 `enhanced_prompt` 获取最终字符串。
 
 可以直接把 [`example/minimax_h3_prompt_enhancer_example.json`](./example/minimax_h3_prompt_enhancer_example.json) 拖入 ComfyUI。示例工作流不包含 API Key。
+
+## Seedance 2.0 快速使用
+
+1. 添加 `Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)`。
+2. 填写“视频创意 / 提示词”。任务意图、组织方式、时长和镜头数都可先保持 `AUTO`。
+3. 按任务连接首帧、尾帧、参考图片或完整参考视频。
+4. 选择官方中文 `@图片N/@视频N` 或 Seedance.nz 英文 `@Image N/@Video N` 引用格式。
+5. 填写的是“提示词增强 LLM API Key”，保存后点击节点底部运行按钮。
+6. 把 `enhanced_prompt` 连接到下游 Seedance 2.0 视频节点的提示词输入。
+
+可以直接导入 [`example/seedance20_prompt_enhancer_example.json`](./example/seedance20_prompt_enhancer_example.json)。示例不包含 API Key。
+
+### Seedance 2.0 任务意图
+
+| 选项 | 用途 | 素材规则 |
+| --- | --- | --- |
+| `AUTO` | 按意图和已连接素材判断 | 无歧义时自动选择 |
+| `T2V` | 文生视频 | 不连接素材 |
+| `I2V` | 首帧图生视频 | 只连接 `first_frame` |
+| `FL-I2V` | 首尾帧过渡 | 连接 `first_frame` 与 `last_frame` |
+| `多模态参考生成` | 借用图片或视频中的主体、动作、运镜、风格等 | 至少连接一个参考素材 |
+| `视频编辑` | 对已有视频增删改 | 至少一个参考视频，提示词直接写 `@视频N` |
+| `视频延长` | 向前或向后延长 | 恰好一个参考视频 |
+| `轨道补齐` | 在视频间生成衔接 | 2–3 个参考视频 |
+| `组合任务` | 参考一个素材并编辑另一个视频 | 被编辑视频加至少一个其他素材 |
+
+视频编辑与组合任务默认把 `@视频1` / `@Video 1` 作为被编辑目标；其他连接素材是支持参考。需要不同角色时，在高级“素材用途”中明确指定。
+
+### Seedance 2.0 提示词组织
+
+- 官方八要素按需补齐：主体、动作、场景、光影色调、单一主运镜、风格、画质和约束。
+- 简单任务使用一个紧凑自然段；复杂任务才使用 `镜头1 / 镜头2 / 镜头3`。
+- 镜头数支持 `AUTO` 或固定 1–20。固定镜头是传给 LLM 的软生成约束；在 4–15 秒内使用较高镜头数时，上游可能合并或省略镜头，节点不会因此判错。
+- 目标时长支持 `AUTO` 或 4–15 秒，只控制整体内容密度，不生成 H3 的毫秒时间码，也不默认写逐镜头绝对秒数。
+- 编辑、延长和组合任务直接指代 `@视频N`，不写成“参考 @视频N”。
+- “素材用途”可补充 `@图片1=人物外观；@视频1=动作和运镜`，但不能替代真实素材分析。
+- “参考模板融合”只迁移结构、节奏、运镜、转场、风格和声音设计，不复制模板中的人物、道具和剧情事实。
+
+### Seedance 2.0 音频边界
+
+Seedance 2.0 目标视频模型能够处理音频，不代表本项目固定使用的提示词增强 LLM 能分析音频文件。2026-08-05 的真实能力探测中，`bytedance/doubao-seed-evolving` 明确拒绝 OpenAI 兼容 `input_audio`，返回“audio input is not supported by this model”。因此新节点没有 `AUDIO` 输入，也不会声称听过上传音频。
+
+用户仍可在文字里描述对白、环境声、动作声、音乐和音色，或保留文字形式的 `@音频N/@Audio N` 意图；这些内容只作为文字理解。探测结论的脱敏记录位于 [`tests/fixtures/seedance20_audio_probe_2026-08-05.txt`](./tests/fixtures/seedance20_audio_probe_2026-08-05.txt)。
 
 ## 生成类型
 
@@ -135,6 +189,8 @@ Seedance 没有为本节点调用的 Chat Completions 公开确定性 `seed` 请
 
 ## API Key 与接口模式
 
+两个节点中的 Key 都用于 `bytedance/doubao-seed-evolving` 提示词增强请求，不是下游 Seedance 2.0 视频生成 API Key。
+
 ### 贞贞平价小屋（推荐）
 
 聊天与素材上传地址固定为：
@@ -199,13 +255,15 @@ enhanced_prompt: STRING
 
 只要 Chat Completions 返回非空正文，节点就会输出，不会因为字段缺失、Markdown、镜头编号、时间码、目标长度或 `finish_reason=length` 报错。
 
-唯一的本地整理规则：
+MiniMax-H3 节点唯一的本地整理规则：
 
 1. 当前任务的全部预期字段均以精确字段名命中；
 2. 每个字段只出现一次；
 3. 字段顺序确实错误。
 
 三个条件同时成立时按官方顺序重排；任何字段未命中、缺失、重复，或者本来就是正确顺序时，保持上游原文。
+
+Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；非空上游正文直接输出。两个节点都不会因目标字数或镜头数量偏差报错，也不会为修复格式自动发起第二次付费请求。
 
 以下情况仍会报错：
 
@@ -227,10 +285,11 @@ enhanced_prompt: STRING
 
 单元测试使用 mock API 和本地媒体夹具，不联网、不上传素材、不产生费用。
 
-`live_smoke.py` 会生成本地图片和 4 秒 MP4，对图片事实、视频时间顺序和跨素材关系做真实联合测试。它会产生实际 Token 费用，只有明确接受费用时才运行：
+`live_smoke.py` 用于 MiniMax-H3；`seedance20_live_smoke.py` 用于 Seedance 2.0。两者都会生成本地图片和 4 秒 MP4，对图片事实、视频时间顺序和跨素材关系做真实联合测试。它会产生实际 Token 费用，只有明确接受费用时才运行：
 
 ```powershell
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\live_smoke.py --confirm-paid
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\seedance20_live_smoke.py --confirm-paid
 ```
 
 运行前必须设置 `SEEDANCE_API_KEY`。不要把真实 Key 写进命令参数、脚本或工作流后上传到公开仓库。
@@ -241,7 +300,9 @@ enhanced_prompt: STRING
 - [MiniMax-H3 完整参考模式指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md)
 - [Seedance API 文档](https://api.seedance.nz/docs/llms.txt)
 - [Seedance 模型页面](https://api.seedance.nz/pricing/bytedance%2Fdoubao-seed-evolving)
+- [Seedance 2.0 官方模型页](https://seed.bytedance.com/en/seedance2_0)
+- [Seedance 2.0 官方 Prompt Optimizer Skill](https://arkdocs.tos-cn-beijing.volces.com/files/video-generation/SKILL.md)
 
 ## 说明
 
-本项目是第三方 ComfyUI 自定义节点，不隶属于 MiniMax、ByteDance、Seedance 或 ComfyUI 官方。API 能力、价格和可用性以服务商最新说明为准。
+本项目是第三方 ComfyUI 自定义节点，不隶属于 MiniMax、ByteDance、Seedance 或 ComfyUI 官方。API 能力、价格和可用性以服务商最新说明为准。使用真人参考素材时，用户仍需自行确认身份授权和下游平台规则。
