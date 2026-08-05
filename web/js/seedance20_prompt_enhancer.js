@@ -1,0 +1,361 @@
+import { app } from "../../scripts/app.js";
+
+
+const NODE_ID = "Seedance20PromptEnhancerT8";
+const SIGN_UP_URL = "https://api.seedance.nz/sign-up?aff=5f4w";
+const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
+const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
+const AUTO_DURATION = "AUTO（模型智能选择）";
+const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
+const TASK_LABELS = {
+    AUTO: "AUTO（根据意图与素材判断）",
+    T2V: "T2V（文生视频）",
+    I2V: "I2V（首帧图生视频）",
+    "FL-I2V": "FL-I2V（首尾帧图生视频）",
+    MultiRef: "多模态参考生成（图片/视频）",
+    VideoEdit: "视频编辑（增删改）",
+    VideoExtend: "视频延长（向前/向后）",
+    TrackFill: "轨道补齐（多视频衔接）",
+    Combined: "组合任务（参考+编辑）",
+};
+const SERIALIZED_WIDGET_NAMES = [
+    "prompt",
+    "task_intent",
+    "complexity_mode",
+    "duration_seconds",
+    "shot_count",
+    "rewrite_mode",
+    "output_detail",
+    "output_language",
+    "prompt_mode",
+    "reference_syntax",
+    "subtitle_policy",
+    "stability_constraints",
+    "custom_length_target",
+    "reference_roles",
+    "reference_context",
+    "constraints",
+    "api_key",
+    "reference_template",
+    "api_mode",
+    "openai_base_url",
+    "openai_upload_url",
+    "seed",
+    "control_after_generate",
+];
+
+
+function setWidgetVisible(widget, visible) {
+    if (!widget) return;
+    if (!("s20OriginalType" in widget)) {
+        widget.s20OriginalType = widget.type;
+        widget.s20OriginalComputeSize = widget.computeSize;
+        widget.s20OriginalDisplay = widget.element?.style.display || "";
+        widget.s20OriginalHidden = Boolean(widget.hidden);
+    }
+    widget.type = visible ? widget.s20OriginalType : "converted-widget";
+    widget.computeSize = visible ? widget.s20OriginalComputeSize : () => [0, -4];
+    widget.hidden = visible ? widget.s20OriginalHidden : true;
+    if (widget.element) {
+        widget.element.dataset.shouldHide = visible ? "false" : "true";
+        widget.element.style.display = visible ? widget.s20OriginalDisplay : "none";
+        widget.element.hidden = !visible;
+    }
+}
+
+
+function resizeNode(node) {
+    const apply = () => {
+        for (const widget of node.widgets || []) {
+            if (widget.element) delete widget.computedHeight;
+        }
+        node.setSize([node.size[0], node.computeSize()[1]]);
+        node.setDirtyCanvas(true, true);
+        app.canvas?.setDirty?.(true, true);
+    };
+    requestAnimationFrame(() => {
+        apply();
+        requestAnimationFrame(apply);
+    });
+}
+
+
+function normalizeChoice(widget, choices, fallback) {
+    if (widget && !choices.includes(widget.value)) widget.value = fallback;
+}
+
+
+function setTextWidgetValue(widget, value) {
+    if (!widget) return;
+    widget.value = value;
+    const input = widget.inputEl
+        || (widget.element?.matches?.("textarea, input") ? widget.element : null)
+        || widget.element?.querySelector?.("textarea, input");
+    if (input) input.value = value;
+}
+
+
+function addAdvancedToggle(node, widgets) {
+    let expanded = false;
+    for (const widget of widgets) setWidgetVisible(widget, expanded);
+    const toggle = node.addWidget(
+        "button",
+        "⚙️ 高级选项（可选）",
+        "展开",
+        () => {
+            expanded = !expanded;
+            for (const widget of widgets) setWidgetVisible(widget, expanded);
+            toggle.value = expanded ? "收起" : "展开";
+            resizeNode(node);
+        },
+        { serialize: false },
+    );
+    toggle.serializeValue = () => undefined;
+}
+
+
+function addConditionalWidget(node, controller, target, predicate) {
+    const update = (value = controller.value) => {
+        setWidgetVisible(target, predicate(value));
+        resizeNode(node);
+    };
+    const originalCallback = controller.callback;
+    controller.callback = function (value) {
+        originalCallback?.apply(this, arguments);
+        update(value);
+    };
+    update();
+    return update;
+}
+
+
+function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget) {
+    const update = (mode = modeWidget.value) => {
+        const compatible = mode === OPENAI_API_MODE;
+        setWidgetVisible(baseUrlWidget, compatible);
+        setWidgetVisible(uploadUrlWidget, compatible);
+        if (node.s20SignUpWidget) setWidgetVisible(node.s20SignUpWidget, !compatible);
+        node.s20UpdateApiKeyPlaceholder?.();
+        resizeNode(node);
+    };
+    const originalCallback = modeWidget.callback;
+    modeWidget.callback = function (value) {
+        originalCallback?.apply(this, arguments);
+        update(value);
+    };
+    node.s20UpdateApiMode = update;
+    update();
+}
+
+
+function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
+    const container = document.createElement("div");
+    container.style.cssText = "display:flex;flex-direction:column;gap:6px;width:100%;box-sizing:border-box";
+
+    const inputRow = document.createElement("div");
+    inputRow.style.cssText = "display:flex;align-items:center;gap:6px;width:100%;height:30px;box-sizing:border-box";
+    const input = document.createElement("input");
+    input.type = "password";
+    input.autocomplete = "new-password";
+    input.spellcheck = false;
+    input.style.cssText = [
+        "flex:1", "min-width:0", "width:0", "height:28px", "box-sizing:border-box",
+        "border:1px solid var(--border-color, #555)", "border-radius:6px",
+        "background:var(--comfy-input-bg, #1f1f1f)", "color:var(--input-text, #ddd)", "padding:0 9px",
+    ].join(";");
+    const updatePlaceholder = () => {
+        input.placeholder = apiModeWidget?.value === OPENAI_API_MODE
+            ? "提示词增强 LLM 的 OpenAI 兼容 API Key"
+            : "贞贞提示词增强 LLM API Key（可保存到工作流）";
+    };
+    node.s20UpdateApiKeyPlaceholder = updatePlaceholder;
+    updatePlaceholder();
+
+    const reveal = document.createElement("button");
+    reveal.type = "button";
+    reveal.textContent = "显示";
+    reveal.title = "显示或隐藏 API Key";
+    reveal.style.cssText = "flex:0 0 auto;height:28px;padding:0 9px;border:1px solid var(--border-color, #555);border-radius:6px;background:var(--comfy-input-bg, #2a2a2a);color:var(--input-text, #ddd);cursor:pointer";
+    reveal.onclick = () => {
+        const show = input.type === "password";
+        input.type = show ? "text" : "password";
+        reveal.textContent = show ? "隐藏" : "显示";
+    };
+    inputRow.append(input, reveal);
+
+    const actionRow = document.createElement("div");
+    actionRow.style.cssText = "display:flex;gap:6px;width:100%;height:28px;box-sizing:border-box";
+    const save = document.createElement("button");
+    save.type = "button";
+    save.textContent = "💾 保存到工作流";
+    save.title = "API Key 会写入工作流 JSON；分享工作流前请清空";
+    const clear = document.createElement("button");
+    clear.type = "button";
+    clear.textContent = "清空";
+    clear.title = "从输入框和工作流中删除 API Key";
+    for (const button of [save, clear]) {
+        button.style.cssText = "flex:1;min-width:0;height:28px;border:1px solid var(--border-color, #555);border-radius:6px;background:var(--comfy-input-bg, #2a2a2a);color:var(--input-text, #ddd);cursor:pointer";
+    }
+    actionRow.append(save, clear);
+    container.append(inputRow, actionRow);
+
+    let value = String(sourceWidget.value || "");
+    Object.defineProperty(sourceWidget, "value", {
+        configurable: true,
+        get() { return value; },
+        set(nextValue) {
+            value = String(nextValue || "");
+            input.value = value;
+        },
+    });
+    input.value = value;
+    input.addEventListener("input", () => {
+        save.textContent = "💾 保存到工作流";
+        node.setDirtyCanvas(true, true);
+    });
+
+    const commit = () => {
+        sourceWidget.value = input.value.trim();
+        sourceWidget.callback?.(sourceWidget.value);
+        node.graph?.change?.();
+        node.setDirtyCanvas(true, true);
+        save.textContent = "✓ 已保存到工作流";
+    };
+    save.onclick = commit;
+    clear.onclick = () => {
+        input.value = "";
+        sourceWidget.value = "";
+        sourceWidget.callback?.("");
+        node.graph?.change?.();
+        node.setDirtyCanvas(true, true);
+        save.textContent = "💾 保存到工作流";
+    };
+    node.s20CommitApiKey = commit;
+
+    setWidgetVisible(sourceWidget, false);
+    const secureWidget = node.addDOMWidget("seedance20_api_key_secure", "custom", container, {
+        getValue: () => "",
+        setValue: () => {},
+        getMinHeight: () => 78,
+        getMaxHeight: () => 78,
+        hideOnZoom: false,
+        serialize: false,
+        beforeResize() { delete this.width; },
+        afterResize(resizedNode) {
+            delete this.width;
+            resizedNode.setDirtyCanvas(true, true);
+        },
+        onDraw(widget) {
+            if ("width" in widget) delete widget.width;
+        },
+    });
+    delete secureWidget.width;
+    secureWidget.serializeValue = () => undefined;
+}
+
+
+app.registerExtension({
+    name: "T8.Seedance20PromptEnhancer",
+
+    async beforeRegisterNodeDef(nodeType, nodeData) {
+        if (nodeData.name !== NODE_ID) return;
+
+        const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
+        const originalOnConfigure = nodeType.prototype.onConfigure;
+        const originalOnSerialize = nodeType.prototype.onSerialize;
+        nodeType.prototype.onNodeCreated = function () {
+            originalOnNodeCreated?.apply(this, arguments);
+
+            const find = (name) => this.widgets?.find((widget) => widget.name === name);
+            const taskWidget = find("task_intent");
+            const complexityWidget = find("complexity_mode");
+            const durationWidget = find("duration_seconds");
+            const shotCountWidget = find("shot_count");
+            const outputLanguageWidget = find("output_language");
+            const promptModeWidget = find("prompt_mode");
+            const templateWidget = find("reference_template");
+            const apiModeWidget = find("api_mode");
+            const baseUrlWidget = find("openai_base_url");
+            const uploadUrlWidget = find("openai_upload_url");
+            const apiKeyWidget = find("api_key");
+            const seedWidget = find("seed");
+            const seedControlWidget = seedWidget?.linkedWidgets?.[0] || find("control_after_generate");
+
+            if (seedControlWidget) {
+                seedControlWidget.label = "种子状态（运行后）";
+                seedControlWidget.tooltip = "fixed 固定；randomize 随机；increment 递增；decrement 递减。";
+            }
+
+            this.s20UpdateTemplate = addConditionalWidget(
+                this,
+                promptModeWidget,
+                templateWidget,
+                (value) => value === "参考模板融合",
+            );
+            addApiModeBehavior(this, apiModeWidget, baseUrlWidget, uploadUrlWidget);
+
+            this.s20NormalizeOptions = () => {
+                if (TASK_LABELS[taskWidget?.value]) taskWidget.value = TASK_LABELS[taskWidget.value];
+                normalizeChoice(taskWidget, Object.values(TASK_LABELS), TASK_LABELS.AUTO);
+                normalizeChoice(complexityWidget, ["AUTO（自动判断）", "简单一段式", "复杂分镜式"], "AUTO（自动判断）");
+                normalizeChoice(durationWidget, [AUTO_DURATION, ...Array.from({ length: 12 }, (_, index) => String(index + 4))], AUTO_DURATION);
+                normalizeChoice(shotCountWidget, [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))], AUTO_SHOT_COUNT);
+                normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
+                normalizeChoice(promptModeWidget, ["官方优化", "参考模板融合"], "官方优化");
+                normalizeChoice(apiModeWidget, [SEEDANCE_API_MODE, OPENAI_API_MODE], SEEDANCE_API_MODE);
+                this.s20UpdateTemplate?.();
+                this.s20UpdateApiMode?.();
+            };
+            this.s20NormalizeOptions();
+
+            const advancedWidgets = [
+                find("custom_length_target"), find("reference_roles"), find("reference_context"), find("constraints"),
+            ].filter(Boolean);
+            if (advancedWidgets.length) addAdvancedToggle(this, advancedWidgets);
+            if (apiKeyWidget) addApiKeyWidget(this, apiKeyWidget, apiModeWidget);
+
+            let queuing = false;
+            const runWidget = this.addWidget(
+                "button",
+                "▶ 运行 Seedance 2.0 提示词优化",
+                "提交当前节点",
+                async () => {
+                    if (queuing) return;
+                    queuing = true;
+                    try {
+                        this.s20CommitApiKey?.();
+                        await app.queuePrompt(0, 1, [String(this.id)]);
+                    } finally {
+                        queuing = false;
+                    }
+                },
+                { serialize: false },
+            );
+            runWidget.serializeValue = () => undefined;
+
+            const signUpWidget = this.addWidget(
+                "button",
+                "🔑 获取贞贞提示词增强 API Key",
+                "打开 Seedance 注册页面",
+                () => window.open(SIGN_UP_URL, "_blank", "noopener,noreferrer"),
+                { serialize: false },
+            );
+            signUpWidget.serializeValue = () => undefined;
+            this.s20SignUpWidget = signUpWidget;
+            this.s20UpdateApiMode?.();
+            resizeNode(this);
+        };
+
+        nodeType.prototype.onConfigure = function () {
+            originalOnConfigure?.apply(this, arguments);
+            requestAnimationFrame(() => this.s20NormalizeOptions?.());
+        };
+
+        nodeType.prototype.onSerialize = function (serialized) {
+            originalOnSerialize?.apply(this, arguments);
+            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => (
+                this.widgets?.find((widget) => widget.name === name)?.value ?? null
+            ));
+        };
+    },
+});

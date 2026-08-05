@@ -1,0 +1,9 @@
+Reference-guided flat motion-graphics video. @Image 1 supplies the two recurring subjects and their exact appearance: a bright magenta triangle with a dark purple outline and a golden yellow circle with a dark brown outline, plus the exact label MANGO-47. @Video 1 supplies the two-phase motion, movement directions, hard-cut order, locked-off camera rhythm, light-to-dark background change, and exact on-screen codes RIVER-83, PHASE ONE, and PHASE TWO.
+
+Shot 1: On the pale off-white background from @Image 1, show the magenta triangle at left and the golden yellow circle at right, with RIVER-83 in black sans-serif at top-left and MANGO-47 in black bold sans-serif inside a white black-bordered rectangle centered below the shapes. Locked-off static camera; both shapes hold still.
+
+Shot 2: Cut to Phase One on a light gray background. Keep RIVER-83 at top-left, show PHASE ONE in dark blue at bottom-left, and have the magenta triangle travel steadily from left to right across the frame at a constant vertical level. Locked-off static camera; smooth flat 2D motion matching @Video 1.
+
+Shot 3: Hard-cut to Phase Two on a dark charcoal background. Keep RIVER-83 in white at top-left, show PHASE TWO in light green at bottom-left, and have the golden yellow circle descend straight down from upper center to lower center at a steady pace. Locked-off static camera; smooth flat 2D motion matching @Video 1.
+
+Flat vector style, crisp outlines, solid colors, no shading or perspective; preserve all exact text as MANGO-47, RIVER-83, PHASE ONE, PHASE TWO, maintain shape and color consistency, do not reverse the source movement order, and fit the three shots naturally within 8 seconds with no extra shapes, people, watermarks, or added subtitles.

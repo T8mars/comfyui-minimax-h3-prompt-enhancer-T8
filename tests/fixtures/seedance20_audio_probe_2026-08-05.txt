@@ -1,0 +1,11 @@
+Seedance 2.0 enhancer LLM audio capability probe, 2026-08-05
+
+Model: bytedance/doubao-seed-evolving
+Provider: Seedance.nz compatible chat API
+
+Probe 1: an audio_url content part was rejected as an invalid content type. The response listed input_audio among accepted content-part names.
+Probe 2: a valid Base64 WAV was therefore sent as an OpenAI-compatible input_audio part. The API explicitly rejected it with: audio input is not supported by this model.
+
+Product decision: do not expose an AUDIO socket and do not claim attached-audio analysis. Users may still describe dialogue, ambience, music, sound effects, or textual @音频N/@Audio N intent inside the prompt.
+
+This fixture intentionally contains no API key, request identifier, uploaded URL, or user media.
