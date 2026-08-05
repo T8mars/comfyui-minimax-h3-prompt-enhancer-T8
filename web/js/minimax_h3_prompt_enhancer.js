@@ -12,17 +12,30 @@ const STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）";
 const OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE];
 const NO_CREATIVE_PRESET = "无（仅核心规则）";
 const CREATIVE_PRESET_OPTIONS = [
+const MV_CREATIVE_PRESET = "MV / 歌词贴字";
     NO_CREATIVE_PRESET,
     "AUTO（根据意图判断）",
     "极简产品广告",
     "3D 动画短片",
     "品牌宣传短片",
-    "MV / 歌词贴字",
+    MV_CREATIVE_PRESET,
     "双人合作游戏开场",
     "纸拼贴讲解",
     "立体纸艺停格讲解",
     "手绘实拍融合",
 ];
+const MV_PROMPT_PLACEHOLDER = [
+    "MV类型/视觉风格：",
+    "歌词原文（逐字保留，可空）：",
+    "演唱者或离屏人声：",
+    "已知 BPM、时间点或节拍事件（可空）：",
+    "字体包装与禁止项：",
+].join("\n");
+const MV_PROMPT_TOOLTIP = "MV 模式：基础提示词可按占位模板填写。歌词仅以用户原文为准；器乐、纯文字或离屏人声 MV 可以不填写演唱者。";
+const MV_REFERENCE_CONTEXT_TOOLTIP = "MV 参考角色映射示例：<Picture 1>=人物外观；<Picture 2>=场景与灯光；<Picture 3>=字体包装，只参考字体、版式和动效，不参考人物与场景。";
+const MV_CONSTRAINTS_TOOLTIP = "MV 硬性要求示例：不增加歌词；不遮挡眼睛与关键口型；不用淡入淡出；固定保留指定服装或场景。";
+const MV_TEMPLATE_TOOLTIP = "仅迁移模板的镜头组织、节奏、运镜、转场和视觉语法；模板人物、歌词、BPM、标题、剧情和镜头数不会覆盖用户内容。";
+
 const TASK_TYPE_LABELS = {
     T2VA: "T2VA（文生音视频）",
     I2VA: "I2VA（首帧图生音视频）",
@@ -102,6 +115,52 @@ function setTextWidgetValue(widget, value) {
         || (widget.element?.matches?.("textarea, input") ? widget.element : null)
         || widget.element?.querySelector?.("textarea, input");
     if (input) input.value = value;
+}
+
+
+function getWidgetInput(widget) {
+    return widget?.inputEl
+        || (widget?.element?.matches?.("textarea, input") ? widget.element : null)
+        || widget?.element?.querySelector?.("textarea, input")
+        || null;
+}
+
+
+function addMvPresetBehavior(node, presetWidget, promptWidget, referenceContextWidget, constraintsWidget, templateWidget) {
+    const tracked = [
+        [promptWidget, MV_PROMPT_TOOLTIP, MV_PROMPT_PLACEHOLDER],
+        [referenceContextWidget, MV_REFERENCE_CONTEXT_TOOLTIP, ""],
+        [constraintsWidget, MV_CONSTRAINTS_TOOLTIP, ""],
+        [templateWidget, MV_TEMPLATE_TOOLTIP, ""],
+    ].filter(([widget]) => Boolean(widget));
+
+    for (const [widget] of tracked) {
+        if (!("t8MvOriginalTooltip" in widget)) widget.t8MvOriginalTooltip = widget.tooltip || "";
+    }
+
+    const update = (preset = presetWidget.value) => {
+        const isMv = preset === MV_CREATIVE_PRESET;
+        for (const [widget, mvTooltip, mvPlaceholder] of tracked) {
+            widget.tooltip = isMv ? mvTooltip : widget.t8MvOriginalTooltip;
+            const input = getWidgetInput(widget);
+            if (!input) continue;
+            if (!("t8MvOriginalPlaceholder" in widget)) {
+                widget.t8MvOriginalPlaceholder = input.placeholder || "";
+            }
+            input.placeholder = isMv && mvPlaceholder ? mvPlaceholder : widget.t8MvOriginalPlaceholder;
+            input.title = widget.tooltip;
+        }
+        node.setDirtyCanvas(true, true);
+    };
+
+    const originalCallback = presetWidget.callback;
+    presetWidget.callback = function (value) {
+        originalCallback?.apply(this, arguments);
+        update(value);
+    };
+    node.t8UpdateMvPreset = update;
+    update();
+    requestAnimationFrame(() => update());
 }
 
 
@@ -334,7 +393,9 @@ app.registerExtension({
         nodeType.prototype.onNodeCreated = function () {
             originalOnNodeCreated?.apply(this, arguments);
 
+            const promptWidget = this.widgets?.find((widget) => widget.name === "prompt");
             const outputLanguageWidget = this.widgets?.find((widget) => widget.name === "output_language");
+            const rewriteModeWidget = this.widgets?.find((widget) => widget.name === "rewrite_mode");
             const taskTypeWidget = this.widgets?.find((widget) => widget.name === "task_type");
             const shotCountWidget = this.widgets?.find((widget) => widget.name === "shot_count");
             const promptModeWidget = this.widgets?.find((widget) => widget.name === "prompt_mode");
@@ -354,11 +415,21 @@ app.registerExtension({
                 seedControlWidget.label = "种子状态（运行后）";
                 seedControlWidget.tooltip = "fixed 固定；randomize 随机；increment 递增；decrement 递减。";
             }
+            if (rewriteModeWidget) {
+                rewriteModeWidget.tooltip = "改写模式只控制扩写幅度：strict 最保守，balanced 平衡补全，creative 更具创造性；它不控制官方协议语言。";
+            }
+            if (officialSkillProfileWidget) {
+                officialSkillProfileWidget.tooltip = "官方 Skill 协议控制说明正文语言与协议：兼容模式服从中文/English，严格模式强制英文说明；它不等同于改写模式 strict。";
+            }
+
             if (promptModeWidget && referenceTemplateWidget) {
                 addReferenceTemplateBehavior(this, promptModeWidget, referenceTemplateWidget);
             }
             if (apiModeWidget && openaiBaseUrlWidget && openaiUploadUrlWidget) {
                 addApiModeBehavior(this, apiModeWidget, openaiBaseUrlWidget, openaiUploadUrlWidget);
+            }
+            if (creativePresetWidget && promptWidget) {
+                addMvPresetBehavior(this, creativePresetWidget, promptWidget, referenceContextWidget, constraintsWidget, referenceTemplateWidget);
             }
             this.t8NormalizePromptOptions = () => {
                 if (TASK_TYPE_LABELS[taskTypeWidget?.value]) taskTypeWidget.value = TASK_TYPE_LABELS[taskTypeWidget.value];
@@ -380,6 +451,7 @@ app.registerExtension({
                 }
                 this.t8UpdateReferenceTemplate?.();
                 this.t8UpdateApiMode?.();
+                this.t8UpdateMvPreset?.();
             };
             this.t8NormalizePromptOptions();
 

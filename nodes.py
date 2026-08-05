@@ -38,13 +38,14 @@ STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）"
 OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE]
 NO_CREATIVE_PRESET = "无（仅核心规则）"
 AUTO_CREATIVE_PRESET = "AUTO（根据意图判断）"
+MV_CREATIVE_PRESET = "MV / 歌词贴字"
 CREATIVE_PRESET_OPTIONS = [
     NO_CREATIVE_PRESET,
     AUTO_CREATIVE_PRESET,
     "极简产品广告",
     "3D 动画短片",
     "品牌宣传短片",
-    "MV / 歌词贴字",
+    MV_CREATIVE_PRESET,
     "双人合作游戏开场",
     "纸拼贴讲解",
     "立体纸艺停格讲解",
@@ -114,13 +115,116 @@ SKILL_PROFILE_RULES = {
 
 PRESET_BOUNDARY_RULE = """Creative preset boundary: the preset is a prompt-writing profile only. Apply it only where it matches the user's request and observable media. Never turn it into a production checklist, asset-generation sequence, approval gate, external research task, API call, multi-clip stitching job, or claim that unsupported analysis occurred. Explicit user facts, media evidence, duration, fixed shot count, H3 fields, and hard constraints always win."""
 
+MV_LYRIC_AND_PERFORMANCE_RULES = """MV Skill — locked lyrics and conditional performance:
+- User-supplied lyrics are the only trusted lyric source. Preserve their exact language, wording, punctuation, order, and repetitions; never translate, paraphrase, extend, replace, or invent lyrics. A reference template cannot contribute lyrics.
+- When a real target-timeline vocal source performs supplied lyrics, keep its stable (Sx) identity and write the exact phrase as <d>[Language] exact source text</d>. If that same phrase is visibly typeset at that moment, put the identical source phrase in English double quotation marks; do not silently create a second wording.
+- Do not add a singer, lip sync, readable lyrics, or a vocal performance merely because this MV profile is active. Instrumental, pure-typography, montage, and off-screen-vocal MVs remain valid.
+- Only when the user requests an on-screen performer, or observable media clearly shows the intended performer, may performance detail connect phrasing to lips, jaw, breath, expression, head accents, and gestures. Keep an off-screen vocal source off-screen and do not animate an unrelated visible person's lips.
+- If a vocal phrase crosses a visual cut, preserve the same (Sx), put <scenetrans> on both sides, and state that the vocal audio remains continuous. Use <cutoff> only when the selected video ending intentionally truncates the performance.
+- Exact lyrics outrank a description-length target. Never shorten or rewrite them merely to hit a character or word target, and never claim that more lyrics fit inside the selected duration than can plausibly be performed."""
+
+MV_TYPOGRAPHY_AND_RHYTHM_RULES = """MV Skill — spatial typography, rhythm evidence, and transition grammar:
+- Treat typography as a foreground, midground, or background graphic layer inside the scene, not as an automatic lower-third subtitle bar. Maintain one principal reading focus at a time; multiple lyric phrases do not by themselves require multiple shots.
+- Typography may pass behind or be lightly occluded by hands, shoulders, props, or scenery for depth, but it must not block eyes, the main facial expression, or the mouth during critical lip-sync moments. Preserve supplied visible wording exactly.
+- Tie type entrances, scale changes, sweeps, fragmentation, and exits to an explicitly supplied lyric accent, timestamp, BPM, drop, snare, 808 event, musical section, or visible action. Without textual timing evidence, use only qualitative pacing such as restrained, driving, or progressively intensifying; never claim beat, BPM, hook, chorus, or audio-file analysis.
+- Hard cuts, glitch, scan displacement, grain, zine collage, and high-frequency cutting are conditional Trap, Dark-pop, or Cyber-grunge grammar. Apply them only when the user's intent or valid reference style calls for them; do not impose them on lyrical, atmospheric, acoustic, or otherwise incompatible MVs.
+- Prefer natural continuity at cuts: lyric pauses, breaths, supplied accents, matching motion direction, occlusion matches, shape matches, or typography motion carried across the boundary. Do not mechanically add a flash, text shatter, glitch, or hard cut to every shot."""
+
+MV_REFERENCE_ROLE_RULES = """MV Skill — reference-role isolation:
+- Interpret explicit reference-context mappings narrowly. A character reference controls only requested identity, facial character, hair, costume silhouette, proportions, or pose; a scene reference controls only space, material, depth, lighting, and palette; a typography reference controls only type texture, graphic treatment, layout proportions, and motion language.
+- Never copy sample words, people, props, scenery, titles, lyrics, or story facts from a typography reference unless the user independently requests them. Do not leak character-card traits into the scene or typography, or scene-card content into the character.
+- With no explicit role mapping, infer conservatively from observable media and the user's intent. In Ref2VA, keep H3 Subject/Picture/Video labels minimal and based on actual reuse; a typography system can be a visible Subject only when it is genuinely reused.
+- A reference video may supply visible performance, camera movement, edit rhythm, and temporal composition. It does not prove an independent <Audio N>, Master Audio, BPM, lyric transcript, or lyric timeline, because this node has no audio-analysis input."""
+
+MV_OUTPUT_FOLDING_RULES = """MV Skill — H3 folding and single-clip boundary:
+- Use Global Aesthetic & Character Lock, Vocal Line, Typography, Visual & Action, Camera & Motion, and Transition Out only as internal planning dimensions. Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description; never emit them as extra top-level fields.
+- This request produces one 4-15 second H3 prompt. AUTO shot count should consider duration, complete lyric phrases, textual rhythm evidence, and visual density; a 15-second MV often needs only 2-4 readable shots, but that is guidance, not a hard limit. A fixed 1-20 shot selection still wins as the requested generation constraint.
+- Diegetic singing, instruments, and music audible to the depicted performers stay in the shot timeline. overall_soundscape contains only ambience, physical sounds, and nonverbal vocal sounds. Audience-only score belongs in non_diegetic_music.
+- Do not output asset cards, a shot-list document outside H3 fields, production approvals, Master Audio instructions, long-form segmentation, stitching, editing, grading, or delivery steps."""
+
+MV_REWRITE_MODE_RULES = {
+    "strict": "MV rewrite scope: strict adds only required H3 structure, continuity, text safety, and explicitly supported performance detail. It must not add a person, lyric, readable text, music, beat, cut, or plot event.",
+    "balanced": "MV rewrite scope: balanced may add compatible composition, camera movement, typography motion, and qualitative pacing around the user's supplied music genre and facts, but it must not invent lyrics, precise beat timing, people, identities, or audio observations.",
+    "creative": "MV rewrite scope: creative may enrich compatible visual texture, camera response, spatial type transformation, and transitions, while still preserving exact lyrics and never inventing readable copy, audio-analysis results, people, identities, or story facts.",
+}
+
+
+MV_AUTO_INTENT_PATTERN = re.compile(
+    r"(?:\bmv\b|music[\s-]*video|lyric[\s-]*video|歌词(?:贴字|视频|动画)?|"
+    r"演唱|歌手|对口型|lip[\s-]*sync|vocal(?:ist)?|karaoke|k-?pop)",
+    re.IGNORECASE,
+)
+
+
+def _auto_requests_mv(prompt: str, reference_context: str, constraints: str) -> bool:
+    trusted_text = "\n".join(str(value or "") for value in (prompt, reference_context, constraints))
+    return bool(MV_AUTO_INTENT_PATTERN.search(trusted_text))
+
+
+def _mv_skill_instruction(
+    task_type: str,
+    duration_seconds: int,
+    shot_count: int,
+    rewrite_mode: str,
+    prompt_mode: str,
+) -> str:
+    shot_guidance = (
+        "AUTO: choose only as many shots as the complete lyric phrases and readable typography need."
+        if shot_count == 0
+        else f"Fixed: honor exactly {shot_count} shots without altering lyrics or fabricating beat events."
+    )
+    template_guidance = (
+        "Reference-template fusion is active: borrow only compatible organization, pacing, camera, transition, and visual grammar. Template people, lyrics, BPM, titles, plot, and shot count remain non-authoritative."
+        if prompt_mode == "参考模板融合"
+        else "Official enhancement is active: no reference-template content participates."
+    )
+    return "\n\n".join([
+        MV_LYRIC_AND_PERFORMANCE_RULES,
+        MV_TYPOGRAPHY_AND_RHYTHM_RULES,
+        MV_REFERENCE_ROLE_RULES,
+        MV_OUTPUT_FOLDING_RULES,
+        MV_REWRITE_MODE_RULES[rewrite_mode],
+        f"MV request context: H3 task={task_type}; duration={duration_seconds:.2f}s; {shot_guidance}",
+        template_guidance,
+    ])
+
+
+def _creative_preset_instruction(
+    creative_preset: str,
+    task_type: str,
+    duration_seconds: int,
+    shot_count: int,
+    rewrite_mode: str,
+    prompt_mode: str,
+    prompt: str,
+    reference_context: str,
+    constraints: str,
+) -> str:
+    base_rule = CREATIVE_PRESET_RULES[creative_preset]
+    if creative_preset == MV_CREATIVE_PRESET:
+        return f"{base_rule}\n\n{_mv_skill_instruction(task_type, duration_seconds, shot_count, rewrite_mode, prompt_mode)}"
+    if creative_preset == AUTO_CREATIVE_PRESET:
+        if _auto_requests_mv(prompt, reference_context, constraints):
+            return "\n\n".join([
+                base_rule,
+                "AUTO MV routing: explicit trusted text matches a music-video, lyric-video, sung-performance, or lyric-typography intent. Apply the conditional MV module below.",
+                _mv_skill_instruction(task_type, duration_seconds, shot_count, rewrite_mode, prompt_mode),
+            ])
+        return (
+            f"{base_rule}\n\nAUTO MV routing: no explicit MV intent was found in the user's intent, "
+            "reference context, or hard constraints. Do not apply the deep MV module merely because the request "
+            "contains ordinary product text, captions, titles, UI copy, posters, or generic motion graphics."
+        )
+    return base_rule
+
+
 CREATIVE_PRESET_RULES = {
     NO_CREATIVE_PRESET: """Creative preset: none. Apply only the H3 core contract and the user's own requested style.""",
     AUTO_CREATIVE_PRESET: """Creative preset: AUTO. Infer at most one of the eight available prompt-writing profiles only when the user's intent or media clearly matches it; otherwise apply none. Do not print a preset name. Do not invent a workflow, asset, brand fact, lyric timing, audio analysis, or game function merely to force a match.""",
     "极简产品广告": """Creative preset: minimalist product advertisement. Lock the product's identity, silhouette, main colors, materials, and requested features. Favor negative space, a clean composition, one principal visual action per beat, and a stable full-frame product-led closing. Avoid grids, split panels, anchor-sheet layouts, crowded props, and unnecessary copy. When copy is requested, show at most one concise single-line text event at a time, keep it out of the lower-subtitle position, preserve supplied wording exactly, and never invent a logo, claim, metric, feature, or endorsement.""",
     "3D 动画短片": """Creative preset: 3D animation short. Anchor each important character with two or three stable visual traits, and preserve scene landmarks, light direction, scale, and prop continuity. Keep no more than three important active characters in one shot unless the user explicitly requires more. Favor readable silhouettes and physically legible anticipation, squash-and-stretch, overshoot, rebound, and follow-through only when compatible with the requested animation style. Produce one 4-15 second H3 timeline, not a long-film production plan.""",
     "品牌宣传短片": """Creative preset: brand promotional video. Use only brand names, logos, product facts, functions, metrics, slogans, and calls to action supplied by the user or visibly verified in attached media. Preserve exact names and copy; never fabricate a capability or claim. Keep brand/product assets readable with safe space, and make each beat demonstrate a concrete requested benefit or proof rather than generic spectacle.""",
-    "MV / 歌词贴字": """Creative preset: music-video lyric typography. Preserve every supplied lyric exactly and connect vocal phrasing to the correct speaker, lip movement, and body performance. Treat typography as a deliberate spatial layer, generally one main text event per shot, with clear hierarchy and without covering eyes or mouths. Use beat-triggered cuts only when timing or musical structure is supplied in text; this node cannot hear an audio attachment and must never claim beat analysis. Keep diegetic performance in the timeline and audience-only scoring in non_diegetic_music.""",
+    MV_CREATIVE_PRESET: """Creative preset: music-video lyric typography. Apply the official MV Skill as a conditional single-prompt writing profile: exact supplied lyrics, conditional performance, spatial typography, evidence-based rhythm, isolated reference roles, and H3-correct sound classification.""",
     "双人合作游戏开场": """Creative preset: two-player cooperative game intro. Lock exactly two player identities when the user supplies them, along with consistent left/right placement, exact player names, game title, UI labels, and button copy. Use a clear single-line hierarchy for actionable UI, a coherent palette of no more than about five main colors, and reduce decorative text when readability suffers. Do not invent gameplay mechanics, working interactions, scores, online services, or UI functionality.""",
     "纸拼贴讲解": """Creative preset: paper-collage explainer. Use a readable visual metaphor with halftone texture, large colored-paper shapes, warm white outlines, paper shadows, and tactile stop-motion assembly. Favor slide-in, pop-in, press-flat, and deliberate pause actions with paper friction, taps, and light rustle. Unless the user requests them, do not add background music, narration, subtitles, logos, or readable text.""",
     "立体纸艺停格讲解": """Creative preset: papercraft stop-motion explainer. Build a layered paper-diorama world with consistent material, folds, lighting, depth, scale, and paper construction. Use folds, pop-ups, page turns, pull-tabs, sliders, and jointed-paper movement to express the requested educational metaphor. Educational labels, arrows, cards, or charts may appear when needed, but keep reading-heavy copy on stable layers and preserve supplied wording exactly. Map restrained page flips, paper rustles, clicks, pops, and tape-peel sounds to visible actions; when narration or music is requested, fit it to the duration and keep light topic-appropriate music below the narration.""",
@@ -716,7 +820,17 @@ def _build_messages(
         TASK_RULES[task_type],
         _shot_count_instruction(shot_count),
         PRESET_BOUNDARY_RULE,
-        CREATIVE_PRESET_RULES[creative_preset],
+        _creative_preset_instruction(
+            creative_preset,
+            task_type,
+            duration_seconds,
+            shot_count,
+            rewrite_mode,
+            prompt_mode,
+            prompt,
+            reference_context,
+            constraints,
+        ),
     ])
     user_text = _build_user_instruction(
         prompt,
@@ -963,7 +1077,13 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     default=AUTO_SHOT_COUNT,
                     tooltip="AUTO 由模型结合时长、内容与节奏判断；1-20 要求输出对应数量的 [Shot N]。",
                 ),
-                io.Combo.Input("rewrite_mode", display_name="改写模式", options=REWRITE_MODES, default="balanced"),
+                io.Combo.Input(
+                    "rewrite_mode",
+                    display_name="改写模式",
+                    options=REWRITE_MODES,
+                    default="balanced",
+                    tooltip="Controls enrichment only: strict is conservative, balanced fills details, creative expands style. This is separate from the official Skill language profile.",
+                ),
                 io.Int.Input(
                     "description_word_target",
                     display_name="目标长度（0=自动）",
@@ -1002,7 +1122,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     multiline=True,
                     default="",
                     advanced=True,
-                    tooltip="Supplemental identity or relationship facts that the media alone cannot establish.",
+                    tooltip="Supplemental identity/relationship facts or narrow reference roles, for example character, scene, or typography-only references.",
                 ),
                 io.String.Input(
                     "constraints",
@@ -1011,7 +1131,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     multiline=True,
                     default="",
                     advanced=True,
-                    tooltip="Content that must be preserved or must not be added/changed.",
+                    tooltip="Content that must be preserved or must not be added/changed, including exact lyrics, text safety, or forbidden transitions.",
                 ),
                 io.String.Input(
                     "api_key",
@@ -1035,7 +1155,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     display_name="创意预设",
                     options=CREATIVE_PRESET_OPTIONS,
                     default=NO_CREATIVE_PRESET,
-                    tooltip="AUTO 或八个 MiniMax 官方场景写作预设。只影响提示词写法，不执行素材生成、视频生成、剪辑或外部 API 工作流。",
+                    tooltip="AUTO 或八个 MiniMax 官方场景写作预设。MV 预设使用用户歌词与文本节拍，不分析音频。预设只影响写法，不执行生成、剪辑或外部工作流。",
                 ),
                 io.String.Input(
                     "reference_template",

@@ -268,6 +268,18 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("widgets_values.splice(8, 0, COMPAT_SKILL_PROFILE, NO_CREATIVE_PRESET)", source)
         self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
         self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
+        self.assertIn('const MV_CREATIVE_PRESET = "MV / 歌词贴字"', source)
+        self.assertIn('"歌词原文（逐字保留，可空）："', source)
+        self.assertIn('"已知 BPM、时间点或节拍事件（可空）："', source)
+        self.assertIn("MV_REFERENCE_CONTEXT_TOOLTIP", source)
+        self.assertIn("<Picture 3>=字体包装，只参考字体、版式和动效", source)
+        self.assertIn("function addMvPresetBehavior", source)
+        self.assertIn("preset === MV_CREATIVE_PRESET", source)
+        self.assertIn("input.placeholder = isMv && mvPlaceholder", source)
+        self.assertIn("requestAnimationFrame(() => update())", source)
+        self.assertIn("this.t8UpdateMvPreset?.()", source)
+        self.assertIn("改写模式只控制扩写幅度", source)
+        self.assertIn("官方 Skill 协议控制说明正文语言与协议", source)
 
     def test_example_workflow_is_importable_and_contains_no_api_key(self):
         path = NODES_PATH.parent / "example" / "minimax_h3_prompt_enhancer_example.json"
@@ -363,7 +375,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "极简产品广告": ("minimalist product advertisement", "one concise single-line text event"),
             "3D 动画短片": ("3D animation short", "squash-and-stretch"),
             "品牌宣传短片": ("brand promotional video", "never fabricate a capability or claim"),
-            "MV / 歌词贴字": ("music-video lyric typography", "one main text event per shot"),
+            "MV / 歌词贴字": ("music-video lyric typography", "evidence-based rhythm"),
             "双人合作游戏开场": ("two-player cooperative game intro", "five main colors"),
             "纸拼贴讲解": ("paper-collage explainer", "press-flat"),
             "立体纸艺停格讲解": ("papercraft stop-motion explainer", "pull-tabs"),
@@ -379,6 +391,124 @@ class PromptEnhancerTests(unittest.TestCase):
                     self.assertIn(marker, messages[0]["content"])
                 self.assertIn("prompt-writing profile only", messages[0]["content"])
                 self.assertIn(f"Creative preset: {preset}", messages[1]["content"])
+
+
+    def test_mv_skill_deep_rules_and_user_sources_reach_the_model(self):
+        lyrics = "歌词原文：夜色落在我肩上，别回头。"
+        role_map = (
+            "<Picture 1>=人物外观；<Picture 2>=场景与灯光；"
+            "<Picture 3>=字体包装，只参考字体、版式和动效，不参考人物与场景。"
+        )
+        session = FakeSession(basic_output())
+        self.run_enhancer(
+            session,
+            prompt=f"暗色抒情 MV。{lyrics}",
+            duration_seconds=15,
+            creative_preset=nodes.MV_CREATIVE_PRESET,
+            reference_context=role_map,
+        )
+        messages = session.chat_requests[0]["json"]["messages"]
+        system = messages[0]["content"]
+        user = messages[1]["content"]
+
+        for required in (
+            "User-supplied lyrics are the only trusted lyric source",
+            "never translate, paraphrase, extend, replace, or invent lyrics",
+            "write the exact phrase as <d>[Language] exact source text</d>",
+            "Do not add a singer, lip sync, readable lyrics, or a vocal performance",
+            "Keep an off-screen vocal source off-screen",
+            "put <scenetrans> on both sides",
+            "foreground, midground, or background graphic layer",
+            "one principal reading focus at a time",
+            "must not block eyes, the main facial expression, or the mouth",
+            "timestamp, BPM, drop, snare, 808 event",
+            "never claim beat, BPM, hook, chorus, or audio-file analysis",
+            "conditional Trap, Dark-pop, or Cyber-grunge grammar",
+            "A character reference controls only",
+            "Never copy sample words",
+            "It does not prove an independent <Audio N>, Master Audio, BPM",
+            "Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description",
+            "a 15-second MV often needs only 2-4 readable shots",
+            "Do not output asset cards",
+            "MV rewrite scope: balanced",
+            "MV request context: H3 task=T2VA; duration=15.00s; AUTO",
+        ):
+            self.assertIn(required, system)
+        self.assertIn(lyrics, user)
+        self.assertIn(role_map, user)
+
+    def test_mv_skill_is_conditional_and_context_aware(self):
+        no_preset_session = FakeSession(basic_output())
+        self.run_enhancer(no_preset_session, prompt="产品标题贴字动画")
+        no_preset_system = no_preset_session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertNotIn("MV Skill — locked lyrics", no_preset_system)
+
+        auto_product_session = FakeSession(basic_output())
+        self.run_enhancer(
+            auto_product_session,
+            prompt="产品标题贴字动画",
+            creative_preset=nodes.AUTO_CREATIVE_PRESET,
+        )
+        auto_product_system = auto_product_session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertIn("no explicit MV intent was found", auto_product_system)
+        self.assertIn("ordinary product text, captions, titles, UI copy", auto_product_system)
+        self.assertNotIn("MV Skill — locked lyrics", auto_product_system)
+
+        auto_mv_session = FakeSession(basic_output())
+        self.run_enhancer(auto_mv_session, prompt="制作歌词 MV", creative_preset=nodes.AUTO_CREATIVE_PRESET)
+        auto_mv_system = auto_mv_session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertIn("explicit trusted text matches", auto_mv_system)
+        self.assertIn("MV Skill — locked lyrics", auto_mv_system)
+
+        template = "陌生角色演唱模板歌词，120 BPM，固定 8 镜头。"
+        fused_session = FakeSession(basic_output())
+        self.run_enhancer(
+            fused_session,
+            prompt="器乐 MV，只使用抽象文字形状，不出现歌手和可读歌词。",
+            duration_seconds=4,
+            shot_count="20",
+            rewrite_mode="creative",
+            creative_preset=nodes.MV_CREATIVE_PRESET,
+            prompt_mode="参考模板融合",
+            reference_template=template,
+        )
+        fused_messages = fused_session.chat_requests[0]["json"]["messages"]
+        fused_system = fused_messages[0]["content"]
+        fused_user = fused_messages[1]["content"]
+        self.assertIn("Fixed: honor exactly 20 shots", fused_system)
+        self.assertIn("duration=4.00s", fused_system)
+        self.assertIn("MV rewrite scope: creative", fused_system)
+        self.assertIn("Template people, lyrics, BPM, titles, plot, and shot count remain non-authoritative", fused_system)
+        self.assertIn("Instrumental, pure-typography, montage, and off-screen-vocal MVs remain valid", fused_system)
+        self.assertIn(template, fused_user)
+
+    def test_mv_rules_preserve_h3_tasks_and_rewrite_mode_boundaries(self):
+        for rewrite_mode, marker in nodes.MV_REWRITE_MODE_RULES.items():
+            with self.subTest(rewrite_mode=rewrite_mode):
+                session = FakeSession(basic_output())
+                self.run_enhancer(
+                    session,
+                    rewrite_mode=rewrite_mode,
+                    creative_preset=nodes.MV_CREATIVE_PRESET,
+                )
+                system = session.chat_requests[0]["json"]["messages"][0]["content"]
+                self.assertIn(marker, system)
+                self.assertIn("Output exactly these three fields in order", system)
+                self.assertNotIn("Master Audio instructions", session.chat_requests[0]["json"]["messages"][1]["content"])
+
+        ref_session = FakeSession(reference_output(include_video=False))
+        self.run_enhancer(
+            ref_session,
+            task_type="Ref2VA",
+            reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
+            creative_preset=nodes.MV_CREATIVE_PRESET,
+            official_skill_profile=nodes.STRICT_SKILL_PROFILE,
+            output_language="中文",
+        )
+        ref_system = ref_session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertIn("Output exactly these six fields in order", ref_system)
+        self.assertIn("Output language: English", ref_system)
+        self.assertIn("Preserve their exact language, wording, punctuation", ref_system)
 
     def test_invalid_skill_profile_and_preset_fail_before_network(self):
         for kwargs, phrase in (
