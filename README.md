@@ -274,7 +274,7 @@ Seedance 没有为本节点调用的 Chat Completions 公开确定性 `seed` 请
 https://api.seedance.nz
 ```
 
-可以在节点底部填写 API Key，或点击[获取贞贞 API Key](https://api.seedance.nz/sign-up?aff=5f4w)。节点中的 Key 留空时读取环境变量 `SEEDANCE_API_KEY`。
+可以把任意 `STRING` 输出连接到节点的 API Key 接口，也可以在节点底部填写 Key，或点击[获取贞贞 API Key](https://api.seedance.nz/sign-up?aff=5f4w)。接线值优先；没有接线且节点中的 Key 留空时读取环境变量 `SEEDANCE_API_KEY`。
 
 PowerShell：
 
@@ -321,7 +321,7 @@ OpenAI Chat Completions 兼容并不自动代表支持图片和视频上传：
 
 ## API Key 安全
 
-节点底部提供遮罩、显示、保存和清空按钮。遮罩只能避免画布上直接显示明文：点击“保存到工作流”后，Key 会进入工作流 JSON。
+两个节点都提供标准 `STRING` API Key 接口，并保留底部的遮罩、显示、保存和清空按钮。外部接线值优先。遮罩只能避免画布上直接显示明文：点击“保存到工作流”后，Key 会进入工作流 JSON。
 
 - 分享工作流前务必点击“清空”。
 - 更安全的方式是把节点 Key 留空并使用环境变量。

@@ -874,8 +874,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     display_name="提示词增强 LLM API Key",
                     optional=True,
                     default="",
-                    socketless=True,
-                    tooltip="这是提示词增强 LLM 的 Key，不是 Seedance 2.0 视频生成 Key。",
+                    force_input=True,
+                    tooltip="可连接 STRING，或使用下方遮罩输入框；接线值优先。这是提示词增强 LLM 的 Key，不是视频生成 Key。",
                 ),
                 io.String.Input(
                     "reference_template",
