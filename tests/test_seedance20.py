@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import importlib.util
 import io
 import json
@@ -112,11 +113,20 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("task_intent", names)
         self.assertIn("complexity_mode", names)
         self.assertIn("reference_syntax", names)
+        self.assertIn("ai_workshop_model", names)
+        self.assertIn("custom_model", names)
         shot_count = next(item for item in schema.inputs if item.id == "shot_count")
         duration = next(item for item in schema.inputs if item.id == "duration_seconds")
+        api_key = next(item for item in schema.inputs if item.id == "api_key")
         self.assertEqual(shot_count.options[1:], [str(value) for value in range(1, 21)])
         self.assertEqual(duration.options[1:], [str(value) for value in range(4, 16)])
+        self.assertTrue(api_key.force_input)
+        self.assertIsNone(api_key.socketless)
         self.assertIn("rejected input_audio", schema.description)
+        api_mode = next(item for item in schema.inputs if item.id == "api_mode")
+        ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
+        self.assertEqual(api_mode.options, seedance20.API_MODES)
+        self.assertEqual(ai_workshop_model.default, seedance20.AI_WORKSHOP_DEFAULT_MODEL)
 
     def test_official_prompt_uses_seedance20_rules_without_h3_contract(self):
         session = FakeSession("可直接使用的提示词")
@@ -259,6 +269,28 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(session.chat_urls, ["https://provider.example/v1/chat/completions"])
         self.assertEqual(session.uploads[0][3], "https://uploads.example/files")
 
+    def test_ai_workshop_uses_inline_complete_media_and_custom_model(self):
+        session = FakeSession()
+        image = torch.zeros((1, 8, 8, 3), dtype=torch.float32)
+        video_bytes = b"complete-seedance20-video-with-ending"
+        self.run_enhancer(
+            session,
+            task_intent="MultiRef",
+            reference_images={"reference_image_0": image},
+            reference_videos={"reference_video_0": FakeVideo(data=video_bytes)},
+            api_mode=seedance20.AI_WORKSHOP_API_MODE,
+            ai_workshop_model=seedance20.CUSTOM_MODEL_OPTION,
+            custom_model="gemini-3.5-flash",
+        )
+        self.assertEqual(session.uploads, [])
+        self.assertEqual(session.chat_urls, [seedance20.AI_WORKSHOP_CHAT_COMPLETIONS_URL])
+        request = session.chat_requests[0]["json"]
+        self.assertEqual(request["model"], "gemini-3.5-flash")
+        parts = request["messages"][1]["content"]
+        self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url", "text", "image_url"])
+        video_url = parts[4]["image_url"]["url"]
+        self.assertEqual(base64.b64decode(video_url.split(",", 1)[1]), video_bytes)
+
     def test_api_key_like_text_is_rejected_without_leaking_secret(self):
         fake_secret = "sk-" + "x" * 24
         with self.assertRaises(seedance20.Seedance20PromptEnhancerError) as captured:
@@ -275,6 +307,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             "▶ 运行 Seedance 2.0 提示词优化",
             "app.queuePrompt(0, 1, [String(this.id)])",
             "https://api.seedance.nz/sign-up?aff=5f4w",
+            "https://ai.t8star.org/register?aff=dP7j",
             'value === "参考模板融合"',
             'mode === OPENAI_API_MODE',
             "delete secureWidget.width",
@@ -288,9 +321,10 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(path.read_text(encoding="utf-8"))
         node = next(item for item in workflow["nodes"] if item["type"] == "Seedance20PromptEnhancerT8")
         self.assertEqual(node["type"], "Seedance20PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 23)
+        self.assertEqual(len(node["widgets_values"]), 25)
         self.assertEqual(node["widgets_values"][1], seedance20.TASK_INTENT_LABELS["AUTO"])
         self.assertEqual(node["widgets_values"][18], seedance20.SEEDANCE_API_MODE)
+        self.assertEqual(node["widgets_values"][19:21], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, ""])
         self.assertNotIn("sk-", path.read_text(encoding="utf-8"))
 
     def test_real_paid_smoke_fixture_passes_seedance20_temporal_evaluation(self):

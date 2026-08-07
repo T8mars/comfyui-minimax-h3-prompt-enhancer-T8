@@ -1,3 +1,4 @@
+import base64
 import io as python_io
 import json
 import os
@@ -16,6 +17,11 @@ API_BASE_URL = "https://api.seedance.nz"
 CHAT_COMPLETIONS_URL = f"{API_BASE_URL}/v1/chat/completions"
 UPLOAD_URL = f"{API_BASE_URL}/v1/files/upload"
 MODEL_ID = "bytedance/doubao-seed-evolving"
+AI_WORKSHOP_API_BASE_URL = "https://ai.t8star.org"
+AI_WORKSHOP_CHAT_COMPLETIONS_URL = f"{AI_WORKSHOP_API_BASE_URL}/v1/chat/completions"
+AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash"
+CUSTOM_MODEL_OPTION = "Custom（自定义）"
+AI_WORKSHOP_MODEL_OPTIONS = [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION]
 MAX_FILE_BYTES = 50 * 1024 * 1024
 REQUEST_TIMEOUT = (20, 300)
 
@@ -54,8 +60,9 @@ CREATIVE_PRESET_OPTIONS = [
 AUTO_SHOT_COUNT = "AUTO（系统自动判断）"
 SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT] + [str(count) for count in range(1, 21)]
 SEEDANCE_API_MODE = "贞贞平价小屋（推荐）"
+AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）"
 OPENAI_API_MODE = "OpenAI兼容接口（备用）"
-API_MODES = [SEEDANCE_API_MODE, OPENAI_API_MODE]
+API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE]
 LEGACY_UI_VALUES = {"展开", "收起", "提交当前工作流", "打开 Seedance 注册页面"}
 API_KEY_PATTERN = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 
@@ -323,6 +330,13 @@ def _provider_config(
         if not api_key:
             raise PromptEnhancerError("Enter api_key in the node or set SEEDANCE_API_KEY in the ComfyUI environment.")
         return api_key, CHAT_COMPLETIONS_URL, UPLOAD_URL, "Seedance"
+    if api_mode == AI_WORKSHOP_API_MODE:
+        api_key = api_key or os.environ.get("T8STAR_API_KEY", "").strip()
+        if not api_key:
+            raise PromptEnhancerError(
+                "Enter api_key in the node or set T8STAR_API_KEY for 贞贞的AI工坊."
+            )
+        return api_key, AI_WORKSHOP_CHAT_COMPLETIONS_URL, "", "贞贞的AI工坊"
     if api_mode != OPENAI_API_MODE:
         raise PromptEnhancerError(f"Unsupported api_mode: {api_mode}")
 
@@ -341,6 +355,23 @@ def _provider_config(
     if upload_url and not re.match(r"^https?://", upload_url):
         raise PromptEnhancerError("openai_upload_url must begin with http:// or https://.")
     return api_key, _openai_chat_url(base_url), upload_url, "OpenAI-compatible provider"
+
+
+def _resolve_llm_model(api_mode: str, ai_workshop_model: str, custom_model: str) -> str:
+    if str(api_mode or SEEDANCE_API_MODE) != AI_WORKSHOP_API_MODE:
+        return MODEL_ID
+
+    selection = str(ai_workshop_model or AI_WORKSHOP_DEFAULT_MODEL).strip()
+    if selection == CUSTOM_MODEL_OPTION:
+        model = str(custom_model or "").strip()
+        if not model:
+            raise PromptEnhancerError("Custom AI Workshop model is selected, but custom_model is empty.")
+        if any(character.isspace() for character in model):
+            raise PromptEnhancerError("custom_model cannot contain whitespace.")
+        return model
+    if selection != AI_WORKSHOP_DEFAULT_MODEL:
+        raise PromptEnhancerError(f"Unsupported ai_workshop_model: {selection}")
+    return AI_WORKSHOP_DEFAULT_MODEL
 
 
 def _ordered_values(values: dict[str, Any] | None) -> list[Any]:
@@ -706,6 +737,29 @@ def _upload_media_plan(
     return content_parts
 
 
+def _inline_media_plan(media_plan: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Build AI Workshop multimodal parts without truncating or replacing video data."""
+    content_parts: list[dict[str, Any]] = []
+    for asset in media_plan:
+        label = asset["label"]
+        if asset["kind"] == "image":
+            data = _image_to_png_bytes(asset["value"])
+            data_url = f"data:image/png;base64,{base64.b64encode(data).decode('ascii')}"
+            content_parts.append({"type": "text", "text": f"The next attached image is {label}."})
+            content_parts.append({"type": "image_url", "image_url": {"url": data_url}})
+        else:
+            data, _extension, mime_type = _video_to_bytes(asset["value"])
+            data_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
+            content_parts.append({
+                "type": "text",
+                "text": f"The next attached temporal video is {label}. Analyze its complete timeline.",
+            })
+            # AI Workshop's Gemini-compatible gateway currently consumes video data URLs through
+            # the OpenAI image_url part. Its video_url part is accepted but silently loses visual facts.
+            content_parts.append({"type": "image_url", "image_url": {"url": data_url}})
+    return content_parts
+
+
 def _effective_output_language(output_language: str, official_skill_profile: str) -> str:
     return "English" if official_skill_profile == STRICT_SKILL_PROFILE else output_language
 
@@ -867,9 +921,10 @@ def _request_completion(
     rewrite_mode: str,
     chat_url: str = CHAT_COMPLETIONS_URL,
     provider_name: str = "Seedance",
+    model_id: str = MODEL_ID,
 ) -> str:
     payload = {
-        "model": MODEL_ID,
+        "model": model_id,
         "messages": messages,
         "temperature": MODE_TEMPERATURES[rewrite_mode],
         "stream": False,
@@ -954,6 +1009,8 @@ def enhance_prompt(
     shot_count: Any = AUTO_SHOT_COUNT,
     official_skill_profile: str = COMPAT_SKILL_PROFILE,
     creative_preset: str = NO_CREATIVE_PRESET,
+    ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
+    custom_model: str = "",
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
@@ -970,6 +1027,7 @@ def enhance_prompt(
         "reference_template": str(reference_template or ""),
         "openai_base_url": str(openai_base_url or ""),
         "openai_upload_url": str(openai_upload_url or ""),
+        "custom_model": str(custom_model or ""),
     }
     for name, value in optional_texts.items():
         stripped = value.strip()
@@ -987,6 +1045,7 @@ def enhance_prompt(
     reference_template = optional_texts["reference_template"]
     openai_base_url = optional_texts["openai_base_url"]
     openai_upload_url = optional_texts["openai_upload_url"]
+    custom_model = optional_texts["custom_model"]
     if API_KEY_PATTERN.search(str(prompt or "")):
         raise PromptEnhancerError("Remove the API-key-like secret from prompt before running this node.")
     media_plan = _validate_inputs(
@@ -1012,12 +1071,17 @@ def enhance_prompt(
         openai_upload_url,
         bool(media_plan),
     )
+    model_id = _resolve_llm_model(api_mode, ai_workshop_model, custom_model)
 
     owns_session = session is None
     if session is None:
         session = requests.Session()
     try:
-        media_parts = _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
+        media_parts = (
+            _inline_media_plan(media_plan)
+            if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE
+            else _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
+        )
         messages = _build_messages(
             prompt,
             task_type,
@@ -1036,7 +1100,9 @@ def enhance_prompt(
             official_skill_profile,
             creative_preset,
         )
-        response_text = _request_completion(session, api_key, messages, rewrite_mode, chat_url, provider_name)
+        response_text = _request_completion(
+            session, api_key, messages, rewrite_mode, chat_url, provider_name, model_id
+        )
         return _reorder_complete_fields(response_text, task_type)
     finally:
         if owns_session:
@@ -1048,10 +1114,10 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3PromptEnhancerT8",
-            display_name="MiniMax H3 Prompt Enhancer (Seedance / OpenAI)",
+            display_name="MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)",
             category="T8/MiniMax H3",
             description=(
-                "Uses bytedance/doubao-seed-evolving to analyze connected images/videos and rewrite one prompt "
+                "Uses the selected visual LLM channel to analyze connected images/complete videos and rewrite one prompt "
                 "into the official MiniMax-H3 T2VA, I2VA, FL2VA, L2VA, or Ref2VA format."
             ),
             inputs=[
@@ -1138,8 +1204,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     display_name="API Key",
                     optional=True,
                     default="",
-                    socketless=True,
-                    tooltip="Uses this key first. Environment fallback depends on API mode. The frontend masks it, but workflows may still store it.",
+                    force_input=True,
+                    tooltip="Accepts a connected STRING or the masked field below. A connected value takes priority. Environment fallback depends on API mode.",
                 ),
                 io.Combo.Input("output_language", display_name="输出语言", options=OUTPUT_LANGUAGES, default="中文"),
                 io.Combo.Input("prompt_mode", display_name="提示词模式", options=PROMPT_MODES, default="官方增强"),
@@ -1166,6 +1232,21 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     tooltip="Provides shot structure, pacing, camera, style, and sound references. The user's prompt and media remain authoritative.",
                 ),
                 io.Combo.Input("api_mode", display_name="API 模式", options=API_MODES, default=SEEDANCE_API_MODE),
+                io.Combo.Input(
+                    "ai_workshop_model",
+                    display_name="AI工坊模型",
+                    options=AI_WORKSHOP_MODEL_OPTIONS,
+                    default=AI_WORKSHOP_DEFAULT_MODEL,
+                    tooltip="仅用于贞贞的AI工坊。默认 gemini-3.5-flash；选择 Custom 后填写下方模型 ID。",
+                ),
+                io.String.Input(
+                    "custom_model",
+                    display_name="自定义模型 ID（Custom）",
+                    optional=True,
+                    default="",
+                    socketless=True,
+                    tooltip="仅在 AI工坊模型选择 Custom 时使用，例如供应商模型列表中的完整 ID。",
+                ),
                 io.String.Input(
                     "openai_base_url",
                     display_name="OpenAI兼容 Base URL",
@@ -1224,6 +1305,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         openai_upload_url="",
         seed=0,
         shot_count=AUTO_SHOT_COUNT,
+        ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
+        custom_model="",
     ) -> io.NodeOutput:
         result = enhance_prompt(
             prompt=prompt,
@@ -1248,6 +1331,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             openai_upload_url=openai_upload_url,
             seed=seed,
             shot_count=shot_count,
+            ai_workshop_model=ai_workshop_model,
+            custom_model=custom_model,
         )
         return io.NodeOutput(result)
 

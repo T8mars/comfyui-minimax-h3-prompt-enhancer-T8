@@ -5,8 +5,13 @@ import requests
 from comfy_api.latest import io
 
 from .nodes import (
+    AI_WORKSHOP_API_MODE,
+    AI_WORKSHOP_CHAT_COMPLETIONS_URL,
+    AI_WORKSHOP_DEFAULT_MODEL,
+    AI_WORKSHOP_MODEL_OPTIONS,
     API_KEY_PATTERN,
     API_MODES,
+    CUSTOM_MODEL_OPTION,
     LEGACY_UI_VALUES,
     OPENAI_API_MODE,
     OUTPUT_LANGUAGES,
@@ -15,9 +20,11 @@ from .nodes import (
     _image_at,
     _image_count,
     _image_to_png_bytes,
+    _inline_media_plan,
     _ordered_values,
     _provider_config,
     _request_completion,
+    _resolve_llm_model,
     _upload_media,
     _validate_video_source,
     _video_duration,
@@ -613,6 +620,8 @@ def enhance_seedance20_prompt(
     openai_upload_url: str = "",
     seed: int = 0,
     session: requests.Session | None = None,
+    ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
+    custom_model: str = "",
 ) -> str:
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
@@ -652,6 +661,7 @@ def enhance_seedance20_prompt(
             "reference_template": reference_template,
             "openai_base_url": openai_base_url,
             "openai_upload_url": openai_upload_url,
+            "custom_model": custom_model,
         },
     )
     if prompt_mode == "参考模板融合" and not cleaned["reference_template"].strip():
@@ -675,17 +685,22 @@ def enhance_seedance20_prompt(
         cleaned["openai_upload_url"],
         bool(media_plan),
     )
+    model_id = _resolve_llm_model(api_mode, ai_workshop_model, cleaned["custom_model"])
 
     owns_session = session is None
     if session is None:
         session = requests.Session()
     try:
-        media_parts = _upload_seedance20_media_plan(
-            session,
-            api_key,
-            media_plan,
-            upload_url,
-            provider_name,
+        media_parts = (
+            _inline_media_plan(media_plan)
+            if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE
+            else _upload_seedance20_media_plan(
+                session,
+                api_key,
+                media_plan,
+                upload_url,
+                provider_name,
+            )
         )
         messages = _build_messages(
             prompt,
@@ -709,7 +724,9 @@ def enhance_seedance20_prompt(
             media_plan,
             media_parts,
         )
-        return _request_completion(session, api_key, messages, rewrite_mode, chat_url, provider_name)
+        return _request_completion(
+            session, api_key, messages, rewrite_mode, chat_url, provider_name, model_id
+        )
     finally:
         if owns_session:
             session.close()
@@ -720,10 +737,10 @@ class Seedance20PromptEnhancer(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="Seedance20PromptEnhancerT8",
-            display_name="Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)",
+            display_name="Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)",
             category="T8/Seedance 2.0",
             description=(
-                "Uses bytedance/doubao-seed-evolving to analyze connected images and complete videos, then rewrites one "
+                "Uses the selected visual LLM channel to analyze connected images and complete videos, then rewrites one "
                 "prompt with the official Seedance 2.0 task phrasing and shot-order guidance. Audio-file analysis is not "
                 "exposed because the configured LLM rejected input_audio in a real capability probe."
             ),
@@ -857,8 +874,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     display_name="提示词增强 LLM API Key",
                     optional=True,
                     default="",
-                    socketless=True,
-                    tooltip="这是提示词增强 LLM 的 Key，不是 Seedance 2.0 视频生成 Key。",
+                    force_input=True,
+                    tooltip="可连接 STRING，或使用下方遮罩输入框；接线值优先。这是提示词增强 LLM 的 Key，不是视频生成 Key。",
                 ),
                 io.String.Input(
                     "reference_template",
@@ -869,6 +886,21 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     tooltip="只迁移结构、节奏、运镜、转场、风格和声音设计，不迁移人物与剧情事实。",
                 ),
                 io.Combo.Input("api_mode", display_name="LLM API 模式", options=API_MODES, default=SEEDANCE_API_MODE),
+                io.Combo.Input(
+                    "ai_workshop_model",
+                    display_name="AI工坊模型",
+                    options=AI_WORKSHOP_MODEL_OPTIONS,
+                    default=AI_WORKSHOP_DEFAULT_MODEL,
+                    tooltip="仅用于贞贞的AI工坊。默认 gemini-3.5-flash；选择 Custom 后填写下方模型 ID。",
+                ),
+                io.String.Input(
+                    "custom_model",
+                    display_name="自定义模型 ID（Custom）",
+                    optional=True,
+                    default="",
+                    socketless=True,
+                    tooltip="仅在 AI工坊模型选择 Custom 时使用。",
+                ),
                 io.String.Input(
                     "openai_base_url",
                     display_name="OpenAI兼容 Base URL",
@@ -927,6 +959,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         openai_base_url="",
         openai_upload_url="",
         seed=0,
+        ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
+        custom_model="",
     ) -> io.NodeOutput:
         result = enhance_seedance20_prompt(
             prompt=prompt,
@@ -955,6 +989,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
             openai_base_url=openai_base_url,
             openai_upload_url=openai_upload_url,
             seed=seed,
+            ai_workshop_model=ai_workshop_model,
+            custom_model=custom_model,
         )
         return io.NodeOutput(result)
 

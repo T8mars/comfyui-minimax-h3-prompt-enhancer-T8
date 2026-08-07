@@ -9,7 +9,7 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 Prompt Enhancer T8
 
-一组面向 MiniMax-H3 与 Seedance 2.0 视频生成的 ComfyUI 提示词增强节点。两个节点固定调用 `bytedance/doubao-seed-evolving`，能够把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求，输出可连接下游节点的 `STRING`。
+一组面向 MiniMax-H3 与 Seedance 2.0 视频生成的 ComfyUI 提示词增强节点。两个节点都能把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求：贞贞平价小屋与 OpenAI 兼容模式使用固定的 `bytedance/doubao-seed-evolving`，贞贞的 AI 工坊默认使用 `gemini-3.5-flash`，并允许选择 Custom 后填写其他模型 ID。输出是可连接下游节点的 `STRING`。
 
 两个节点共享已经验证的 API、上传、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法，绝不是把 H3 节点换名字。
 
@@ -17,14 +17,14 @@
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
-| `MiniMax H3 Prompt Enhancer (Seedance / OpenAI)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
-| `Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
+| `MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
+| `Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
 
 本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频生成、轮询或下载接口。
 
 ## 功能特点
 
-- 固定视觉模型 `bytedance/doubao-seed-evolving`，没有纯文本模型回退。
+- 平价小屋与 OpenAI 兼容模式固定视觉模型 `bytedance/doubao-seed-evolving`；AI 工坊默认 `gemini-3.5-flash`，也可显式选择 Custom 模型。
 - 同时分析文字、图片和完整视频，不用抽帧冒充视频理解。
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
@@ -36,7 +36,7 @@
 - 支持用户参考模板融合，主提示词与可观察媒体事实优先。
 - 提供随机种子以及 `fixed / randomize / increment / decrement` 状态。
 - 提供节点内 API Key 输入、遮罩显示、保存、清空和注册链接。
-- 支持贞贞平价小屋固定接口和显式配置的 OpenAI 兼容备用接口。
+- 支持贞贞平价小屋、贞贞的 AI 工坊，以及显式配置的 OpenAI 兼容备用接口。
 - 输出单一 `STRING`，可直接连接下游提示词输入。
 - 新增独立 Seedance 2.0 节点：简单/复杂双路径、AUTO/固定 1–20 镜头、官方/Seedance.nz 引用语法、字幕与稳定性策略。
 
@@ -61,13 +61,13 @@ ComfyUI/
 在节点菜单中搜索任一节点：
 
 ```text
-MiniMax H3 Prompt Enhancer (Seedance / OpenAI)
-Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)
+MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
+Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 ```
 
 ## 快速使用
 
-1. 添加 `MiniMax H3 Prompt Enhancer (Seedance / OpenAI)`。
+1. 添加 `MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
 3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和创意预设。
 4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
@@ -79,7 +79,7 @@ Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)
 
 ## Seedance 2.0 快速使用
 
-1. 添加 `Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)`。
+1. 添加 `Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)`。
 2. 填写“视频创意 / 提示词”。任务意图、组织方式、时长和镜头数都可先保持 `AUTO`。
 3. 按任务连接首帧、尾帧、参考图片或完整参考视频。
 4. 选择官方中文 `@图片N/@视频N` 或 Seedance.nz 英文 `@Image N/@Video N` 引用格式。
@@ -116,7 +116,7 @@ Seedance 2.0 Prompt Enhancer (Seedance / OpenAI)
 
 ### Seedance 2.0 音频边界
 
-Seedance 2.0 目标视频模型能够处理音频，不代表本项目固定使用的提示词增强 LLM 能分析音频文件。2026-08-05 的真实能力探测中，`bytedance/doubao-seed-evolving` 明确拒绝 OpenAI 兼容 `input_audio`，返回“audio input is not supported by this model”。因此新节点没有 `AUDIO` 输入，也不会声称听过上传音频。
+Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠道能分析音频文件。2026-08-05 的真实能力探测中，平价小屋/兼容模式使用的 `bytedance/doubao-seed-evolving` 明确拒绝 OpenAI 兼容 `input_audio`，返回“audio input is not supported by this model”。新增 AI 工坊渠道不会改变本节点的输入合同：两个节点都没有 `AUDIO` 输入，也不会声称听过上传音频。
 
 用户仍可在文字里描述对白、环境声、动作声、音乐和音色，或保留文字形式的 `@音频N/@Audio N` 意图；这些内容只作为文字理解。探测结论的脱敏记录位于 [`tests/fixtures/seedance20_audio_probe_2026-08-05.txt`](./tests/fixtures/seedance20_audio_probe_2026-08-05.txt)。
 
@@ -264,7 +264,7 @@ Seedance 没有为本节点调用的 Chat Completions 公开确定性 `seed` 请
 
 ## API Key 与接口模式
 
-两个节点中的 Key 都用于 `bytedance/doubao-seed-evolving` 提示词增强请求，不是下游 Seedance 2.0 视频生成 API Key。
+两个节点中的 Key 都用于当前所选 LLM 渠道的提示词增强请求，不是下游 Seedance 2.0 视频生成 API Key。
 
 ### 贞贞平价小屋（推荐）
 
@@ -274,7 +274,7 @@ Seedance 没有为本节点调用的 Chat Completions 公开确定性 `seed` 请
 https://api.seedance.nz
 ```
 
-可以在节点底部填写 API Key，或点击[获取贞贞 API Key](https://api.seedance.nz/sign-up?aff=5f4w)。节点中的 Key 留空时读取环境变量 `SEEDANCE_API_KEY`。
+可以把任意 `STRING` 输出连接到节点的 API Key 接口，也可以在节点底部填写 Key，或点击[获取贞贞 API Key](https://api.seedance.nz/sign-up?aff=5f4w)。接线值优先；没有接线且节点中的 Key 留空时读取环境变量 `SEEDANCE_API_KEY`。
 
 PowerShell：
 
@@ -287,6 +287,24 @@ Linux / macOS：
 ```bash
 export SEEDANCE_API_KEY="你的 API Key"
 ```
+
+### 贞贞的 AI 工坊（图片/视频）
+
+聊天地址固定为：
+
+```text
+https://ai.t8star.org/v1/chat/completions
+```
+
+默认模型是 `gemini-3.5-flash`。选择 `Custom（自定义）` 后会显示“自定义模型 ID”，可填写 AI 工坊模型列表中的完整 ID。自定义模型必须自行确认具备图片与视频理解能力；节点不会降级到纯文本模型。
+
+可以点击节点底部的[获取 AI 工坊 API Key](https://ai.t8star.org/register?aff=dP7j)。节点中的 Key 留空时读取环境变量 `T8STAR_API_KEY`：
+
+```powershell
+$env:T8STAR_API_KEY="你的 API Key"
+```
+
+AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL 放进同一次 Chat Completions 请求。2026-08-06 的真实协议探测确认：该网关对 `gemini-3.5-flash` 的视频 Data URL 必须使用 OpenAI 多模态 `image_url` 部件（Data URL 自身仍是 `video/mp4`）；`video_url` 虽会返回 200，但会丢失或误读视频事实。因此本节点使用实测通过的表示法，而不是照搬旧参考节点。
 
 ### OpenAI 兼容接口（备用）
 
@@ -303,7 +321,7 @@ OpenAI Chat Completions 兼容并不自动代表支持图片和视频上传：
 
 ## API Key 安全
 
-节点底部提供遮罩、显示、保存和清空按钮。遮罩只能避免画布上直接显示明文：点击“保存到工作流”后，Key 会进入工作流 JSON。
+两个节点都提供标准 `STRING` API Key 接口，并保留底部的遮罩、显示、保存和清空按钮。外部接线值优先。遮罩只能避免画布上直接显示明文：点击“保存到工作流”后，Key 会进入工作流 JSON。
 
 - 分享工作流前务必点击“清空”。
 - 更安全的方式是把节点 Key 留空并使用环境变量。
@@ -312,13 +330,13 @@ OpenAI Chat Completions 兼容并不自动代表支持图片和视频上传：
 
 ## 图片与视频处理
 
-- 图片编码为 PNG 后上传。
-- 视频使用 ComfyUI 原生 `VIDEO` 的完整流，不抽帧、不转成图片列表。
+- 图片编码为 PNG；平价小屋/兼容模式按上传合同上传，AI 工坊模式内联为 Base64 Data URL。
+- 视频使用 ComfyUI 原生 `VIDEO` 的完整流，不抽帧、不转成图片列表，也不在本地截取前 5 秒；AI 工坊模式同样内联完整视频字节。
 - 支持 MP4、AVI、MOV、MKV，单文件不超过 50 MB。
 - Ref2VA 单个视频时长 2–15 秒，多个视频总时长不超过 15 秒。
 - Ref2VA 最多 9 张图片、3 个视频，总素材数最多 12。
 - 带活动裁剪窗口的原生 `VIDEO` 会在上传前被拒绝，因为底层流可能仍指向未裁剪原文件。请先把片段另存为新视频再连接。
-- 素材上传 URL 是临时链接，应只用于当前模型请求。
+- 平价小屋或兼容模式返回的素材上传 URL 是临时链接，应只用于当前模型请求；AI 工坊模式没有中间素材 URL。
 
 ## 输出与错误行为
 
@@ -344,7 +362,7 @@ Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；
 
 - API Key 无效或余额不足；
 - 网络、超时、限流或供应商 5xx；
-- 图片或视频上传失败；
+- 素材编码、上传或多模态请求失败；
 - 响应不是合法 JSON；
 - 响应缺少正文或正文全空白。
 
@@ -360,14 +378,16 @@ Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；
 
 单元测试使用 mock API 和本地媒体夹具，不联网、不上传素材、不产生费用。
 
-`live_smoke.py` 用于 MiniMax-H3；`seedance20_live_smoke.py` 用于 Seedance 2.0。两者都会生成本地图片和 4 秒 MP4，对图片事实、视频时间顺序和跨素材关系做真实联合测试。它会产生实际 Token 费用，只有明确接受费用时才运行：
+`live_smoke.py` 用于平价小屋的 MiniMax-H3；`seedance20_live_smoke.py` 用于平价小屋的 Seedance 2.0。`workshop_live_smoke.py` 会让两个节点各走一次 AI 工坊：H3 使用默认模型，Seedance 2.0 使用 Custom 路径但填写同一个 `gemini-3.5-flash`。测试会生成带独有文字、颜色、形状和两阶段运动的本地图片与完整 4 秒 MP4，并核验两个节点是否真的识别图片和视频时间顺序。真实测试会产生 Token 费用，只有明确接受费用时才运行：
 
 ```powershell
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\live_smoke.py --confirm-paid
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\seedance20_live_smoke.py --confirm-paid
+$env:T8STAR_API_KEY="你的 AI 工坊 API Key"
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\workshop_live_smoke.py --confirm-paid
 ```
 
-运行前必须设置 `SEEDANCE_API_KEY`。不要把真实 Key 写进命令参数、脚本或工作流后上传到公开仓库。
+前两个脚本运行前设置 `SEEDANCE_API_KEY`；AI 工坊脚本设置 `T8STAR_API_KEY`。不要把真实 Key 写进命令参数、脚本或工作流后上传到公开仓库。
 
 ## 参考资料
 

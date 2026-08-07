@@ -3,16 +3,20 @@ import { app } from "../../scripts/app.js";
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
 const SIGN_UP_URL = "https://api.seedance.nz/sign-up?aff=5f4w";
+const AI_WORKSHOP_SIGN_UP_URL = "https://ai.t8star.org/register?aff=dP7j";
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
+const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
+const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
+const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
 const SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))];
 const COMPAT_SKILL_PROFILE = "现有兼容（保留中英文）";
 const STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）";
 const OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE];
 const NO_CREATIVE_PRESET = "无（仅核心规则）";
-const CREATIVE_PRESET_OPTIONS = [
 const MV_CREATIVE_PRESET = "MV / 歌词贴字";
+const CREATIVE_PRESET_OPTIONS = [
     NO_CREATIVE_PRESET,
     "AUTO（根据意图判断）",
     "极简产品广告",
@@ -57,6 +61,8 @@ const SERIALIZED_WIDGET_NAMES = [
     "official_skill_profile",
     "creative_preset",
     "api_mode",
+    "ai_workshop_model",
+    "custom_model",
     "reference_context",
     "constraints",
     "api_key",
@@ -202,7 +208,18 @@ function addReferenceTemplateBehavior(node, modeWidget, templateWidget) {
 }
 
 
-function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget) {
+function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget, modelWidget, customModelWidget) {
+    const updateModel = () => {
+        const workshop = modeWidget.value === AI_WORKSHOP_API_MODE;
+        setWidgetVisible(modelWidget, workshop);
+        setWidgetVisible(customModelWidget, workshop && modelWidget.value === CUSTOM_MODEL_OPTION);
+    };
+    const originalModelCallback = modelWidget.callback;
+    modelWidget.callback = function (value) {
+        originalModelCallback?.apply(this, arguments);
+        updateModel();
+        resizeNode(node);
+    };
     const update = (mode = modeWidget.value) => {
         for (const widget of [baseUrlWidget, uploadUrlWidget]) {
             if (LEGACY_UI_VALUES.has(String(widget.value || "").trim())) setTextWidgetValue(widget, "");
@@ -210,7 +227,15 @@ function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget) {
         const compatible = mode === OPENAI_API_MODE;
         setWidgetVisible(baseUrlWidget, compatible);
         setWidgetVisible(uploadUrlWidget, compatible);
-        if (node.t8SignUpWidget) setWidgetVisible(node.t8SignUpWidget, !compatible);
+        updateModel();
+        if (node.t8SignUpWidget) {
+            setWidgetVisible(node.t8SignUpWidget, !compatible);
+            const signupLabel = mode === AI_WORKSHOP_API_MODE
+                ? "🔑 获取 AI 工坊 API Key"
+                : "🔑 获取贞贞 API Key";
+            node.t8SignUpWidget.label = signupLabel;
+            node.t8SignUpWidget.name = signupLabel;
+        }
         node.t8UpdateApiKeyPlaceholder?.();
         resizeNode(node);
     };
@@ -245,9 +270,13 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     const input = document.createElement("input");
     input.type = "password";
     const updatePlaceholder = () => {
-        input.placeholder = apiModeWidget?.value === OPENAI_API_MODE
-            ? "OpenAI兼容 API Key（输入后保存到工作流）"
-            : "贞贞 API Key（输入后保存到工作流）";
+        if (apiModeWidget?.value === OPENAI_API_MODE) {
+            input.placeholder = "OpenAI兼容 API Key（输入后保存到工作流）";
+        } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
+            input.placeholder = "AI 工坊 API Key（输入后保存到工作流）";
+        } else {
+            input.placeholder = "贞贞 API Key（输入后保存到工作流）";
+        }
     };
     node.t8UpdateApiKeyPlaceholder = updatePlaceholder;
     updatePlaceholder();
@@ -406,6 +435,8 @@ app.registerExtension({
             const constraintsWidget = this.widgets?.find((widget) => widget.name === "constraints");
             const apiKeyWidget = this.widgets?.find((widget) => widget.name === "api_key");
             const apiModeWidget = this.widgets?.find((widget) => widget.name === "api_mode");
+            const aiWorkshopModelWidget = this.widgets?.find((widget) => widget.name === "ai_workshop_model");
+            const customModelWidget = this.widgets?.find((widget) => widget.name === "custom_model");
             const openaiBaseUrlWidget = this.widgets?.find((widget) => widget.name === "openai_base_url");
             const openaiUploadUrlWidget = this.widgets?.find((widget) => widget.name === "openai_upload_url");
             const seedWidget = this.widgets?.find((widget) => widget.name === "seed");
@@ -425,8 +456,11 @@ app.registerExtension({
             if (promptModeWidget && referenceTemplateWidget) {
                 addReferenceTemplateBehavior(this, promptModeWidget, referenceTemplateWidget);
             }
-            if (apiModeWidget && openaiBaseUrlWidget && openaiUploadUrlWidget) {
-                addApiModeBehavior(this, apiModeWidget, openaiBaseUrlWidget, openaiUploadUrlWidget);
+            if (apiModeWidget && openaiBaseUrlWidget && openaiUploadUrlWidget && aiWorkshopModelWidget && customModelWidget) {
+                addApiModeBehavior(
+                    this, apiModeWidget, openaiBaseUrlWidget, openaiUploadUrlWidget,
+                    aiWorkshopModelWidget, customModelWidget,
+                );
             }
             if (creativePresetWidget && promptWidget) {
                 addMvPresetBehavior(this, creativePresetWidget, promptWidget, referenceContextWidget, constraintsWidget, referenceTemplateWidget);
@@ -439,9 +473,18 @@ app.registerExtension({
                 normalizeChoice(promptModeWidget, ["官方增强", "参考模板融合"], "官方增强");
                 normalizeChoice(officialSkillProfileWidget, OFFICIAL_SKILL_PROFILES, COMPAT_SKILL_PROFILE);
                 normalizeChoice(creativePresetWidget, CREATIVE_PRESET_OPTIONS, NO_CREATIVE_PRESET);
-                normalizeChoice(apiModeWidget, [SEEDANCE_API_MODE, OPENAI_API_MODE], SEEDANCE_API_MODE);
+                normalizeChoice(
+                    apiModeWidget,
+                    [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE],
+                    SEEDANCE_API_MODE,
+                );
+                normalizeChoice(
+                    aiWorkshopModelWidget,
+                    [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION],
+                    AI_WORKSHOP_DEFAULT_MODEL,
+                );
                 if (LEGACY_UI_VALUES.has(String(apiKeyWidget?.value || "").trim())) apiKeyWidget.value = "";
-                for (const widget of [referenceContextWidget, constraintsWidget, referenceTemplateWidget, openaiBaseUrlWidget, openaiUploadUrlWidget]) {
+                for (const widget of [referenceContextWidget, constraintsWidget, referenceTemplateWidget, customModelWidget, openaiBaseUrlWidget, openaiUploadUrlWidget]) {
                     const value = String(widget?.value || "").trim();
                     if (LEGACY_UI_VALUES.has(value)) setTextWidgetValue(widget, "");
                     if (API_KEY_PATTERN.test(value)) {
@@ -482,8 +525,12 @@ app.registerExtension({
             const signUpWidget = this.addWidget(
                 "button",
                 "🔑 获取贞贞 API Key",
-                "打开 Seedance 注册页面",
-                () => window.open(SIGN_UP_URL, "_blank", "noopener,noreferrer"),
+                "打开当前渠道注册页面",
+                () => window.open(
+                    apiModeWidget?.value === AI_WORKSHOP_API_MODE ? AI_WORKSHOP_SIGN_UP_URL : SIGN_UP_URL,
+                    "_blank",
+                    "noopener,noreferrer",
+                ),
                 { serialize: false },
             );
             signUpWidget.serializeValue = () => undefined;
@@ -495,7 +542,7 @@ app.registerExtension({
             const args = [...arguments];
             const serialized = args[0];
             if (Array.isArray(serialized?.widgets_values)
-                && (serialized.widgets_values.length === 16 || serialized.widgets_values.length === 17)) {
+                && [16, 17, 19].includes(serialized.widgets_values.length)) {
                 args[0] = { ...serialized, widgets_values: [...serialized.widgets_values] };
             }
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 16) {
@@ -503,6 +550,9 @@ app.registerExtension({
             }
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 17) {
                 args[0].widgets_values.splice(8, 0, COMPAT_SKILL_PROFILE, NO_CREATIVE_PRESET);
+            }
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 19) {
+                args[0].widgets_values.splice(11, 0, AI_WORKSHOP_DEFAULT_MODEL, "");
             }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => this.t8NormalizePromptOptions?.());

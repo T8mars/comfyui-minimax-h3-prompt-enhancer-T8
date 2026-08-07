@@ -149,6 +149,25 @@
           "link": null
         },
         {
+          "localized_name": "ai_workshop_model",
+          "name": "ai_workshop_model",
+          "type": "COMBO",
+          "widget": {
+            "name": "ai_workshop_model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "custom_model",
+          "name": "custom_model",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "custom_model"
+          },
+          "link": null
+        },
+        {
           "localized_name": "reference_context",
           "name": "reference_context",
           "shape": 7,
@@ -242,6 +261,8 @@
         "现有兼容（保留中英文）",
         "无（仅核心规则）",
         "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        "",
         "",
         "",
         "",

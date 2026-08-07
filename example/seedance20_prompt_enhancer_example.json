@@ -36,6 +36,8 @@
         {"name": "api_key", "localized_name": "api_key", "shape": 7, "type": "STRING", "widget": {"name": "api_key"}, "link": null},
         {"name": "reference_template", "localized_name": "reference_template", "shape": 7, "type": "STRING", "widget": {"name": "reference_template"}, "link": null},
         {"name": "api_mode", "localized_name": "api_mode", "type": "COMBO", "widget": {"name": "api_mode"}, "link": null},
+        {"name": "ai_workshop_model", "localized_name": "ai_workshop_model", "type": "COMBO", "widget": {"name": "ai_workshop_model"}, "link": null},
+        {"name": "custom_model", "localized_name": "custom_model", "shape": 7, "type": "STRING", "widget": {"name": "custom_model"}, "link": null},
         {"name": "openai_base_url", "localized_name": "openai_base_url", "shape": 7, "type": "STRING", "widget": {"name": "openai_base_url"}, "link": null},
         {"name": "openai_upload_url", "localized_name": "openai_upload_url", "shape": 7, "type": "STRING", "widget": {"name": "openai_upload_url"}, "link": null},
         {"name": "seed", "localized_name": "seed", "shape": 7, "type": "INT", "widget": {"name": "seed"}, "link": null}
@@ -64,6 +66,8 @@
         "",
         "",
         "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        "",
         "",
         "",
         0,
