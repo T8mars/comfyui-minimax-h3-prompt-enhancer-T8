@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "batch-2026-08-10-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-mimu-ai1-2086474098859987150-browser-2086474098859987150-video-1",
+      "template_id": "t8-case-evidence-ladder-reality-v1",
+      "label": "证据递进跨界",
+      "summary": "有边界证据连续两次更新同一变量，稳定现实延迟响应，最终变化跨界形成单一物理结果。",
+      "case_sha256": "4462ca7fb93be518f6c4e81822c21d17f1855c0b44a4a0cbaa130def66ea3079",
+      "creative_dna_sha256": "8ec5bc37cf88c43cdf9f7a4b069bf117dca7eb1f6056fad3349ccc065c85d8e7",
+      "mechanism_fingerprint": "967f031b99625e14571cbeb2afef14c48bb8152ee2ffbfdd09eb9deddca3c695",
+      "h3_adapter_sha256": "9ada911043149f23d9ae4def927c36346705d542baf47cc9a093f7d0564a4088",
+      "seedance20_adapter_sha256": "4c28814e8bfdf690834c37ddbac9173d5e88e5ac6e9fae0cf7dc51e372657068"
+    },
+    {
+      "case_id": "x-strength04-x-2086471165581902327-browser-2086471165581902327-video-1",
+      "template_id": "t8-case-threshold-inspection-passage-v1",
+      "label": "阈值通行巡检",
+      "summary": "远景锁定入口，一次跨过阈值并连续通行；局部材料信号触发检查，结尾只显示可见路线状态。",
+      "case_sha256": "b551d4c3ff336011a2dac34291cfa345c7521fe03c81feea4d9b6a7c9572ba9c",
+      "creative_dna_sha256": "19ba5baa8ed1e48a807264a0e84acb7e937f0b287915e1a123753dd4389da9fd",
+      "mechanism_fingerprint": "31ca609ed70b77fe325296cb1246b88ad198b8e6a5125b3f71ac4933ffc1f59f",
+      "h3_adapter_sha256": "70788f480c684273d445150a6256cdbe8902ffa2b919b2fd1ddf8f727f01f901",
+      "seedance20_adapter_sha256": "130bc0989d96cea44158b55e001e8900307d3d4806b7d94edeefba9ddac8fc62"
+    },
+    {
+      "case_id": "x-zephyraleigh-2086466812347297938-browser-2086466812347297938-video-1",
+      "template_id": "t8-case-imperfect-memory-farewell-v1",
+      "label": "瑕疵记忆告别",
+      "summary": "不完美观察者发现日常动作，外部信号改变目标，临近离场只回应一次，并以有动机的录制失误结束。",
+      "case_sha256": "1f3215b17398d00108c413cefacc092f199b081128a0085010bc0f98e01babca",
+      "creative_dna_sha256": "898a0d0523c74cc768503b9cf15c2f66f339c54ee229391da6e39bed4f3edd84",
+      "mechanism_fingerprint": "dba23e0ae611e494725c2fad3e534e80ddd6b200bd5ad5da6b2124beec1c08e8",
+      "h3_adapter_sha256": "8abaad62eb8fc8108ca1314ff196c6e380c7ad3aca0f059a99e70748a0618fdd",
+      "seedance20_adapter_sha256": "3858e5c8da676a23893603e1e9dd4b50ecb0b62514c12d1f4646ddf4c90012ba"
+    }
+  ]
+}

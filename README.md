@@ -30,7 +30,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。预设只优化提示词，不运行完整制作工作流。
-- 两个节点新增独立的 `T8 精选案例模板（非官方）` 列表，首批 7 个案例只携带可复用 Creative DNA 与防复制规则，不携带源视频、路径、URL 或成品提示词。
+- 两个节点提供独立的 `T8 精选案例模板（非官方）` 列表，当前 10 个已发布案例只携带可复用 Creative DNA 与防复制规则，不携带源视频、路径、URL 或成品提示词。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -178,7 +178,7 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 
 ## T8 精选案例模板（非官方）
 
-该列表与 MiniMax 官方创意预设完全分开。两个节点使用同一稳定模板 ID，但 H3 版本会折叠到 H3 字段、`[Shot N]` 时间线和声音合同；Seedance 2.0 版本会使用任务意图、自然段或 `镜头N` 顺序与素材引用语法，不输出 H3 字段或绝对 H3 时间码。
+该列表与 MiniMax 官方创意预设完全分开。当前收录 10 个已发布模板；两个节点使用同一稳定模板 ID，但 H3 版本会折叠到 H3 字段、`[Shot N]` 时间线和声音合同；Seedance 2.0 版本会使用任务意图、自然段或 `镜头N` 顺序与素材引用语法，不输出 H3 字段或绝对 H3 时间码。
 
 | 模板 | 可复用机制 |
 | --- | --- |
@@ -189,6 +189,9 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 | `T8-C005｜二维与真实媒介接触反应` | 一次跨媒介接触触发三段清晰反应，以媒介专属的不可能效果收尾 |
 | `T8-C006｜数量对清晰证明反转` | 先让数量与噪声占优，再用一次克制信号与物理结果完成反转 |
 | `T8-C007｜证明物与反应交接` | 干预制造冲突，稳定展示隐藏风险，再以有动机的镜头交接落到反应 |
+| `证据递进跨界` | 有边界证据两次更新同一变量，稳定现实延迟响应，最终变化跨界形成物理结果 |
+| `阈值通行巡检` | 远景锁定入口，越过阈值后连续通行，以局部材料信号触发检查并显示最终路线状态 |
+| `瑕疵记忆告别` | 不完美观察者记录日常动作，外部信号改变目标，并以一次回应和有动机的录制失误结束 |
 
 默认 `无（不使用 T8 案例）`，因此旧工作流的请求内容保持不变。案例模板独立于“官方增强 / 官方优化”和“参考模板融合”：可以单独使用，也可以与用户手动模板共同使用；用户提示词、媒体事实、硬性要求、时长与固定镜头数始终优先。案例只迁移机制、可变槽位、失败修复和 anti-copy 排除项，不复制源人物、品牌、剧情、对白、准确镜头表、表面风格或媒体。
 
@@ -199,11 +202,12 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 ```bash
 python tools/import_t8_case_templates.py \
   --registry <comfyui-handoffs/registry.json> \
-  --batch case_templates/source_batches/<batch-id>.json \
+  --batch case_templates/source_batches/2026-08-09-01.json \
+  --batch case_templates/source_batches/2026-08-10-01.json \
   --output case_templates/catalog.json
 ```
 
-导入会现场要求 canonical case 为 `released`、两个模型 recipe 齐全、`media_connections=[]`、API Key/Base URL/视频 URL 为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并记录 case 与 adapter SHA-256。目录不会包含本地路径、来源 URL、媒体或最终提示词。每日批次仍需先用 curator 的 release/adapter 校验通过；Markdown 报告只是交接说明，不能代替实时 case 与哈希核验。
+`--batch` 可按发布时间重复传入，后续每日批次在末尾追加一项即可。导入会现场要求 canonical case 为 `released`、两个模型 recipe 齐全、`media_connections=[]`、API Key/Base URL/视频 URL 为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并重算及核对 case、Creative DNA 与 adapter SHA-256。目录不会包含本地路径、来源 URL、媒体或最终提示词。每日批次仍需先用 curator 的 release/adapter 校验通过；Markdown 报告只是交接说明，不能代替实时 case 与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
