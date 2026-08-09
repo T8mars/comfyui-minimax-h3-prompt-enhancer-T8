@@ -9,7 +9,7 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 Prompt Enhancer T8
 
-一组面向 MiniMax-H3 与 Seedance 2.0 视频生成的 ComfyUI 提示词增强节点。两个节点都能把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求：贞贞平价小屋与 OpenAI 兼容模式使用固定的 `bytedance/doubao-seed-evolving`，贞贞的 AI 工坊默认使用 `gemini-3.5-flash`，并允许选择 Custom 后填写其他模型 ID。输出是可连接下游节点的 `STRING`。
+一组面向 MiniMax-H3 与 Seedance 2.0 视频生成的 ComfyUI 提示词增强节点。两个节点都能把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求：贞贞平价小屋固定使用 `bytedance/doubao-seed-evolving`；贞贞的 AI 工坊默认使用 `gemini-3.5-flash`，并允许选择 Custom；OpenAI 兼容模式由用户填写 API Base URL 和视觉模型 ID。输出是可连接下游节点的 `STRING`。
 
 两个节点共享已经验证的 API、上传、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法，绝不是把 H3 节点换名字。
 
@@ -24,7 +24,7 @@
 
 ## 功能特点
 
-- 平价小屋与 OpenAI 兼容模式固定视觉模型 `bytedance/doubao-seed-evolving`；AI 工坊默认 `gemini-3.5-flash`，也可显式选择 Custom 模型。
+- 平价小屋固定视觉模型 `bytedance/doubao-seed-evolving`；AI 工坊默认 `gemini-3.5-flash` 并支持 Custom；OpenAI 兼容模式支持填写供应商自己的视觉模型 ID。
 - 同时分析文字、图片和完整视频，不用抽帧冒充视频理解。
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
@@ -309,6 +309,19 @@ AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL �
 ### OpenAI 兼容接口（备用）
 
 备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；模型 ID 必须在节点中填写供应商实际支持的视觉模型。
+
+#### 修复后的节点配置
+
+MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：
+
+| 节点字段 | 是否必填 | 用法 |
+| --- | --- | --- |
+| `API Key` | 是 | 可连接任意 `STRING`，也可在节点内填写；节点留空时读取 `OPENAI_API_KEY` |
+| `OpenAI 模型 ID` | 是 | 填写兼容服务商提供的完整视觉模型 ID，不再固定为 `bytedance/doubao-seed-evolving` |
+| `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；节点会把服务根地址或 `/v1` 地址规范化为 `/v1/chat/completions` |
+| `视频素材 URL` | 否 | 仅用于视频，每行一个，按已连接 `VIDEO` 的顺序对应；未填写的已连接视频自动使用 Base64 |
+
+不再需要、也不要填写单独的“兼容素材上传 URL”。图片没有素材 URL 字段，始终由节点编码成 Base64 并随聊天请求直接发送。
 
 该模式不再使用第二个素材上传端点：
 
