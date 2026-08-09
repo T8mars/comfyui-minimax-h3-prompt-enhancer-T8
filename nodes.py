@@ -1,11 +1,11 @@
 import base64
 import io as python_io
 import json
+import logging
 import os
 import re
 import time
 from typing import Any
-from urllib.parse import urlsplit
 
 import numpy as np
 import requests
@@ -30,8 +30,12 @@ CUSTOM_MODEL_OPTION = "Custom（自定义）"
 AI_WORKSHOP_MODEL_OPTIONS = [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION]
 MAX_FILE_BYTES = 50 * 1024 * 1024
 REQUEST_TIMEOUT = (20, 300)
-SEEDANCE_CHAT_RETRY_DELAYS = (0.5, 1.0)
-SEEDANCE_CHAT_RETRYABLE_STATUS_CODES = frozenset({502, 503, 504})
+REQUEST_ROUTE_SEQUENCE = ("direct", "proxy", "direct", "proxy")
+RETRY_DELAYS_SECONDS = (1, 5, 10)
+RETRYABLE_HTTP_STATUSES = frozenset({429, 502, 503, 504})
+DIRECT_PROXIES = {"http": "", "https": "", "all": ""}
+
+LOGGER = logging.getLogger(__name__)
 
 TASK_TYPES = ["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA"]
 TASK_TYPE_LABELS = {
@@ -710,30 +714,44 @@ def _raise_http_error(
     raise PromptEnhancerError(f"{provider_name} {operation} {label} (HTTP {status}): {detail}")
 
 
-def _is_seedance_chat_endpoint(chat_url: str) -> bool:
-    try:
-        parsed = urlsplit(str(chat_url or ""))
-    except ValueError:
-        return False
-    return (
-        (parsed.hostname or "").lower() == "api.seedance.nz"
-        and parsed.path.rstrip("/") == "/v1/chat/completions"
-    )
+def _route_proxies(url: str, route: str) -> dict[str, str]:
+    if route == "direct":
+        return DIRECT_PROXIES
+    return requests.utils.get_environ_proxies(url)
 
 
-def _is_retryable_seedance_network_error(error: requests.RequestException) -> bool:
-    # A read timeout is deliberately excluded: the server may already have
-    # completed the paid generation even though its response did not arrive.
-    if isinstance(error, requests.exceptions.ReadTimeout):
-        return False
+def _is_retryable_network_error(error: requests.RequestException) -> bool:
     return isinstance(
         error,
         (
-            requests.exceptions.SSLError,
-            requests.exceptions.ConnectTimeout,
-            requests.exceptions.ConnectionError,
+            requests.ConnectionError,
+            requests.Timeout,
+            requests.exceptions.ChunkedEncodingError,
+            requests.exceptions.ContentDecodingError,
         ),
     )
+
+
+def _post_on_route(
+    session: requests.Session,
+    url: str,
+    route: str,
+    **kwargs: Any,
+) -> requests.Response:
+    """Use an isolated production session for every direct/proxy attempt."""
+    if isinstance(session, requests.Session):
+        attempt_session = requests.Session()
+        attempt_session.trust_env = route == "proxy"
+        try:
+            return attempt_session.post(url, **kwargs)
+        finally:
+            attempt_session.close()
+    kwargs["proxies"] = _route_proxies(url, route)
+    return session.post(url, **kwargs)
+
+
+def _wait_before_retry(attempt: int) -> None:
+    time.sleep(RETRY_DELAYS_SECONDS[attempt - 1])
 
 
 def _upload_media(
@@ -748,21 +766,41 @@ def _upload_media(
     if len(data) > MAX_FILE_BYTES:
         raise PromptEnhancerError(f"{filename} exceeds the Seedance 50 MB upload limit.")
     response = None
-    for attempt in range(2):
+    attempted_routes: list[str] = []
+    for attempt, route in enumerate(REQUEST_ROUTE_SEQUENCE, start=1):
+        attempted_routes.append(route)
         try:
-            response = session.post(
+            response = _post_on_route(
+                session,
                 upload_url,
+                route,
                 headers={"Authorization": f"Bearer {api_key}"},
                 files={"file": (filename, data, mime_type)},
                 timeout=REQUEST_TIMEOUT,
+                allow_redirects=False,
             )
         except requests.RequestException as error:
-            raise PromptEnhancerError(f"{provider_name} media upload network error: {type(error).__name__}") from error
-        if response.status_code != 429 or attempt == 1:
-            break
-        retry_after = str(getattr(response, "headers", {}).get("Retry-After", "")).strip()
-        wait_seconds = int(retry_after) if retry_after.isdigit() else 60
-        time.sleep(min(max(wait_seconds, 1), 60))
+            LOGGER.warning(
+                "%s media upload attempt %d/%d via %s failed: %s",
+                provider_name,
+                attempt,
+                len(REQUEST_ROUTE_SEQUENCE),
+                route,
+                type(error).__name__,
+            )
+            if _is_retryable_network_error(error) and attempt < len(REQUEST_ROUTE_SEQUENCE):
+                _wait_before_retry(attempt)
+                continue
+            routes = " -> ".join(attempted_routes)
+            raise PromptEnhancerError(
+                f"{provider_name} media upload network error after {routes}: {type(error).__name__}"
+            ) from error
+        if response.status_code in RETRYABLE_HTTP_STATUSES and attempt < len(REQUEST_ROUTE_SEQUENCE):
+            response.close()
+            _wait_before_retry(attempt)
+            continue
+        break
+    assert response is not None
     if response.status_code != 200:
         _raise_http_error(response, api_key, "media upload", provider_name)
     try:
@@ -1039,45 +1077,46 @@ def _request_completion(
         "temperature": MODE_TEMPERATURES[rewrite_mode],
         "stream": False,
     }
-    retry_delays = SEEDANCE_CHAT_RETRY_DELAYS if _is_seedance_chat_endpoint(chat_url) else ()
-    attempt = 0
-    while True:
-        attempt += 1
+    response = None
+    attempted_routes: list[str] = []
+    for attempt, route in enumerate(REQUEST_ROUTE_SEQUENCE, start=1):
+        attempted_routes.append(route)
         try:
-            response = session.post(
+            response = _post_on_route(
+                session,
                 chat_url,
+                route,
                 headers={
                     "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json",
                 },
                 json=payload,
                 timeout=REQUEST_TIMEOUT,
+                allow_redirects=False,
             )
         except requests.RequestException as error:
-            can_retry = _is_retryable_seedance_network_error(error)
-            if can_retry and attempt <= len(retry_delays):
-                time.sleep(retry_delays[attempt - 1])
+            LOGGER.warning(
+                "%s chat attempt %d/%d via %s failed: %s; replay may incur duplicate chat billing",
+                provider_name,
+                attempt,
+                len(REQUEST_ROUTE_SEQUENCE),
+                route,
+                type(error).__name__,
+            )
+            if _is_retryable_network_error(error) and attempt < len(REQUEST_ROUTE_SEQUENCE):
+                _wait_before_retry(attempt)
                 continue
-            if can_retry and retry_delays:
-                retry_note = f"Fast retry was exhausted after {attempt} attempts."
-            elif isinstance(error, requests.exceptions.ReadTimeout):
-                retry_note = (
-                    "The response state is ambiguous, so it was not retried automatically "
-                    "to avoid a duplicate paid generation."
-                )
-            else:
-                retry_note = "The paid request was not retried automatically."
+            routes = " -> ".join(attempted_routes)
             raise PromptEnhancerError(
-                f"{provider_name} chat network error: {type(error).__name__}. {retry_note}"
+                f"{provider_name} chat network error after {routes}: {type(error).__name__}. "
+                "The request may have incurred duplicate chat billing."
             ) from error
-
-        if (
-            response.status_code in SEEDANCE_CHAT_RETRYABLE_STATUS_CODES
-            and attempt <= len(retry_delays)
-        ):
-            time.sleep(retry_delays[attempt - 1])
+        if response.status_code in RETRYABLE_HTTP_STATUSES and attempt < len(REQUEST_ROUTE_SEQUENCE):
+            response.close()
+            _wait_before_retry(attempt)
             continue
         break
+    assert response is not None
     if response.status_code != 200:
         _raise_http_error(response, api_key, "chat", provider_name, attempts=attempt)
     try:

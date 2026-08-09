@@ -38,6 +38,9 @@ class FakeResponse:
             raise self.payload
         return self.payload
 
+    def close(self):
+        return None
+
 
 class FakeSession:
     def __init__(self, completion, chat_status=200, chat_payload=None, chat_exception=None, upload_status=200):
@@ -1126,21 +1129,37 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(self.run_enhancer(session, description_word_target=350), short_output)
         self.assertEqual(len(session.chat_requests), 1)
 
-    def test_non_retryable_http_errors_are_actionable_and_do_not_retry_chat(self):
-        for status, phrase in ((401, "configured API Key"), (402, "insufficient balance"), (429, "rate limited")):
+    def test_business_http_errors_are_actionable_and_do_not_retry_chat(self):
+        for status, phrase in ((400, "request rejected"), (401, "configured API Key"), (402, "insufficient balance")):
             with self.subTest(status=status):
                 session = FakeSession("", chat_status=status)
                 with self.assertRaisesRegex(nodes.PromptEnhancerError, phrase):
                     self.run_enhancer(session)
                 self.assertEqual(len(session.chat_requests), 1)
 
+    def test_temporary_http_errors_retry_chat_on_all_routes(self):
+        for status, phrase in ((429, "rate limited"), (502, "gateway failure"), (503, "service unavailable"), (504, "gateway timeout")):
+            with self.subTest(status=status):
+                session = FakeSession("", chat_status=status)
+                with patch.object(nodes.time, "sleep") as sleep:
+                    with self.assertRaisesRegex(nodes.PromptEnhancerError, phrase):
+                        self.run_enhancer(session)
+                self.assertEqual(len(session.chat_requests), 4)
+                self.assertEqual(
+                    [call.args[0] for call in sleep.call_args_list],
+                    [1, 5, 10],
+                )
+
+        gateway = FakeSession(
+            "",
+            chat_status=502,
+            chat_payload=ValueError("not json"),
+        )
         gateway_response = FakeResponse(502, ValueError("not json"), text="<html><h1>502 Bad Gateway</h1><p>nginx</p></html>")
-        gateway = SequencedChatSession([gateway_response, gateway_response, gateway_response])
-        with patch.object(nodes.time, "sleep") as sleep:
-            with self.assertRaisesRegex(nodes.PromptEnhancerError, "after 3 automatic attempts") as raised:
+        gateway.post = lambda url, **kwargs: gateway_response
+        with patch.object(nodes.time, "sleep"):
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "after 4 automatic attempts") as raised:
                 self.run_enhancer(gateway)
-        self.assertEqual(len(gateway.chat_requests), 3)
-        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
         self.assertNotIn("<html>", str(raised.exception))
 
     def test_seedance_ssl_retry_returns_the_successful_generation(self):
@@ -1154,7 +1173,7 @@ class PromptEnhancerTests(unittest.TestCase):
         with patch.object(nodes.time, "sleep") as sleep:
             self.assertEqual(self.run_enhancer(session), expected)
         self.assertEqual(len(session.chat_requests), 3)
-        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [1, 5])
 
     def test_seedance_gateway_retry_returns_the_successful_generation(self):
         expected = basic_output()
@@ -1167,15 +1186,17 @@ class PromptEnhancerTests(unittest.TestCase):
         with patch.object(nodes.time, "sleep") as sleep:
             self.assertEqual(self.run_enhancer(session), expected)
         self.assertEqual(len(session.chat_requests), 3)
-        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [1, 5])
 
-    def test_custom_openai_endpoint_does_not_inherit_seedance_paid_retry_policy(self):
+    def test_custom_openai_endpoint_uses_the_same_four_route_retry_policy(self):
         session = SequencedChatSession([
             requests.exceptions.SSLError("custom provider TLS failure"),
+            FakeResponse(502, {"error": {"message": "bad gateway"}}),
+            FakeResponse(503, {"error": {"message": "unavailable"}}),
             FakeResponse(200, {"choices": [{"message": {"content": basic_output()}}]}),
         ])
-        with self.assertRaisesRegex(nodes.PromptEnhancerError, "not retried automatically"):
-            nodes._request_completion(
+        with patch.object(nodes.time, "sleep") as sleep:
+            result = nodes._request_completion(
                 session,
                 "secret-key",
                 [{"role": "user", "content": "hello"}],
@@ -1183,7 +1204,9 @@ class PromptEnhancerTests(unittest.TestCase):
                 chat_url="https://llm.example/v1/chat/completions",
                 provider_name="OpenAI-compatible",
             )
-        self.assertEqual(len(session.chat_requests), 1)
+        self.assertEqual(result, basic_output())
+        self.assertEqual(len(session.chat_requests), 4)
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [1, 5, 10])
 
     def test_http_error_redacts_api_keys(self):
         leaked_key = "sk-" + "leaked-value-1234567890"
@@ -1197,11 +1220,37 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn("secret-key", str(raised.exception))
         self.assertNotIn(leaked_key, str(raised.exception))
 
-    def test_timeout_is_not_retried(self):
-        session = FakeSession("", chat_exception=requests.exceptions.ReadTimeout("secret-key must not leak"))
-        with self.assertRaisesRegex(nodes.PromptEnhancerError, "response state is ambiguous"):
-            self.run_enhancer(session)
-        self.assertEqual(len(session.chat_requests), 1)
+    def test_timeout_retries_all_chat_routes(self):
+        session = FakeSession("", chat_exception=requests.Timeout("secret-key must not leak"))
+        with patch.object(nodes.time, "sleep") as sleep:
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "duplicate chat billing"):
+                self.run_enhancer(session)
+        self.assertEqual(len(session.chat_requests), 4)
+        self.assertEqual(
+            [call.args[0] for call in sleep.call_args_list], [1, 5, 10]
+        )
+
+    def test_chat_network_failure_alternates_direct_and_proxy(self):
+        class RoutingChatSession(FakeSession):
+            def __init__(self):
+                super().__init__(basic_output())
+                self.routes = []
+
+            def post(self, url, **kwargs):
+                if "json" in kwargs:
+                    self.routes.append(kwargs["proxies"])
+                    raise requests.ConnectTimeout("ambiguous route failure")
+                return super().post(url, **kwargs)
+
+        proxy = {"https": "http://proxy.internal:3128"}
+        session = RoutingChatSession()
+        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value=proxy), patch.object(nodes.time, "sleep"):
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "duplicate chat billing"):
+                self.run_enhancer(session)
+        self.assertEqual(
+            session.routes,
+            [nodes.DIRECT_PROXIES, proxy, nodes.DIRECT_PROXIES, proxy],
+        )
 
     def test_free_upload_429_retries_once_without_duplicate_chat(self):
         class RateLimitedUploadSession(FakeSession):
@@ -1218,6 +1267,58 @@ class PromptEnhancerTests(unittest.TestCase):
         sleep.assert_called_once_with(1)
         self.assertEqual(len(session.uploads), 2)
         self.assertEqual(len(session.chat_requests), 1)
+
+    def test_free_upload_network_failures_alternate_direct_and_proxy(self):
+        class RoutingUploadSession(FakeSession):
+            def __init__(self):
+                super().__init__(basic_output("I2VA"))
+                self.routes = []
+
+            def post(self, url, **kwargs):
+                if url == nodes.UPLOAD_URL:
+                    self.routes.append(kwargs["proxies"])
+                    if len(self.routes) < 4:
+                        raise requests.ConnectTimeout("temporary route failure")
+                return super().post(url, **kwargs)
+
+        proxy = {"https": "http://proxy.internal:3128"}
+        session = RoutingUploadSession()
+        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value=proxy):
+            with patch.object(nodes.time, "sleep") as sleep:
+                self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
+
+        self.assertEqual(
+            session.routes,
+            [nodes.DIRECT_PROXIES, proxy, nodes.DIRECT_PROXIES, proxy],
+        )
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [1, 5, 10])
+        self.assertEqual(len(session.uploads), 1)
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_free_upload_reports_all_failed_routes(self):
+        class FailedUploadSession(FakeSession):
+            def __init__(self):
+                super().__init__(basic_output("I2VA"))
+                self.routes = []
+
+            def post(self, url, **kwargs):
+                if url == nodes.UPLOAD_URL:
+                    self.routes.append(kwargs["proxies"])
+                    raise requests.ReadTimeout("temporary route failure")
+                return super().post(url, **kwargs)
+
+        session = FailedUploadSession()
+        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value={"https": "http://proxy"}):
+            with patch.object(nodes.time, "sleep") as sleep:
+                with self.assertRaisesRegex(
+                    nodes.PromptEnhancerError,
+                    "direct -> proxy -> direct -> proxy: ReadTimeout",
+                ):
+                    self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
+
+        self.assertEqual(len(session.routes), 4)
+        self.assertEqual(len(session.chat_requests), 0)
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [1, 5, 10])
 
     def test_invalid_json_and_empty_responses_fail_but_length_content_is_returned(self):
         payloads = [
