@@ -321,8 +321,6 @@ def _provider_config(
     api_mode: str,
     api_key: str,
     openai_base_url: str,
-    openai_upload_url: str,
-    has_media: bool,
 ) -> tuple[str, str, str, str]:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
     if api_mode == SEEDANCE_API_MODE:
@@ -346,19 +344,19 @@ def _provider_config(
     base_url = str(openai_base_url or "").strip() or os.environ.get("OPENAI_BASE_URL", "").strip()
     if not base_url:
         raise PromptEnhancerError("OpenAI-compatible mode requires openai_base_url or OPENAI_BASE_URL.")
-    upload_url = str(openai_upload_url or "").strip() or os.environ.get("OPENAI_MEDIA_UPLOAD_URL", "").strip()
-    if has_media and not upload_url:
-        raise PromptEnhancerError(
-            "OpenAI-compatible image/video tasks require openai_upload_url. It must accept multipart field 'file' "
-            "and return JSON with an HTTP(S) 'url'."
-        )
-    if upload_url and not re.match(r"^https?://", upload_url):
-        raise PromptEnhancerError("openai_upload_url must begin with http:// or https://.")
-    return api_key, _openai_chat_url(base_url), upload_url, "OpenAI-compatible provider"
+    return api_key, _openai_chat_url(base_url), "", "OpenAI-compatible provider"
 
 
 def _resolve_llm_model(api_mode: str, ai_workshop_model: str, custom_model: str) -> str:
-    if str(api_mode or SEEDANCE_API_MODE) != AI_WORKSHOP_API_MODE:
+    api_mode = str(api_mode or SEEDANCE_API_MODE)
+    if api_mode == OPENAI_API_MODE:
+        model = str(custom_model or "").strip()
+        if not model:
+            raise PromptEnhancerError("OpenAI-compatible mode requires custom_model.")
+        if any(character.isspace() for character in model):
+            raise PromptEnhancerError("custom_model cannot contain whitespace.")
+        return model
+    if api_mode != AI_WORKSHOP_API_MODE:
         return MODEL_ID
 
     selection = str(ai_workshop_model or AI_WORKSHOP_DEFAULT_MODEL).strip()
@@ -760,6 +758,48 @@ def _inline_media_plan(media_plan: list[dict[str, Any]]) -> list[dict[str, Any]]
     return content_parts
 
 
+def _openai_video_url_list(value: str) -> list[str]:
+    urls = [line.strip() for line in str(value or "").splitlines() if line.strip()]
+    for url in urls:
+        if not re.match(r"^https?://", url):
+            raise PromptEnhancerError("Each OpenAI-compatible video URL must begin with http:// or https://.")
+    return urls
+
+
+def _openai_media_plan(media_plan: list[dict[str, Any]], video_urls_text: str) -> list[dict[str, Any]]:
+    """Inline images and videos for a generic OpenAI-compatible multimodal request."""
+    video_urls = _openai_video_url_list(video_urls_text)
+    video_count = sum(asset["kind"] == "video" for asset in media_plan)
+    if len(video_urls) > video_count:
+        raise PromptEnhancerError(
+            f"openai_video_urls has {len(video_urls)} URL(s), but only {video_count} VIDEO input(s) are connected."
+        )
+
+    content_parts: list[dict[str, Any]] = []
+    video_index = 0
+    for asset in media_plan:
+        label = asset["label"]
+        if asset["kind"] == "image":
+            data = _image_to_png_bytes(asset["value"])
+            data_url = f"data:image/png;base64,{base64.b64encode(data).decode('ascii')}"
+            content_parts.append({"type": "text", "text": f"The next attached image is {label}."})
+            content_parts.append({"type": "image_url", "image_url": {"url": data_url}})
+            continue
+
+        if video_index < len(video_urls):
+            video_url = video_urls[video_index]
+        else:
+            data, _extension, mime_type = _video_to_bytes(asset["value"])
+            video_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
+        video_index += 1
+        content_parts.append({
+            "type": "text",
+            "text": f"The next attached temporal video is {label}. Analyze its complete timeline.",
+        })
+        content_parts.append({"type": "video_url", "video_url": {"url": video_url}})
+    return content_parts
+
+
 def _effective_output_language(output_language: str, official_skill_profile: str) -> str:
     return "English" if official_skill_profile == STRICT_SKILL_PROFILE else output_language
 
@@ -1004,7 +1044,7 @@ def enhance_prompt(
     reference_template: str = "",
     api_mode: str = SEEDANCE_API_MODE,
     openai_base_url: str = "",
-    openai_upload_url: str = "",
+    openai_video_urls: str = "",
     seed: int = 0,
     shot_count: Any = AUTO_SHOT_COUNT,
     official_skill_profile: str = COMPAT_SKILL_PROFILE,
@@ -1026,7 +1066,7 @@ def enhance_prompt(
         "constraints": str(constraints or ""),
         "reference_template": str(reference_template or ""),
         "openai_base_url": str(openai_base_url or ""),
-        "openai_upload_url": str(openai_upload_url or ""),
+        "openai_video_urls": str(openai_video_urls or ""),
         "custom_model": str(custom_model or ""),
     }
     for name, value in optional_texts.items():
@@ -1044,7 +1084,7 @@ def enhance_prompt(
     constraints = optional_texts["constraints"]
     reference_template = optional_texts["reference_template"]
     openai_base_url = optional_texts["openai_base_url"]
-    openai_upload_url = optional_texts["openai_upload_url"]
+    openai_video_urls = optional_texts["openai_video_urls"]
     custom_model = optional_texts["custom_model"]
     if API_KEY_PATTERN.search(str(prompt or "")):
         raise PromptEnhancerError("Remove the API-key-like secret from prompt before running this node.")
@@ -1068,8 +1108,6 @@ def enhance_prompt(
         api_mode,
         api_key,
         openai_base_url,
-        openai_upload_url,
-        bool(media_plan),
     )
     model_id = _resolve_llm_model(api_mode, ai_workshop_model, custom_model)
 
@@ -1077,11 +1115,12 @@ def enhance_prompt(
     if session is None:
         session = requests.Session()
     try:
-        media_parts = (
-            _inline_media_plan(media_plan)
-            if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE
-            else _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
-        )
+        if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE:
+            media_parts = _inline_media_plan(media_plan)
+        elif str(api_mode or SEEDANCE_API_MODE) == OPENAI_API_MODE:
+            media_parts = _openai_media_plan(media_plan, openai_video_urls)
+        else:
+            media_parts = _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
         messages = _build_messages(
             prompt,
             task_type,
@@ -1241,11 +1280,11 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 ),
                 io.String.Input(
                     "custom_model",
-                    display_name="自定义模型 ID（Custom）",
+                    display_name="自定义模型 ID",
                     optional=True,
                     default="",
                     socketless=True,
-                    tooltip="仅在 AI工坊模型选择 Custom 时使用，例如供应商模型列表中的完整 ID。",
+                    tooltip="OpenAI兼容模式必填；AI工坊选择 Custom 时使用。填写供应商模型列表中的完整 ID。",
                 ),
                 io.String.Input(
                     "openai_base_url",
@@ -1256,12 +1295,13 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     tooltip="Provider root, /v1 URL, or full /chat/completions URL. Used only in OpenAI-compatible mode.",
                 ),
                 io.String.Input(
-                    "openai_upload_url",
-                    display_name="兼容素材上传 URL（图/视频时必填）",
+                    "openai_video_urls",
+                    display_name="OpenAI 视频素材 URL（可选）",
                     optional=True,
+                    multiline=True,
                     default="",
                     socketless=True,
-                    tooltip="Must accept multipart field 'file' and return JSON with an HTTP(S) 'url'. OpenAI compatibility alone does not define video upload.",
+                    tooltip="每行一个，按已连接 VIDEO 顺序替代视频 Base64；未填写或未覆盖的视频仍以内联 Base64 发送。图片始终内联 Base64。",
                 ),
                 io.Int.Input(
                     "seed",
@@ -1302,7 +1342,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         reference_template="",
         api_mode=SEEDANCE_API_MODE,
         openai_base_url="",
-        openai_upload_url="",
+        openai_video_urls="",
         seed=0,
         shot_count=AUTO_SHOT_COUNT,
         ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
@@ -1328,7 +1368,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             api_key=api_key,
             api_mode=api_mode,
             openai_base_url=openai_base_url,
-            openai_upload_url=openai_upload_url,
+            openai_video_urls=openai_video_urls,
             seed=seed,
             shot_count=shot_count,
             ai_workshop_model=ai_workshop_model,

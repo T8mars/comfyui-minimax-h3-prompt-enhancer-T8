@@ -21,6 +21,7 @@ from .nodes import (
     _image_count,
     _image_to_png_bytes,
     _inline_media_plan,
+    _openai_media_plan,
     _ordered_values,
     _provider_config,
     _request_completion,
@@ -617,7 +618,7 @@ def enhance_seedance20_prompt(
     reference_template: str = "",
     api_mode: str = SEEDANCE_API_MODE,
     openai_base_url: str = "",
-    openai_upload_url: str = "",
+    openai_video_urls: str = "",
     seed: int = 0,
     session: requests.Session | None = None,
     ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
@@ -660,7 +661,7 @@ def enhance_seedance20_prompt(
             "constraints": constraints,
             "reference_template": reference_template,
             "openai_base_url": openai_base_url,
-            "openai_upload_url": openai_upload_url,
+            "openai_video_urls": openai_video_urls,
             "custom_model": custom_model,
         },
     )
@@ -682,8 +683,6 @@ def enhance_seedance20_prompt(
         api_mode,
         api_key,
         cleaned["openai_base_url"],
-        cleaned["openai_upload_url"],
-        bool(media_plan),
     )
     model_id = _resolve_llm_model(api_mode, ai_workshop_model, cleaned["custom_model"])
 
@@ -691,17 +690,18 @@ def enhance_seedance20_prompt(
     if session is None:
         session = requests.Session()
     try:
-        media_parts = (
-            _inline_media_plan(media_plan)
-            if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE
-            else _upload_seedance20_media_plan(
+        if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE:
+            media_parts = _inline_media_plan(media_plan)
+        elif str(api_mode or SEEDANCE_API_MODE) == OPENAI_API_MODE:
+            media_parts = _openai_media_plan(media_plan, cleaned["openai_video_urls"])
+        else:
+            media_parts = _upload_seedance20_media_plan(
                 session,
                 api_key,
                 media_plan,
                 upload_url,
                 provider_name,
             )
-        )
         messages = _build_messages(
             prompt,
             task_intent,
@@ -895,11 +895,11 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 ),
                 io.String.Input(
                     "custom_model",
-                    display_name="自定义模型 ID（Custom）",
+                    display_name="自定义模型 ID",
                     optional=True,
                     default="",
                     socketless=True,
-                    tooltip="仅在 AI工坊模型选择 Custom 时使用。",
+                    tooltip="OpenAI兼容模式必填；AI工坊选择 Custom 时使用。填写供应商模型列表中的完整 ID。",
                 ),
                 io.String.Input(
                     "openai_base_url",
@@ -909,12 +909,13 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     socketless=True,
                 ),
                 io.String.Input(
-                    "openai_upload_url",
-                    display_name="兼容素材上传 URL（图/视频时必填）",
+                    "openai_video_urls",
+                    display_name="OpenAI 视频素材 URL（可选）",
                     optional=True,
+                    multiline=True,
                     default="",
                     socketless=True,
-                    tooltip="必须接收 multipart 字段 file，并返回包含 HTTP(S) url 的 JSON。",
+                    tooltip="每行一个，按已连接 VIDEO 顺序替代视频 Base64；未填写或未覆盖的视频仍以内联 Base64 发送。图片始终内联 Base64。",
                 ),
                 io.Int.Input(
                     "seed",
@@ -957,7 +958,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         reference_template="",
         api_mode=SEEDANCE_API_MODE,
         openai_base_url="",
-        openai_upload_url="",
+        openai_video_urls="",
         seed=0,
         ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
         custom_model="",
@@ -987,7 +988,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
             reference_template=reference_template,
             api_mode=api_mode,
             openai_base_url=openai_base_url,
-            openai_upload_url=openai_upload_url,
+            openai_video_urls=openai_video_urls,
             seed=seed,
             ai_workshop_model=ai_workshop_model,
             custom_model=custom_model,

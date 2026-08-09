@@ -218,12 +218,12 @@
           "link": null
         },
         {
-          "localized_name": "openai_upload_url",
-          "name": "openai_upload_url",
+          "localized_name": "openai_video_urls",
+          "name": "openai_video_urls",
           "shape": 7,
           "type": "STRING",
           "widget": {
-            "name": "openai_upload_url"
+            "name": "openai_video_urls"
           },
           "link": null
         },

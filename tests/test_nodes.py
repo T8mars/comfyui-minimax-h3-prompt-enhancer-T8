@@ -187,7 +187,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("ai_workshop_model", input_names)
         self.assertIn("custom_model", input_names)
         self.assertIn("openai_base_url", input_names)
-        self.assertIn("openai_upload_url", input_names)
+        self.assertIn("openai_video_urls", input_names)
+        self.assertNotIn("openai_upload_url", input_names)
         self.assertIn("seed", input_names)
         self.assertIn("shot_count", input_names)
         self.assertLess(input_names.index("api_key"), input_names.index("output_language"))
@@ -277,6 +278,9 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('widgets_values.splice(11, 0, AI_WORKSHOP_DEFAULT_MODEL, "")', source)
         self.assertIn('const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）"', source)
         self.assertIn('const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash"', source)
+        self.assertIn('widget.name === "openai_video_urls"', source)
+        self.assertIn('compatible || (workshop && modelWidget.value === CUSTOM_MODEL_OPTION)', source)
+        self.assertIn('customModelWidget.label = compatible ? "OpenAI 模型 ID（必填）"', source)
         self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
         self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
         self.assertIn('const MV_CREATIVE_PRESET = "MV / 歌词贴字"', source)
@@ -306,6 +310,8 @@ class PromptEnhancerTests(unittest.TestCase):
             ["中文", "官方增强", nodes.COMPAT_SKILL_PROFILE, nodes.NO_CREATIVE_PRESET, nodes.SEEDANCE_API_MODE],
         )
         self.assertEqual(node["widgets_values"][11:13], [nodes.AI_WORKSHOP_DEFAULT_MODEL, ""])
+        self.assertIn("openai_video_urls", [item["name"] for item in node["inputs"]])
+        self.assertNotIn("openai_upload_url", [item["name"] for item in node["inputs"]])
         self.assertEqual(node["widgets_values"][-2:], [0, "randomize"])
         self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
 
@@ -617,7 +623,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(result, basic_output())
         self.assertIn("H3 task type: T2VA", session.chat_requests[0]["json"]["messages"][1]["content"])
 
-    def test_openai_compatible_mode_uses_custom_chat_url_and_fixed_model(self):
+    def test_openai_compatible_mode_uses_one_base_url_and_custom_model(self):
         session = FakeSession(basic_output())
         with patch.dict(os.environ, {}, clear=True):
             result = nodes.enhance_prompt(
@@ -625,11 +631,12 @@ class PromptEnhancerTests(unittest.TestCase):
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
                 openai_base_url="https://gateway.example/v1",
+                custom_model="provider/vision-model",
                 session=session,
             )
         self.assertEqual(result, basic_output())
         self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
-        self.assertEqual(session.chat_requests[0]["json"]["model"], nodes.MODEL_ID)
+        self.assertEqual(session.chat_requests[0]["json"]["model"], "provider/vision-model")
         self.assertEqual(session.chat_requests[0]["headers"]["Authorization"], "Bearer compatible-key")
 
     def test_ai_workshop_uses_default_model_and_inline_complete_image_and_video(self):
@@ -680,7 +687,7 @@ class PromptEnhancerTests(unittest.TestCase):
                 session=FakeSession(basic_output()),
             )
 
-    def test_openai_compatible_media_uses_explicit_upload_contract(self):
+    def test_openai_compatible_image_is_inlined_as_base64_without_upload(self):
         session = FakeSession(basic_output("I2VA"))
         with patch.dict(os.environ, {}, clear=True):
             nodes.enhance_prompt(
@@ -690,21 +697,20 @@ class PromptEnhancerTests(unittest.TestCase):
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
                 openai_base_url="https://gateway.example",
-                openai_upload_url="https://uploads.example/media",
+                custom_model="provider/vision-model",
                 session=session,
             )
-        self.assertEqual(session.upload_urls, ["https://uploads.example/media"])
+        self.assertEqual(session.uploads, [])
         self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
         parts = session.chat_requests[0]["json"]["messages"][1]["content"]
         self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url"])
+        self.assertTrue(parts[2]["image_url"]["url"].startswith("data:image/png;base64,"))
 
-    def test_openai_compatible_media_requires_explicit_upload_url(self):
-        session = FakeSession(basic_output("I2VA"))
-        with patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(nodes.PromptEnhancerError, "openai_upload_url"):
+    def test_openai_compatible_mode_requires_custom_model(self):
+        session = FakeSession(basic_output())
+        with patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(nodes.PromptEnhancerError, "requires custom_model"):
             nodes.enhance_prompt(
                 prompt="A cyclist crosses the street.",
-                task_type="I2VA",
-                first_frame=torch.zeros((1, 1, 1, 3)),
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
                 openai_base_url="https://gateway.example/v1",
@@ -713,24 +719,37 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(session.uploads, [])
         self.assertEqual(session.chat_requests, [])
 
-    def test_openai_compatible_ref2va_keeps_complete_video_url_part(self):
+    def test_openai_compatible_video_supports_direct_url_then_base64_fallback(self):
         session = FakeSession(reference_output())
+        second_video = b"second-complete-video"
         with patch.dict(os.environ, {}, clear=True):
             nodes.enhance_prompt(
                 prompt="Transfer the referenced action to the pictured subject.",
                 task_type="Ref2VA（参考图/视频生音视频）",
                 reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
-                reference_videos={"reference_video_0": FakeVideo()},
+                reference_videos={
+                    "reference_video_0": FakeVideo(),
+                    "reference_video_1": FakeVideo(data=second_video),
+                },
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
                 openai_base_url="https://gateway.example/v1/chat/completions",
-                openai_upload_url="https://uploads.example/media",
+                openai_video_urls="https://media.example/reference-one.mp4",
+                custom_model="provider/video-vision-model",
                 session=session,
             )
         self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
-        self.assertEqual(session.upload_urls, ["https://uploads.example/media", "https://uploads.example/media"])
+        self.assertEqual(session.uploads, [])
         parts = session.chat_requests[0]["json"]["messages"][1]["content"]
-        self.assertEqual([part["type"] for part in parts], ["text", "text", "image_url", "text", "video_url"])
+        self.assertEqual(
+            [part["type"] for part in parts],
+            ["text", "text", "image_url", "text", "video_url", "text", "video_url"],
+        )
+        self.assertTrue(parts[2]["image_url"]["url"].startswith("data:image/png;base64,"))
+        self.assertEqual(parts[4]["video_url"]["url"], "https://media.example/reference-one.mp4")
+        fallback_url = parts[6]["video_url"]["url"]
+        self.assertTrue(fallback_url.startswith("data:video/mp4;base64,"))
+        self.assertEqual(base64.b64decode(fallback_url.split(",", 1)[1]), second_video)
 
     def test_node_api_key_overrides_environment_key(self):
         session = FakeSession(basic_output())

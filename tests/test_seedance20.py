@@ -115,6 +115,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("reference_syntax", names)
         self.assertIn("ai_workshop_model", names)
         self.assertIn("custom_model", names)
+        self.assertIn("openai_video_urls", names)
+        self.assertNotIn("openai_upload_url", names)
         shot_count = next(item for item in schema.inputs if item.id == "shot_count")
         duration = next(item for item in schema.inputs if item.id == "duration_seconds")
         api_key = next(item for item in schema.inputs if item.id == "api_key")
@@ -255,19 +257,32 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("never claim to have heard or analyzed", combined)
         self.assertIn("@音频1", combined)
 
-    def test_openai_compatible_chat_and_media_upload_urls(self):
+    def test_openai_compatible_uses_base64_images_and_optional_video_urls(self):
         session = FakeSession()
         image = torch.zeros((1, 8, 8, 3), dtype=torch.float32)
+        fallback_video = b"seedance20-inline-video"
         self.run_enhancer(
             session,
             task_intent="MultiRef",
             reference_images={"reference_image_0": image},
+            reference_videos={
+                "reference_video_0": FakeVideo(),
+                "reference_video_1": FakeVideo(data=fallback_video),
+            },
             api_mode=seedance20.OPENAI_API_MODE,
             openai_base_url="https://provider.example/v1",
-            openai_upload_url="https://uploads.example/files",
+            openai_video_urls="https://media.example/first.mp4",
+            custom_model="provider/video-vision-model",
         )
         self.assertEqual(session.chat_urls, ["https://provider.example/v1/chat/completions"])
-        self.assertEqual(session.uploads[0][3], "https://uploads.example/files")
+        self.assertEqual(session.uploads, [])
+        self.assertEqual(session.chat_requests[0]["json"]["model"], "provider/video-vision-model")
+        parts = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertTrue(parts[2]["image_url"]["url"].startswith("data:image/png;base64,"))
+        self.assertEqual(parts[4]["video_url"]["url"], "https://media.example/first.mp4")
+        fallback_url = parts[6]["video_url"]["url"]
+        self.assertTrue(fallback_url.startswith("data:video/mp4;base64,"))
+        self.assertEqual(base64.b64decode(fallback_url.split(",", 1)[1]), fallback_video)
 
     def test_ai_workshop_uses_inline_complete_media_and_custom_model(self):
         session = FakeSession()
@@ -310,6 +325,9 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             "https://ai.t8star.org/register?aff=dP7j",
             'value === "参考模板融合"',
             'mode === OPENAI_API_MODE',
+            'find("openai_video_urls")',
+            'compatible || (workshop && modelWidget.value === CUSTOM_MODEL_OPTION)',
+            'customModelWidget.label = compatible ? "OpenAI 模型 ID（必填）"',
             "delete secureWidget.width",
             'find("custom_length_target")',
             '"control_after_generate"',
@@ -325,6 +343,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(node["widgets_values"][1], seedance20.TASK_INTENT_LABELS["AUTO"])
         self.assertEqual(node["widgets_values"][18], seedance20.SEEDANCE_API_MODE)
         self.assertEqual(node["widgets_values"][19:21], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, ""])
+        self.assertIn("openai_video_urls", [item["name"] for item in node["inputs"]])
+        self.assertNotIn("openai_upload_url", [item["name"] for item in node["inputs"]])
         self.assertNotIn("sk-", path.read_text(encoding="utf-8"))
 
     def test_real_paid_smoke_fixture_passes_seedance20_temporal_evaluation(self):

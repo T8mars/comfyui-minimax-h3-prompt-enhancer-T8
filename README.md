@@ -308,16 +308,16 @@ AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL �
 
 ### OpenAI 兼容接口（备用）
 
-备用模式支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`。
+备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；模型 ID 必须在节点中填写供应商实际支持的视觉模型。
 
-OpenAI Chat Completions 兼容并不自动代表支持图片和视频上传：
+该模式不再使用第二个素材上传端点：
 
-- T2VA 只要求兼容聊天端点。
-- 图像或视频任务必须配置 `openai_upload_url`，或设置 `OPENAI_MEDIA_UPLOAD_URL`。
-- 上传端点必须接收 multipart 字段 `file`。
-- 上传响应必须包含可公开访问的 HTTP(S) `url`。
+- 图片统一编码为 PNG，通过 `image_url.url` 中的 `data:image/png;base64,...` 内联到同一次 Chat Completions 请求。
+- 视频默认通过 `video_url.url` 中的 `data:video/...;base64,...` 内联完整视频字节。
+- “视频素材 URL”可选，每行一个，按已连接 VIDEO 的顺序替代对应视频的 Base64；未覆盖的视频继续使用 Base64。
+- 视频 URL 数量不能超过已连接 VIDEO 数量，且必须是 HTTP(S) 地址。
 
-缺少媒体上传合同会在联网前报错，不会悄悄降级成纯文字或抽帧请求。
+OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `video_url` 并不是所有兼容供应商都支持的统一能力。这里的视频格式面向声明支持视频理解的兼容网关；用户填写的模型和网关必须同时支持视频内容部件，节点不会降级到纯文字或抽帧请求。
 
 ## API Key 安全
 
@@ -330,13 +330,13 @@ OpenAI Chat Completions 兼容并不自动代表支持图片和视频上传：
 
 ## 图片与视频处理
 
-- 图片编码为 PNG；平价小屋/兼容模式按上传合同上传，AI 工坊模式内联为 Base64 Data URL。
-- 视频使用 ComfyUI 原生 `VIDEO` 的完整流，不抽帧、不转成图片列表，也不在本地截取前 5 秒；AI 工坊模式同样内联完整视频字节。
+- 图片编码为 PNG；平价小屋模式上传，AI 工坊与 OpenAI 兼容模式内联为 Base64 Data URL。
+- 视频使用 ComfyUI 原生 `VIDEO` 的完整流，不抽帧、不转成图片列表，也不在本地截取前 5 秒；AI 工坊与 OpenAI 兼容模式默认内联完整视频字节。
 - 支持 MP4、AVI、MOV、MKV，单文件不超过 50 MB。
 - Ref2VA 单个视频时长 2–15 秒，多个视频总时长不超过 15 秒。
 - Ref2VA 最多 9 张图片、3 个视频，总素材数最多 12。
 - 带活动裁剪窗口的原生 `VIDEO` 会在上传前被拒绝，因为底层流可能仍指向未裁剪原文件。请先把片段另存为新视频再连接。
-- 平价小屋或兼容模式返回的素材上传 URL 是临时链接，应只用于当前模型请求；AI 工坊模式没有中间素材 URL。
+- 平价小屋返回的素材上传 URL 是临时链接，应只用于当前模型请求；AI 工坊与 OpenAI 兼容模式没有中间上传步骤。
 
 ## 输出与错误行为
 

@@ -39,7 +39,7 @@
         {"name": "ai_workshop_model", "localized_name": "ai_workshop_model", "type": "COMBO", "widget": {"name": "ai_workshop_model"}, "link": null},
         {"name": "custom_model", "localized_name": "custom_model", "shape": 7, "type": "STRING", "widget": {"name": "custom_model"}, "link": null},
         {"name": "openai_base_url", "localized_name": "openai_base_url", "shape": 7, "type": "STRING", "widget": {"name": "openai_base_url"}, "link": null},
-        {"name": "openai_upload_url", "localized_name": "openai_upload_url", "shape": 7, "type": "STRING", "widget": {"name": "openai_upload_url"}, "link": null},
+        {"name": "openai_video_urls", "localized_name": "openai_video_urls", "shape": 7, "type": "STRING", "widget": {"name": "openai_video_urls"}, "link": null},
         {"name": "seed", "localized_name": "seed", "shape": 7, "type": "INT", "widget": {"name": "seed"}, "link": null}
       ],
       "outputs": [

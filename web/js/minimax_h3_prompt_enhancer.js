@@ -68,7 +68,7 @@ const SERIALIZED_WIDGET_NAMES = [
     "api_key",
     "reference_template",
     "openai_base_url",
-    "openai_upload_url",
+    "openai_video_urls",
     "seed",
     "control_after_generate",
 ];
@@ -208,11 +208,13 @@ function addReferenceTemplateBehavior(node, modeWidget, templateWidget) {
 }
 
 
-function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget, modelWidget, customModelWidget) {
+function addApiModeBehavior(node, modeWidget, baseUrlWidget, videoUrlsWidget, modelWidget, customModelWidget) {
     const updateModel = () => {
         const workshop = modeWidget.value === AI_WORKSHOP_API_MODE;
+        const compatible = modeWidget.value === OPENAI_API_MODE;
         setWidgetVisible(modelWidget, workshop);
-        setWidgetVisible(customModelWidget, workshop && modelWidget.value === CUSTOM_MODEL_OPTION);
+        setWidgetVisible(customModelWidget, compatible || (workshop && modelWidget.value === CUSTOM_MODEL_OPTION));
+        customModelWidget.label = compatible ? "OpenAI 模型 ID（必填）" : "AI工坊自定义模型 ID";
     };
     const originalModelCallback = modelWidget.callback;
     modelWidget.callback = function (value) {
@@ -221,12 +223,14 @@ function addApiModeBehavior(node, modeWidget, baseUrlWidget, uploadUrlWidget, mo
         resizeNode(node);
     };
     const update = (mode = modeWidget.value) => {
-        for (const widget of [baseUrlWidget, uploadUrlWidget]) {
+        for (const widget of [baseUrlWidget, videoUrlsWidget]) {
             if (LEGACY_UI_VALUES.has(String(widget.value || "").trim())) setTextWidgetValue(widget, "");
         }
         const compatible = mode === OPENAI_API_MODE;
+        baseUrlWidget.label = "OpenAI Base URL";
+        videoUrlsWidget.label = "视频素材 URL（可选，每行一个）";
         setWidgetVisible(baseUrlWidget, compatible);
-        setWidgetVisible(uploadUrlWidget, compatible);
+        setWidgetVisible(videoUrlsWidget, compatible);
         updateModel();
         if (node.t8SignUpWidget) {
             setWidgetVisible(node.t8SignUpWidget, !compatible);
@@ -438,7 +442,7 @@ app.registerExtension({
             const aiWorkshopModelWidget = this.widgets?.find((widget) => widget.name === "ai_workshop_model");
             const customModelWidget = this.widgets?.find((widget) => widget.name === "custom_model");
             const openaiBaseUrlWidget = this.widgets?.find((widget) => widget.name === "openai_base_url");
-            const openaiUploadUrlWidget = this.widgets?.find((widget) => widget.name === "openai_upload_url");
+            const openaiVideoUrlsWidget = this.widgets?.find((widget) => widget.name === "openai_video_urls");
             const seedWidget = this.widgets?.find((widget) => widget.name === "seed");
             const seedControlWidget = seedWidget?.linkedWidgets?.[0]
                 || this.widgets?.find((widget) => widget.name === "control_after_generate");
@@ -456,9 +460,9 @@ app.registerExtension({
             if (promptModeWidget && referenceTemplateWidget) {
                 addReferenceTemplateBehavior(this, promptModeWidget, referenceTemplateWidget);
             }
-            if (apiModeWidget && openaiBaseUrlWidget && openaiUploadUrlWidget && aiWorkshopModelWidget && customModelWidget) {
+            if (apiModeWidget && openaiBaseUrlWidget && openaiVideoUrlsWidget && aiWorkshopModelWidget && customModelWidget) {
                 addApiModeBehavior(
-                    this, apiModeWidget, openaiBaseUrlWidget, openaiUploadUrlWidget,
+                    this, apiModeWidget, openaiBaseUrlWidget, openaiVideoUrlsWidget,
                     aiWorkshopModelWidget, customModelWidget,
                 );
             }
@@ -484,7 +488,7 @@ app.registerExtension({
                     AI_WORKSHOP_DEFAULT_MODEL,
                 );
                 if (LEGACY_UI_VALUES.has(String(apiKeyWidget?.value || "").trim())) apiKeyWidget.value = "";
-                for (const widget of [referenceContextWidget, constraintsWidget, referenceTemplateWidget, customModelWidget, openaiBaseUrlWidget, openaiUploadUrlWidget]) {
+                for (const widget of [referenceContextWidget, constraintsWidget, referenceTemplateWidget, customModelWidget, openaiBaseUrlWidget, openaiVideoUrlsWidget]) {
                     const value = String(widget?.value || "").trim();
                     if (LEGACY_UI_VALUES.has(value)) setTextWidgetValue(widget, "");
                     if (API_KEY_PATTERN.test(value)) {
@@ -541,6 +545,7 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
             const serialized = args[0];
+            const hadLegacyUploadUrl = serialized?.inputs?.some((input) => input.name === "openai_upload_url");
             if (Array.isArray(serialized?.widgets_values)
                 && [16, 17, 19].includes(serialized.widgets_values.length)) {
                 args[0] = { ...serialized, widgets_values: [...serialized.widgets_values] };
@@ -555,7 +560,12 @@ app.registerExtension({
                 args[0].widgets_values.splice(11, 0, AI_WORKSHOP_DEFAULT_MODEL, "");
             }
             originalOnConfigure?.apply(this, args);
-            requestAnimationFrame(() => this.t8NormalizePromptOptions?.());
+            requestAnimationFrame(() => {
+                if (hadLegacyUploadUrl) {
+                    setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
+                }
+                this.t8NormalizePromptOptions?.();
+            });
         };
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
