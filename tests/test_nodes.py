@@ -291,13 +291,16 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('customModelWidget.label = compatible ? "OpenAI 模型 ID（必填）"', source)
         self.assertIn('widget.element.style.display = visible ? widget.t8OriginalDisplay : "none"', source)
         self.assertIn("widget.hidden = visible ? widget.t8OriginalHidden : true", source)
-        self.assertIn('const MV_CREATIVE_PRESET = "MV / 歌词贴字"', source)
-        self.assertIn('"歌词原文（逐字保留，可空）："', source)
-        self.assertIn('"已知 BPM、时间点或节拍事件（可空）："', source)
+        self.assertIn('const MV_CREATIVE_PRESET = "音乐 MV 动态字幕（官方）"', source)
+        self.assertIn('const LEGACY_MV_CREATIVE_PRESET = "MV / 歌词贴字"', source)
+        self.assertIn('"歌词原文（逐字锁定，可空）："', source)
+        self.assertIn('"无歌词时：器乐 / 允许生成原创歌词"', source)
+        self.assertIn('"已知 BPM、歌词时间点或节拍事件（可空，节点不分析音频）："', source)
         self.assertIn("MV_REFERENCE_CONTEXT_TOOLTIP", source)
         self.assertIn("<Picture 3>=字体包装，只参考字体、版式和动效", source)
         self.assertIn("function addMvPresetBehavior", source)
         self.assertIn("preset === MV_CREATIVE_PRESET", source)
+        self.assertIn("creativePresetWidget?.value === LEGACY_MV_CREATIVE_PRESET", source)
         self.assertIn("input.placeholder = isMv && mvPlaceholder", source)
         self.assertIn("requestAnimationFrame(() => update())", source)
         self.assertIn("this.t8UpdateMvPreset?.()", source)
@@ -401,7 +404,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "极简产品广告": ("minimalist product advertisement", "one concise single-line text event"),
             "3D 动画短片": ("3D animation short", "squash-and-stretch"),
             "品牌宣传短片": ("brand promotional video", "never fabricate a capability or claim"),
-            "MV / 歌词贴字": ("music-video lyric typography", "evidence-based rhythm"),
+            nodes.MV_CREATIVE_PRESET: ("official music-video-subtitle-generator", "isolated character/scene/typography"),
             "双人合作游戏开场": ("two-player cooperative game intro", "five main colors"),
             "纸拼贴讲解": ("paper-collage explainer", "press-flat"),
             "立体纸艺停格讲解": ("papercraft stop-motion explainer", "pull-tabs"),
@@ -417,6 +420,19 @@ class PromptEnhancerTests(unittest.TestCase):
                     self.assertIn(marker, messages[0]["content"])
                 self.assertIn("prompt-writing profile only", messages[0]["content"])
                 self.assertIn(f"Creative preset: {preset}", messages[1]["content"])
+
+    def test_official_mv_skill_source_and_legacy_workflow_value_are_preserved(self):
+        self.assertEqual(nodes.OFFICIAL_MV_SKILL_VERSION, "0.6.6")
+        self.assertEqual(nodes.OFFICIAL_MV_SKILL_SOURCE_SHA, "b7227fa6a6206e9fb30562383d39e53cf3866a48")
+        self.assertNotIn(nodes.LEGACY_MV_CREATIVE_PRESET, nodes.CREATIVE_PRESET_OPTIONS)
+
+        session = FakeSession(basic_output())
+        self.run_enhancer(session, creative_preset=nodes.LEGACY_MV_CREATIVE_PRESET)
+        system = session.chat_requests[0]["json"]["messages"][0]["content"]
+        user = session.chat_requests[0]["json"]["messages"][1]["content"]
+        self.assertIn("Official MiniMax music-video-subtitle-generator Skill v0.6.6", system)
+        self.assertIn(f"commit {nodes.OFFICIAL_MV_SKILL_SOURCE_SHA}", system)
+        self.assertIn(f"Creative preset: {nodes.MV_CREATIVE_PRESET}", user)
 
 
     def test_mv_skill_deep_rules_and_user_sources_reach_the_model(self):
@@ -438,8 +454,9 @@ class PromptEnhancerTests(unittest.TestCase):
         user = messages[1]["content"]
 
         for required in (
-            "User-supplied lyrics are the only trusted lyric source",
-            "never translate, paraphrase, extend, replace, or invent lyrics",
+            "User-supplied lyrics are locked lyrics",
+            "explicitly authorizes this official preset to create original lyrics",
+            "Without that explicit authorization, do not invent lyrics",
             "write the exact phrase as <d>[Language] exact source text</d>",
             "Do not add a singer, lip sync, readable lyrics, or a vocal performance",
             "Keep an off-screen vocal source off-screen",
@@ -456,6 +473,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description",
             "a 15-second MV often needs only 2-4 readable shots",
             "Do not output asset cards",
+            "This node adapts only the rules that can be expressed in one 4-15 second H3 prompt",
             "MV rewrite scope: balanced",
             "MV request context: H3 task=T2VA; duration=15.00s; AUTO",
         ):

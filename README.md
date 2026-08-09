@@ -29,7 +29,7 @@
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
-- 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；预设只优化提示词，不运行完整制作工作流。
+- 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。预设只优化提示词，不运行完整制作工作流。
 - 两个节点新增独立的 `T8 精选案例模板（非官方）` 列表，首批 7 个案例只携带可复用 Creative DNA 与防复制规则，不携带源视频、路径、URL 或成品提示词。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
@@ -168,7 +168,7 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 | `极简产品广告` | 产品身份、材质、负空间、单节拍主动作、稳定闭幕和品牌事实安全 |
 | `3D 动画短片` | 角色/场景连续性、可读轮廓、动作预备与跟随、单镜重要角色控制 |
 | `品牌宣传短片` | 可核验品牌事实、精确文案、安全空间和具体功能证明 |
-| `MV / 歌词贴字` | 歌词原文、口型/表演、空间文字层级和文本已知节拍；不假装分析音频附件 |
+| `音乐 MV 动态字幕（官方）` | MiniMax 官方 `music-video-subtitle-generator` v0.6.6：锁定歌词、条件式口型/表演、空间文字、文本已知节拍和人物/场景/文字参考隔离；明确授权时可创作适配当前时长的短篇原创歌词，但不假装分析音频附件 |
 | `双人合作游戏开场` | 双人身份与左右位置、玩家名、UI 文案、按钮层级和颜色控制 |
 | `纸拼贴讲解` | 半调纸片、视觉隐喻、停格组装动作和触感音效 |
 | `立体纸艺停格讲解` | 分层纸景、折叠/弹起/翻页/纸偶动作、材料与景深连续性 |
@@ -205,21 +205,23 @@ python tools/import_t8_case_templates.py \
 
 导入会现场要求 canonical case 为 `released`、两个模型 recipe 齐全、`media_connections=[]`、API Key/Base URL/视频 URL 为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并记录 case 与 adapter SHA-256。目录不会包含本地路径、来源 URL、媒体或最终提示词。每日批次仍需先用 curator 的 release/adapter 校验通过；Markdown 报告只是交接说明，不能代替实时 case 与哈希核验。
 
-### MV / 歌词贴字填写方式
+### 音乐 MV 动态字幕（官方）填写方式
 
-选择 `MV / 歌词贴字` 后，主提示词会显示一份动态填写提示；它只是界面占位文字，不会写入工作流或自动成为提示词。可以直接按下面的结构填写，未涉及的项目留空：
+选择 `音乐 MV 动态字幕（官方）` 后，主提示词会显示一份动态填写提示；它只是界面占位文字，不会写入工作流或自动成为提示词。旧工作流中保存的 `MV / 歌词贴字` 会自动迁移到这个正式名称。可以直接按下面的结构填写，未涉及的项目留空：
 
 ```text
-MV类型/视觉风格：暗色抒情 MV，低饱和蓝黑色，空间歌词排版
-歌词原文（逐字保留，可空）：夜色落在我肩上，别回头。
+MV类型/音乐类型/视觉风格：暗色抒情 MV，低饱和蓝黑色，空间歌词排版
+歌词原文（逐字锁定，可空）：夜色落在我肩上，别回头。
+无歌词时：器乐 / 允许生成原创歌词
 演唱者或离屏人声：画内女歌手演唱
-已知 BPM、时间点或节拍事件（可空）：00:04.200 鼓点进入，00:09.000 drop
+已知 BPM、歌词时间点或节拍事件（可空，节点不分析音频）：00:04.200 鼓点进入，00:09.000 drop
+目标平台/画幅（可空）：抖音竖屏，9:16
 字体包装与禁止项：文字在中景展开，不遮挡眼睛和关键口型
 ```
 
 MV 规则按以下方式工作：
 
-- 用户提供的歌词是唯一歌词来源，保持原语言、标点、顺序和重复，不翻译、不润色、不补写；没有歌词时不会自动创建歌词、歌手或口型。
+- 用户提供的歌词逐字锁定，保持原语言、标点、顺序和重复，不翻译、不润色、不补写；只有未提供歌词且明确写出“允许生成原创歌词”时，才会创作一段能放进当前 4–15 秒时长的短篇原创歌词，并将同一文本用于演唱与可见文字。否则不会自动创建歌词、歌手或口型。
 - 只有提示词或可见参考素材明确存在画内演唱者时，才补充嘴唇、下颌、呼吸、表情和手势；器乐、纯 Typography 与离屏人声 MV 不强制出现歌手。
 - 歌词文字作为前景、中景或背景的空间图形层，同一时刻保持一个主阅读焦点；可轻微穿插遮挡，但不会遮挡眼睛、主要表情和关键口型。
 - 只有文本明确给出 BPM、时间码、drop、snare、808、歌词重音或音乐段落时，才进行精确卡点。节点没有 AUDIO 输入，也不会声称听过歌曲或参考视频声音。
@@ -438,8 +440,9 @@ $env:T8STAR_API_KEY="你的 AI 工坊 API Key"
 
 - [MiniMax-H3 基础提示词指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md)
 - [MiniMax-H3 完整参考模式指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md)
-- [MiniMax-H3 官方 Skills 目录](https://github.com/MiniMax-AI/MiniMax-H3/tree/093f3129a3f7bd27c74928b1cd31a54fbdebe057/skills)
+- [MiniMax-H3 官方 Skills 目录](https://github.com/MiniMax-AI/MiniMax-H3/tree/b7227fa6a6206e9fb30562383d39e53cf3866a48/skills)
 - [MiniMax-H3 官方核心 Prompt Writing Skill](https://github.com/MiniMax-AI/MiniMax-H3/blob/093f3129a3f7bd27c74928b1cd31a54fbdebe057/skills/h3-prompt-writing/SKILL.md)
+- [MiniMax-H3 官方 Music Video Subtitle Generator Skill v0.6.6](https://github.com/MiniMax-AI/MiniMax-H3/blob/b7227fa6a6206e9fb30562383d39e53cf3866a48/skills/music-video-subtitle-generator/SKILL.cn.md)
 - [Seedance API 文档](https://api.seedance.nz/docs/llms.txt)
 - [Seedance 模型页面](https://api.seedance.nz/pricing/bytedance%2Fdoubao-seed-evolving)
 - [Seedance 2.0 官方模型页](https://seed.bytedance.com/en/seedance2_0)

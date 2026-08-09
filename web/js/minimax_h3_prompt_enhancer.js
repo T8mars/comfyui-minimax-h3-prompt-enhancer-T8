@@ -16,7 +16,8 @@ const STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）";
 const OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE];
 const NO_CREATIVE_PRESET = "无（仅核心规则）";
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
-const MV_CREATIVE_PRESET = "MV / 歌词贴字";
+const MV_CREATIVE_PRESET = "音乐 MV 动态字幕（官方）";
+const LEGACY_MV_CREATIVE_PRESET = "MV / 歌词贴字";
 const CREATIVE_PRESET_OPTIONS = [
     NO_CREATIVE_PRESET,
     "AUTO（根据意图判断）",
@@ -30,13 +31,15 @@ const CREATIVE_PRESET_OPTIONS = [
     "手绘实拍融合",
 ];
 const MV_PROMPT_PLACEHOLDER = [
-    "MV类型/视觉风格：",
-    "歌词原文（逐字保留，可空）：",
+    "MV类型/音乐类型/视觉风格：",
+    "歌词原文（逐字锁定，可空）：",
+    "无歌词时：器乐 / 允许生成原创歌词",
     "演唱者或离屏人声：",
-    "已知 BPM、时间点或节拍事件（可空）：",
+    "已知 BPM、歌词时间点或节拍事件（可空，节点不分析音频）：",
+    "目标平台/画幅（可空）：",
     "字体包装与禁止项：",
 ].join("\n");
-const MV_PROMPT_TOOLTIP = "MV 模式：基础提示词可按占位模板填写。歌词仅以用户原文为准；器乐、纯文字或离屏人声 MV 可以不填写演唱者。";
+const MV_PROMPT_TOOLTIP = "官方 music-video-subtitle-generator v0.6.6：基础提示词可按占位模板填写。用户歌词会逐字锁定；只有明确写出“允许生成原创歌词”时才会补写短篇原创歌词。器乐、纯文字或离屏人声 MV 可以不填写演唱者。";
 const MV_REFERENCE_CONTEXT_TOOLTIP = "MV 参考角色映射示例：<Picture 1>=人物外观；<Picture 2>=场景与灯光；<Picture 3>=字体包装，只参考字体、版式和动效，不参考人物与场景。";
 const MV_CONSTRAINTS_TOOLTIP = "MV 硬性要求示例：不增加歌词；不遮挡眼睛与关键口型；不用淡入淡出；固定保留指定服装或场景。";
 const MV_TEMPLATE_TOOLTIP = "仅迁移模板的镜头组织、节奏、运镜、转场和视觉语法；模板人物、歌词、BPM、标题、剧情和镜头数不会覆盖用户内容。";
@@ -478,6 +481,9 @@ app.registerExtension({
                 normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
                 normalizeChoice(promptModeWidget, ["官方增强", "参考模板融合"], "官方增强");
                 normalizeChoice(officialSkillProfileWidget, OFFICIAL_SKILL_PROFILES, COMPAT_SKILL_PROFILE);
+                if (creativePresetWidget?.value === LEGACY_MV_CREATIVE_PRESET) {
+                    creativePresetWidget.value = MV_CREATIVE_PRESET;
+                }
                 normalizeChoice(creativePresetWidget, CREATIVE_PRESET_OPTIONS, NO_CREATIVE_PRESET);
                 normalizeChoice(
                     apiModeWidget,

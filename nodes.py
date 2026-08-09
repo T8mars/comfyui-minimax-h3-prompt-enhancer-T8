@@ -44,12 +44,16 @@ MODE_TEMPERATURES = {"strict": 0.2, "balanced": 0.7, "creative": 1.2}
 OUTPUT_LANGUAGES = ["中文", "English"]
 PROMPT_MODES = ["官方增强", "参考模板融合"]
 OFFICIAL_SKILL_SOURCE_SHA = "093f3129a3f7bd27c74928b1cd31a54fbdebe057"
+OFFICIAL_MV_SKILL_SOURCE_SHA = "b7227fa6a6206e9fb30562383d39e53cf3866a48"
+OFFICIAL_MV_SKILL_VERSION = "0.6.6"
 COMPAT_SKILL_PROFILE = "现有兼容（保留中英文）"
 STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）"
 OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE]
 NO_CREATIVE_PRESET = "无（仅核心规则）"
 AUTO_CREATIVE_PRESET = "AUTO（根据意图判断）"
-MV_CREATIVE_PRESET = "MV / 歌词贴字"
+MV_CREATIVE_PRESET = "音乐 MV 动态字幕（官方）"
+LEGACY_MV_CREATIVE_PRESET = "MV / 歌词贴字"
+CREATIVE_PRESET_ALIASES = {LEGACY_MV_CREATIVE_PRESET: MV_CREATIVE_PRESET}
 CREATIVE_PRESET_OPTIONS = [
     NO_CREATIVE_PRESET,
     AUTO_CREATIVE_PRESET,
@@ -127,8 +131,15 @@ SKILL_PROFILE_RULES = {
 
 PRESET_BOUNDARY_RULE = """Creative preset boundary: the preset is a prompt-writing profile only. Apply it only where it matches the user's request and observable media. Never turn it into a production checklist, asset-generation sequence, approval gate, external research task, API call, multi-clip stitching job, or claim that unsupported analysis occurred. Explicit user facts, media evidence, duration, fixed shot count, H3 fields, and hard constraints always win."""
 
+MV_OFFICIAL_SCOPE_RULES = f"""Official MiniMax music-video-subtitle-generator Skill v{OFFICIAL_MV_SKILL_VERSION}, frozen from MiniMax-AI/MiniMax-H3 at commit {OFFICIAL_MV_SKILL_SOURCE_SHA}:
+- Use this profile for AI music videos or emotional music shorts in which music intent, locked lyrics, spatial typography, reference roles, rhythm, performance, and camera language must be designed together. It is not ordinary subtitle cleanup, generic editing, a non-music product ad, licensed-IP copying, or a simple request with no MV structure.
+- Respect any user-supplied target platform, aspect ratio, music genre, instrumentation, tempo feel, vocal mode, emotional temperature, camera language, edit density, and exclusions. Never silently replace them with a preset default.
+- The complete official Skill can plan character, scene, and typography cards, multi-clip generation, Master Audio alignment, canvas delivery, editing, and finishing. This node adapts only the rules that can be expressed in one 4-15 second H3 prompt; it does not claim to create cards, analyze an audio file, generate clips, stitch footage, or deliver a finished MV.
+- Omit irrelevant MV dimensions. Do not mechanically add a performer, lyrics, typography, a transition, or a preset visual treatment when the request does not need it."""
+
 MV_LYRIC_AND_PERFORMANCE_RULES = """MV Skill — locked lyrics and conditional performance:
-- User-supplied lyrics are the only trusted lyric source. Preserve their exact language, wording, punctuation, order, and repetitions; never translate, paraphrase, extend, replace, or invent lyrics. A reference template cannot contribute lyrics.
+- User-supplied lyrics are locked lyrics. Preserve their exact language, wording, punctuation, order, and repetitions; never translate, paraphrase, extend, or replace them. A reference template cannot contribute lyrics.
+- If the user supplies no lyrics but explicitly authorizes this official preset to create original lyrics, treat that as a narrow request for new content rather than permission to fabricate unspecified facts: write only a short original phrase that can plausibly fit the selected duration, then lock and reuse that exact phrase for both performance and visible typography. Without that explicit authorization, do not invent lyrics; an instrumental, abstract-typography, montage, or off-screen-vocal MV remains valid.
 - When a real target-timeline vocal source performs supplied lyrics, keep its stable (Sx) identity and write the exact phrase as <d>[Language] exact source text</d>. If that same phrase is visibly typeset at that moment, put the identical source phrase in English double quotation marks; do not silently create a second wording.
 - Do not add a singer, lip sync, readable lyrics, or a vocal performance merely because this MV profile is active. Instrumental, pure-typography, montage, and off-screen-vocal MVs remain valid.
 - Only when the user requests an on-screen performer, or observable media clearly shows the intended performer, may performance detail connect phrasing to lips, jaw, breath, expression, head accents, and gestures. Keep an off-screen vocal source off-screen and do not animate an unrelated visible person's lips.
@@ -163,7 +174,9 @@ MV_REWRITE_MODE_RULES = {
 
 MV_AUTO_INTENT_PATTERN = re.compile(
     r"(?:\bmv\b|music[\s-]*video|lyric[\s-]*video|歌词(?:贴字|视频|动画)?|"
-    r"演唱|歌手|对口型|lip[\s-]*sync|vocal(?:ist)?|karaoke|k-?pop)",
+    r"字幕\s*MV|贴字\s*MV|卡点\s*MV|MV\s*提示词|音乐美学|"
+    r"演唱|歌手|对口型|lip[\s-]*sync|vocal(?:ist)?|karaoke|k-?pop|"
+    r"trap[\s-]*mv|gospel[\s-]*hip[\s-]*hop|dark[\s-]*pop|cyber[\s-]*grunge)",
     re.IGNORECASE,
 )
 
@@ -171,6 +184,11 @@ MV_AUTO_INTENT_PATTERN = re.compile(
 def _auto_requests_mv(prompt: str, reference_context: str, constraints: str) -> bool:
     trusted_text = "\n".join(str(value or "") for value in (prompt, reference_context, constraints))
     return bool(MV_AUTO_INTENT_PATTERN.search(trusted_text))
+
+
+def _canonical_creative_preset(creative_preset: Any) -> str:
+    value = str(creative_preset or NO_CREATIVE_PRESET)
+    return CREATIVE_PRESET_ALIASES.get(value, value)
 
 
 def _mv_skill_instruction(
@@ -191,6 +209,7 @@ def _mv_skill_instruction(
         else "Official enhancement is active: no reference-template content participates."
     )
     return "\n\n".join([
+        MV_OFFICIAL_SCOPE_RULES,
         MV_LYRIC_AND_PERFORMANCE_RULES,
         MV_TYPOGRAPHY_AND_RHYTHM_RULES,
         MV_REFERENCE_ROLE_RULES,
@@ -236,7 +255,7 @@ CREATIVE_PRESET_RULES = {
     "极简产品广告": """Creative preset: minimalist product advertisement. Lock the product's identity, silhouette, main colors, materials, and requested features. Favor negative space, a clean composition, one principal visual action per beat, and a stable full-frame product-led closing. Avoid grids, split panels, anchor-sheet layouts, crowded props, and unnecessary copy. When copy is requested, show at most one concise single-line text event at a time, keep it out of the lower-subtitle position, preserve supplied wording exactly, and never invent a logo, claim, metric, feature, or endorsement.""",
     "3D 动画短片": """Creative preset: 3D animation short. Anchor each important character with two or three stable visual traits, and preserve scene landmarks, light direction, scale, and prop continuity. Keep no more than three important active characters in one shot unless the user explicitly requires more. Favor readable silhouettes and physically legible anticipation, squash-and-stretch, overshoot, rebound, and follow-through only when compatible with the requested animation style. Produce one 4-15 second H3 timeline, not a long-film production plan.""",
     "品牌宣传短片": """Creative preset: brand promotional video. Use only brand names, logos, product facts, functions, metrics, slogans, and calls to action supplied by the user or visibly verified in attached media. Preserve exact names and copy; never fabricate a capability or claim. Keep brand/product assets readable with safe space, and make each beat demonstrate a concrete requested benefit or proof rather than generic spectacle.""",
-    MV_CREATIVE_PRESET: """Creative preset: music-video lyric typography. Apply the official MV Skill as a conditional single-prompt writing profile: exact supplied lyrics, conditional performance, spatial typography, evidence-based rhythm, isolated reference roles, and H3-correct sound classification.""",
+    MV_CREATIVE_PRESET: f"""Creative preset: official music-video-subtitle-generator v{OFFICIAL_MV_SKILL_VERSION}. Apply the official MiniMax MV Skill as a conditional single-prompt writing profile: locked or explicitly authorized original lyrics, conditional performance, spatial typography, evidence-based rhythm, isolated character/scene/typography reference roles, and H3-correct sound classification.""",
     "双人合作游戏开场": """Creative preset: two-player cooperative game intro. Lock exactly two player identities when the user supplies them, along with consistent left/right placement, exact player names, game title, UI labels, and button copy. Use a clear single-line hierarchy for actionable UI, a coherent palette of no more than about five main colors, and reduce decorative text when readability suffers. Do not invent gameplay mechanics, working interactions, scores, online services, or UI functionality.""",
     "纸拼贴讲解": """Creative preset: paper-collage explainer. Use a readable visual metaphor with halftone texture, large colored-paper shapes, warm white outlines, paper shadows, and tactile stop-motion assembly. Favor slide-in, pop-in, press-flat, and deliberate pause actions with paper friction, taps, and light rustle. Unless the user requests them, do not add background music, narration, subtitles, logos, or readable text.""",
     "立体纸艺停格讲解": """Creative preset: papercraft stop-motion explainer. Build a layered paper-diorama world with consistent material, folds, lighting, depth, scale, and paper construction. Use folds, pop-ups, page turns, pull-tabs, sliders, and jointed-paper movement to express the requested educational metaphor. Educational labels, arrows, cards, or charts may appear when needed, but keep reading-heavy copy on stable layers and preserve supplied wording exactly. Map restrained page flips, paper rustles, clicks, pops, and tape-peel sounds to visible actions; when narration or music is requested, fit it to the duration and keep light topic-appropriate music below the narration.""",
@@ -1068,7 +1087,7 @@ def enhance_prompt(
     output_language = str(output_language or "中文")
     prompt_mode = str(prompt_mode or "官方增强")
     official_skill_profile = str(official_skill_profile or COMPAT_SKILL_PROFILE)
-    creative_preset = str(creative_preset or NO_CREATIVE_PRESET)
+    creative_preset = _canonical_creative_preset(creative_preset)
     case_template = str(case_template or NO_CASE_TEMPLATE)
     if case_template not in CASE_TEMPLATE_OPTIONS:
         raise PromptEnhancerError(f"Unsupported case_template: {case_template}")
@@ -1275,7 +1294,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     display_name="MiniMax 官方创意预设",
                     options=CREATIVE_PRESET_OPTIONS,
                     default=NO_CREATIVE_PRESET,
-                    tooltip="AUTO 或八个 MiniMax 官方场景写作预设。MV 预设使用用户歌词与文本节拍，不分析音频。预设只影响写法，不执行生成、剪辑或外部工作流。",
+                    tooltip="AUTO 或八个 MiniMax 官方场景写作预设。音乐 MV 动态字幕预设来自官方 music-video-subtitle-generator v0.6.6；仅使用用户给出的歌词/节拍事实，或在用户明确授权时创作短篇原创歌词，不分析音频。预设只影响写法，不执行生成、剪辑或外部工作流。",
                 ),
                 io.Combo.Input(
                     "case_template",
