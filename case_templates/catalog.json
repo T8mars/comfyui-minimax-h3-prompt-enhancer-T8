@@ -1,0 +1,183 @@
+{
+  "schema_version": "t8-case-template-catalog/v1",
+  "catalog_id": "t8-curated-2026-08-09-01",
+  "authority": "T8 精选案例（非官方）",
+  "default": "无（不使用 T8 案例）",
+  "templates": [
+    {
+      "id": "t8c001-product-proof-state-machine",
+      "label": "T8-C001｜产品证明状态机",
+      "summary": "用可重排的证明状态回答不同产品问题，并以统一材质、光线与文字行为维持连续性。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "x-abulu8-2085626141759709286-browser-2085626141759709286-video-1",
+        "case_sha256": "23cb4f6b85a2d7ed5d9e216ad1b279ae3673720e5e11b6023617abb62d22f724",
+        "release_score": 4.837,
+        "h3_adapter_sha256": "d38a74955bae1ef761702a226897a43a6c19f4498a3c909a31116d5c804d5948",
+        "seedance20_adapter_sha256": "88cabea6eb9b9a5586cbfc3fec403e56244aabcb88ee4518eb929c11892ee05d"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA compressed launch film behaves as a flexible proof state machine rather than a fixed storyboard: an outcome, operation, internal mechanism, maximum contrast event, breadth proof and final action may be merged or reordered as long as each state answers a new product question. A strict material, light and typography system maintains coherence while shot count, information order, camera carrier and breadth device change across instances.\nInvariants:\n- inv-01: Within the first third, establish one emotionally legible outcome and its causal relationship to the product; outcome-first and proof-first openings are both valid.\n- inv-02: Make each information state answer a different product question, but merge related questions and vary their order according to the new product's strongest causal proof.\n- inv-03: Concentrate one maximum contrast event after enough setup to make it legible; the peak may be physical, spatial, typographic or human, and its position is variable.\n- inv-04: Bind different modules with one strict contrast system, typography behavior and recurring assembly physics.\n- inv-05: Prove breadth once before the final action using a device native to the new concept—continuous space, physical transformation, one montage, radial staging or audience behavior—not a mandatory card row or grid.\n- inv-06: Keep all visible copy short, complete and motion-safe: text lands at final size on a cut or via a hard mask and remains sharp long enough to read.\nVariable slots:\n- product_identity: One original fictional product name and a single-sentence emotional promise.\n- hero_benefit_image: An original person, object or environment showing the desired outcome rather than the interface.\n- capability_modules: Two or three visually distinct proofs that answer different product questions.\n- operation_proof: One legible control, process or physical mechanism that demonstrates how the product works.\n- peak_event: One maximum contrast event expressed through physical, spatial, typographic or human change.\n- breadth_device: One original non-redundant method for proving multiple contexts; avoid the source card-row plus grid pair.\n- graphic_system: A palette, material, light behavior and typography rule unrelated to the source campaign.\n- final_action: One concise CTA displayed in a stable closing lockup.\n- information_order: Choose an order derived from the new product's causal logic, not the source's nine-state sequence.\n- shot_structure: Use five to eight states with materially different boundaries, merges and camera implementations.\nFailure prevention:\n- The film is only a sequence of attractive product shots.: Assign each beat a distinct question and require an observable proof before the next cut.\n- Every beat tries to be the visual climax.: Use restrained assembly motion early, one dominant kinetic peak, then simplify toward the CTA.\n- Typography becomes unreadable or dominates the product.: Limit copy, land it complete at final size, hold it sharp and keep moving effects behind the text plane.\n- A palette swap leaves the source campaign visibly recognizable.: Change product category, hero subject, materials, information order, shot count, camera implementation, breadth device, copy and final action in addition to color.\nDo not copy from the source: MiniMax H3, HailuoAI, Create Beyond, LIVE RIGHT NOW, AVAILABLE NOW and every other source string; source woman, violet jellyfish, nebula, purple speed streaks and identical product-category imagery; source wordmarks, logos, translucent panel compositions, editing interface and creator-card layouts; the exact nine-panel storyboard, exact beat durations, exact typography positions and source color palette",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8c002-fixed-composition-medium-ladder",
+      "label": "T8-C002｜固定构图媒介生成阶梯",
+      "summary": "锁定构图，让引导、结构、材质、语境与克制的媒介内运动逐层完成。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "x-dheepanratnam-2086312209919963371-browser-2086312209919963371-video-1",
+        "case_sha256": "1243a7193968bb000a86fa0f84af6cfc4d33395315cf6b98e5987f437bb0279b",
+        "release_score": 4.76,
+        "h3_adapter_sha256": "f52f4a282dcaace46abbab898d34024df56c4a3b6b1cab8251e31f505dfbdb20",
+        "seedance20_adapter_sha256": "712ac6703bb4f2d4698310ac0a85c6d0ee50185352363b63604035ec3fa84a05"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA fixed composition turns creation into a readable causal ladder: low-commitment guides establish geometry, committed structure locks it, material finish adds specificity, contextual details certify completion, and one restrained in-medium motion supplies the final surprise.\nInvariants:\n- inv-01: Lock the camera and reserve stable spatial zones before any marks appear.\n- inv-02: Progress from low-commitment guides to committed structure to material colour or finish.\n- inv-03: Delay secondary labels, studies or context until the hero form is already readable.\n- inv-04: End with one subtle motion that remains faithful to the finished medium while the support stays inert.\nVariable slots:\n- support: One stable physical or graphic surface with reserved hero and context zones.\n- hero_subject: A single dominant form readable first as guides, then structure, then finish.\n- representation_ladder: Three visibly distinct commitment stages appropriate to the chosen medium.\n- context_details: Two to four secondary marks or diagrams that arrive only after the hero reads.\n- finish_palette: A restrained palette that clarifies material stages.\n- living_idle: One small loop or response that does not leave or volumize the surface.\n- sound_ladder: Material sounds change with each process stage, followed by one payoff accent.\nFailure prevention:\n- All layers appear together as a generic dissolve.: Give each representation stage a distinct material behavior and complete one milestone before the next begins.\n- The support or camera drifts during creation.: Lock framing, shadows, surface texture and prior marks; permit motion only inside active drawing regions.\n- The final animation breaks into three dimensions.: Restrict the payoff to one flat, local, low-amplitude motion that preserves the medium boundary.\nDo not copy from the source: the source bird species, pose, branch and natural-history subject; the antique two-page folio, exact plate geometry and wooden tabletop; source handwriting, taxonomic wording, plate number and page marks; the exact timecode pattern, colour placement, final blink and tail gesture",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8c003-dimensional-carrier-loop",
+      "label": "T8-C003｜连续载体维度升级回环",
+      "summary": "持续追踪一个载体，从平面痕迹升级到环境改写，再收缩回开场等价位置。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "x-godofprompt-2086142925063516348-browser-2086142925063516348-video-1",
+        "case_sha256": "303edd73515d96ab87e98e62e83016bc5b5d7df374831a862336a6ddfa1c3acb",
+        "release_score": 4.737,
+        "h3_adapter_sha256": "ba16c239ad15247ebaeaf51a38d6fa608d6d2b96ec5d8635a103e688a602b6e2",
+        "seedance20_adapter_sha256": "5e839ba603fa97867548481400ad5476b8813907099feba0934a9dc5d6c80111"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA small anomaly leaves a low-information real anchor as one continuously tracked carrier, escalates from flat trace to spatial figure to volumetric material, uses a contact peak to distribute its visual grammar across ordinary environmental anchors, then contracts into a reduced residue that returns to an opening-equivalent location.\nInvariants:\n- inv-01: Introduce one legible impossible seed on a stable ordinary anchor before explaining it.\n- inv-02: Keep one identifiable carrier or trajectory visible across every handoff, and motivate camera attention with that carrier.\n- inv-03: Escalate through at least three materially different representation regimes before the environmental peak.\n- inv-04: Use recurring practical anchors first as ordinary objects and later as hosts for the transformed visual grammar.\n- inv-05: After the maximum-scale state, reduce the effect to one small residue and return it to the origin or a clear opening analogue.\nVariable slots:\n- origin_anchor: A visually simple real surface or object that can host the first anomaly and the final residue.\n- carrier: One trackable point, filament, droplet, particle or shadow whose path remains causally continuous.\n- representation_ladder: At least three distinct stages such as trace, spatial figure, volumetric material and environment-wide system.\n- practical_anchor_chain: Two to four ordinary environmental objects revisited during propagation.\n- contact_trigger: One physically readable interaction or threshold crossing that causes the largest propagation change.\n- environment_rewrite_medium: A coherent graphic or material grammar that can spread across the existing setting without replacing its geometry.\n- camera_follow_strategy: A motivated follow, track, orbit or focus handoff that keeps the carrier legible; exact carrier and shot count may vary.\n- return_residue: A quieter, smaller state related to the carrier but not a copy of the source feather-like ending.\n- designed_sound_family: Newly authored material and propagation sounds synchronized to the chosen transformation; not asserted as source audio.\nFailure prevention:\n- The film stacks unrelated glowing effects without a persistent carrier.: Give every state the same trajectory, colour seed or material fingerprint and show each handoff on a recurring anchor.\n- The environment changes before the carrier earns the scale increase.: Complete trace, spatial figure and volumetric stages before activating the world-scale grammar.\n- The final return copies the source page-and-feather ending.: Change the origin class, residue material, camera implementation and return path while preserving only scale contraction and structural closure.\n- Camera motion competes with the small carrier.: Use one motivated move per beat, slow at each handoff and keep at least one stable practical anchor in frame.\nDo not copy from the source: the source open sketchbook, two standing figures, warm shop-like clutter, bicycle, exposed bulb, denim pocket, leaves and magazine stacks; the source star-led white trail, angular hovering drawing, cyan-pink-violet spiral, feather-like residue and exact colour sequence; the exact page-to-floor-to-person-to-lamp-to-bicycle-to-page traversal, compositions and beat durations; the creator name, MiniMax H3 marketing claim, After Effects comparison and all source-thread wording",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8c004-pressure-to-goal-journey",
+      "label": "T8-C004｜人物锚定压力到目标旅程",
+      "summary": "以稳定人物为情绪坐标，通过物理互动、视差、尺度和光线完成从受限空间到目标空间的抵达。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "x-iamahmedfaraz66-2086298926617903365-browser-2086298926617903365-video-1",
+        "case_sha256": "4c876544f6157cd97fd9c54dca0aa4cf923e82a3f4878796b86a64fd15ed123c",
+        "release_score": 4.796,
+        "h3_adapter_sha256": "261a1cce93f3e54fb7a6d675bb9180f568e2528aec5cde2370d7d33740499da5",
+        "seedance20_adapter_sha256": "7a6fd4c66a34212578d7ea5a3d0a02c3ed801863c511f9f12b11c39213fa1a06"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA recognizable person remains the emotional coordinate while an externally observed journey moves from constrained work pressure into an expanded goal space. Context is revealed through material interactions and camera parallax rather than direct exposition; scale and light increase toward the transition, and a final task-completing interaction—not a gesture to the lens—turns anticipation into earned arrival. Shot count, camera carrier and reveal order are variable.\nInvariants:\n- inv-01: Keep one recognizable person emotionally legible across changing spaces, using face, posture or task behavior as the recurring anchor rather than requiring a selfie.\n- inv-02: Make every contextual reveal originate from a physical interaction—moving a cart, opening geometry, passing an obstacle or handing off an object—and let the camera discover it through parallax, reframing or occlusion.\n- inv-03: Create one legible transition from compressed effort to expanded possibility using at least two of scale, light, depth, sound or traffic flow; the transition may occur through a door, lift, ramp, curtain, bend or temporal match.\n- inv-04: Choose a capture grammar appropriate to each new world and keep its rules consistent; controlled documentary texture may come from parallax, shallow focus, operator lag or environmental occlusion, not a fixed bundle of DV defects.\n- inv-05: Resolve arrival through one task-completing physical interaction between the person and the goal environment, while their emotional state remains readable without addressing the lens.\nVariable slots:\n- traveler: One original adult subject with stable identity and a clear reason to move.\n- prep_space: A compressed, imperfectly lit working area with readable practical obstacles.\n- context_reveals: One to three physically motivated discoveries whose order and camera implementation change with the instance.\n- material_handoff: An object, obstacle or collaborator changes the route or objective; avoid mirror-based self-checks.\n- goal_threshold: A brighter, wider destination visibly different from the prep space.\n- capture_texture: Select an instance-specific external, fixed, body-mounted or handheld grammar; do not reuse a bundled source artifact signature.\n- resolution_action: A material action that proves the person has entered or completed the goal, with no direct-to-camera hand sign.\n- shot_structure: Choose three to six events with an order justified by the new task; do not map source beats one-to-one.\nFailure prevention:\n- Camera changes occur without a material cause or simply imitate turn-and-return selfie coverage.: Tie each reframe to an object, obstacle, collaborator or changed route; vary carrier and shot count with the instance.\n- The destination appears too early.: Hide it behind real geometry and reserve the brightest, widest composition for the final third.\n- A new concept preserves the source's entire MiniDV defect signature.: Select a different coherent capture grammar and derive texture from the new environment while locking identity and route direction.\nDo not copy from the source: source face, ethnicity cues, hair, earrings and stage wardrobe; concert backstage corridor, dressing mirror, curtain and exact stage-light composition; exact dialogue, countdown, finger-heart gesture and performer premise; creator-specific DV artifact bundle, wrist-turn/return pattern, mirror readiness check or shot timing copied beat for beat",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8c005-cross-medium-contact-reaction",
+      "label": "T8-C005｜二维与真实媒介接触反应",
+      "summary": "一次真实到二维的接触触发三段清晰反应，并以媒介专属的不可能效果收尾。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "reddit-1vgynd7-chibi-pinch",
+        "case_sha256": "0abac53b8d02b547145e80eeb677fda6cfeba36b2d51a58945519b9874fb45ee",
+        "release_score": 4.693,
+        "h3_adapter_sha256": "787df7a59cbae27ef14f4a29a0cbf6c2417af5514ddbcb55967e3af680a73e69",
+        "seedance20_adapter_sha256": "7cfc239a7852e69af78ad0579a1a58c7e1d7367f156f32021401d3da9948b52d"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA single flat 2D character shares a locked photoreal environment with a real hand; one small cross-medium contact causes a three-stage readable reaction that ends in a medium-specific impossible effect.\nInvariants:\n- inv-01: Keep exactly one flat animated character inside an otherwise photoreal, stable environment.\n- inv-02: Show real-to-animated contact before the reaction begins.\n- inv-03: Escalate in three readable states: neutral, discomfort, impossible payoff.\n- inv-04: Keep the camera locked and let contact, expression, and effects move attention.\nVariable slots:\n- photoreal_arena: A stable real location with clear depth and one interaction surface.\n- flat_character: One original 2D paper- or sticker-like adult mascot, visually distinct from the source.\n- real_agent: One live-action hand or tool entering from a consistent edge.\n- contact_object: A small real object whose motion can visibly cross the medium boundary.\n- sensation: A simple cause such as cold, static, scent, or weight, not source heat/chili.\n- reaction_states: Three visually distinct but causally continuous poses.\n- payoff_effect: An original safe effect appropriate to the new sensation.\n- sound: Real location ambience plus contact-synced foley and one effect accent.\nFailure prevention:\n- The animated character no longer looks flat against the real scene.: Keep constant paper thickness, a crisp outline, planar deformation, and a consistent contact shadow.\n- The reaction begins before contact.: Hold neutral expression through the contact frame, then delay the first change by a short readable beat.\n- The adaptation still feels like the source spicy-food gag.: Change arena, character category, contact object, sensation, palette, reaction graphics, and final effect together.\nDo not copy from the source: source girl character, hairstyle, clothes, face, outline, or childlike proportions; source kitchen, wok, food, seasoning jar, spoon interaction, and camera composition; chili or heat tasting, lateral tear jets, red forehead, and fire breathing; exact reaction timing and source visual effects",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8c006-clarity-over-quantity-reversal",
+      "label": "T8-C006｜数量对清晰证明反转",
+      "summary": "先让数量与噪声占优，再用一次克制、可感知的纠正信号完成反转和物理证明。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "reddit-1vh8jy6-h3-high-card",
+        "case_sha256": "08e8279891b5f0e13c0cc8184a862da8b818f99d39db89f80179f2edcbb9b5b3",
+        "release_score": 4.748,
+        "h3_adapter_sha256": "4af33241d1f64a6c5ccdec4a57ee862afd3282596ec1c7f818333fb24e2b6918",
+        "seedance20_adapter_sha256": "f04c49aadc2496ff5ede3610ab5cce75e01347201158ae335612bc58645e8f9d"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA noisy system makes quantity look powerful, one restrained corrective signal interrupts it, and a physical consequence proves that calibrated clarity beats accumulation.\nInvariants:\n- inv-01: Show the asymmetric one-versus-many matchup before either side explains it.\n- inv-02: Let the many-item side perform longer and occupy more space before the concise answer.\n- inv-03: Give the single corrective signal a dedicated sensory close-up.\n- inv-04: End with calm control versus noisy consequence, not another explanation.\nVariable slots:\n- arena: A stable comparison space unrelated to gambling or the source saloon.\n- many_side: One expressive character with three to five compact labeled options.\n- one_side: One calm character with a single short answer label.\n- many_signals: Three to five distinct controls, sounds, lights, routes, or gestures that create legible visual noise.\n- single_answer: One visually and sonically distinct corrective action or object that carries the reversal without needing text.\n- proof: A visible consequence showing why the concise answer wins.\n- meltdown: Safe exaggerated reaction with no weapons or copied gesture.\n- sound: Escalating object sounds, one reveal accent, and a short consequence sound.\nFailure prevention:\n- The answer appears too early.: Hold it until after the many side has completed the spatial display and presentation pose.\n- The many-side noise becomes random rather than countable.: Limit it to three to five distinct controls or signals and stage them in a clear activation sequence.\n- The ending copies the source meltdown.: Replace weapons and smoke with a consequence native to the new arena, such as collapsing mockups, foaming food, or desynchronized lights.\nDo not copy from the source: legacy cartoon characters, voices, silhouettes, or franchise animation surface; saloon, gambling table, gold-and-carrot stakes, or Western props; source model names and exact card text; pistols, smoke-cloud surrender, exact poses, and shot compositions",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8c007-proof-object-reaction-handoff",
+      "label": "T8-C007｜证明物与反应交接",
+      "summary": "紧急干预制造冲突，稳定展示隐藏风险，再用一次有动机的镜头交接落到接收者反应。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "2026-08-09-01",
+        "case_id": "reddit-1vhloyz-walter-prompt-guide",
+        "case_sha256": "1cddc7f4216e4a1373153e7e2d51dc94a2d5b6546f696e801da89ec9694c0391",
+        "release_score": 4.674,
+        "h3_adapter_sha256": "61271711824b9ed30a6e5acbc7aaf1d58aeeafd6dd9608ae5a57be10dd8dc794",
+        "seedance20_adapter_sha256": "88203f5d68a978f08c8f5703ec532fb45d0687fc9ca8b68faf20990f5cbc1cb2"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nAn urgent intervention creates conflict, a controlled visual proof makes the hidden risk undeniable, and one motivated camera handoff transfers that proof to the recipient's compact reaction.\nInvariants:\n- inv-01: Establish an urgent conflict through action before revealing the proof state.\n- inv-02: Hold the proof state visually stable long enough to be understood before the camera hands off.\n- inv-03: Use one motivated reframe to hand the last line to a contrasting second speaker.\nVariable slots:\n- authority_role: A visually decisive expert with a clear reason to instruct.\n- recipient_role: A contrasting novice or peer who can answer in one short line.\n- proof_state: A physical condition, instrument reading, light reveal, or object state that becomes visually unambiguous without copying source typography.\n- setting: A context-rich location readable behind a medium close subject.\n- intervention: One brief action or line that stops the unsafe or mistaken behavior before the proof appears.\n- reaction: One gesture and one line that resolve the conflict.\n- camera_handoff: One pan or cut motivated by the second speaker.\n- sound: Location ambience plus non-overlapping dialogue; no music required.\nFailure prevention:\n- The proof state changes too quickly to understand.: Hold the revealed condition for at least two seconds with stable light, focus, and spatial context before the handoff.\n- Dialogue overlaps or sounds rushed.: Keep two short lines, place the speaker handoff after the first line fully ends, and remove extra actions.\n- The scene feels copied despite changed names.: Change profession, location, wardrobe, prop category, dialogue, and camera surface while preserving only the causal timing.\nDo not copy from the source: protected television characters or actor likenesses; source-series wardrobe, vehicle, desert setup, or color grade; source-character voices and exact dialogue; exact guide title, profanity, framing, or prop typography",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    }
+  ]
+}

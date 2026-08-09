@@ -4,6 +4,11 @@ from typing import Any
 import requests
 from comfy_api.latest import io
 
+try:
+    from .case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, resolve_case_template
+except ImportError:
+    from case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, resolve_case_template
+
 from .nodes import (
     AI_WORKSHOP_API_MODE,
     AI_WORKSHOP_CHAT_COMPLETIONS_URL,
@@ -512,6 +517,7 @@ def _build_messages(
     seed: int,
     media_plan: list[dict[str, Any]],
     media_parts: list[dict[str, Any]],
+    case_template: str,
 ) -> list[dict[str, Any]]:
     complexity_rules = {
         "AUTO（自动判断）": (
@@ -546,7 +552,7 @@ def _build_messages(
     )
     media_summary = ", ".join(f"{asset['label']} ({asset['role']})" for asset in media_plan) or "none"
 
-    system_content = "\n\n".join([
+    system_rules = [
         COMMON_SYSTEM_RULES,
         LANGUAGE_RULES[output_language],
         MODE_RULES[rewrite_mode],
@@ -559,7 +565,11 @@ def _build_messages(
         _subtitle_instruction(subtitle_policy),
         _stability_instruction(stability_constraints),
         prompt_mode_rule,
-    ])
+    ]
+    case_instruction = resolve_case_template(case_template, "seedance20")
+    if case_instruction:
+        system_rules.append(case_instruction)
+    system_content = "\n\n".join(system_rules)
 
     user_lines = [
         f"Selected task intent: {task_intent}",
@@ -623,6 +633,7 @@ def enhance_seedance20_prompt(
     session: requests.Session | None = None,
     ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
     custom_model: str = "",
+    case_template: str = NO_CASE_TEMPLATE,
 ) -> str:
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
@@ -635,6 +646,9 @@ def enhance_seedance20_prompt(
     subtitle_policy = str(subtitle_policy or SUBTITLE_POLICIES[0])
     stability_constraints = str(stability_constraints or STABILITY_POLICIES[0])
     custom_length_target = int(custom_length_target or 0)
+    case_template = str(case_template or NO_CASE_TEMPLATE)
+    if case_template not in CASE_TEMPLATE_OPTIONS:
+        raise Seedance20PromptEnhancerError(f"Unsupported case_template: {case_template}")
 
     selections = {
         "complexity_mode": (complexity_mode, COMPLEXITY_OPTIONS),
@@ -723,6 +737,7 @@ def enhance_seedance20_prompt(
             int(seed),
             media_plan,
             media_parts,
+            case_template,
         )
         return _request_completion(
             session, api_key, messages, rewrite_mode, chat_url, provider_name, model_id
@@ -813,6 +828,13 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 ),
                 io.Combo.Input("output_language", display_name="输出语言", options=OUTPUT_LANGUAGES, default="中文"),
                 io.Combo.Input("prompt_mode", display_name="提示词模式", options=PROMPT_MODES, default="官方优化"),
+                io.Combo.Input(
+                    "case_template",
+                    display_name="T8 精选案例模板（非官方）",
+                    options=CASE_TEMPLATE_OPTIONS,
+                    default=NO_CASE_TEMPLATE,
+                    tooltip="迁移原创案例的 Creative DNA、因果节奏与防复制约束；不复制源人物、剧情、文案、镜头表或媒体。它独立于提示词模式，可与手动参考模板共同使用。",
+                ),
                 io.Combo.Input(
                     "reference_syntax",
                     display_name="素材引用格式",
@@ -962,6 +984,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         seed=0,
         ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
         custom_model="",
+        case_template=NO_CASE_TEMPLATE,
     ) -> io.NodeOutput:
         result = enhance_seedance20_prompt(
             prompt=prompt,
@@ -992,6 +1015,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
             seed=seed,
             ai_workshop_model=ai_workshop_model,
             custom_model=custom_model,
+            case_template=case_template,
         )
         return io.NodeOutput(result)
 

@@ -112,6 +112,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn("task_type", names)
         self.assertIn("task_intent", names)
         self.assertIn("complexity_mode", names)
+        self.assertIn("case_template", names)
         self.assertIn("reference_syntax", names)
         self.assertIn("ai_workshop_model", names)
         self.assertIn("custom_model", names)
@@ -120,10 +121,14 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         shot_count = next(item for item in schema.inputs if item.id == "shot_count")
         duration = next(item for item in schema.inputs if item.id == "duration_seconds")
         api_key = next(item for item in schema.inputs if item.id == "api_key")
+        case_template = next(item for item in schema.inputs if item.id == "case_template")
         self.assertEqual(shot_count.options[1:], [str(value) for value in range(1, 21)])
         self.assertEqual(duration.options[1:], [str(value) for value in range(4, 16)])
         self.assertTrue(api_key.force_input)
         self.assertIsNone(api_key.socketless)
+        self.assertEqual(case_template.default, seedance20.NO_CASE_TEMPLATE)
+        self.assertEqual(case_template.options, seedance20.CASE_TEMPLATE_OPTIONS)
+        self.assertEqual(case_template.display_name, "T8 精选案例模板（非官方）")
         self.assertIn("rejected input_audio", schema.description)
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
         ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
@@ -241,6 +246,40 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("镜头1先静后动", combined)
         self.assertIn("structure/style inspiration only", combined)
 
+    def test_non_official_case_templates_work_in_both_prompt_modes_without_h3_syntax(self):
+        no_case = FakeSession()
+        self.run_enhancer(no_case)
+        self.assertNotIn("Selected non-official T8 case template", self.messages(no_case)[0]["content"])
+
+        for selection in seedance20.CASE_TEMPLATE_OPTIONS[1:]:
+            with self.subTest(selection=selection):
+                session = FakeSession()
+                self.run_enhancer(session, case_template=selection)
+                system = self.messages(session)[0]["content"]
+                self.assertIn(f"Selected non-official T8 case template: {selection}", system)
+                self.assertIn("Target adapter: Seedance 2.0", system)
+                self.assertIn("compact paragraph or ordered 镜头N structure", system)
+                self.assertIn("Never emit H3 field names or absolute H3 timestamps", system)
+                self.assertNotIn("integrated_multimodal_description:", system)
+                self.assertNotIn("[Shot N] At MM:SS", system)
+
+        session = FakeSession()
+        manual = "只借鉴快速开场，主体与结尾严格按用户要求。"
+        self.run_enhancer(
+            session,
+            case_template=seedance20.CASE_TEMPLATE_OPTIONS[1],
+            prompt_mode="参考模板融合",
+            reference_template=manual,
+        )
+        combined = json.dumps(self.messages(session), ensure_ascii=False)
+        self.assertIn("Selected non-official T8 case template", combined)
+        self.assertIn(manual, combined)
+
+        invalid = FakeSession()
+        with self.assertRaisesRegex(seedance20.Seedance20PromptEnhancerError, "case_template"):
+            self.run_enhancer(invalid, case_template="future-case")
+        self.assertEqual(invalid.chat_requests, [])
+
     def test_length_target_is_soft_and_arbitrary_nonempty_output_passes_through(self):
         upstream = "上游没有按任何固定格式返回，但内容非空，应原样放行。"
         session = FakeSession(upstream)
@@ -330,6 +369,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             'customModelWidget.label = compatible ? "OpenAI 模型 ID（必填）"',
             "delete secureWidget.width",
             'find("custom_length_target")',
+            'const NO_CASE_TEMPLATE = "无（不使用 T8 案例）"',
+            "widgets_values.splice(9, 0, NO_CASE_TEMPLATE)",
             '"control_after_generate"',
         ):
             self.assertIn(snippet, source)
@@ -339,10 +380,11 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(path.read_text(encoding="utf-8"))
         node = next(item for item in workflow["nodes"] if item["type"] == "Seedance20PromptEnhancerT8")
         self.assertEqual(node["type"], "Seedance20PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 25)
+        self.assertEqual(len(node["widgets_values"]), 26)
         self.assertEqual(node["widgets_values"][1], seedance20.TASK_INTENT_LABELS["AUTO"])
-        self.assertEqual(node["widgets_values"][18], seedance20.SEEDANCE_API_MODE)
-        self.assertEqual(node["widgets_values"][19:21], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, ""])
+        self.assertEqual(node["widgets_values"][9], seedance20.NO_CASE_TEMPLATE)
+        self.assertEqual(node["widgets_values"][19], seedance20.SEEDANCE_API_MODE)
+        self.assertEqual(node["widgets_values"][20:22], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, ""])
         self.assertIn("openai_video_urls", [item["name"] for item in node["inputs"]])
         self.assertNotIn("openai_upload_url", [item["name"] for item in node["inputs"]])
         self.assertNotIn("sk-", path.read_text(encoding="utf-8"))

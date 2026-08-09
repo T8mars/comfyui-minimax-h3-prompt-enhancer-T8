@@ -12,6 +12,11 @@ from PIL import Image
 
 from comfy_api.latest import ComfyExtension, io
 
+try:
+    from .case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, resolve_case_template
+except ImportError:
+    from case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, resolve_case_template
+
 
 API_BASE_URL = "https://api.seedance.nz"
 CHAT_COMPLETIONS_URL = f"{API_BASE_URL}/v1/chat/completions"
@@ -902,9 +907,10 @@ def _build_messages(
     shot_count: int,
     official_skill_profile: str,
     creative_preset: str,
+    case_template: str,
 ) -> list[dict[str, Any]]:
     effective_language = _effective_output_language(output_language, official_skill_profile)
-    system_content = "\n\n".join([
+    system_rules = [
         COMMON_SYSTEM_RULES,
         OFFICIAL_CORE_ADDENDUM,
         SKILL_PROFILE_RULES[official_skill_profile],
@@ -925,7 +931,11 @@ def _build_messages(
             reference_context,
             constraints,
         ),
-    ])
+    ]
+    case_instruction = resolve_case_template(case_template, "h3")
+    if case_instruction:
+        system_rules.append(case_instruction)
+    system_content = "\n\n".join(system_rules)
     user_text = _build_user_instruction(
         prompt,
         task_type,
@@ -1051,6 +1061,7 @@ def enhance_prompt(
     creative_preset: str = NO_CREATIVE_PRESET,
     ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
     custom_model: str = "",
+    case_template: str = NO_CASE_TEMPLATE,
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
@@ -1058,6 +1069,9 @@ def enhance_prompt(
     prompt_mode = str(prompt_mode or "官方增强")
     official_skill_profile = str(official_skill_profile or COMPAT_SKILL_PROFILE)
     creative_preset = str(creative_preset or NO_CREATIVE_PRESET)
+    case_template = str(case_template or NO_CASE_TEMPLATE)
+    if case_template not in CASE_TEMPLATE_OPTIONS:
+        raise PromptEnhancerError(f"Unsupported case_template: {case_template}")
     api_key = str(api_key or "").strip()
     if api_key in LEGACY_UI_VALUES:
         api_key = ""
@@ -1138,6 +1152,7 @@ def enhance_prompt(
             shot_count,
             official_skill_profile,
             creative_preset,
+            case_template,
         )
         response_text = _request_completion(
             session, api_key, messages, rewrite_mode, chat_url, provider_name, model_id
@@ -1257,10 +1272,17 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 ),
                 io.Combo.Input(
                     "creative_preset",
-                    display_name="创意预设",
+                    display_name="MiniMax 官方创意预设",
                     options=CREATIVE_PRESET_OPTIONS,
                     default=NO_CREATIVE_PRESET,
                     tooltip="AUTO 或八个 MiniMax 官方场景写作预设。MV 预设使用用户歌词与文本节拍，不分析音频。预设只影响写法，不执行生成、剪辑或外部工作流。",
+                ),
+                io.Combo.Input(
+                    "case_template",
+                    display_name="T8 精选案例模板（非官方）",
+                    options=CASE_TEMPLATE_OPTIONS,
+                    default=NO_CASE_TEMPLATE,
+                    tooltip="迁移原创案例的 Creative DNA、因果节奏与防复制约束；不复制源人物、剧情、文案、镜头表或媒体。可与官方增强、官方预设及手动参考模板共同使用。",
                 ),
                 io.String.Input(
                     "reference_template",
@@ -1347,6 +1369,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         shot_count=AUTO_SHOT_COUNT,
         ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
         custom_model="",
+        case_template=NO_CASE_TEMPLATE,
     ) -> io.NodeOutput:
         result = enhance_prompt(
             prompt=prompt,
@@ -1373,6 +1396,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             shot_count=shot_count,
             ai_workshop_model=ai_workshop_model,
             custom_model=custom_model,
+            case_template=case_template,
         )
         return io.NodeOutput(result)
 

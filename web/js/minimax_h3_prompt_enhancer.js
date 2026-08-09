@@ -15,6 +15,7 @@ const COMPAT_SKILL_PROFILE = "现有兼容（保留中英文）";
 const STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）";
 const OFFICIAL_SKILL_PROFILES = [COMPAT_SKILL_PROFILE, STRICT_SKILL_PROFILE];
 const NO_CREATIVE_PRESET = "无（仅核心规则）";
+const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
 const MV_CREATIVE_PRESET = "MV / 歌词贴字";
 const CREATIVE_PRESET_OPTIONS = [
     NO_CREATIVE_PRESET,
@@ -60,6 +61,7 @@ const SERIALIZED_WIDGET_NAMES = [
     "prompt_mode",
     "official_skill_profile",
     "creative_preset",
+    "case_template",
     "api_mode",
     "ai_workshop_model",
     "custom_model",
@@ -547,7 +549,7 @@ app.registerExtension({
             const serialized = args[0];
             const hadLegacyUploadUrl = serialized?.inputs?.some((input) => input.name === "openai_upload_url");
             if (Array.isArray(serialized?.widgets_values)
-                && [16, 17, 19].includes(serialized.widgets_values.length)) {
+                && [16, 17, 19, 21].includes(serialized.widgets_values.length)) {
                 args[0] = { ...serialized, widgets_values: [...serialized.widgets_values] };
             }
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 16) {
@@ -558,6 +560,9 @@ app.registerExtension({
             }
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 19) {
                 args[0].widgets_values.splice(11, 0, AI_WORKSHOP_DEFAULT_MODEL, "");
+            }
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 21) {
+                args[0].widgets_values.splice(10, 0, NO_CASE_TEMPLATE);
             }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => {

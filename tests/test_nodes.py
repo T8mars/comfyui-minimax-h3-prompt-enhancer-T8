@@ -182,6 +182,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("prompt_mode", input_names)
         self.assertIn("official_skill_profile", input_names)
         self.assertIn("creative_preset", input_names)
+        self.assertIn("case_template", input_names)
         self.assertIn("reference_template", input_names)
         self.assertIn("api_mode", input_names)
         self.assertIn("ai_workshop_model", input_names)
@@ -202,6 +203,7 @@ class PromptEnhancerTests(unittest.TestCase):
         prompt_mode = next(item for item in schema.inputs if item.id == "prompt_mode")
         official_skill_profile = next(item for item in schema.inputs if item.id == "official_skill_profile")
         creative_preset = next(item for item in schema.inputs if item.id == "creative_preset")
+        case_template = next(item for item in schema.inputs if item.id == "case_template")
         task_type = next(item for item in schema.inputs if item.id == "task_type")
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
         ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
@@ -220,6 +222,11 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.default, nodes.NO_CREATIVE_PRESET)
         self.assertEqual(creative_preset.options, nodes.CREATIVE_PRESET_OPTIONS)
         self.assertEqual(len(creative_preset.options), 10)
+        self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
+        self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
+        self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
+        self.assertEqual(len(case_template.options), 8)
+        self.assertEqual(case_template.display_name, "T8 精选案例模板（非官方）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
         self.assertEqual(api_mode.default, nodes.SEEDANCE_API_MODE)
@@ -272,10 +279,11 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('seedControlWidget.label = "种子状态（运行后）"', source)
         self.assertIn('const AUTO_SHOT_COUNT = "AUTO（系统自动判断）"', source)
         self.assertIn('"shot_count"', source)
-        self.assertIn("[16, 17, 19].includes(serialized.widgets_values.length)", source)
+        self.assertIn("[16, 17, 19, 21].includes(serialized.widgets_values.length)", source)
         self.assertIn("widgets_values.splice(3, 0, AUTO_SHOT_COUNT)", source)
         self.assertIn("widgets_values.splice(8, 0, COMPAT_SKILL_PROFILE, NO_CREATIVE_PRESET)", source)
         self.assertIn('widgets_values.splice(11, 0, AI_WORKSHOP_DEFAULT_MODEL, "")', source)
+        self.assertIn("widgets_values.splice(10, 0, NO_CASE_TEMPLATE)", source)
         self.assertIn('const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）"', source)
         self.assertIn('const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash"', source)
         self.assertIn('widget.name === "openai_video_urls"', source)
@@ -302,14 +310,14 @@ class PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(source)
         node = workflow["nodes"][0]
         self.assertEqual(node["type"], "MiniMaxH3PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 21)
+        self.assertEqual(len(node["widgets_values"]), 22)
         self.assertEqual(node["widgets_values"][1], "T2VA（文生音视频）")
         self.assertEqual(node["widgets_values"][3], nodes.AUTO_SHOT_COUNT)
         self.assertEqual(
-            node["widgets_values"][6:11],
-            ["中文", "官方增强", nodes.COMPAT_SKILL_PROFILE, nodes.NO_CREATIVE_PRESET, nodes.SEEDANCE_API_MODE],
+            node["widgets_values"][6:12],
+            ["中文", "官方增强", nodes.COMPAT_SKILL_PROFILE, nodes.NO_CREATIVE_PRESET, nodes.NO_CASE_TEMPLATE, nodes.SEEDANCE_API_MODE],
         )
-        self.assertEqual(node["widgets_values"][11:13], [nodes.AI_WORKSHOP_DEFAULT_MODEL, ""])
+        self.assertEqual(node["widgets_values"][12:14], [nodes.AI_WORKSHOP_DEFAULT_MODEL, ""])
         self.assertIn("openai_video_urls", [item["name"] for item in node["inputs"]])
         self.assertNotIn("openai_upload_url", [item["name"] for item in node["inputs"]])
         self.assertEqual(node["widgets_values"][-2:], [0, "randomize"])
@@ -532,6 +540,7 @@ class PromptEnhancerTests(unittest.TestCase):
         for kwargs, phrase in (
             ({"official_skill_profile": "future-profile"}, "official_skill_profile"),
             ({"creative_preset": "future-preset"}, "creative_preset"),
+            ({"case_template": "future-case"}, "case_template"),
         ):
             with self.subTest(kwargs=kwargs):
                 session = FakeSession(basic_output())
@@ -539,6 +548,60 @@ class PromptEnhancerTests(unittest.TestCase):
                     self.run_enhancer(session, **kwargs)
                 self.assertEqual(session.uploads, [])
                 self.assertEqual(session.chat_requests, [])
+
+    def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
+        self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 8)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 8)
+
+        no_case_session = FakeSession(basic_output())
+        self.run_enhancer(no_case_session)
+        no_case_system = no_case_session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertNotIn("Selected non-official T8 case template", no_case_system)
+        self.assertNotIn("Reusable Creative DNA (mechanism and production grammar only)", no_case_system)
+
+        for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
+            with self.subTest(selection=selection):
+                session = FakeSession(basic_output())
+                self.run_enhancer(session, case_template=selection)
+                system = session.chat_requests[0]["json"]["messages"][0]["content"]
+                self.assertIn(f"Selected non-official T8 case template: {selection}", system)
+                self.assertIn("Reusable Creative DNA (mechanism and production grammar only)", system)
+                self.assertIn("Target adapter: MiniMax H3", system)
+                self.assertIn("selected MiniMax official creative preset", system)
+                self.assertIn("more specific manual template", system)
+
+        manual = "只参考三段式节奏，第二段必须保持一镜到底。"
+        combined_session = FakeSession(basic_output())
+        self.run_enhancer(
+            combined_session,
+            case_template=nodes.CASE_TEMPLATE_OPTIONS[1],
+            creative_preset="品牌宣传短片",
+            prompt_mode="参考模板融合",
+            reference_template=manual,
+        )
+        messages = combined_session.chat_requests[0]["json"]["messages"]
+        self.assertIn("brand promotional video", messages[0]["content"])
+        self.assertIn("Selected non-official T8 case template", messages[0]["content"])
+        self.assertIn(manual, messages[1]["content"])
+
+    def test_distributable_case_catalog_contains_only_active_text_abstractions(self):
+        catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v1")
+        self.assertEqual(len(catalog["templates"]), 7)
+        source = catalog_path.read_text(encoding="utf-8")
+        self.assertNotRegex(source, r"https?://")
+        self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{16,}")
+        self.assertNotIn("case_directory", source)
+        self.assertNotIn("compiled_prompt", source)
+        self.assertNotIn("openai_upload_url", source)
+        for template in catalog["templates"]:
+            self.assertEqual(template["status"], "active")
+            self.assertFalse(template["official"])
+            self.assertEqual(set(template["variants"]), {"h3", "seedance20"})
+            self.assertTrue(template["source"]["case_sha256"])
+            self.assertNotIn("integrated_multimodal_description:", template["creative_dna"])
 
     def test_reference_template_mode_requires_and_sends_template(self):
         missing_session = FakeSession(basic_output())

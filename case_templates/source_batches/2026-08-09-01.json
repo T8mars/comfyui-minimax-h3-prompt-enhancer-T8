@@ -1,0 +1,49 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-09-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-abulu8-2085626141759709286-browser-2085626141759709286-video-1",
+      "template_id": "t8c001-product-proof-state-machine",
+      "label": "T8-C001｜产品证明状态机",
+      "summary": "用可重排的证明状态回答不同产品问题，并以统一材质、光线与文字行为维持连续性。"
+    },
+    {
+      "case_id": "x-dheepanratnam-2086312209919963371-browser-2086312209919963371-video-1",
+      "template_id": "t8c002-fixed-composition-medium-ladder",
+      "label": "T8-C002｜固定构图媒介生成阶梯",
+      "summary": "锁定构图，让引导、结构、材质、语境与克制的媒介内运动逐层完成。"
+    },
+    {
+      "case_id": "x-godofprompt-2086142925063516348-browser-2086142925063516348-video-1",
+      "template_id": "t8c003-dimensional-carrier-loop",
+      "label": "T8-C003｜连续载体维度升级回环",
+      "summary": "持续追踪一个载体，从平面痕迹升级到环境改写，再收缩回开场等价位置。"
+    },
+    {
+      "case_id": "x-iamahmedfaraz66-2086298926617903365-browser-2086298926617903365-video-1",
+      "template_id": "t8c004-pressure-to-goal-journey",
+      "label": "T8-C004｜人物锚定压力到目标旅程",
+      "summary": "以稳定人物为情绪坐标，通过物理互动、视差、尺度和光线完成从受限空间到目标空间的抵达。"
+    },
+    {
+      "case_id": "reddit-1vgynd7-chibi-pinch",
+      "template_id": "t8c005-cross-medium-contact-reaction",
+      "label": "T8-C005｜二维与真实媒介接触反应",
+      "summary": "一次真实到二维的接触触发三段清晰反应，并以媒介专属的不可能效果收尾。"
+    },
+    {
+      "case_id": "reddit-1vh8jy6-h3-high-card",
+      "template_id": "t8c006-clarity-over-quantity-reversal",
+      "label": "T8-C006｜数量对清晰证明反转",
+      "summary": "先让数量与噪声占优，再用一次克制、可感知的纠正信号完成反转和物理证明。"
+    },
+    {
+      "case_id": "reddit-1vhloyz-walter-prompt-guide",
+      "template_id": "t8c007-proof-object-reaction-handoff",
+      "label": "T8-C007｜证明物与反应交接",
+      "summary": "紧急干预制造冲突，稳定展示隐藏风险，再用一次有动机的镜头交接落到接收者反应。"
+    }
+  ]
+}

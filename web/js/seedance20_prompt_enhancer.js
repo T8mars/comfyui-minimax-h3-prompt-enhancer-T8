@@ -11,6 +11,7 @@ const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
 const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const AUTO_DURATION = "AUTO（模型智能选择）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
+const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
 const TASK_LABELS = {
     AUTO: "AUTO（根据意图与素材判断）",
     T2V: "T2V（文生视频）",
@@ -32,6 +33,7 @@ const SERIALIZED_WIDGET_NAMES = [
     "output_detail",
     "output_language",
     "prompt_mode",
+    "case_template",
     "reference_syntax",
     "subtitle_policy",
     "stability_constraints",
@@ -400,9 +402,14 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
             const hadLegacyUploadUrl = args[0]?.inputs?.some((input) => input.name === "openai_upload_url");
-            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 23) {
+            if (Array.isArray(args[0]?.widgets_values) && [23, 25].includes(args[0].widgets_values.length)) {
                 args[0] = { ...args[0], widgets_values: [...args[0].widgets_values] };
+            }
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 23) {
                 args[0].widgets_values.splice(19, 0, AI_WORKSHOP_DEFAULT_MODEL, "");
+            }
+            if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 25) {
+                args[0].widgets_values.splice(9, 0, NO_CASE_TEMPLATE);
             }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => {

@@ -30,6 +30,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；预设只优化提示词，不运行完整制作工作流。
+- 两个节点新增独立的 `T8 精选案例模板（非官方）` 列表，首批 7 个案例只携带可复用 Creative DNA 与防复制规则，不携带源视频、路径、URL 或成品提示词。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -69,7 +70,7 @@ Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 
 1. 添加 `MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
-3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和创意预设。
+3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和 MiniMax 官方创意预设；需要时再选择一个 T8 非官方案例模板。
 4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
 5. 填写 API Key，点击“保存到工作流”；或者使用环境变量。
 6. 点击节点底部的“运行提示词优化”。
@@ -83,8 +84,9 @@ Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 2. 填写“视频创意 / 提示词”。任务意图、组织方式、时长和镜头数都可先保持 `AUTO`。
 3. 按任务连接首帧、尾帧、参考图片或完整参考视频。
 4. 选择官方中文 `@图片N/@视频N` 或 Seedance.nz 英文 `@Image N/@Video N` 引用格式。
-5. 填写的是“提示词增强 LLM API Key”，保存后点击节点底部运行按钮。
-6. 把 `enhanced_prompt` 连接到下游 Seedance 2.0 视频节点的提示词输入。
+5. 可选一个 `T8 精选案例模板（非官方）`，用于迁移因果结构、节奏和镜头语法。
+6. 填写的是“提示词增强 LLM API Key”，保存后点击节点底部运行按钮。
+7. 把 `enhanced_prompt` 连接到下游 Seedance 2.0 视频节点的提示词输入。
 
 可以直接导入 [`example/seedance20_prompt_enhancer_example.json`](./example/seedance20_prompt_enhancer_example.json)。示例不包含 API Key。
 
@@ -143,7 +145,7 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 优先级为：
 
 ```text
-硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 核心规则 > 创意预设 > 参考模板
+硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 核心规则 > MiniMax 官方创意预设 > 更具体的用户手动参考模板 > T8 非官方案例模板
 ```
 
 ## MiniMax-H3 官方 Skill 协议
@@ -173,6 +175,35 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 | `手绘实拍融合` | 实拍接触、同一实体连续变形、慢半拍追拍、粗糙发光笔触和非恐怖基调 |
 
 这些选项只把官方场景 Skill 中适合“单次 H3 提示词改写”的规则传给 LLM。节点不会安装远程 Skill、生成角色卡或锚点图、研究官网、分析音频文件、调用 H3 视频生成、拼接片段或执行交付流程。
+
+## T8 精选案例模板（非官方）
+
+该列表与 MiniMax 官方创意预设完全分开。两个节点使用同一稳定模板 ID，但 H3 版本会折叠到 H3 字段、`[Shot N]` 时间线和声音合同；Seedance 2.0 版本会使用任务意图、自然段或 `镜头N` 顺序与素材引用语法，不输出 H3 字段或绝对 H3 时间码。
+
+| 模板 | 可复用机制 |
+| --- | --- |
+| `T8-C001｜产品证明状态机` | 用可重排证明状态回答不同产品问题，以统一材质、光线与文字行为维持连续性 |
+| `T8-C002｜固定构图媒介生成阶梯` | 锁定构图，让引导、结构、材质、语境与克制的媒介内运动逐层完成 |
+| `T8-C003｜连续载体维度升级回环` | 持续追踪一个载体，从平面痕迹升级到环境改写，再收缩回开场等价位置 |
+| `T8-C004｜人物锚定压力到目标旅程` | 用物理互动、视差、尺度和光线完成从受限空间到目标空间的抵达 |
+| `T8-C005｜二维与真实媒介接触反应` | 一次跨媒介接触触发三段清晰反应，以媒介专属的不可能效果收尾 |
+| `T8-C006｜数量对清晰证明反转` | 先让数量与噪声占优，再用一次克制信号与物理结果完成反转 |
+| `T8-C007｜证明物与反应交接` | 干预制造冲突，稳定展示隐藏风险，再以有动机的镜头交接落到反应 |
+
+默认 `无（不使用 T8 案例）`，因此旧工作流的请求内容保持不变。案例模板独立于“官方增强 / 官方优化”和“参考模板融合”：可以单独使用，也可以与用户手动模板共同使用；用户提示词、媒体事实、硬性要求、时长与固定镜头数始终优先。案例只迁移机制、可变槽位、失败修复和 anti-copy 排除项，不复制源人物、品牌、剧情、对白、准确镜头表、表面风格或媒体。
+
+### 维护者：标准化每日导入
+
+仓库提供确定性的 [`tools/import_t8_case_templates.py`](./tools/import_t8_case_templates.py)。输入为机器可读 handoff registry 与批次元数据，输出为 [`case_templates/catalog.json`](./case_templates/catalog.json)：
+
+```bash
+python tools/import_t8_case_templates.py \
+  --registry <comfyui-handoffs/registry.json> \
+  --batch case_templates/source_batches/<batch-id>.json \
+  --output case_templates/catalog.json
+```
+
+导入会现场要求 canonical case 为 `released`、两个模型 recipe 齐全、`media_connections=[]`、API Key/Base URL/视频 URL 为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并记录 case 与 adapter SHA-256。目录不会包含本地路径、来源 URL、媒体或最终提示词。每日批次仍需先用 curator 的 release/adapter 校验通过；Markdown 报告只是交接说明，不能代替实时 case 与哈希核验。
 
 ### MV / 歌词贴字填写方式
 
@@ -232,6 +263,7 @@ MV 规则按以下方式工作：
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | `现有兼容 / 官方 Skill 严格`；默认兼容，严格档位强制英文说明正文 |
 | `creative_preset` | `无 / AUTO / 8 个官方场景写作预设` |
+| `case_template` | `无 / 7 个 T8 精选案例模板（非官方）`；H3 与 Seedance 2.0 使用独立适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |
