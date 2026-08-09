@@ -5,6 +5,7 @@ import os
 import re
 import time
 from typing import Any
+from urllib.parse import urlsplit
 
 import numpy as np
 import requests
@@ -29,6 +30,8 @@ CUSTOM_MODEL_OPTION = "Custom（自定义）"
 AI_WORKSHOP_MODEL_OPTIONS = [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION]
 MAX_FILE_BYTES = 50 * 1024 * 1024
 REQUEST_TIMEOUT = (20, 300)
+SEEDANCE_CHAT_RETRY_DELAYS = (0.5, 1.0)
+SEEDANCE_CHAT_RETRYABLE_STATUS_CODES = frozenset({502, 503, 504})
 
 TASK_TYPES = ["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA"]
 TASK_TYPE_LABELS = {
@@ -679,20 +682,58 @@ def _safe_response_message(response: Any, api_key: str) -> str:
     return re.sub(r"\s+", " ", message).strip()[:500] or "No error message returned."
 
 
-def _raise_http_error(response: Any, api_key: str, operation: str, provider_name: str = "Seedance"):
+def _raise_http_error(
+    response: Any,
+    api_key: str,
+    operation: str,
+    provider_name: str = "Seedance",
+    attempts: int = 1,
+):
     status = int(getattr(response, "status_code", 0))
     detail = _safe_response_message(response, api_key)
+    gateway_suffix = (
+        f" after {attempts} automatic attempts"
+        if attempts > 1
+        else "; retry manually"
+    )
     labels = {
         400: "request rejected",
         401: "authentication failed; check the configured API Key",
         402: "insufficient balance",
         413: "media payload too large",
         429: "rate limited; wait before running again",
-        502: "temporary upstream gateway failure; retry manually",
-        504: "temporary upstream gateway timeout; retry manually",
+        502: f"temporary upstream gateway failure{gateway_suffix}",
+        503: f"temporary upstream service unavailable{gateway_suffix}",
+        504: f"temporary upstream gateway timeout{gateway_suffix}",
     }
     label = labels.get(status, "server error" if status >= 500 else "request failed")
     raise PromptEnhancerError(f"{provider_name} {operation} {label} (HTTP {status}): {detail}")
+
+
+def _is_seedance_chat_endpoint(chat_url: str) -> bool:
+    try:
+        parsed = urlsplit(str(chat_url or ""))
+    except ValueError:
+        return False
+    return (
+        (parsed.hostname or "").lower() == "api.seedance.nz"
+        and parsed.path.rstrip("/") == "/v1/chat/completions"
+    )
+
+
+def _is_retryable_seedance_network_error(error: requests.RequestException) -> bool:
+    # A read timeout is deliberately excluded: the server may already have
+    # completed the paid generation even though its response did not arrive.
+    if isinstance(error, requests.exceptions.ReadTimeout):
+        return False
+    return isinstance(
+        error,
+        (
+            requests.exceptions.SSLError,
+            requests.exceptions.ConnectTimeout,
+            requests.exceptions.ConnectionError,
+        ),
+    )
 
 
 def _upload_media(
@@ -998,22 +1039,47 @@ def _request_completion(
         "temperature": MODE_TEMPERATURES[rewrite_mode],
         "stream": False,
     }
-    try:
-        response = session.post(
-            chat_url,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-            timeout=REQUEST_TIMEOUT,
-        )
-    except requests.RequestException as error:
-        raise PromptEnhancerError(
-            f"{provider_name} chat network error: {type(error).__name__}. The paid request was not retried."
-        ) from error
+    retry_delays = SEEDANCE_CHAT_RETRY_DELAYS if _is_seedance_chat_endpoint(chat_url) else ()
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            response = session.post(
+                chat_url,
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json=payload,
+                timeout=REQUEST_TIMEOUT,
+            )
+        except requests.RequestException as error:
+            can_retry = _is_retryable_seedance_network_error(error)
+            if can_retry and attempt <= len(retry_delays):
+                time.sleep(retry_delays[attempt - 1])
+                continue
+            if can_retry and retry_delays:
+                retry_note = f"Fast retry was exhausted after {attempt} attempts."
+            elif isinstance(error, requests.exceptions.ReadTimeout):
+                retry_note = (
+                    "The response state is ambiguous, so it was not retried automatically "
+                    "to avoid a duplicate paid generation."
+                )
+            else:
+                retry_note = "The paid request was not retried automatically."
+            raise PromptEnhancerError(
+                f"{provider_name} chat network error: {type(error).__name__}. {retry_note}"
+            ) from error
+
+        if (
+            response.status_code in SEEDANCE_CHAT_RETRYABLE_STATUS_CODES
+            and attempt <= len(retry_delays)
+        ):
+            time.sleep(retry_delays[attempt - 1])
+            continue
+        break
     if response.status_code != 200:
-        _raise_http_error(response, api_key, "chat", provider_name)
+        _raise_http_error(response, api_key, "chat", provider_name, attempts=attempt)
     try:
         data = response.json()
     except ValueError as error:

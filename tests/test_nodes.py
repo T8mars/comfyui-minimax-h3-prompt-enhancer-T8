@@ -84,6 +84,22 @@ class FakeSession:
         self.closed = True
 
 
+class SequencedChatSession(FakeSession):
+    def __init__(self, outcomes):
+        super().__init__("")
+        self.outcomes = list(outcomes)
+
+    def post(self, url, **kwargs):
+        if "json" not in kwargs:
+            return super().post(url, **kwargs)
+        self.chat_requests.append(kwargs)
+        self.chat_urls.append(url)
+        outcome = self.outcomes.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+
 class FakeVideo:
     def __init__(self, data=b"complete-video-stream", duration=3.0, container="mp4"):
         self.data = data
@@ -1110,24 +1126,64 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(self.run_enhancer(session, description_word_target=350), short_output)
         self.assertEqual(len(session.chat_requests), 1)
 
-    def test_http_errors_are_actionable_and_do_not_retry_chat(self):
-        for status, phrase in ((401, "configured API Key"), (402, "insufficient balance"), (429, "rate limited"), (503, "server error")):
+    def test_non_retryable_http_errors_are_actionable_and_do_not_retry_chat(self):
+        for status, phrase in ((401, "configured API Key"), (402, "insufficient balance"), (429, "rate limited")):
             with self.subTest(status=status):
                 session = FakeSession("", chat_status=status)
                 with self.assertRaisesRegex(nodes.PromptEnhancerError, phrase):
                     self.run_enhancer(session)
                 self.assertEqual(len(session.chat_requests), 1)
 
-        gateway = FakeSession(
-            "",
-            chat_status=502,
-            chat_payload=ValueError("not json"),
-        )
         gateway_response = FakeResponse(502, ValueError("not json"), text="<html><h1>502 Bad Gateway</h1><p>nginx</p></html>")
-        gateway.post = lambda url, **kwargs: gateway_response
-        with self.assertRaisesRegex(nodes.PromptEnhancerError, "temporary upstream gateway failure; retry manually") as raised:
-            self.run_enhancer(gateway)
+        gateway = SequencedChatSession([gateway_response, gateway_response, gateway_response])
+        with patch.object(nodes.time, "sleep") as sleep:
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "after 3 automatic attempts") as raised:
+                self.run_enhancer(gateway)
+        self.assertEqual(len(gateway.chat_requests), 3)
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
         self.assertNotIn("<html>", str(raised.exception))
+
+    def test_seedance_ssl_retry_returns_the_successful_generation(self):
+        expected = basic_output()
+        success = FakeResponse(200, {"choices": [{"message": {"content": expected}}]})
+        session = SequencedChatSession([
+            requests.exceptions.SSLError("regional TLS failure"),
+            requests.exceptions.ConnectionError("temporary route reset"),
+            success,
+        ])
+        with patch.object(nodes.time, "sleep") as sleep:
+            self.assertEqual(self.run_enhancer(session), expected)
+        self.assertEqual(len(session.chat_requests), 3)
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
+
+    def test_seedance_gateway_retry_returns_the_successful_generation(self):
+        expected = basic_output()
+        success = FakeResponse(200, {"choices": [{"message": {"content": expected}}]})
+        session = SequencedChatSession([
+            FakeResponse(502, {"error": {"message": "bad gateway"}}),
+            FakeResponse(504, {"error": {"message": "gateway timeout"}}),
+            success,
+        ])
+        with patch.object(nodes.time, "sleep") as sleep:
+            self.assertEqual(self.run_enhancer(session), expected)
+        self.assertEqual(len(session.chat_requests), 3)
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
+
+    def test_custom_openai_endpoint_does_not_inherit_seedance_paid_retry_policy(self):
+        session = SequencedChatSession([
+            requests.exceptions.SSLError("custom provider TLS failure"),
+            FakeResponse(200, {"choices": [{"message": {"content": basic_output()}}]}),
+        ])
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "not retried automatically"):
+            nodes._request_completion(
+                session,
+                "secret-key",
+                [{"role": "user", "content": "hello"}],
+                "balanced",
+                chat_url="https://llm.example/v1/chat/completions",
+                provider_name="OpenAI-compatible",
+            )
+        self.assertEqual(len(session.chat_requests), 1)
 
     def test_http_error_redacts_api_keys(self):
         leaked_key = "sk-" + "leaked-value-1234567890"
@@ -1142,8 +1198,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn(leaked_key, str(raised.exception))
 
     def test_timeout_is_not_retried(self):
-        session = FakeSession("", chat_exception=requests.Timeout("secret-key must not leak"))
-        with self.assertRaisesRegex(nodes.PromptEnhancerError, "not retried"):
+        session = FakeSession("", chat_exception=requests.exceptions.ReadTimeout("secret-key must not leak"))
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "response state is ambiguous"):
             self.run_enhancer(session)
         self.assertEqual(len(session.chat_requests), 1)
 
