@@ -241,7 +241,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(len(case_template.options), 18)
+        self.assertEqual(len(case_template.options), 27)
         self.assertEqual(case_template.display_name, "T8 精选案例模板（非官方）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
@@ -585,8 +585,8 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
         self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
-        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 18)
-        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 18)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 27)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 27)
 
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
@@ -623,7 +623,7 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v1")
-        self.assertEqual(len(catalog["templates"]), 17)
+        self.assertEqual(len(catalog["templates"]), 26)
         by_id = {template["id"]: template for template in catalog["templates"]}
         imported_ids = {
             "t8-case-evidence-ladder-reality-v1",
@@ -636,6 +636,15 @@ class PromptEnhancerTests(unittest.TestCase):
             "t8-case-staged-character-reveal-v1",
             "t8-case-mechanical-convoy-proof-v1",
             "t8-case-flat-geometry-reconstruction-v1",
+            "t8-case-audio-cause-lead-ladder-v1",
+            "t8-case-recurring-identity-board-v1",
+            "t8-case-dual-system-convergence-proof-v1",
+            "t8-case-alternating-obstacle-goal-corridor-v1",
+            "t8-case-calm-dense-decisive-delay-v1",
+            "t8-case-monotonic-route-loss-threshold-v1",
+            "t8-case-procedure-mismatch-nested-proof-v1",
+            "t8-case-base-loop-skill-ladder-v1",
+            "t8-case-inert-scale-active-intervention-v1",
         }
         self.assertTrue(imported_ids.issubset(by_id))
         source = catalog_path.read_text(encoding="utf-8")
@@ -650,9 +659,22 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertEqual(set(template["variants"]), {"h3", "seedance20"})
             self.assertTrue(template["source"]["case_sha256"])
             self.assertNotIn("integrated_multimodal_description:", template["creative_dna"])
+        batch_01_ids = {
+            "t8-case-evidence-ladder-reality-v1",
+            "t8-case-threshold-inspection-passage-v1",
+            "t8-case-imperfect-memory-farewell-v1",
+            "t8-case-deadpan-chain-failure-v1",
+            "t8-case-layered-dossier-activation-v1",
+            "t8-case-created-mark-boundary-crossing-v1",
+            "t8-case-material-progress-clock-v1",
+            "t8-case-staged-character-reveal-v1",
+            "t8-case-mechanical-convoy-proof-v1",
+            "t8-case-flat-geometry-reconstruction-v1",
+        }
         for template_id in imported_ids:
             imported = by_id[template_id]
-            self.assertEqual(imported["source"]["batch_id"], "batch-2026-08-10-01")
+            expected_batch = "batch-2026-08-10-01" if template_id in batch_01_ids else "batch-2026-08-10-02"
+            self.assertEqual(imported["source"]["batch_id"], expected_batch)
             self.assertRegex(imported["source"]["creative_dna_sha256"], r"^[0-9a-f]{64}$")
             self.assertRegex(imported["source"]["mechanism_fingerprint"], r"^[0-9a-f]{64}$")
             self.assertIn("Do not copy from the source:", imported["creative_dna"])
@@ -669,7 +691,7 @@ class PromptEnhancerTests(unittest.TestCase):
             batch = json.loads(source)
             self.assertEqual(batch["schema_version"], "t8-case-template-batch/v1")
             source_cases.extend(batch["cases"])
-        self.assertEqual(len(source_cases), 17)
+        self.assertEqual(len(source_cases), 26)
         self.assertEqual({item["case_id"] for item in source_cases}, set(catalog_by_case))
         for item in source_cases:
             template = catalog_by_case[item["case_id"]]

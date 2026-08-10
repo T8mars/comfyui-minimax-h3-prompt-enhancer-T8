@@ -7,43 +7,71 @@
       "case_id": "x-abulu8-2085626141759709286-browser-2085626141759709286-video-1",
       "template_id": "t8c001-product-proof-state-machine",
       "label": "T8-C001｜产品证明状态机",
-      "summary": "用可重排的证明状态回答不同产品问题，并以统一材质、光线与文字行为维持连续性。"
+      "summary": "用可重排的证明状态回答不同产品问题，并以统一材质、光线与文字行为维持连续性。",
+      "case_sha256": "23cb4f6b85a2d7ed5d9e216ad1b279ae3673720e5e11b6023617abb62d22f724",
+      "creative_dna_sha256": "1bfea667f950ad423b368cbdfe1fe8ff2431882be49b257cd99da7f3aeff3cf8",
+      "h3_adapter_sha256": "d38a74955bae1ef761702a226897a43a6c19f4498a3c909a31116d5c804d5948",
+      "seedance20_adapter_sha256": "88cabea6eb9b9a5586cbfc3fec403e56244aabcb88ee4518eb929c11892ee05d"
     },
     {
       "case_id": "x-dheepanratnam-2086312209919963371-browser-2086312209919963371-video-1",
       "template_id": "t8c002-fixed-composition-medium-ladder",
       "label": "T8-C002｜固定构图媒介生成阶梯",
-      "summary": "锁定构图，让引导、结构、材质、语境与克制的媒介内运动逐层完成。"
+      "summary": "锁定构图，让引导、结构、材质、语境与克制的媒介内运动逐层完成。",
+      "case_sha256": "1243a7193968bb000a86fa0f84af6cfc4d33395315cf6b98e5987f437bb0279b",
+      "creative_dna_sha256": "0720696ea193a36e0985792765a6bd612ae292e6d73a63346d881231d29280c2",
+      "h3_adapter_sha256": "f52f4a282dcaace46abbab898d34024df56c4a3b6b1cab8251e31f505dfbdb20",
+      "seedance20_adapter_sha256": "712ac6703bb4f2d4698310ac0a85c6d0ee50185352363b63604035ec3fa84a05"
     },
     {
       "case_id": "x-godofprompt-2086142925063516348-browser-2086142925063516348-video-1",
       "template_id": "t8c003-dimensional-carrier-loop",
       "label": "T8-C003｜连续载体维度升级回环",
-      "summary": "持续追踪一个载体，从平面痕迹升级到环境改写，再收缩回开场等价位置。"
+      "summary": "持续追踪一个载体，从平面痕迹升级到环境改写，再收缩回开场等价位置。",
+      "case_sha256": "303edd73515d96ab87e98e62e83016bc5b5d7df374831a862336a6ddfa1c3acb",
+      "creative_dna_sha256": "ccdb69a0c216b1504604b22145657d0bc55451342e95cb0d17fdfc04d164c075",
+      "h3_adapter_sha256": "ba16c239ad15247ebaeaf51a38d6fa608d6d2b96ec5d8635a103e688a602b6e2",
+      "seedance20_adapter_sha256": "5e839ba603fa97867548481400ad5476b8813907099feba0934a9dc5d6c80111"
     },
     {
       "case_id": "x-iamahmedfaraz66-2086298926617903365-browser-2086298926617903365-video-1",
       "template_id": "t8c004-pressure-to-goal-journey",
       "label": "T8-C004｜人物锚定压力到目标旅程",
-      "summary": "以稳定人物为情绪坐标，通过物理互动、视差、尺度和光线完成从受限空间到目标空间的抵达。"
+      "summary": "以稳定人物为情绪坐标，通过物理互动、视差、尺度和光线完成从受限空间到目标空间的抵达。",
+      "case_sha256": "4c876544f6157cd97fd9c54dca0aa4cf923e82a3f4878796b86a64fd15ed123c",
+      "creative_dna_sha256": "f48c52a54bed092d46e6e4dae080121b6d5197d28415965f8ff59571e924c0ba",
+      "h3_adapter_sha256": "261a1cce93f3e54fb7a6d675bb9180f568e2528aec5cde2370d7d33740499da5",
+      "seedance20_adapter_sha256": "7a6fd4c66a34212578d7ea5a3d0a02c3ed801863c511f9f12b11c39213fa1a06"
     },
     {
       "case_id": "reddit-1vgynd7-chibi-pinch",
       "template_id": "t8c005-cross-medium-contact-reaction",
       "label": "T8-C005｜二维与真实媒介接触反应",
-      "summary": "一次真实到二维的接触触发三段清晰反应，并以媒介专属的不可能效果收尾。"
+      "summary": "一次真实到二维的接触触发三段清晰反应，并以媒介专属的不可能效果收尾。",
+      "case_sha256": "0abac53b8d02b547145e80eeb677fda6cfeba36b2d51a58945519b9874fb45ee",
+      "creative_dna_sha256": "ed8631e6ac8fad89a7c56ac94eb4a4d0d91b33c73e90ae72a659fe5337bb8de3",
+      "h3_adapter_sha256": "787df7a59cbae27ef14f4a29a0cbf6c2417af5514ddbcb55967e3af680a73e69",
+      "seedance20_adapter_sha256": "7cfc239a7852e69af78ad0579a1a58c7e1d7367f156f32021401d3da9948b52d"
     },
     {
       "case_id": "reddit-1vh8jy6-h3-high-card",
       "template_id": "t8c006-clarity-over-quantity-reversal",
       "label": "T8-C006｜数量对清晰证明反转",
-      "summary": "先让数量与噪声占优，再用一次克制、可感知的纠正信号完成反转和物理证明。"
+      "summary": "先让数量与噪声占优，再用一次克制、可感知的纠正信号完成反转和物理证明。",
+      "case_sha256": "08e8279891b5f0e13c0cc8184a862da8b818f99d39db89f80179f2edcbb9b5b3",
+      "creative_dna_sha256": "2b87a30e15bd1ad221a1cbf782fa9f7532d7a712657453b946afc37b7dbcd921",
+      "h3_adapter_sha256": "4af33241d1f64a6c5ccdec4a57ee862afd3282596ec1c7f818333fb24e2b6918",
+      "seedance20_adapter_sha256": "f04c49aadc2496ff5ede3610ab5cce75e01347201158ae335612bc58645e8f9d"
     },
     {
       "case_id": "reddit-1vhloyz-walter-prompt-guide",
       "template_id": "t8c007-proof-object-reaction-handoff",
       "label": "T8-C007｜证明物与反应交接",
-      "summary": "紧急干预制造冲突，稳定展示隐藏风险，再用一次有动机的镜头交接落到接收者反应。"
+      "summary": "紧急干预制造冲突，稳定展示隐藏风险，再用一次有动机的镜头交接落到接收者反应。",
+      "case_sha256": "1cddc7f4216e4a1373153e7e2d51dc94a2d5b6546f696e801da89ec9694c0391",
+      "creative_dna_sha256": "a5617663d6b9fc1eee39fcd54a14864886395bfc74c9fafd913f951e4c08ad8d",
+      "h3_adapter_sha256": "61271711824b9ed30a6e5acbc7aaf1d58aeeafd6dd9608ae5a57be10dd8dc794",
+      "seedance20_adapter_sha256": "88203f5d68a978f08c8f5703ec532fb45d0687fc9ca8b68faf20990f5cbc1cb2"
     }
   ]
 }

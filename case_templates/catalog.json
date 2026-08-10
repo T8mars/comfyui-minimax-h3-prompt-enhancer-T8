@@ -1,6 +1,6 @@
 {
   "schema_version": "t8-case-template-catalog/v1",
-  "catalog_id": "t8-curated-2026-08-10-01",
+  "catalog_id": "t8-curated-2026-08-10-02",
   "authority": "T8 精选案例（非官方）",
   "default": "无（不使用 T8 案例）",
   "templates": [
@@ -17,7 +17,8 @@
         "case_sha256": "23cb4f6b85a2d7ed5d9e216ad1b279ae3673720e5e11b6023617abb62d22f724",
         "release_score": 4.837,
         "h3_adapter_sha256": "d38a74955bae1ef761702a226897a43a6c19f4498a3c909a31116d5c804d5948",
-        "seedance20_adapter_sha256": "88cabea6eb9b9a5586cbfc3fec403e56244aabcb88ee4518eb929c11892ee05d"
+        "seedance20_adapter_sha256": "88cabea6eb9b9a5586cbfc3fec403e56244aabcb88ee4518eb929c11892ee05d",
+        "creative_dna_sha256": "1bfea667f950ad423b368cbdfe1fe8ff2431882be49b257cd99da7f3aeff3cf8"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA compressed launch film behaves as a flexible proof state machine rather than a fixed storyboard: an outcome, operation, internal mechanism, maximum contrast event, breadth proof and final action may be merged or reordered as long as each state answers a new product question. A strict material, light and typography system maintains coherence while shot count, information order, camera carrier and breadth device change across instances.\nInvariants:\n- inv-01: Within the first third, establish one emotionally legible outcome and its causal relationship to the product; outcome-first and proof-first openings are both valid.\n- inv-02: Make each information state answer a different product question, but merge related questions and vary their order according to the new product's strongest causal proof.\n- inv-03: Concentrate one maximum contrast event after enough setup to make it legible; the peak may be physical, spatial, typographic or human, and its position is variable.\n- inv-04: Bind different modules with one strict contrast system, typography behavior and recurring assembly physics.\n- inv-05: Prove breadth once before the final action using a device native to the new concept—continuous space, physical transformation, one montage, radial staging or audience behavior—not a mandatory card row or grid.\n- inv-06: Keep all visible copy short, complete and motion-safe: text lands at final size on a cut or via a hard mask and remains sharp long enough to read.\nVariable slots:\n- product_identity: One original fictional product name and a single-sentence emotional promise.\n- hero_benefit_image: An original person, object or environment showing the desired outcome rather than the interface.\n- capability_modules: Two or three visually distinct proofs that answer different product questions.\n- operation_proof: One legible control, process or physical mechanism that demonstrates how the product works.\n- peak_event: One maximum contrast event expressed through physical, spatial, typographic or human change.\n- breadth_device: One original non-redundant method for proving multiple contexts; avoid the source card-row plus grid pair.\n- graphic_system: A palette, material, light behavior and typography rule unrelated to the source campaign.\n- final_action: One concise CTA displayed in a stable closing lockup.\n- information_order: Choose an order derived from the new product's causal logic, not the source's nine-state sequence.\n- shot_structure: Use five to eight states with materially different boundaries, merges and camera implementations.\nFailure prevention:\n- The film is only a sequence of attractive product shots.: Assign each beat a distinct question and require an observable proof before the next cut.\n- Every beat tries to be the visual climax.: Use restrained assembly motion early, one dominant kinetic peak, then simplify toward the CTA.\n- Typography becomes unreadable or dominates the product.: Limit copy, land it complete at final size, hold it sharp and keep moving effects behind the text plane.\n- A palette swap leaves the source campaign visibly recognizable.: Change product category, hero subject, materials, information order, shot count, camera implementation, breadth device, copy and final action in addition to color.\nDo not copy from the source: MiniMax H3, HailuoAI, Create Beyond, LIVE RIGHT NOW, AVAILABLE NOW and every other source string; source woman, violet jellyfish, nebula, purple speed streaks and identical product-category imagery; source wordmarks, logos, translucent panel compositions, editing interface and creator-card layouts; the exact nine-panel storyboard, exact beat durations, exact typography positions and source color palette",
       "variants": {
@@ -42,7 +43,8 @@
         "case_sha256": "1243a7193968bb000a86fa0f84af6cfc4d33395315cf6b98e5987f437bb0279b",
         "release_score": 4.76,
         "h3_adapter_sha256": "f52f4a282dcaace46abbab898d34024df56c4a3b6b1cab8251e31f505dfbdb20",
-        "seedance20_adapter_sha256": "712ac6703bb4f2d4698310ac0a85c6d0ee50185352363b63604035ec3fa84a05"
+        "seedance20_adapter_sha256": "712ac6703bb4f2d4698310ac0a85c6d0ee50185352363b63604035ec3fa84a05",
+        "creative_dna_sha256": "0720696ea193a36e0985792765a6bd612ae292e6d73a63346d881231d29280c2"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA fixed composition turns creation into a readable causal ladder: low-commitment guides establish geometry, committed structure locks it, material finish adds specificity, contextual details certify completion, and one restrained in-medium motion supplies the final surprise.\nInvariants:\n- inv-01: Lock the camera and reserve stable spatial zones before any marks appear.\n- inv-02: Progress from low-commitment guides to committed structure to material colour or finish.\n- inv-03: Delay secondary labels, studies or context until the hero form is already readable.\n- inv-04: End with one subtle motion that remains faithful to the finished medium while the support stays inert.\nVariable slots:\n- support: One stable physical or graphic surface with reserved hero and context zones.\n- hero_subject: A single dominant form readable first as guides, then structure, then finish.\n- representation_ladder: Three visibly distinct commitment stages appropriate to the chosen medium.\n- context_details: Two to four secondary marks or diagrams that arrive only after the hero reads.\n- finish_palette: A restrained palette that clarifies material stages.\n- living_idle: One small loop or response that does not leave or volumize the surface.\n- sound_ladder: Material sounds change with each process stage, followed by one payoff accent.\nFailure prevention:\n- All layers appear together as a generic dissolve.: Give each representation stage a distinct material behavior and complete one milestone before the next begins.\n- The support or camera drifts during creation.: Lock framing, shadows, surface texture and prior marks; permit motion only inside active drawing regions.\n- The final animation breaks into three dimensions.: Restrict the payoff to one flat, local, low-amplitude motion that preserves the medium boundary.\nDo not copy from the source: the source bird species, pose, branch and natural-history subject; the antique two-page folio, exact plate geometry and wooden tabletop; source handwriting, taxonomic wording, plate number and page marks; the exact timecode pattern, colour placement, final blink and tail gesture",
       "variants": {
@@ -67,7 +69,8 @@
         "case_sha256": "303edd73515d96ab87e98e62e83016bc5b5d7df374831a862336a6ddfa1c3acb",
         "release_score": 4.737,
         "h3_adapter_sha256": "ba16c239ad15247ebaeaf51a38d6fa608d6d2b96ec5d8635a103e688a602b6e2",
-        "seedance20_adapter_sha256": "5e839ba603fa97867548481400ad5476b8813907099feba0934a9dc5d6c80111"
+        "seedance20_adapter_sha256": "5e839ba603fa97867548481400ad5476b8813907099feba0934a9dc5d6c80111",
+        "creative_dna_sha256": "ccdb69a0c216b1504604b22145657d0bc55451342e95cb0d17fdfc04d164c075"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA small anomaly leaves a low-information real anchor as one continuously tracked carrier, escalates from flat trace to spatial figure to volumetric material, uses a contact peak to distribute its visual grammar across ordinary environmental anchors, then contracts into a reduced residue that returns to an opening-equivalent location.\nInvariants:\n- inv-01: Introduce one legible impossible seed on a stable ordinary anchor before explaining it.\n- inv-02: Keep one identifiable carrier or trajectory visible across every handoff, and motivate camera attention with that carrier.\n- inv-03: Escalate through at least three materially different representation regimes before the environmental peak.\n- inv-04: Use recurring practical anchors first as ordinary objects and later as hosts for the transformed visual grammar.\n- inv-05: After the maximum-scale state, reduce the effect to one small residue and return it to the origin or a clear opening analogue.\nVariable slots:\n- origin_anchor: A visually simple real surface or object that can host the first anomaly and the final residue.\n- carrier: One trackable point, filament, droplet, particle or shadow whose path remains causally continuous.\n- representation_ladder: At least three distinct stages such as trace, spatial figure, volumetric material and environment-wide system.\n- practical_anchor_chain: Two to four ordinary environmental objects revisited during propagation.\n- contact_trigger: One physically readable interaction or threshold crossing that causes the largest propagation change.\n- environment_rewrite_medium: A coherent graphic or material grammar that can spread across the existing setting without replacing its geometry.\n- camera_follow_strategy: A motivated follow, track, orbit or focus handoff that keeps the carrier legible; exact carrier and shot count may vary.\n- return_residue: A quieter, smaller state related to the carrier but not a copy of the source feather-like ending.\n- designed_sound_family: Newly authored material and propagation sounds synchronized to the chosen transformation; not asserted as source audio.\nFailure prevention:\n- The film stacks unrelated glowing effects without a persistent carrier.: Give every state the same trajectory, colour seed or material fingerprint and show each handoff on a recurring anchor.\n- The environment changes before the carrier earns the scale increase.: Complete trace, spatial figure and volumetric stages before activating the world-scale grammar.\n- The final return copies the source page-and-feather ending.: Change the origin class, residue material, camera implementation and return path while preserving only scale contraction and structural closure.\n- Camera motion competes with the small carrier.: Use one motivated move per beat, slow at each handoff and keep at least one stable practical anchor in frame.\nDo not copy from the source: the source open sketchbook, two standing figures, warm shop-like clutter, bicycle, exposed bulb, denim pocket, leaves and magazine stacks; the source star-led white trail, angular hovering drawing, cyan-pink-violet spiral, feather-like residue and exact colour sequence; the exact page-to-floor-to-person-to-lamp-to-bicycle-to-page traversal, compositions and beat durations; the creator name, MiniMax H3 marketing claim, After Effects comparison and all source-thread wording",
       "variants": {
@@ -92,7 +95,8 @@
         "case_sha256": "4c876544f6157cd97fd9c54dca0aa4cf923e82a3f4878796b86a64fd15ed123c",
         "release_score": 4.796,
         "h3_adapter_sha256": "261a1cce93f3e54fb7a6d675bb9180f568e2528aec5cde2370d7d33740499da5",
-        "seedance20_adapter_sha256": "7a6fd4c66a34212578d7ea5a3d0a02c3ed801863c511f9f12b11c39213fa1a06"
+        "seedance20_adapter_sha256": "7a6fd4c66a34212578d7ea5a3d0a02c3ed801863c511f9f12b11c39213fa1a06",
+        "creative_dna_sha256": "f48c52a54bed092d46e6e4dae080121b6d5197d28415965f8ff59571e924c0ba"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA recognizable person remains the emotional coordinate while an externally observed journey moves from constrained work pressure into an expanded goal space. Context is revealed through material interactions and camera parallax rather than direct exposition; scale and light increase toward the transition, and a final task-completing interaction—not a gesture to the lens—turns anticipation into earned arrival. Shot count, camera carrier and reveal order are variable.\nInvariants:\n- inv-01: Keep one recognizable person emotionally legible across changing spaces, using face, posture or task behavior as the recurring anchor rather than requiring a selfie.\n- inv-02: Make every contextual reveal originate from a physical interaction—moving a cart, opening geometry, passing an obstacle or handing off an object—and let the camera discover it through parallax, reframing or occlusion.\n- inv-03: Create one legible transition from compressed effort to expanded possibility using at least two of scale, light, depth, sound or traffic flow; the transition may occur through a door, lift, ramp, curtain, bend or temporal match.\n- inv-04: Choose a capture grammar appropriate to each new world and keep its rules consistent; controlled documentary texture may come from parallax, shallow focus, operator lag or environmental occlusion, not a fixed bundle of DV defects.\n- inv-05: Resolve arrival through one task-completing physical interaction between the person and the goal environment, while their emotional state remains readable without addressing the lens.\nVariable slots:\n- traveler: One original adult subject with stable identity and a clear reason to move.\n- prep_space: A compressed, imperfectly lit working area with readable practical obstacles.\n- context_reveals: One to three physically motivated discoveries whose order and camera implementation change with the instance.\n- material_handoff: An object, obstacle or collaborator changes the route or objective; avoid mirror-based self-checks.\n- goal_threshold: A brighter, wider destination visibly different from the prep space.\n- capture_texture: Select an instance-specific external, fixed, body-mounted or handheld grammar; do not reuse a bundled source artifact signature.\n- resolution_action: A material action that proves the person has entered or completed the goal, with no direct-to-camera hand sign.\n- shot_structure: Choose three to six events with an order justified by the new task; do not map source beats one-to-one.\nFailure prevention:\n- Camera changes occur without a material cause or simply imitate turn-and-return selfie coverage.: Tie each reframe to an object, obstacle, collaborator or changed route; vary carrier and shot count with the instance.\n- The destination appears too early.: Hide it behind real geometry and reserve the brightest, widest composition for the final third.\n- A new concept preserves the source's entire MiniDV defect signature.: Select a different coherent capture grammar and derive texture from the new environment while locking identity and route direction.\nDo not copy from the source: source face, ethnicity cues, hair, earrings and stage wardrobe; concert backstage corridor, dressing mirror, curtain and exact stage-light composition; exact dialogue, countdown, finger-heart gesture and performer premise; creator-specific DV artifact bundle, wrist-turn/return pattern, mirror readiness check or shot timing copied beat for beat",
       "variants": {
@@ -117,7 +121,8 @@
         "case_sha256": "0abac53b8d02b547145e80eeb677fda6cfeba36b2d51a58945519b9874fb45ee",
         "release_score": 4.693,
         "h3_adapter_sha256": "787df7a59cbae27ef14f4a29a0cbf6c2417af5514ddbcb55967e3af680a73e69",
-        "seedance20_adapter_sha256": "7cfc239a7852e69af78ad0579a1a58c7e1d7367f156f32021401d3da9948b52d"
+        "seedance20_adapter_sha256": "7cfc239a7852e69af78ad0579a1a58c7e1d7367f156f32021401d3da9948b52d",
+        "creative_dna_sha256": "ed8631e6ac8fad89a7c56ac94eb4a4d0d91b33c73e90ae72a659fe5337bb8de3"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA single flat 2D character shares a locked photoreal environment with a real hand; one small cross-medium contact causes a three-stage readable reaction that ends in a medium-specific impossible effect.\nInvariants:\n- inv-01: Keep exactly one flat animated character inside an otherwise photoreal, stable environment.\n- inv-02: Show real-to-animated contact before the reaction begins.\n- inv-03: Escalate in three readable states: neutral, discomfort, impossible payoff.\n- inv-04: Keep the camera locked and let contact, expression, and effects move attention.\nVariable slots:\n- photoreal_arena: A stable real location with clear depth and one interaction surface.\n- flat_character: One original 2D paper- or sticker-like adult mascot, visually distinct from the source.\n- real_agent: One live-action hand or tool entering from a consistent edge.\n- contact_object: A small real object whose motion can visibly cross the medium boundary.\n- sensation: A simple cause such as cold, static, scent, or weight, not source heat/chili.\n- reaction_states: Three visually distinct but causally continuous poses.\n- payoff_effect: An original safe effect appropriate to the new sensation.\n- sound: Real location ambience plus contact-synced foley and one effect accent.\nFailure prevention:\n- The animated character no longer looks flat against the real scene.: Keep constant paper thickness, a crisp outline, planar deformation, and a consistent contact shadow.\n- The reaction begins before contact.: Hold neutral expression through the contact frame, then delay the first change by a short readable beat.\n- The adaptation still feels like the source spicy-food gag.: Change arena, character category, contact object, sensation, palette, reaction graphics, and final effect together.\nDo not copy from the source: source girl character, hairstyle, clothes, face, outline, or childlike proportions; source kitchen, wok, food, seasoning jar, spoon interaction, and camera composition; chili or heat tasting, lateral tear jets, red forehead, and fire breathing; exact reaction timing and source visual effects",
       "variants": {
@@ -142,7 +147,8 @@
         "case_sha256": "08e8279891b5f0e13c0cc8184a862da8b818f99d39db89f80179f2edcbb9b5b3",
         "release_score": 4.748,
         "h3_adapter_sha256": "4af33241d1f64a6c5ccdec4a57ee862afd3282596ec1c7f818333fb24e2b6918",
-        "seedance20_adapter_sha256": "f04c49aadc2496ff5ede3610ab5cce75e01347201158ae335612bc58645e8f9d"
+        "seedance20_adapter_sha256": "f04c49aadc2496ff5ede3610ab5cce75e01347201158ae335612bc58645e8f9d",
+        "creative_dna_sha256": "2b87a30e15bd1ad221a1cbf782fa9f7532d7a712657453b946afc37b7dbcd921"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA noisy system makes quantity look powerful, one restrained corrective signal interrupts it, and a physical consequence proves that calibrated clarity beats accumulation.\nInvariants:\n- inv-01: Show the asymmetric one-versus-many matchup before either side explains it.\n- inv-02: Let the many-item side perform longer and occupy more space before the concise answer.\n- inv-03: Give the single corrective signal a dedicated sensory close-up.\n- inv-04: End with calm control versus noisy consequence, not another explanation.\nVariable slots:\n- arena: A stable comparison space unrelated to gambling or the source saloon.\n- many_side: One expressive character with three to five compact labeled options.\n- one_side: One calm character with a single short answer label.\n- many_signals: Three to five distinct controls, sounds, lights, routes, or gestures that create legible visual noise.\n- single_answer: One visually and sonically distinct corrective action or object that carries the reversal without needing text.\n- proof: A visible consequence showing why the concise answer wins.\n- meltdown: Safe exaggerated reaction with no weapons or copied gesture.\n- sound: Escalating object sounds, one reveal accent, and a short consequence sound.\nFailure prevention:\n- The answer appears too early.: Hold it until after the many side has completed the spatial display and presentation pose.\n- The many-side noise becomes random rather than countable.: Limit it to three to five distinct controls or signals and stage them in a clear activation sequence.\n- The ending copies the source meltdown.: Replace weapons and smoke with a consequence native to the new arena, such as collapsing mockups, foaming food, or desynchronized lights.\nDo not copy from the source: legacy cartoon characters, voices, silhouettes, or franchise animation surface; saloon, gambling table, gold-and-carrot stakes, or Western props; source model names and exact card text; pistols, smoke-cloud surrender, exact poses, and shot compositions",
       "variants": {
@@ -167,7 +173,8 @@
         "case_sha256": "1cddc7f4216e4a1373153e7e2d51dc94a2d5b6546f696e801da89ec9694c0391",
         "release_score": 4.674,
         "h3_adapter_sha256": "61271711824b9ed30a6e5acbc7aaf1d58aeeafd6dd9608ae5a57be10dd8dc794",
-        "seedance20_adapter_sha256": "88203f5d68a978f08c8f5703ec532fb45d0687fc9ca8b68faf20990f5cbc1cb2"
+        "seedance20_adapter_sha256": "88203f5d68a978f08c8f5703ec532fb45d0687fc9ca8b68faf20990f5cbc1cb2",
+        "creative_dna_sha256": "a5617663d6b9fc1eee39fcd54a14864886395bfc74c9fafd913f951e4c08ad8d"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nAn urgent intervention creates conflict, a controlled visual proof makes the hidden risk undeniable, and one motivated camera handoff transfers that proof to the recipient's compact reaction.\nInvariants:\n- inv-01: Establish an urgent conflict through action before revealing the proof state.\n- inv-02: Hold the proof state visually stable long enough to be understood before the camera hands off.\n- inv-03: Use one motivated reframe to hand the last line to a contrasting second speaker.\nVariable slots:\n- authority_role: A visually decisive expert with a clear reason to instruct.\n- recipient_role: A contrasting novice or peer who can answer in one short line.\n- proof_state: A physical condition, instrument reading, light reveal, or object state that becomes visually unambiguous without copying source typography.\n- setting: A context-rich location readable behind a medium close subject.\n- intervention: One brief action or line that stops the unsafe or mistaken behavior before the proof appears.\n- reaction: One gesture and one line that resolve the conflict.\n- camera_handoff: One pan or cut motivated by the second speaker.\n- sound: Location ambience plus non-overlapping dialogue; no music required.\nFailure prevention:\n- The proof state changes too quickly to understand.: Hold the revealed condition for at least two seconds with stable light, focus, and spatial context before the handoff.\n- Dialogue overlaps or sounds rushed.: Keep two short lines, place the speaker handoff after the first line fully ends, and remove extra actions.\n- The scene feels copied despite changed names.: Change profession, location, wardrobe, prop category, dialogue, and camera surface while preserving only the causal timing.\nDo not copy from the source: protected television characters or actor likenesses; source-series wardrobe, vehicle, desert setup, or color grade; source-character voices and exact dialogue; exact guide title, profanity, framing, or prop typography",
       "variants": {
@@ -191,8 +198,8 @@
         "case_id": "x-mimu-ai1-2086474098859987150-browser-2086474098859987150-video-1",
         "case_sha256": "4462ca7fb93be518f6c4e81822c21d17f1855c0b44a4a0cbaa130def66ea3079",
         "release_score": 4.712,
-        "h3_adapter_sha256": "65af067d16d6d62a3562102fa9c5ecf4db7d1b78ccf762505a3c7c0942bed7d0",
-        "seedance20_adapter_sha256": "72fd1720ff10ecdc5e39863b9146d84a8b78d8ea63c21680a7ad3725164b6980",
+        "h3_adapter_sha256": "ba5af5d7e3437290fff9e74c72d728bfaf0ea2c7af1faa7b3994fcb3021c06ad",
+        "seedance20_adapter_sha256": "391065e546aee00de6cacfa59d96ffa8ffe250cf6a48f217d0cb21091c2624a8",
         "creative_dna_sha256": "8ec5bc37cf88c43cdf9f7a4b069bf117dca7eb1f6056fad3349ccc065c85d8e7",
         "mechanism_fingerprint": "967f031b99625e14571cbeb2afef14c48bb8152ee2ffbfdd09eb9deddca3c695"
       },
@@ -218,8 +225,8 @@
         "case_id": "x-strength04-x-2086471165581902327-browser-2086471165581902327-video-1",
         "case_sha256": "b551d4c3ff336011a2dac34291cfa345c7521fe03c81feea4d9b6a7c9572ba9c",
         "release_score": 4.613,
-        "h3_adapter_sha256": "eaafcc7780507382c0217277f2af149e023cc7e20bb1c0cbf2bead70edd36b60",
-        "seedance20_adapter_sha256": "9761ddffde140fc37348b8378daf906f53bb4e5c29550a119dbce0b8458efc63",
+        "h3_adapter_sha256": "acdb7b135d5379501a7dc0b9eff7269667828221659c894ec1ac65cb9763a07c",
+        "seedance20_adapter_sha256": "462a8f2fbdb1aa800b5073dc3aee1de82d676f189a6e5e1afba4af3a5f99a51d",
         "creative_dna_sha256": "19ba5baa8ed1e48a807264a0e84acb7e937f0b287915e1a123753dd4389da9fd",
         "mechanism_fingerprint": "31ca609ed70b77fe325296cb1246b88ad198b8e6a5125b3f71ac4933ffc1f59f"
       },
@@ -245,8 +252,8 @@
         "case_id": "x-zephyraleigh-2086466812347297938-browser-2086466812347297938-video-1",
         "case_sha256": "1f3215b17398d00108c413cefacc092f199b081128a0085010bc0f98e01babca",
         "release_score": 4.736,
-        "h3_adapter_sha256": "c2fa97c4e52c3872f5faf165cfc5a1f3a136df0b90b4531484a3bdcd99b01fdf",
-        "seedance20_adapter_sha256": "ae1af1dce72522348e3871c993e1a6786b14d3db0e6f6edfe44f3b354c06e85a",
+        "h3_adapter_sha256": "a97efe7c8e9e4ea4bdedab04073d8f5baf947e045722181432055d341918e83a",
+        "seedance20_adapter_sha256": "50516b10ba95a0744e2ffccca5e0d0f9fb138748c7c496695f3b76f191b91076",
         "creative_dna_sha256": "898a0d0523c74cc768503b9cf15c2f66f339c54ee229391da6e39bed4f3edd84",
         "mechanism_fingerprint": "dba23e0ae611e494725c2fad3e534e80ddd6b200bd5ad5da6b2124beec1c08e8"
       },
@@ -272,8 +279,8 @@
         "case_id": "x-decat2025-2086476172783759520-browser-2086476172783759520-video-1",
         "case_sha256": "3fb193c551c575cc1ea4855efa9f9e9ae8881feeb2f23fcda721ab5d7117a191",
         "release_score": 4.655,
-        "h3_adapter_sha256": "d131bcddd2906397c741effc96e58bfcaf63703cd0ce395b7707c8d5ca72baf5",
-        "seedance20_adapter_sha256": "a4a7c68727c912fc9fc76f2c9353c3200c992256c902e1a4c85063ccdd4cc433",
+        "h3_adapter_sha256": "0328bab9dde8a4170590e13f84d0e3686863fce78d2bc6ae33d37c6fa0bc2cec",
+        "seedance20_adapter_sha256": "3b8fa1213e4f66a1e2961999cace929374e1c3f59e40bf72a7b00258637e6bd0",
         "creative_dna_sha256": "72791a42ca74a0568fc451da6ecf255b0077fe1ddb9a3974619aba17bd0d8be3",
         "mechanism_fingerprint": "7cce48fb443801d32c7d48278be7351ed4e0caf57ed65dc3ed8c5a0017b98d80"
       },
@@ -299,8 +306,8 @@
         "case_id": "x-adithatipalli-2086477914699170293-browser-2086477914699170293-video-1",
         "case_sha256": "a5331133ea491ec8bb24563d03a7b13e71b23070ac7ca1067966239b8696affd",
         "release_score": 4.641,
-        "h3_adapter_sha256": "5dabfe620a7c4db02512242a705e9b2286aae86d98df464ebc758dd17014077f",
-        "seedance20_adapter_sha256": "466c6a30235eb7934a8f5d68a6aa86b5089603e988de9bafd4c9bfacd4007f52",
+        "h3_adapter_sha256": "8be315915160853c78ce8b17a2fefd25c869e92d97ba2f67ab9d676c5c87a7d7",
+        "seedance20_adapter_sha256": "766fb4d75470d3dbdf3a2737e4744f981132ea3b6033581c922505f98b0213d7",
         "creative_dna_sha256": "63049173eedcfd4f00e3a6d484fc114be163f07db71a921d3169b922ea95fba3",
         "mechanism_fingerprint": "6f10c97e0ec72c41afc2f5194edd49f22108cc4994e7d4dd5c37a79f4e86f97a"
       },
@@ -326,8 +333,8 @@
         "case_id": "x-futurevibesai-2086443552649941148-browser-2086443552649941148-video-1",
         "case_sha256": "24543492b4daba970c7b3d4cc60aea2bc286f5bed0e2f7a449bbc7e8956d680f",
         "release_score": 4.663,
-        "h3_adapter_sha256": "07d7a1c749e9ee48f74f01aa6450aa8f031942b6773a698039d4d7366c16f330",
-        "seedance20_adapter_sha256": "9db3f3879eac4a6bbef49f13ef5948473d870be4d1492d8d577e4671737d63d8",
+        "h3_adapter_sha256": "adb2eff111453ff1dd6f1bc490c5ca833704d2f8d59613213d214432236a6f2f",
+        "seedance20_adapter_sha256": "5d798892e5d3efbf2883cba53b5f67c8dafce9c2eb3276f5b77917f2446d69fd",
         "creative_dna_sha256": "d65b2bf76c8a3b4137d8fd2ee4b66eac4e7cef366739ad326233a58e52bb631b",
         "mechanism_fingerprint": "9c8c86bd87bdecb6ea13b47432b14218e205735c8cd3ab599ef02e08a7e0dcd4"
       },
@@ -353,8 +360,8 @@
         "case_id": "x-derek-wall90176-2086464559439855938-browser-2086464559439855938-video-1",
         "case_sha256": "48fccb106c5ed0c3748614ae71c4e0c422a77f55041d49c52898850e41fac36b",
         "release_score": 4.622,
-        "h3_adapter_sha256": "f5f8e0a160ed401970235120ac6d0f26c7fdebaf2872af84026f12b926c2b51c",
-        "seedance20_adapter_sha256": "5e7594db0ce99020815151485c23c9689086560671fd2a57fa589697839d1aef",
+        "h3_adapter_sha256": "cf4a0f016debd31836a9c391d4115f58f19a6509afb6a13a64a8bc4547749b4c",
+        "seedance20_adapter_sha256": "24a07b809f62965e90dac2906ab580b5d180919a7f6f19536931e9f493a5898b",
         "creative_dna_sha256": "5a7ab0a7889381608b5c0a6729ef60beb57872dfe99d5c922bc02c17958e00f4",
         "mechanism_fingerprint": "6d66cee4d1020b7cbcbe0166b16618d3808b2793885d5410ee0a41f5e0fcb909"
       },
@@ -380,8 +387,8 @@
         "case_id": "x-aimikoda-2086412223061135392-browser-2086412223061135392-video-1",
         "case_sha256": "7e6650b77d45dc58ffc71ab7e8dd86a62cabb5eafd05348417930f4e19b60924",
         "release_score": 4.601,
-        "h3_adapter_sha256": "316b1f226342402a6acf513e6399e242fdd74d3c46e59a0a4a060b779192bde2",
-        "seedance20_adapter_sha256": "e4fb80047765ba2b443136ea6714624bef2374dabb97d3025200fdb1d33cba2b",
+        "h3_adapter_sha256": "11641a47c7c1d89e82d229c0c785b80149d98f37795f9c891f2a904f11d8611e",
+        "seedance20_adapter_sha256": "9b1530ac46b0e026959fb995cf49b098520abf9a34d5728b6cbc111bac5401e4",
         "creative_dna_sha256": "cff69bea492d7d07bbd9c104eb54952b53645223a68134e2d51529996470c00f",
         "mechanism_fingerprint": "6550cfd928a4b3ac3abaa586e1925ee889871568bc44c5ec0e254ac617dc37f4"
       },
@@ -407,8 +414,8 @@
         "case_id": "x-saniaspeaks-2085932310923251950-browser-2085932310923251950-video-1",
         "case_sha256": "3bd0d9239135941a3f9b839e2933beb2d14a7facb3f7c6f1ae5dddcfe5ee7088",
         "release_score": 4.702,
-        "h3_adapter_sha256": "726cd6768610c09ab3b3efec874e2bd7a41b88dacefa12b33a72f30d46e219f2",
-        "seedance20_adapter_sha256": "db88ade1c74dd9c5281d9c7fdce34aa5e342dc819ec98efd884abfcf9c628c0f",
+        "h3_adapter_sha256": "ef5e96b96a4cb7c2631419ec9eded82951d268da52a28c8f33c01c94e4bf75d4",
+        "seedance20_adapter_sha256": "5c0d140241d013cf66d567e65034c1791ead83705a2efc9540ec0dcd7c18215c",
         "creative_dna_sha256": "1c5c5badc4e58a0058bbd70632fca6039e6b209d1ce54e6e96f3e10b5ddadbf8",
         "mechanism_fingerprint": "03d8fe209ce33e21d14a37c3eb1d0155018bc3e742f018a66bba4eee257c798c"
       },
@@ -434,12 +441,255 @@
         "case_id": "x-mayz1169-2086427292755247409-browser-2086427292755247409-video-1",
         "case_sha256": "1cee62aadece4cda7c1be91366bc96401604b29a3f7a0adf87e19ab3fc5ba21c",
         "release_score": 4.619,
-        "h3_adapter_sha256": "4d51e36b20cd5466e58805ce4a055ad5fa0f8e4ae91c81c726f9cef588640622",
-        "seedance20_adapter_sha256": "41ca4326ece19e2a6f6ffebb9fed87a851fe75912c214a25815c2d82f6c54d68",
+        "h3_adapter_sha256": "cc241bd765bee6ea063247a515a46a74e8a426ab2d601e3c2c35ef4985eb6e7f",
+        "seedance20_adapter_sha256": "236308d89a53f23a1d6e3badb205e9429ceb6588616b843616c87826b3347baf",
         "creative_dna_sha256": "697b53a76c84c7fe9d761792698171eabcf2ad479ce460b3399d6e7b038f402b",
         "mechanism_fingerprint": "da62fa815543a2627a9724cdb384425996b1cf0f7c5c2b0175decb68a183090a"
       },
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBuild a flat poster world around one dominant geometric motif and one stable protagonist silhouette. Repeatedly fracture and reconstruct the layout through hard-edged crops, diagrams, negative space and key states; reserve continuous physical action, then slow briefly for a contrastive operational tableau and resolve all graphic families into one closing system. Motif, palette, subject class, icon family, tempo, contrast state and final graphic outcome are variable.\nInvariants:\n- inv-01: Establish one dominant geometric motif and protagonist silhouette immediately.\n- inv-02: Keep all space flat and poster-like while graphic planes transform.\n- inv-03: Use key states and symbolic environmental inserts instead of continuous combat.\n- inv-04: Peak information density before a short contrastive operational tableau.\n- inv-05: Resolve the established graphic families into one original closing system.\nVariable slots:\n- lead_subject: An original subject whose identity and silhouette remain stable.\n- setting: A new setting with fixed spatial anchors and no source-specific location.\n- escalation_variable: One readable variable that changes monotonically or in countable stages.\n- performance_rule: One restrained performance rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy the source shot boundaries.\n- payoff: One clean physical or graphic consequence that closes the causal chain.\n- sound_family: A new hierarchy of diegetic cues supporting each state change.\nFailure prevention:\n- The clip becomes realistic 3D scenery.: Use flat planes, hard shadows, graphic crops and no volumetric perspective.\n- Characters perform continuous combat.: Reduce movement to a few iconic key poses and let layout transitions carry energy.\n- The final mark introduces unrelated graphics.: Build it only from motif, grid and icon families already established.\nDo not copy from the source: giant purple lunar eclipse and lunar phase diagrams; black-haired woman with massive katana; gray-haired villain in a wide-brim black hat; source purple-black-silver palette, raven inserts and exact astrology UI",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-audio-cause-lead-ladder-v1",
+      "label": "声画错位递进",
+      "summary": "让同一固定提前量的声画错位从环境线索逐级升级到主体关键机构，并以未揭示的新声源收束。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-soranlan-2086461295818084617-browser-2086461295818084617-video-1",
+        "case_sha256": "6f1aa643fff806788f5448b1458df6f506db64189fee1dcae1ad79fd25c6d518",
+        "release_score": 4.401,
+        "h3_adapter_sha256": "ac22a12ec737c0758ad6c549a9615d31b1a8c16786931d931ae3508ba8ce819b",
+        "seedance20_adapter_sha256": "0f9f506c60bafce991dd8c3571e11bcc7b0c14c3b51141b76232eb33f59d807d",
+        "creative_dna_sha256": "c7ec2c8940d8137c697962c520af2dedb06d3dd06cf10197961d643414f07901",
+        "mechanism_fingerprint": "f2776f3a8b005ac98e2b38578cc204a27fe89e1b7f3adf04f9f5cf1ccd6c9d38"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish a trustworthy world, then apply one precise audio-before-visible-cause offset to a countable ladder that moves from ambient system to locomotion, loose object and subject-owned mechanism. Keep every non-designated sound synchronized, let observers verify the rule through restraint, and end with one new cue whose cause is still outside the frame.\nInvariants:\n- inv-01: Begin with an ordinary synchronized baseline before the first offset.\n- inv-02: Use the same small lead interval for each designated cue and no others.\n- inv-03: Escalate ownership from environment toward a subject-controlled mechanism.\n- inv-04: Show an observer pause or test after each major mismatch.\n- inv-05: Close on a fresh advance cue while withholding its source.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Without a baseline every sound can feel generally mistimed.: Begin with an ordinary synchronized baseline before the first offset.\n- Variable delays read as editing mistakes instead of one anomaly.: Use the same small lead interval for each designated cue and no others.\n- Unordered examples produce no causal progression.: Escalate ownership from environment toward a subject-controlled mechanism.\n- Without verification the audience may miss the intended relation.: Show an observer pause or test after each major mismatch.\n- Revealing every cause fully closes the anomaly and weakens retention.: Close on a fresh advance cue while withholding its source.\nDo not copy from the source: two wuxia women in white and green robes; silver sword unsheathing before its action; misty Chinese immortal valley settlement; the source Mandarin dialogue and exact four tests",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-recurring-identity-board-v1",
+      "label": "固定角色卡反复校验",
+      "summary": "让同一固定角色卡在姿态、动作、步态和面部证据之间反复出现，最后由实景主体完成定格。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-imastudio-ai-2086429537127297091-browser-2086429537127297091-video-1",
+        "case_sha256": "f6d6835961cb714e10747e3c033f838a55b24bea945c2c855d809e17261788ef",
+        "release_score": 4.516,
+        "h3_adapter_sha256": "829918f49553e01dd83567d341c754a5c935ea1f0ec494444e810ffe4d33337d",
+        "seedance20_adapter_sha256": "518d1504f3dea9b5f7e606a424d92b0759c41fe7fb7342567aadc5aa0de96ef9",
+        "creative_dna_sha256": "395290caa32ab0e344836c38f905e648f2de5e62d96fcf5292388dc1807b3925",
+        "mechanism_fingerprint": "3dc4fd687e8fcd384bf77f0f3f5aca0694f8f05e6e3b641bdd86639547a2caa8"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nUse one fixed identity board as a recurring visual checkpoint between four different live-scene proofs: silhouette and pose, small performance action, locomotion and face-level detail. Keep the board layout stable while camera scale and environment vary, then remove or subordinate the board so the verified live subject owns the final hero composition.\nInvariants:\n- inv-01: Establish the identity board and live subject together before major action.\n- inv-02: Return to the same board layout between distinct live proofs.\n- inv-03: Each live proof must test a different identity dimension.\n- inv-04: Keep defining proportions and markers continuous across board and scene.\n- inv-05: End on the verified live subject rather than a board-only frame.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- A hidden reference cannot function as visible evidence.: Establish the identity board and live subject together before major action.\n- A changing board destroys the reference baseline.: Return to the same board layout between distinct live proofs.\n- Repeated face close-ups do not prove gait or silhouette.: Each live proof must test a different identity dimension.\n- Marker drift breaks the verification mechanism.: Keep defining proportions and markers continuous across board and scene.\n- A board-only ending feels like documentation, not completion.: End on the verified live subject rather than a board-only frame.\nDo not copy from the source: blonde anime cowgirl with black hat and sunglasses; Route 66 sunset and vintage muscle car; low-angle boots then sunglasses close-up; the NOVA character sheet layout and source end card",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-dual-system-convergence-proof-v1",
+      "label": "双系统汇聚证明",
+      "summary": "先分别建立两套相反但连续的主体与材质规则，再用一次不可逆接触形成可见的统一结果。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-airina-xyz-2086404681480233236-browser-2086404681480233236-video-1",
+        "case_sha256": "6d0c52f4dd2f485d2240c430f30b081b64fd5c94784d952e1629b388b52c6daa",
+        "release_score": 4.668,
+        "h3_adapter_sha256": "7b66cf6e657a83fc6a1db0db20e4529d4256d39eafa51c6aef864a5cdc202829",
+        "seedance20_adapter_sha256": "319edd66fae13f55716f7ca32086a34237fdebfd82001e1752f7a55062fd3de4",
+        "creative_dna_sha256": "4549601752349b13ebb5a39eb5b23ca97ccc2dfe0edf8fef3a0ce1cc9a6b5f80",
+        "mechanism_fingerprint": "7f754a21659bad2268cd1eaad9ec4c3fc6fd732d3eb3588abfad5a090c2e3ddb"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish two systems separately with distinct color, material physics, motion cadence and starting zones. Alternate equal proof beats while their spatial distance decreases, align them on one readable axis, permit exactly one convergence event, and end on a third shared result that neither system produced alone.\nInvariants:\n- inv-01: Give each system an independent establishing proof.\n- inv-02: Keep material physics and cadence distinct before convergence.\n- inv-03: Reduce one visible spatial gap across matched views.\n- inv-04: Allow only one terminal meeting event.\n- inv-05: Leave a persistent third-state consequence.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Immediate collision makes the systems interchangeable.: Give each system an independent establishing proof.\n- Shared motion grammar erases opposition.: Keep material physics and cadence distinct before convergence.\n- Random angles obscure whether convergence is approaching.: Reduce one visible spatial gap across matched views.\n- Repeated clashes dilute the payoff.: Allow only one terminal meeting event.\n- A flash followed by reset provides no outcome evidence.: Leave a persistent third-state consequence.\nDo not copy from the source: two female elemental warriors; fire magic versus ice magic; ruined stone arena at sunset; weapons, petals and the source mid-air collision pose",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-alternating-obstacle-goal-corridor-v1",
+      "label": "目标障碍交替走廊",
+      "summary": "锁定远端目标，以前后交替的障碍和一次可控近失误持续证明主体的推进与保护能力。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-decat2025-2086379637874078201-browser-2086379637874078201-video-1",
+        "case_sha256": "a2b5a13bbeb3773f160a02761d1f9633681511f6455f034c4094b75055f49e66",
+        "release_score": 4.658,
+        "h3_adapter_sha256": "27893b19dd76ef32dc0d745eb6616c69217be90a097786cb80b2dd1c1c12da83",
+        "seedance20_adapter_sha256": "2ab4559f8048c0dcc64e77f74f11ab7aebb9b4501bbaf721337d4e62c8cba439",
+        "creative_dna_sha256": "d4c392194e60eaf9339f1073dbc0d83171801650216960596cab858d524a3395",
+        "mechanism_fingerprint": "5e0e352a07be9a14d9cfc97498c094f453243904fb06ef129b67a662635f11d3"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nKeep one destination visible while a single operator advances along a constrained route. Alternate obstacles from behind, ahead and the side so each requires a different physical adaptation without changing the goal. Reserve one deliberate control action for the endpoint, then prove success with a near-miss protective state that visibly intercepts the pursuing hazard.\nInvariants:\n- inv-01: Show the destination before the first obstacle.\n- inv-02: Alternate obstacle direction across at least three vectors.\n- inv-03: Preserve one travel direction and recover after each disruption.\n- inv-04: Require a physical endpoint control action.\n- inv-05: Prove the control with a visible near-miss interception.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- A hidden target turns the sequence into generic running.: Show the destination before the first obstacle.\n- All hazards from behind produce one-note escalation.: Alternate obstacle direction across at least three vectors.\n- Direction resets make progress impossible to measure.: Preserve one travel direction and recover after each disruption.\n- Automatic rescue removes agency.: Require a physical endpoint control action.\n- A cut to safety does not show why the subject survived.: Prove the control with a visible near-miss interception.\nDo not copy from the source: geothermal reactor catwalk and lava eruptions; helmeted plant technician; falling industrial pipes and steam jet; large wheel control and blast shield",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-calm-dense-decisive-delay-v1",
+      "label": "静密决三态终结",
+      "summary": "用安静建立、密集交换、单次决定性介入和延迟物理结果构成清楚的终结节奏。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-charaspowerai-2086105326978281608-browser-2086105326978281608-video-1",
+        "case_sha256": "d957f933e77f2c070b273b78aab3b4a05ac37ff0819bcc592f326ac88c195b87",
+        "release_score": 4.663,
+        "h3_adapter_sha256": "b1e5f657cebae02f47de5e6a4bec5ae2a708c7c8ec78e5925d74cb683d4171b1",
+        "seedance20_adapter_sha256": "3d8ce94bbe2e2a08a09a607c24b64da5e0b8316777dc7dc7184645ef76737796",
+        "creative_dna_sha256": "b7fbeff132b2c92ff30d54ce3ebe14251d7d3d836aacb9b3b7076fb210eeaf4c",
+        "mechanism_fingerprint": "3ed4f9aa8a2c12fa061c6622b9bdd5cc1d4d3bf1bf199d1f2c37697b01858b3c"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nOrganize a two-agent confrontation into three readable states: measured stillness, one continuous dense exchange, and a single decisive intervention. After the intervention, preserve one short false-stability beat before an irreversible physical consequence confirms the result; end on the initiator's controlled state rather than another attack.\nInvariants:\n- inv-01: Begin with readable stillness and a clear relation between both agents.\n- inv-02: Treat the middle as one continuous exchange rather than unrelated highlights.\n- inv-03: Use only one identifiable state-changing intervention.\n- inv-04: Hold a short false-stability beat after intervention.\n- inv-05: Confirm the outcome through irreversible physical state while the initiator stays controlled.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Immediate action removes the contrast state.: Begin with readable stillness and a clear relation between both agents.\n- Disconnected cuts make the decisive event arbitrary.: Treat the middle as one continuous exchange rather than unrelated highlights.\n- Multiple finishers compete for causal credit.: Use only one identifiable state-changing intervention.\n- Immediate collapse loses the delayed proof.: Hold a short false-stability beat after intervention.\n- A reaction-only ending fails to prove the result.: Confirm the outcome through irreversible physical state while the initiator stays controlled.\nDo not copy from the source: female swordswoman in red; white-robed assassin; snow-covered temple courtyard; blade trap, finishing cut and delayed kneeling fall",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-monotonic-route-loss-threshold-v1",
+      "label": "路线递减阈值逃生",
+      "summary": "主体始终朝固定终点前进，已通过路线单调消失，并在最后连接失效前完整跨过安全阈值。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-decat2025-2086287667948396933-browser-2086287667948396933-video-1",
+        "case_sha256": "d6c937f0187e5016fc7bcc9018dc2cbd8070576ccba4aade717c1e488b66f8a5",
+        "release_score": 4.683,
+        "h3_adapter_sha256": "fea16d259c84cc9679a4020955cb8f7f169f26fc21c2bc825fe8ee3d6d6a105a",
+        "seedance20_adapter_sha256": "7bf962ddb1fdd69bb642fd5cc6748f30013ddf6ab9758c07a09747b58a1b07aa",
+        "creative_dna_sha256": "51215a519fe861beb68e91623792d9e8ce5ef6abfc1e2e06c8aad20db8ef6f5d",
+        "mechanism_fingerprint": "8080d325adda83d0e1f406316b9bf1423ce62ba2974fbc6f887d0c9eabcf34f5"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nLock one subject to a single screen-direction destination, then remove traversed route segments monotonically from behind while introducing one instability under the current segment. Alternate local control proof with wide remaining-route proof, and end with the subject fully crossing a safety threshold one beat before the final connection fails.\nInvariants:\n- inv-01: Establish one visible destination and one travel direction.\n- inv-02: Remove only already-traversed safe space from behind.\n- inv-03: Add one recoverable instability under the current segment.\n- inv-04: Alternate close control with wide remaining-route evidence.\n- inv-05: Cross the full threshold before the last connection fails.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Changing destination destroys the countdown.: Establish one visible destination and one travel direction.\n- Random forward gaps can make survival impossible rather than tense.: Remove only already-traversed safe space from behind.\n- Too many local hazards obscure the monotonic collapse.: Add one recoverable instability under the current segment.\n- Only close shots hide how much route remains.: Alternate close control with wide remaining-route evidence.\n- Cutting away before full crossing leaves the outcome uncertain.: Cross the full threshold before the last connection fails.\nDo not copy from the source: dark SUV on a suspension bridge; heavy rain and black water; sliding abandoned cars and snapping cables; the source bridge-deck collapse and far-shore anchorage",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-procedure-mismatch-nested-proof-v1",
+      "label": "程序失配嵌套反转",
+      "summary": "让不合尺度的主体认真执行熟悉程序，检测先揭示不同功能载荷，再由实物行动完成双重证明。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-decat2025-2086134168992236013-browser-2086134168992236013-video-1",
+        "case_sha256": "4afa0b57871bb9e5896c8439283dfaa4e7761c1d90322cb3707e08dc29245bab",
+        "release_score": 4.569,
+        "h3_adapter_sha256": "68e6bb4e2785833e8391ec0f8fb2f8e17f86b45864d4bdbed82638f1040a4a6e",
+        "seedance20_adapter_sha256": "aa4fdcb79306f85cb352b98378556e71951b37a83bc60674ef445b22ce27f894",
+        "creative_dna_sha256": "86655c69a262abb9c86c1c33dd2595bfbf10efe4634ece460c5ba57b93412ff7",
+        "mechanism_fingerprint": "76028c3f16d647469f5b28b9f45d395cafb668ac43f2a7c9bd6fcc79d69415d0"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nPlace one visibly mis-scaled subject inside a familiar step-by-step procedure and require sincere compliance. Let each successive checkpoint expose a different physical fit failure while the subject preserves dignity. Use an imaging device to reveal a nested functional payload with a different identity and purpose, then expose the same payload physically so its emergence independently confirms and explains the scan.\nInvariants:\n- inv-01: Use a procedure with immediately recognizable ordered checkpoints.\n- inv-02: Keep the subject sincere and restrained throughout compliance.\n- inv-03: Escalate through different fit failures rather than repeated alarms.\n- inv-04: Reveal a differently identified functional payload first through an imaging device.\n- inv-05: Physically expose the same payload so it performs one explanatory action.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- An unfamiliar process cannot create clear mismatch.: Use a procedure with immediately recognizable ordered checkpoints.\n- Deliberate clowning weakens the procedural contrast.: Keep the subject sincere and restrained throughout compliance.\n- One repeated mismatch becomes monotonous.: Escalate through different fit failures rather than repeated alarms.\n- Immediate emergence removes the double-proof structure.: Reveal a differently identified functional payload first through an imaging device.\n- A screen-only ending could be dismissed as an error.: Physically expose the same payload so it performs one explanatory action.\nDo not copy from the source: full-size T-rex at airport security; tiny sunglasses and snakeskin purse; metal detector, security wand and baggage scanner; miniature T-rex emerging from the purse",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-base-loop-skill-ladder-v1",
+      "label": "基底动作串联技能",
+      "summary": "用持续返回的基础动作连接递增技能，每种机位只承担一个运动证明任务，峰值后回到原循环。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-techiebysa-2086089483682734427-browser-2086089483682734427-video-1",
+        "case_sha256": "c1b5997b611ce4deaddbde15448df7d7b36d79d8bc02b9e7e37d5d00d69379a2",
+        "release_score": 4.614,
+        "h3_adapter_sha256": "33f22d381de92cbf285067167dbb9c055574397e0467c9f24ac6cb6428245585",
+        "seedance20_adapter_sha256": "6e69e8066e8828ef18a67bb66e6a2df9ff8557a27c07b00a6fcc119b67c2bb7c",
+        "creative_dna_sha256": "7a3b0efa6d11b2ea2638d301114b5afe3185d8e5c2674e8f98dd510d5ae632a2",
+        "mechanism_fingerprint": "eac341bb0e6dc60a10cb78ac672c72d726d0eed3c7e9fc427fd969d98c5ee948"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nStart inside one continuous base motion and make it the mandatory entry and exit for every distinct skill. Increase difficulty across countable stages, assign each camera angle a verification purpose such as contact, clearance, rotation or recovery, combine learned principles near the end, then perform one peak variation and visibly return to the unchanged base loop.\nInvariants:\n- inv-01: Begin mid-loop and keep the base motion active between every skill.\n- inv-02: Every skill must depart from and visibly return to the loop.\n- inv-03: Increase difficulty through distinct movement properties.\n- inv-04: Give each camera angle one proof job.\n- inv-05: After the peak, return to the original loop without stopping.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Static resets turn the piece into disconnected highlights.: Begin mid-loop and keep the base motion active between every skill.\n- Cuts can otherwise hide failed transitions.: Every skill must depart from and visibly return to the loop.\n- More of the same move adds speed but not progression.: Increase difficulty through distinct movement properties.\n- Decorative angle changes can obscure mechanics.: Give each camera angle one proof job.\n- A freeze at the peak abandons the connective rule.: After the peak, return to the original loop without stopping.\nDo not copy from the source: male capoeira practitioner in white abada; Salvador da Bahia colorful street; ginga and named capoeira moves; berimbau rhythm and the source character sheet",
+      "variants": {
+        "h3": {
+          "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."
+        },
+        "seedance20": {
+          "guidance": "Target adapter: Seedance 2.0. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Express compatible invariants and slots through the chosen Seedance task, compact paragraph or ordered 镜头N structure, media-reference syntax, motion continuity, and sound intent. Never emit H3 field names or absolute H3 timestamps, never copy source surface content, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official Seedance rules, or a more specific manual template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-inert-scale-active-intervention-v1",
+      "label": "静态尺度主动介入",
+      "summary": "开场用静态标准物校准微缩尺度，内部日常稳定后由不同外部执行物单次介入并改变局部状态。",
+      "status": "active",
+      "authority": "T8 精选案例（非官方）",
+      "official": false,
+      "source": {
+        "batch_id": "batch-2026-08-10-02",
+        "case_id": "x-nicolasmariar-2086226500538273920-browser-2086226500538273920-video-1",
+        "case_sha256": "224ea67bf1bbf7c12667b2366c28ba7dc7d963362d3c72c6801f8291fe536645",
+        "release_score": 4.609,
+        "h3_adapter_sha256": "421027664740d897c88529c4753aeb2503404fa66fdfdbf05ac5abe121e642df",
+        "seedance20_adapter_sha256": "75664d1ff882adfa593713ce5c75ebb248f548a269ca7178a452c50ab364ffbd",
+        "creative_dna_sha256": "3f8c6371b6e51af29ad4add2b87a98db56296fbc1925bbdc4f05fdb1ff892157",
+        "mechanism_fingerprint": "17054e025e4d9a35dae1a41eef8d11cc8d4b6f22950fe54695739bcc1f5bf92e"
+      },
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nUse one familiar inert object at the opening to calibrate a miniature world immediately. Let the small actors, tools, motion, shadows and atmosphere then sustain a coherent routine while the calibrator remains passive. Later, introduce one different external execution object exactly once, let it change one local state, and hold the intervention, affected object and internal reaction together so the story shifts from scale observation to outside control.\nInvariants:\n- inv-01: Calibrate scale early with one familiar inert standard object.\n- inv-02: Prove the known miniature world through coordinated routine and local physics.\n- inv-03: Keep the opening calibrator passive after its proof.\n- inv-04: Introduce one different external execution object only once in continuous entry.\n- inv-05: Show one changed local state and internal reaction with both scales visible.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Without calibration the later intervention is mistaken for a scale reveal.: Calibrate scale early with one familiar inert standard object.\n- A static model offers no relation to disrupt.: Prove the known miniature world through coordinated routine and local physics.\n- An active calibrator collapses the two external roles.: Keep the opening calibrator passive after its proof.\n- Repeated tools or cuts turn the event into ordinary handling.: Introduce one different external execution object only once in continuous entry.\n- A hovering tool without consequence does not alter the relationship.: Show one changed local state and internal reaction with both scales visible.\nDo not copy from the source: miniature barbecue on a kitchen table; full-size human hand entering the scene; foreground fork and wooden tabletop; tiny men in colorful sweaters around a smoking grill",
       "variants": {
         "h3": {
           "guidance": "Target adapter: MiniMax H3. Apply the selected non-official T8 Creative DNA only as a lower-priority composition mechanism. Translate compatible invariants and slots into the required H3 top-level fields, [Shot N] timeline, camera continuity, soundscape, and music rules. Never copy source surface content, never invent readable copy or claims, and never let this case override the user's intent, observable media, hard constraints, fixed duration, fixed shot count, official H3 contract, selected MiniMax official creative preset, or a more specific manual template."

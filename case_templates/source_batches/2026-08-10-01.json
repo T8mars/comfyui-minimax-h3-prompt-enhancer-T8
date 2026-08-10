@@ -11,8 +11,8 @@
       "case_sha256": "4462ca7fb93be518f6c4e81822c21d17f1855c0b44a4a0cbaa130def66ea3079",
       "creative_dna_sha256": "8ec5bc37cf88c43cdf9f7a4b069bf117dca7eb1f6056fad3349ccc065c85d8e7",
       "mechanism_fingerprint": "967f031b99625e14571cbeb2afef14c48bb8152ee2ffbfdd09eb9deddca3c695",
-      "h3_adapter_sha256": "65af067d16d6d62a3562102fa9c5ecf4db7d1b78ccf762505a3c7c0942bed7d0",
-      "seedance20_adapter_sha256": "72fd1720ff10ecdc5e39863b9146d84a8b78d8ea63c21680a7ad3725164b6980"
+      "h3_adapter_sha256": "ba5af5d7e3437290fff9e74c72d728bfaf0ea2c7af1faa7b3994fcb3021c06ad",
+      "seedance20_adapter_sha256": "391065e546aee00de6cacfa59d96ffa8ffe250cf6a48f217d0cb21091c2624a8"
     },
     {
       "case_id": "x-strength04-x-2086471165581902327-browser-2086471165581902327-video-1",
@@ -22,8 +22,8 @@
       "case_sha256": "b551d4c3ff336011a2dac34291cfa345c7521fe03c81feea4d9b6a7c9572ba9c",
       "creative_dna_sha256": "19ba5baa8ed1e48a807264a0e84acb7e937f0b287915e1a123753dd4389da9fd",
       "mechanism_fingerprint": "31ca609ed70b77fe325296cb1246b88ad198b8e6a5125b3f71ac4933ffc1f59f",
-      "h3_adapter_sha256": "eaafcc7780507382c0217277f2af149e023cc7e20bb1c0cbf2bead70edd36b60",
-      "seedance20_adapter_sha256": "9761ddffde140fc37348b8378daf906f53bb4e5c29550a119dbce0b8458efc63"
+      "h3_adapter_sha256": "acdb7b135d5379501a7dc0b9eff7269667828221659c894ec1ac65cb9763a07c",
+      "seedance20_adapter_sha256": "462a8f2fbdb1aa800b5073dc3aee1de82d676f189a6e5e1afba4af3a5f99a51d"
     },
     {
       "case_id": "x-zephyraleigh-2086466812347297938-browser-2086466812347297938-video-1",
@@ -33,8 +33,8 @@
       "case_sha256": "1f3215b17398d00108c413cefacc092f199b081128a0085010bc0f98e01babca",
       "creative_dna_sha256": "898a0d0523c74cc768503b9cf15c2f66f339c54ee229391da6e39bed4f3edd84",
       "mechanism_fingerprint": "dba23e0ae611e494725c2fad3e534e80ddd6b200bd5ad5da6b2124beec1c08e8",
-      "h3_adapter_sha256": "c2fa97c4e52c3872f5faf165cfc5a1f3a136df0b90b4531484a3bdcd99b01fdf",
-      "seedance20_adapter_sha256": "ae1af1dce72522348e3871c993e1a6786b14d3db0e6f6edfe44f3b354c06e85a"
+      "h3_adapter_sha256": "a97efe7c8e9e4ea4bdedab04073d8f5baf947e045722181432055d341918e83a",
+      "seedance20_adapter_sha256": "50516b10ba95a0744e2ffccca5e0d0f9fb138748c7c496695f3b76f191b91076"
     },
     {
       "case_id": "x-decat2025-2086476172783759520-browser-2086476172783759520-video-1",
@@ -44,8 +44,8 @@
       "case_sha256": "3fb193c551c575cc1ea4855efa9f9e9ae8881feeb2f23fcda721ab5d7117a191",
       "creative_dna_sha256": "72791a42ca74a0568fc451da6ecf255b0077fe1ddb9a3974619aba17bd0d8be3",
       "mechanism_fingerprint": "7cce48fb443801d32c7d48278be7351ed4e0caf57ed65dc3ed8c5a0017b98d80",
-      "h3_adapter_sha256": "d131bcddd2906397c741effc96e58bfcaf63703cd0ce395b7707c8d5ca72baf5",
-      "seedance20_adapter_sha256": "a4a7c68727c912fc9fc76f2c9353c3200c992256c902e1a4c85063ccdd4cc433"
+      "h3_adapter_sha256": "0328bab9dde8a4170590e13f84d0e3686863fce78d2bc6ae33d37c6fa0bc2cec",
+      "seedance20_adapter_sha256": "3b8fa1213e4f66a1e2961999cace929374e1c3f59e40bf72a7b00258637e6bd0"
     },
     {
       "case_id": "x-adithatipalli-2086477914699170293-browser-2086477914699170293-video-1",
@@ -55,8 +55,8 @@
       "case_sha256": "a5331133ea491ec8bb24563d03a7b13e71b23070ac7ca1067966239b8696affd",
       "creative_dna_sha256": "63049173eedcfd4f00e3a6d484fc114be163f07db71a921d3169b922ea95fba3",
       "mechanism_fingerprint": "6f10c97e0ec72c41afc2f5194edd49f22108cc4994e7d4dd5c37a79f4e86f97a",
-      "h3_adapter_sha256": "5dabfe620a7c4db02512242a705e9b2286aae86d98df464ebc758dd17014077f",
-      "seedance20_adapter_sha256": "466c6a30235eb7934a8f5d68a6aa86b5089603e988de9bafd4c9bfacd4007f52"
+      "h3_adapter_sha256": "8be315915160853c78ce8b17a2fefd25c869e92d97ba2f67ab9d676c5c87a7d7",
+      "seedance20_adapter_sha256": "766fb4d75470d3dbdf3a2737e4744f981132ea3b6033581c922505f98b0213d7"
     },
     {
       "case_id": "x-futurevibesai-2086443552649941148-browser-2086443552649941148-video-1",
@@ -66,8 +66,8 @@
       "case_sha256": "24543492b4daba970c7b3d4cc60aea2bc286f5bed0e2f7a449bbc7e8956d680f",
       "creative_dna_sha256": "d65b2bf76c8a3b4137d8fd2ee4b66eac4e7cef366739ad326233a58e52bb631b",
       "mechanism_fingerprint": "9c8c86bd87bdecb6ea13b47432b14218e205735c8cd3ab599ef02e08a7e0dcd4",
-      "h3_adapter_sha256": "07d7a1c749e9ee48f74f01aa6450aa8f031942b6773a698039d4d7366c16f330",
-      "seedance20_adapter_sha256": "9db3f3879eac4a6bbef49f13ef5948473d870be4d1492d8d577e4671737d63d8"
+      "h3_adapter_sha256": "adb2eff111453ff1dd6f1bc490c5ca833704d2f8d59613213d214432236a6f2f",
+      "seedance20_adapter_sha256": "5d798892e5d3efbf2883cba53b5f67c8dafce9c2eb3276f5b77917f2446d69fd"
     },
     {
       "case_id": "x-derek-wall90176-2086464559439855938-browser-2086464559439855938-video-1",
@@ -77,8 +77,8 @@
       "case_sha256": "48fccb106c5ed0c3748614ae71c4e0c422a77f55041d49c52898850e41fac36b",
       "creative_dna_sha256": "5a7ab0a7889381608b5c0a6729ef60beb57872dfe99d5c922bc02c17958e00f4",
       "mechanism_fingerprint": "6d66cee4d1020b7cbcbe0166b16618d3808b2793885d5410ee0a41f5e0fcb909",
-      "h3_adapter_sha256": "f5f8e0a160ed401970235120ac6d0f26c7fdebaf2872af84026f12b926c2b51c",
-      "seedance20_adapter_sha256": "5e7594db0ce99020815151485c23c9689086560671fd2a57fa589697839d1aef"
+      "h3_adapter_sha256": "cf4a0f016debd31836a9c391d4115f58f19a6509afb6a13a64a8bc4547749b4c",
+      "seedance20_adapter_sha256": "24a07b809f62965e90dac2906ab580b5d180919a7f6f19536931e9f493a5898b"
     },
     {
       "case_id": "x-aimikoda-2086412223061135392-browser-2086412223061135392-video-1",
@@ -88,8 +88,8 @@
       "case_sha256": "7e6650b77d45dc58ffc71ab7e8dd86a62cabb5eafd05348417930f4e19b60924",
       "creative_dna_sha256": "cff69bea492d7d07bbd9c104eb54952b53645223a68134e2d51529996470c00f",
       "mechanism_fingerprint": "6550cfd928a4b3ac3abaa586e1925ee889871568bc44c5ec0e254ac617dc37f4",
-      "h3_adapter_sha256": "316b1f226342402a6acf513e6399e242fdd74d3c46e59a0a4a060b779192bde2",
-      "seedance20_adapter_sha256": "e4fb80047765ba2b443136ea6714624bef2374dabb97d3025200fdb1d33cba2b"
+      "h3_adapter_sha256": "11641a47c7c1d89e82d229c0c785b80149d98f37795f9c891f2a904f11d8611e",
+      "seedance20_adapter_sha256": "9b1530ac46b0e026959fb995cf49b098520abf9a34d5728b6cbc111bac5401e4"
     },
     {
       "case_id": "x-saniaspeaks-2085932310923251950-browser-2085932310923251950-video-1",
@@ -99,8 +99,8 @@
       "case_sha256": "3bd0d9239135941a3f9b839e2933beb2d14a7facb3f7c6f1ae5dddcfe5ee7088",
       "creative_dna_sha256": "1c5c5badc4e58a0058bbd70632fca6039e6b209d1ce54e6e96f3e10b5ddadbf8",
       "mechanism_fingerprint": "03d8fe209ce33e21d14a37c3eb1d0155018bc3e742f018a66bba4eee257c798c",
-      "h3_adapter_sha256": "726cd6768610c09ab3b3efec874e2bd7a41b88dacefa12b33a72f30d46e219f2",
-      "seedance20_adapter_sha256": "db88ade1c74dd9c5281d9c7fdce34aa5e342dc819ec98efd884abfcf9c628c0f"
+      "h3_adapter_sha256": "ef5e96b96a4cb7c2631419ec9eded82951d268da52a28c8f33c01c94e4bf75d4",
+      "seedance20_adapter_sha256": "5c0d140241d013cf66d567e65034c1791ead83705a2efc9540ec0dcd7c18215c"
     },
     {
       "case_id": "x-mayz1169-2086427292755247409-browser-2086427292755247409-video-1",
@@ -110,8 +110,8 @@
       "case_sha256": "1cee62aadece4cda7c1be91366bc96401604b29a3f7a0adf87e19ab3fc5ba21c",
       "creative_dna_sha256": "697b53a76c84c7fe9d761792698171eabcf2ad479ce460b3399d6e7b038f402b",
       "mechanism_fingerprint": "da62fa815543a2627a9724cdb384425996b1cf0f7c5c2b0175decb68a183090a",
-      "h3_adapter_sha256": "4d51e36b20cd5466e58805ce4a055ad5fa0f8e4ae91c81c726f9cef588640622",
-      "seedance20_adapter_sha256": "41ca4326ece19e2a6f6ffebb9fed87a851fe75912c214a25815c2d82f6c54d68"
+      "h3_adapter_sha256": "cc241bd765bee6ea063247a515a46a74e8a426ab2d601e3c2c35ef4985eb6e7f",
+      "seedance20_adapter_sha256": "236308d89a53f23a1d6e3badb205e9429ceb6588616b843616c87826b3347baf"
     }
   ]
 }
