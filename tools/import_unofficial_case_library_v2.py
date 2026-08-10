@@ -16,6 +16,19 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
+EXPECTED_RECORD_COUNT = 29
+EXPECTED_SELECTOR_COUNT = 28
+EXPECTED_EVIDENCE_COUNT = 1
+EXPECTED_CONTRACT = {
+    "stable_template_id_is_machine_key": True,
+    "dropdown_label_is_human_ui_name": True,
+    "recommended_input_is_editable_prefill": True,
+    "required_anchors_need_semantic_validation": True,
+    "preview_gif_is_required": True,
+    "preview_gif_is_model_reference": False,
+    "source_video_is_model_reference": False,
+    "official_minimax_skills_included": False,
+}
 
 H3_GUIDANCE = (
     "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the "
@@ -75,6 +88,8 @@ def _load_creative_dna(record: dict[str, Any]) -> tuple[str, dict[str, str]]:
             raise LibraryImportError(f"Removed openai_upload_url found: {path}")
         recipes[target] = recipe
         actual_hashes[target] = _sha256(path)
+        if record["models"][target].get("adapter_sha256") != actual_hashes[target]:
+            raise LibraryImportError(f"Adapter SHA-256 mismatch: {path}")
     h3_dna = str(recipes["h3"]["inputs"].get("reference_template", "")).strip()
     seedance_dna = str(recipes["seedance20"]["inputs"].get("reference_template", "")).strip()
     if not h3_dna or h3_dna != seedance_dna:
@@ -82,6 +97,28 @@ def _load_creative_dna(record: dict[str, Any]) -> tuple[str, dict[str, str]]:
     if SECRET_RE.search(h3_dna) or URL_RE.search(h3_dna):
         raise LibraryImportError(f"Creative DNA contains a secret or URL: {record['case_id']}")
     return h3_dna, actual_hashes
+
+
+def _validate_preview(record: dict[str, Any]) -> None:
+    preview = record.get("preview")
+    if not isinstance(preview, dict):
+        raise LibraryImportError(f"Preview metadata is missing: {record.get('case_id')}")
+    case_root = Path(str(record.get("case_path", ""))).resolve()
+    relative = Path(str(preview.get("path", "")))
+    if not str(relative) or relative.is_absolute() or ".." in relative.parts:
+        raise LibraryImportError(f"Unsafe preview path: {record.get('case_id')}")
+    path = (case_root / relative).resolve()
+    try:
+        path.relative_to(case_root)
+    except ValueError as exc:
+        raise LibraryImportError(f"Preview escapes its case directory: {path}") from exc
+    if path.suffix.lower() != ".gif" or not path.is_file():
+        raise LibraryImportError(f"Required preview GIF is missing: {path}")
+    with path.open("rb") as handle:
+        if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
+            raise LibraryImportError(f"Preview is not a GIF: {path}")
+    if preview.get("sha256") != _sha256(path):
+        raise LibraryImportError(f"Preview GIF SHA-256 mismatch: {path}")
 
 
 def _preview_record(record: dict[str, Any]) -> dict[str, Any]:
@@ -105,25 +142,63 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
     if library.get("schema_version") != LIBRARY_SCHEMA:
         raise LibraryImportError("Unsupported unofficial case-library schema")
     contract = library.get("contract", {})
-    if contract.get("official_minimax_skills_included") is not False:
-        raise LibraryImportError("Official MiniMax Skills must not enter the non-official catalog")
+    if not isinstance(contract, dict) or any(contract.get(key) is not value for key, value in EXPECTED_CONTRACT.items()):
+        raise LibraryImportError("Unofficial case-library contract does not match the v2 node handoff")
     records = library.get("records")
     if not isinstance(records, list):
         raise LibraryImportError("Library records are missing")
     selectors = [record for record in records if record.get("template_action") == "selector"]
     evidence = [record for record in records if record.get("template_action") == "evidence_variant"]
-    if len(selectors) != 26 or len(evidence) != 1:
-        raise LibraryImportError("Expected 26 selectors and one evidence variant")
+    declared_counts = (
+        library.get("case_count"),
+        library.get("selector_template_count"),
+        library.get("evidence_variant_count"),
+    )
+    actual_counts = (len(records), len(selectors), len(evidence))
+    expected_counts = (EXPECTED_RECORD_COUNT, EXPECTED_SELECTOR_COUNT, EXPECTED_EVIDENCE_COUNT)
+    if declared_counts != expected_counts or actual_counts != expected_counts:
+        raise LibraryImportError("Expected 29 records: 28 selectors and one evidence variant")
     by_template: dict[str, list[dict[str, Any]]] = {}
+    validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
+    seen_cases: set[str] = set()
     for record in records:
-        by_template.setdefault(str(record.get("template_id", "")), []).append(record)
+        case_id = str(record.get("case_id", ""))
+        template_id = str(record.get("template_id", ""))
+        action = record.get("template_action")
+        if not case_id or case_id in seen_cases or not template_id or action not in {"selector", "evidence_variant"}:
+            raise LibraryImportError(f"Invalid or duplicate case identity: {case_id}")
+        for field in ("dropdown_label", "short_summary", "input_format", "recommended_input"):
+            if not isinstance(record.get(field), str) or not record[field].strip():
+                raise LibraryImportError(f"Case UX field is missing: {case_id}/{field}")
+        anchors = record.get("required_anchors")
+        if not isinstance(anchors, list) or not 2 <= len(anchors) <= 5:
+            raise LibraryImportError(f"Case requires 2-5 mechanism anchors: {case_id}")
+        if not all(isinstance(anchor, str) and anchor.strip() for anchor in anchors):
+            raise LibraryImportError(f"Case contains an empty mechanism anchor: {case_id}")
+        by_template.setdefault(template_id, []).append(record)
         if record.get("state") != "released" or record.get("review_status") != "approved":
-            raise LibraryImportError(f"Case is not released and approved: {record.get('case_id')}")
+            raise LibraryImportError(f"Case is not released and approved: {case_id}")
         if not all(record.get("models", {}).get(target, {}).get("validation_passed") for target in TARGETS):
-            raise LibraryImportError(f"Case lacks validated dual-model adapters: {record.get('case_id')}")
+            raise LibraryImportError(f"Case lacks validated dual-model adapters: {case_id}")
         rights = record.get("rights", {})
-        if rights.get("local_preview") is not True or rights.get("model_reference") is not False:
-            raise LibraryImportError(f"Preview/model-reference rights mismatch: {record.get('case_id')}")
+        required_rights = {
+            "local_preview": True,
+            "model_reference": False,
+            "redistribute": False,
+            "gif_connected_to_model": False,
+            "source_video_connected_to_model": False,
+        }
+        if not isinstance(rights, dict) or any(rights.get(key) is not value for key, value in required_rights.items()):
+            raise LibraryImportError(f"Preview/model-reference rights mismatch: {case_id}")
+        _validate_preview(record)
+        validated_recipes[case_id] = _load_creative_dna(record)
+        seen_cases.add(case_id)
+
+    selector_by_template = {str(record["template_id"]): record for record in selectors}
+    evidence_record = evidence[0]
+    primary = selector_by_template.get(str(evidence_record["template_id"]))
+    if primary is None or evidence_record.get("duplicate_of") != primary.get("case_id"):
+        raise LibraryImportError("Evidence variant must bind to its selector's primary case")
 
     existing: dict[str, dict[str, Any]] = {}
     if existing_catalog_path and existing_catalog_path.is_file():
@@ -137,7 +212,7 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
         label = str(record["dropdown_label"])
         if template_id in {item["id"] for item in templates} or label in seen_labels:
             raise LibraryImportError(f"Duplicate selector identity: {template_id} / {label}")
-        dna, adapter_hashes = _load_creative_dna(record)
+        dna, adapter_hashes = validated_recipes[str(record["case_id"])]
         legacy_labels: list[str] = []
         old = existing.get(template_id)
         if old:
@@ -213,7 +288,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Import the 27-record T8 unofficial case-library v2 handoff.")
+    parser = argparse.ArgumentParser(description="Import the 29-record T8 unofficial case-library v2 handoff.")
     parser.add_argument("--library", required=True, type=Path)
     parser.add_argument("--existing-catalog", type=Path)
     parser.add_argument("--source-batch-dir", type=Path)

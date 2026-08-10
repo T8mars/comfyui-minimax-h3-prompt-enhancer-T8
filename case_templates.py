@@ -56,8 +56,8 @@ def _load_catalog(path: Path = CATALOG_PATH) -> dict[str, Any]:
             if not isinstance(template.get(field), str) or not template[field].strip():
                 raise CaseTemplateCatalogError(f"T8 case-template UX field is missing: {template_id}/{field}")
         anchors = template.get("required_anchors")
-        if not isinstance(anchors, list) or not 2 <= len(anchors) <= 4:
-            raise CaseTemplateCatalogError(f"T8 case-template requires 2-4 anchors: {template_id}")
+        if not isinstance(anchors, list) or not 2 <= len(anchors) <= 5:
+            raise CaseTemplateCatalogError(f"T8 case-template requires 2-5 anchors: {template_id}")
         if not all(isinstance(anchor, str) and anchor.strip() for anchor in anchors):
             raise CaseTemplateCatalogError(f"T8 case-template contains an empty anchor: {template_id}")
         previews = template.get("previews")

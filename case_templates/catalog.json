@@ -3,8 +3,8 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 原创案例模板（非官方）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 27,
-  "selector_template_count": 26,
+  "source_case_count": 29,
+  "selector_template_count": 28,
   "evidence_variant_count": 1,
   "official_minimax_skills_included": false,
   "templates": [
@@ -1474,6 +1474,118 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nUse one familiar inert object at the opening to calibrate a miniature world immediately. Let the small actors, tools, motion, shadows and atmosphere then sustain a coherent routine while the calibrator remains passive. Later, introduce one different external execution object exactly once, let it change one local state, and hold the intervention, affected object and internal reaction together so the story shifts from scale observation to outside control.\nInvariants:\n- inv-01: Calibrate scale early with one familiar inert standard object.\n- inv-02: Prove the known miniature world through coordinated routine and local physics.\n- inv-03: Keep the opening calibrator passive after its proof.\n- inv-04: Introduce one different external execution object only once in continuous entry.\n- inv-05: Show one changed local state and internal reaction with both scales visible.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Without calibration the later intervention is mistaken for a scale reveal.: Calibrate scale early with one familiar inert standard object.\n- A static model offers no relation to disrupt.: Prove the known miniature world through coordinated routine and local physics.\n- An active calibrator collapses the two external roles.: Keep the opening calibrator passive after its proof.\n- Repeated tools or cuts turn the event into ordinary handling.: Introduce one different external execution object only once in continuous entry.\n- A hovering tool without consequence does not alter the relationship.: Show one changed local state and internal reaction with both scales visible.\nDo not copy from the source: miniature barbecue on a kitchen table; full-size human hand entering the scene; foreground fork and wooden tabletop; tiny men in colorful sweaters around a smoking grill",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-material-role-traversal-ladder-v1",
+      "label": "微缩闯关｜同一材质连续变形",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "让一个微型主体穿越同一巨型地形，地形依次变成路面、阻力、载体和弹性过渡，最后由一个外部尺度工具只进入一次完成跨越。",
+      "input_format": "微型主体 + 单一巨型地形 + 同一材质至少3种连续物理角色 + 一次晚段外部桥梁 + 恢复自主的稳定结尾",
+      "recommended_input": "微型温室信使横穿一片巨型蜡质叶：叶面从路脊变成湿滑露水面、移动叶脉和弹性纤维；最后一支全尺寸玻璃滴管只进入一次成为桥，信使抵达种子标记旁稳定站立。",
+      "required_anchors": [
+        "开场先证明主体与地形尺度",
+        "同一材质至少承担三种连续物理角色",
+        "每次解决动作必须引出下一个材质状态",
+        "外部尺度工具只在后段进入一次",
+        "结尾主体恢复自主稳定状态"
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "source": {
+        "case_id": "x-arzoo12sh-2086407184309792852-browser-2086407184309792852-video-1",
+        "case_sha256": "84c5624f4c17f7b6d0d30f5d389eab149bd86bff4a684aa95f2207f4643ebc0c",
+        "release_score": 4.732,
+        "creative_dna_sha256": "7587b65d51e5d95848e5a9a5a98cebcebd619bceb48203f001aa0cfe838a9b69",
+        "h3_adapter_sha256": "76dfcb7cbd48fc02feff435092aff4e655ea4d3e614a985b36a4c838fb9f3032",
+        "seedance20_adapter_sha256": "aedc4a10fdf8bd1e192fe48cbce2078cda1fa3666ea70fbd2e5aa935426063a4"
+      },
+      "previews": [
+        {
+          "case_id": "x-arzoo12sh-2086407184309792852-browser-2086407184309792852-video-1",
+          "label": "微缩闯关｜同一材质连续变形",
+          "short_summary": "让一个微型主体穿越同一巨型地形，地形依次变成路面、阻力、载体和弹性过渡，最后由一个外部尺度工具只进入一次完成跨越。",
+          "recommended_input": "微型温室信使横穿一片巨型蜡质叶：叶面从路脊变成湿滑露水面、移动叶脉和弹性纤维；最后一支全尺寸玻璃滴管只进入一次成为桥，信使抵达种子标记旁稳定站立。",
+          "required_anchors": [
+            "开场先证明主体与地形尺度",
+            "同一材质至少承担三种连续物理角色",
+            "每次解决动作必须引出下一个材质状态",
+            "外部尺度工具只在后段进入一次",
+            "结尾主体恢复自主稳定状态"
+          ],
+          "sha256": "39a2c09cbe1aa5c077aff56bb87ad846abf1b4b56614abf8024e2ed58831c4e0",
+          "width": 270,
+          "height": 480,
+          "duration_seconds": 16.0,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one tiny protagonist crossing a single oversized terrain, then make that same substrate change physical role in a causal ladder: reliable footing becomes resistance, resistance becomes an improvised carrier, and the carrier becomes an elastic transition. Only after the protagonist has attempted those states, introduce one full-scale tool exactly once as a final bridge. End with the protagonist back in a stable self-possessed pose so scale assistance resolves the route without erasing agency.\nInvariants:\n- inv-01: Prove the protagonist-to-terrain scale relation in the opening before the first obstacle.\n- inv-02: Make one continuous substrate perform at least three visibly different physical roles in causal order.\n- inv-03: Let each attempted solution expose the next material state rather than resetting the route.\n- inv-04: Use one late external-scale tool exactly once as a bridge, not as the opening scale reveal.\n- inv-05: End on a stable pose that visibly restores agency after the external bridge.\nVariable slots:\n- lead_subject: An original, stable subject or group with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical or social consequence.\n- sound_family: An original hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- Without early scale proof, later material deformation reads as arbitrary VFX.: Prove the protagonist-to-terrain scale relation in the opening before the first obstacle.\n- If every beat uses a new prop, the sequence becomes a montage instead of one evolving material problem.: Make one continuous substrate perform at least three visibly different physical roles in causal order.\n- Independent gags remove the sense that the traveler is learning and adapting.: Let each attempted solution expose the next material state rather than resetting the route.\n- An early or repeated giant tool steals agency and collapses the material traversal into handling.: Use one late external-scale tool exactly once as a bridge, not as the opening scale reveal.\n- Ending in midair or on the tool leaves the causal result unresolved.: End on a stable pose that visibly restores agency after the external bridge.\nDo not copy from the source: tiny chibi man on giant pepperoni pizza; stretchy melted cheese terrain; full-size fork and hand; warm kitchen and drinking glass",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-earnest-upgrade-displacement-v1",
+      "label": "升级讽刺｜新物登场旧爱被移走",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先建立对旧物的真诚依恋，再让升级与移走同时发生；群体把掌声转向新物，最后用完全认真的制度化终态保留未解决的反差。",
+      "input_format": "被珍爱的旧物 + 一个具体依恋动作 + 新旧同时进出 + 群体掌声转移 + 真诚但不解决依恋的终态",
+      "recommended_input": "纸艺温室里，毛毡园丁珍爱旧雨量计，折纸知更鸟在底座筑巢；自动气象塔进入时旧雨量计同时被推出，知更鸟仍随旧物离场，园丁真诚鼓掌，最后停在无文字的太阳徽记终态。",
+      "required_anchors": [
+        "先证明旧物被真诚珍爱",
+        "用一个具体身体动作锁定依恋",
+        "新物进入与旧物移走必须同镜同时发生",
+        "群体掌声转向新物且不回应被移走者",
+        "结尾保持制度化真诚并保留未解决依恋"
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "source": {
+        "case_id": "x-dheepanratnam-2086493087707086919-browser-2086493087707086919-video-1",
+        "case_sha256": "336934969a0ecab2450b595cd8e35bcfd68d5362b08116953d5ca7d779e75541",
+        "release_score": 4.757,
+        "creative_dna_sha256": "220a4cfa86388e6dc7c6f22c7e0165bced24c098c98dbab70edb147a0505bff9",
+        "h3_adapter_sha256": "4b262be51ae45240e4cd5d848c30ed30b25560fe4c9008f815a12869ab41af9b",
+        "seedance20_adapter_sha256": "bb235bf1727820bf00948d63852363fcfdfd9a5e59d54631aec71cd27f7c1241"
+      },
+      "previews": [
+        {
+          "case_id": "x-dheepanratnam-2086493087707086919-browser-2086493087707086919-video-1",
+          "label": "升级讽刺｜新物登场旧爱被移走",
+          "short_summary": "先建立对旧物的真诚依恋，再让升级与移走同时发生；群体把掌声转向新物，最后用完全认真的制度化终态保留未解决的反差。",
+          "recommended_input": "纸艺温室里，毛毡园丁珍爱旧雨量计，折纸知更鸟在底座筑巢；自动气象塔进入时旧雨量计同时被推出，知更鸟仍随旧物离场，园丁真诚鼓掌，最后停在无文字的太阳徽记终态。",
+          "required_anchors": [
+            "先证明旧物被真诚珍爱",
+            "用一个具体身体动作锁定依恋",
+            "新物进入与旧物移走必须同镜同时发生",
+            "群体掌声转向新物且不回应被移走者",
+            "结尾保持制度化真诚并保留未解决依恋"
+          ],
+          "sha256": "149897202a906b0c45c72979993eaa1c7b1b169f3051403186ef02349a883bb2",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.17,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nFirst make an existing object feel sincerely valued, then bind one restrained subject to it through a specific physical attachment. Introduce the upgrade and remove the valued object in the same spatial event so progress and loss are inseparable. Redirect the surrounding group's genuine enthusiasm to the replacement while the attached subject remains visible but unattended. Finish with completely earnest institutional closure, preserving the unresolved attachment so the satire comes from the image logic rather than a wink or joke.\nInvariants:\n- inv-01: Establish the current object or system as sincerely valued before introducing its replacement.\n- inv-02: Bind one restrained character or creature to the current object through a concrete physical attachment action.\n- inv-03: Show the replacement entering while the valued object exits in one shared spatial proof.\n- inv-04: Redirect group approval to the replacement while the attached subject remains visible but socially unattended.\n- inv-05: End with an authoritative promotional closure that remains completely sincere and does not resolve the attachment.\nVariable slots:\n- lead_subject: An original, stable subject or group with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical or social consequence.\n- sound_family: An original hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- If replacement arrives first, the satire is only a product comparison.: Establish the current object or system as sincerely valued before introducing its replacement.\n- Generic smiles give the audience no specific cost to track.: Bind one restrained character or creature to the current object through a concrete physical attachment action.\n- Separate before-and-after shots hide who or what is displaced.: Show the replacement entering while the valued object exits in one shared spatial proof.\n- If the group notices or apologizes, the institutional certainty collapses into ordinary drama.: Redirect group approval to the replacement while the attached subject remains visible but socially unattended.\n- A wink, angry reaction or explanatory joke releases the tension and weakens the satire.: End with an authoritative promotional closure that remains completely sincere and does not resolve the attachment.\nDo not copy from the source: Mark IV; Mark V; OPEN MIND INC.; The Future Arrives Thursday.; 1950s appliance showroom family; boy dragged while hugging old machine",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

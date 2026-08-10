@@ -274,7 +274,10 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertIn(f"HUMAN_NAME: {selection}", system)
                 self.assertIn("SELECTED_CASE_ID:", system)
                 self.assertIn("REQUIRED_MECHANISM_ANCHORS", system)
-                self.assertIn("realize all 4 as concrete events in order", system)
+                anchor_block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
+                anchors = re.findall(r"^\d+\. (.+)$", anchor_block, re.MULTILINE)
+                self.assertIn(len(anchors), {4, 5})
+                self.assertIn(f"realize all {len(anchors)} as concrete events in order", system)
                 self.assertIn("Seedance 2.0 native adapter", system)
                 self.assertIn("compact paragraph or consecutive 镜头N sequence", system)
                 self.assertIn("never emit H3 field names", system)
@@ -350,13 +353,13 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(offsets, sorted(offsets))
                 self.assertTrue(output.rstrip().endswith(f"实现{anchors[-1]}。"))
 
-    def test_configured_local_case_library_serves_all_27_human_only_gifs(self):
+    def test_configured_local_case_library_serves_all_29_human_only_gifs(self):
         manifest_path = case_library_routes.configured_manifest_path()
         if manifest_path is None or not manifest_path.is_file():
             self.skipTest("Local GIF case library is not configured on this machine")
         catalog = case_library_routes.runtime_public_catalog()
         previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-        self.assertEqual(len(previews), 27)
+        self.assertEqual(len(previews), 29)
         self.assertTrue(all(preview["available"] for preview in previews))
         self.assertTrue(all(preview["preview_url"].startswith("/t8-prompt-enhancer/case-preview/") for preview in previews))
         self.assertTrue(all(preview["source_url"].startswith("https://") for preview in previews))

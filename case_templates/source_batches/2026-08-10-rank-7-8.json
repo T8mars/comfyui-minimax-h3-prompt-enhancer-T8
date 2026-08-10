@@ -1,0 +1,27 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-10-rank-7-8",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-arzoo12sh-2086407184309792852-browser-2086407184309792852-video-1",
+      "template_id": "t8-case-material-role-traversal-ladder-v1",
+      "label": "微缩闯关｜同一材质连续变形",
+      "summary": "让一个微型主体穿越同一巨型地形，地形依次变成路面、阻力、载体和弹性过渡，最后由一个外部尺度工具只进入一次完成跨越。",
+      "case_sha256": "84c5624f4c17f7b6d0d30f5d389eab149bd86bff4a684aa95f2207f4643ebc0c",
+      "creative_dna_sha256": "7587b65d51e5d95848e5a9a5a98cebcebd619bceb48203f001aa0cfe838a9b69",
+      "h3_adapter_sha256": "76dfcb7cbd48fc02feff435092aff4e655ea4d3e614a985b36a4c838fb9f3032",
+      "seedance20_adapter_sha256": "aedc4a10fdf8bd1e192fe48cbce2078cda1fa3666ea70fbd2e5aa935426063a4"
+    },
+    {
+      "case_id": "x-dheepanratnam-2086493087707086919-browser-2086493087707086919-video-1",
+      "template_id": "t8-case-earnest-upgrade-displacement-v1",
+      "label": "升级讽刺｜新物登场旧爱被移走",
+      "summary": "先建立对旧物的真诚依恋，再让升级与移走同时发生；群体把掌声转向新物，最后用完全认真的制度化终态保留未解决的反差。",
+      "case_sha256": "336934969a0ecab2450b595cd8e35bcfd68d5362b08116953d5ca7d779e75541",
+      "creative_dna_sha256": "220a4cfa86388e6dc7c6f22c7e0165bced24c098c98dbab70edb147a0505bff9",
+      "h3_adapter_sha256": "4b262be51ae45240e4cd5d848c30ed30b25560fe4c9008f815a12869ab41af9b",
+      "seedance20_adapter_sha256": "bb235bf1727820bf00948d63852363fcfdfd9a5e59d54631aec71cd27f7c1241"
+    }
+  ]
+}
