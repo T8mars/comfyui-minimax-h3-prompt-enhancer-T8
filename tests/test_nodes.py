@@ -3,6 +3,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -82,6 +83,24 @@ class FakeSession:
 
     def close(self):
         self.closed = True
+
+
+class AnchorAwareH3Session(FakeSession):
+    def __init__(self):
+        super().__init__("")
+
+    def post(self, url, **kwargs):
+        if "json" in kwargs:
+            system = kwargs["json"]["messages"][0]["content"]
+            block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
+            anchors = re.findall(r"^\d+\. (.+)$", block, re.MULTILINE)
+            self.completion = (
+                "integrated_multimodal_description: [Shot 1] "
+                + "；".join(f"画面以可见事件实现{anchor}" for anchor in anchors)
+                + "。\n\noverall_soundscape: 环境与动作声依次响应这些可见状态。"
+                + "\n\nnon_diegetic_music: 克制配乐随因果推进后稳定收束。"
+            )
+        return super().post(url, **kwargs)
 
 
 class SequencedChatSession(FakeSession):
@@ -242,7 +261,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
         self.assertEqual(len(case_template.options), 27)
-        self.assertEqual(case_template.display_name, "T8 精选案例模板（非官方）")
+        self.assertEqual(case_template.display_name, "T8 原创案例模板（非官方）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
         self.assertEqual(api_mode.default, nodes.SEEDANCE_API_MODE)
@@ -591,7 +610,7 @@ class PromptEnhancerTests(unittest.TestCase):
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
         no_case_system = no_case_session.chat_requests[0]["json"]["messages"][0]["content"]
-        self.assertNotIn("Selected non-official T8 case template", no_case_system)
+        self.assertNotIn("Selected T8 original case template", no_case_system)
         self.assertNotIn("Reusable Creative DNA (mechanism and production grammar only)", no_case_system)
 
         for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
@@ -599,11 +618,17 @@ class PromptEnhancerTests(unittest.TestCase):
                 session = FakeSession(basic_output())
                 self.run_enhancer(session, case_template=selection)
                 system = session.chat_requests[0]["json"]["messages"][0]["content"]
-                self.assertIn(f"Selected non-official T8 case template: {selection}", system)
+                self.assertIn(f"HUMAN_NAME: {selection}", system)
+                self.assertIn("SELECTED_CASE_ID:", system)
+                self.assertIn("REQUIRED_MECHANISM_ANCHORS", system)
+                self.assertIn("realize all 4 as concrete events in order", system)
                 self.assertIn("Reusable Creative DNA (mechanism and production grammar only)", system)
-                self.assertIn("Target adapter: MiniMax H3", system)
-                self.assertIn("selected MiniMax official creative preset", system)
-                self.assertIn("more specific manual template", system)
+                self.assertIn("MiniMax H3 native adapter", system)
+                self.assertIn("native H3 integrated description", system)
+                self.assertIn("never treat as a MiniMax official Skill", system)
+                self.assertNotIn("Seedance 2.0 native adapter", system)
+                self.assertNotIn("preview.gif", system)
+                self.assertNotIn("/case-preview/", system)
 
         manual = "只参考三段式节奏，第二段必须保持一镜到底。"
         combined_session = FakeSession(basic_output())
@@ -616,14 +641,73 @@ class PromptEnhancerTests(unittest.TestCase):
         )
         messages = combined_session.chat_requests[0]["json"]["messages"]
         self.assertIn("brand promotional video", messages[0]["content"])
-        self.assertIn("Selected non-official T8 case template", messages[0]["content"])
+        self.assertIn("Selected T8 original case template", messages[0]["content"])
         self.assertIn(manual, messages[1]["content"])
+
+    def test_subject_only_case_intent_is_preserved_and_completed_by_all_26_selectors(self):
+        for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
+            with self.subTest(selection=selection):
+                session = FakeSession(basic_output())
+                self.run_enhancer(session, prompt="美丽的女人", case_template=selection)
+                system = session.chat_requests[0]["json"]["messages"][0]["content"]
+                self.assertIn('INSTANCE_INTENT: "美丽的女人"', system)
+                self.assertIn("SPARSE_INPUT: yes", system)
+                self.assertIn("Create an original, compatible scene, trigger, ordered event chain and visible result", system)
+                self.assertIn("must remain the subject", system)
+                self.assertIn("must not collapse into a generic portrait", system)
+
+    def test_stable_ids_and_legacy_case_values_resolve_to_current_human_labels(self):
+        cases = {
+            "t8c001-product-proof-state-machine": "产品广告｜功能证据递进",
+            "T8-C001｜产品证明状态机": "产品广告｜功能证据递进",
+            "t8-case-audio-cause-lead-ladder-v1": "景别收紧｜从世界到眼神",
+            "声画错位递进": "景别收紧｜从世界到眼神",
+        }
+        for saved_value, current_label in cases.items():
+            with self.subTest(saved_value=saved_value):
+                session = FakeSession(basic_output())
+                self.run_enhancer(session, case_template=saved_value)
+                system = session.chat_requests[0]["json"]["messages"][0]["content"]
+                self.assertIn(f"HUMAN_NAME: {current_label}", system)
+
+    def test_case_contract_keeps_concrete_changed_surface_intent_and_all_ordered_anchors(self):
+        selection = "角色登场｜细节到全身揭晓"
+        prompt = "一位蒸汽朋克女飞行员在飞艇甲板亮相，先看护目镜，最后全身站定。"
+        session = FakeSession(basic_output())
+        self.run_enhancer(session, prompt=prompt, case_template=selection)
+        system = session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertIn(json.dumps(prompt, ensure_ascii=False), system)
+        self.assertIn("SPARSE_INPUT: no", system)
+        expected = ["从可识别细节开始", "揭晓尺度逐步扩大", "角色只做一次代表动作", "以全身定格完成身份确认"]
+        offsets = [system.index(anchor) for anchor in expected]
+        self.assertEqual(offsets, sorted(offsets))
+        self.assertIn("[Shot N] timeline", system)
+        self.assertNotIn("consecutive 镜头N sequence", system)
+
+    def test_fake_h3_provider_outputs_all_case_anchors_in_native_structure_and_order(self):
+        for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
+            with self.subTest(selection=selection):
+                session = AnchorAwareH3Session()
+                output = self.run_enhancer(session, prompt="美丽的女人", case_template=selection)
+                system = session.chat_requests[0]["json"]["messages"][0]["content"]
+                block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
+                anchors = re.findall(r"^\d+\. (.+)$", block, re.MULTILINE)
+                self.assertTrue(output.startswith("integrated_multimodal_description: [Shot 1]"))
+                self.assertEqual(output.count("overall_soundscape:"), 1)
+                self.assertEqual(output.count("non_diegetic_music:"), 1)
+                offsets = [output.index(anchor) for anchor in anchors]
+                self.assertEqual(offsets, sorted(offsets))
+                self.assertLess(offsets[-1], output.index("overall_soundscape:"))
 
     def test_distributable_case_catalog_contains_only_active_text_abstractions(self):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
-        self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v1")
+        self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
         self.assertEqual(len(catalog["templates"]), 26)
+        self.assertEqual(catalog["source_case_count"], 27)
+        self.assertEqual(catalog["selector_template_count"], 26)
+        self.assertEqual(catalog["evidence_variant_count"], 1)
+        self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
         imported_ids = {
             "t8-case-evidence-ladder-reality-v1",
@@ -636,7 +720,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "t8-case-staged-character-reveal-v1",
             "t8-case-mechanical-convoy-proof-v1",
             "t8-case-flat-geometry-reconstruction-v1",
-            "t8-case-audio-cause-lead-ladder-v1",
+            "t8-case-scale-contraction-evidence-funnel-v1",
             "t8-case-recurring-identity-board-v1",
             "t8-case-dual-system-convergence-proof-v1",
             "t8-case-alternating-obstacle-goal-corridor-v1",
@@ -653,12 +737,28 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn("case_directory", source)
         self.assertNotIn("compiled_prompt", source)
         self.assertNotIn("openai_upload_url", source)
+        self.assertNotIn("music-video-subtitle-generator", source)
+        self.assertNotIn("t8-case-audio-cause-lead-ladder-v1", {template["id"] for template in catalog["templates"]})
+        preview_count = 0
         for template in catalog["templates"]:
             self.assertEqual(template["status"], "active")
             self.assertFalse(template["official"])
             self.assertEqual(set(template["variants"]), {"h3", "seedance20"})
             self.assertTrue(template["source"]["case_sha256"])
             self.assertNotIn("integrated_multimodal_description:", template["creative_dna"])
+            self.assertTrue(template["summary"])
+            self.assertTrue(template["input_format"])
+            self.assertTrue(template["recommended_input"])
+            self.assertGreaterEqual(len(template["required_anchors"]), 2)
+            self.assertLessEqual(len(template["required_anchors"]), 4)
+            self.assertTrue(template["previews"])
+            self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
+            preview_count += len(template["previews"])
+        self.assertEqual(preview_count, 27)
+        self.assertEqual(len(by_id["t8-case-flat-geometry-reconstruction-v1"]["previews"]), 2)
+        soran = by_id["t8-case-scale-contraction-evidence-funnel-v1"]
+        self.assertIn("t8-case-audio-cause-lead-ladder-v1", soran["legacy_ids"])
+        self.assertIn("声画错位递进", soran["legacy_labels"])
         batch_01_ids = {
             "t8-case-evidence-ladder-reality-v1",
             "t8-case-threshold-inspection-passage-v1",
@@ -673,10 +773,7 @@ class PromptEnhancerTests(unittest.TestCase):
         }
         for template_id in imported_ids:
             imported = by_id[template_id]
-            expected_batch = "batch-2026-08-10-01" if template_id in batch_01_ids else "batch-2026-08-10-02"
-            self.assertEqual(imported["source"]["batch_id"], expected_batch)
             self.assertRegex(imported["source"]["creative_dna_sha256"], r"^[0-9a-f]{64}$")
-            self.assertRegex(imported["source"]["mechanism_fingerprint"], r"^[0-9a-f]{64}$")
             self.assertIn("Do not copy from the source:", imported["creative_dna"])
 
     def test_source_batches_reconstruct_the_catalog_identity_and_provenance(self):
@@ -698,9 +795,27 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertEqual(template["id"], item["template_id"])
             self.assertEqual(template["label"], item["label"])
             self.assertEqual(template["summary"], item["summary"])
-            for field in ("case_sha256", "creative_dna_sha256", "mechanism_fingerprint"):
+            for field in ("case_sha256", "creative_dna_sha256"):
                 if field in item:
                     self.assertEqual(template["source"][field], item[field])
+
+    def test_case_template_frontend_shows_preview_and_safe_recommended_fill(self):
+        root = NODES_PATH.parent
+        shared = (root / "web" / "js" / "case_template_ui.js").read_text(encoding="utf-8")
+        h3_ui = (root / "web" / "js" / "minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")
+        seedance_ui = (root / "web" / "js" / "seedance20_prompt_enhancer.js").read_text(encoding="utf-8")
+        self.assertIn("填入推荐示例", shared)
+        self.assertIn("已有输入，未覆盖", shared)
+        self.assertIn("适用范围", shared)
+        self.assertIn("推荐输入格式", shared)
+        self.assertIn("此 GIF 推荐示例", shared)
+        self.assertIn("if (String(promptWidget?.value || \"\").trim())", shared)
+        self.assertIn("仅供人类本地预览，不会发送给 LLM", shared)
+        self.assertIn("查看来源", shared)
+        self.assertIn("serializedCaseTemplateValue", h3_ui)
+        self.assertIn("serializedCaseTemplateValue", seedance_ui)
+        self.assertIn("addCaseTemplateUI", h3_ui)
+        self.assertIn("addCaseTemplateUI", seedance_ui)
 
     def test_reference_template_mode_requires_and_sends_template(self):
         missing_session = FakeSession(basic_output())

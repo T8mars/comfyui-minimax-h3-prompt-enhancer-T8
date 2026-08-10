@@ -5,9 +5,19 @@ import requests
 from comfy_api.latest import io
 
 try:
-    from .case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, resolve_case_template
+    from .case_templates import (
+        CASE_TEMPLATE_OPTIONS,
+        NO_CASE_TEMPLATE,
+        canonical_case_template_label,
+        resolve_case_template,
+    )
 except ImportError:
-    from case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, resolve_case_template
+    from case_templates import (
+        CASE_TEMPLATE_OPTIONS,
+        NO_CASE_TEMPLATE,
+        canonical_case_template_label,
+        resolve_case_template,
+    )
 
 from .nodes import (
     AI_WORKSHOP_API_MODE,
@@ -566,7 +576,7 @@ def _build_messages(
         _stability_instruction(stability_constraints),
         prompt_mode_rule,
     ]
-    case_instruction = resolve_case_template(case_template, "seedance20")
+    case_instruction = resolve_case_template(case_template, "seedance20", prompt)
     if case_instruction:
         system_rules.append(case_instruction)
     system_content = "\n\n".join(system_rules)
@@ -646,9 +656,10 @@ def enhance_seedance20_prompt(
     subtitle_policy = str(subtitle_policy or SUBTITLE_POLICIES[0])
     stability_constraints = str(stability_constraints or STABILITY_POLICIES[0])
     custom_length_target = int(custom_length_target or 0)
-    case_template = str(case_template or NO_CASE_TEMPLATE)
-    if case_template not in CASE_TEMPLATE_OPTIONS:
-        raise Seedance20PromptEnhancerError(f"Unsupported case_template: {case_template}")
+    try:
+        case_template = canonical_case_template_label(case_template)
+    except ValueError as exc:
+        raise Seedance20PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
 
     selections = {
         "complexity_mode": (complexity_mode, COMPLEXITY_OPTIONS),
@@ -830,10 +841,10 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 io.Combo.Input("prompt_mode", display_name="提示词模式", options=PROMPT_MODES, default="官方优化"),
                 io.Combo.Input(
                     "case_template",
-                    display_name="T8 精选案例模板（非官方）",
+                    display_name="T8 原创案例模板（非官方）",
                     options=CASE_TEMPLATE_OPTIONS,
                     default=NO_CASE_TEMPLATE,
-                    tooltip="迁移原创案例的 Creative DNA、因果节奏与防复制约束；不复制源人物、剧情、文案、镜头表或媒体。它独立于提示词模式，可与手动参考模板共同使用。",
+                    tooltip="选择后显示用途、输入格式、推荐示例、结构锚点和本地 GIF。迁移 Creative DNA 与因果节奏，不复制源人物、剧情、文案、镜头表或媒体。",
                 ),
                 io.Combo.Input(
                     "reference_syntax",

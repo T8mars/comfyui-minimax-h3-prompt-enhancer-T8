@@ -1,4 +1,5 @@
 roadmap.md
+.t8-case-library.local.json
 __pycache__/
 *.py[cod]
 .env

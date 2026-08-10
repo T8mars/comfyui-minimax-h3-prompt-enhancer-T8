@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
 
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
@@ -439,6 +440,7 @@ app.registerExtension({
             const promptModeWidget = this.widgets?.find((widget) => widget.name === "prompt_mode");
             const officialSkillProfileWidget = this.widgets?.find((widget) => widget.name === "official_skill_profile");
             const creativePresetWidget = this.widgets?.find((widget) => widget.name === "creative_preset");
+            const caseTemplateWidget = this.widgets?.find((widget) => widget.name === "case_template");
             const referenceTemplateWidget = this.widgets?.find((widget) => widget.name === "reference_template");
             const referenceContextWidget = this.widgets?.find((widget) => widget.name === "reference_context");
             const constraintsWidget = this.widgets?.find((widget) => widget.name === "constraints");
@@ -510,6 +512,8 @@ app.registerExtension({
             };
             this.t8NormalizePromptOptions();
 
+            addCaseTemplateUI(this, caseTemplateWidget, promptWidget, () => resizeNode(this));
+
             const advancedWidgets = [referenceContextWidget, constraintsWidget].filter(Boolean);
             if (advancedWidgets.length) addAdvancedToggle(this, advancedWidgets);
 
@@ -570,19 +574,27 @@ app.registerExtension({
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 21) {
                 args[0].widgets_values.splice(10, 0, NO_CASE_TEMPLATE);
             }
+            if (Array.isArray(args[0]?.widgets_values)) {
+                this.t8PendingCaseTemplateValue = args[0].widgets_values[10];
+            }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => {
                 if (hadLegacyUploadUrl) {
                     setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
                 }
+                this.t8RestoreCaseTemplate?.(this.t8PendingCaseTemplateValue);
+                if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.t8NormalizePromptOptions?.();
             });
         };
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
-            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => (
-                this.widgets?.find((widget) => widget.name === name)?.value ?? null
-            ));
+            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => {
+                const widget = this.widgets?.find((item) => item.name === name);
+                return name === "case_template"
+                    ? serializedCaseTemplateValue(this, widget)
+                    : (widget?.value ?? null);
+            });
         };
     },
 });

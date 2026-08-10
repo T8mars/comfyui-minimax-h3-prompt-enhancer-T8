@@ -4,6 +4,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -25,6 +26,7 @@ package = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = package
 SPEC.loader.exec_module(package)
 seedance20 = sys.modules[f"{SPEC.name}.seedance20"]
+case_library_routes = sys.modules[f"{SPEC.name}.case_library_routes"]
 
 
 class FakeResponse:
@@ -61,6 +63,19 @@ class FakeSession:
 
     def close(self):
         pass
+
+
+class AnchorAwareSeedanceSession(FakeSession):
+    def post(self, url, **kwargs):
+        if "json" in kwargs:
+            system = kwargs["json"]["messages"][0]["content"]
+            block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
+            anchors = re.findall(r"^\d+\. (.+)$", block, re.MULTILINE)
+            self.completion = "\n".join(
+                f"镜头{index}：以连续、可拍摄的事件实现{anchor}。"
+                for index, anchor in enumerate(anchors, 1)
+            )
+        return super().post(url, **kwargs)
 
 
 class FakeVideo:
@@ -128,7 +143,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIsNone(api_key.socketless)
         self.assertEqual(case_template.default, seedance20.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, seedance20.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(case_template.display_name, "T8 精选案例模板（非官方）")
+        self.assertEqual(case_template.display_name, "T8 原创案例模板（非官方）")
         self.assertIn("rejected input_audio", schema.description)
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
         ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
@@ -249,19 +264,25 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
     def test_non_official_case_templates_work_in_both_prompt_modes_without_h3_syntax(self):
         no_case = FakeSession()
         self.run_enhancer(no_case)
-        self.assertNotIn("Selected non-official T8 case template", self.messages(no_case)[0]["content"])
+        self.assertNotIn("Selected T8 original case template", self.messages(no_case)[0]["content"])
 
         for selection in seedance20.CASE_TEMPLATE_OPTIONS[1:]:
             with self.subTest(selection=selection):
                 session = FakeSession()
                 self.run_enhancer(session, case_template=selection)
                 system = self.messages(session)[0]["content"]
-                self.assertIn(f"Selected non-official T8 case template: {selection}", system)
-                self.assertIn("Target adapter: Seedance 2.0", system)
-                self.assertIn("compact paragraph or ordered 镜头N structure", system)
-                self.assertIn("Never emit H3 field names or absolute H3 timestamps", system)
+                self.assertIn(f"HUMAN_NAME: {selection}", system)
+                self.assertIn("SELECTED_CASE_ID:", system)
+                self.assertIn("REQUIRED_MECHANISM_ANCHORS", system)
+                self.assertIn("realize all 4 as concrete events in order", system)
+                self.assertIn("Seedance 2.0 native adapter", system)
+                self.assertIn("compact paragraph or consecutive 镜头N sequence", system)
+                self.assertIn("never emit H3 field names", system)
                 self.assertNotIn("integrated_multimodal_description:", system)
                 self.assertNotIn("[Shot N] At MM:SS", system)
+                self.assertNotIn("MiniMax H3 native adapter", system)
+                self.assertNotIn("preview.gif", system)
+                self.assertNotIn("/case-preview/", system)
 
         session = FakeSession()
         manual = "只借鉴快速开场，主体与结尾严格按用户要求。"
@@ -272,13 +293,78 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             reference_template=manual,
         )
         combined = json.dumps(self.messages(session), ensure_ascii=False)
-        self.assertIn("Selected non-official T8 case template", combined)
+        self.assertIn("Selected T8 original case template", combined)
         self.assertIn(manual, combined)
 
         invalid = FakeSession()
         with self.assertRaisesRegex(seedance20.Seedance20PromptEnhancerError, "case_template"):
             self.run_enhancer(invalid, case_template="future-case")
         self.assertEqual(invalid.chat_requests, [])
+
+    def test_subject_only_intent_gets_case_completion_contract_without_h3_leakage(self):
+        for selection in seedance20.CASE_TEMPLATE_OPTIONS[1:]:
+            with self.subTest(selection=selection):
+                session = FakeSession()
+                self.run_enhancer(session, prompt="美丽的女人", case_template=selection)
+                system = self.messages(session)[0]["content"]
+                self.assertIn('INSTANCE_INTENT: "美丽的女人"', system)
+                self.assertIn("SPARSE_INPUT: yes", system)
+                self.assertIn("scene, trigger, ordered event chain and visible result", system)
+                self.assertIn("must not collapse into a generic portrait", system)
+                self.assertIn("consecutive 镜头N sequence", system)
+                self.assertNotIn("native H3 integrated description", system)
+
+    def test_seedance_accepts_stable_case_id_saved_in_workflow(self):
+        session = FakeSession()
+        self.run_enhancer(session, case_template="t8-case-base-loop-skill-ladder-v1")
+        system = self.messages(session)[0]["content"]
+        self.assertIn("HUMAN_NAME: 技能展示｜基础动作串联升级", system)
+        self.assertIn("Seedance 2.0 native adapter", system)
+
+    def test_changed_surface_seedance_contract_preserves_intent_and_anchor_order(self):
+        prompt = "一台水下维修机器人在珊瑚站展示三级技能，完成后恢复巡航。"
+        selection = "技能展示｜基础动作串联升级"
+        session = FakeSession()
+        self.run_enhancer(session, prompt=prompt, case_template=selection)
+        system = self.messages(session)[0]["content"]
+        self.assertIn(json.dumps(prompt, ensure_ascii=False), system)
+        self.assertIn("SPARSE_INPUT: no", system)
+        anchors = ["基础动作反复返回", "至少三项技能逐级变难", "每个机位只承担一种证明任务", "峰值后回到基础循环"]
+        anchor_contract = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
+        offsets = [anchor_contract.index(anchor) for anchor in anchors]
+        self.assertEqual(offsets, sorted(offsets))
+        self.assertNotIn("[Shot N] timeline", system)
+
+    def test_fake_seedance_provider_outputs_all_case_anchors_in_native_order(self):
+        for selection in seedance20.CASE_TEMPLATE_OPTIONS[1:]:
+            with self.subTest(selection=selection):
+                session = AnchorAwareSeedanceSession()
+                output = self.run_enhancer(session, prompt="美丽的女人", case_template=selection)
+                system = self.messages(session)[0]["content"]
+                block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
+                anchors = re.findall(r"^\d+\. (.+)$", block, re.MULTILINE)
+                self.assertNotIn("integrated_multimodal_description:", output)
+                self.assertNotIn("[Shot ", output)
+                self.assertEqual(re.findall(r"镜头(\d+)：", output), [str(index) for index in range(1, len(anchors) + 1)])
+                offsets = [output.index(anchor) for anchor in anchors]
+                self.assertEqual(offsets, sorted(offsets))
+                self.assertTrue(output.rstrip().endswith(f"实现{anchors[-1]}。"))
+
+    def test_configured_local_case_library_serves_all_27_human_only_gifs(self):
+        manifest_path = case_library_routes.configured_manifest_path()
+        if manifest_path is None or not manifest_path.is_file():
+            self.skipTest("Local GIF case library is not configured on this machine")
+        catalog = case_library_routes.runtime_public_catalog()
+        previews = [preview for template in catalog["templates"] for preview in template["previews"]]
+        self.assertEqual(len(previews), 27)
+        self.assertTrue(all(preview["available"] for preview in previews))
+        self.assertTrue(all(preview["preview_url"].startswith("/t8-prompt-enhancer/case-preview/") for preview in previews))
+        self.assertTrue(all(preview["source_url"].startswith("https://") for preview in previews))
+        for preview in previews:
+            path, record = case_library_routes.resolve_preview(preview["case_id"], verify_hash=True)
+            self.assertTrue(path.is_file())
+            self.assertTrue(record["rights"]["local_preview"])
+            self.assertFalse(record["rights"]["model_reference"])
 
     def test_length_target_is_soft_and_arbitrary_nonempty_output_passes_through(self):
         upstream = "上游没有按任何固定格式返回，但内容非空，应原样放行。"

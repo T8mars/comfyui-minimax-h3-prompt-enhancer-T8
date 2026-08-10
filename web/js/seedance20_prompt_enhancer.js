@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
 
 
 const NODE_ID = "Seedance20PromptEnhancerT8";
@@ -302,6 +303,7 @@ app.registerExtension({
             originalOnNodeCreated?.apply(this, arguments);
 
             const find = (name) => this.widgets?.find((widget) => widget.name === name);
+            const promptWidget = find("prompt");
             const taskWidget = find("task_intent");
             const complexityWidget = find("complexity_mode");
             const durationWidget = find("duration_seconds");
@@ -309,6 +311,7 @@ app.registerExtension({
             const outputLanguageWidget = find("output_language");
             const promptModeWidget = find("prompt_mode");
             const templateWidget = find("reference_template");
+            const caseTemplateWidget = find("case_template");
             const apiModeWidget = find("api_mode");
             const aiWorkshopModelWidget = find("ai_workshop_model");
             const customModelWidget = find("custom_model");
@@ -356,6 +359,8 @@ app.registerExtension({
                 this.s20UpdateApiMode?.();
             };
             this.s20NormalizeOptions();
+
+            addCaseTemplateUI(this, caseTemplateWidget, promptWidget, () => resizeNode(this));
 
             const advancedWidgets = [
                 find("custom_length_target"), find("reference_roles"), find("reference_context"), find("constraints"),
@@ -411,20 +416,28 @@ app.registerExtension({
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 25) {
                 args[0].widgets_values.splice(9, 0, NO_CASE_TEMPLATE);
             }
+            if (Array.isArray(args[0]?.widgets_values)) {
+                this.t8PendingCaseTemplateValue = args[0].widgets_values[9];
+            }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => {
                 if (hadLegacyUploadUrl) {
                     setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
                 }
+                this.t8RestoreCaseTemplate?.(this.t8PendingCaseTemplateValue);
+                if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.s20NormalizeOptions?.();
             });
         };
 
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
-            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => (
-                this.widgets?.find((widget) => widget.name === name)?.value ?? null
-            ));
+            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => {
+                const widget = this.widgets?.find((item) => item.name === name);
+                return name === "case_template"
+                    ? serializedCaseTemplateValue(this, widget)
+                    : (widget?.value ?? null);
+            });
         };
     },
 });

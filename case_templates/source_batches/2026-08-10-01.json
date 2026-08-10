@@ -6,112 +6,112 @@
     {
       "case_id": "x-mimu-ai1-2086474098859987150-browser-2086474098859987150-video-1",
       "template_id": "t8-case-evidence-ladder-reality-v1",
-      "label": "证据递进跨界",
-      "summary": "有边界证据连续两次更新同一变量，稳定现实延迟响应，最终变化跨界形成单一物理结果。",
+      "label": "未来证据｜异常闯入现实",
+      "summary": "稳定现实中，同一证据载体连续更新，最后异常内容延迟跨入现实。",
       "case_sha256": "4462ca7fb93be518f6c4e81822c21d17f1855c0b44a4a0cbaa130def66ea3079",
       "creative_dna_sha256": "8ec5bc37cf88c43cdf9f7a4b069bf117dca7eb1f6056fad3349ccc065c85d8e7",
       "mechanism_fingerprint": "967f031b99625e14571cbeb2afef14c48bb8152ee2ffbfdd09eb9deddca3c695",
-      "h3_adapter_sha256": "ba5af5d7e3437290fff9e74c72d728bfaf0ea2c7af1faa7b3994fcb3021c06ad",
-      "seedance20_adapter_sha256": "391065e546aee00de6cacfa59d96ffa8ffe250cf6a48f217d0cb21091c2624a8"
+      "h3_adapter_sha256": "44ec0a1cbb7be0b65e142befb22522df95b2fef8d26c1403631d01a5c591c2a9",
+      "seedance20_adapter_sha256": "d9a0536c44fcdca654c7fe2fec1c4c23e6dfef48e702a9eabbb6d89b5ff03d7d"
     },
     {
       "case_id": "x-strength04-x-2086471165581902327-browser-2086471165581902327-video-1",
       "template_id": "t8-case-threshold-inspection-passage-v1",
-      "label": "阈值通行巡检",
-      "summary": "远景锁定入口，一次跨过阈值并连续通行；局部材料信号触发检查，结尾只显示可见路线状态。",
+      "label": "第一视角探险｜穿越后巡检",
+      "summary": "从入口跨过阈值后连续通行，局部检查异常，再给出可见但不武断的路线终态。",
       "case_sha256": "b551d4c3ff336011a2dac34291cfa345c7521fe03c81feea4d9b6a7c9572ba9c",
       "creative_dna_sha256": "19ba5baa8ed1e48a807264a0e84acb7e937f0b287915e1a123753dd4389da9fd",
       "mechanism_fingerprint": "31ca609ed70b77fe325296cb1246b88ad198b8e6a5125b3f71ac4933ffc1f59f",
-      "h3_adapter_sha256": "acdb7b135d5379501a7dc0b9eff7269667828221659c894ec1ac65cb9763a07c",
-      "seedance20_adapter_sha256": "462a8f2fbdb1aa800b5073dc3aee1de82d676f189a6e5e1afba4af3a5f99a51d"
+      "h3_adapter_sha256": "f80e7700cac9c6ff97f8e1bb863f77853733dc7f0bbf3e81d4489f12e3108eab",
+      "seedance20_adapter_sha256": "34867e81b667adf9605ddd8245629805f2c2b5257d81c644a1d404336a4ec025"
     },
     {
       "case_id": "x-zephyraleigh-2086466812347297938-browser-2086466812347297938-video-1",
       "template_id": "t8-case-imperfect-memory-farewell-v1",
-      "label": "瑕疵记忆告别",
-      "summary": "不完美观察者发现日常动作，外部信号改变目标，临近离场只回应一次，并以有动机的录制失误结束。",
+      "label": "复古手持｜日常送别回眸",
+      "summary": "观察者先发现人物日常，外部信号改变人物目标，一次回应后以有动机的拍摄失误结束。",
       "case_sha256": "1f3215b17398d00108c413cefacc092f199b081128a0085010bc0f98e01babca",
       "creative_dna_sha256": "898a0d0523c74cc768503b9cf15c2f66f339c54ee229391da6e39bed4f3edd84",
       "mechanism_fingerprint": "dba23e0ae611e494725c2fad3e534e80ddd6b200bd5ad5da6b2124beec1c08e8",
-      "h3_adapter_sha256": "a97efe7c8e9e4ea4bdedab04073d8f5baf947e045722181432055d341918e83a",
-      "seedance20_adapter_sha256": "50516b10ba95a0744e2ffccca5e0d0f9fb138748c7c496695f3b76f191b91076"
+      "h3_adapter_sha256": "0be0ff3c80fdf698e7eed7c21c3b7199b4032a73b61a345f9e2dd755b32148f6",
+      "seedance20_adapter_sha256": "e7c0eded802e57362ee922c9f94a7c10c8e23dd3f5d54039f646456a92e38f74"
     },
     {
       "case_id": "x-decat2025-2086476172783759520-browser-2086476172783759520-video-1",
       "template_id": "t8-case-deadpan-chain-failure-v1",
-      "label": "泰然连锁失控",
-      "summary": "正式仪式中由单一物理负担引发两次以上连锁后果，主体始终泰然，最终以可见失效完成反转。",
+      "label": "反差喜剧｜越从容越失控",
+      "summary": "正式场合中连锁失控不断升级，但主体始终镇定，反差本身构成笑点。",
       "case_sha256": "3fb193c551c575cc1ea4855efa9f9e9ae8881feeb2f23fcda721ab5d7117a191",
       "creative_dna_sha256": "72791a42ca74a0568fc451da6ecf255b0077fe1ddb9a3974619aba17bd0d8be3",
       "mechanism_fingerprint": "7cce48fb443801d32c7d48278be7351ed4e0caf57ed65dc3ed8c5a0017b98d80",
-      "h3_adapter_sha256": "0328bab9dde8a4170590e13f84d0e3686863fce78d2bc6ae33d37c6fa0bc2cec",
-      "seedance20_adapter_sha256": "3b8fa1213e4f66a1e2961999cace929374e1c3f59e40bf72a7b00258637e6bd0"
+      "h3_adapter_sha256": "c57d48eecebbbded1d298330175d4026230bfa80c4781aa7788d86fe720fce29",
+      "seedance20_adapter_sha256": "2638dc338f36b4d0744b715433c3b9e9f512108f7de46563e173b8cc378e9a64"
     },
     {
       "case_id": "x-adithatipalli-2086477914699170293-browser-2086477914699170293-video-1",
       "template_id": "t8-case-layered-dossier-activation-v1",
-      "label": "分层档案激活",
-      "summary": "固定人物与模块网格，以身份、诊断、能力、工具和状态的严格层级逐步激活档案。",
+      "label": "人物档案｜能力逐层点亮",
+      "summary": "固定档案界面不换主体，按身份、诊断、能力、工具和待命状态逐层激活。",
       "case_sha256": "a5331133ea491ec8bb24563d03a7b13e71b23070ac7ca1067966239b8696affd",
       "creative_dna_sha256": "63049173eedcfd4f00e3a6d484fc114be163f07db71a921d3169b922ea95fba3",
       "mechanism_fingerprint": "6f10c97e0ec72c41afc2f5194edd49f22108cc4994e7d4dd5c37a79f4e86f97a",
-      "h3_adapter_sha256": "8be315915160853c78ce8b17a2fefd25c869e92d97ba2f67ab9d676c5c87a7d7",
-      "seedance20_adapter_sha256": "766fb4d75470d3dbdf3a2737e4744f981132ea3b6033581c922505f98b0213d7"
+      "h3_adapter_sha256": "108e7c16f65f1d8def61b8aa7bacab17bac4afd4684d70f5f65438ccfc616b82",
+      "seedance20_adapter_sha256": "f05ae18cc3173ff1af5a6b99605804d883f1d4438b463be6fe4d8447e9e97246"
     },
     {
       "case_id": "x-futurevibesai-2086443552649941148-browser-2086443552649941148-video-1",
       "template_id": "t8-case-created-mark-boundary-crossing-v1",
-      "label": "创作越界光潮",
-      "summary": "被创作的小型标记先获得自主性并越过实体边界，再扩大为能改变环境的可见后果。",
+      "label": "画中物成真｜小光点变奇观",
+      "summary": "被创作的小标记获得自主性，跨出实体边界，扩张并改变真实环境。",
       "case_sha256": "24543492b4daba970c7b3d4cc60aea2bc286f5bed0e2f7a449bbc7e8956d680f",
       "creative_dna_sha256": "d65b2bf76c8a3b4137d8fd2ee4b66eac4e7cef366739ad326233a58e52bb631b",
       "mechanism_fingerprint": "9c8c86bd87bdecb6ea13b47432b14218e205735c8cd3ab599ef02e08a7e0dcd4",
-      "h3_adapter_sha256": "adb2eff111453ff1dd6f1bc490c5ca833704d2f8d59613213d214432236a6f2f",
-      "seedance20_adapter_sha256": "5d798892e5d3efbf2883cba53b5f67c8dafce9c2eb3276f5b77917f2446d69fd"
+      "h3_adapter_sha256": "e25d50d1c9c92c3de0529dd10d1e0134f12eba46914ff7339716a193e2a05d7c",
+      "seedance20_adapter_sha256": "c2f6e1ef2c4ad25f80948b4cfd45433885e7a9fceb367256cbac26c7e23af4c4"
     },
     {
       "case_id": "x-derek-wall90176-2086464559439855938-browser-2086464559439855938-video-1",
       "template_id": "t8-case-material-progress-clock-v1",
-      "label": "材质进度时钟",
-      "summary": "围绕同一工艺物件，让一个不可逆材料变量只增不减地充当制作进度时钟。",
+      "label": "工艺过程｜材料覆盖当进度",
+      "summary": "同一工艺物保持连续，用只增不减的材料变量作为清晰进度钟。",
       "case_sha256": "48fccb106c5ed0c3748614ae71c4e0c422a77f55041d49c52898850e41fac36b",
       "creative_dna_sha256": "5a7ab0a7889381608b5c0a6729ef60beb57872dfe99d5c922bc02c17958e00f4",
       "mechanism_fingerprint": "6d66cee4d1020b7cbcbe0166b16618d3808b2793885d5410ee0a41f5e0fcb909",
-      "h3_adapter_sha256": "cf4a0f016debd31836a9c391d4115f58f19a6509afb6a13a64a8bc4547749b4c",
-      "seedance20_adapter_sha256": "24a07b809f62965e90dac2906ab580b5d180919a7f6f19536931e9f493a5898b"
+      "h3_adapter_sha256": "964143120de0d84e9aa0d7d501e0fb3757950f7c46d05fe7d369a6615f386207",
+      "seedance20_adapter_sha256": "4b06056caf2cb613e6c1a631d80562ac0a93c3e75ee382793576baeddd19203a"
     },
     {
       "case_id": "x-aimikoda-2086412223061135392-browser-2086412223061135392-video-1",
       "template_id": "t8-case-staged-character-reveal-v1",
-      "label": "四阶角色亮相",
-      "summary": "以标志细节、局部轮廓、面部、单一动作和完整定格逐级释放稳定角色身份。",
+      "label": "角色登场｜细节到全身揭晓",
+      "summary": "从标志细节开始，逐层扩展到面部、动作和全身英雄定格。",
       "case_sha256": "7e6650b77d45dc58ffc71ab7e8dd86a62cabb5eafd05348417930f4e19b60924",
       "creative_dna_sha256": "cff69bea492d7d07bbd9c104eb54952b53645223a68134e2d51529996470c00f",
       "mechanism_fingerprint": "6550cfd928a4b3ac3abaa586e1925ee889871568bc44c5ec0e254ac617dc37f4",
-      "h3_adapter_sha256": "11641a47c7c1d89e82d229c0c785b80149d98f37795f9c891f2a904f11d8611e",
-      "seedance20_adapter_sha256": "9b1530ac46b0e026959fb995cf49b098520abf9a34d5728b6cbc111bac5401e4"
+      "h3_adapter_sha256": "c0ddea1631519fb9f84c775aee6e4e50e3cfca09a0b6a11ce8f69be68a22d1f4",
+      "seedance20_adapter_sha256": "b87d5e27064eef59c1702e58f95511dba5d646f6d0950121ae2b991ba0d94fc9"
     },
     {
       "case_id": "x-saniaspeaks-2085932310923251950-browser-2085932310923251950-video-1",
       "template_id": "t8-case-mechanical-convoy-proof-v1",
-      "label": "机械因果伴行",
-      "summary": "可见机械装置先达到阈值再让负载起浮，用连续视角证明与前导运输保持稳定编队。",
+      "label": "机械同行｜启动后稳定伴行",
+      "summary": "装置启动并达到阈值后带动负载，连续镜头证明它确实稳定跟随。",
       "case_sha256": "3bd0d9239135941a3f9b839e2933beb2d14a7facb3f7c6f1ae5dddcfe5ee7088",
       "creative_dna_sha256": "1c5c5badc4e58a0058bbd70632fca6039e6b209d1ce54e6e96f3e10b5ddadbf8",
       "mechanism_fingerprint": "03d8fe209ce33e21d14a37c3eb1d0155018bc3e742f018a66bba4eee257c798c",
-      "h3_adapter_sha256": "ef5e96b96a4cb7c2631419ec9eded82951d268da52a28c8f33c01c94e4bf75d4",
-      "seedance20_adapter_sha256": "5c0d140241d013cf66d567e65034c1791ead83705a2efc9540ec0dcd7c18215c"
+      "h3_adapter_sha256": "a2ccd8b277c9e511eb7c5b32122ea02e2e5cf70a78b88dd920cb0c47953fa5c3",
+      "seedance20_adapter_sha256": "6ebdb9d4ea431d9edf75a47f25e654eb37454f4a4d284c29f712751d34356f40"
     },
     {
       "case_id": "x-mayz1169-2086427292755247409-browser-2086427292755247409-video-1",
       "template_id": "t8-case-flat-geometry-reconstruction-v1",
-      "label": "平面几何重构",
-      "summary": "围绕单一几何母题反复拆解重构平面布局，经高密状态与对照静段收束为原创图形系统。",
+      "label": "平面重组｜几何节奏品牌片",
+      "summary": "稳定剪影与几何母题被反复拆解重组，在高密阶段后短暂停顿并收束为既有图形族。",
       "case_sha256": "1cee62aadece4cda7c1be91366bc96401604b29a3f7a0adf87e19ab3fc5ba21c",
       "creative_dna_sha256": "697b53a76c84c7fe9d761792698171eabcf2ad479ce460b3399d6e7b038f402b",
       "mechanism_fingerprint": "da62fa815543a2627a9724cdb384425996b1cf0f7c5c2b0175decb68a183090a",
-      "h3_adapter_sha256": "cc241bd765bee6ea063247a515a46a74e8a426ab2d601e3c2c35ef4985eb6e7f",
-      "seedance20_adapter_sha256": "236308d89a53f23a1d6e3badb205e9429ceb6588616b843616c87826b3347baf"
+      "h3_adapter_sha256": "94e74aa503fd195831f9a8febe96623d73876b908136b89ef56e8ec2e00c098f",
+      "seedance20_adapter_sha256": "de219d3e0309306de44860415e1404b90b5d55b858e9877ce1723ce8b2908991"
     }
   ]
 }
