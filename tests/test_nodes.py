@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import importlib.util
 import io
 import json
@@ -802,6 +803,8 @@ class PromptEnhancerTests(unittest.TestCase):
     def test_case_template_frontend_shows_preview_and_safe_recommended_fill(self):
         root = NODES_PATH.parent
         shared = (root / "web" / "js" / "case_template_ui.js").read_text(encoding="utf-8")
+        menu = (root / "web" / "js" / "template_menu_preview.js").read_text(encoding="utf-8")
+        official = (root / "web" / "js" / "official_preset_previews.js").read_text(encoding="utf-8")
         h3_ui = (root / "web" / "js" / "minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")
         seedance_ui = (root / "web" / "js" / "seedance20_prompt_enhancer.js").read_text(encoding="utf-8")
         self.assertIn("填入推荐示例", shared)
@@ -816,6 +819,36 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("serializedCaseTemplateValue", seedance_ui)
         self.assertIn("addCaseTemplateUI", h3_ui)
         self.assertIn("addCaseTemplateUI", seedance_ui)
+        self.assertIn("registerTemplateMenuPreview(node, caseWidget", shared)
+        self.assertIn('entry.addEventListener("pointerenter"', menu)
+        self.assertIn('filter?.addEventListener("keydown"', menu)
+        self.assertIn("rootRect.right + gap", menu)
+        self.assertIn("rootRect.left - panelRect.width - gap", menu)
+        self.assertIn("addOfficialPresetMenuPreview(this, creativePresetWidget)", h3_ui)
+        self.assertIn("MiniMax 官方示例 GIF", official)
+        self.assertIn("不会发送给 LLM", official)
+
+    def test_all_official_preset_gifs_are_bundled_and_hash_pinned(self):
+        root = NODES_PATH.parent
+        asset_root = root / "web" / "js" / "assets" / "official-previews"
+        source = (root / "web" / "js" / "official_preset_previews.js").read_text(encoding="utf-8")
+        expected = {
+            "极简产品广告": ("minimalist-product-ad-generator.gif", "f25d9b4f9c2a8d881d8bbefdb3076a4d79fd46246d11b75d1a5ee278b5cc38f7"),
+            "3D 动画短片": ("3d-animation-short-generator.gif", "1bf1ad020c4d8548a23902133c4704b2c2503efef1de40889cf0eb3a92467285"),
+            "品牌宣传短片": ("brand-promo-video-generator.gif", "1346688e90749b42ca15f94fc80078ebb7d98a9bf23f409f6a2f11d6f55c5ba5"),
+            nodes.MV_CREATIVE_PRESET: ("music-video-subtitle-generator.gif", "e266707a77965622d175d012370a638cb2bef660532950634c28434fd87697e2"),
+            "双人合作游戏开场": ("co-op-game-intro-generator.gif", "b6c12f7ac0e476645b8228e4b6b6cb9650c3b92d7e773b3d68c1dadac733cdde"),
+            "纸拼贴讲解": ("paper-collage-explainer-generator.gif", "f89d8c00943dbe02fae0b709ebb5705fc80a75bfd13bbb0cefdb01eb31b4a8f3"),
+            "立体纸艺停格讲解": ("papercraft-stop-motion-explainer.gif", "6bc26e1724e6dbe250fe10b22924fa914602d98f1634b3410bf208dfc05ec59f"),
+            "手绘实拍融合": ("handdrawn-live-video-generator.gif", "4bbc23442baedd2463e3c111221946fce59bd55d498e2c522d3da9b295083e55"),
+        }
+        self.assertEqual({path.name for path in asset_root.glob("*.gif")}, {item[0] for item in expected.values()})
+        for label, (filename, digest) in expected.items():
+            with self.subTest(label=label):
+                self.assertIn(f'"{label}"', source)
+                self.assertIn(f'file: "{filename}"', source)
+                self.assertEqual(hashlib.sha256((asset_root / filename).read_bytes()).hexdigest(), digest)
+        self.assertIn('const OFFICIAL_COMMIT = "b7227fa6a6206e9fb30562383d39e53cf3866a48"', source)
 
     def test_reference_template_mode_requires_and_sends_template(self):
         missing_session = FakeSession(basic_output())

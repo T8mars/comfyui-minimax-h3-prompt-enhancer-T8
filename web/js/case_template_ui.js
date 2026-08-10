@@ -1,4 +1,5 @@
 import { api } from "../../scripts/api.js";
+import { registerTemplateMenuPreview } from "./template_menu_preview.js";
 
 
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
@@ -223,6 +224,33 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         node.t8RestoreCaseTemplate(node.t8PendingCaseTemplateValue);
         node.t8PendingCaseTemplateValue = "";
     }
+
+    registerTemplateMenuPreview(node, caseWidget, (value) => {
+        const template = byLabel.get(value) || byId.get(value);
+        if (!template) {
+            return {
+                authority: "T8 原创案例模板（非官方）",
+                title: value || "T8 原创案例模板（非官方）",
+                summary: "悬停一个具体案例即可在右侧查看对应 GIF 与案例用途。",
+                empty_message: "当前未启用 T8 案例模板。",
+                previews: [],
+            };
+        }
+        return {
+            authority: template.authority || "T8 原创案例模板（非官方）",
+            title: template.label,
+            summary: template.summary,
+            previews: (template.previews || []).map((preview) => ({
+                label: preview.label,
+                url: preview.available && preview.preview_url ? api.apiURL(preview.preview_url) : "",
+                available: Boolean(preview.available && preview.preview_url),
+                unavailable_message: "本机未配置此案例 GIF；不影响提示词增强。",
+                source_url: preview.source_url || "",
+                source_label: "查看案例来源",
+            })),
+            policy: "T8 案例 GIF 仅供人类本地预览，不会发送给 LLM",
+        };
+    });
 
     const update = (value = caseWidget.value) => {
         const template = byLabel.get(value) || byId.get(value);

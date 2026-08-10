@@ -1,5 +1,6 @@
 import { app } from "../../scripts/app.js";
 import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
+import { addOfficialPresetMenuPreview } from "./official_preset_previews.js";
 
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
@@ -512,6 +513,7 @@ app.registerExtension({
             };
             this.t8NormalizePromptOptions();
 
+            addOfficialPresetMenuPreview(this, creativePresetWidget);
             addCaseTemplateUI(this, caseTemplateWidget, promptWidget, () => resizeNode(this));
 
             const advancedWidgets = [referenceContextWidget, constraintsWidget].filter(Boolean);
