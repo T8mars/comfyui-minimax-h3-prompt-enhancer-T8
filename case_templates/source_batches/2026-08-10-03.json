@@ -1,0 +1,97 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-10-03",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-aripratama293-2058715926451896397-browser-2058715926451896397-video-1",
+      "template_id": "t8-case-recorder-overlay-memory-route-v1",
+      "label": "相机记忆｜固定取景框串联日常",
+      "summary": "一个固定相机取景界面贯穿多处日常空间，同一人物每到一处完成一个小动作，最后用手掌触镜物理结束记录。",
+      "case_sha256": "ec9d06afe9b6c8329c9945214ddf2b279e9a25abc559b2d76d32b11406d7b5e3",
+      "creative_dna_sha256": "ce16cdb227389259e3b383beac0987cc9ea0d9947f41d706c38b2753b5706008",
+      "h3_adapter_sha256": "a4723b2ade368d22b0459e0d0cdbce3d3048d74694348f066b7c22511ddc1167",
+      "seedance20_adapter_sha256": "d999c8deb3cf30c21ef9700f545db3dbd7ab89fa7ab13acba5b9ddc663df5070"
+    },
+    {
+      "case_id": "x-aimikoda-2053053922332262547-browser-2053053922332262547-video-1",
+      "template_id": "t8-case-performance-fall-rise-arc-v1",
+      "label": "舞台表演｜远景起势到倒地复起",
+      "summary": "单人表演先用大远景建立身体与空间，再推进近景表达、完成一次受控倒地和俯拍停留，最后在独立光束中复起。",
+      "case_sha256": "83f0a6b10afca39acff8530a0a8d00e0d6d870ac8f4dd92b4628f0d9eed6ae31",
+      "creative_dna_sha256": "f7b81b8dbe01d388692338bb278fb4ca9e1946d29ede7710aed4141115d3f2b2",
+      "h3_adapter_sha256": "94b2ffa91c5ce4308af2facfffe419a28c2d6e6297634cd3d2ea73125d921222",
+      "seedance20_adapter_sha256": "489a03c738cfca6313652e71f0b1855286b4544d94fe15f55504cea9db16a611"
+    },
+    {
+      "case_id": "x-oggii-0-2083436822085165289-browser-2083436822085165289-video-1",
+      "template_id": "t8-case-first-person-testimonial-proof-v1",
+      "label": "UGC测评｜开箱到一口实证",
+      "summary": "真人与未开封产品同框起手，完整开箱后给一个关键微距证据，再完成真实使用，并让产品与变化后的反应一起收口。",
+      "case_sha256": "79b3730bf6b40ab925f128db045e89f66cb43920ddc22e3f130d7138da7e137f",
+      "creative_dna_sha256": "1f14fcbdaddcf6c536bef9a4940d638052d0c770e647fc447625f4965004cc96",
+      "h3_adapter_sha256": "218f7201ec456b53341e0b5a16f13c0500c8993f45e87b7c6d10448c006eb1ec",
+      "seedance20_adapter_sha256": "cce69f8b6ab7bc1f020acd2ce16c4b0178720aa2cc8627a2c6f2b3fc47bc0c83"
+    },
+    {
+      "case_id": "x-aimikoda-2083949566009778473-browser-2083949566009778473-video-1",
+      "template_id": "t8-case-persistent-selector-subject-swap-v1",
+      "label": "互动图鉴｜固定菜单切换生物",
+      "summary": "菜单、数据区和主视窗固定不动，选择器逐项切换，每次让名称、参数与主视窗主体同步更新并完成一个定义动作。",
+      "case_sha256": "e54c830343455a76e9b9a6260f9709f3ebf45101754b5f6f97e424af5118c049",
+      "creative_dna_sha256": "b51eb2046704dfd41172ee1baf617fb644f759691f23c4dd986de01124ed635b",
+      "h3_adapter_sha256": "d4c16dec2555556799b527b0f5f0b8ae23a60144710b8774466e435612380044",
+      "seedance20_adapter_sha256": "d8d6a1be190acd64129570bdd0d654d092f5d869aaa1aef7ee9f3e37e3a13d5d"
+    },
+    {
+      "case_id": "x-sebatheepan-2084311486277599712-browser-2084311486277599712-video-1",
+      "template_id": "t8-case-kinetic-text-obstacle-break-v1",
+      "label": "动力短片｜文字障碍逐个击碎",
+      "summary": "低饱和世界里，短词成为路线上的实体障碍，主角通过前进动作逐个击碎，每次冲击恢复一部分颜色，最后用一个原创短句命名新状态。",
+      "case_sha256": "3a12fc7023352777131864cef49096457eba2cd60e1e788c4eb4b324d3de23a6",
+      "creative_dna_sha256": "0b4d6b684c9c39f1c128c6b0d04c1a73ff9d96c1f2cdd63261e16817f0bf8d49",
+      "h3_adapter_sha256": "7f7815518b0f61cf05f17e8f16b791c02417ea5ecd7634ef74c89e28effe9089",
+      "seedance20_adapter_sha256": "9b5a3b1e1b9a4780832a0f2c511e6e80d56234ba5e333f0397d4b4c4ff37c3be"
+    },
+    {
+      "case_id": "x-craftian-keskin-2082658222247137433-browser-2082658222247137433-video-1",
+      "template_id": "t8-case-asymmetric-mass-control-fight-v1",
+      "label": "力量反差｜小体型用杠杆反制",
+      "summary": "先证明巨大质量差与可用支点，让重型对手完整承诺攻击，小体型主角进入转弯半径并用杠杆重定向动量，最后形成非致命控制。",
+      "case_sha256": "0901e871766789fa0952577695df3bf8ebee0e08d7ccfbdc746bdedf4cb27040",
+      "creative_dna_sha256": "c99dd5e0ce66c2e6b85870283422694527da7945d3fa0fe94444092a949a1a3b",
+      "h3_adapter_sha256": "e68942e5512dfd953844ed31019177aa498cfb69caadcb60c3d58a387da0d5a3",
+      "seedance20_adapter_sha256": "5b6bb021dad2408ef570c5bea059aca2310fa5272f74989243a61b79c11d58c6"
+    },
+    {
+      "case_id": "x-charaspowerai-2085622021812039920-browser-2085622021812039920-video-1",
+      "template_id": "t8-case-reversible-material-typography-loop-v1",
+      "label": "材质字效｜霜花成字再归位",
+      "summary": "固定竖直玻璃先建立清晰基线，霜晶从同一表面长成一个短词，保持可读后融成真实水珠，最终恢复开场窗口形成闭环。",
+      "case_sha256": "e4fa824ad48c50fe8b84e2252dccc7c559177ec27c95e13c607e7dd726589e53",
+      "creative_dna_sha256": "fd746e873399c6f949465be0f8373bc093502a7d59aea2218088f432ec3d1775",
+      "h3_adapter_sha256": "1de175ef76f4dfcfe28ae2087532ce98854bab74543c14553386087f8a008661",
+      "seedance20_adapter_sha256": "e7d7cc687d592a872462b5312a39dad5d0dd2980b5b56fb9f63e7386a1cfbcd2"
+    },
+    {
+      "case_id": "x-techhalla-2081333381401334006-browser-2081333381401334006-video-1",
+      "template_id": "t8-case-observer-follow-encounter-v1",
+      "label": "纪实跟拍｜行进中偶遇再离开",
+      "summary": "侧面跟拍同一人物离开狭窄空间，镜头漂到身后并揭示更大路线；只发生一次偶遇和一次克制回应，人物随后继续离开。",
+      "case_sha256": "a626e8a2e5dc25a929030ed583e5907865b119f106f27e9c38582a862aa5c4f0",
+      "creative_dna_sha256": "1adf2d6165d0387072f04db1822696f41a8e243d0c7ad46eee460a4a7e4c36f8",
+      "h3_adapter_sha256": "38b51f48ff0299495adb9942014e73006172e3521662a98a35e923ad9fbc5669",
+      "seedance20_adapter_sha256": "48a268a8722b3d3ce7910a9852d7dfe2c24226c1c64f7597f3e616be633af626"
+    },
+    {
+      "case_id": "x-techiebysa-2084600512180113820-browser-2084600512180113820-video-1",
+      "template_id": "t8-case-two-turn-pause-reaction-v1",
+      "label": "对话喜剧｜双轮停顿无声反应",
+      "summary": "双人同框先建立眼线，第一轮说话后留出清楚停顿，再完成第二轮说话并以第一人的无声反应收尾；具体对白和喜剧语义必须全新原创。",
+      "case_sha256": "9670b0dba53ce827bc49ce5a6d125943f81fc1db320dba44c9f73cc1b2c2cc68",
+      "creative_dna_sha256": "1adcc65ead98af47d6c83c8d089f16fe094006cf07e021159f678270285e63d9",
+      "h3_adapter_sha256": "bb3ece01cee03c25fd3de5516298c7a865cef6e9bc644384b48f5038556fd743",
+      "seedance20_adapter_sha256": "fec3288105c76c0fa5ef82718d7c2791bbb5014683799a092800667065de3dea"
+    }
+  ]
+}

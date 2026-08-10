@@ -30,7 +30,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。打开官方预设下拉时，悬停具体预设会在菜单右侧显示对应 MiniMax 官方 GIF。预设只优化提示词，不运行完整制作工作流。
-- 两个节点提供独立的 `T8 原创案例模板（非官方）` 列表：29 个已发布案例归并为 28 个稳定 selector（含 1 个同机制证据变体），并提供人类可读名称、用途、推荐输入、2–5 个结构锚点和可选本地 GIF 预览。
+- 两个节点提供独立的 `T8 原创案例模板（非官方）` 列表：39 个已发布案例归并为 37 个稳定 selector（含 2 个同机制证据变体），并提供人类可读名称、用途、推荐输入、2–5 个结构锚点和可选本地 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -209,7 +209,7 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 | `技能展示｜基础动作串联升级` | 每项递增技能都从基础循环出发并返回，每个机位只承担一个证明任务 |
 | `微缩介入｜外部物只进入一次` | 静态标准物先校准尺度，微缩日常稳定后由另一个外部执行物单次介入 |
 
-29 个来源案例中有 28 个 selector；Mayz 的纸艺无障碍案例作为 `平面重组｜几何节奏品牌片` 的第二个 GIF 与示例，不重复增加下拉项。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。本次 v2 增量只新增 `微缩闯关｜同一材质连续变形` 与 `升级讽刺｜新物登场旧爱被移走`，原有 27 条案例关系不重复导入。
+39 个来源案例中有 37 个 selector；Mayz 的纸艺无障碍案例作为 `平面重组｜几何节奏品牌片` 的第二个 GIF，第三批角色板案例作为 `角色卡验真｜四类证据锁定角色` 的第二个 GIF，均不重复增加下拉项。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。第三批只新增 9 个 selector 和 1 个证据变体，旧 29 条案例关系保持不变。
 
 打开 `MiniMax 官方创意预设` 或 `T8 原创案例模板（非官方）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和来源；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择 T8 模板后，节点内仍会显示用途、适用/推荐输入格式、2–5 个必须实现的结构锚点、推荐示例和 GIF。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立该案例需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
@@ -235,7 +235,7 @@ python tools/import_unofficial_case_library_v2.py `
   --output case_templates/catalog.json
 ```
 
-导入器要求 29 条记录严格组成 28 个 selector + 1 个 evidence variant、案例 `released/approved`、H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并现场重算 adapter 哈希。可分发目录不会写入本地路径、来源 URL、媒体或成品提示词；来源链接仅由本机 manifest 的预览路由按授权动态提供。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe 与哈希核验。
+导入器要求 39 条记录严格组成 37 个 selector + 2 个 evidence variant、案例 `released/approved`、H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并现场重算 adapter 与 GIF 哈希。可分发目录不会写入本地路径、来源 URL、媒体或成品提示词；来源链接仅由本机 manifest 的预览路由按授权动态提供。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe 与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
@@ -297,7 +297,7 @@ MV 规则按以下方式工作：
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | `现有兼容 / 官方 Skill 严格`；默认兼容，严格档位强制英文说明正文 |
 | `creative_preset` | `无 / AUTO / 8 个官方场景写作预设` |
-| `case_template` | `无 / 28 个 T8 原创案例模板（非官方）`；显示人类名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
+| `case_template` | `无 / 37 个 T8 原创案例模板（非官方）`；显示人类名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |

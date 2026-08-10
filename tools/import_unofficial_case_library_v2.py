@@ -16,9 +16,9 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 29
-EXPECTED_SELECTOR_COUNT = 28
-EXPECTED_EVIDENCE_COUNT = 1
+EXPECTED_RECORD_COUNT = 39
+EXPECTED_SELECTOR_COUNT = 37
+EXPECTED_EVIDENCE_COUNT = 2
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -157,7 +157,7 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
     actual_counts = (len(records), len(selectors), len(evidence))
     expected_counts = (EXPECTED_RECORD_COUNT, EXPECTED_SELECTOR_COUNT, EXPECTED_EVIDENCE_COUNT)
     if declared_counts != expected_counts or actual_counts != expected_counts:
-        raise LibraryImportError("Expected 29 records: 28 selectors and one evidence variant")
+        raise LibraryImportError("Expected 39 records: 37 selectors and two evidence variants")
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
     seen_cases: set[str] = set()
@@ -195,10 +195,10 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
         seen_cases.add(case_id)
 
     selector_by_template = {str(record["template_id"]): record for record in selectors}
-    evidence_record = evidence[0]
-    primary = selector_by_template.get(str(evidence_record["template_id"]))
-    if primary is None or evidence_record.get("duplicate_of") != primary.get("case_id"):
-        raise LibraryImportError("Evidence variant must bind to its selector's primary case")
+    for evidence_record in evidence:
+        primary = selector_by_template.get(str(evidence_record["template_id"]))
+        if primary is None or evidence_record.get("duplicate_of") != primary.get("case_id"):
+            raise LibraryImportError("Evidence variant must bind to its selector's primary case")
 
     existing: dict[str, dict[str, Any]] = {}
     if existing_catalog_path and existing_catalog_path.is_file():
@@ -288,7 +288,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Import the 29-record T8 unofficial case-library v2 handoff.")
+    parser = argparse.ArgumentParser(description="Import the 39-record T8 unofficial case-library v2 handoff.")
     parser.add_argument("--library", required=True, type=Path)
     parser.add_argument("--existing-catalog", type=Path)
     parser.add_argument("--source-batch-dir", type=Path)
@@ -304,7 +304,8 @@ def main() -> int:
         sync_source_batches(catalog, args.source_batch_dir.resolve())
     print(
         f"Wrote {catalog['selector_template_count']} selectors and "
-        f"{catalog['evidence_variant_count']} evidence variant to {args.output.resolve()}"
+        f"{catalog['evidence_variant_count']} evidence "
+        f"{'variant' if catalog['evidence_variant_count'] == 1 else 'variants'} to {args.output.resolve()}"
     )
     return 0
 
