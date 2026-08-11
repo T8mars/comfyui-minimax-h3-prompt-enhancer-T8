@@ -143,7 +143,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIsNone(api_key.socketless)
         self.assertEqual(case_template.default, seedance20.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, seedance20.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(case_template.display_name, "T8 原创案例模板（非官方）")
+        self.assertEqual(case_template.display_name, "非官方模板（案例 / 社区 Skill）")
         self.assertIn("rejected input_audio", schema.description)
         api_mode = next(item for item in schema.inputs if item.id == "api_mode")
         ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
@@ -353,21 +353,30 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(offsets, sorted(offsets))
                 self.assertTrue(output.rstrip().endswith(f"实现{anchors[-1]}。"))
 
-    def test_configured_local_case_library_serves_all_39_human_only_gifs(self):
+    def test_configured_local_template_library_serves_all_51_human_only_gifs(self):
         manifest_path = case_library_routes.configured_manifest_path()
         if manifest_path is None or not manifest_path.is_file():
             self.skipTest("Local GIF case library is not configured on this machine")
         catalog = case_library_routes.runtime_public_catalog()
         previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-        self.assertEqual(len(previews), 39)
+        self.assertEqual(len(previews), 51)
         self.assertTrue(all(preview["available"] for preview in previews))
         self.assertTrue(all(preview["preview_url"].startswith("/t8-prompt-enhancer/case-preview/") for preview in previews))
-        self.assertTrue(all(preview["source_url"].startswith("https://") for preview in previews))
+        case_previews = [preview for preview in previews if not preview["case_id"].startswith("community-skill--")]
+        community_previews = [preview for preview in previews if preview["case_id"].startswith("community-skill--")]
+        self.assertEqual(len(case_previews), 49)
+        self.assertEqual(len(community_previews), 2)
+        self.assertTrue(all(preview["source_url"].startswith("https://") for preview in case_previews))
+        self.assertTrue(all(preview["source_url"] == "" for preview in community_previews))
         for preview in previews:
             path, record = case_library_routes.resolve_preview(preview["case_id"], verify_hash=True)
             self.assertTrue(path.is_file())
-            self.assertTrue(record["rights"]["local_preview"])
-            self.assertFalse(record["rights"]["model_reference"])
+            if record["_template_kind"] == "case":
+                self.assertTrue(record["rights"]["local_preview"])
+                self.assertFalse(record["rights"]["model_reference"])
+            else:
+                self.assertTrue(record["import_policy"]["preview_only"])
+                self.assertFalse(record["import_policy"]["source_media_connected"])
 
     def test_length_target_is_soft_and_arbitrary_nonempty_output_passes_through(self):
         upstream = "上游没有按任何固定格式返回，但内容非空，应原样放行。"

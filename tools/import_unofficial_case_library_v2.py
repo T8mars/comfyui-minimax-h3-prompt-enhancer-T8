@@ -10,15 +10,18 @@ from typing import Any
 
 CATALOG_SCHEMA = "t8-case-template-catalog/v2"
 LIBRARY_SCHEMA = "t8-unofficial-case-library/v2"
+COMMUNITY_LIBRARY_SCHEMA = "t8-standalone-community-skill-handoff/v1"
 NO_CASE_TEMPLATE = "无（不使用 T8 案例）"
 TARGETS = ("h3", "seedance20")
 SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 39
-EXPECTED_SELECTOR_COUNT = 37
-EXPECTED_EVIDENCE_COUNT = 2
+EXPECTED_RECORD_COUNT = 49
+EXPECTED_SELECTOR_COUNT = 43
+EXPECTED_EVIDENCE_COUNT = 6
+EXPECTED_COMMUNITY_SKILL_COUNT = 2
+EXPECTED_TOTAL_SELECTOR_COUNT = 45
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -66,6 +69,58 @@ def _sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _verified_text_asset(asset: Any, *, label: str) -> tuple[str, str]:
+    if not isinstance(asset, dict):
+        raise LibraryImportError(f"Community Skill asset is missing: {label}")
+    path = Path(str(asset.get("path", ""))).resolve()
+    expected_hash = str(asset.get("sha256", ""))
+    if not path.is_file() or not re.fullmatch(r"[0-9a-f]{64}", expected_hash):
+        raise LibraryImportError(f"Community Skill asset is invalid: {label}: {path}")
+    actual_hash = _sha256(path)
+    if actual_hash != expected_hash:
+        raise LibraryImportError(f"Community Skill asset SHA-256 mismatch: {label}: {path}")
+    try:
+        text = path.read_text(encoding="utf-8").strip()
+    except OSError as exc:
+        raise LibraryImportError(f"Cannot read community Skill asset: {label}: {path}: {exc}") from exc
+    if not text or SECRET_RE.search(text):
+        raise LibraryImportError(f"Community Skill asset is empty or contains a secret: {label}")
+    return text, actual_hash
+
+
+def _community_preview_id(skill_id: str) -> str:
+    return f"community-skill--{skill_id}"
+
+
+def _validate_community_preview(record: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    skill_id = str(record.get("skill_id", ""))
+    preview = record.get("preview")
+    if not isinstance(preview, dict):
+        raise LibraryImportError(f"Community Skill preview metadata is missing: {skill_id}")
+    path = Path(str(preview.get("path", ""))).resolve()
+    expected_hash = str(preview.get("sha256", ""))
+    if path.suffix.lower() != ".gif" or not path.is_file():
+        raise LibraryImportError(f"Community Skill preview GIF is missing: {path}")
+    with path.open("rb") as handle:
+        if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
+            raise LibraryImportError(f"Community Skill preview is not a GIF: {path}")
+    actual_hash = _sha256(path)
+    if actual_hash != expected_hash:
+        raise LibraryImportError(f"Community Skill preview GIF SHA-256 mismatch: {path}")
+    return {
+        "case_id": _community_preview_id(skill_id),
+        "label": record["dropdown_label"],
+        "short_summary": record["short_summary"],
+        "recommended_input": record["recommended_input"],
+        "required_anchors": list(record["required_anchors"]),
+        "sha256": actual_hash,
+        "width": 0,
+        "height": 0,
+        "duration_seconds": 0,
+        "human_preview_only": True,
+    }, actual_hash
 
 
 def _load_creative_dna(record: dict[str, Any]) -> tuple[str, dict[str, str]]:
@@ -137,7 +192,130 @@ def _preview_record(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_catalog(library_path: Path, existing_catalog_path: Path | None = None) -> dict[str, Any]:
+def _build_community_templates(community_library_path: Path) -> list[dict[str, Any]]:
+    manifest = _read_json(community_library_path)
+    if manifest.get("schema_version") != COMMUNITY_LIBRARY_SCHEMA:
+        raise LibraryImportError("Unsupported standalone community-Skill handoff schema")
+    if manifest.get("official") is not False or manifest.get("authority") != "t8_user_contributed_skill":
+        raise LibraryImportError("Standalone community-Skill authority is invalid")
+    records = manifest.get("records")
+    if (
+        not isinstance(records, list)
+        or manifest.get("skill_count") != EXPECTED_COMMUNITY_SKILL_COUNT
+        or manifest.get("selector_count") != EXPECTED_COMMUNITY_SKILL_COUNT
+        or len(records) != EXPECTED_COMMUNITY_SKILL_COUNT
+    ):
+        raise LibraryImportError("Expected two standalone community Skill selectors")
+    source_index_path = Path(str(manifest.get("source_index", ""))).resolve()
+    source_index = _read_json(source_index_path)
+    indexed_skills = source_index.get("skills")
+    indexed_ids = {
+        str(item.get("id"))
+        for item in indexed_skills
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    } if isinstance(indexed_skills, list) else set()
+    if (
+        source_index.get("schema_version") != "public-community-skill-index/v1"
+        or source_index.get("official") is not False
+        or source_index.get("skill_count") != EXPECTED_COMMUNITY_SKILL_COUNT
+        or indexed_ids != {str(record.get("skill_id")) for record in records}
+    ):
+        raise LibraryImportError("Standalone community Skill source index does not close over the handoff records")
+
+    templates: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    seen_labels: set[str] = set()
+    for record in records:
+        skill_id = str(record.get("skill_id", ""))
+        template_id = str(record.get("template_id", ""))
+        label = str(record.get("dropdown_label", ""))
+        if (
+            not skill_id
+            or template_id != f"community-skill/{skill_id}"
+            or template_id in seen_ids
+            or not label
+            or label in seen_labels
+            or record.get("template_action") != "selector"
+            or record.get("official") is not False
+            or record.get("source_classification") != "user-contributed"
+            or record.get("models") != list(TARGETS)
+        ):
+            raise LibraryImportError(f"Invalid standalone community Skill identity: {skill_id}")
+        for field in ("short_summary", "input_format", "recommended_input"):
+            if not isinstance(record.get(field), str) or not record[field].strip():
+                raise LibraryImportError(f"Community Skill UX field is missing: {skill_id}/{field}")
+        anchors = record.get("required_anchors")
+        if not isinstance(anchors, list) or not 2 <= len(anchors) <= 5:
+            raise LibraryImportError(f"Community Skill requires 2-5 mechanism anchors: {skill_id}")
+        if not all(isinstance(anchor, str) and anchor.strip() for anchor in anchors):
+            raise LibraryImportError(f"Community Skill contains an empty mechanism anchor: {skill_id}")
+        expected_policy = {
+            "create_selector": True,
+            "merge_into_case_registry": False,
+            "source_media_connected": False,
+            "preview_only": True,
+            "node_modification_authorized": False,
+        }
+        policy = record.get("import_policy")
+        if not isinstance(policy, dict) or any(policy.get(key) is not value for key, value in expected_policy.items()):
+            raise LibraryImportError(f"Community Skill import policy mismatch: {skill_id}")
+
+        _skill_text, skill_hash = _verified_text_asset(record.get("skill"), label=f"{skill_id}/SKILL.md")
+        summary, summary_hash = _verified_text_asset(record.get("summary"), label=f"{skill_id}/summary")
+        h3_guidance, h3_hash = _verified_text_asset(
+            record.get("guidance", {}).get("h3"), label=f"{skill_id}/h3"
+        )
+        seedance_guidance, seedance_hash = _verified_text_asset(
+            record.get("guidance", {}).get("seedance20"), label=f"{skill_id}/seedance20"
+        )
+        for label_name, content in (
+            ("summary", summary), ("h3", h3_guidance), ("seedance20", seedance_guidance),
+        ):
+            if URL_RE.search(content):
+                raise LibraryImportError(f"Community Skill distributable text contains a URL: {skill_id}/{label_name}")
+        preview, preview_hash = _validate_community_preview(record)
+        templates.append({
+            "id": template_id,
+            "label": label,
+            "legacy_ids": [],
+            "legacy_labels": [],
+            "summary": record["short_summary"],
+            "input_format": record["input_format"],
+            "recommended_input": record["recommended_input"],
+            "required_anchors": list(anchors),
+            "status": "active",
+            "authority": "T8 社区 Skill（非官方·用户贡献）",
+            "official": False,
+            "template_kind": "community_skill",
+            "source": {
+                "skill_id": skill_id,
+                "skill_sha256": skill_hash,
+                "summary_sha256": summary_hash,
+                "preview_sha256": preview_hash,
+                "h3_guidance_sha256": h3_hash,
+                "seedance20_guidance_sha256": seedance_hash,
+            },
+            "previews": [preview],
+            "creative_dna": (
+                "Reusable Creative DNA (mechanism and production grammar only)\n"
+                "Authority: non-official, user-contributed community Skill.\n\n"
+                + summary
+            ),
+            "variants": {
+                "h3": {"guidance": H3_GUIDANCE + "\n\n" + h3_guidance},
+                "seedance20": {"guidance": SEEDANCE20_GUIDANCE + "\n\n" + seedance_guidance},
+            },
+        })
+        seen_ids.add(template_id)
+        seen_labels.add(label)
+    return templates
+
+
+def build_catalog(
+    library_path: Path,
+    community_library_path: Path,
+    existing_catalog_path: Path | None = None,
+) -> dict[str, Any]:
     library = _read_json(library_path)
     if library.get("schema_version") != LIBRARY_SCHEMA:
         raise LibraryImportError("Unsupported unofficial case-library schema")
@@ -157,7 +335,7 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
     actual_counts = (len(records), len(selectors), len(evidence))
     expected_counts = (EXPECTED_RECORD_COUNT, EXPECTED_SELECTOR_COUNT, EXPECTED_EVIDENCE_COUNT)
     if declared_counts != expected_counts or actual_counts != expected_counts:
-        raise LibraryImportError("Expected 39 records: 37 selectors and two evidence variants")
+        raise LibraryImportError("Expected 49 records: 43 selectors and six evidence variants")
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
     seen_cases: set[str] = set()
@@ -236,6 +414,7 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
             "status": "active",
             "authority": "T8 原创案例模板（非官方）",
             "official": False,
+            "template_kind": "case",
             "source": {
                 "case_id": record["case_id"],
                 "case_sha256": record["case_sha256"],
@@ -252,13 +431,26 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
             },
         })
         seen_labels.add(label)
+    community_templates = _build_community_templates(community_library_path)
+    existing_ids = {template["id"] for template in templates}
+    existing_labels = {template["label"] for template in templates}
+    for template in community_templates:
+        if template["id"] in existing_ids or template["label"] in existing_labels:
+            raise LibraryImportError(f"Community selector collides with a case selector: {template['id']}")
+        templates.append(template)
+        existing_ids.add(template["id"])
+        existing_labels.add(template["label"])
+    if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
+        raise LibraryImportError("Expected 45 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
-        "authority": "T8 原创案例模板（非官方）",
+        "authority": "T8 非官方模板（案例 / 社区 Skill）",
         "default": NO_CASE_TEMPLATE,
         "source_case_count": len(records),
-        "selector_template_count": len(selectors),
+        "case_selector_template_count": len(selectors),
+        "community_skill_count": len(community_templates),
+        "selector_template_count": len(templates),
         "evidence_variant_count": len(evidence),
         "official_minimax_skills_included": False,
         "templates": templates,
@@ -266,7 +458,11 @@ def build_catalog(library_path: Path, existing_catalog_path: Path | None = None)
 
 
 def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None:
-    by_case = {item["source"]["case_id"]: item for item in catalog["templates"]}
+    by_case = {
+        item["source"]["case_id"]: item
+        for item in catalog["templates"]
+        if item.get("template_kind") == "case" and item.get("source", {}).get("case_id")
+    }
     for path in sorted(source_batch_dir.glob("*.json")):
         batch = _read_json(path)
         changed = False
@@ -288,14 +484,18 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Import the 39-record T8 unofficial case-library v2 handoff.")
+    parser = argparse.ArgumentParser(
+        description="Import the 49-record case handoff plus two standalone community Skills."
+    )
     parser.add_argument("--library", required=True, type=Path)
+    parser.add_argument("--community-skills", required=True, type=Path)
     parser.add_argument("--existing-catalog", type=Path)
     parser.add_argument("--source-batch-dir", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
     catalog = build_catalog(
         args.library.resolve(),
+        args.community_skills.resolve(),
         args.existing_catalog.resolve() if args.existing_catalog else None,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -303,7 +503,8 @@ def main() -> int:
     if args.source_batch_dir:
         sync_source_batches(catalog, args.source_batch_dir.resolve())
     print(
-        f"Wrote {catalog['selector_template_count']} selectors and "
+        f"Wrote {catalog['case_selector_template_count']} case selectors, "
+        f"{catalog['community_skill_count']} community Skills, and "
         f"{catalog['evidence_variant_count']} evidence "
         f"{'variant' if catalog['evidence_variant_count'] == 1 else 'variants'} to {args.output.resolve()}"
     )

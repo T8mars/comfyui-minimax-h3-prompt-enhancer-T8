@@ -11,7 +11,9 @@ from .case_templates import CASE_TEMPLATES, public_case_catalog
 
 LOCAL_CONFIG_PATH = Path(__file__).resolve().parent / ".t8-case-library.local.json"
 MANIFEST_ENV = "T8_UNOFFICIAL_CASE_LIBRARY_V2"
+COMMUNITY_MANIFEST_ENV = "T8_STANDALONE_COMMUNITY_SKILLS_V1"
 LIBRARY_SCHEMA = "t8-unofficial-case-library/v2"
+COMMUNITY_LIBRARY_SCHEMA = "t8-standalone-community-skill-handoff/v1"
 _REGISTERED = False
 
 
@@ -27,21 +29,39 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def configured_manifest_path() -> Path | None:
-    env_path = str(os.environ.get(MANIFEST_ENV, "")).strip()
-    if env_path:
-        return Path(env_path).expanduser().resolve()
+def _local_config() -> dict[str, Any]:
     if not LOCAL_CONFIG_PATH.is_file():
-        return None
+        return {}
     try:
         config = json.loads(LOCAL_CONFIG_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise CasePreviewError(f"Cannot read local case-library config: {exc}") from exc
-    manifest_path = str(config.get("manifest_path", "")).strip() if isinstance(config, dict) else ""
+    if not isinstance(config, dict):
+        raise CasePreviewError("Local case-library config must be a JSON object")
+    return config
+
+
+def configured_manifest_path() -> Path | None:
+    env_path = str(os.environ.get(MANIFEST_ENV, "")).strip()
+    if env_path:
+        return Path(env_path).expanduser().resolve()
+    manifest_path = str(_local_config().get("manifest_path", "")).strip()
     return Path(manifest_path).expanduser().resolve() if manifest_path else None
 
 
-def _runtime_records() -> dict[str, dict[str, Any]]:
+def configured_community_manifest_path() -> Path | None:
+    env_path = str(os.environ.get(COMMUNITY_MANIFEST_ENV, "")).strip()
+    if env_path:
+        return Path(env_path).expanduser().resolve()
+    config_path = str(_local_config().get("community_skills_manifest_path", "")).strip()
+    if config_path:
+        return Path(config_path).expanduser().resolve()
+    case_manifest = configured_manifest_path()
+    sibling = case_manifest.parent / "standalone-community-skills-v1.json" if case_manifest else None
+    return sibling.resolve() if sibling and sibling.is_file() else None
+
+
+def _runtime_case_records() -> dict[str, dict[str, Any]]:
     manifest_path = configured_manifest_path()
     if manifest_path is None or not manifest_path.is_file():
         return {}
@@ -53,11 +73,67 @@ def _runtime_records() -> dict[str, dict[str, Any]]:
         raise CasePreviewError("Unsupported local unofficial case-library schema")
     if manifest.get("contract", {}).get("official_minimax_skills_included") is not False:
         raise CasePreviewError("Local library mixes official MiniMax Skills into the unofficial cases")
-    return {
-        str(record.get("case_id")): record
-        for record in manifest.get("records", [])
-        if isinstance(record, dict) and isinstance(record.get("case_id"), str)
-    }
+    records: dict[str, dict[str, Any]] = {}
+    for record in manifest.get("records", []):
+        if isinstance(record, dict) and isinstance(record.get("case_id"), str):
+            records[str(record["case_id"])] = {**record, "_template_kind": "case"}
+    return records
+
+
+def _runtime_community_records() -> dict[str, dict[str, Any]]:
+    manifest_path = configured_community_manifest_path()
+    if manifest_path is None or not manifest_path.is_file():
+        return {}
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CasePreviewError(f"Cannot read local community-Skill manifest: {exc}") from exc
+    if (
+        not isinstance(manifest, dict)
+        or manifest.get("schema_version") != COMMUNITY_LIBRARY_SCHEMA
+        or manifest.get("official") is not False
+    ):
+        raise CasePreviewError("Unsupported local standalone community-Skill manifest")
+    source_index = Path(str(manifest.get("source_index", ""))).resolve()
+    if not source_index.is_file():
+        raise CasePreviewError("Local community-Skill source index is missing")
+    try:
+        source_index_data = json.loads(source_index.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CasePreviewError(f"Cannot read local community-Skill source index: {exc}") from exc
+    indexed_ids = {
+        str(item.get("id"))
+        for item in source_index_data.get("skills", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    } if isinstance(source_index_data, dict) else set()
+    if (
+        not isinstance(source_index_data, dict)
+        or source_index_data.get("schema_version") != "public-community-skill-index/v1"
+        or source_index_data.get("official") is not False
+    ):
+        raise CasePreviewError("Unsupported local community-Skill source index")
+    records: dict[str, dict[str, Any]] = {}
+    for record in manifest.get("records", []):
+        if not isinstance(record, dict) or not isinstance(record.get("skill_id"), str):
+            continue
+        if record["skill_id"] not in indexed_ids:
+            raise CasePreviewError("Community Skill is absent from the configured source index")
+        preview_id = f"community-skill--{record['skill_id']}"
+        records[preview_id] = {
+            **record,
+            "_template_kind": "community_skill",
+            "_source_index": str(source_index),
+        }
+    return records
+
+
+def _runtime_records() -> dict[str, dict[str, Any]]:
+    records = _runtime_case_records()
+    community = _runtime_community_records()
+    if set(records).intersection(community):
+        raise CasePreviewError("Local case and community preview identities collide")
+    records.update(community)
+    return records
 
 
 def _allowed_previews() -> dict[str, dict[str, Any]]:
@@ -73,23 +149,42 @@ def resolve_preview(case_id: str, *, verify_hash: bool = True) -> tuple[Path, di
     runtime = _runtime_records().get(str(case_id))
     if allowed is None or runtime is None:
         raise CasePreviewError("Local preview is not configured for this case")
-    rights = runtime.get("rights", {})
-    if rights.get("local_preview") is not True or rights.get("model_reference") is not False:
-        raise CasePreviewError("This case is not authorized for local human preview")
     preview = runtime.get("preview", {})
     if preview.get("sha256") != allowed.get("sha256"):
         raise CasePreviewError("Local preview metadata does not match the installed selector catalog")
-    case_root = Path(str(runtime.get("case_path", ""))).resolve()
-    relative = Path(str(preview.get("path", "preview.gif")))
-    if relative.is_absolute() or ".." in relative.parts:
-        raise CasePreviewError("Unsafe preview path")
-    preview_path = (case_root / relative).resolve()
-    try:
-        preview_path.relative_to(case_root)
-    except ValueError as exc:
-        raise CasePreviewError("Preview path escapes its case directory") from exc
-    if not preview_path.is_file():
+    if runtime.get("_template_kind") == "community_skill":
+        policy = runtime.get("import_policy", {})
+        if (
+            runtime.get("official") is not False
+            or policy.get("preview_only") is not True
+            or policy.get("source_media_connected") is not False
+            or policy.get("create_selector") is not True
+        ):
+            raise CasePreviewError("This community Skill is not authorized for local human preview")
+        preview_path = Path(str(preview.get("path", ""))).resolve()
+        preview_root = Path(str(runtime.get("_source_index", ""))).resolve().parent
+        try:
+            preview_path.relative_to(preview_root)
+        except ValueError as exc:
+            raise CasePreviewError("Community preview path escapes the indexed preview directory") from exc
+    else:
+        rights = runtime.get("rights", {})
+        if rights.get("local_preview") is not True or rights.get("model_reference") is not False:
+            raise CasePreviewError("This case is not authorized for local human preview")
+        case_root = Path(str(runtime.get("case_path", ""))).resolve()
+        relative = Path(str(preview.get("path", "preview.gif")))
+        if relative.is_absolute() or ".." in relative.parts:
+            raise CasePreviewError("Unsafe preview path")
+        preview_path = (case_root / relative).resolve()
+        try:
+            preview_path.relative_to(case_root)
+        except ValueError as exc:
+            raise CasePreviewError("Preview path escapes its case directory") from exc
+    if preview_path.suffix.lower() != ".gif" or not preview_path.is_file():
         raise CasePreviewError("Local preview file is missing")
+    with preview_path.open("rb") as handle:
+        if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
+            raise CasePreviewError("Local preview file is not a GIF")
     if verify_hash and _sha256(preview_path) != allowed["sha256"]:
         raise CasePreviewError("Local preview hash does not match the installed selector catalog")
     return preview_path, runtime
@@ -112,9 +207,12 @@ def runtime_public_catalog() -> dict[str, Any]:
                 continue
             preview["available"] = True
             preview["preview_url"] = f"/t8-prompt-enhancer/case-preview/{preview['case_id']}"
-            source_url = str(record.get("source", {}).get("canonical_url", ""))
-            preview["source_url"] = source_url if source_url.startswith(("https://", "http://")) else ""
-    catalog["preview_manifest_configured"] = configured_manifest_path() is not None
+            if record.get("_template_kind") == "case":
+                source_url = str(record.get("source", {}).get("canonical_url", ""))
+                preview["source_url"] = source_url if source_url.startswith(("https://", "http://")) else ""
+    catalog["preview_manifest_configured"] = any(
+        path is not None for path in (configured_manifest_path(), configured_community_manifest_path())
+    )
     catalog["preview_policy"] = "GIF is for local human preview only and is never sent to the LLM."
     return catalog
 
@@ -159,6 +257,7 @@ def register_routes() -> None:
 
 __all__ = [
     "CasePreviewError",
+    "configured_community_manifest_path",
     "configured_manifest_path",
     "register_routes",
     "resolve_preview",

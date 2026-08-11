@@ -1375,7 +1375,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 ),
                 io.Combo.Input(
                     "case_template",
-                    display_name="T8 原创案例模板（非官方）",
+                    display_name="非官方模板（案例 / 社区 Skill）",
                     options=CASE_TEMPLATE_OPTIONS,
                     default=NO_CASE_TEMPLATE,
                     tooltip="选择后显示用途、输入格式、推荐示例、结构锚点和本地 GIF。迁移 Creative DNA 与因果节奏，不复制源人物、剧情、文案、镜头表或媒体。",

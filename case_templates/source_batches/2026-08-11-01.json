@@ -1,0 +1,67 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-11-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-john87445528-2086787356556685419-browser-2086787356556685419-video-1",
+      "template_id": "t8-case-first-person-concealment-evidence-ladder-v1",
+      "label": "第一视角查岗｜遮挡失效到摆烂收口",
+      "summary": "第一人称身体运动连续推进，遮挡每失败一次就暴露更深证据，最后以人物停止遮挡并后仰回到桌前状态收口。",
+      "case_sha256": "877d53fde2398fd950818748d3141dfa080de58f35ee5f394331311753726623",
+      "creative_dna_sha256": "7d39407b49e59b3394a07ebba8bfbf61e985627d42faf8a59059debe6d3a5ce6",
+      "h3_adapter_sha256": "136ba126a6131e3c3dfd0918ddcec4fd76a3848588172e7a421e19d53b593980",
+      "seedance20_adapter_sha256": "9a9582fe53c35db67376afe4632d3567d00749c4864130ada14a8c1252a7bdf5"
+    },
+    {
+      "case_id": "x-i-amshiti-2086828210457604364-browser-2086828210457604364-video-1",
+      "template_id": "t8-case-pursuit-handoff-escape-corridor-v1",
+      "label": "雨夜追逐｜街巷近战到机车脱身",
+      "summary": "追逐先建立方向，中段用一次近身阻断改变节奏，再把主体交接到更快载具完成脱身。",
+      "case_sha256": "98c4e8429ea45d35e44679457c4a539d6a422f1b2d39118ef709b4cc3a24a93e",
+      "creative_dna_sha256": "1160733fbdd9a430c043a2071496b176af38a118dd842b8b16b6374494fc6565",
+      "h3_adapter_sha256": "24c82b1c0abc33dfce1b923784ea8b6db310b2cfb89e42e22b798c88bb02b54e",
+      "seedance20_adapter_sha256": "8fdf180062abcecf31017ddca723c74acdc7b5b4ec1bb6a68a185e588ea1ea6d"
+    },
+    {
+      "case_id": "x-gizakdag-2086774589426643034-browser-2086774589426643034-video-1",
+      "template_id": "t8-case-solo-posture-comedy-performance-v1",
+      "label": "单人表演弧｜坐起前倾再释放",
+      "summary": "固定直视镜头里，单人用躺靠、坐起、前倾、手势和后仰释放完成完整表演弧，不依赖来源台词。",
+      "case_sha256": "dfaf28a7d57312e18a420a870e1cd15bf434eb85e1b000c7adaf3d2773be9fcf",
+      "creative_dna_sha256": "4a81bb1e4a5d3d345782f3d019bee20b307a7acff89c67bc30cbbf0f5421ce74",
+      "h3_adapter_sha256": "6339dab9b462e254018a12fd4cac7f7b588c0213735d27a623e618a0a3cc73b6",
+      "seedance20_adapter_sha256": "d38277371e1705a6d29435406ba6a70c2f15e47559032fdb153a41675adec903"
+    },
+    {
+      "case_id": "x-nvtdanh-2086774974921200055-browser-2086774974921200055-video-1",
+      "template_id": "t8-case-tool-to-traversal-rescue-chain-v1",
+      "label": "多功能救援线｜跨裂隙送补给再撤离",
+      "summary": "同一根绳索从发射、攀爬、摆荡到进入持续承担路线职责，短接触建立跟随后由一人带领双方共同离开。",
+      "case_sha256": "b03aef39a5a9a3ecc15b159d2e5c96a7410121bbc007b8adba87d02d978b4c84",
+      "creative_dna_sha256": "392e174a68d22087c91a5e182f801cfdd90a0839ef14b3601f61f97763188d5d",
+      "h3_adapter_sha256": "6ea75994d3f74ad634eead0b70343aa18e4ec86b57be66641ac72bfdd3b15423",
+      "seedance20_adapter_sha256": "0c146998d2968b8978a243c63398f3e6f0985f162202847f0d77302debcb9a5a"
+    },
+    {
+      "case_id": "x-futurevibesai-2086777152666796255-browser-2086777152666796255-video-1",
+      "template_id": "t8-case-miniature-pursuit-foraging-route-v1",
+      "label": "微缩逃亡｜巨物追赶到资源补给",
+      "summary": "先用巨物校准微缩尺度，再让同一人物连续改变跑、弹、爬、平衡等动作，最终抵达可用资源。",
+      "case_sha256": "b5d67e17f5fc0d81dd28bf69c785b4b6d76d6b7cabac42e77718317e277ee919",
+      "creative_dna_sha256": "9a22439880b4edf942291f1c83a44a63408d24337e6c61d9d1b89aa625e70f8d",
+      "h3_adapter_sha256": "1a73904d6fbf4a4f1137afd663b5287083bdee18dd4f4fb4e50091f895a70e66",
+      "seedance20_adapter_sha256": "4b7a6f4d6d61efebb383e398144cf16635cf7557b8521aa5858b10db1b70f83a"
+    },
+    {
+      "case_id": "x-nicolasmariar-2086951328098513269-browser-2086951328098513269-video-1",
+      "template_id": "t8-case-contained-space-rule-break-v1",
+      "label": "气闸异境｜物理异常后空间崩坏",
+      "summary": "先锁定普通密闭空间与遗留物，普通操作后让室内积累物理异常，再经短黑场开向不可能异境，用遗留物证明空间连续。",
+      "case_sha256": "0b920fbc2ddc20d7223ec7247fc1a23e2873f4b2c4cb20abaec73d2fcb838a29",
+      "creative_dna_sha256": "48348a805e8b8ffcf1a512c2ed476433388a89dc0a334dbedbb2c1a5899e7081",
+      "h3_adapter_sha256": "5aba9a895f38bd3888be5259a298af4c9a1e848a627d990f57b2963e84b6dc38",
+      "seedance20_adapter_sha256": "ee63b65ac0c291964d0deb8af975bd8c0c913f6d2b516f11021104d6765a9627"
+    }
+  ]
+}

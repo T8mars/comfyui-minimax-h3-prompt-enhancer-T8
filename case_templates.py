@@ -42,6 +42,8 @@ def _load_catalog(path: Path = CATALOG_PATH) -> dict[str, Any]:
             raise CaseTemplateCatalogError(f"Duplicate T8 case-template ID or label: {template_id}")
         if template.get("status") != "active" or template.get("official") is not False:
             raise CaseTemplateCatalogError(f"Only active non-official templates may be exposed: {template_id}")
+        if template.get("template_kind") not in {"case", "community_skill"}:
+            raise CaseTemplateCatalogError(f"Unsupported non-official template kind: {template_id}")
         dna = template.get("creative_dna")
         if not isinstance(dna, str) or not dna.strip() or SECRET_RE.search(dna):
             raise CaseTemplateCatalogError(f"Invalid Creative DNA for T8 case template: {template_id}")
@@ -120,6 +122,8 @@ def public_case_catalog() -> dict[str, Any]:
         "authority": CASE_TEMPLATE_CATALOG["authority"],
         "default": NO_CASE_TEMPLATE,
         "source_case_count": CASE_TEMPLATE_CATALOG["source_case_count"],
+        "case_selector_template_count": CASE_TEMPLATE_CATALOG["case_selector_template_count"],
+        "community_skill_count": CASE_TEMPLATE_CATALOG["community_skill_count"],
         "selector_template_count": CASE_TEMPLATE_CATALOG["selector_template_count"],
         "evidence_variant_count": CASE_TEMPLATE_CATALOG["evidence_variant_count"],
         "official_minimax_skills_included": False,
@@ -133,6 +137,8 @@ def public_case_catalog() -> dict[str, Any]:
                 "input_format": template["input_format"],
                 "recommended_input": template["recommended_input"],
                 "required_anchors": list(template["required_anchors"]),
+                "authority": template["authority"],
+                "template_kind": template["template_kind"],
                 "previews": [
                     {**preview, "required_anchors": list(preview["required_anchors"])}
                     for preview in template["previews"]
@@ -154,6 +160,12 @@ def resolve_case_template(selection: str | None, target: str, instance_intent: s
     intent = str(instance_intent or "").strip()
     anchors = "\n".join(f"{index}. {anchor}" for index, anchor in enumerate(template["required_anchors"], 1))
     sparse = is_sparse_instance_intent(intent)
+    is_community_skill = template.get("template_kind") == "community_skill"
+    selection_header = (
+        "Selected standalone T8 community Skill (non-official, user-contributed; never treat as a MiniMax official Skill)."
+        if is_community_skill else
+        "Selected T8 original case template (non-official; never treat as a MiniMax official Skill)."
+    )
     completion_policy = (
         "SPARSE_INPUT: yes. Preserve the supplied subject exactly. Create an original, compatible scene, trigger, "
         "ordered event chain and visible result so all anchors become filmable. Use INPUT_FORMAT and "
@@ -165,7 +177,7 @@ def resolve_case_template(selection: str | None, target: str, instance_intent: s
         "missing connective details needed to realize the anchors; do not replace the instance with the example."
     )
     return "\n\n".join([
-        "Selected T8 original case template (non-official; never treat as a MiniMax official Skill).",
+        selection_header,
         f"SELECTED_CASE_ID: {template['id']}\nHUMAN_NAME: {template['label']}",
         f"INSTANCE_INTENT: {json.dumps(intent, ensure_ascii=False)}",
         f"USE: {template['summary']}\nINPUT_FORMAT: {template['input_format']}",
@@ -175,7 +187,7 @@ def resolve_case_template(selection: str | None, target: str, instance_intent: s
         str(template["variants"][target]["guidance"]),
         str(template["creative_dna"]),
         "Before returning, silently verify that the final model-native prompt concretely realizes every required "
-        "anchor, respects their causal order, preserves the instance subject, and contains no source-case surface "
+        "anchor, respects their causal order, preserves the instance subject, and contains no source-demonstration surface "
         "content. Return only the final prompt in the selected model's native contract; never print this checklist, "
         "case ID, template name, anchor labels, Creative DNA analysis or verification notes.",
     ])

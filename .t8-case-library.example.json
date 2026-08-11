@@ -1,3 +1,4 @@
 {
-  "manifest_path": "D:\\video-prompt-library\\comfyui-handoffs\\unofficial-case-library-v2.json"
+  "manifest_path": "D:\\video-prompt-library\\comfyui-handoffs\\unofficial-case-library-v2.json",
+  "community_skills_manifest_path": "D:\\video-prompt-library\\comfyui-handoffs\\standalone-community-skills-v1.json"
 }

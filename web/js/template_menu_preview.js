@@ -61,6 +61,20 @@ function renderPreview(panel, model, reposition) {
             "font-size:12px;line-height:1.5;opacity:.9",
         ));
     }
+    if (model?.input_format) {
+        panel.append(textBlock(
+            "t8-template-preview-input-format",
+            `推荐输入格式：${model.input_format}`,
+            "font-size:11px;line-height:1.45;opacity:.78",
+        ));
+    }
+    if (model?.recommended_input) {
+        panel.append(textBlock(
+            "t8-template-preview-recommended-input",
+            `简约推荐输入：${model.recommended_input}`,
+            "font-size:11px;line-height:1.45;padding:7px;border-radius:5px;background:rgba(255,255,255,.045)",
+        ));
+    }
 
     const previews = Array.isArray(model?.previews) ? model.previews : [];
     if (!previews.length) {
@@ -76,6 +90,16 @@ function renderPreview(panel, model, reposition) {
         figure.style.cssText = "display:flex;flex-direction:column;gap:6px;min-width:0";
         if (preview.label) {
             figure.append(textBlock("t8-template-preview-label", preview.label, "font-size:12px;font-weight:600"));
+        }
+        if (preview.summary && preview.summary !== model?.summary) {
+            figure.append(textBlock("t8-template-preview-evidence-summary", preview.summary, "font-size:11px;opacity:.8"));
+        }
+        if (preview.recommended_input && preview.recommended_input !== model?.recommended_input) {
+            figure.append(textBlock(
+                "t8-template-preview-evidence-input",
+                `此证据推荐输入：${preview.recommended_input}`,
+                "font-size:11px;line-height:1.4;opacity:.78",
+            ));
         }
         if (preview.available !== false && preview.url) {
             const image = document.createElement("img");

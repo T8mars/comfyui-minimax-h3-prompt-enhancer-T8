@@ -152,7 +152,7 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
             figure.append(img);
         } else {
             const unavailable = document.createElement("div");
-            unavailable.textContent = "本机未配置 GIF 案例库；不影响模板增强。";
+            unavailable.textContent = "本机未配置此模板的 GIF 预览；不影响提示词增强。";
             unavailable.style.cssText = "padding:12px;border:1px dashed #666;border-radius:5px;opacity:.75";
             figure.append(unavailable);
         }
@@ -166,7 +166,7 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
             figure.append(source);
         }
         const policy = document.createElement("small");
-        policy.textContent = "仅供人类本地预览，不会发送给 LLM";
+        policy.textContent = "仅供人类本地预览，不会作为图像、视频或 LLM 参考素材";
         policy.style.opacity = ".65";
         figure.append(policy);
         previewWrap.append(figure);
@@ -179,7 +179,7 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
 export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshSize) {
     if (!caseWidget || !promptWidget) return null;
     const root = createCard();
-    root.textContent = "正在读取 T8 原创案例说明…";
+    root.textContent = "正在读取非官方模板说明…";
     const domWidget = node.addDOMWidget("t8_case_template_details", "custom", root, {
         getValue: () => "",
         setValue: () => {},
@@ -200,7 +200,7 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
     try {
         catalog = await fetchCatalog();
     } catch (error) {
-        root.textContent = `案例说明加载失败：${error.message}`;
+        root.textContent = `模板说明加载失败：${error.message}`;
         setDomWidgetVisible(domWidget, caseWidget.value !== NO_CASE_TEMPLATE);
         refreshSize?.();
         return domWidget;
@@ -229,26 +229,30 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         const template = byLabel.get(value) || byId.get(value);
         if (!template) {
             return {
-                authority: "T8 原创案例模板（非官方）",
-                title: value || "T8 原创案例模板（非官方）",
-                summary: "悬停一个具体案例即可在右侧查看对应 GIF 与案例用途。",
-                empty_message: "当前未启用 T8 案例模板。",
+                authority: "T8 非官方模板（案例 / 社区 Skill）",
+                title: value || "T8 非官方模板（案例 / 社区 Skill）",
+                summary: "悬停一个具体模板即可在右侧查看对应 GIF、用途与简约推荐输入。",
+                empty_message: "当前未启用非官方模板。",
                 previews: [],
             };
         }
         return {
-            authority: template.authority || "T8 原创案例模板（非官方）",
+            authority: template.authority || "T8 非官方模板（案例 / 社区 Skill）",
             title: template.label,
             summary: template.summary,
+            input_format: template.input_format,
+            recommended_input: template.recommended_input,
             previews: (template.previews || []).map((preview) => ({
                 label: preview.label,
+                summary: preview.short_summary,
+                recommended_input: preview.recommended_input,
                 url: preview.available && preview.preview_url ? api.apiURL(preview.preview_url) : "",
                 available: Boolean(preview.available && preview.preview_url),
-                unavailable_message: "本机未配置此案例 GIF；不影响提示词增强。",
+                unavailable_message: "本机未配置此模板 GIF；不影响提示词增强。",
                 source_url: preview.source_url || "",
                 source_label: "查看案例来源",
             })),
-            policy: "T8 案例 GIF 仅供人类本地预览，不会发送给 LLM",
+            policy: "GIF 仅供人类本地预览，不会作为图像、视频或 LLM 参考素材",
         };
     });
 

@@ -261,8 +261,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(len(case_template.options), 38)
-        self.assertEqual(case_template.display_name, "T8 原创案例模板（非官方）")
+        self.assertEqual(len(case_template.options), 46)
+        self.assertEqual(case_template.display_name, "非官方模板（案例 / 社区 Skill）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
         self.assertEqual(api_mode.default, nodes.SEEDANCE_API_MODE)
@@ -605,8 +605,8 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
         self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
-        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 38)
-        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 38)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 46)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 46)
 
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
@@ -648,7 +648,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("Selected T8 original case template", messages[0]["content"])
         self.assertIn(manual, messages[1]["content"])
 
-    def test_subject_only_case_intent_is_preserved_and_completed_by_all_37_selectors(self):
+    def test_subject_only_case_intent_is_preserved_and_completed_by_all_45_selectors(self):
         for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
             with self.subTest(selection=selection):
                 session = FakeSession(basic_output())
@@ -707,10 +707,12 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
-        self.assertEqual(len(catalog["templates"]), 37)
-        self.assertEqual(catalog["source_case_count"], 39)
-        self.assertEqual(catalog["selector_template_count"], 37)
-        self.assertEqual(catalog["evidence_variant_count"], 2)
+        self.assertEqual(len(catalog["templates"]), 45)
+        self.assertEqual(catalog["source_case_count"], 49)
+        self.assertEqual(catalog["case_selector_template_count"], 43)
+        self.assertEqual(catalog["community_skill_count"], 2)
+        self.assertEqual(catalog["selector_template_count"], 45)
+        self.assertEqual(catalog["evidence_variant_count"], 6)
         self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
         imported_ids = {
@@ -744,6 +746,12 @@ class PromptEnhancerTests(unittest.TestCase):
             "t8-case-reversible-material-typography-loop-v1",
             "t8-case-observer-follow-encounter-v1",
             "t8-case-two-turn-pause-reaction-v1",
+            "t8-case-first-person-concealment-evidence-ladder-v1",
+            "t8-case-pursuit-handoff-escape-corridor-v1",
+            "t8-case-solo-posture-comedy-performance-v1",
+            "t8-case-tool-to-traversal-rescue-chain-v1",
+            "t8-case-miniature-pursuit-foraging-route-v1",
+            "t8-case-contained-space-rule-break-v1",
         }
         self.assertTrue(imported_ids.issubset(by_id))
         self.assertIn("微缩闯关｜同一材质连续变形", nodes.CASE_TEMPLATE_OPTIONS)
@@ -764,7 +772,11 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertFalse(template["official"])
             self.assertRegex(template["label"], r"[\u4e00-\u9fff]")
             self.assertEqual(set(template["variants"]), {"h3", "seedance20"})
-            self.assertTrue(template["source"]["case_sha256"])
+            self.assertIn(template["template_kind"], {"case", "community_skill"})
+            if template["template_kind"] == "case":
+                self.assertTrue(template["source"]["case_sha256"])
+            else:
+                self.assertTrue(template["source"]["skill_sha256"])
             self.assertNotIn("integrated_multimodal_description:", template["creative_dna"])
             self.assertTrue(template["summary"])
             self.assertTrue(template["input_format"])
@@ -774,9 +786,23 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertTrue(template["previews"])
             self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
             preview_count += len(template["previews"])
-        self.assertEqual(preview_count, 39)
+        self.assertEqual(preview_count, 51)
         self.assertEqual(len(by_id["t8-case-flat-geometry-reconstruction-v1"]["previews"]), 2)
-        self.assertEqual(len(by_id["t8-case-recurring-identity-board-v1"]["previews"]), 2)
+        self.assertEqual(len(by_id["t8-case-recurring-identity-board-v1"]["previews"]), 3)
+        community_ids = {
+            "community-skill/direct-street-interview-video",
+            "community-skill/stage-startle-to-truce-encounter",
+        }
+        self.assertTrue(community_ids.issubset(by_id))
+        self.assertEqual(
+            sum(template["template_kind"] == "community_skill" for template in catalog["templates"]),
+            2,
+        )
+        for template_id in community_ids:
+            community = by_id[template_id]
+            self.assertEqual(community["authority"], "T8 社区 Skill（非官方·用户贡献）")
+            self.assertTrue(community["id"].startswith("community-skill/"))
+            self.assertTrue(community["previews"][0]["case_id"].startswith("community-skill--"))
         soran = by_id["t8-case-scale-contraction-evidence-funnel-v1"]
         self.assertIn("t8-case-audio-cause-lead-ladder-v1", soran["legacy_ids"])
         self.assertIn("声画错位递进", soran["legacy_labels"])
@@ -800,7 +826,11 @@ class PromptEnhancerTests(unittest.TestCase):
     def test_source_batches_reconstruct_the_catalog_identity_and_provenance(self):
         root = NODES_PATH.parent
         catalog = json.loads((root / "case_templates" / "catalog.json").read_text(encoding="utf-8"))
-        catalog_by_case = {template["source"]["case_id"]: template for template in catalog["templates"]}
+        catalog_by_case = {
+            template["source"]["case_id"]: template
+            for template in catalog["templates"]
+            if template["template_kind"] == "case"
+        }
         source_cases = []
         for path in sorted((root / "case_templates" / "source_batches").glob("*.json")):
             source = path.read_text(encoding="utf-8")
@@ -809,7 +839,7 @@ class PromptEnhancerTests(unittest.TestCase):
             batch = json.loads(source)
             self.assertEqual(batch["schema_version"], "t8-case-template-batch/v1")
             source_cases.extend(batch["cases"])
-        self.assertEqual(len(source_cases), 37)
+        self.assertEqual(len(source_cases), 43)
         self.assertEqual({item["case_id"] for item in source_cases}, set(catalog_by_case))
         for item in source_cases:
             template = catalog_by_case[item["case_id"]]
@@ -829,11 +859,13 @@ class PromptEnhancerTests(unittest.TestCase):
         seedance_ui = (root / "web" / "js" / "seedance20_prompt_enhancer.js").read_text(encoding="utf-8")
         self.assertIn("填入推荐示例", shared)
         self.assertIn("已有输入，未覆盖", shared)
+        self.assertIn("recommended_input: template.recommended_input", shared)
+        self.assertIn("简约推荐输入", menu)
         self.assertIn("适用范围", shared)
         self.assertIn("推荐输入格式", shared)
         self.assertIn("此 GIF 推荐示例", shared)
         self.assertIn("if (String(promptWidget?.value || \"\").trim())", shared)
-        self.assertIn("仅供人类本地预览，不会发送给 LLM", shared)
+        self.assertIn("仅供人类本地预览，不会作为图像、视频或 LLM 参考素材", shared)
         self.assertIn("查看来源", shared)
         self.assertIn("serializedCaseTemplateValue", h3_ui)
         self.assertIn("serializedCaseTemplateValue", seedance_ui)

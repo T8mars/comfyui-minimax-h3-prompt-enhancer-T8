@@ -30,7 +30,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。打开官方预设下拉时，悬停具体预设会在菜单右侧显示对应 MiniMax 官方 GIF。预设只优化提示词，不运行完整制作工作流。
-- 两个节点提供独立的 `T8 原创案例模板（非官方）` 列表：39 个已发布案例归并为 37 个稳定 selector（含 2 个同机制证据变体），并提供人类可读名称、用途、推荐输入、2–5 个结构锚点和可选本地 GIF 预览。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：49 条已发布案例事实归并为 43 个稳定案例 selector（含 6 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 45 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和可选本地 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -70,7 +70,7 @@ Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 
 1. 添加 `MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
-3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和 MiniMax 官方创意预设；需要时再选择一个 T8 非官方案例模板。
+3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和 MiniMax 官方创意预设；需要时再选择一个非官方案例或社区 Skill 模板。
 4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
 5. 填写 API Key，点击“保存到工作流”；或者使用环境变量。
 6. 点击节点底部的“运行提示词优化”。
@@ -84,7 +84,7 @@ Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 2. 填写“视频创意 / 提示词”。任务意图、组织方式、时长和镜头数都可先保持 `AUTO`。
 3. 按任务连接首帧、尾帧、参考图片或完整参考视频。
 4. 选择官方中文 `@图片N/@视频N` 或 Seedance.nz 英文 `@Image N/@Video N` 引用格式。
-5. 可选一个 `T8 原创案例模板（非官方）`，用于迁移因果结构、节奏和镜头语法。
+5. 可选一个 `非官方模板（案例 / 社区 Skill）`，用于迁移因果结构、节奏和镜头语法。
 6. 填写的是“提示词增强 LLM API Key”，保存后点击节点底部运行按钮。
 7. 把 `enhanced_prompt` 连接到下游 Seedance 2.0 视频节点的提示词输入。
 
@@ -145,7 +145,7 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 优先级为：
 
 ```text
-硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 核心规则 > MiniMax 官方创意预设 > 更具体的用户手动参考模板 > T8 非官方案例模板
+硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 核心规则 > MiniMax 官方创意预设 > 更具体的用户手动参考模板 > T8 非官方案例 / 社区 Skill 模板
 ```
 
 ## MiniMax-H3 官方 Skill 协议
@@ -176,9 +176,9 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 
 这些选项只把官方场景 Skill 中适合“单次 H3 提示词改写”的规则传给 LLM。节点不会安装远程 Skill、生成角色卡或锚点图、研究官网、分析音频文件、调用 H3 视频生成、拼接片段或执行交付流程。
 
-## T8 原创案例模板（非官方）
+## 非官方模板（案例 / 社区 Skill）
 
-该列表与 MiniMax 官方 9 个 Skill 完全分开，不会重复导入官方模板。下拉框显示人类可读名称，工作流内部保存稳定模板 ID；旧名称会自动迁移。MiniMax H3 会把案例机制写进 H3 原生字段、`[Shot N]` 时间线和声音合同；Seedance 2.0 只使用它自己的任务意图、自然段或连续 `镜头N` 语法，不会混入 H3 字段或逐镜头绝对时间码。
+该列表与节点已有的 MiniMax 官方 9 个 Skill 完全分开，绝不修改或重复导入官方模板。下拉框显示中文名称，工作流内部保存稳定模板 ID；旧名称会自动迁移。MiniMax H3 会把机制写进 H3 原生字段、`[Shot N]` 时间线和声音合同；Seedance 2.0 只使用它自己的任务意图、自然段或连续 `镜头N` 语法，不会混入 H3 字段或逐镜头绝对时间码。
 
 | 模板 | 可复用机制 |
 | --- | --- |
@@ -208,18 +208,31 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 | `程序错位｜扫描到实物双确认` | 超尺度主体经历不同程序失配，扫描先揭晓，随后由同一实物完成第二次确认 |
 | `技能展示｜基础动作串联升级` | 每项递增技能都从基础循环出发并返回，每个机位只承担一个证明任务 |
 | `微缩介入｜外部物只进入一次` | 静态标准物先校准尺度，微缩日常稳定后由另一个外部执行物单次介入 |
+| `第一视角查岗｜遮挡失效到摆烂收口` | 第一人称持续推进，每次遮挡失败都暴露更深证据，最终主动停止遮挡 |
+| `雨夜追逐｜街巷近战到机车脱身` | 建立追逐方向，以一次近身阻断改变节奏，再交接到更快载具完成脱身 |
+| `单人表演弧｜坐起前倾再释放` | 固定直视镜头中用姿态、手势和释放动作完成完整单人表演弧 |
+| `多功能救援线｜跨裂隙送补给再撤离` | 同一绳线承担多种路线职责，接触被救者后由一人带领共同离开 |
+| `微缩逃亡｜巨物追赶到资源补给` | 巨物校准微缩尺度，跨材质改变动作动词，最终取得并使用资源 |
+| `气闸异境｜物理异常后空间崩坏` | 密闭空间先完成普通操作，再积累异常并开向不可能外部，由遗留物证明连续 |
 
-39 个来源案例中有 37 个 selector；Mayz 的纸艺无障碍案例作为 `平面重组｜几何节奏品牌片` 的第二个 GIF，第三批角色板案例作为 `角色卡验真｜四类证据锁定角色` 的第二个 GIF，均不重复增加下拉项。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。第三批只新增 9 个 selector 和 1 个证据变体，旧 29 条案例关系保持不变。
+49 条来源案例事实中有 43 个案例 selector 和 6 个 evidence variant；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
 
-打开 `MiniMax 官方创意预设` 或 `T8 原创案例模板（非官方）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和来源；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择 T8 模板后，节点内仍会显示用途、适用/推荐输入格式、2–5 个必须实现的结构锚点、推荐示例和 GIF。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立该案例需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
+另外两个独立的用户贡献社区 Skill 不合并进案例 registry，也不冒充官方 Skill：
 
-GIF 只供浏览器中的本地人类预览，绝不会连接到节点媒体输入或发送给 LLM。8 个官方预设 GIF 随节点保存，并固定对应到 MiniMax 官方 Skill；T8 原创案例 GIF 仍不随本仓库重新分发。需要在本机显示 T8 案例 GIF 与来源链接时，复制示例配置并把 `manifest_path` 指向 curator 生成的 `unofficial-case-library-v2.json`：
+| 社区 Skill | 可复用机制 |
+| --- | --- |
+| `自然街拍互动｜边走边聊到清楚落点` | 连续路线跟拍中用距离、步态、视线、手势、视差与现场声推进到可读互动结果 |
+| `突遇惊吓到和解｜贴近反转与求和手势` | 平静基线、一次非致命惊慌、距离反转和被看见的求和手势组成关系反转 |
+
+打开 `MiniMax 官方创意预设` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择非官方模板后，节点内仍会显示用途、适用/推荐输入格式、2–5 个必须实现的结构锚点、推荐示例和 GIF。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
+
+GIF 只供浏览器中的本地人类预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 随节点保存，并固定对应到 MiniMax 官方 Skill；非官方案例与社区 Skill GIF 不随本仓库重新分发。需要本地预览时，复制示例配置，并分别指向 `unofficial-case-library-v2.json` 与 `standalone-community-skills-v1.json`：
 
 ```powershell
 Copy-Item .t8-case-library.example.json .t8-case-library.local.json
 ```
 
-`.t8-case-library.local.json` 已加入 `.gitignore`。也可以用环境变量 `T8_UNOFFICIAL_CASE_LIBRARY_V2` 指定同一 manifest；后端会按 case ID、授权标记和 SHA-256 校验 `preview.gif`，拒绝任意文件路径。
+`.t8-case-library.local.json` 已加入 `.gitignore`。也可以分别用环境变量 `T8_UNOFFICIAL_CASE_LIBRARY_V2`、`T8_STANDALONE_COMMUNITY_SKILLS_V1` 指定两个 manifest；若社区 manifest 与案例 manifest 位于同一目录，后端会自动发现它。后端会按稳定预览 ID、授权策略、根目录边界、GIF 文件头和 SHA-256 校验，拒绝任意文件路径。
 
 默认 `无（不使用 T8 案例）`，因此旧工作流请求保持不变。案例独立于“官方增强 / 官方优化”和“参考模板融合”，用户提示词、媒体事实、硬性要求、时长与固定镜头数始终优先。节点把所有结构锚点作为一次请求内的硬写作合同传入上游，并要求静默检查；按此前的上游兼容策略，非空响应仍直接放行，不会因本地语义猜测误杀有效输出。
 
@@ -230,12 +243,13 @@ Copy-Item .t8-case-library.example.json .t8-case-library.local.json
 ```powershell
 python tools/import_unofficial_case_library_v2.py `
   --library G:\minimax-skill-T8\comfyui-handoffs\unofficial-case-library-v2.json `
+  --community-skills G:\minimax-skill-T8\comfyui-handoffs\standalone-community-skills-v1.json `
   --existing-catalog case_templates\catalog.json `
   --source-batch-dir case_templates\source_batches `
   --output case_templates/catalog.json
 ```
 
-导入器要求 39 条记录严格组成 37 个 selector + 2 个 evidence variant、案例 `released/approved`、H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致，并现场重算 adapter 与 GIF 哈希。可分发目录不会写入本地路径、来源 URL、媒体或成品提示词；来源链接仅由本机 manifest 的预览路由按授权动态提供。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe 与哈希核验。
+导入器要求 49 条案例记录严格组成 43 个 selector + 6 个 evidence variant，并另验 2 个独立社区 Skill，最终生成 45 个非官方下拉项。案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。可分发目录不会写入本地路径、来源 URL、媒体或成品提示词；来源链接仅由本机 manifest 的预览路由按授权动态提供。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe 与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
@@ -297,7 +311,7 @@ MV 规则按以下方式工作：
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | `现有兼容 / 官方 Skill 严格`；默认兼容，严格档位强制英文说明正文 |
 | `creative_preset` | `无 / AUTO / 8 个官方场景写作预设` |
-| `case_template` | `无 / 37 个 T8 原创案例模板（非官方）`；显示人类名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
+| `case_template` | `无 / 45 个非官方模板`：43 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |
