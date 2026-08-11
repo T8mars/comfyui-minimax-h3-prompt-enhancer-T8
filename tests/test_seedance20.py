@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import hashlib
 import importlib.util
 import io
 import json
@@ -377,6 +378,51 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             else:
                 self.assertTrue(record["import_policy"]["preview_only"])
                 self.assertFalse(record["import_policy"]["source_media_connected"])
+
+    def test_github_checkout_serves_all_51_bundled_gifs_without_local_manifests(self):
+        with (
+            patch.object(case_library_routes, "configured_manifest_path", return_value=None),
+            patch.object(case_library_routes, "configured_community_manifest_path", return_value=None),
+        ):
+            catalog = case_library_routes.runtime_public_catalog()
+            previews = [preview for template in catalog["templates"] for preview in template["previews"]]
+            self.assertEqual(len(previews), 51)
+            self.assertFalse(catalog["preview_manifest_configured"])
+            self.assertTrue(catalog["bundled_previews_included"])
+            self.assertEqual(catalog["bundled_preview_count"], 51)
+            self.assertTrue(all(preview["available"] for preview in previews))
+            self.assertTrue(all(preview["source_url"] == "" for preview in previews))
+            for preview in previews:
+                path, record = case_library_routes.resolve_preview(preview["case_id"], verify_hash=True)
+                self.assertEqual(record["_template_kind"], "bundled")
+                self.assertTrue(path.is_relative_to(case_library_routes.BUNDLED_PREVIEW_ROOT))
+
+    def test_bundled_gif_manifest_is_complete_hash_pinned_and_reasonably_sized(self):
+        manifest = json.loads(case_library_routes.BUNDLED_PREVIEW_MANIFEST.read_text(encoding="utf-8"))
+        catalog = case_library_routes.public_case_catalog()
+        expected = {
+            preview["case_id"]: preview["sha256"]
+            for template in catalog["templates"]
+            for preview in template["previews"]
+        }
+        self.assertEqual(manifest["schema_version"], "t8-bundled-case-previews/v1")
+        self.assertEqual(manifest["preview_count"], 51)
+        self.assertEqual({item["case_id"] for item in manifest["previews"]}, set(expected))
+        self.assertEqual(
+            {path.name for path in case_library_routes.BUNDLED_PREVIEW_ROOT.glob("*.gif")},
+            {item["file"] for item in manifest["previews"]},
+        )
+        total_bytes = 0
+        for item in manifest["previews"]:
+            path = case_library_routes.BUNDLED_PREVIEW_ROOT / item["file"]
+            content = path.read_bytes()
+            self.assertIn(content[:6], {b"GIF87a", b"GIF89a"})
+            self.assertEqual(len(content), item["bytes"])
+            self.assertEqual(hashlib.sha256(content).hexdigest(), item["sha256"])
+            self.assertEqual(item["source_sha256"], expected[item["case_id"]])
+            self.assertTrue(item["human_preview_only"])
+            total_bytes += len(content)
+        self.assertLess(total_bytes, 128 * 1024 * 1024)
 
     def test_length_target_is_soft_and_arbitrary_nonempty_output_passes_through(self):
         upstream = "上游没有按任何固定格式返回，但内容非空，应原样放行。"

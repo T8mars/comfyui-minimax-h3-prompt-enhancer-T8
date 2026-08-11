@@ -29,8 +29,8 @@
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
-- 内置 `无 / AUTO` 和全部 8 个官方场景写作预设；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。打开官方预设下拉时，悬停具体预设会在菜单右侧显示对应 MiniMax 官方 GIF。预设只优化提示词，不运行完整制作工作流。
-- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：49 条已发布案例事实归并为 43 个稳定案例 selector（含 6 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 45 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和可选本地 GIF 预览。
+- 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。预设只优化提示词，不运行完整制作工作流。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：49 条已发布案例事实归并为 43 个稳定案例 selector（含 6 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 45 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -148,7 +148,9 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 硬性要求 > 用户主提示词与媒体事实 > MiniMax-H3 核心规则 > MiniMax 官方创意预设 > 更具体的用户手动参考模板 > T8 非官方案例 / 社区 Skill 模板
 ```
 
-## MiniMax-H3 官方 Skill 协议
+## H3 核心写作 Skill（始终启用）
+
+MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 Skill”。核心 `h3-prompt-writing` 负责所有任务共用的 H3 字段、时间线、素材标签与声音合同，因此不是一种可选视频风格；节点界面的协议选项只控制它采用兼容输出还是严格英文输出。
 
 | 选项 | 行为 |
 | --- | --- |
@@ -159,7 +161,7 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 
 新版核心规则还包括：按目标视频首次真实发声顺序分配 `(S1)`，多人同声使用 `(S1,S2)`，跨切镜对白在两侧使用 `<scenetrans>`，只在片尾截断时使用 `<cutoff>`；Ref2VA 严格区分 Subject、Picture、Video 的实际角色，普通视频内声音不会被伪装成独立 Audio 素材。
 
-## MiniMax-H3 创意预设
+## MiniMax 官方场景 Skill（8 个可选）
 
 | 预设 | 主要强化内容 |
 | --- | --- |
@@ -224,15 +226,17 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 | `自然街拍互动｜边走边聊到清楚落点` | 连续路线跟拍中用距离、步态、视线、手势、视差与现场声推进到可读互动结果 |
 | `突遇惊吓到和解｜贴近反转与求和手势` | 平静基线、一次非致命惊慌、距离反转和被看见的求和手势组成关系反转 |
 
-打开 `MiniMax 官方创意预设` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择非官方模板后，节点内仍会显示用途、适用/推荐输入格式、2–5 个必须实现的结构锚点、推荐示例和 GIF。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
+打开 `MiniMax 官方场景 Skill（8 个可选）` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择任一具体官方场景 Skill 或非官方模板后，节点内都会显示用途、适用/推荐输入格式、必须实现的结构锚点、推荐示例、GIF 和来源链接。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
-GIF 只供浏览器中的本地人类预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 随节点保存，并固定对应到 MiniMax 官方 Skill；非官方案例与社区 Skill GIF 不随本仓库重新分发。需要本地预览时，复制示例配置，并分别指向 `unofficial-case-library-v2.json` 与 `standalone-community-skills-v1.json`：
+GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 51 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
+
+维护者仍可选用本地原始案例清单，以显示来源链接或在开发环境优先检查原始预览；普通用户不需要此配置：
 
 ```powershell
 Copy-Item .t8-case-library.example.json .t8-case-library.local.json
 ```
 
-`.t8-case-library.local.json` 已加入 `.gitignore`。也可以分别用环境变量 `T8_UNOFFICIAL_CASE_LIBRARY_V2`、`T8_STANDALONE_COMMUNITY_SKILLS_V1` 指定两个 manifest；若社区 manifest 与案例 manifest 位于同一目录，后端会自动发现它。后端会按稳定预览 ID、授权策略、根目录边界、GIF 文件头和 SHA-256 校验，拒绝任意文件路径。
+`.t8-case-library.local.json` 已加入 `.gitignore`。也可以分别用环境变量 `T8_UNOFFICIAL_CASE_LIBRARY_V2`、`T8_STANDALONE_COMMUNITY_SKILLS_V1` 指定两个 manifest；若社区 manifest 与案例 manifest 位于同一目录，后端会自动发现它。本地清单缺失、路径失效或校验失败时，节点会自动回退到仓库内置 GIF。
 
 默认 `无（不使用 T8 案例）`，因此旧工作流请求保持不变。案例独立于“官方增强 / 官方优化”和“参考模板融合”，用户提示词、媒体事实、硬性要求、时长与固定镜头数始终优先。节点把所有结构锚点作为一次请求内的硬写作合同传入上游，并要求静默检查；按此前的上游兼容策略，非空响应仍直接放行，不会因本地语义猜测误杀有效输出。
 
@@ -249,7 +253,18 @@ python tools/import_unofficial_case_library_v2.py `
   --output case_templates/catalog.json
 ```
 
-导入器要求 49 条案例记录严格组成 43 个 selector + 6 个 evidence variant，并另验 2 个独立社区 Skill，最终生成 45 个非官方下拉项。案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。可分发目录不会写入本地路径、来源 URL、媒体或成品提示词；来源链接仅由本机 manifest 的预览路由按授权动态提供。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe 与哈希核验。
+每次案例目录发生变化，都必须同步生成并提交完整的内置预览包，不能只提交 selector 元数据。生成器要求输出目录不存在或为空；建议先生成到待审目录，核对后再整体替换正式目录：
+
+```powershell
+python tools/bundle_t8_case_previews.py `
+  --library G:\minimax-skill-T8\comfyui-handoffs\unofficial-case-library-v2.json `
+  --community-skills G:\minimax-skill-T8\comfyui-handoffs\standalone-community-skills-v1.json `
+  --catalog case_templates\catalog.json `
+  --output-dir web\js\assets\t8-case-previews-next `
+  --ffmpeg F:\AI-T8-video-onekey\ffmpeg\bin\ffmpeg.exe
+```
+
+导入器要求 49 条案例记录严格组成 43 个 selector + 6 个 evidence variant，并另验 2 个独立社区 Skill，最终生成 45 个非官方下拉项。案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
@@ -309,8 +324,8 @@ MV 规则按以下方式工作：
 | `description_word_target` | `0` 为自动；非零为 80–1000，中文按约数汉字、英文按单词理解 |
 | `output_language` | `中文 / English`，默认中文 |
 | `prompt_mode` | `官方增强 / 参考模板融合` |
-| `official_skill_profile` | `现有兼容 / 官方 Skill 严格`；默认兼容，严格档位强制英文说明正文 |
-| `creative_preset` | `无 / AUTO / 8 个官方场景写作预设` |
+| `official_skill_profile` | 界面显示为“H3 核心写作 Skill（始终启用）”；`现有兼容 / 官方 Skill 严格`，默认兼容，严格档位强制英文说明正文 |
+| `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF |
 | `case_template` | `无 / 45 个非官方模板`：43 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |

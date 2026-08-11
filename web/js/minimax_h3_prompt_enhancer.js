@@ -1,6 +1,6 @@
 import { app } from "../../scripts/app.js";
 import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
-import { addOfficialPresetMenuPreview } from "./official_preset_previews.js";
+import { addOfficialPresetUI } from "./official_preset_previews.js";
 
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
@@ -462,7 +462,12 @@ app.registerExtension({
                 rewriteModeWidget.tooltip = "改写模式只控制扩写幅度：strict 最保守，balanced 平衡补全，creative 更具创造性；它不控制官方协议语言。";
             }
             if (officialSkillProfileWidget) {
-                officialSkillProfileWidget.tooltip = "官方 Skill 协议控制说明正文语言与协议：兼容模式服从中文/English，严格模式强制英文说明；它不等同于改写模式 strict。";
+                officialSkillProfileWidget.label = "H3 核心写作 Skill（始终启用）";
+                officialSkillProfileWidget.tooltip = "官方 9 个 Skill = 1 个始终启用的 H3 核心写作 Skill + 8 个可选场景 Skill。这里控制核心规范的输出协议：兼容模式服从中文/English，严格模式强制英文说明；它不等同于改写模式 strict。";
+            }
+            if (creativePresetWidget) {
+                creativePresetWidget.label = "MiniMax 官方场景 Skill（8 个可选）";
+                creativePresetWidget.tooltip = "选择一个官方场景 Skill 后，节点下方会显示用途、推荐输入、结构锚点、官方 GIF 与来源；GIF 不会发送给 LLM。";
             }
 
             if (promptModeWidget && referenceTemplateWidget) {
@@ -510,10 +515,11 @@ app.registerExtension({
                 this.t8UpdateReferenceTemplate?.();
                 this.t8UpdateApiMode?.();
                 this.t8UpdateMvPreset?.();
+                this.t8UpdateOfficialPreset?.();
             };
             this.t8NormalizePromptOptions();
 
-            addOfficialPresetMenuPreview(this, creativePresetWidget);
+            addOfficialPresetUI(this, creativePresetWidget, promptWidget, () => resizeNode(this));
             addCaseTemplateUI(this, caseTemplateWidget, promptWidget, () => resizeNode(this));
 
             const advancedWidgets = [referenceContextWidget, constraintsWidget].filter(Boolean);

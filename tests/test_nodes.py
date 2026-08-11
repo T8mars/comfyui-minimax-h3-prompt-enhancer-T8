@@ -341,7 +341,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("requestAnimationFrame(() => update())", source)
         self.assertIn("this.t8UpdateMvPreset?.()", source)
         self.assertIn("改写模式只控制扩写幅度", source)
-        self.assertIn("官方 Skill 协议控制说明正文语言与协议", source)
+        self.assertIn("官方 9 个 Skill = 1 个始终启用的 H3 核心写作 Skill + 8 个可选场景 Skill", source)
 
     def test_example_workflow_is_importable_and_contains_no_api_key(self):
         path = NODES_PATH.parent / "example" / "minimax_h3_prompt_enhancer_example.json"
@@ -876,8 +876,16 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn('filter?.addEventListener("keydown"', menu)
         self.assertIn("rootRect.right + gap", menu)
         self.assertIn("rootRect.left - panelRect.width - gap", menu)
-        self.assertIn("addOfficialPresetMenuPreview(this, creativePresetWidget)", h3_ui)
+        self.assertIn("addOfficialPresetUI(this, creativePresetWidget, promptWidget", h3_ui)
+        self.assertIn('officialSkillProfileWidget.label = "H3 核心写作 Skill（始终启用）"', h3_ui)
+        self.assertIn('creativePresetWidget.label = "MiniMax 官方场景 Skill（8 个可选）"', h3_ui)
         self.assertIn("MiniMax 官方示例 GIF", official)
+        self.assertIn("t8_official_preset_details", official)
+        self.assertIn("renderTemplateDetail", official)
+        self.assertIn("推荐输入格式", shared)
+        self.assertIn("必须命中的结构锚点", shared)
+        self.assertEqual(official.count("required_anchors: ["), 8)
+        self.assertEqual(official.count("recommended_input: \""), 8)
         self.assertIn("不会发送给 LLM", official)
 
     def test_all_official_preset_gifs_are_bundled_and_hash_pinned(self):

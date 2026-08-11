@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,9 @@ MANIFEST_ENV = "T8_UNOFFICIAL_CASE_LIBRARY_V2"
 COMMUNITY_MANIFEST_ENV = "T8_STANDALONE_COMMUNITY_SKILLS_V1"
 LIBRARY_SCHEMA = "t8-unofficial-case-library/v2"
 COMMUNITY_LIBRARY_SCHEMA = "t8-standalone-community-skill-handoff/v1"
+BUNDLED_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
+BUNDLED_PREVIEW_ROOT = Path(__file__).resolve().parent / "web" / "js" / "assets" / "t8-case-previews"
+BUNDLED_PREVIEW_MANIFEST = BUNDLED_PREVIEW_ROOT / "manifest.json"
 _REGISTERED = False
 
 
@@ -144,11 +148,70 @@ def _allowed_previews() -> dict[str, dict[str, Any]]:
     return allowed
 
 
-def resolve_preview(case_id: str, *, verify_hash: bool = True) -> tuple[Path, dict[str, Any]]:
-    allowed = _allowed_previews().get(str(case_id))
-    runtime = _runtime_records().get(str(case_id))
-    if allowed is None or runtime is None:
-        raise CasePreviewError("Local preview is not configured for this case")
+@lru_cache(maxsize=1)
+def _bundled_preview_records() -> dict[str, dict[str, Any]]:
+    if not BUNDLED_PREVIEW_MANIFEST.is_file():
+        return {}
+    try:
+        manifest = json.loads(BUNDLED_PREVIEW_MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CasePreviewError(f"Cannot read bundled T8 preview manifest: {exc}") from exc
+    entries = manifest.get("previews") if isinstance(manifest, dict) else None
+    if (
+        not isinstance(manifest, dict)
+        or manifest.get("schema_version") != BUNDLED_PREVIEW_SCHEMA
+        or manifest.get("catalog_id") != "t8-unofficial-case-library-v2"
+        or not isinstance(entries, list)
+        or manifest.get("preview_count") != len(entries)
+    ):
+        raise CasePreviewError("Unsupported bundled T8 preview manifest")
+    allowed = _allowed_previews()
+    records: dict[str, dict[str, Any]] = {}
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise CasePreviewError("Bundled T8 preview entry is not an object")
+        case_id = str(entry.get("case_id", ""))
+        filename = Path(str(entry.get("file", "")))
+        expected = allowed.get(case_id)
+        if (
+            not case_id
+            or case_id in records
+            or expected is None
+            or entry.get("human_preview_only") is not True
+            or entry.get("source_sha256") != expected.get("sha256")
+            or filename.name != str(filename)
+            or filename.suffix.lower() != ".gif"
+        ):
+            raise CasePreviewError(f"Bundled T8 preview identity mismatch: {case_id}")
+        path = (BUNDLED_PREVIEW_ROOT / filename).resolve()
+        try:
+            path.relative_to(BUNDLED_PREVIEW_ROOT.resolve())
+        except ValueError as exc:
+            raise CasePreviewError("Bundled T8 preview path escapes its asset directory") from exc
+        if not path.is_file() or path.stat().st_size != int(entry.get("bytes", -1)):
+            raise CasePreviewError(f"Bundled T8 preview file is missing or truncated: {case_id}")
+        with path.open("rb") as handle:
+            if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
+                raise CasePreviewError(f"Bundled T8 preview is not a GIF: {case_id}")
+        if _sha256(path) != entry.get("sha256"):
+            raise CasePreviewError(f"Bundled T8 preview SHA-256 mismatch: {case_id}")
+        records[case_id] = {
+            **entry,
+            "_template_kind": "bundled",
+            "_path": path,
+        }
+    if set(records) != set(allowed):
+        raise CasePreviewError("Bundled T8 preview manifest does not cover the installed selector catalog")
+    return records
+
+
+def _resolve_local_preview(
+    case_id: str,
+    allowed: dict[str, Any],
+    runtime: dict[str, Any],
+    *,
+    verify_hash: bool,
+) -> tuple[Path, dict[str, Any]]:
     preview = runtime.get("preview", {})
     if preview.get("sha256") != allowed.get("sha256"):
         raise CasePreviewError("Local preview metadata does not match the installed selector catalog")
@@ -190,30 +253,53 @@ def resolve_preview(case_id: str, *, verify_hash: bool = True) -> tuple[Path, di
     return preview_path, runtime
 
 
+def resolve_preview(case_id: str, *, verify_hash: bool = True) -> tuple[Path, dict[str, Any]]:
+    preview_id = str(case_id)
+    allowed = _allowed_previews().get(preview_id)
+    if allowed is None:
+        raise CasePreviewError("Unknown T8 preview identity")
+    runtime = _runtime_records().get(preview_id)
+    local_error: CasePreviewError | None = None
+    if runtime is not None:
+        try:
+            return _resolve_local_preview(preview_id, allowed, runtime, verify_hash=verify_hash)
+        except CasePreviewError as exc:
+            local_error = exc
+    bundled = _bundled_preview_records().get(preview_id)
+    if bundled is not None:
+        return Path(bundled["_path"]), bundled
+    if local_error is not None:
+        raise local_error
+    raise CasePreviewError("T8 preview is neither bundled nor configured locally")
+
+
 def runtime_public_catalog() -> dict[str, Any]:
     catalog = public_case_catalog()
     runtime = _runtime_records()
+    bundled = _bundled_preview_records()
     for template in catalog["templates"]:
         for preview in template["previews"]:
             record = runtime.get(preview["case_id"])
             preview["available"] = False
             preview["preview_url"] = ""
             preview["source_url"] = ""
-            if record is None:
-                continue
             try:
                 resolve_preview(preview["case_id"], verify_hash=False)
             except CasePreviewError:
                 continue
             preview["available"] = True
             preview["preview_url"] = f"/t8-prompt-enhancer/case-preview/{preview['case_id']}"
-            if record.get("_template_kind") == "case":
+            if record is not None and record.get("_template_kind") == "case":
                 source_url = str(record.get("source", {}).get("canonical_url", ""))
                 preview["source_url"] = source_url if source_url.startswith(("https://", "http://")) else ""
     catalog["preview_manifest_configured"] = any(
         path is not None for path in (configured_manifest_path(), configured_community_manifest_path())
     )
-    catalog["preview_policy"] = "GIF is for local human preview only and is never sent to the LLM."
+    catalog["bundled_preview_count"] = len(bundled)
+    catalog["bundled_previews_included"] = len(bundled) == sum(
+        len(template["previews"]) for template in catalog["templates"]
+    )
+    catalog["preview_policy"] = "GIF is a bundled/local human UI preview only and is never sent to the LLM."
     return catalog
 
 
@@ -238,10 +324,15 @@ def register_routes() -> None:
 
     async def preview_route(request: Any) -> Any:
         try:
-            path, _record = resolve_preview(request.match_info["case_id"], verify_hash=True)
+            path, record = resolve_preview(request.match_info["case_id"], verify_hash=True)
+            cache_control = (
+                "public, max-age=31536000, immutable"
+                if record.get("_template_kind") == "bundled"
+                else "private, max-age=300"
+            )
             return web.FileResponse(
                 path,
-                headers={"Cache-Control": "private, max-age=300", "X-T8-Preview-Only": "human"},
+                headers={"Cache-Control": cache_control, "X-T8-Preview-Only": "human"},
             )
         except CasePreviewError as exc:
             return web.json_response({"error": str(exc)}, status=404)
@@ -257,6 +348,8 @@ def register_routes() -> None:
 
 __all__ = [
     "CasePreviewError",
+    "BUNDLED_PREVIEW_MANIFEST",
+    "BUNDLED_PREVIEW_ROOT",
     "configured_community_manifest_path",
     "configured_manifest_path",
     "register_routes",

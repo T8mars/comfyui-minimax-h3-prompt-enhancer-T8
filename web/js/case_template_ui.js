@@ -23,7 +23,7 @@ function fetchCatalog() {
 }
 
 
-function setTextWidgetValue(widget, value) {
+export function setTextWidgetValue(widget, value) {
     if (!widget) return;
     widget.value = value;
     const input = widget.inputEl
@@ -34,7 +34,7 @@ function setTextWidgetValue(widget, value) {
 }
 
 
-function setDomWidgetVisible(widget, visible) {
+export function setDomWidgetVisible(widget, visible) {
     if (!("t8CaseOriginalType" in widget)) {
         widget.t8CaseOriginalType = widget.type;
         widget.t8CaseOriginalComputeSize = widget.computeSize;
@@ -49,7 +49,7 @@ function setDomWidgetVisible(widget, visible) {
 }
 
 
-function textRow(label, value) {
+export function textRow(label, value) {
     const row = document.createElement("div");
     const strong = document.createElement("strong");
     strong.textContent = `${label}：`;
@@ -58,7 +58,7 @@ function textRow(label, value) {
 }
 
 
-function createCard() {
+export function createTemplateDetailCard() {
     const root = document.createElement("div");
     root.style.cssText = [
         "display:flex", "flex-direction:column", "gap:8px", "width:100%", "box-sizing:border-box",
@@ -70,7 +70,18 @@ function createCard() {
 }
 
 
-function renderTemplate(root, template, promptWidget, node, refreshSize) {
+export function renderTemplateDetail(
+    root,
+    template,
+    promptWidget,
+    node,
+    refreshSize,
+    {
+        resolvePreviewUrl = (preview) => api.apiURL(preview.preview_url),
+        sourceLabel = "查看来源",
+        policyText = "仅供人类本地预览，不会作为图像、视频或 LLM 参考素材",
+    } = {},
+) {
     root.replaceChildren();
 
     const title = document.createElement("div");
@@ -79,7 +90,10 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
     root.append(title);
     root.append(textRow("用途", template.summary));
     const mechanismName = template.label.includes("｜") ? template.label.split("｜").slice(1).join("｜") : template.label;
-    root.append(textRow("适用范围", `适合需要“${mechanismName}”结构的视频创意；主体、场景和表面风格均可替换。`));
+    root.append(textRow(
+        "适用范围",
+        template.applicability || `适合需要“${mechanismName}”结构的视频创意；主体、场景和表面风格均可替换。`,
+    ));
     root.append(textRow("推荐输入格式", template.input_format));
 
     const anchors = document.createElement("div");
@@ -140,7 +154,7 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
         }
         if (preview.available && preview.preview_url) {
             const img = document.createElement("img");
-            img.src = api.apiURL(preview.preview_url);
+            img.src = resolvePreviewUrl(preview);
             img.alt = `${preview.label} GIF 预览`;
             img.loading = "lazy";
             img.style.cssText = "display:block;width:100%;max-height:220px;object-fit:contain;border-radius:5px;background:#111";
@@ -161,12 +175,12 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
             source.href = preview.source_url;
             source.target = "_blank";
             source.rel = "noopener noreferrer";
-            source.textContent = "查看来源";
+            source.textContent = preview.source_label || sourceLabel;
             source.style.color = "var(--link-color,#7ab7ff)";
             figure.append(source);
         }
         const policy = document.createElement("small");
-        policy.textContent = "仅供人类本地预览，不会作为图像、视频或 LLM 参考素材";
+        policy.textContent = policyText;
         policy.style.opacity = ".65";
         figure.append(policy);
         previewWrap.append(figure);
@@ -178,7 +192,7 @@ function renderTemplate(root, template, promptWidget, node, refreshSize) {
 
 export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshSize) {
     if (!caseWidget || !promptWidget) return null;
-    const root = createCard();
+    const root = createTemplateDetailCard();
     root.textContent = "正在读取非官方模板说明…";
     const domWidget = node.addDOMWidget("t8_case_template_details", "custom", root, {
         getValue: () => "",
@@ -263,7 +277,7 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
             setDomWidgetVisible(domWidget, false);
         } else {
             if (caseWidget.value !== template.label) caseWidget.value = template.label;
-            renderTemplate(root, template, promptWidget, node, refreshSize);
+            renderTemplateDetail(root, template, promptWidget, node, refreshSize);
             setDomWidgetVisible(domWidget, true);
         }
         refreshSize?.();
