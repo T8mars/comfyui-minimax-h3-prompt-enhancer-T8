@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 51,
+  "preview_count": 55,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -153,6 +153,14 @@
       "source_sha256": "304b54700aac4c6cf0edffa6e72eac95efe11b5de1935a5ea04f88f889edc361",
       "sha256": "7190dd876b6000971333056532f1d11fd59e8c5e48ac8065870de7cb9ee1f2d6",
       "bytes": 1494452,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-manuagi01-2086784467981697343-browser-2086784467981697343-video-1",
+      "file": "3d6e70d3e01888ebe445be9437990cacbe1f7383915e34e2786b73ac80da3780.gif",
+      "source_sha256": "97cd3786bd07a6844698c589f526afbc7b78ea78953ba36ba777e1acf18e3159",
+      "sha256": "3d6e70d3e01888ebe445be9437990cacbe1f7383915e34e2786b73ac80da3780",
+      "bytes": 1391333,
       "human_preview_only": true
     },
     {
@@ -401,6 +409,30 @@
       "source_sha256": "c84856f22c8a745afedafe7996fa141afd313a16a91508483961e74dee5b6600",
       "sha256": "81767462796dec26d7b899b70c58ecdf477201974f8dd1dba037f5f4ff34af81",
       "bytes": 3280521,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-brittaninatali-2086846696101962006-browser-2086846696101962006-video-1",
+      "file": "7546b1ffebe09558c4f578cd38505618526c268e7316edc45cb18dd557543b4a.gif",
+      "source_sha256": "aacf8e8e8d9b0125de1e21c0f05d2e6784cb1f4ee54589d7a54c93f11dd9d9b8",
+      "sha256": "7546b1ffebe09558c4f578cd38505618526c268e7316edc45cb18dd557543b4a",
+      "bytes": 3244878,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-guicastellanos1-2086895492437532803-browser-2086895492437532803-video-1",
+      "file": "769c872ad75c2e18c75d858f5731a13d751d9c58c05b7c5c4e686ae6f1af1cb0.gif",
+      "source_sha256": "4fb61e2f2b1e0b4993c99ab3dec1f9f32dde9930d1af30d9c2e97079ba3796d8",
+      "sha256": "769c872ad75c2e18c75d858f5731a13d751d9c58c05b7c5c4e686ae6f1af1cb0",
+      "bytes": 2433221,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-manuagi01-2086778003422671069-browser-2086778003422671069-video-1",
+      "file": "edacec3db2c3d08c9cf865760fe1d087b3c6045aaaa0249ec0e6140a43053b8e.gif",
+      "source_sha256": "d0bb4e2780db55df9b4d3fd624676cd3ffbf0c491f7c74869762845f284a6bca",
+      "sha256": "edacec3db2c3d08c9cf865760fe1d087b3c6045aaaa0249ec0e6140a43053b8e",
+      "bytes": 1761886,
       "human_preview_only": true
     },
     {

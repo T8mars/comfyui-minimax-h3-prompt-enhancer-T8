@@ -1,0 +1,43 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-11-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-brittaninatali-2086846696101962006-browser-2086846696101962006-video-1",
+      "template_id": "t8-case-incompatible-medium-travel-scale-reveal-v1",
+      "template_action": "selector",
+      "label": "异质航行｜维修出发到巨尺度揭示",
+      "summary": "先用维修准备建立载具与成员，再让同一载具在不相容材质环境中持续航行；近景证明操控，远景证明速度与尺度，最后用巨尺度环境或生命体重构旅程大小。",
+      "case_sha256": "7593c0e84e8fc9077cb9926481a30c3a8cfba73cb4cdb27be904127bb002cd1b",
+      "creative_dna_sha256": "8fe37f0c44cf783580d166f95da00476744ee61f02290ae30733eb9a9bd22612",
+      "h3_adapter_sha256": "8e7250a103d4b5a2809038a0b28b67c15f65dd9c9f59e2b03cce29101492eeaf",
+      "seedance20_adapter_sha256": "2dbdea3b9f199d4b04a132ccdcee71e74444f126f6d124692d3bcfaa77b9c248",
+      "mechanism_fingerprint": "871a0fd31e5b2ea6cd07d056066ecc3f52153ccd053f3a278542cc00ae3907ac"
+    },
+    {
+      "case_id": "x-guicastellanos1-2086895492437532803-browser-2086895492437532803-video-1",
+      "template_id": "t8-case-competence-through-recoverable-failure-v1",
+      "template_action": "selector",
+      "label": "角色登场｜失误后借身体特征破局",
+      "summary": "先用居所、醒来反应和移动方式建立原创角色，再让技术任务发生可恢复失误；角色把自身独特身体特征当成工具完成破局，并以成果同框收束。",
+      "case_sha256": "fa3d4dcc9124f588d814474334bc7e08a8da827334946338e708c4aaee39e3f1",
+      "creative_dna_sha256": "548c58786291f1221db6e235defef7d61463bae5d7850cf120ae018bfb27f1ef",
+      "h3_adapter_sha256": "b5d2172db632b99fc5e3d3aefc8d064029085284c94d5c930044a3c1a1e92b45",
+      "seedance20_adapter_sha256": "c58c2c5f0528dac6dd4d7086a8622c180d35a6cef534e41d79223fc694506518",
+      "mechanism_fingerprint": "4b9740eb44840323cb78b250e5056cb4dfbdfdc71918aeb02da54a27595d8901"
+    },
+    {
+      "case_id": "x-manuagi01-2086778003422671069-browser-2086778003422671069-video-1",
+      "template_id": "t8-case-independent-roles-to-shared-result-v1",
+      "template_action": "selector",
+      "label": "双角色职责｜独立建立后共同完成",
+      "summary": "先分别用工具、局部动作和中间结果建立两个角色的独立职责，随后让双方在一个共享接口产生不可替代的依赖，最终以缺少任一方都无法完成的可见成果收束。",
+      "case_sha256": "d6bbac2586b1ac01e3cf074143ad81f89f1799e3958a9c3ca586aaaac6c05290",
+      "creative_dna_sha256": "c518b2039070b7a7256fffd5f49d83f5566bdb96fa8356267cc6b6a7740e0b1d",
+      "h3_adapter_sha256": "b80ec1976e8a7b22ac1184bcb381ade1b052b4ebdae8204456e85bb4869bf086",
+      "seedance20_adapter_sha256": "99b3676f08fc83138a7eabc4faecf21f4bb724e9443989844f89035be0762159",
+      "mechanism_fingerprint": "4e23eb9e747030561b171d0b76adfe7086627c29f3096180f133dd5603671974"
+    }
+  ]
+}

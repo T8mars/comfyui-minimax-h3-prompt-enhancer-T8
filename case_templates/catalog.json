@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 49,
-  "case_selector_template_count": 43,
+  "source_case_count": 53,
+  "case_selector_template_count": 46,
   "community_skill_count": 2,
-  "selector_template_count": 45,
-  "evidence_variant_count": 6,
+  "selector_template_count": 48,
+  "evidence_variant_count": 7,
   "official_minimax_skills_included": false,
   "templates": [
     {
@@ -983,6 +983,23 @@
           "width": 480,
           "height": 274,
           "duration_seconds": 14.63,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-manuagi01-2086784467981697343-browser-2086784467981697343-video-1",
+          "label": "平面重组｜图标开启档案世界",
+          "short_summary": "紧凑图标先展开成角色与世界，图形密度经多个象征场景逐步升高，再用短暂状态卡打断；最后一个人物画面把持续配色与面板几何交给独立终态锁定。作为既有平面重组模板的证据变体，不新增下拉项。",
+          "recommended_input": "铜色种子螺旋从标本标签展开成纸艺温室世界，经过叶廊与根系高密模块，短暂停在无字检疫花结，最终重组成植物徽记。",
+          "required_anchors": [
+            "Open with one compact flat icon that visibly expands into a larger graphic field.",
+            "Keep one character silhouette, palette and panel family stable while the world modules change.",
+            "Insert one short isolated status or negative-space state before the ending.",
+            "Resolve the recurring palette and panel geometry into a held final lockup after the last character frame hands off."
+          ],
+          "sha256": "97cd3786bd07a6844698c589f526afbc7b78ea78953ba36ba777e1acf18e3159",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
           "human_preview_only": true
         }
       ],
@@ -2544,6 +2561,171 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nLock one ordinary enclosed room, one occupant and one inert witness object. After one ordinary operation or control check, make the enclosure accumulate visible physical evidence, use one brief blackout without resetting geometry, then open the threshold onto an impossible exterior while the unchanged witness object remains inside so the reveal reads as a rule break rather than a location cut.\nInvariants:\n- inv-01: Lock one familiar enclosed-room geometry before the anomaly begins.\n- inv-02: Place one ordinary operation or control check before the physical anomaly.\n- inv-03: Make the enclosure accumulate physical evidence before the threshold opens.\n- inv-04: Preserve one inert witness object across the interruption.\n- inv-05: Hold the impossible exterior and unchanged interior together after the occupant is absent or displaced.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A changing room cannot prove which rule broke.: Lock one familiar enclosed-room geometry before the anomaly begins.\n- Starting with unexplained material effects weakens the ordinary-to-impossible escalation.: Place one ordinary operation or control check before the physical anomaly.\n- An instant portal lacks escalation and material causality.: Make the enclosure accumulate physical evidence before the threshold opens.\n- If everything changes, the reveal can read as a location cut.: Preserve one inert witness object across the interruption.\n- A quick exterior insert cannot establish spatial contradiction.: Hold the impossible exterior and unchanged interior together after the occupant is absent or displaced.\nDo not copy from the source: source elevator; source male passenger and paper bag; source freezing metal walls; source cloud doorway and exact disappearance",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-incompatible-medium-travel-scale-reveal-v1",
+      "label": "异质航行｜维修出发到巨尺度揭示",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先用维修准备建立载具与成员，再让同一载具在不相容材质环境中持续航行；近景证明操控，远景证明速度与尺度，最后用巨尺度环境或生命体重构旅程大小。",
+      "input_format": "载具与操作员 + 出发前准备 + 明确启动 + 不相容介质持续航行 + 近/远尺度证明 + 巨尺度揭示",
+      "recommended_input": "两台维护机器人先检修三角磁吸履带车并完成磁足自检；启动后穿越像潮汐一样流动的铝箔带，用近景证明适应、远景证明规模，最后揭示巨型压实机。",
+      "required_anchors": [
+        "Establish one carrier, its crew and a visible readiness task before departure.",
+        "Show an unambiguous engine or control engagement followed by departure.",
+        "Alternate local control proof with wider speed-and-scale proof.",
+        "Use a late giant-scale environmental, living or working-form reveal to reframe the journey's scale."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-brittaninatali-2086846696101962006-browser-2086846696101962006-video-1",
+        "case_sha256": "7593c0e84e8fc9077cb9926481a30c3a8cfba73cb4cdb27be904127bb002cd1b",
+        "release_score": 4.659,
+        "creative_dna_sha256": "8fe37f0c44cf783580d166f95da00476744ee61f02290ae30733eb9a9bd22612",
+        "h3_adapter_sha256": "8e7250a103d4b5a2809038a0b28b67c15f65dd9c9f59e2b03cce29101492eeaf",
+        "seedance20_adapter_sha256": "2dbdea3b9f199d4b04a132ccdcee71e74444f126f6d124692d3bcfaa77b9c248"
+      },
+      "previews": [
+        {
+          "case_id": "x-brittaninatali-2086846696101962006-browser-2086846696101962006-video-1",
+          "label": "异质航行｜维修出发到巨尺度揭示",
+          "short_summary": "先用维修准备建立载具与成员，再让同一载具在不相容材质环境中持续航行；近景证明操控，远景证明速度与尺度，最后用巨尺度环境或生命体重构旅程大小。",
+          "recommended_input": "两台维护机器人先检修三角磁吸履带车并完成磁足自检；启动后穿越像潮汐一样流动的铝箔带，用近景证明适应、远景证明规模，最后揭示巨型压实机。",
+          "required_anchors": [
+            "Establish one carrier, its crew and a visible readiness task before departure.",
+            "Show an unambiguous engine or control engagement followed by departure.",
+            "Alternate local control proof with wider speed-and-scale proof.",
+            "Use a late giant-scale environmental, living or working-form reveal to reframe the journey's scale."
+          ],
+          "sha256": "aacf8e8e8d9b0125de1e21c0f05d2e6784cb1f4ee54589d7a54c93f11dd9d9b8",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 23.38,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one carrier, its crew and a visible readiness task before departure. Move that same carrier through an environment whose material is incompatible with its familiar travel grammar, use close and wide views to prove continuous control and increasing route scale, then end with a late giant-scale environmental, living or working-form reveal that reframes how small the journey has been. The source analysis need not identify that form's purpose; a transfer may assign an original function as instance-specific fiction.\nInvariants:\n- inv-01: Establish one carrier, its crew and a visible readiness task before departure.\n- inv-02: Show an unambiguous engine or control engagement followed by departure.\n- inv-03: Keep one carrier and one forward route continuous across an incompatible material environment.\n- inv-04: Alternate local control proof with wider speed-and-scale proof.\n- inv-05: Use a late giant-scale environmental, living or working-form reveal to reframe the journey's scale.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is readable without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific surface.\n- carrier_or_token: One visible material, prop or symbolic anchor that carries the causal mechanism.\n- state_change: A sequence of visible, causally ordered changes rather than decorative montage.\n- camera_grammar: An information order that proves each change without copying source shot boundaries.\n- payoff: A held final state that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of visible-action sounds; no unsupported source-audio claim.\nFailure prevention:\n- An unexplained moving carrier lacks a causal start.: Establish one carrier, its crew and a visible readiness task before departure.\n- A cut from repair to distant travel loses the readiness handoff.: Show an unambiguous engine or control engagement followed by departure.\n- Unrelated scenic inserts cannot prove a journey.: Keep one carrier and one forward route continuous across an incompatible material environment.\n- Only close shots hide route scale; only wides hide control.: Alternate local control proof with wider speed-and-scale proof.\n- Ending on another travel shot adds no new context; any assigned function must belong to the new transfer rather than being claimed as source evidence.: Use a late giant-scale environmental, living or working-form reveal to reframe the journey's scale.\nDo not copy from the source: white-haired desert mechanic and large-eyed animal companion; sand-sailing craft and ocean-like dune route; source repair tools, canyon chase and whale-shaped landform; the exact source desert palette, character design and travel storyboard",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-competence-through-recoverable-failure-v1",
+      "label": "角色登场｜失误后借身体特征破局",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先用居所、醒来反应和移动方式建立原创角色，再让技术任务发生可恢复失误；角色把自身独特身体特征当成工具完成破局，并以成果同框收束。",
+      "input_format": "原创角色居所与移动 + 技术任务 + 可恢复失误 + 身体特征破局 + 成果同框",
+      "recommended_input": "半透明纸蛾气象员在黄铜气象塔醒来，校准棱镜气压计时遭遇阵风失误，随后用翼脉投影诊断气流并修复，最后托起一颗雨珠。",
+      "required_anchors": [
+        "Establish habitat, intimate reaction and locomotion before the technical task.",
+        "Show one skilled task with a readable intermediate state.",
+        "Use one identity-defining body feature as a practical tool in the solution.",
+        "End with the repaired or transformed object and a restrained competence pose together."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-guicastellanos1-2086895492437532803-browser-2086895492437532803-video-1",
+        "case_sha256": "fa3d4dcc9124f588d814474334bc7e08a8da827334946338e708c4aaee39e3f1",
+        "release_score": 4.727,
+        "creative_dna_sha256": "548c58786291f1221db6e235defef7d61463bae5d7850cf120ae018bfb27f1ef",
+        "h3_adapter_sha256": "b5d2172db632b99fc5e3d3aefc8d064029085284c94d5c930044a3c1a1e92b45",
+        "seedance20_adapter_sha256": "c58c2c5f0528dac6dd4d7086a8622c180d35a6cef534e41d79223fc694506518"
+      },
+      "previews": [
+        {
+          "case_id": "x-guicastellanos1-2086895492437532803-browser-2086895492437532803-video-1",
+          "label": "角色登场｜失误后借身体特征破局",
+          "short_summary": "先用居所、醒来反应和移动方式建立原创角色，再让技术任务发生可恢复失误；角色把自身独特身体特征当成工具完成破局，并以成果同框收束。",
+          "recommended_input": "半透明纸蛾气象员在黄铜气象塔醒来，校准棱镜气压计时遭遇阵风失误，随后用翼脉投影诊断气流并修复，最后托起一颗雨珠。",
+          "required_anchors": [
+            "Establish habitat, intimate reaction and locomotion before the technical task.",
+            "Show one skilled task with a readable intermediate state.",
+            "Use one identity-defining body feature as a practical tool in the solution.",
+            "End with the repaired or transformed object and a restrained competence pose together."
+          ],
+          "sha256": "4fb61e2f2b1e0b4993c99ab3dec1f9f32dde9930d1af30d9c2e97079ba3796d8",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nIntroduce one original character through habitat, wake behavior and locomotion before assigning a skilled task. Let the first technical attempt create a visible recoverable failure, then make the character use one identity-defining body feature as a practical reasoning or control instrument. The success state must visibly answer the failure and end in a clean competence pose with the changed object.\nInvariants:\n- inv-01: Establish habitat, intimate reaction and locomotion before the technical task.\n- inv-02: Show one skilled task with a readable intermediate state.\n- inv-03: Keep the failure recoverable and preserve the same task object.\n- inv-04: Use one identity-defining body feature as a practical tool in the solution.\n- inv-05: End with the repaired or transformed object and a restrained competence pose together.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is readable without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific surface.\n- carrier_or_token: One visible material, prop or symbolic anchor that carries the causal mechanism.\n- state_change: A sequence of visible, causally ordered changes rather than decorative montage.\n- camera_grammar: An information order that proves each change without copying source shot boundaries.\n- payoff: A held final state that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of visible-action sounds; no unsupported source-audio claim.\nFailure prevention:\n- Starting at the workbench reduces the character to a decorative technician.: Establish habitat, intimate reaction and locomotion before the technical task.\n- An unexplained accident cannot prove what changed.: Show one skilled task with a readable intermediate state.\n- Replacing the object erases the consequence.: Keep the failure recoverable and preserve the same task object.\n- If any generic tool solves the problem, the body design is only ornament.: Use one identity-defining body feature as a practical tool in the solution.\n- A reaction without the result cannot close the task.: End with the repaired or transformed object and a restrained competence pose together.\nDo not copy from the source: Ayotl name and source folklore attribution; source turtle-like creature, shell markings and color design; hammock wake-up, floating gears, crystal experiment and source equations; the exact source workshop, explosion, self-writing surface and hero pose",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-independent-roles-to-shared-result-v1",
+      "label": "双角色职责｜独立建立后共同完成",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先分别用工具、局部动作和中间结果建立两个角色的独立职责，随后让双方在一个共享接口产生不可替代的依赖，最终以缺少任一方都无法完成的可见成果收束。",
+      "input_format": "角色A工具/操作/中间结果 + 角色B不同工具/操作/中间结果 + 共享接口 + 双贡献成果",
+      "recommended_input": "铜腿土壤采样自动机完成矿物路径，玻璃泵站自动机独立建立水压；两者在矩形混合阀会合，缺一不可地启动滴灌并让幼苗成排抬起。",
+      "required_anchors": [
+        "Establish Character A through one stable tool, local operation and visible intermediate result.",
+        "Keep Character A's identity and result legible while its local operation completes.",
+        "Bring both roles to one shared interface where each contribution is visibly required.",
+        "Hold a concrete joint result while preserving both identities, tools and complementary responsibilities."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-manuagi01-2086778003422671069-browser-2086778003422671069-video-1",
+        "case_sha256": "d6bbac2586b1ac01e3cf074143ad81f89f1799e3958a9c3ca586aaaac6c05290",
+        "release_score": 4.71,
+        "creative_dna_sha256": "c518b2039070b7a7256fffd5f49d83f5566bdb96fa8356267cc6b6a7740e0b1d",
+        "h3_adapter_sha256": "b80ec1976e8a7b22ac1184bcb381ade1b052b4ebdae8204456e85bb4869bf086",
+        "seedance20_adapter_sha256": "99b3676f08fc83138a7eabc4faecf21f4bb724e9443989844f89035be0762159"
+      },
+      "previews": [
+        {
+          "case_id": "x-manuagi01-2086778003422671069-browser-2086778003422671069-video-1",
+          "label": "双角色职责｜独立建立后共同完成",
+          "short_summary": "先分别用工具、局部动作和中间结果建立两个角色的独立职责，随后让双方在一个共享接口产生不可替代的依赖，最终以缺少任一方都无法完成的可见成果收束。",
+          "recommended_input": "铜腿土壤采样自动机完成矿物路径，玻璃泵站自动机独立建立水压；两者在矩形混合阀会合，缺一不可地启动滴灌并让幼苗成排抬起。",
+          "required_anchors": [
+            "Establish Character A through one stable tool, local operation and visible intermediate result.",
+            "Keep Character A's identity and result legible while its local operation completes.",
+            "Bring both roles to one shared interface where each contribution is visibly required.",
+            "Hold a concrete joint result while preserving both identities, tools and complementary responsibilities."
+          ],
+          "sha256": "d0bb4e2780db55df9b4d3fd624676cd3ffbf0c491f7c74869762845f284a6bca",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish two distinct characters through separate, observable responsibilities before they interact. Give each one stable identity, tool, local action and intermediate result; only after both roles are independently legible may they meet at one shared interface where both contributions are required. End on a concrete joint result that could not exist if either role were removed, while preserving both identities.\nInvariants:\n- inv-01: Establish Character A through one stable tool, local operation and visible intermediate result.\n- inv-02: Keep Character A's identity and result legible while its local operation completes.\n- inv-03: Establish Character B later through a different tool, operation and intermediate result rather than replaying Character A.\n- inv-04: Bring both roles to one shared interface where each contribution is visibly required.\n- inv-05: Hold a concrete joint result while preserving both identities, tools and complementary responsibilities.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is readable without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific surface.\n- carrier_or_token: One visible material, prop or symbolic anchor that carries the causal mechanism.\n- state_change: A sequence of visible, causally ordered changes rather than decorative montage.\n- camera_grammar: An information order that proves each change without copying source shot boundaries.\n- payoff: A held final state that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of visible-action sounds; no unsupported source-audio claim.\nFailure prevention:\n- A generic portrait provides no role for the second character to depend on.: Establish Character A through one stable tool, local operation and visible intermediate result.\n- A prop held without consequence is only costume.: Keep Character A's identity and result legible while its local operation completes.\n- An identical second introduction feels like duplicated character art.: Establish Character B later through a different tool, operation and intermediate result rather than replaying Character A.\n- Placing characters side by side does not explain how they connect.: Bring both roles to one shared interface where each contribution is visibly required.\n- A generic team pose or merged emblem cannot prove that both operations mattered.: Hold a concrete joint result while preserving both identities, tools and complementary responsibilities.\nDo not copy from the source: source white-haired and older long-haired characters; astrolabe, hourglass, masks and constellation-map vocabulary; source city triptych, circular camera rotation and split poster panels; the exact source red brush ring, character silhouettes and final game-PV diagram",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
