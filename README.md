@@ -426,7 +426,7 @@ AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL �
 
 ### OpenAI 兼容接口（备用）
 
-备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；模型 ID 必须在节点中填写供应商实际支持的视觉模型。
+备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/vN` 版本段结尾的地址（如 `/v1`、火山方舟的 `/api/v3`），或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；模型 ID 必须在节点中填写供应商实际支持的视觉模型。
 
 #### 修复后的节点配置
 
@@ -436,7 +436,7 @@ MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：
 | --- | --- | --- |
 | `API Key` | 是 | 可连接任意 `STRING`，也可在节点内填写；节点留空时读取 `OPENAI_API_KEY` |
 | `OpenAI 模型 ID` | 是 | 填写兼容服务商提供的完整视觉模型 ID，不再固定为 `bytedance/doubao-seed-evolving` |
-| `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；节点会把服务根地址或 `/v1` 地址规范化为 `/v1/chat/completions` |
+| `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；节点会把服务根地址或任意 `/vN` 版本化地址规范化为 `/chat/completions` |
 | `视频素材 URL` | 否 | 仅用于视频，每行一个，按已连接 `VIDEO` 的顺序对应；未填写的已连接视频自动使用 Base64 |
 
 不再需要、也不要填写单独的“兼容素材上传 URL”。图片没有素材 URL 字段，始终由节点编码成 Base64 并随聊天请求直接发送。

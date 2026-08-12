@@ -349,7 +349,9 @@ def _openai_chat_url(base_url: str) -> str:
         raise PromptEnhancerError("OpenAI-compatible Base URL must begin with http:// or https://.")
     if base_url.endswith("/chat/completions"):
         return base_url
-    if base_url.endswith("/v1"):
+    if re.search(r"/v\d+$", base_url):
+        # Handles /v1, /v2, /v3, ... bases such as Volcano Ark's /api/v3,
+        # where the OpenAI-compatible path is <base>/chat/completions.
         return f"{base_url}/chat/completions"
     return f"{base_url}/v1/chat/completions"
 
