@@ -3,11 +3,12 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 63,
+  "source_case_count": 66,
   "case_selector_template_count": 55,
   "community_skill_count": 2,
   "selector_template_count": 57,
   "evidence_variant_count": 8,
+  "pending_completion_count": 3,
   "official_minimax_skills_included": false,
   "templates": [
     {

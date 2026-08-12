@@ -708,11 +708,12 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
         self.assertEqual(len(catalog["templates"]), 57)
-        self.assertEqual(catalog["source_case_count"], 63)
+        self.assertEqual(catalog["source_case_count"], 66)
         self.assertEqual(catalog["case_selector_template_count"], 55)
         self.assertEqual(catalog["community_skill_count"], 2)
         self.assertEqual(catalog["selector_template_count"], 57)
         self.assertEqual(catalog["evidence_variant_count"], 8)
+        self.assertEqual(catalog["pending_completion_count"], 3)
         self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
         imported_ids = {
@@ -766,6 +767,12 @@ class PromptEnhancerTests(unittest.TestCase):
             "t8-case-repeating-landmark-deeper-passage-v1",
         }
         self.assertTrue(imported_ids.issubset(by_id))
+        pending_ids = {
+            "t8-case-shared-contact-height-escalation-v1",
+            "t8-case-fold-metrics-to-current-state-v1",
+            "t8-case-foreground-effector-background-state-change-v1",
+        }
+        self.assertTrue(pending_ids.isdisjoint(by_id))
         self.assertIn("微缩闯关｜同一材质连续变形", nodes.CASE_TEMPLATE_OPTIONS)
         self.assertIn("升级讽刺｜新物登场旧爱被移走", nodes.CASE_TEMPLATE_OPTIONS)
         self.assertEqual(len(by_id["t8-case-material-role-traversal-ladder-v1"]["required_anchors"]), 5)
@@ -862,6 +869,30 @@ class PromptEnhancerTests(unittest.TestCase):
             for field in ("case_sha256", "creative_dna_sha256"):
                 if field in item:
                     self.assertEqual(template["source"][field], item[field])
+
+    def test_pending_batch_is_development_only_and_has_no_selector_adapter_or_preview_distribution(self):
+        root = NODES_PATH.parent
+        catalog = json.loads((root / "case_templates" / "catalog.json").read_text(encoding="utf-8"))
+        catalog_ids = {template["id"] for template in catalog["templates"]}
+        pending_path = root / "case_templates" / "pending_batches" / "2026-08-12-02.json"
+        source = pending_path.read_text(encoding="utf-8")
+        pending = json.loads(source)
+        self.assertEqual(pending["schema_version"], "t8-case-template-pending-batch/v1")
+        self.assertEqual(pending["selector_entry"], "disabled-pending-review")
+        self.assertEqual(len(pending["cases"]), 3)
+        self.assertNotRegex(source, r"https?://")
+        self.assertNotRegex(source, r"[A-Za-z]:\\")
+        self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{16,}")
+        for item in pending["cases"]:
+            self.assertNotIn(item["template_id"], catalog_ids)
+            self.assertEqual(item["state"], "compiled")
+            self.assertEqual(item["review_status"], "not_reviewed")
+            self.assertIsNone(item["release_score"])
+            self.assertGreater(item["blocker_count"], 0)
+            self.assertEqual(item["adapter_generation_status"], "not-generated")
+            self.assertEqual(item["preview_distribution_status"], "not-distributed")
+            self.assertRegex(item["case_sha256"], r"^[0-9a-f]{64}$")
+            self.assertRegex(item["creative_dna_sha256"], r"^[0-9a-f]{64}$")
 
     def test_case_template_frontend_shows_preview_and_safe_recommended_fill(self):
         root = NODES_PATH.parent

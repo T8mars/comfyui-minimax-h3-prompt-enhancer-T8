@@ -30,7 +30,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。预设只优化提示词，不运行完整制作工作流。
-- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：63 条已发布案例事实归并为 55 个稳定案例 selector（含 8 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 57 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：累计 66 条来源案例中，63 条已发布案例事实归并为 55 个稳定案例 selector（含 8 个同机制证据变体），另有 3 条待独立复审案例不会进入下拉；再加 2 个独立用户贡献社区 Skill，共 57 个非官方下拉项。所有已发布项均提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -229,7 +229,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 | `动作成字｜方向笔画驱动角色切换与终态标记` | 第一位角色生成方向笔画，第二位角色沿同一图形轴接力并完成终态标记 |
 | `连续推进｜重复地标计时并抵达更深通道` | 受限通道持续推进，以重复地标和视差计时，仅在末段跨入更深次级通道 |
 
-63 条来源案例事实中有 55 个案例 selector 和 8 个 evidence variant；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
+累计 66 条来源案例中有 55 个案例 selector、8 个 evidence variant 和 3 个 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉，pending case 在独立复审及 release gate 完成前不生成 adapter、不进入下拉、也不分发 GIF。本批待完成项记录在 [`case_templates/pending_batches/2026-08-12-02.json`](./case_templates/pending_batches/2026-08-12-02.json)。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
 
 另外两个独立的用户贡献社区 Skill 不合并进案例 registry，也不冒充官方 Skill：
 
@@ -276,7 +276,7 @@ python tools/bundle_t8_case_previews.py `
   --ffmpeg F:\AI-T8-video-onekey\ffmpeg\bin\ffmpeg.exe
 ```
 
-导入器要求 63 条案例记录严格组成 55 个 selector + 8 个 evidence variant，并另验 2 个独立社区 Skill，最终生成 57 个非官方下拉项。案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
+导入器要求 66 条案例记录严格组成 55 个 selector + 8 个 evidence variant + 3 个 pending case，并另验 2 个独立社区 Skill，最终仍只生成 57 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；pending case 必须保持未发布、未复审、有明确 blocker、无 adapter，并保存在开发待完成清单中。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 

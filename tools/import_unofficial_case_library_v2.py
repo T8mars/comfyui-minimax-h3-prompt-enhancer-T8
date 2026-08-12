@@ -17,9 +17,10 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 63
+EXPECTED_RECORD_COUNT = 66
 EXPECTED_SELECTOR_COUNT = 55
 EXPECTED_EVIDENCE_COUNT = 8
+EXPECTED_PENDING_COUNT = 3
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
 EXPECTED_TOTAL_SELECTOR_COUNT = 57
 EXPECTED_CONTRACT = {
@@ -327,15 +328,24 @@ def build_catalog(
         raise LibraryImportError("Library records are missing")
     selectors = [record for record in records if record.get("template_action") == "selector"]
     evidence = [record for record in records if record.get("template_action") == "evidence_variant"]
+    pending = [record for record in records if record.get("template_action") == "pending"]
     declared_counts = (
         library.get("case_count"),
         library.get("selector_template_count"),
         library.get("evidence_variant_count"),
+        library.get("pending_completion_count"),
     )
-    actual_counts = (len(records), len(selectors), len(evidence))
-    expected_counts = (EXPECTED_RECORD_COUNT, EXPECTED_SELECTOR_COUNT, EXPECTED_EVIDENCE_COUNT)
+    actual_counts = (len(records), len(selectors), len(evidence), len(pending))
+    expected_counts = (
+        EXPECTED_RECORD_COUNT,
+        EXPECTED_SELECTOR_COUNT,
+        EXPECTED_EVIDENCE_COUNT,
+        EXPECTED_PENDING_COUNT,
+    )
     if declared_counts != expected_counts or actual_counts != expected_counts:
-        raise LibraryImportError("Expected 63 records: 55 selectors and eight evidence variants")
+        raise LibraryImportError(
+            "Expected 66 records: 55 selectors, eight evidence variants, and three pending cases"
+        )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
     seen_cases: set[str] = set()
@@ -343,7 +353,9 @@ def build_catalog(
         case_id = str(record.get("case_id", ""))
         template_id = str(record.get("template_id", ""))
         action = record.get("template_action")
-        if not case_id or case_id in seen_cases or not template_id or action not in {"selector", "evidence_variant"}:
+        if not case_id or case_id in seen_cases or not template_id or action not in {
+            "selector", "evidence_variant", "pending",
+        }:
             raise LibraryImportError(f"Invalid or duplicate case identity: {case_id}")
         for field in ("dropdown_label", "short_summary", "input_format", "recommended_input"):
             if not isinstance(record.get(field), str) or not record[field].strip():
@@ -353,6 +365,31 @@ def build_catalog(
             raise LibraryImportError(f"Case requires 2-5 mechanism anchors: {case_id}")
         if not all(isinstance(anchor, str) and anchor.strip() for anchor in anchors):
             raise LibraryImportError(f"Case contains an empty mechanism anchor: {case_id}")
+        if action == "pending":
+            blockers = record.get("blockers")
+            if (
+                record.get("state") == "released"
+                or record.get("review_status") == "approved"
+                or record.get("release_score") is not None
+                or not isinstance(blockers, list)
+                or not blockers
+                or not all(isinstance(blocker, str) and blocker.strip() for blocker in blockers)
+            ):
+                raise LibraryImportError(f"Pending case release gate is inconsistent: {case_id}")
+            for target in TARGETS:
+                model = record.get("models", {}).get(target, {})
+                if model.get("adapter_path") is not None or model.get("adapter_sha256") is not None:
+                    raise LibraryImportError(f"Pending case must not ship an adapter: {case_id}/{target}")
+            rights = record.get("rights", {})
+            if (
+                rights.get("model_reference") is not False
+                or rights.get("redistribute") is not False
+                or rights.get("gif_connected_to_model") is not False
+                or rights.get("source_video_connected_to_model") is not False
+            ):
+                raise LibraryImportError(f"Pending case rights/model-reference boundary mismatch: {case_id}")
+            seen_cases.add(case_id)
+            continue
         by_template.setdefault(template_id, []).append(record)
         if record.get("state") != "released" or record.get("review_status") != "approved":
             raise LibraryImportError(f"Case is not released and approved: {case_id}")
@@ -452,6 +489,7 @@ def build_catalog(
         "community_skill_count": len(community_templates),
         "selector_template_count": len(templates),
         "evidence_variant_count": len(evidence),
+        "pending_completion_count": len(pending),
         "official_minimax_skills_included": False,
         "templates": templates,
     }
@@ -485,7 +523,10 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Import the 63-record case handoff plus two standalone community Skills."
+        description=(
+            "Import the 66-record case handoff: 55 selectors, eight evidence variants, "
+            "three pending cases, plus two standalone community Skills."
+        )
     )
     parser.add_argument("--library", required=True, type=Path)
     parser.add_argument("--community-skills", required=True, type=Path)
@@ -506,7 +547,8 @@ def main() -> int:
         f"Wrote {catalog['case_selector_template_count']} case selectors, "
         f"{catalog['community_skill_count']} community Skills, and "
         f"{catalog['evidence_variant_count']} evidence "
-        f"{'variant' if catalog['evidence_variant_count'] == 1 else 'variants'} to {args.output.resolve()}"
+        f"{'variant' if catalog['evidence_variant_count'] == 1 else 'variants'}; "
+        f"held back {catalog['pending_completion_count']} pending cases; wrote {args.output.resolve()}"
     )
     return 0
 
