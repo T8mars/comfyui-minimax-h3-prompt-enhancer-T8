@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 55,
+  "preview_count": 65,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -17,6 +17,14 @@
       "source_sha256": "928c1d5d789d22c748ca35d6d701c66c514ce4636f72fe69150430793b43b70a",
       "sha256": "f9162e99969f3384c8617c6833115324bc021578a6f37455578979ce91f60962",
       "bytes": 1467703,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-doyamarke-2087150954340929655-browser-2087150954340929655-video-1",
+      "file": "5feaa15019482a1b907b803a28c966db51ee1c3a69905cf216718c310a423a44.gif",
+      "source_sha256": "22d5d3bf5ca636d87e425548e51d5ca89221ebe44504e5f43084ca79df4b507f",
+      "sha256": "5feaa15019482a1b907b803a28c966db51ee1c3a69905cf216718c310a423a44",
+      "bytes": 1766001,
       "human_preview_only": true
     },
     {
@@ -433,6 +441,78 @@
       "source_sha256": "d0bb4e2780db55df9b4d3fd624676cd3ffbf0c491f7c74869762845f284a6bca",
       "sha256": "edacec3db2c3d08c9cf865760fe1d087b3c6045aaaa0249ec0e6140a43053b8e",
       "bytes": 1761886,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-yoni-attlan-2087162663922975137-browser-2087162663922975137-video-1",
+      "file": "32f0b19adf416e81eb6e37ece94b53aab24cd6364489ce3c203e1b1833885a62.gif",
+      "source_sha256": "43e0feb7ec414ce258431eda310a9a276437692f1ec60e112a0402012c6c86f0",
+      "sha256": "32f0b19adf416e81eb6e37ece94b53aab24cd6364489ce3c203e1b1833885a62",
+      "bytes": 4765057,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-cso6709-2087327019579392231-browser-2087327019579392231-video-1",
+      "file": "b40104a8e0d268a34ab1b8e355267e048785f2fd5418353dc1a567f1701cfba3.gif",
+      "source_sha256": "3904f8b668d234b2e3cbcb7e4e41b12105822b454389d1ddb2799701f980573b",
+      "sha256": "b40104a8e0d268a34ab1b8e355267e048785f2fd5418353dc1a567f1701cfba3",
+      "bytes": 1717959,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-sada-ai-2087294907786600770-browser-2087294907786600770-video-1",
+      "file": "ad6d9b10fc41c1ad4eeb9aa1f1ff973e39bf5e5ee389e5d776a4a7cc4c007651.gif",
+      "source_sha256": "8714c07637d4d636807de59a7ebc6fb50f72c70198a6f3b1468c28c0aeb60319",
+      "sha256": "ad6d9b10fc41c1ad4eeb9aa1f1ff973e39bf5e5ee389e5d776a4a7cc4c007651",
+      "bytes": 3958934,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-nicolasmariar-2087313673312256276-browser-2087313673312256276-video-1",
+      "file": "abb6b6ffefa515b4248ebec79e9c88493ec5840247deae8d77e0a76daaa4cb83.gif",
+      "source_sha256": "b54c690b990407d90392bb5a6cf22747783a0fbdb3c07e75385b0d59173047d3",
+      "sha256": "abb6b6ffefa515b4248ebec79e9c88493ec5840247deae8d77e0a76daaa4cb83",
+      "bytes": 5487528,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-charaspowerai-2087192378880721150-browser-2087192378880721150-video-1",
+      "file": "295dfe2de30f69a06ac9a654bee8d7ba56adc9e89e08fa86aaa9b13194d3f2f5.gif",
+      "source_sha256": "e5b867b8ca6bbfb55cf4fadebf7d9db03d7f335e44d667db5ed56e38ad34a681",
+      "sha256": "295dfe2de30f69a06ac9a654bee8d7ba56adc9e89e08fa86aaa9b13194d3f2f5",
+      "bytes": 2382660,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-vkuoo-2087148758954053985-browser-2087148758954053985-video-1",
+      "file": "71c74f7863608c97c51fac95eb4c4a277a47078eed05c132a63e9771f3efac76.gif",
+      "source_sha256": "7b1a0190bd869b3d84b9623371395bcfff5bd137d0e0067022c8cde4c656a265",
+      "sha256": "71c74f7863608c97c51fac95eb4c4a277a47078eed05c132a63e9771f3efac76",
+      "bytes": 4376075,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-primee32-2087285945213059079-browser-2087285945213059079-video-1",
+      "file": "541136df6a6504ec56f695a24de5339a0ae001519ffb6ce066a0b7de24460e27.gif",
+      "source_sha256": "250dc331cf616b2b33109c7fb0ad00ed324fa549e984a7de8349f68ef797e298",
+      "sha256": "541136df6a6504ec56f695a24de5339a0ae001519ffb6ce066a0b7de24460e27",
+      "bytes": 3887747,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-steftranquillin-2087233814665814190-browser-2087233814665814190-video-1",
+      "file": "5e6bbf123dcbb0d247951cd9b88b2afeacebb48b66e333ad86b949e5577a029e.gif",
+      "source_sha256": "25892051ca6f8576bdbe4cc7f17c4c83890170ec08585023e31a71c3a6b1e260",
+      "sha256": "5e6bbf123dcbb0d247951cd9b88b2afeacebb48b66e333ad86b949e5577a029e",
+      "bytes": 2290589,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-unrealrafael-2087161642702315868-browser-2087161642702315868-video-1",
+      "file": "a73aa3ca9cd05282bf6a04f778952133114633fd6f3e987bb032dc3382785b84.gif",
+      "source_sha256": "20951c133e6867e748cc26d6c5d2dcf5d01d1256ddde536ff51d593ff06c16e8",
+      "sha256": "a73aa3ca9cd05282bf6a04f778952133114633fd6f3e987bb032dc3382785b84",
+      "bytes": 2620506,
       "human_preview_only": true
     },
     {

@@ -1,0 +1,106 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-12-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-yoni-attlan-2087162663922975137-browser-2087162663922975137-video-1",
+      "template_id": "t8-case-intimate-impact-aftermath-reveal-v1",
+      "label": "冲击后揭示｜从私密困境到城市尺度真因",
+      "summary": "先在狭小受保护空间建立私密困境，再让巨大外力突然移动承载体；局部撞击与长停留反应证明后果，最后广角揭示城市尺度真因。",
+      "case_sha256": "4ae7ae2178a9111e669cdb3e344f324b100c2e7a1e6082772546e419de1a8329",
+      "creative_dna_sha256": "92afaaa109a4ec791025afcffccd358c74b86f94e01081d850d028fe6283050c",
+      "h3_adapter_sha256": "c956484ae555a0082e17d9c3b3d863cfe40b47eb2dbe457ac0fe7714927a2882",
+      "seedance20_adapter_sha256": "dafa0a5ad5cf15733cd36660f630d97a58ae2db3653ca111a9302ab14d3ce060",
+      "mechanism_fingerprint": "8c7cac7ecf4fdf6fcfdc5874894d8f79863d252dfdea96355fe13d30eba5ed94"
+    },
+    {
+      "case_id": "x-cso6709-2087327019579392231-browser-2087327019579392231-video-1",
+      "template_id": "t8-case-stacked-zone-token-relay-v1",
+      "label": "分层接力｜小物体穿越多区域完成传递",
+      "summary": "在同一可读空间建立多个相连区域，让一个小物体从首位角色出发；物体通过可见表面改变路线，后续见证者持续追踪，最终交给自主载体，并以全景闭合完整接力。",
+      "case_sha256": "4a2b8bef69199ceec40f96c4f7dacec7e65cc15d6484a4b6cf870bca3f818f81",
+      "creative_dna_sha256": "07a9c65907ededa61dbf6756a3a0317ab7334fe4146b809b6b72072f6dc2b54c",
+      "h3_adapter_sha256": "aa88f6f0d7741a1e285d12e830dda83de6ea1bd9201c2e845c0187488d37d8ab",
+      "seedance20_adapter_sha256": "ad02eb8a71112d830a1a09e483bbee9b6af21089ce5c79336935d73ee8119606",
+      "mechanism_fingerprint": "2d1c67ad6642e007b313070617851db31340bf610006233e0246467b9b8f3254"
+    },
+    {
+      "case_id": "x-sada-ai-2087294907786600770-browser-2087294907786600770-video-1",
+      "template_id": "t8-case-viewpoint-scale-spectacle-ladder-v1",
+      "label": "尺度奇观阶梯｜每镜重置参照再逼近",
+      "summary": "每个短段先重置熟悉视点与尺度参照，再让一个不可能的空中形态进入；通过观察距离与遮挡变化逐步逼近，最终以近距离视点遭遇收束。",
+      "case_sha256": "7f3fc167e119fb296ab04973129bcfd16a861428de03d2a7450a3c71839ef3c7",
+      "creative_dna_sha256": "455e6122e235cc0bbc0122e835b02444d90f3f54c3d7c31446627c95e1fbe6c6",
+      "h3_adapter_sha256": "7bd4ab438e4d8f8e7d825390420c2cf052053d7b26abb2ad28d94a59400786a0",
+      "seedance20_adapter_sha256": "822e0f3a7835914034e7ac59a4fadfad3e7951a3f5b04c83151c207756539632",
+      "mechanism_fingerprint": "8f010e54c7596c137751807981e9ef1bcbd3be0c6ecd402c684b667e6781a452"
+    },
+    {
+      "case_id": "x-nicolasmariar-2087313673312256276-browser-2087313673312256276-video-1",
+      "template_id": "t8-case-background-anomaly-recording-reveal-v1",
+      "label": "背景异常｜先被观众发现再由记录设备证实",
+      "summary": "先让异常出现在背景而人物继续日常活动，再用记录设备把异常隔离成证据；异常改变或离开记录画面后，人物才出现延迟反应。",
+      "case_sha256": "97faa18e26ec151304804da7df03ba63236ff1d5c960e89fce28bb3a69deb963",
+      "creative_dna_sha256": "3fcf67ca054a782cec798677f653ab44c595fe79e9ad0b4297341b474196a8b7",
+      "h3_adapter_sha256": "cdd8469af7f4a828aaf64801fd4e744932679a4c37636a7a82a7ae747e6fe8d0",
+      "seedance20_adapter_sha256": "675a2ee2666a82195365c23e93384a34158868a62eb5d7e7514797b8bbefbf7a",
+      "mechanism_fingerprint": "65103ce749b8700deaaa040e6b8b9b0bc37572dd68bb0b35234204d51a683bee"
+    },
+    {
+      "case_id": "x-charaspowerai-2087192378880721150-browser-2087192378880721150-video-1",
+      "template_id": "t8-case-asymmetric-force-breach-escalation-v1",
+      "label": "非对称突破｜密集阻力到空间制度改变",
+      "summary": "先建立防守目标与密集阻力场，再引入一个非对称运动力量；局部接触证明动量，广角证明推进，突破后改变空间制度，并以近景后果收束。",
+      "case_sha256": "cb762d42d210d35141b0c9e92b60cc163b95822bd7d1681ffdf7d626ae07ce57",
+      "creative_dna_sha256": "38e235aa1c0cd20d2c16717549d3a0c9a5357c5b247de3d8a7ed9b672496ade5",
+      "h3_adapter_sha256": "3ad93d7e6eafd7c39e9047fef1827d8762b7cc4b2d9617b520310cc28b9c0976",
+      "seedance20_adapter_sha256": "12842c70a0595fabb3657b319e12da9d2cdf3d15dfaeb701bcf31bb49b65f6df",
+      "mechanism_fingerprint": "d7ce205189be6054503b2c51f9b08bed61504848fc10f21c9adfb58710efbe52"
+    },
+    {
+      "case_id": "x-vkuoo-2087148758954053985-browser-2087148758954053985-video-1",
+      "template_id": "t8-case-surface-line-growth-keepsake-loop-v1",
+      "label": "表面生长｜沿既有几何扩散并回收到手作载体",
+      "summary": "先让彩色线条沿真实载体既有几何生长，再扩散成图标或材质标记但不遮掉轮廓；同一线条族连接多个载体，最终回收到手作纪念物并物理关闭。",
+      "case_sha256": "23ae9d3de2765b8d7f2d1c4f358f5b112d477302e5dc2c8b89bcef504eba6412",
+      "creative_dna_sha256": "34c1c122d9c251fc2509b1a0903cb7bfb99e2de30ae248ffc73c2e98c422fce6",
+      "h3_adapter_sha256": "355ea5d4c62579732c499058dc04ca09e3b37cdad4ef9ccebdb38a1c45e075a7",
+      "seedance20_adapter_sha256": "62b4cf138167d6d722452a8b05224dfcf920e9aeed3f43ace2d53f7e434a7711",
+      "mechanism_fingerprint": "13cccbd73d915ef09967bd70228021ef210e74efcf93c3555172c47e7f9fae54"
+    },
+    {
+      "case_id": "x-primee32-2087285945213059079-browser-2087285945213059079-video-1",
+      "template_id": "t8-case-pace-to-destination-celebration-v1",
+      "label": "步速到抵达｜目的地延迟出现并由环境庆祝",
+      "summary": "先建立安静旅人与尚未揭示的路线，再由步行提升到奔跑并扩大空间；目的地在投入行动后才出现，接近时由环境触发庆祝，最后三者同框收束。",
+      "case_sha256": "2c75408e468195388f2f5828cc614a250bdcaa188d5ca26bc204484f29cb7354",
+      "creative_dna_sha256": "a3eaaa66c4708d96945c77a54c7508f13ff080dd8f9243f30321bc910137e7e0",
+      "h3_adapter_sha256": "91f405facb74dc765e5e859bf0306c5e08e8dd721c3b78e72efa689becd807d2",
+      "seedance20_adapter_sha256": "94e4b467a81218f4b49ecc572801127922053c974523e8eb58d65d3dcf5aa891",
+      "mechanism_fingerprint": "cbbbba3794410cdb2eda42612c9a13fc561bfd0a41978dbd45c32804c1754287"
+    },
+    {
+      "case_id": "x-steftranquillin-2087233814665814190-browser-2087233814665814190-video-1",
+      "template_id": "t8-case-direction-stroke-role-switch-v1",
+      "label": "动作成字｜方向笔画驱动角色切换与终态标记",
+      "summary": "第一位角色的动作生成强方向笔画，落地后笔画变成构图分隔；第二位角色沿同一图形轴进入并把笔画弯成新几何，最终标记由两次动作共同完成。",
+      "case_sha256": "8b3b3cfee8812cf4ff2ebd49982d80848e69d6662448d2aeeee1ec684573cc29",
+      "creative_dna_sha256": "234f3ad774164f680f702f80d23d28713e2ff0172742db0991a88604c451fac8",
+      "h3_adapter_sha256": "6b476480ab190ec779638e0128bd199697543ba7e05ddb2cd3b338a5a5f0dbb3",
+      "seedance20_adapter_sha256": "8780163773dec34497a33c7f0d9b26e81924006ff728ddb2834c8af130b91070",
+      "mechanism_fingerprint": "5e6dbe4438a9781dda7f753d70cecb9ef4a10d074311746914a1ba4977be4690"
+    },
+    {
+      "case_id": "x-unrealrafael-2087161642702315868-browser-2087161642702315868-video-1",
+      "template_id": "t8-case-repeating-landmark-deeper-passage-v1",
+      "label": "连续推进｜重复地标计时并抵达更深通道",
+      "summary": "在受限通道中持续前进，以重复固定地标和门洞视差作为进度时钟；接近结尾时只转向或跨越一次可见边界，并停在材质更深的次级通道，不虚构检查、诊断或隐藏威胁。",
+      "case_sha256": "93eb2850d4a87869888f301e8cb54f6321b8cb5babc3d93eed7e8284134a58c6",
+      "creative_dna_sha256": "f84fe3e9869d17c0ad3f0c0fa60d5b4f0e98fcb29f0b8095d1abf3728121f891",
+      "h3_adapter_sha256": "a4bee6a62b3e4e27d1554210a08cdfcd7fe4c7f190630d2e89102815119e4702",
+      "seedance20_adapter_sha256": "e3a5be107f653c1c448357d9081cdf381b5d3ff253d641da35711bea9a641367",
+      "mechanism_fingerprint": "4df8dff285868aae4c3aed9949694dcb9ed9754abfcb3b6d57e9a1627b12d43d"
+    }
+  ]
+}

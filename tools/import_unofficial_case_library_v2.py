@@ -17,11 +17,11 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 53
-EXPECTED_SELECTOR_COUNT = 46
-EXPECTED_EVIDENCE_COUNT = 7
+EXPECTED_RECORD_COUNT = 63
+EXPECTED_SELECTOR_COUNT = 55
+EXPECTED_EVIDENCE_COUNT = 8
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 48
+EXPECTED_TOTAL_SELECTOR_COUNT = 57
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -335,7 +335,7 @@ def build_catalog(
     actual_counts = (len(records), len(selectors), len(evidence))
     expected_counts = (EXPECTED_RECORD_COUNT, EXPECTED_SELECTOR_COUNT, EXPECTED_EVIDENCE_COUNT)
     if declared_counts != expected_counts or actual_counts != expected_counts:
-        raise LibraryImportError("Expected 53 records: 46 selectors and seven evidence variants")
+        raise LibraryImportError("Expected 63 records: 55 selectors and eight evidence variants")
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
     seen_cases: set[str] = set()
@@ -441,7 +441,7 @@ def build_catalog(
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
     if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 48 total non-official selectors")
+        raise LibraryImportError("Expected 57 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -485,7 +485,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Import the 53-record case handoff plus two standalone community Skills."
+        description="Import the 63-record case handoff plus two standalone community Skills."
     )
     parser.add_argument("--library", required=True, type=Path)
     parser.add_argument("--community-skills", required=True, type=Path)

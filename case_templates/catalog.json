@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 53,
-  "case_selector_template_count": 46,
+  "source_case_count": 63,
+  "case_selector_template_count": 55,
   "community_skill_count": 2,
-  "selector_template_count": 48,
-  "evidence_variant_count": 7,
+  "selector_template_count": 57,
+  "evidence_variant_count": 8,
   "official_minimax_skills_included": false,
   "templates": [
     {
@@ -54,6 +54,23 @@
           "width": 480,
           "height": 204,
           "duration_seconds": 15.26,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-doyamarke-2087150954340929655-browser-2087150954340929655-video-1",
+          "label": "产品证据变体｜场景结果到机理再回人群",
+          "short_summary": "从人群结果切到产品身份，再给出一次清楚的材质或机理证明，返回更广的人群结果并以稳定产品终态收束；复用既有产品证据状态机。",
+          "recommended_input": "办公室先显示空气问题，再独立展示净化器；微距证明滤芯截留颗粒，回到放松人群，最后以设备、旧滤芯与清洁气流同框收束。",
+          "required_anchors": [
+            "Establish one emotionally readable outcome related to the product.",
+            "Isolate the product identity before technical proof.",
+            "Return to a broader result state after proof.",
+            "End on a clean stable product state."
+          ],
+          "sha256": "22d5d3bf5ca636d87e425548e51d5ca89221ebe44504e5f43084ca79df4b507f",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
           "human_preview_only": true
         }
       ],
@@ -2736,6 +2753,501 @@
       }
     },
     {
+      "id": "t8-case-intimate-impact-aftermath-reveal-v1",
+      "label": "冲击后揭示｜从私密困境到城市尺度真因",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先在狭小受保护空间建立私密困境，再让巨大外力突然移动承载体；局部撞击与长停留反应证明后果，最后广角揭示城市尺度真因。",
+      "input_format": "受困主体 + 外力移动承载体 + 局部撞击证明 + 反应停留 + 广角真因揭示",
+      "recommended_input": "玻璃修复师在狭小修复舱内固定器皿，压力波把整舱推过被淹大厅；撞上软缓冲后长停留反应，最后揭示中庭上方巨型水族箱破裂。",
+      "required_anchors": [
+        "Begin with an intimate confined baseline before the large event.",
+        "Let one external force visibly displace the established carrier.",
+        "Hold one post-impact reaction after motion stops.",
+        "Reveal the larger cause only after local consequence is clear."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-yoni-attlan-2087162663922975137-browser-2087162663922975137-video-1",
+        "case_sha256": "4ae7ae2178a9111e669cdb3e344f324b100c2e7a1e6082772546e419de1a8329",
+        "release_score": 4.723,
+        "creative_dna_sha256": "92afaaa109a4ec791025afcffccd358c74b86f94e01081d850d028fe6283050c",
+        "h3_adapter_sha256": "c956484ae555a0082e17d9c3b3d863cfe40b47eb2dbe457ac0fe7714927a2882",
+        "seedance20_adapter_sha256": "dafa0a5ad5cf15733cd36660f630d97a58ae2db3653ca111a9302ab14d3ce060"
+      },
+      "previews": [
+        {
+          "case_id": "x-yoni-attlan-2087162663922975137-browser-2087162663922975137-video-1",
+          "label": "冲击后揭示｜从私密困境到城市尺度真因",
+          "short_summary": "先在狭小受保护空间建立私密困境，再让巨大外力突然移动承载体；局部撞击与长停留反应证明后果，最后广角揭示城市尺度真因。",
+          "recommended_input": "玻璃修复师在狭小修复舱内固定器皿，压力波把整舱推过被淹大厅；撞上软缓冲后长停留反应，最后揭示中庭上方巨型水族箱破裂。",
+          "required_anchors": [
+            "Begin with an intimate confined baseline before the large event.",
+            "Let one external force visibly displace the established carrier.",
+            "Hold one post-impact reaction after motion stops.",
+            "Reveal the larger cause only after local consequence is clear."
+          ],
+          "sha256": "43e0feb7ec414ce258431eda310a9a276437692f1ec60e112a0402012c6c86f0",
+          "width": 480,
+          "height": 854,
+          "duration_seconds": 15.01,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBegin inside a tight protected or confined relationship, let one immense external force abruptly displace the carrier, prove impact and disorientation locally, hold a survivor reaction long enough to register consequence, then widen to reveal the much larger environmental cause and aftermath.\nInvariants:\n- inv-01: Begin with an intimate confined baseline before the large event.\n- inv-02: Let one external force visibly displace the established carrier.\n- inv-03: Prove impact through local physical aftermath.\n- inv-04: Hold one post-impact reaction after motion stops.\n- inv-05: Reveal the larger cause only after local consequence is clear.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Opening on destruction removes scale contrast.: Begin with an intimate confined baseline before the large event.\n- Unrelated disaster inserts do not move the story.: Let one external force visibly displace the established carrier.\n- Skipping impact makes the carrier teleport.: Prove impact through local physical aftermath.\n- Cutting immediately to spectacle loses the human cost.: Hold one post-impact reaction after motion stops.\n- An early wide reveal spends the final information too soon.: Reveal the larger cause only after local consequence is clear.\nDo not copy from the source: source woman and automobile; burning giant machines and falling wreckage; source street destruction and source end card; the exact trapped-car crash storyboard; STILL HUMAN end card; WATCH CHAPTER ONE ON YOUTUBE",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-stacked-zone-token-relay-v1",
+      "label": "分层接力｜小物体穿越多区域完成传递",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "在同一可读空间建立多个相连区域，让一个小物体从首位角色出发；物体通过可见表面改变路线，后续见证者持续追踪，最终交给自主载体，并以全景闭合完整接力。",
+      "input_format": "至少3个分层区域 + 1个可数物体 + 2次路线改变 + 后段重定向 + 自主载体终点",
+      "recommended_input": "垂直种子库中，一枚琥珀胶囊从上层分拣臂出发，经过透明滑道与机械叶门两次改道，最终落入自主种植车。",
+      "required_anchors": [
+        "Show at least three connected zones in one readable geography.",
+        "Launch one countable token from a clear first participant.",
+        "Keep the same token visible through a later witness zone and into its descending segment.",
+        "End with an autonomous final carrier and a wide path closure."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-cso6709-2087327019579392231-browser-2087327019579392231-video-1",
+        "case_sha256": "4a2b8bef69199ceec40f96c4f7dacec7e65cc15d6484a4b6cf870bca3f818f81",
+        "release_score": 4.706,
+        "creative_dna_sha256": "07a9c65907ededa61dbf6756a3a0317ab7334fe4146b809b6b72072f6dc2b54c",
+        "h3_adapter_sha256": "aa88f6f0d7741a1e285d12e830dda83de6ea1bd9201c2e845c0187488d37d8ab",
+        "seedance20_adapter_sha256": "ad02eb8a71112d830a1a09e483bbee9b6af21089ce5c79336935d73ee8119606"
+      },
+      "previews": [
+        {
+          "case_id": "x-cso6709-2087327019579392231-browser-2087327019579392231-video-1",
+          "label": "分层接力｜小物体穿越多区域完成传递",
+          "short_summary": "在同一可读空间建立多个相连区域，让一个小物体从首位角色出发；物体通过可见表面改变路线，后续见证者持续追踪，最终交给自主载体，并以全景闭合完整接力。",
+          "recommended_input": "垂直种子库中，一枚琥珀胶囊从上层分拣臂出发，经过透明滑道与机械叶门两次改道，最终落入自主种植车。",
+          "required_anchors": [
+            "Show at least three connected zones in one readable geography.",
+            "Launch one countable token from a clear first participant.",
+            "Keep the same token visible through a later witness zone and into its descending segment.",
+            "End with an autonomous final carrier and a wide path closure."
+          ],
+          "sha256": "3904f8b668d234b2e3cbcb7e4e41b12105822b454389d1ddb2799701f980573b",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish several connected zones in one readable geography, launch one small token from the first actor, let the token change route through visible surfaces while later witnesses keep tracking it, hand it to one autonomous final carrier, then close wide so the complete relay path is visible.\nInvariants:\n- inv-01: Show at least three connected zones in one readable geography.\n- inv-02: Launch one countable token from a clear first participant.\n- inv-03: Change the token route at least twice without changing identity.\n- inv-04: Keep the same token visible through a later witness zone and into its descending segment.\n- inv-05: End with an autonomous final carrier and a wide path closure.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Isolated close-ups turn the relay into coincidence.: Show at least three connected zones in one readable geography.\n- Multiple tokens make continuity unverifiable.: Launch one countable token from a clear first participant.\n- Unchanged travel lacks participant responsibility.: Change the token route at least twice without changing identity.\n- Losing the token before descent makes the final handoff coincidental.: Keep the same token visible through a later witness zone and into its descending segment.\n- A close endpoint hides whether the relay connected.: End with an autonomous final carrier and a wide path closure.\nDo not copy from the source: source cat, dog and robot vacuum; white ball, piano and domestic room; the exact stacked household composition; the source animal-to-appliance relay order",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-viewpoint-scale-spectacle-ladder-v1",
+      "label": "尺度奇观阶梯｜每镜重置参照再逼近",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "每个短段先重置熟悉视点与尺度参照，再让一个不可能的空中形态进入；通过观察距离与遮挡变化逐步逼近，最终以近距离视点遭遇收束。",
+      "input_format": "5个熟悉尺度参照 + 每镜1个巨型原创形态 + 视点变化 + 距离逐步缩短 + 近距离终态",
+      "recommended_input": "五种原创巨型空中种子结构依次出现在风场、列车窗、采石场、温室与维护车视点中，每次距离更近，最后从车顶正上方掠过。",
+      "required_anchors": [
+        "Give each vignette an immediately familiar scale anchor.",
+        "Use one dominant impossible silhouette per vignette.",
+        "Increase proximity, not just nominal size.",
+        "End with a viewpoint-level encounter that preserves spatial legibility."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-sada-ai-2087294907786600770-browser-2087294907786600770-video-1",
+        "case_sha256": "7f3fc167e119fb296ab04973129bcfd16a861428de03d2a7450a3c71839ef3c7",
+        "release_score": 4.726,
+        "creative_dna_sha256": "455e6122e235cc0bbc0122e835b02444d90f3f54c3d7c31446627c95e1fbe6c6",
+        "h3_adapter_sha256": "7bd4ab438e4d8f8e7d825390420c2cf052053d7b26abb2ad28d94a59400786a0",
+        "seedance20_adapter_sha256": "822e0f3a7835914034e7ac59a4fadfad3e7951a3f5b04c83151c207756539632"
+      },
+      "previews": [
+        {
+          "case_id": "x-sada-ai-2087294907786600770-browser-2087294907786600770-video-1",
+          "label": "尺度奇观阶梯｜每镜重置参照再逼近",
+          "short_summary": "每个短段先重置熟悉视点与尺度参照，再让一个不可能的空中形态进入；通过观察距离与遮挡变化逐步逼近，最终以近距离视点遭遇收束。",
+          "recommended_input": "五种原创巨型空中种子结构依次出现在风场、列车窗、采石场、温室与维护车视点中，每次距离更近，最后从车顶正上方掠过。",
+          "required_anchors": [
+            "Give each vignette an immediately familiar scale anchor.",
+            "Use one dominant impossible silhouette per vignette.",
+            "Increase proximity, not just nominal size.",
+            "End with a viewpoint-level encounter that preserves spatial legibility."
+          ],
+          "sha256": "8714c07637d4d636807de59a7ebc6fb50f72c70198a6f3b1468c28c0aeb60319",
+          "width": 480,
+          "height": 640,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nReset a familiar viewpoint and scale anchor in each vignette, introduce one impossible airborne form that preserves readable silhouette, vary observer distance and occlusion, then escalate proximity until the final viewpoint encounter feels immediate rather than merely larger.\nInvariants:\n- inv-01: Give each vignette an immediately familiar scale anchor.\n- inv-02: Use one dominant impossible silhouette per vignette.\n- inv-03: Change observer carrier or occlusion between vignettes.\n- inv-04: Increase proximity, not just nominal size.\n- inv-05: End with a viewpoint-level encounter that preserves spatial legibility.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- A blank sky provides no scale proof.: Give each vignette an immediately familiar scale anchor.\n- Several equal forms create visual noise.: Use one dominant impossible silhouette per vignette.\n- Identical viewpoints flatten the ladder.: Change observer carrier or occlusion between vignettes.\n- Distant forms remain postcards.: Increase proximity, not just nominal size.\n- An abstract final close-up loses the observer relationship.: End with a viewpoint-level encounter that preserves spatial legibility.\nDo not copy from the source: source giant whale, manta, nautilus, jellyfish and shark; Shanghai skyline, airplane window, highway and car POV; the exact animal order and city landmarks; source blue atmospheric spectacle palette",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-background-anomaly-recording-reveal-v1",
+      "label": "背景异常｜先被观众发现再由记录设备证实",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让异常出现在背景而人物继续日常活动，再用记录设备把异常隔离成证据；异常改变或离开记录画面后，人物才出现延迟反应。",
+      "input_format": "背景异常先出现 + 前景保持日常 + 记录设备取证 + 证据场变化 + 延迟反应",
+      "recommended_input": "单名温室工程师校准阀门时，远处压力窗出现非人形霜纹；墙装机械观察镜固定取证，霜纹沿铜管迁移后人物才转身。",
+      "required_anchors": [
+        "Reveal the anomaly to the viewer before the subjects notice it.",
+        "Keep foreground behavior ordinary during the first anomaly state.",
+        "Change the anomaly inside or against the evidence field.",
+        "Delay the human reaction until after the proof changes."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-nicolasmariar-2087313673312256276-browser-2087313673312256276-video-1",
+        "case_sha256": "97faa18e26ec151304804da7df03ba63236ff1d5c960e89fce28bb3a69deb963",
+        "release_score": 4.75,
+        "creative_dna_sha256": "3fcf67ca054a782cec798677f653ab44c595fe79e9ad0b4297341b474196a8b7",
+        "h3_adapter_sha256": "cdd8469af7f4a828aaf64801fd4e744932679a4c37636a7a82a7ae747e6fe8d0",
+        "seedance20_adapter_sha256": "675a2ee2666a82195365c23e93384a34158868a62eb5d7e7514797b8bbefbf7a"
+      },
+      "previews": [
+        {
+          "case_id": "x-nicolasmariar-2087313673312256276-browser-2087313673312256276-video-1",
+          "label": "背景异常｜先被观众发现再由记录设备证实",
+          "short_summary": "先让异常出现在背景而人物继续日常活动，再用记录设备把异常隔离成证据；异常改变或离开记录画面后，人物才出现延迟反应。",
+          "recommended_input": "单名温室工程师校准阀门时，远处压力窗出现非人形霜纹；墙装机械观察镜固定取证，霜纹沿铜管迁移后人物才转身。",
+          "required_anchors": [
+            "Reveal the anomaly to the viewer before the subjects notice it.",
+            "Keep foreground behavior ordinary during the first anomaly state.",
+            "Change the anomaly inside or against the evidence field.",
+            "Delay the human reaction until after the proof changes."
+          ],
+          "sha256": "b54c690b990407d90392bb5a6cf22747783a0fbdb3c07e75385b0d59173047d3",
+          "width": 480,
+          "height": 854,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nPlace an anomaly in the background before foreground subjects notice it, preserve ordinary foreground behavior, use a recording or inspection device to isolate the anomaly as evidence, let the anomaly visibly disrupt or leave that evidence field, then delay the subjects' reaction until after the proof changes.\nInvariants:\n- inv-01: Reveal the anomaly to the viewer before the subjects notice it.\n- inv-02: Keep foreground behavior ordinary during the first anomaly state.\n- inv-03: Use one device or inspection frame to isolate the anomaly.\n- inv-04: Change the anomaly inside or against the evidence field.\n- inv-05: Delay the human reaction until after the proof changes.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Simultaneous discovery removes suspense.: Reveal the anomaly to the viewer before the subjects notice it.\n- Immediate panic spends the escalation.: Keep foreground behavior ordinary during the first anomaly state.\n- A random close-up does not prove discovery.: Use one device or inspection frame to isolate the anomaly.\n- An unchanged recording adds no causal turn.: Change the anomaly inside or against the evidence field.\n- Early reaction breaks the asymmetry.: Delay the human reaction until after the proof changes.\nDo not copy from the source: source anime women and neon alley; purple ghost silhouette and smartphone screen; the exact phone-recording disappearance storyboard; source character designs and palette; source phone 00:00 recording UI; source red record button",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-asymmetric-force-breach-escalation-v1",
+      "label": "非对称突破｜密集阻力到空间制度改变",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先建立防守目标与密集阻力场，再引入一个非对称运动力量；局部接触证明动量，广角证明推进，突破后改变空间制度，并以近景后果收束。",
+      "input_format": "固定目标 + 密集阻力场 + 单一非对称力量 + 3次局部接触 + 突破改变空间",
+      "recommended_input": "被淹物流大厅里，一艘无人拖船通过三次可见接触清出泡沫障碍通道，再一次推开救援闸门，让三艘小艇依次通过。",
+      "required_anchors": [
+        "Establish one fixed objective and a dense visible resistance field.",
+        "Introduce one asymmetric force with a clear motion axis.",
+        "Return wide to show progress toward the boundary.",
+        "Let one breach change the spatial regime and hold the consequence."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-charaspowerai-2087192378880721150-browser-2087192378880721150-video-1",
+        "case_sha256": "cb762d42d210d35141b0c9e92b60cc163b95822bd7d1681ffdf7d626ae07ce57",
+        "release_score": 4.734,
+        "creative_dna_sha256": "38e235aa1c0cd20d2c16717549d3a0c9a5357c5b247de3d8a7ed9b672496ade5",
+        "h3_adapter_sha256": "3ad93d7e6eafd7c39e9047fef1827d8762b7cc4b2d9617b520310cc28b9c0976",
+        "seedance20_adapter_sha256": "12842c70a0595fabb3657b319e12da9d2cdf3d15dfaeb701bcf31bb49b65f6df"
+      },
+      "previews": [
+        {
+          "case_id": "x-charaspowerai-2087192378880721150-browser-2087192378880721150-video-1",
+          "label": "非对称突破｜密集阻力到空间制度改变",
+          "short_summary": "先建立防守目标与密集阻力场，再引入一个非对称运动力量；局部接触证明动量，广角证明推进，突破后改变空间制度，并以近景后果收束。",
+          "recommended_input": "被淹物流大厅里，一艘无人拖船通过三次可见接触清出泡沫障碍通道，再一次推开救援闸门，让三艘小艇依次通过。",
+          "required_anchors": [
+            "Establish one fixed objective and a dense visible resistance field.",
+            "Introduce one asymmetric force with a clear motion axis.",
+            "Return wide to show progress toward the boundary.",
+            "Let one breach change the spatial regime and hold the consequence."
+          ],
+          "sha256": "e5b867b8ca6bbfb55cf4fadebf7d9db03d7f335e44d667db5ed56e38ad34a681",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish a fortified objective and dense resisting field, introduce one asymmetric moving force, prove momentum through several local contacts, widen to show progress toward the objective, then use one breach to change the spatial regime before a close held consequence.\nInvariants:\n- inv-01: Establish one fixed objective and a dense visible resistance field.\n- inv-02: Introduce one asymmetric force with a clear motion axis.\n- inv-03: Use multiple local contacts to prove momentum.\n- inv-04: Return wide to show progress toward the boundary.\n- inv-05: Let one breach change the spatial regime and hold the consequence.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Unanchored action lacks direction.: Establish one fixed objective and a dense visible resistance field.\n- Several equal forces create generic chaos.: Introduce one asymmetric force with a clear motion axis.\n- A distant charge alone does not prove force.: Use multiple local contacts to prove momentum.\n- Only close action hides whether progress occurred.: Return wide to show progress toward the boundary.\n- Ending before entry leaves the objective unresolved.: Let one breach change the spatial regime and hold the consequence.\nDo not copy from the source: source fantasy beast and armored army; castle gate, siege field and fire; the exact creature charge and breach choreography; source medieval costume and weapon design",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-surface-line-growth-keepsake-loop-v1",
+      "label": "表面生长｜沿既有几何扩散并回收到手作载体",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让彩色线条沿真实载体既有几何生长，再扩散成图标或材质标记但不遮掉轮廓；同一线条族连接多个载体，最终回收到手作纪念物并物理关闭。",
+      "input_format": "真实载体 + 沿既有几何描线 + 同线条族跨载体 + 保留轮廓 + 手作纪念物闭合",
+      "recommended_input": "铜色刺绣线先沿陶瓷原型接缝生长，再跨四件原型形成一致功能标记，最终装订成实体材质样本册并扣上锁扣。",
+      "required_anchors": [
+        "Begin the mark by tracing existing carrier geometry.",
+        "Spread marks while preserving the carrier silhouette.",
+        "Change carrier while retaining the mark behavior.",
+        "Collect the journey into a handmade keepsake and physically close it."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-vkuoo-2087148758954053985-browser-2087148758954053985-video-1",
+        "case_sha256": "23ae9d3de2765b8d7f2d1c4f358f5b112d477302e5dc2c8b89bcef504eba6412",
+        "release_score": 4.74,
+        "creative_dna_sha256": "34c1c122d9c251fc2509b1a0903cb7bfb99e2de30ae248ffc73c2e98c422fce6",
+        "h3_adapter_sha256": "355ea5d4c62579732c499058dc04ca09e3b37cdad4ef9ccebdb38a1c45e075a7",
+        "seedance20_adapter_sha256": "62b4cf138167d6d722452a8b05224dfcf920e9aeed3f43ace2d53f7e434a7711"
+      },
+      "previews": [
+        {
+          "case_id": "x-vkuoo-2087148758954053985-browser-2087148758954053985-video-1",
+          "label": "表面生长｜沿既有几何扩散并回收到手作载体",
+          "short_summary": "先让彩色线条沿真实载体既有几何生长，再扩散成图标或材质标记但不遮掉轮廓；同一线条族连接多个载体，最终回收到手作纪念物并物理关闭。",
+          "recommended_input": "铜色刺绣线先沿陶瓷原型接缝生长，再跨四件原型形成一致功能标记，最终装订成实体材质样本册并扣上锁扣。",
+          "required_anchors": [
+            "Begin the mark by tracing existing carrier geometry.",
+            "Spread marks while preserving the carrier silhouette.",
+            "Change carrier while retaining the mark behavior.",
+            "Collect the journey into a handmade keepsake and physically close it."
+          ],
+          "sha256": "7b1a0190bd869b3d84b9623371395bcfff5bd137d0e0067022c8cde4c656a265",
+          "width": 480,
+          "height": 640,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nPlace one recognizable real carrier in frame, let a colored line trace existing geometry before spreading into icons or material marks without erasing the silhouette, use the same line family to bridge to new carriers, then collect the accumulated journey into one handmade keepsake and close it physically.\nInvariants:\n- inv-01: Begin the mark by tracing existing carrier geometry.\n- inv-02: Spread marks while preserving the carrier silhouette.\n- inv-03: Use one consistent line or material family across carriers.\n- inv-04: Change carrier while retaining the mark behavior.\n- inv-05: Collect the journey into a handmade keepsake and physically close it.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- A floating overlay feels disconnected.: Begin the mark by tracing existing carrier geometry.\n- Full occlusion destroys before/after comparison.: Spread marks while preserving the carrier silhouette.\n- Unrelated styles feel like separate effects.: Use one consistent line or material family across carriers.\n- One surface cannot demonstrate a transferable system.: Change carrier while retaining the mark behavior.\n- A final random landmark adds no structural payoff.: Collect the journey into a handmade keepsake and physically close it.\nDo not copy from the source: source world landmarks and neon crayon doodles; Eiffel Tower, Big Ben, Colosseum, Opera House and pyramids; source globe sketchbook and closing hand; the exact travel-icon order and drawings",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-pace-to-destination-celebration-v1",
+      "label": "步速到抵达｜目的地延迟出现并由环境庆祝",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先建立安静旅人与尚未揭示的路线，再由步行提升到奔跑并扩大空间；目的地在投入行动后才出现，接近时由环境触发庆祝，最后三者同框收束。",
+      "input_format": "安静旅人 + 步行转奔跑 + 延迟目的地揭示 + 环境庆祝 + 人路目的地同框",
+      "recommended_input": "夜间植物学家沿温室水渠由步行转奔跑，种子库在叶帘后延迟出现，接近时环形灌溉装置依次启动，最后三者同框。",
+      "required_anchors": [
+        "Begin with a quiet traveler and no visible destination.",
+        "Increase pace while preserving one travel direction.",
+        "Use one environmental celebration triggered near approach.",
+        "Hold traveler, route and destination in one final field."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-primee32-2087285945213059079-browser-2087285945213059079-video-1",
+        "case_sha256": "2c75408e468195388f2f5828cc614a250bdcaa188d5ca26bc204484f29cb7354",
+        "release_score": 4.733,
+        "creative_dna_sha256": "a3eaaa66c4708d96945c77a54c7508f13ff080dd8f9243f30321bc910137e7e0",
+        "h3_adapter_sha256": "91f405facb74dc765e5e859bf0306c5e08e8dd721c3b78e72efa689becd807d2",
+        "seedance20_adapter_sha256": "94e4b467a81218f4b49ecc572801127922053c974523e8eb58d65d3dcf5aa891"
+      },
+      "previews": [
+        {
+          "case_id": "x-primee32-2087285945213059079-browser-2087285945213059079-video-1",
+          "label": "步速到抵达｜目的地延迟出现并由环境庆祝",
+          "short_summary": "先建立安静旅人与尚未揭示的路线，再由步行提升到奔跑并扩大空间；目的地在投入行动后才出现，接近时由环境触发庆祝，最后三者同框收束。",
+          "recommended_input": "夜间植物学家沿温室水渠由步行转奔跑，种子库在叶帘后延迟出现，接近时环形灌溉装置依次启动，最后三者同框。",
+          "required_anchors": [
+            "Begin with a quiet traveler and no visible destination.",
+            "Increase pace while preserving one travel direction.",
+            "Use one environmental celebration triggered near approach.",
+            "Hold traveler, route and destination in one final field."
+          ],
+          "sha256": "250dc331cf616b2b33109c7fb0ad00ed324fa549e984a7de8349f68ef797e298",
+          "width": 480,
+          "height": 854,
+          "duration_seconds": 14.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBegin with a quiet traveler and an unrevealed route, increase body pace from walk to run while widening the path, delay the destination until forward commitment is established, activate one external celebration as the traveler approaches, then hold traveler, route and destination in one legible arrival field.\nInvariants:\n- inv-01: Begin with a quiet traveler and no visible destination.\n- inv-02: Increase pace while preserving one travel direction.\n- inv-03: Reveal the destination only after the pace change.\n- inv-04: Use one environmental celebration triggered near approach.\n- inv-05: Hold traveler, route and destination in one final field.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Showing the goal immediately removes discovery.: Begin with a quiet traveler and no visible destination.\n- A cut to a different traveler breaks the journey.: Increase pace while preserving one travel direction.\n- An early destination becomes wallpaper.: Reveal the destination only after the pace change.\n- Random spectacle has no route relationship.: Use one environmental celebration triggered near approach.\n- A destination-only close-up loses the journey.: Hold traveler, route and destination in one final field.\nDo not copy from the source: source woman, sheep, grassland and fantasy castle; source dusk fireworks and hill reveal; the exact walk-run-castle storyboard; source wardrobe and pastoral palette",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-direction-stroke-role-switch-v1",
+      "label": "动作成字｜方向笔画驱动角色切换与终态标记",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "第一位角色的动作生成强方向笔画，落地后笔画变成构图分隔；第二位角色沿同一图形轴进入并把笔画弯成新几何，最终标记由两次动作共同完成。",
+      "input_format": "第一动作生成方向笔画 + 落地变分隔 + 第二角色沿同轴进入 + 笔画变形 + 无文字终态标记",
+      "recommended_input": "蓝色纸艺自动机把炭黑直尺变成构图分隔，琥珀自动机沿同轴进入并把直尺弯成螺旋，两次动作共同形成无文字涡轮标记。",
+      "required_anchors": [
+        "Bind the first action to one dominant directional stroke.",
+        "Use the first landing to change the stroke's composition role.",
+        "Let the second action bend or reconfigure the stroke.",
+        "Hold one final mark that visibly inherits both actions."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-steftranquillin-2087233814665814190-browser-2087233814665814190-video-1",
+        "case_sha256": "8b3b3cfee8812cf4ff2ebd49982d80848e69d6662448d2aeeee1ec684573cc29",
+        "release_score": 4.748,
+        "creative_dna_sha256": "234f3ad774164f680f702f80d23d28713e2ff0172742db0991a88604c451fac8",
+        "h3_adapter_sha256": "6b476480ab190ec779638e0128bd199697543ba7e05ddb2cd3b338a5a5f0dbb3",
+        "seedance20_adapter_sha256": "8780163773dec34497a33c7f0d9b26e81924006ff728ddb2834c8af130b91070"
+      },
+      "previews": [
+        {
+          "case_id": "x-steftranquillin-2087233814665814190-browser-2087233814665814190-video-1",
+          "label": "动作成字｜方向笔画驱动角色切换与终态标记",
+          "short_summary": "第一位角色的动作生成强方向笔画，落地后笔画变成构图分隔；第二位角色沿同一图形轴进入并把笔画弯成新几何，最终标记由两次动作共同完成。",
+          "recommended_input": "蓝色纸艺自动机把炭黑直尺变成构图分隔，琥珀自动机沿同轴进入并把直尺弯成螺旋，两次动作共同形成无文字涡轮标记。",
+          "required_anchors": [
+            "Bind the first action to one dominant directional stroke.",
+            "Use the first landing to change the stroke's composition role.",
+            "Let the second action bend or reconfigure the stroke.",
+            "Hold one final mark that visibly inherits both actions."
+          ],
+          "sha256": "25892051ca6f8576bdbe4cc7f17c4c83890170ec08585023e31a71c3a6b1e260",
+          "width": 480,
+          "height": 270,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nLet one performer action generate or align with a strong directional stroke, use the landing to convert that stroke into a composition divider, switch to a second performer on the same graphic axis, let the second action bend the stroke into a new geometry, then hold the completed abstract mark as the consequence of both actions.\nInvariants:\n- inv-01: Bind the first action to one dominant directional stroke.\n- inv-02: Use the first landing to change the stroke's composition role.\n- inv-03: Introduce a second performer on the established graphic axis.\n- inv-04: Let the second action bend or reconfigure the stroke.\n- inv-05: Hold one final mark that visibly inherits both actions.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- A decorative line adds no causal role.: Bind the first action to one dominant directional stroke.\n- A normal landing leaves no graphic consequence.: Use the first landing to change the stroke's composition role.\n- A new unrelated frame breaks continuity.: Introduce a second performer on the established graphic axis.\n- An unchanged divider makes the second role redundant.: Let the second action bend or reconfigure the stroke.\n- A random title card cannot prove the two-action construction.: Hold one final mark that visibly inherits both actions.\nDo not copy from the source: source red-white-black characters and skateboard; source graffiti rail, bar swing and number eight; the exact two-performer graphic choreography; source color blocking and final mark; source large numeral 8; source repeated 8 motif",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-repeating-landmark-deeper-passage-v1",
+      "label": "连续推进｜重复地标计时并抵达更深通道",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "在受限通道中持续前进，以重复固定地标和门洞视差作为进度时钟；接近结尾时只转向或跨越一次可见边界，并停在材质更深的次级通道，不虚构检查、诊断或隐藏威胁。",
+      "input_format": "连续受限通道 + 重复地标进度时钟 + 门洞视差逼近 + 单次边界跨越 + 更深次级通道终态",
+      "recommended_input": "植物维护镜头沿根系观察沟连续前进，用编号湿度窗和门洞视差证明进度；结尾只跨越一次气闸，停在更暗的种子库次级通道。",
+      "required_anchors": [
+        "Use one continuous constrained passage and stable travel axis.",
+        "Repeat fixed landmarks as a progress clock.",
+        "Turn or cross only once at the late visible threshold.",
+        "End inside a materially deeper secondary passage while retaining one prior-route edge."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-unrealrafael-2087161642702315868-browser-2087161642702315868-video-1",
+        "case_sha256": "93eb2850d4a87869888f301e8cb54f6321b8cb5babc3d93eed7e8284134a58c6",
+        "release_score": 4.747,
+        "creative_dna_sha256": "f84fe3e9869d17c0ad3f0c0fa60d5b4f0e98fcb29f0b8095d1abf3728121f891",
+        "h3_adapter_sha256": "a4bee6a62b3e4e27d1554210a08cdfcd7fe4c7f190630d2e89102815119e4702",
+        "seedance20_adapter_sha256": "e3a5be107f653c1c448357d9081cdf381b5d3ff253d641da35711bea9a641367"
+      },
+      "previews": [
+        {
+          "case_id": "x-unrealrafael-2087161642702315868-browser-2087161642702315868-video-1",
+          "label": "连续推进｜重复地标计时并抵达更深通道",
+          "short_summary": "在受限通道中持续前进，以重复固定地标和门洞视差作为进度时钟；接近结尾时只转向或跨越一次可见边界，并停在材质更深的次级通道，不虚构检查、诊断或隐藏威胁。",
+          "recommended_input": "植物维护镜头沿根系观察沟连续前进，用编号湿度窗和门洞视差证明进度；结尾只跨越一次气闸，停在更暗的种子库次级通道。",
+          "required_anchors": [
+            "Use one continuous constrained passage and stable travel axis.",
+            "Repeat fixed landmarks as a progress clock.",
+            "Turn or cross only once at the late visible threshold.",
+            "End inside a materially deeper secondary passage while retaining one prior-route edge."
+          ],
+          "sha256": "20951c133e6867e748cc26d6c5d2dcf5d01d1256ddde536ff51d593ff06c16e8",
+          "width": 480,
+          "height": 276,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nMove continuously through one constrained passage, use repeated fixed landmarks and doorway parallax as a progress clock, then turn or cross once at a late visible threshold so the endpoint is a materially deeper secondary passage without inventing an inspection, diagnosis or unseen threat.\nInvariants:\n- inv-01: Use one continuous constrained passage and stable travel axis.\n- inv-02: Repeat fixed landmarks as a progress clock.\n- inv-03: Keep moving while one late doorway grows through parallax.\n- inv-04: Turn or cross only once at the late visible threshold.\n- inv-05: End inside a materially deeper secondary passage while retaining one prior-route edge.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Unrelated corridors erase route continuity.: Use one continuous constrained passage and stable travel axis.\n- Featureless darkness cannot show distance.: Repeat fixed landmarks as a progress clock.\n- A sudden unrelated doorway cut breaks route continuity.: Keep moving while one late doorway grows through parallax.\n- Repeated detours turn the passage into arbitrary exploration.: Turn or cross only once at the late visible threshold.\n- Stopping before the threshold or hiding all prior geometry feels truncated.: End inside a materially deeper secondary passage while retaining one prior-route edge.\nDo not copy from the source: source dark subway tunnel and rail corridor; source first-person game-like viewpoint; the exact doors, lamps and tunnel route; any unobserved creature or threat claim",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
       "id": "community-skill/direct-street-interview-video",
       "label": "自然街拍互动｜边走边聊到清楚落点",
       "legacy_ids": [],
@@ -2814,7 +3326,7 @@
       "source": {
         "skill_id": "stage-startle-to-truce-encounter",
         "skill_sha256": "4a9845392f739a14450ee5dcabdc1c5ea00c85bcd174ecf31ca45579a2ed252b",
-        "summary_sha256": "7ead8503e8e0fd1aee25bf6820c97dc1ed5ae252e51a63cbd3abc7ea6b814d4b",
+        "summary_sha256": "156e2fe60ec4a5e43381fea3227a37c5c841128df27d486e446eac8d0af1920b",
         "preview_sha256": "7e9f89ec423798b249e7c4541210694dad3f6e11f51919c57cd49ff5a95825bf",
         "h3_guidance_sha256": "470cd709aa6fe79f1862730d87bae5341a56ba3bfad9c58468728479c47d585d",
         "seedance20_guidance_sha256": "04746257efaff6f2fd4984595b530e99803134964ef196f4277e927813dd8db3"
@@ -2839,7 +3351,7 @@
           "human_preview_only": true
         }
       ],
-      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only)\nAuthority: non-official, user-contributed community Skill.\n\n# Startle-to-Truce Encounter — Skill 摘要\n\n> **分类：非官方 · 用户贡献。** 本 Skill 由用户提供的 AIGC 样片与提示词文本启发，经完整解码、逐段画面核对、时长修复和双模型重写形成；不是 MiniMax 或 ByteDance 官方 Skill。\n\n## 一句话机制\n\n让一个平静主体被技术观察者发现，通过双方视角建立认知差；一次非致命惊慌反应把距离推到极端，主体再以不可能的近距离同框反转空间权力，最后用持续对视和一个迟疑手势把威胁降级为尴尬和解。\n\n## 推荐简写输入\n\n把下面这一段替换槽位后直接放入提示词增强器，比复制整篇样片提示词更稳定：\n\n```text\n15秒，16:9。[平静主角]被[技术观察者]意外发现；双方通过独立视角建立距离。观察者因主角突然贴近[舷窗/观察窗/透明屏障]而做一次非致命惊慌反应，主角保持克制并与其准确对视。结尾由观察者迟疑地做出求和手势，主角以停留、轻微表情或小幅回应让关系降级。保持身份、载具、屏障、速度、光向和视线连续；不受伤，不堆叠武器，不加字幕Logo水印。\n```\n\n如使用参考图，再加一句：\n\n```text\n图片1只锁定角色A的身份、脸型、发型与服装，不继承原图场景、构图、姿势或首帧。\n```\n\n## 风格与适用范围\n\n- 幻想主体与现代科技、自然生物与研究设备、微缩生命与控制室之间的反差相遇\n- 驾驶舱、潜航器、观察窗、温室玻璃、实验舱或透明屏障两侧的精准对视\n- 4–15 秒内可讲清的追近、惊吓、误判、试探与非语言和解\n- 需要参考图锁定单一角色身份、但必须重建场景和动作的 H3 Ref2VA 或 Seedance 多模态参考\n- 靠眼神、肩颈、握力、手势和相对速度完成的轻喜剧或温和戏剧反转\n\n## 不适用范围\n\n- 需要完整战争、多人战术、连续爆炸和复杂武器逻辑的动作大片\n- 把受伤、血腥或真实攻击作为必要卖点的内容\n- 无法给最终对视和手势留出阅读时间的过载分镜\n- 只替换精灵、战机、飞剑、浮空山或水果名词的表面复刻\n\n## 核心质量门\n\n- 决定性贴近必须早于结尾，给受惊和求和留出时间。\n- 防御动作只能按可见结构命名；看见对称光轨时不能自动写成制导导弹。\n- 结尾至少证明“手势被看见”，不强行声称对方接受和解。\n- 玻璃两侧必须具有正确的视线、反射、屏幕方向和匹配速度。\n- 13 秒样片不能冒充精确 15 秒；生成模板可重新设计为 15 秒，但必须重新分配事件。\n\n完整不变量、消融解释、转移测试与失败修复见 [template.md](./template.md)。",
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only)\nAuthority: non-official, user-contributed community Skill.\n\n# Startle-to-Truce Encounter — Skill 摘要\n\n> **分类：非官方 · 用户贡献。** 本 Skill 由用户提供的 AIGC 样片与提示词文本启发，经完整解码、逐段画面核对、时长修复和双模型重写形成；不是 MiniMax 或 ByteDance 官方 Skill。\n\n## 一句话机制\n\n让一个平静主体被技术观察者发现，通过双方视角建立认知差；一次非致命惊慌反应把距离推到极端，主体再以不可能的近距离同框反转空间权力，最后用持续对视和一个迟疑手势尝试把威胁降级，但不虚构双方已经和解。\n\n## 推荐简写输入\n\n把下面这一段替换槽位后直接放入提示词增强器，比复制整篇样片提示词更稳定：\n\n```text\n15秒，16:9。[平静主角]被[技术观察者]意外发现；双方通过独立视角建立距离。观察者因主角突然贴近[舷窗/观察窗/透明屏障]而做一次非致命惊慌反应，主角保持克制并与其准确对视。结尾由观察者迟疑地做出求和手势，主角以停留、轻微表情或小幅回应让关系降级。保持身份、载具、屏障、速度、光向和视线连续；不受伤，不堆叠武器，不加字幕Logo水印。\n```\n\n如使用参考图，再加一句：\n\n```text\n图片1只锁定角色A的身份、脸型、发型与服装，不继承原图场景、构图、姿势或首帧。\n```\n\n## 风格与适用范围\n\n- 幻想主体与现代科技、自然生物与研究设备、微缩生命与控制室之间的反差相遇\n- 驾驶舱、潜航器、观察窗、温室玻璃、实验舱或透明屏障两侧的精准对视\n- 4–15 秒内可讲清的追近、惊吓、误判、试探与非语言和解\n- 需要参考图锁定单一角色身份、但必须重建场景和动作的 H3 Ref2VA 或 Seedance 多模态参考\n- 靠眼神、肩颈、握力、手势和相对速度完成的轻喜剧或温和戏剧反转\n\n## 不适用范围\n\n- 需要完整战争、多人战术、连续爆炸和复杂武器逻辑的动作大片\n- 把受伤、血腥或真实攻击作为必要卖点的内容\n- 无法给最终对视和手势留出阅读时间的过载分镜\n- 只替换精灵、战机、飞剑、浮空山或水果名词的表面复刻\n\n## 核心质量门\n\n- 决定性贴近必须早于结尾，给受惊和求和留出时间。\n- 防御动作只能按可见结构命名；看见对称光轨时不能自动写成制导导弹。\n- 结尾至少证明“手势被看见”，不强行声称对方接受和解。\n- 玻璃两侧必须具有正确的视线、反射、屏幕方向和匹配速度。\n- 13 秒样片不能冒充精确 15 秒；生成模板可重新设计为 15 秒，但必须重新分配事件。\n\n完整不变量、消融解释、转移测试与失败修复见 [template.md](./template.md)。",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template.\n\n# MiniMax H3 template\n\nUse Base T2VA when there are no generation-time references. Use Ref2VA only when the user actually supplies an image or video for identity, wardrobe, scene, motion, camera, or sound.\n\n## Recommended T2VA structure\n\n```text\nintegrated_multimodal_description: [Shot 1] [Original calm subject, baseline behavior, distant observer, readable separation, light and environment.] [Shot 2] At [timestamp], [observer POV inside a technical enclosure; attention shift and spatial cue.] [Shot 3] At [timestamp], [one bounded non-lethal escalation and coherent distance-closing trajectory.] [Shot 4] At [timestamp], [subject reaches the transparent boundary; matched speed, exact eyeline, observer startle.] [Shot 5] At [timestamp], [small conciliatory offer and held visible response in a shared-axis composition.]\n\noverall_soundscape: [Continuous environment and machine ambience, synchronized movement, one escalation transient, barrier-level detail, and restrained settling sounds. Do not repeat dialogue.]\n\nnon_diegetic_music: [Optional concise audience-only score, or N/A.]\n```\n\n## Optional Ref2VA identity block\n\n```text\nsubject_definitions:\n<Subject 1> is the adult [ROLE] whose identity, facial structure, hairstyle, body proportions, and [WARDROBE ANCHORS] come from <Picture 1>.\n\nsummary:\n[reference generation] Create an original [DURATION]-second [ASPECT] startle-to-truce encounter in which <Subject 1> closes an impossible distance to a technical observer and resolves the encounter through gaze and one restrained gesture.\n\nretention_analysis:\n<Subject 1>: fully_preserved — preserve identity, proportions, hairstyle, and wardrobe while allowing new performance and movement.\n\ndetailed_description:\n[Write original style and five evidence-bearing shots. State that <Picture 1> supplies identity and wardrobe only; rebuild setting, composition, action, observer, boundary, and lighting.]\n\noverall_soundscape:\n[Continuous ambience and synchronized physical effects; no invented dialogue.]\n\nnon_diegetic_music:\n[Optional score or N/A.]\n```\n\nDo not independently define `<Picture 1>` when it is only provenance for `<Subject 1>`. Add exactly one retention line per independently defined label.\n\n## H3 audit\n\n- First shot has no timestamp; later timestamps increase and remain within 4–15 seconds.\n- Official-strict prose is English outside approved dialogue or visible text.\n- The close appearance, startle, gesture, and held response all fit before the endpoint.\n- No Seedance braces, `镜头N`, or `@图片N` syntax appears.\n- No research video or reference image is fabricated as a generation input.\n- The output does not reproduce the demonstration's character, fruit, sword, aircraft, landscape, flare pattern, or exact canopy arrangement.\n\nSee [h3-example.txt](./h3-example.txt) for one validated original T2VA realization."
