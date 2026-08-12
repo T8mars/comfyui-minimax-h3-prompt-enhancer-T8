@@ -1,0 +1,95 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-12-04",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-macbethai-2087310945009995972-browser-2087310945009995972-video-1",
+      "template_id": "t8-case-silhouette-attack-state-relay-v1",
+      "label": "轮廓接力｜闪光换形后完成攻势闭环",
+      "summary": "先用武器与披风轮廓建立动作基准，再通过可数的落地姿态推进；一次中央闪光只负责换形交接，新形态以能量弧与腾空段得到证明，最后回到可读的落地终态。",
+      "case_sha256": "1f021cb96649812e60620d7f10b82741f36a952fb53c03d10fac523e219bd39a",
+      "creative_dna_sha256": "668582c1fe79791590451d50ec53bbc34fd644492315625880470e390b60123b",
+      "h3_adapter_sha256": "9060b8b83233903d76ef2f245a01a4b314eae782dad795b03715a1b1f23bf306",
+      "seedance20_adapter_sha256": "841e61827c82052fc64883bdd8cbf8a296876c877628b4b20278001839822dc2",
+      "mechanism_fingerprint": "4297197b70d97be728649c14f4be361a5e5240cf2a3199c5ef5368ca0a9209ea"
+    },
+    {
+      "case_id": "x-itsphotogptai-2087276933222695045-browser-2087276933222695045-video-1",
+      "template_id": "t8-case-multi-agent-attack-entry-relay-v1",
+      "label": "多人攻势接力｜独立入场后同步收束",
+      "summary": "先建立稳定的中央威胁几何与外围团队，再让不同成员以独立入场路线完成各自证明动作；角色职责清楚后才允许路线重叠，最终以同步投入而不是混乱群殴收束。",
+      "case_sha256": "3fb9c15857fe2bdabfd4c733d28f7cc458bb84b531d07dcde52a6d41cddc70ac",
+      "creative_dna_sha256": "4d788d76656103ac38277664a9e7bed2df9fe175a3f7bd3d5e68b6c05708711f",
+      "h3_adapter_sha256": "78b28b3bf3b069ba0553137581e4016c184ded64c1cd0b776a5a645cfba722b4",
+      "seedance20_adapter_sha256": "7cec196211b5769d9516a95d0f73de8fc9a871baadac953d96a24ddd0129e3ee",
+      "mechanism_fingerprint": "08cbb8941c3076866c9ff12f41f61072b16e8e709958a7fc9fc705fb177a0772"
+    },
+    {
+      "case_id": "x-alone1moon-2087282913410764864-browser-2087282913410764864-video-1",
+      "template_id": "t8-case-microexpression-greeting-arc-v1",
+      "label": "微表情问候｜侧身发现到笑容回稳",
+      "summary": "用近乎锁定的人像镜头完成五段微表情问候：侧身开始、建立直视、短暂垂眼停顿、闭眼笑容达到峰值，再回到开放而放松的表情；不换场景、不加大动作。",
+      "case_sha256": "1067485906b0e2acb1a30ab240308702da45695540b93cc2222a60f4162257a9",
+      "creative_dna_sha256": "cbdb2f2a65d8188d72093b4ec2ae1552afb9a730d9bae36d627a088a949be201",
+      "h3_adapter_sha256": "f225d085353827812717e6b2207888f9961644ac9ad5b053d3dc0673f30dbb40",
+      "seedance20_adapter_sha256": "9748481550c36d93030eaa73500a8117df26ac13fa566184bb80393139315154",
+      "mechanism_fingerprint": "51c220e0921202689cc766bfbb4b4b0ffba8483acbf132c61100a44b4cff96fd"
+    },
+    {
+      "case_id": "x-100xmart-2087298018668077160-browser-2087298018668077160-video-1",
+      "template_id": "t8-case-environment-deformation-scale-reveal-v1",
+      "label": "地貌变形揭示｜局部异常到巨体逼近",
+      "summary": "先让环境异常看起来仍像地貌，再只揭出一个身份特征；随后用高位或远景证明完整几何及其对环境的尺度影响，最后回到低位视点完成一次近距离逼近。",
+      "case_sha256": "4476cb80b5e254ad54d797c02d16d42f2c9e5b9c05eff8c1c22b060e1cb3ea7e",
+      "creative_dna_sha256": "d1f55c00e18cdd39579aef44c9370272f5e0b054d7b76b8be50f842a95bb4389",
+      "h3_adapter_sha256": "6d221f089f3fbd61f676402944ec14da781f84d8032b40174bc57fa4ea85be41",
+      "seedance20_adapter_sha256": "7c01ff1ac3255295caaf97216be3d3b834a3d7867b2dfb94bf7fcef04e806f44",
+      "mechanism_fingerprint": "4589849ef75663c552d6db5eeca5e10cd8ca07abb42b964cf8fa36e726b44d9f"
+    },
+    {
+      "case_id": "x-antonioleivag-2087290562781081994-browser-2087290562781081994-video-1",
+      "template_id": "t8-case-performance-environment-pullback-v1",
+      "label": "表演让位于环境｜近脸到全景的连续退镜",
+      "summary": "从身份清楚的近脸表演开始，表演不中断，单次连续退镜把视觉主导权逐步从面部交给身体，再交给响应中的环境；结尾人物仍可辨，但环境成为主角。",
+      "case_sha256": "c99b8cad85113d6c858aadb8b46a9396a64d65585fa671907f45c90f9d2aaec3",
+      "creative_dna_sha256": "8ae0cea9a94e30876dedd951c411337a319ab59cfc53275707f51ba36504fc8f",
+      "h3_adapter_sha256": "d6dc41682d25f9603eded3c9a51fea0155c28264c223f0d56eda3df2965f27c2",
+      "seedance20_adapter_sha256": "7a32ddd4a66c7ff194bb1c7033edf793961a527f347eba57915baca2e75175da",
+      "mechanism_fingerprint": "495d528bd6fcb407dda2ee60cb9af3b0a6679618d911e87afe63a43a17c25f31"
+    },
+    {
+      "case_id": "x-unrealrafael-2087275532517884174-browser-2087275532517884174-video-1",
+      "template_id": "t8-case-continuous-follow-geometry-clock-v1",
+      "label": "连续跟随｜步态与弯曲地标共同计时",
+      "summary": "在弯曲受限通道中使用一次不中断的后方跟随；人物步态与画面位置稳定，重复灯具、轨缝与壁肋成为可数进度时钟，隧道曲率缓慢移动消失点，最后停在明显更深的位置，不虚构门槛、偶遇或改道。",
+      "case_sha256": "44d7ae6c19fb9d2670123092718c53f97b573bd27cd69fe4febff63310586b99",
+      "creative_dna_sha256": "2e321592222878754f6fffec061c9046d4f83080c35ef4937bcdde9bf798dd5c",
+      "h3_adapter_sha256": "92c65e142a78e451f5feac2f26d45b6d501318806df424af6fce5fbf218a554a",
+      "seedance20_adapter_sha256": "cddfe2d1f7c99dd440791337d7b650a5145d8d68aef457d1db01bf5874eaeb45",
+      "mechanism_fingerprint": "4fab40bda43e7113932a036cd7ef7ea869b37fe3c5b20f8e37c379571a357a70"
+    },
+    {
+      "case_id": "x-donhyeon-choi-2087163007491268632-browser-2087163007491268632-video-1",
+      "template_id": "t8-case-subgroup-conversation-recombine-v1",
+      "label": "分组对话覆盖｜两边接力后全桌合流",
+      "summary": "先用第一组双人镜头建立共享社交空间，在组内交接可见发言轮次，再切到桌对面的第二组完成独立回应阶段，最后用更宽构图让所有人物和同一桌面锚点合流；来源对白含义未知，只迁移可见轮次与覆盖顺序。",
+      "case_sha256": "6c20a3c3c95f7f5c744a14c131bbf763f0109691a6694dfc12a199266bf5aadd",
+      "creative_dna_sha256": "a3cf5f35e177a73b75c96bcefe6fa82d3b5a42f976ec2ac4d08d225a0fbf532d",
+      "h3_adapter_sha256": "5fedcb3cbffaadb460a99065ddf7266aaa4ef10ea4dbd078f158959ca6a8a7df",
+      "seedance20_adapter_sha256": "635a2f2a27b3d60471282b90313f4293a9339f6e4a63e05c1b393935d630f0ce",
+      "mechanism_fingerprint": "4c38d1ba65c19325da378885371f40c0fa31811a2eb72b7f2d9a59c106bc8914"
+    },
+    {
+      "case_id": "x-ravfx777-2087152046114038024-browser-2087152046114038024-video-1",
+      "template_id": "t8-case-ensemble-focus-handoff-v1",
+      "label": "群演聚焦接力｜全场到主位再回合奏",
+      "summary": "先建立完整群体与观众或工作场，再让两名中心贡献者进入共享动作；镜头隔离其中一名主位完成完整证明段，随后重新引入共同主位，并以更宽的同步群体终态收束。",
+      "case_sha256": "97264f49591f847bcdaae56bc2d8bab8cfbaf93d32940139dca1556f3212e826",
+      "creative_dna_sha256": "1343a1158a88ce0d014f5b5571d0e795c9b071e753a84a53ec527f77e7e491be",
+      "h3_adapter_sha256": "d6a15c600d72b33bbbd4743b333546cf343dc41146e1adccb80fc05b611c0b54",
+      "seedance20_adapter_sha256": "9d26c5965278625e3bb68f4c9ed4fa069b419e2048b929a3d167c87ad6465f6b",
+      "mechanism_fingerprint": "38049275ae66ca79c5260c1f7207dc11b0b796f446360b3637931557223e2160"
+    }
+  ]
+}

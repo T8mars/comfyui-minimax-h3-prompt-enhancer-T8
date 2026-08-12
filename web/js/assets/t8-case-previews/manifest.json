@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 68,
+  "preview_count": 77,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -25,6 +25,14 @@
       "source_sha256": "22d5d3bf5ca636d87e425548e51d5ca89221ebe44504e5f43084ca79df4b507f",
       "sha256": "5feaa15019482a1b907b803a28c966db51ee1c3a69905cf216718c310a423a44",
       "bytes": 1766001,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-imagvio-trends-2087163509125878029-browser-2087163509125878029-video-1",
+      "file": "6225b146163d9b2b98bf043f262cc2fe3f51e0f507979ef6266f96745ae90f0b.gif",
+      "source_sha256": "ed707bfb15f2ac5fefa07c8df0dec830b53e48f0c9496637a146e1968111b0a8",
+      "sha256": "6225b146163d9b2b98bf043f262cc2fe3f51e0f507979ef6266f96745ae90f0b",
+      "bytes": 2329879,
       "human_preview_only": true
     },
     {
@@ -537,6 +545,70 @@
       "source_sha256": "09c304c1afb564c1fc637225ea563a49575d3216ec4dc214ce3a15e925462853",
       "sha256": "5039b2c74f987c49253563ca3126c2dffaecc25e6f6ae20f16d7fc74d83a3724",
       "bytes": 2048075,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-macbethai-2087310945009995972-browser-2087310945009995972-video-1",
+      "file": "cf8c8f4f5e6a341788fefeb1d7b413d296a97fed36dc8d51326490166c2a31e9.gif",
+      "source_sha256": "c2722d5fd2fe071f3599d20ea2a04a4dd9040d3332005ce305199c4612009def",
+      "sha256": "cf8c8f4f5e6a341788fefeb1d7b413d296a97fed36dc8d51326490166c2a31e9",
+      "bytes": 3158204,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-itsphotogptai-2087276933222695045-browser-2087276933222695045-video-1",
+      "file": "b665b5a3943ff6239d44f75e07fab9ad152393b4380659afd96fcbdb37f870f1.gif",
+      "source_sha256": "aff77e3a321ffc19446d054361ec64ebb0bc88b4624251c7619ca5c6326600ff",
+      "sha256": "b665b5a3943ff6239d44f75e07fab9ad152393b4380659afd96fcbdb37f870f1",
+      "bytes": 2111573,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-alone1moon-2087282913410764864-browser-2087282913410764864-video-1",
+      "file": "baadab9cb04acd14407239eb9b1f4a005d8e6555e8d62f333e68734d3afb81eb.gif",
+      "source_sha256": "fcacf317d16192adf588de433c09a1f943ae2b8bf422281db292a41affa36bf7",
+      "sha256": "baadab9cb04acd14407239eb9b1f4a005d8e6555e8d62f333e68734d3afb81eb",
+      "bytes": 3983332,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-100xmart-2087298018668077160-browser-2087298018668077160-video-1",
+      "file": "0f076ee42838f770440369be4c7a14be98b206425221a85821b254f6e0555159.gif",
+      "source_sha256": "549da47efb92ecf60ce57ac0d5729f10c81e679ed256fad69e5241ed3ccd4293",
+      "sha256": "0f076ee42838f770440369be4c7a14be98b206425221a85821b254f6e0555159",
+      "bytes": 1950231,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-antonioleivag-2087290562781081994-browser-2087290562781081994-video-1",
+      "file": "32eaa4bd2a409fe07da6284c6f5df06a7c53c1b8d82a73bd23a6ad3384e4f4ca.gif",
+      "source_sha256": "95d4d62134baafc718b2a8b283ceae7c544034f910adc6723e8dfeda13aaa703",
+      "sha256": "32eaa4bd2a409fe07da6284c6f5df06a7c53c1b8d82a73bd23a6ad3384e4f4ca",
+      "bytes": 1494509,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-unrealrafael-2087275532517884174-browser-2087275532517884174-video-1",
+      "file": "b912d0734042fe4dda9706586781a86e5e990d055c37798198af8e9c729e243c.gif",
+      "source_sha256": "6910a2fc8f87b06f1c64cdad28ccf6f008595f47eac8de77039a63821de438b9",
+      "sha256": "b912d0734042fe4dda9706586781a86e5e990d055c37798198af8e9c729e243c",
+      "bytes": 5067524,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-donhyeon-choi-2087163007491268632-browser-2087163007491268632-video-1",
+      "file": "8a5abd133b898719dbae9b581b5dc5476ef41bbf836e69abd735522d207418ab.gif",
+      "source_sha256": "f5d6dadf6894abd885eb275e685b0cfac6d30ddebcefb921ff8bc38613aa5ca2",
+      "sha256": "8a5abd133b898719dbae9b581b5dc5476ef41bbf836e69abd735522d207418ab",
+      "bytes": 2128247,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-ravfx777-2087152046114038024-browser-2087152046114038024-video-1",
+      "file": "5676ba527dd41a9663bc8179eb3f400789bc14575802a26553e3771311376263.gif",
+      "source_sha256": "bb1fee021051bcb3cac8adf4e6e2889fed455d84b474bc570ebc451328c28630",
+      "sha256": "5676ba527dd41a9663bc8179eb3f400789bc14575802a26553e3771311376263",
+      "bytes": 1499154,
       "human_preview_only": true
     },
     {
