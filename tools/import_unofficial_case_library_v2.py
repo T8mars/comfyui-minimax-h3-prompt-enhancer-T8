@@ -18,11 +18,11 @@ URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
 EXPECTED_RECORD_COUNT = 66
-EXPECTED_SELECTOR_COUNT = 55
+EXPECTED_SELECTOR_COUNT = 58
 EXPECTED_EVIDENCE_COUNT = 8
-EXPECTED_PENDING_COUNT = 3
+EXPECTED_PENDING_COUNT = 0
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 57
+EXPECTED_TOTAL_SELECTOR_COUNT = 60
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -344,7 +344,7 @@ def build_catalog(
     )
     if declared_counts != expected_counts or actual_counts != expected_counts:
         raise LibraryImportError(
-            "Expected 66 records: 55 selectors, eight evidence variants, and three pending cases"
+            "Expected 66 records: 58 selectors, eight evidence variants, and no pending cases"
         )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
@@ -478,7 +478,7 @@ def build_catalog(
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
     if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 57 total non-official selectors")
+        raise LibraryImportError("Expected 60 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -524,8 +524,8 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Import the 66-record case handoff: 55 selectors, eight evidence variants, "
-            "three pending cases, plus two standalone community Skills."
+            "Import the 66-record case handoff: 58 selectors, eight evidence variants, "
+            "no pending cases, plus two standalone community Skills."
         )
     )
     parser.add_argument("--library", required=True, type=Path)

@@ -1,50 +1,41 @@
 {
-  "schema_version": "t8-case-template-pending-batch/v1",
-  "batch_id": "2026-08-12-02",
-  "authority": "T8 精选案例待完成清单（非官方·不发布）",
-  "selector_entry": "disabled-pending-review",
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-12-03",
+  "completion_of": "2026-08-12-02",
+  "authority": "T8 精选案例（非官方）",
   "cases": [
     {
       "case_id": "user-video-8cc6ac74d1d823cc7d99d90451f6214e",
       "template_id": "t8-case-shared-contact-height-escalation-v1",
       "label": "双人递进｜共享接触从地面升到空中峰值",
       "summary": "先建立两个主体的深度差，再让同一次共享接触从低位逐级升高到唯一空中峰值，最后回到地面并停留在可读的关系终态。",
-      "case_sha256": "230238013d0a2fc3d6fd12333472241ccd97fa083c7ca9fd4724689050f8cf29",
+      "case_sha256": "b7f78336bcae27e82764adbbfceb9d3ce05c603f4f5f092740ea5faf6b45281b",
       "creative_dna_sha256": "ef45d1521b5be61228ebfc4c69ce2f24c743390d96f7e7cec4c7b038a755d9df",
-      "state": "compiled",
-      "review_status": "not_reviewed",
-      "release_score": null,
-      "blocker_count": 23,
-      "adapter_generation_status": "not-generated",
-      "preview_distribution_status": "not-distributed"
+      "h3_adapter_sha256": "daad840c4ee4139a3b0ae3dd2777df2e5a81719eefb61af838479a51501316b4",
+      "seedance20_adapter_sha256": "f22535ff21f734b0a0ce4c7c94923fa6d09b6fd3c9ec0f02b853e46f53451d97",
+      "mechanism_fingerprint": "4fa5a7ec22a99282a7cb14b5c3dffe5b96cb7077ea2d07cba3e37551af5b8377"
     },
     {
       "case_id": "user-video-123094afc2fed97c8846b3cb370ead5f",
       "template_id": "t8-case-fold-metrics-to-current-state-v1",
       "label": "数据折叠｜总量下钻到当前值",
       "summary": "用一个超大总量建立尺度，展开明细记录证明总量，再折回聚合结果并切换到当前状态值，最后只用一次克制标注锁定结论。",
-      "case_sha256": "4a1ee3bc3dc5d7b93c0570037c7401a99ad3938786c08cb0150c5195fc3625fa",
+      "case_sha256": "2af65d24d0ee2d8f3df22ffcf4ca70f6bdf5b76b1f493489a2ccefaf94ef191d",
       "creative_dna_sha256": "c2976ceae2e8a2e91dc33ce98aef37d75df55115c9e6ec47b5a9e4c4f5937417",
-      "state": "compiled",
-      "review_status": "not_reviewed",
-      "release_score": null,
-      "blocker_count": 23,
-      "adapter_generation_status": "not-generated",
-      "preview_distribution_status": "not-distributed"
+      "h3_adapter_sha256": "af88b51c59f56d2cf565a885cefe71f3cdb7ce10d60d1e861bc02312c719c84f",
+      "seedance20_adapter_sha256": "70f28f8594d085f578c7eca9452e7e4e27a76b2128016660520834949b6229d6",
+      "mechanism_fingerprint": "7458125de8c1227ed20d5f15f60733f366b058e75583ff770d1560fab0e9f0ec"
     },
     {
       "case_id": "user-video-28168005f9240ddaa23e1c9d97492961",
       "template_id": "t8-case-foreground-effector-background-state-change-v1",
       "label": "手势对齐｜前景动作触发后景状态",
       "summary": "固定分层构图先给出一个后景基准状态，前景动作沿清楚路径完成视线对齐，只触发一次状态变化，再通过保持、清开与回指确认结果持续。",
-      "case_sha256": "7c8842f9c6eec246234c9915d5b524c0ffc0ff0ab62dd6823496a33478ba518b",
+      "case_sha256": "be020d9cb27964dac12900e5c41604a3c4e1301477cdf3da1c54c69bad832236",
       "creative_dna_sha256": "2fc76040d5328baa80aed317c79db0f47eaddd43a9ab639bf7419f08f9a67524",
-      "state": "compiled",
-      "review_status": "not_reviewed",
-      "release_score": null,
-      "blocker_count": 23,
-      "adapter_generation_status": "not-generated",
-      "preview_distribution_status": "not-distributed"
+      "h3_adapter_sha256": "7550c00025b35b8909fc9a1e1b77694dc2ea9580d1de9b0bf042263dea735837",
+      "seedance20_adapter_sha256": "ecbdb7788e55c75e2a2c8a87e75ba63c956167984732c87783bbce088e50c304",
+      "mechanism_fingerprint": "871aa2b4d218debe07316a811251b186f2862dec6e941adea961e71507f81759"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 65,
+  "preview_count": 68,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -513,6 +513,30 @@
       "source_sha256": "20951c133e6867e748cc26d6c5d2dcf5d01d1256ddde536ff51d593ff06c16e8",
       "sha256": "a73aa3ca9cd05282bf6a04f778952133114633fd6f3e987bb032dc3382785b84",
       "bytes": 2620506,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-8cc6ac74d1d823cc7d99d90451f6214e",
+      "file": "283e23b45b578441abd86f5a427526ddf86d58aabca94682fd9b738b190bb3ef.gif",
+      "source_sha256": "58b9271bfbab7945c8d20ee89e8d48e80317aa2c3aff0d8d5d1ff3495b359649",
+      "sha256": "283e23b45b578441abd86f5a427526ddf86d58aabca94682fd9b738b190bb3ef",
+      "bytes": 2456414,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-123094afc2fed97c8846b3cb370ead5f",
+      "file": "598f94a10ee45644fdf3b64eb52baa35e99f334ce4d01e55312973305bea0126.gif",
+      "source_sha256": "1ab1f898359509645709f4fe1bba81febfcb9104e728597ddefee45d119c7b84",
+      "sha256": "598f94a10ee45644fdf3b64eb52baa35e99f334ce4d01e55312973305bea0126",
+      "bytes": 1193412,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-28168005f9240ddaa23e1c9d97492961",
+      "file": "5039b2c74f987c49253563ca3126c2dffaecc25e6f6ae20f16d7fc74d83a3724.gif",
+      "source_sha256": "09c304c1afb564c1fc637225ea563a49575d3216ec4dc214ce3a15e925462853",
+      "sha256": "5039b2c74f987c49253563ca3126c2dffaecc25e6f6ae20f16d7fc74d83a3724",
+      "bytes": 2048075,
       "human_preview_only": true
     },
     {
