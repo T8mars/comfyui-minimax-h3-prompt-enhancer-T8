@@ -41,7 +41,11 @@ AI_WORKSHOP_MODEL_OPTIONS = [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION]
 MAX_FILE_BYTES = 50 * 1024 * 1024
 REQUEST_TIMEOUT = (20, 300)
 SEEDANCE_CHAT_RETRY_DELAYS = (0.5, 1.0)
-SEEDANCE_CHAT_RETRYABLE_STATUS_CODES = frozenset({502, 503, 504})
+# Seedance.nz is fronted by regional gateways. These statuses all mean that the
+# gateway/TLS path failed before a usable completion reached the client; unlike
+# 401/402/429/read-timeout they are safe candidates for the existing short,
+# bounded retry policy.
+SEEDANCE_CHAT_RETRYABLE_STATUS_CODES = frozenset({500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526, 530})
 
 TASK_TYPES = ["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA"]
 TASK_TYPE_LABELS = {

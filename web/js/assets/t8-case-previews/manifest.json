@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 89,
+  "preview_count": 92,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -705,6 +705,30 @@
       "source_sha256": "09fdcddf17149dc01733f58b274be0ce64034cd7ca8ce0f82af944970e25ab9d",
       "sha256": "3da3ebdc02a88078661ea3a80bc11ec9a508fe05d1cf13c8f8a4fe9061f13b42",
       "bytes": 1846739,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-lepadphone-2084217085308326385-browser-2084217085308326385-video-1",
+      "file": "503f50e75a1536d3c565c8ede9c1345b1732155d1527623463fcdc2a85562b93.gif",
+      "source_sha256": "d3d5f6490879e8ce1c3ae1428927d3e719a26d7b5298690b819d745bd3e9b39b",
+      "sha256": "503f50e75a1536d3c565c8ede9c1345b1732155d1527623463fcdc2a85562b93",
+      "bytes": 2119273,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-azed-ai-2085034121844396472-browser-2085034121844396472-video-1",
+      "file": "90e953d7bcefc070bfa9765fd89733017261f6f251a82165ac7b82c5f3cfa446.gif",
+      "source_sha256": "ec1ff1b161e5a225550d9654951c8c5cba6528b36c1bc41e7033983525a41a19",
+      "sha256": "90e953d7bcefc070bfa9765fd89733017261f6f251a82165ac7b82c5f3cfa446",
+      "bytes": 2807415,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-simplyannisa-2085371269537845497-browser-2085371269537845497-video-1",
+      "file": "9e87764723a7b04831c77cf00f6f02d437d283db6a18158d14831f1a19f3304b.gif",
+      "source_sha256": "2da9a7a2c3332cf07c4cfb027d68aa335e65845d4422d8ba8a4b60cdf6f74b6e",
+      "sha256": "9e87764723a7b04831c77cf00f6f02d437d283db6a18158d14831f1a19f3304b",
+      "bytes": 1903591,
       "human_preview_only": true
     },
     {

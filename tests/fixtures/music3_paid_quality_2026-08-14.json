@@ -1,0 +1,589 @@
+{
+  "schema_version": "t8-music3-paid-quality/v1",
+  "provider": "seedance-flat-price-house",
+  "model": "bytedance/doubao-seed-evolving",
+  "official_skill_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+  "official_skill_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+  "minimum_score": 85.0,
+  "minimum_judge_score": 80,
+  "score_formula": "70% deterministic contract score + 30% one batched structured LLM quality judge",
+  "passed": true,
+  "cases": [
+    {
+      "case": {
+        "id": "generate_chinese_pop",
+        "kwargs": {
+          "music_idea": "原声华语流行歌曲，克制女声从雨夜独行逐步走向明亮坚定的最终副歌。",
+          "lyrics_mode": "生成新歌词（T8非官方）",
+          "lyrics": "",
+          "lyrics_language": "中文",
+          "target_duration_seconds": 150,
+          "rewrite_mode": "balanced",
+          "quality_mode": "官方完整（2–4次请求，推荐）",
+          "structure_preset": "Verse → Pre-Chorus → Chorus → Bridge",
+          "constraints_and_exclusions": "Exactly 96 BPM in G major, 4/4 meter, female lead vocal, piano and acoustic guitar, no rap.",
+          "fixed_bpm": 96,
+          "key_scale": "G major",
+          "meter": "4/4",
+          "semantic_profile_mode": "LLM宽泛分析（会发送歌词并可能增加请求）",
+          "seed": 2026081401
+        },
+        "required_groups": [
+          [
+            "96 bpm"
+          ],
+          [
+            "g major"
+          ],
+          [
+            "female"
+          ],
+          [
+            "piano"
+          ],
+          [
+            "acoustic guitar"
+          ],
+          [
+            "no rap",
+            "without rap"
+          ]
+        ],
+        "sections": [
+          "Verse",
+          "Pre-Chorus",
+          "Chorus",
+          "Bridge",
+          "Outro"
+        ],
+        "mode": "generate"
+      },
+      "lyrics": "[Intro]\n呜……\n雨落在空的街\n\n[Verse]\n伞骨沾着午夜的凉\n路灯把影子拉得很长\n每片水洼都藏着\n一句没说出口的原谅\n我数着红绿灯的节拍\n把回忆踩成细碎声响\n风穿过衣领的时候\n忽然想把从前原谅\n\n[Pre-Chorus]\n不是所有伤口都要结成疤\n不是所有告别都要等回答\n我还在走，雨还在下\n心里却有一点点亮起来了\n\n[Chorus]\n就让我一个人走过这雨夜\n把淋湿的梦走成晴天\n脚步轻一点，目光远一点\n昨天再重也压不弯明天\n我会穿过所有沉默的街\n把孤单走成暖暖的光线\n不再回头，不再拖延\n走到云破日出那一边\n\n[Verse]\n便利店亮着温柔的灯\n热咖啡暖了微凉指尖\n橱窗里映出的我\n眼神比想象中勇敢\n也许路没有那么难\n只是心需要一点时间\n把那场倾盆的怀念\n走成身后淡淡的烟\n\n[Chorus]\n就让我一个人走过这雨夜\n把淋湿的梦走成晴天\n脚步轻一点，目光远一点\n昨天再重也压不弯明天\n我会穿过所有沉默的街\n把孤单走成暖暖的光线\n不再回头，不再拖延\n走到云破日出那一边\n\n[Bridge]\n雨慢慢停了，云慢慢裂了\n天边有一抹颜色醒了\n我不再问谁还在等我\n我等的人，原来是我\n那些被雨打湿的承诺\n就让风轻轻带过\n\n[Chorus]\n我终于走过了那场雨夜\n把淋湿的梦走成了晴天\n脚步稳一点，目光亮一点\n昨天再重也压不弯明天\n我站在云破日出的街\n把孤单走成暖暖的光线\n张开双手，风在身边\n世界正慢慢回到我眼前\n\n[Outro]\n水洼里的天亮了\n我走着，我笑着\n向前走，不回头",
+      "music_caption": "### Global Metadata\n\nAcoustic Mandopop / Huayu pop with a cinematic pop-ballad arc. 96 BPM, 4/4 meter, G major. The emotional progression begins in restrained, rainy-night solitude, gradually gathers warmth and momentum, and opens into a bright, resolute final chorus. The production is organic and wide, preserving intimacy in the early sections while allowing the chorus to bloom into a polished, emotionally full acoustic landscape. Piano and acoustic guitar form the core instrumental identity, supported by restrained low-end and percussion that enter only to strengthen the groove.\n\n### Vocal Details\n\nA female lead vocalist performs in Mandarin Chinese with a clear, pure tone and gentle breathiness in the lower register. Her delivery begins close, controlled, and narrative, then becomes more open, sustained, and determined as the song climbs. In the choruses, she moves into a confident, emotive lift with controlled vibrato, avoiding harsh belting. Subtle layered self-harmonies appear in the chorus sections, adding warmth and width without obscuring the lead. The vocal is treated with tasteful reverb and light delay on phrase endings; no rap or spoken-word sections are included.\n\n### Arrangement\n\nIntro: Solo acoustic piano presents a quiet arpeggiated figure in a higher register, establishing a reflective, rain-like stillness. The guitar is absent, leaving space around the piano.\n\nVerse 1: Fingerpicked acoustic guitar enters softly, locking with the piano’s sparse chords. The lead vocal enters intimately, close and conversational. A very gentle brushed percussion pulse and warm bass begin to outline the harmony, keeping the texture breathable.\n\nPre-Chorus 1: The piano becomes more rhythmically active, while the guitar shifts from fingerpicking to lighter strums. Harmony vocals appear faintly, and a subtle cymbal swell creates lift toward the first chorus.\n\nChorus 1: The arrangement opens into a steady acoustic pop groove. Piano plays fuller chords, the guitar drives with clear strumming, and brushed drums establish a gentle backbeat. Lead and backing vocals combine for the first emotional release, though the dynamics remain controlled.\n\nVerse 2: The energy pulls back slightly. Piano returns to arpeggios, while the acoustic guitar adds delicate melodic fills. The bass remains present, and percussion softens to let the vocal storytelling remain central.\n\nChorus 2: The chorus returns with greater confidence. Harmonies are more layered, the guitar strums more firmly, and the piano adds octave movement. Brushed drums become more defined, giving the section stronger forward motion.\n\nBridge: The arrangement retreats to piano, vocal, and sparse guitar accents, creating a moment of suspended reflection. Tension builds through repeated piano figures and gradual percussion addition, leading into a transition that resolves directly into the final chorus.\n\nFinal Chorus 3: The full arrangement returns at its brightest and most determined. Piano plays broad, ringing chords, acoustic guitar drives with open strums, bass and brushed drums lock into a firm groove, and layered vocals create a rich, uplifting finish.\n\nOutro: Instruments gradually thin out, leaving piano and acoustic guitar to support the final vocal phrases. The percussion and bass fade first, and the section closes with a gentle piano-and-guitar decay.",
+      "music3_payload_json": {
+        "input": "[Intro]\n呜……\n雨落在空的街\n\n[Verse]\n伞骨沾着午夜的凉\n路灯把影子拉得很长\n每片水洼都藏着\n一句没说出口的原谅\n我数着红绿灯的节拍\n把回忆踩成细碎声响\n风穿过衣领的时候\n忽然想把从前原谅\n\n[Pre-Chorus]\n不是所有伤口都要结成疤\n不是所有告别都要等回答\n我还在走，雨还在下\n心里却有一点点亮起来了\n\n[Chorus]\n就让我一个人走过这雨夜\n把淋湿的梦走成晴天\n脚步轻一点，目光远一点\n昨天再重也压不弯明天\n我会穿过所有沉默的街\n把孤单走成暖暖的光线\n不再回头，不再拖延\n走到云破日出那一边\n\n[Verse]\n便利店亮着温柔的灯\n热咖啡暖了微凉指尖\n橱窗里映出的我\n眼神比想象中勇敢\n也许路没有那么难\n只是心需要一点时间\n把那场倾盆的怀念\n走成身后淡淡的烟\n\n[Chorus]\n就让我一个人走过这雨夜\n把淋湿的梦走成晴天\n脚步轻一点，目光远一点\n昨天再重也压不弯明天\n我会穿过所有沉默的街\n把孤单走成暖暖的光线\n不再回头，不再拖延\n走到云破日出那一边\n\n[Bridge]\n雨慢慢停了，云慢慢裂了\n天边有一抹颜色醒了\n我不再问谁还在等我\n我等的人，原来是我\n那些被雨打湿的承诺\n就让风轻轻带过\n\n[Chorus]\n我终于走过了那场雨夜\n把淋湿的梦走成了晴天\n脚步稳一点，目光亮一点\n昨天再重也压不弯明天\n我站在云破日出的街\n把孤单走成暖暖的光线\n张开双手，风在身边\n世界正慢慢回到我眼前\n\n[Outro]\n水洼里的天亮了\n我走着，我笑着\n向前走，不回头",
+        "instructions": "### Global Metadata\n\nAcoustic Mandopop / Huayu pop with a cinematic pop-ballad arc. 96 BPM, 4/4 meter, G major. The emotional progression begins in restrained, rainy-night solitude, gradually gathers warmth and momentum, and opens into a bright, resolute final chorus. The production is organic and wide, preserving intimacy in the early sections while allowing the chorus to bloom into a polished, emotionally full acoustic landscape. Piano and acoustic guitar form the core instrumental identity, supported by restrained low-end and percussion that enter only to strengthen the groove.\n\n### Vocal Details\n\nA female lead vocalist performs in Mandarin Chinese with a clear, pure tone and gentle breathiness in the lower register. Her delivery begins close, controlled, and narrative, then becomes more open, sustained, and determined as the song climbs. In the choruses, she moves into a confident, emotive lift with controlled vibrato, avoiding harsh belting. Subtle layered self-harmonies appear in the chorus sections, adding warmth and width without obscuring the lead. The vocal is treated with tasteful reverb and light delay on phrase endings; no rap or spoken-word sections are included.\n\n### Arrangement\n\nIntro: Solo acoustic piano presents a quiet arpeggiated figure in a higher register, establishing a reflective, rain-like stillness. The guitar is absent, leaving space around the piano.\n\nVerse 1: Fingerpicked acoustic guitar enters softly, locking with the piano’s sparse chords. The lead vocal enters intimately, close and conversational. A very gentle brushed percussion pulse and warm bass begin to outline the harmony, keeping the texture breathable.\n\nPre-Chorus 1: The piano becomes more rhythmically active, while the guitar shifts from fingerpicking to lighter strums. Harmony vocals appear faintly, and a subtle cymbal swell creates lift toward the first chorus.\n\nChorus 1: The arrangement opens into a steady acoustic pop groove. Piano plays fuller chords, the guitar drives with clear strumming, and brushed drums establish a gentle backbeat. Lead and backing vocals combine for the first emotional release, though the dynamics remain controlled.\n\nVerse 2: The energy pulls back slightly. Piano returns to arpeggios, while the acoustic guitar adds delicate melodic fills. The bass remains present, and percussion softens to let the vocal storytelling remain central.\n\nChorus 2: The chorus returns with greater confidence. Harmonies are more layered, the guitar strums more firmly, and the piano adds octave movement. Brushed drums become more defined, giving the section stronger forward motion.\n\nBridge: The arrangement retreats to piano, vocal, and sparse guitar accents, creating a moment of suspended reflection. Tension builds through repeated piano figures and gradual percussion addition, leading into a transition that resolves directly into the final chorus.\n\nFinal Chorus 3: The full arrangement returns at its brightest and most determined. Piano plays broad, ringing chords, acoustic guitar drives with open strums, bass and brushed drums lock into a firm groove, and layered vocals create a rich, uplifting finish.\n\nOutro: Instruments gradually thin out, leaving piano and acoustic guitar to support the final vocal phrases. The percussion and bass fade first, and the section closes with a gentle piano-and-guitar decay."
+      },
+      "enhancement_report": {
+        "schema_version": "t8-music3-enhancement-report/v1",
+        "effective_lyrics_mode": "生成新歌词（T8非官方）",
+        "semantic_profile_mode": "LLM宽泛分析（会发送歌词并可能增加请求）",
+        "request_count": 4,
+        "cache_hits": 0,
+        "stages": [
+          {
+            "stage": "lyrics_generation",
+            "source": "network"
+          },
+          {
+            "stage": "official_genre_routing",
+            "source": "network"
+          },
+          {
+            "stage": "official_reference_selection",
+            "source": "network"
+          },
+          {
+            "stage": "official_caption_compilation",
+            "source": "network"
+          }
+        ],
+        "family_index_count": 1,
+        "reference_count": 3,
+        "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+        "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+        "tag_event_count": 9,
+        "ignored_tag_count": 0,
+        "estimated_music3_tokens": 1362,
+        "warnings": []
+      },
+      "deterministic": {
+        "score": 100.0,
+        "checks": {
+          "official_heading_contract": 15,
+          "payload_consistency": 10,
+          "explicit_constraint_preservation": 20.0,
+          "section_timeline_coverage": 10.0,
+          "lyrics_caption_separation": 10,
+          "caption_specificity": 5,
+          "lyrics_mode_invariant": 20,
+          "safe_diagnostics": 5,
+          "nonempty_outputs": 5
+        },
+        "hard_failures": [],
+        "missing_constraint_groups": [],
+        "report": {
+          "schema_version": "t8-music3-enhancement-report/v1",
+          "effective_lyrics_mode": "生成新歌词（T8非官方）",
+          "semantic_profile_mode": "LLM宽泛分析（会发送歌词并可能增加请求）",
+          "request_count": 4,
+          "cache_hits": 0,
+          "stages": [
+            {
+              "stage": "lyrics_generation",
+              "source": "network"
+            },
+            {
+              "stage": "official_genre_routing",
+              "source": "network"
+            },
+            {
+              "stage": "official_reference_selection",
+              "source": "network"
+            },
+            {
+              "stage": "official_caption_compilation",
+              "source": "network"
+            }
+          ],
+          "family_index_count": 1,
+          "reference_count": 3,
+          "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+          "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+          "tag_event_count": 9,
+          "ignored_tag_count": 0,
+          "estimated_music3_tokens": 1362,
+          "warnings": []
+        }
+      },
+      "judge": {
+        "score": 92.0,
+        "dimensions": {
+          "brief_fidelity": 28.0,
+          "arrangement_coherence": 24.0,
+          "lyric_singability": 18.0,
+          "originality_and_hook": 12.0,
+          "official_separation": 10.0
+        },
+        "evidence": [
+          "Caption states 96 BPM, G major, 4/4, female lead, piano/acoustic guitar, and no rap.",
+          "Emotional arc moves from restrained rainy-night verse to bright, resolute final chorus.",
+          "Arrangement entrances are coherent: piano intro, guitar in verse, restrained bass/brushed percussion, fuller final chorus.",
+          "Lyrics include Intro, Verse, Pre-Chorus, Chorus, Bridge, and Outro with a repeated, transformed chorus.",
+          "Some rain/dawn imagery is conventional, but the chorus has a clear, singable hook.",
+          "Caption does not copy extended lyric lines."
+        ]
+      },
+      "final_score": 97.6,
+      "passed": true,
+      "output_sha256": "05953a54477509cb1c0ac631909103684ba499edeee08fb37603fb3ae27b55f9"
+    },
+    {
+      "case": {
+        "id": "strict_preserve_synthpop",
+        "kwargs": {
+          "music_idea": "Retrowave synth-pop with a restrained opening, pulsing analog bass, and a wide but clean final chorus.",
+          "lyrics_mode": "严格保留歌词",
+          "lyrics": "[Verse]\n凌晨四点，旧车站把雨声折成蓝线\n我把未寄出的车票压在掌心\n\n[Chorus]\n沿着北纬三十一度的风\n我们把沉默唱成回程的灯\n\n[Outro]\n最后一班车没有带走姓名",
+          "lyrics_language": "中文",
+          "target_duration_seconds": 135,
+          "rewrite_mode": "strict",
+          "quality_mode": "官方完整（2–4次请求，推荐）",
+          "constraints_and_exclusions": "Female alto lead, analog synth bass, gated drums, no choir, no key change.",
+          "seed": 2026081402
+        },
+        "required_groups": [
+          [
+            "female alto"
+          ],
+          [
+            "analog synth",
+            "synth bass"
+          ],
+          [
+            "gated drum"
+          ],
+          [
+            "no choir",
+            "without choir"
+          ],
+          [
+            "no key change",
+            "without key change"
+          ]
+        ],
+        "sections": [
+          "Verse",
+          "Chorus",
+          "Outro"
+        ],
+        "mode": "preserve"
+      },
+      "lyrics": "[Verse]\n凌晨四点，旧车站把雨声折成蓝线\n我把未寄出的车票压在掌心\n\n[Chorus]\n沿着北纬三十一度的风\n我们把沉默唱成回程的灯\n\n[Outro]\n最后一班车没有带走姓名",
+      "music_caption": "### Global Metadata\n\nRetrowave synth-pop with a nostalgic analog-synth palette, a steady four-on-the-floor pulse, and a clean, wide stereo image. The tempo is around 120 BPM in 4/4, with a minor harmonic color that remains stable throughout; there is no key change. The emotional arc begins restrained and intimate, gains lift and momentum in the chorus, and resolves into a spacious but controlled outro. The production centers on a pulsing analog synth bass, crisp gated drums, soft pads, and bright melodic synths. Choruses open up spatially while staying polished and uncluttered, avoiding excessive distortion or overcrowding.\n\n### Vocal Details\n\nA female alto lead carries the song in Mandarin. Her tone is warm, smooth, and grounded in the lower register, with a slightly breathy intimacy in the verse and a stronger, sustained delivery in the chorus. The performance feels controlled rather than overblown, emphasizing melody and emotional clarity. Light self-harmonies appear in the chorus, but they are used sparingly as parallel support rather than a large choral texture. Subtle plate reverb and short delay give the voice space, while gentle compression keeps it present above the synths. No choir or massed vocal layers are used.\n\n### Arrangement\n\n**Verse 1** opens the track with restraint. A round, pulsating analog synth bass enters first, locked tightly with a simple kick pattern and a gated snare on beats two and four. Closed hi-hats keep the groove tight, while a soft analog pad and a quiet arpeggiated synth provide harmonic and melodic texture. The lead vocal enters close and conversational, with minimal doubling. As the verse progresses, the arpeggio brightens slightly and the hi-hats become more active, building anticipation without expanding the arrangement too early.\n\n**Chorus** arrives as the track’s main release. The drums open up with added open hi-hats, subtle percussion fills, and a fuller gated-snare sound. The analog bass becomes more driving, the pad swells wider, and a bright retrowave lead synth carries the main hook. The lead alto rises in intensity, supported by light harmonies, while the mix stays clean and separated across the stereo field. The harmony remains unchanged, preserving the song’s tonal center.\n\n**Outro** gradually pulls back. Drums soften and then fade, leaving the bass, arpeggio, and pad to linger. The lead synth hook echoes faintly before the analog elements thin out, ending with a clean, spacious tail rather than an abrupt cut.",
+      "music3_payload_json": {
+        "input": "[Verse]\n凌晨四点，旧车站把雨声折成蓝线\n我把未寄出的车票压在掌心\n\n[Chorus]\n沿着北纬三十一度的风\n我们把沉默唱成回程的灯\n\n[Outro]\n最后一班车没有带走姓名",
+        "instructions": "### Global Metadata\n\nRetrowave synth-pop with a nostalgic analog-synth palette, a steady four-on-the-floor pulse, and a clean, wide stereo image. The tempo is around 120 BPM in 4/4, with a minor harmonic color that remains stable throughout; there is no key change. The emotional arc begins restrained and intimate, gains lift and momentum in the chorus, and resolves into a spacious but controlled outro. The production centers on a pulsing analog synth bass, crisp gated drums, soft pads, and bright melodic synths. Choruses open up spatially while staying polished and uncluttered, avoiding excessive distortion or overcrowding.\n\n### Vocal Details\n\nA female alto lead carries the song in Mandarin. Her tone is warm, smooth, and grounded in the lower register, with a slightly breathy intimacy in the verse and a stronger, sustained delivery in the chorus. The performance feels controlled rather than overblown, emphasizing melody and emotional clarity. Light self-harmonies appear in the chorus, but they are used sparingly as parallel support rather than a large choral texture. Subtle plate reverb and short delay give the voice space, while gentle compression keeps it present above the synths. No choir or massed vocal layers are used.\n\n### Arrangement\n\n**Verse 1** opens the track with restraint. A round, pulsating analog synth bass enters first, locked tightly with a simple kick pattern and a gated snare on beats two and four. Closed hi-hats keep the groove tight, while a soft analog pad and a quiet arpeggiated synth provide harmonic and melodic texture. The lead vocal enters close and conversational, with minimal doubling. As the verse progresses, the arpeggio brightens slightly and the hi-hats become more active, building anticipation without expanding the arrangement too early.\n\n**Chorus** arrives as the track’s main release. The drums open up with added open hi-hats, subtle percussion fills, and a fuller gated-snare sound. The analog bass becomes more driving, the pad swells wider, and a bright retrowave lead synth carries the main hook. The lead alto rises in intensity, supported by light harmonies, while the mix stays clean and separated across the stereo field. The harmony remains unchanged, preserving the song’s tonal center.\n\n**Outro** gradually pulls back. Drums soften and then fade, leaving the bass, arpeggio, and pad to linger. The lead synth hook echoes faintly before the analog elements thin out, ending with a clean, spacious tail rather than an abrupt cut."
+      },
+      "enhancement_report": {
+        "schema_version": "t8-music3-enhancement-report/v1",
+        "effective_lyrics_mode": "严格保留歌词",
+        "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+        "request_count": 3,
+        "cache_hits": 0,
+        "stages": [
+          {
+            "stage": "official_genre_routing",
+            "source": "network"
+          },
+          {
+            "stage": "official_reference_selection",
+            "source": "network"
+          },
+          {
+            "stage": "official_caption_compilation",
+            "source": "network"
+          }
+        ],
+        "family_index_count": 1,
+        "reference_count": 3,
+        "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+        "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+        "tag_event_count": 3,
+        "ignored_tag_count": 0,
+        "estimated_music3_tokens": 692,
+        "warnings": []
+      },
+      "deterministic": {
+        "score": 100.0,
+        "checks": {
+          "official_heading_contract": 15,
+          "payload_consistency": 10,
+          "explicit_constraint_preservation": 20.0,
+          "section_timeline_coverage": 10.0,
+          "lyrics_caption_separation": 10,
+          "caption_specificity": 5,
+          "lyrics_mode_invariant": 20,
+          "safe_diagnostics": 5,
+          "nonempty_outputs": 5
+        },
+        "hard_failures": [],
+        "missing_constraint_groups": [],
+        "report": {
+          "schema_version": "t8-music3-enhancement-report/v1",
+          "effective_lyrics_mode": "严格保留歌词",
+          "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+          "request_count": 3,
+          "cache_hits": 0,
+          "stages": [
+            {
+              "stage": "official_genre_routing",
+              "source": "network"
+            },
+            {
+              "stage": "official_reference_selection",
+              "source": "network"
+            },
+            {
+              "stage": "official_caption_compilation",
+              "source": "network"
+            }
+          ],
+          "family_index_count": 1,
+          "reference_count": 3,
+          "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+          "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+          "tag_event_count": 3,
+          "ignored_tag_count": 0,
+          "estimated_music3_tokens": 692,
+          "warnings": []
+        }
+      },
+      "judge": {
+        "score": 93.0,
+        "dimensions": {
+          "brief_fidelity": 29.0,
+          "arrangement_coherence": 24.0,
+          "lyric_singability": 18.0,
+          "originality_and_hook": 12.0,
+          "official_separation": 10.0
+        },
+        "evidence": [
+          "Final lyrics match the supplied lyrics exactly across verse, chorus, and outro.",
+          "Caption specifies female alto, analog synth bass, gated drums, no choir, and no key change.",
+          "Opening is restrained, then chorus opens into a wide but clean release.",
+          "Light self-harmonies are described as sparse support rather than a choir.",
+          "Caption adds approximate 120 BPM and minor color not in the brief, but without contradiction.",
+          "Compact chorus hook is melodic and easy to sing."
+        ]
+      },
+      "final_score": 97.9,
+      "passed": true,
+      "output_sha256": "c3e74eef146097efa0e64763629cd463ec0b22771e120692828b5bdf4d74178a"
+    },
+    {
+      "case": {
+        "id": "instrumental_fusion",
+        "kwargs": {
+          "music_idea": "Instrumental cinematic folk fused with Chinese traditional colors, moving from a sparse dawn texture to a forceful final release.",
+          "lyrics_mode": "纯器乐",
+          "lyrics": "",
+          "target_duration_seconds": 180,
+          "rewrite_mode": "balanced",
+          "quality_mode": "官方完整（2–4次请求，推荐）",
+          "structure_preset": "Custom（自定义）",
+          "custom_structure": "[Intro] [Verse: sparse erhu] [Instrumental: frame drum build] [Outro: instruments decay]",
+          "constraints_and_exclusions": "Strictly instrumental. Erhu carries the lead melody; frame drum enters only after the midpoint; no singer and no choir.",
+          "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+          "seed": 2026081403
+        },
+        "required_groups": [
+          [
+            "instrumental"
+          ],
+          [
+            "erhu"
+          ],
+          [
+            "frame drum"
+          ],
+          [
+            "no singer",
+            "without singer",
+            "no vocal"
+          ],
+          [
+            "no choir",
+            "without choir"
+          ]
+        ],
+        "sections": [
+          "Intro",
+          "Verse",
+          "Instrumental",
+          "Outro"
+        ],
+        "mode": "instrumental"
+      },
+      "lyrics": "[Instrumental]",
+      "music_caption": "### Global Metadata\n\nGenre: Instrumental cinematic folk fused with Chinese traditional colors. Subgenres include pastoral folk-ballad and sweeping orchestral folk-cinema.\n\nTempo: A slow, meditative pulse in the opening half, gradually firming into a driving medium tempo as percussion arrives; no fixed BPM is imposed.\n\nEmotional progression: The piece begins in a sparse, dawn-lit solitude—quiet, breath-like, and reflective. Across the first half it deepens into a yearning melancholy carried by the bowed lead. After the midpoint, rhythmic and orchestral layers gather, transforming restraint into a forceful, resolute release. The conclusion settles into a lingering, bittersweet calm.\n\nSonic and production profile: The soundstage opens wide and airy, with generous natural reverb suggesting open landscape at first light. The early texture is transparent and close-miked around the acoustic lead, preserving bow noise and string resonance. As layers accumulate, the low end warms and broadens, while the high end retains clarity. The dynamic arc moves from intimate, uncompressed breathing to a fuller, denser climax, then recedes. Stereo imaging places plucked strings wide, with the bowed lead centered throughout.\n\n### Vocal Details\n\nThe piece is strictly instrumental. No singer, choir, or vocal layer of any kind appears. The erhu carries the lead melodic role throughout, supported by a guzheng-like plucked zither providing harmonic arpeggios and rhythmic motion. Orchestral strings and frame drum serve secondary and structural roles rather than melodic leads.\n\n### Arrangement\n\nIntro: A solitary dawn texture opens the piece. Sustained atmospheric drones and soft wind-like ambience establish space. A guzheng-like zither enters with sparse, ringing plucked notes, its reverb tail long and open. The erhu appears after a short breath, stating a mournful, stepping theme in its middle register, with occasional glissando ornaments between phrases. No percussion is present.\n\nVerse: The arrangement remains sparse as directed. The erhu continues as the clear lead, its phrasing vocal and narrative, rising in intensity only slightly at phrase peaks. The zither adds delicate arpeggiated support beneath. A warm, sustained acoustic or bowed bass enters subtly, anchoring the harmony without disturbing the stillness. Soft string pads swell very faintly in the background during emotional peaks, then recede. The groove is carried entirely by the flow of plucked strings and erhu phrasing.\n\nInstrumental: After the midpoint, the frame drum enters—first as a soft, heartbeat-like pulse, then building into a steadier, driving pattern. This marks the beginning of the forceful build. Orchestral strings gather in layers, rising through long sustained lines and rhythmic bowing. The erhu pushes into a higher, more urgent register, its tone fuller and more impassioned. The zither playing becomes more rapid and emphatic. Subtle percussive accents and deep bass support the growing momentum. The texture thickens toward a sweeping climax where all elements converge in a powerful, resonant release.\n\nOutro: The frame drum and orchestral weight fall away. The erhu returns to a quieter, altered restatement of the opening theme, now tinged with resolution. The zither offers a few final plucked notes. Drones and reverb tails linger as the texture thins to silence, leaving a spacious, wistful resonance.",
+      "music3_payload_json": {
+        "input": "[Instrumental]",
+        "instructions": "### Global Metadata\n\nGenre: Instrumental cinematic folk fused with Chinese traditional colors. Subgenres include pastoral folk-ballad and sweeping orchestral folk-cinema.\n\nTempo: A slow, meditative pulse in the opening half, gradually firming into a driving medium tempo as percussion arrives; no fixed BPM is imposed.\n\nEmotional progression: The piece begins in a sparse, dawn-lit solitude—quiet, breath-like, and reflective. Across the first half it deepens into a yearning melancholy carried by the bowed lead. After the midpoint, rhythmic and orchestral layers gather, transforming restraint into a forceful, resolute release. The conclusion settles into a lingering, bittersweet calm.\n\nSonic and production profile: The soundstage opens wide and airy, with generous natural reverb suggesting open landscape at first light. The early texture is transparent and close-miked around the acoustic lead, preserving bow noise and string resonance. As layers accumulate, the low end warms and broadens, while the high end retains clarity. The dynamic arc moves from intimate, uncompressed breathing to a fuller, denser climax, then recedes. Stereo imaging places plucked strings wide, with the bowed lead centered throughout.\n\n### Vocal Details\n\nThe piece is strictly instrumental. No singer, choir, or vocal layer of any kind appears. The erhu carries the lead melodic role throughout, supported by a guzheng-like plucked zither providing harmonic arpeggios and rhythmic motion. Orchestral strings and frame drum serve secondary and structural roles rather than melodic leads.\n\n### Arrangement\n\nIntro: A solitary dawn texture opens the piece. Sustained atmospheric drones and soft wind-like ambience establish space. A guzheng-like zither enters with sparse, ringing plucked notes, its reverb tail long and open. The erhu appears after a short breath, stating a mournful, stepping theme in its middle register, with occasional glissando ornaments between phrases. No percussion is present.\n\nVerse: The arrangement remains sparse as directed. The erhu continues as the clear lead, its phrasing vocal and narrative, rising in intensity only slightly at phrase peaks. The zither adds delicate arpeggiated support beneath. A warm, sustained acoustic or bowed bass enters subtly, anchoring the harmony without disturbing the stillness. Soft string pads swell very faintly in the background during emotional peaks, then recede. The groove is carried entirely by the flow of plucked strings and erhu phrasing.\n\nInstrumental: After the midpoint, the frame drum enters—first as a soft, heartbeat-like pulse, then building into a steadier, driving pattern. This marks the beginning of the forceful build. Orchestral strings gather in layers, rising through long sustained lines and rhythmic bowing. The erhu pushes into a higher, more urgent register, its tone fuller and more impassioned. The zither playing becomes more rapid and emphatic. Subtle percussive accents and deep bass support the growing momentum. The texture thickens toward a sweeping climax where all elements converge in a powerful, resonant release.\n\nOutro: The frame drum and orchestral weight fall away. The erhu returns to a quieter, altered restatement of the opening theme, now tinged with resolution. The zither offers a few final plucked notes. Drones and reverb tails linger as the texture thins to silence, leaving a spacious, wistful resonance."
+      },
+      "enhancement_report": {
+        "schema_version": "t8-music3-enhancement-report/v1",
+        "effective_lyrics_mode": "纯器乐",
+        "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+        "request_count": 3,
+        "cache_hits": 0,
+        "stages": [
+          {
+            "stage": "official_genre_routing",
+            "source": "network"
+          },
+          {
+            "stage": "official_reference_selection",
+            "source": "network"
+          },
+          {
+            "stage": "official_caption_compilation",
+            "source": "network"
+          }
+        ],
+        "family_index_count": 2,
+        "reference_count": 2,
+        "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+        "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+        "tag_event_count": 4,
+        "ignored_tag_count": 0,
+        "estimated_music3_tokens": 857,
+        "warnings": []
+      },
+      "deterministic": {
+        "score": 100.0,
+        "checks": {
+          "official_heading_contract": 15,
+          "payload_consistency": 10,
+          "explicit_constraint_preservation": 20.0,
+          "section_timeline_coverage": 10.0,
+          "lyrics_caption_separation": 10,
+          "caption_specificity": 5,
+          "lyrics_mode_invariant": 20,
+          "safe_diagnostics": 5,
+          "nonempty_outputs": 5
+        },
+        "hard_failures": [],
+        "missing_constraint_groups": [],
+        "report": {
+          "schema_version": "t8-music3-enhancement-report/v1",
+          "effective_lyrics_mode": "纯器乐",
+          "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+          "request_count": 3,
+          "cache_hits": 0,
+          "stages": [
+            {
+              "stage": "official_genre_routing",
+              "source": "network"
+            },
+            {
+              "stage": "official_reference_selection",
+              "source": "network"
+            },
+            {
+              "stage": "official_caption_compilation",
+              "source": "network"
+            }
+          ],
+          "family_index_count": 2,
+          "reference_count": 2,
+          "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+          "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+          "tag_event_count": 4,
+          "ignored_tag_count": 0,
+          "estimated_music3_tokens": 857,
+          "warnings": []
+        }
+      },
+      "judge": {
+        "score": 96.0,
+        "dimensions": {
+          "brief_fidelity": 30.0,
+          "arrangement_coherence": 25.0,
+          "lyric_singability": 18.0,
+          "originality_and_hook": 13.0,
+          "official_separation": 10.0
+        },
+        "evidence": [
+          "Lyrics field is [Instrumental], and caption explicitly states no singer, choir, or vocal layer.",
+          "Erhu carries the lead melody throughout, with guzheng-like zither and strings in support.",
+          "Frame drum is absent until after the midpoint, then builds into the forceful release.",
+          "Arrangement follows the custom Intro, sparse erhu Verse, frame-drum build, and decay Outro.",
+          "Dynamic arc matches sparse dawn texture to climax and lingering resolution.",
+          "No lyrics are quoted in the caption, consistent with privacy isolation."
+        ]
+      },
+      "final_score": 98.8,
+      "passed": true,
+      "output_sha256": "7fe40e170ce876d7bf172a07c932d2d0e6c54ab20a24f428a125ccb79595f513"
+    },
+    {
+      "case": {
+        "id": "targeted_second_verse_edit",
+        "kwargs": {
+          "music_idea": "Mid-tempo Mandarin indie pop with intimate verses and an open, memorable chorus.",
+          "lyrics_mode": "按要求润色（T8非官方）",
+          "lyrics": "[Verse]\n霓虹落在空杯里\n我还没想好怎么告别\n\n[Chorus]\n把风留在旧天台\n把约定留到云散开\n\n[Verse]\n末班车穿过长街\n我仍然听见你的节拍\n\n[Chorus]\n把风留在旧天台\n把约定留到云散开",
+          "lyrics_language": "中文",
+          "target_duration_seconds": 120,
+          "rewrite_mode": "balanced",
+          "quality_mode": "快速核心（1–2次请求）",
+          "lyrics_edit_request": "只改第二段主歌，使画面更具体并与副歌押韵；其他内容逐字不改。",
+          "lyrics_edit_scope": "AUTO（从润色要求识别）",
+          "constraints_and_exclusions": "Keep the existing chorus exactly unchanged. Warm male tenor, clean electric guitar, no rap.",
+          "seed": 2026081404
+        },
+        "required_groups": [
+          [
+            "male tenor"
+          ],
+          [
+            "electric guitar"
+          ],
+          [
+            "no rap",
+            "without rap"
+          ]
+        ],
+        "sections": [
+          "Verse",
+          "Chorus"
+        ],
+        "mode": "edit"
+      },
+      "lyrics": "[Verse]\n霓虹落在空杯里\n我还没想好怎么告别\n\n[Chorus]\n把风留在旧天台\n把约定留到云散开\n\n[Verse]\n末班车掠过站牌\n我仍然听见你的节拍\n\n[Chorus]\n把风留在旧天台\n把约定留到云散开",
+      "music_caption": "### Global Metadata\n\nMandarin indie pop with a warm, singer-songwriter intimacy and a guitar-centered production. Subgenres include reflective indie pop and melodic Mandarin pop. The tempo is mid-tempo, roughly 92–104 BPM in a steady 4/4 feel, supporting a relaxed but forward-moving groove. The emotional arc moves from close, conversational verses into an open, uplifting, and memorable chorus. The overall sonic profile is organic and slightly analog-leaning: clean electric guitar is the core instrumental color, supported by soft bass, restrained drums, and subtle atmospheric layers. No rap is included. The target length is approximately 120 seconds, with the chorus retaining the same core identity and arrangement each time it appears.\n\n### Vocal Details\n\nThe lead is a warm male tenor singing in Mandarin. In the verses, his delivery is intimate, breathy, and conversational, sitting close to the microphone with minimal processing. In the chorus, he opens into a fuller, more sustained tone while preserving clarity and emotional directness. Backing vocals are used sparingly, mostly as soft doubled phrases or gentle harmonies that widen the chorus without overpowering the lead. Vocal effects remain restrained, favoring natural space and warmth over heavy processing.\n\n### Arrangement\n\nA short intro establishes the mood with a clean electric guitar pattern, soft fingerpicking or arpeggios, and a faint pad, creating an immediate sense of closeness.\n\nVerse 1 enters with the warm male tenor over sparse electric guitar, light bass, and minimal percussion. The groove is restrained, allowing the vocal melody and lyrical rhythm to lead. Subtle keyboard or pad textures linger in the background, keeping the section intimate and reflective.\n\nChorus 1 opens up while keeping the clean electric guitar at the center. Drums become fuller, bass becomes more defined, and the guitar shifts into a brighter strum or lead motif. The lead vocal rises with a memorable, open melody, joined by understated backing harmonies. The chorus’s chordal movement, melody, and core arrangement remain fixed as the song’s emotional anchor.\n\nVerse 2 returns to a more intimate texture, but adds slight rhythmic movement—perhaps a second clean guitar layer, shaker, or more active bass—to maintain momentum without losing the verse’s closeness. The lead vocal remains conversational and expressive.\n\nChorus 2 repeats the first chorus exactly in structure, melody, and core instrumentation, preserving its familiar hook. Any lift comes from natural vocal conviction and a slightly more open mix rather than new musical parts. A brief outro lets the clean electric guitar and soft pad fade gently, closing the song on a warm, lingering note.",
+      "music3_payload_json": {
+        "input": "[Verse]\n霓虹落在空杯里\n我还没想好怎么告别\n\n[Chorus]\n把风留在旧天台\n把约定留到云散开\n\n[Verse]\n末班车掠过站牌\n我仍然听见你的节拍\n\n[Chorus]\n把风留在旧天台\n把约定留到云散开",
+        "instructions": "### Global Metadata\n\nMandarin indie pop with a warm, singer-songwriter intimacy and a guitar-centered production. Subgenres include reflective indie pop and melodic Mandarin pop. The tempo is mid-tempo, roughly 92–104 BPM in a steady 4/4 feel, supporting a relaxed but forward-moving groove. The emotional arc moves from close, conversational verses into an open, uplifting, and memorable chorus. The overall sonic profile is organic and slightly analog-leaning: clean electric guitar is the core instrumental color, supported by soft bass, restrained drums, and subtle atmospheric layers. No rap is included. The target length is approximately 120 seconds, with the chorus retaining the same core identity and arrangement each time it appears.\n\n### Vocal Details\n\nThe lead is a warm male tenor singing in Mandarin. In the verses, his delivery is intimate, breathy, and conversational, sitting close to the microphone with minimal processing. In the chorus, he opens into a fuller, more sustained tone while preserving clarity and emotional directness. Backing vocals are used sparingly, mostly as soft doubled phrases or gentle harmonies that widen the chorus without overpowering the lead. Vocal effects remain restrained, favoring natural space and warmth over heavy processing.\n\n### Arrangement\n\nA short intro establishes the mood with a clean electric guitar pattern, soft fingerpicking or arpeggios, and a faint pad, creating an immediate sense of closeness.\n\nVerse 1 enters with the warm male tenor over sparse electric guitar, light bass, and minimal percussion. The groove is restrained, allowing the vocal melody and lyrical rhythm to lead. Subtle keyboard or pad textures linger in the background, keeping the section intimate and reflective.\n\nChorus 1 opens up while keeping the clean electric guitar at the center. Drums become fuller, bass becomes more defined, and the guitar shifts into a brighter strum or lead motif. The lead vocal rises with a memorable, open melody, joined by understated backing harmonies. The chorus’s chordal movement, melody, and core arrangement remain fixed as the song’s emotional anchor.\n\nVerse 2 returns to a more intimate texture, but adds slight rhythmic movement—perhaps a second clean guitar layer, shaker, or more active bass—to maintain momentum without losing the verse’s closeness. The lead vocal remains conversational and expressive.\n\nChorus 2 repeats the first chorus exactly in structure, melody, and core instrumentation, preserving its familiar hook. Any lift comes from natural vocal conviction and a slightly more open mix rather than new musical parts. A brief outro lets the clean electric guitar and soft pad fade gently, closing the song on a warm, lingering note."
+      },
+      "enhancement_report": {
+        "schema_version": "t8-music3-enhancement-report/v1",
+        "effective_lyrics_mode": "按要求润色（T8非官方）",
+        "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+        "request_count": 2,
+        "cache_hits": 0,
+        "stages": [
+          {
+            "stage": "lyrics_edit",
+            "source": "network"
+          },
+          {
+            "stage": "official_caption_compilation",
+            "source": "network"
+          }
+        ],
+        "family_index_count": 0,
+        "reference_count": 0,
+        "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+        "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+        "tag_event_count": 4,
+        "ignored_tag_count": 0,
+        "estimated_music3_tokens": 756,
+        "warnings": []
+      },
+      "deterministic": {
+        "score": 100.0,
+        "checks": {
+          "official_heading_contract": 15,
+          "payload_consistency": 10,
+          "explicit_constraint_preservation": 20.0,
+          "section_timeline_coverage": 10.0,
+          "lyrics_caption_separation": 10,
+          "caption_specificity": 5,
+          "lyrics_mode_invariant": 20,
+          "safe_diagnostics": 5,
+          "nonempty_outputs": 5
+        },
+        "hard_failures": [],
+        "missing_constraint_groups": [],
+        "report": {
+          "schema_version": "t8-music3-enhancement-report/v1",
+          "effective_lyrics_mode": "按要求润色（T8非官方）",
+          "semantic_profile_mode": "隐私隔离（不发送歌词给Caption阶段）",
+          "request_count": 2,
+          "cache_hits": 0,
+          "stages": [
+            {
+              "stage": "lyrics_edit",
+              "source": "network"
+            },
+            {
+              "stage": "official_caption_compilation",
+              "source": "network"
+            }
+          ],
+          "family_index_count": 0,
+          "reference_count": 0,
+          "official_source_commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+          "official_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+          "tag_event_count": 4,
+          "ignored_tag_count": 0,
+          "estimated_music3_tokens": 756,
+          "warnings": []
+        }
+      },
+      "judge": {
+        "score": 90.0,
+        "dimensions": {
+          "brief_fidelity": 27.0,
+          "arrangement_coherence": 23.0,
+          "lyric_singability": 18.0,
+          "originality_and_hook": 12.0,
+          "official_separation": 10.0
+        },
+        "evidence": [
+          "Only the second verse’s first line is changed; all other lines remain unchanged.",
+          "Both choruses are preserved verbatim as requested.",
+          "The revised verse rhyme aligns with the chorus rhyme sound.",
+          "Caption centers warm male tenor, clean electric guitar, and no rap.",
+          "Verse 2 adds slight momentum while the second chorus preserves its core arrangement.",
+          "The concrete-imagery improvement is modest and limited to one line."
+        ]
+      },
+      "final_score": 97.0,
+      "passed": true,
+      "output_sha256": "e3990b83868e5f99cf69cdf021d239aecced6fd2d3269b0e37d2ffe38dd3a240"
+    }
+  ]
+}

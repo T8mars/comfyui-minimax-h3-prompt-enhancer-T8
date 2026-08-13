@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-13-05",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-lepadphone-2084217085308326385-browser-2084217085308326385-video-1",
+      "template_id": "t8-case-material-carrier-format-collapse-v1",
+      "label": "材质引路｜空间生长到版式定格",
+      "summary": "从一个微小材质锚点开始，让同一连续材质先引导运镜、再形成有厚度的可读结构并扩展成环境，最后通过俯视升维把立体场景压成一张保持人物与材质关系的平面版式。",
+      "case_sha256": "aa3fe6bb492fa74ad47027365686ff1f88ac52391acb8d5f06fe00aaeb800dcc",
+      "creative_dna_sha256": "91cfb4efccf59aaaea0e1c96a72b53b4defe58c71e6008720be81b3abb18c910",
+      "h3_adapter_sha256": "f7c47638783f090699ae7f3c95c3ca8f99a3b57cf2eb5743ea192ffb86c99b4e",
+      "seedance20_adapter_sha256": "6efe62c4164fb85dc9c92f2be9015efefebc6471702567b20d02b3fbc7e41775",
+      "mechanism_fingerprint": "5c4d9bf3e905fdb277359b85e99e54d2a638c11f118dd44e348dca4f021a54ce"
+    },
+    {
+      "case_id": "x-azed-ai-2085034121844396472-browser-2085034121844396472-video-1",
+      "template_id": "t8-case-suspended-world-terminal-resumption-v1",
+      "label": "世界悬停｜持续靠近到末端复流",
+      "summary": "先让一个本应高速运动的复杂环境整体悬停，以连续第一视角推进和重复地标证明时间仍被锁住；局部手部只负责对齐与观察，最后只在片尾发生一次全局复流和速度跃迁。",
+      "case_sha256": "89a29b897bef08ac9fc5a3b94763b85f9289523e935224f5d8555552d16d3bca",
+      "creative_dna_sha256": "73b1211773ae659bdf5ca33c9047af923dab89a024bf241f9fd5cf3c47d0d4f3",
+      "h3_adapter_sha256": "5cab1bb3e147443a89f1e68e583ca9ab9fbdbacf0cf153112f2f8bd541d40ef3",
+      "seedance20_adapter_sha256": "11df4153f6ffc7def28a719659b1e59a0c3f7b92e4d928610335978011e1e9d2",
+      "mechanism_fingerprint": "9fd035ba05d0aeda6b00b909323a94ac356750883a0f68a853be710a414d8e5e"
+    },
+    {
+      "case_id": "x-simplyannisa-2085371269537845497-browser-2085371269537845497-video-1",
+      "template_id": "t8-case-unstable-support-failed-transfer-v1",
+      "label": "动态承载｜平衡升级到失败落点",
+      "summary": "先让参与者在固定路线和稳定踏板上建立能力，再把她交给一个会滚动的动态承载面；用多机位持续证明平衡与位移，随后只做一次离开承载面的转移尝试，以清楚的腾空、落水和本人反应完成失败证明。",
+      "case_sha256": "b9567d715fc1e2c4a4d8df6fd8a7bcb44c5dbae9105b5575a1fbc2caacb82af0",
+      "creative_dna_sha256": "6aea5a21e5e6ffa93f88026339f1826f1dc6fcfbd817bb4b8dd10b58f1c140fc",
+      "h3_adapter_sha256": "3f714ed237a86cd1d339dba137dca65337258287a3a9e63c1858914b648ece4d",
+      "seedance20_adapter_sha256": "28a50aa25c00e4c4051499e918a409d9c8caab803981ad09c2eb6adfdd2104f6",
+      "mechanism_fingerprint": "dd641573897569ff6aaac963afd11e868c8891d6c2c46e2ad66ab3e0a7030564"
+    }
+  ]
+}

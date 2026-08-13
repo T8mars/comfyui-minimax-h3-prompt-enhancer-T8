@@ -1,0 +1,14 @@
+{
+  "schema_version": "t8-official-skill-source/v1",
+  "authority": "MiniMax-AI",
+  "repository": "https://github.com/MiniMax-AI/MiniMax-Music3",
+  "commit": "91410fb657c007ae57c60df8240f5ece5be089c7",
+  "skill": "music-caption-rewriter",
+  "file_count": 1022,
+  "family_index_count": 18,
+  "template_count": 1000,
+  "normalized_tree_sha256": "d836359b48a4bc3381f8d9eb370ff90dd82cb5ad9aa4e3ba0ed80da2c25b2553",
+  "core_skill_sha256": "510f27d504bb06eb3859eb8a627773e655108e72df028d760be3ae98b3d4832c",
+  "normalization": "Each file is hashed after CRLF-to-LF normalization; sorted relative-path NUL file-hash records are joined with LF and hashed again.",
+  "purpose": "Official MiniMax Music 3 prompt-writing resources bundled for progressive-disclosure caption enhancement."
+}

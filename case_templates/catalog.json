@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 87,
-  "case_selector_template_count": 77,
+  "source_case_count": 90,
+  "case_selector_template_count": 80,
   "community_skill_count": 2,
-  "selector_template_count": 79,
+  "selector_template_count": 82,
   "evidence_variant_count": 10,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -4483,6 +4483,171 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nTurn craft into a visible proof ladder: establish one raw material, perform several functionally different manipulations that progressively change its length, topology or organization, cross one irreversible processing threshold, assemble the result, and end on a macro finished-state proof that visibly inherits features created earlier.\nInvariants:\n- inv-01: Establish one raw material and its maker before complex manipulation.\n- inv-02: Use at least three functionally different manipulations that visibly change the same material.\n- inv-03: Keep the material identity and work-surface geography continuous across the manipulation ladder.\n- inv-04: Cross one visible irreversible processing threshold before the result assembly.\n- inv-05: End on a macro finished-state proof that retains visible evidence of earlier transformations.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Opening on spectacle removes the transformation baseline.: Establish one raw material and its maker before complex manipulation.\n- Repeated tossing without distinct material effects is only flourish.: Use at least three functionally different manipulations that visibly change the same material.\n- Unmotivated material substitutions break the proof.: Keep the material identity and work-surface geography continuous across the manipulation ladder.\n- A finished object appearing without a threshold feels swapped in.: Cross one visible irreversible processing threshold before the result assembly.\n- A wide beauty shot alone hides whether the material work mattered.: End on a macro finished-state proof that retains visible evidence of earlier transformations.\nDo not copy from the source: source muscular noodle cook; source noodle dough and shrimp bowl; source dark wood kitchen; source open-wok flame; source noodle-loop choreography and food macro finish",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-material-carrier-format-collapse-v1",
+      "label": "材质引路｜空间生长到版式定格",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "从一个微小材质锚点开始，让同一连续材质先引导运镜、再形成有厚度的可读结构并扩展成环境，最后通过俯视升维把立体场景压成一张保持人物与材质关系的平面版式。",
+      "input_format": "稳定主体 + 微小材质原点 + 同材质引导运镜/形成实体结构/扩成环境 + 单次升高 + 保留历史的版式终态",
+      "recommended_input": "极地档案室里，黄铜勘测甲虫从一枚冰种拉出唯一霜丝；霜丝引导镜头、形成实体 K-42 代码并展开晶体风图舱，最后只升高一次，把甲虫、代码和路径收束成可读野外图表页。",
+      "required_anchors": [
+        "Introduce one small material guide on the same optical axis as a stable subject.",
+        "Keep one continuous material family responsible for camera guidance, color accumulation and spatial growth.",
+        "Expand the same material into an environment that still contains the original subject and prior palette.",
+        "Use one late camera rise to resolve the dimensional scene into a held graphic sheet that preserves subject and material history."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-lepadphone-2084217085308326385-browser-2084217085308326385-video-1",
+        "case_sha256": "aa3fe6bb492fa74ad47027365686ff1f88ac52391acb8d5f06fe00aaeb800dcc",
+        "release_score": 4.68,
+        "creative_dna_sha256": "91cfb4efccf59aaaea0e1c96a72b53b4defe58c71e6008720be81b3abb18c910",
+        "h3_adapter_sha256": "f7c47638783f090699ae7f3c95c3ca8f99a3b57cf2eb5743ea192ffb86c99b4e",
+        "seedance20_adapter_sha256": "6efe62c4164fb85dc9c92f2be9015efefebc6471702567b20d02b3fbc7e41775"
+      },
+      "previews": [
+        {
+          "case_id": "x-lepadphone-2084217085308326385-browser-2084217085308326385-video-1",
+          "label": "材质引路｜空间生长到版式定格",
+          "short_summary": "从一个微小材质锚点开始，让同一连续材质先引导运镜、再形成有厚度的可读结构并扩展成环境，最后通过俯视升维把立体场景压成一张保持人物与材质关系的平面版式。",
+          "recommended_input": "极地档案室里，黄铜勘测甲虫从一枚冰种拉出唯一霜丝；霜丝引导镜头、形成实体 K-42 代码并展开晶体风图舱，最后只升高一次，把甲虫、代码和路径收束成可读野外图表页。",
+          "required_anchors": [
+            "Introduce one small material guide on the same optical axis as a stable subject.",
+            "Keep one continuous material family responsible for camera guidance, color accumulation and spatial growth.",
+            "Expand the same material into an environment that still contains the original subject and prior palette.",
+            "Use one late camera rise to resolve the dimensional scene into a held graphic sheet that preserves subject and material history."
+          ],
+          "sha256": "d3d5f6490879e8ce1c3ae1428927d3e719a26d7b5298690b819d745bd3e9b39b",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBegin with one small material guide aligned to a stable subject. Keep that same material visually continuous as it pulls the camera, accumulates color and depth, becomes one readable physical structure, and expands into an inhabitable environment. Reserve one final camera rise that compresses the dimensional world into a held graphic sheet while preserving the subject and material history.\nInvariants:\n- inv-01: Introduce one small material guide on the same optical axis as a stable subject.\n- inv-02: Keep one continuous material family responsible for camera guidance, color accumulation and spatial growth.\n- inv-03: Let the material form one readable, depth-bearing structure inside the scene and hold it briefly.\n- inv-04: Expand the same material into an environment that still contains the original subject and prior palette.\n- inv-05: Use one late camera rise to resolve the dimensional scene into a held graphic sheet that preserves subject and material history.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without a small origin and stable subject, the sequence starts as an ungrounded effects montage.: Introduce one small material guide on the same optical axis as a stable subject.\n- Changing material rules between phases breaks the transformation chain.: Keep one continuous material family responsible for camera guidance, color accumulation and spatial growth.\n- Flat overlay copy or unreadable decoration cannot prove physical integration.: Let the material form one readable, depth-bearing structure inside the scene and hold it briefly.\n- A disconnected new room would read as a scene swap.: Expand the same material into an environment that still contains the original subject and prior palette.\n- An arbitrary end card would not prove continuity with the preceding world.: Use one late camera rise to resolve the dimensional scene into a held graphic sheet that preserves subject and material history.\nDo not copy from the source: the source black-haired fashion model and printed white dress; the source watercolor ribbon palette and ivory paper gallery; LET SILENCE BLOOM; AQUARELLE No.7; WEAR THE UNSEEN; the source flower-petal chamber and fashion-ad poster layout; MiniMax and Hailuo AI watermarks",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-suspended-world-terminal-resumption-v1",
+      "label": "世界悬停｜持续靠近到末端复流",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让一个本应高速运动的复杂环境整体悬停，以连续第一视角推进和重复地标证明时间仍被锁住；局部手部只负责对齐与观察，最后只在片尾发生一次全局复流和速度跃迁。",
+      "input_format": "复杂环境整体悬停 + 第一视角连续移动 + 至少3个冻结地标 + 局部对齐但不强称接触 + 末端只复流一次",
+      "recommended_input": "头盔视角穿过整体悬停的轨道装配舱，货运环、机械臂、螺栓和冷却液珠始终冻结；探针只与校准棱镜对齐但不接触，片尾所有机构与相机通道只恢复一次。",
+      "required_anchors": [
+        "Open on a complex environment whose normally moving elements are visibly suspended.",
+        "Move one embodied observer continuously while at least three environmental landmarks remain frozen.",
+        "Sustain the suspended comparison long enough to show that many independent elements share the same state.",
+        "Resume the world only once at the end, with distributed object motion and camera-speed change occurring together."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-azed-ai-2085034121844396472-browser-2085034121844396472-video-1",
+        "case_sha256": "89a29b897bef08ac9fc5a3b94763b85f9289523e935224f5d8555552d16d3bca",
+        "release_score": 4.676,
+        "creative_dna_sha256": "73b1211773ae659bdf5ca33c9047af923dab89a024bf241f9fd5cf3c47d0d4f3",
+        "h3_adapter_sha256": "5cab1bb3e147443a89f1e68e583ca9ab9fbdbacf0cf153112f2f8bd541d40ef3",
+        "seedance20_adapter_sha256": "11df4153f6ffc7def28a719659b1e59a0c3f7b92e4d928610335978011e1e9d2"
+      },
+      "previews": [
+        {
+          "case_id": "x-azed-ai-2085034121844396472-browser-2085034121844396472-video-1",
+          "label": "世界悬停｜持续靠近到末端复流",
+          "short_summary": "先让一个本应高速运动的复杂环境整体悬停，以连续第一视角推进和重复地标证明时间仍被锁住；局部手部只负责对齐与观察，最后只在片尾发生一次全局复流和速度跃迁。",
+          "recommended_input": "头盔视角穿过整体悬停的轨道装配舱，货运环、机械臂、螺栓和冷却液珠始终冻结；探针只与校准棱镜对齐但不接触，片尾所有机构与相机通道只恢复一次。",
+          "required_anchors": [
+            "Open on a complex environment whose normally moving elements are visibly suspended.",
+            "Move one embodied observer continuously while at least three environmental landmarks remain frozen.",
+            "Sustain the suspended comparison long enough to show that many independent elements share the same state.",
+            "Resume the world only once at the end, with distributed object motion and camera-speed change occurring together."
+          ],
+          "sha256": "ec1ff1b161e5a225550d9654951c8c5cba6528b36c1bc41e7033983525a41a19",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish a motion-rich environment in a visibly suspended state, then let one embodied observer move continuously through it while recurring objects prove the world remains locked. Introduce one local inspection alignment without requiring contact, sustain the frozen comparison, and reserve one terminal global resumption in which many independent elements and the camera regain motion together.\nInvariants:\n- inv-01: Open on a complex environment whose normally moving elements are visibly suspended.\n- inv-02: Move one embodied observer continuously while at least three environmental landmarks remain frozen.\n- inv-03: Use one local alignment or inspection focus, but do not require unproven physical contact.\n- inv-04: Sustain the suspended comparison long enough to show that many independent elements share the same state.\n- inv-05: Resume the world only once at the end, with distributed object motion and camera-speed change occurring together.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A quiet empty environment cannot prove suspension.: Open on a complex environment whose normally moving elements are visibly suspended.\n- Cuts or changing landmarks make the state ambiguous.: Move one embodied observer continuously while at least three environmental landmarks remain frozen.\n- A forced touch claim exceeds the visible mechanism.: Use one local alignment or inspection focus, but do not require unproven physical contact.\n- A brief freeze frame reads as an editing trick.: Sustain the suspended comparison long enough to show that many independent elements share the same state.\n- Multiple resumptions dilute the state transition.: Resume the world only once at the end, with distributed object motion and camera-speed change occurring together.\nDo not copy from the source: the source rainy city intersection and neon storefronts; the source first-person bare hand; the source stopped cars, pedestrians and birds; the source orange collision-fragment tableau; the source traffic-resumption staging and signage",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-unstable-support-failed-transfer-v1",
+      "label": "动态承载｜平衡升级到失败落点",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让参与者在固定路线和稳定踏板上建立能力，再把她交给一个会滚动的动态承载面；用多机位持续证明平衡与位移，随后只做一次离开承载面的转移尝试，以清楚的腾空、落水和本人反应完成失败证明。",
+      "input_format": "主体/路线/危险介质/终点 + 稳定穿越基线 + 动态承载面 + 持续平衡证明 + 单次转移失败 + 本人反应",
+      "recommended_input": "种子甲虫先稳定走过三块叶片，再踏上沿树皮轨道滚动的苔藓鼓并持续调整平衡；它只跳一次，未命中干燥盘而落入花粉床，随后自行翻正并闪一次绿灯。",
+      "required_anchors": [
+        "Establish one participant, route direction, hazard medium and destination before the hard section.",
+        "Show a stable traversal phase before the moving support.",
+        "Sustain balance long enough to prove repeated body correction while preserving support and destination in shared geography.",
+        "Use one terminal transfer attempt and show miss, impact medium and the participant's reaction without an invented outcome claim."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-simplyannisa-2085371269537845497-browser-2085371269537845497-video-1",
+        "case_sha256": "b9567d715fc1e2c4a4d8df6fd8a7bcb44c5dbae9105b5575a1fbc2caacb82af0",
+        "release_score": 4.666,
+        "creative_dna_sha256": "6aea5a21e5e6ffa93f88026339f1826f1dc6fcfbd817bb4b8dd10b58f1c140fc",
+        "h3_adapter_sha256": "3f714ed237a86cd1d339dba137dca65337258287a3a9e63c1858914b648ece4d",
+        "seedance20_adapter_sha256": "28a50aa25c00e4c4051499e918a409d9c8caab803981ad09c2eb6adfdd2104f6"
+      },
+      "previews": [
+        {
+          "case_id": "x-simplyannisa-2085371269537845497-browser-2085371269537845497-video-1",
+          "label": "动态承载｜平衡升级到失败落点",
+          "short_summary": "先让参与者在固定路线和稳定踏板上建立能力，再把她交给一个会滚动的动态承载面；用多机位持续证明平衡与位移，随后只做一次离开承载面的转移尝试，以清楚的腾空、落水和本人反应完成失败证明。",
+          "recommended_input": "种子甲虫先稳定走过三块叶片，再踏上沿树皮轨道滚动的苔藓鼓并持续调整平衡；它只跳一次，未命中干燥盘而落入花粉床，随后自行翻正并闪一次绿灯。",
+          "required_anchors": [
+            "Establish one participant, route direction, hazard medium and destination before the hard section.",
+            "Show a stable traversal phase before the moving support.",
+            "Sustain balance long enough to prove repeated body correction while preserving support and destination in shared geography.",
+            "Use one terminal transfer attempt and show miss, impact medium and the participant's reaction without an invented outcome claim."
+          ],
+          "sha256": "2da9a7a2c3332cf07c4cfb027d68aa335e65845d4422d8ba8a4b60cdf6f74b6e",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one participant, a visible route and a stable traversal baseline before introducing a support surface that moves beneath the participant. Prove balance through several views that keep body, moving support and fixed landmarks together, then allow exactly one transfer attempt off the support. Close on the visible miss, impact medium and the participant's own reaction without inventing injury, score or victory.\nInvariants:\n- inv-01: Establish one participant, route direction, hazard medium and destination before the hard section.\n- inv-02: Show a stable traversal phase before the moving support.\n- inv-03: Transfer the participant onto one support whose motion is visible against fixed landmarks.\n- inv-04: Sustain balance long enough to prove repeated body correction while preserving support and destination in shared geography.\n- inv-05: Use one terminal transfer attempt and show miss, impact medium and the participant's reaction without an invented outcome claim.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without route geography, later imbalance has no clear consequence.: Establish one participant, route direction, hazard medium and destination before the hard section.\n- Starting directly on the hard obstacle removes escalation.: Show a stable traversal phase before the moving support.\n- A stationary prop cannot explain the balance corrections.: Transfer the participant onto one support whose motion is visible against fixed landmarks.\n- Fragmentary close-ups hide whether the participant actually traverses.: Sustain balance long enough to prove repeated body correction while preserving support and destination in shared geography.\n- Omitting impact or reaction makes the ending ambiguous.: Use one terminal transfer attempt and show miss, impact medium and the participant's reaction without an invented outcome claim.\nDo not copy from the source: the source live-action young woman and black athletic outfit; the source RoboNeo obstacle-course venue and audience; the source red-white-blue padded course; the source large red rolling cylinder over water; the source missed platform jump and pool reaction staging; RoboNeo watermark",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

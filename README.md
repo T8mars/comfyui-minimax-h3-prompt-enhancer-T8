@@ -7,20 +7,21 @@
 | RunningHub APIKEY（国内版） | 需要适配更多 AI 应用的国内用户 | 适配更多 AI 应用，并可体验最新模型。 | <a href="https://www.runninghub.cn/user-center/1819214514410942465/webapp?inviteCode=rh-v1121"><kbd>获取国内版 APIKEY</kbd></a> |
 | RunningHub APIKEY（海外版） | 海外模型、更宽松审核场景 | 审核更宽松，支持海外模型。 | <a href="https://www.runninghub.ai/user-center/1907375370302308353/webapp?inviteCode=rh-v1121"><kbd>获取海外版 APIKEY</kbd></a> |
 
-# ComfyUI MiniMax-H3 / Seedance 2.0 Prompt Enhancer T8
+# ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 Prompt Enhancer T8
 
-一组面向 MiniMax-H3 与 Seedance 2.0 视频生成的 ComfyUI 提示词增强节点。两个节点都能把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求：贞贞平价小屋固定使用 `bytedance/doubao-seed-evolving`；贞贞的 AI 工坊默认使用 `gemini-3.5-flash`，并允许选择 Custom；OpenAI 兼容模式由用户填写 API Base URL 和视觉模型 ID。输出是可连接下游节点的 `STRING`。
+一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点能把用户文字与真实 `IMAGE` / `VIDEO` 素材放进同一次多模态请求；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊或用户自己的 OpenAI 兼容接口。
 
-两个节点共享已经验证的 API、上传、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法，绝不是把 H3 节点换名字。
+三个节点共享已经验证的 API、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法；Music 3 严格执行官方 `music-caption-rewriter` 的三段描述合同。Music 3 是独立音乐模型，不是 H3 视频模型。
 
-## 两个独立节点
+## 三个独立节点
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
 | `MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
 | `Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
+| `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | 生成 Music 3 歌词与音乐描述 | AUTO、生成歌词、严格保留、局部润色、纯器乐 |
 
-本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频生成、轮询或下载接口。
+本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频或音乐生成、轮询、试听或下载接口。
 
 ## 功能特点
 
@@ -30,7 +31,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。预设只优化提示词，不运行完整制作工作流。
-- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：87 条已发布案例事实归并为 77 个稳定案例 selector（含 10 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 79 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：90 条已发布案例事实归并为 80 个稳定案例 selector（含 10 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 82 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -38,8 +39,10 @@
 - 提供随机种子以及 `fixed / randomize / increment / decrement` 状态。
 - 提供节点内 API Key 输入、遮罩显示、保存、清空和注册链接。
 - 支持贞贞平价小屋、贞贞的 AI 工坊，以及显式配置的 OpenAI 兼容备用接口。
-- 输出单一 `STRING`，可直接连接下游提示词输入。
+- H3/Seedance 输出单一提示词 `STRING`；Music 3 分别输出歌词、Structured Caption、payload JSON 和安全增强报告四个 `STRING`。
 - 新增独立 Seedance 2.0 节点：简单/复杂双路径、AUTO/固定 1–20 镜头、官方/Seedance.nz 引用语法、字幕与稳定性策略。
+- 新增独立 Music 3 节点：完整内置官方 `music-caption-rewriter`、18 个流派索引和 1000 个模板，并严格按 router → 最多 2 个索引 → 最多 3 个模板逐级披露，绝不会把全库塞进一次 LLM 请求。
+- Music 3 的官方 Caption 与歌词完全分离；生成/润色歌词属于清楚标注的 T8 非官方扩展，严格保留模式不会改动用户歌词。
 
 ## 安装
 
@@ -64,6 +67,7 @@ ComfyUI/
 ```text
 MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
+MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 ```
 
 ## 快速使用
@@ -77,6 +81,18 @@ Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 7. 从 `enhanced_prompt` 获取最终字符串。
 
 可以直接把 [`example/minimax_h3_prompt_enhancer_example.json`](./example/minimax_h3_prompt_enhancer_example.json) 拖入 ComfyUI。示例工作流不包含 API Key。
+
+## MiniMax Music 3 快速使用
+
+1. 添加 `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)`。
+2. 在“音乐创意”中写明风格、主题、情绪、用途和希望的编曲发展。
+3. 选择歌词模式：`AUTO / 生成新歌词 / 严格保留歌词 / 按要求润色 / 纯器乐`。已有歌词可以通过普通 `STRING` 接入。
+4. “官方完整（2–4 次请求）”会按官方逐级披露选择参考；“快速核心（1–2 次请求）”只执行官方核心合同。调用次数取决于是否还要生成或润色歌词，不会同时调用三个供应商。
+5. 填写当前所选 LLM 渠道的 API Key，点击“运行 Music 3 提示词与歌词优化”。
+6. 将 `lyrics` 接到 Music 3 的 `input`，将 `music_caption` 接到 `instructions`；也可以直接解析 `music3_payload_json`。
+7. `enhancement_report_json` 只记录阶段、付费请求数、缓存命中、官方快照哈希、Token 预算估算与警告代码，不包含歌词、用户创意、API Key、供应商 URL、模板 ID 或模板正文。
+
+可以直接导入 [`example/music3_prompt_lyrics_enhancer_example.json`](./example/music3_prompt_lyrics_enhancer_example.json)。示例不包含 API Key、音频或官方模板正文。
 
 ## Seedance 2.0 快速使用
 
@@ -121,6 +137,29 @@ Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)
 Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠道能分析音频文件。2026-08-05 的真实能力探测中，平价小屋/兼容模式使用的 `bytedance/doubao-seed-evolving` 明确拒绝 OpenAI 兼容 `input_audio`，返回“audio input is not supported by this model”。新增 AI 工坊渠道不会改变本节点的输入合同：两个节点都没有 `AUDIO` 输入，也不会声称听过上传音频。
 
 用户仍可在文字里描述对白、环境声、动作声、音乐和音色，或保留文字形式的 `@音频N/@Audio N` 意图；这些内容只作为文字理解。探测结论的脱敏记录位于 [`tests/fixtures/seedance20_audio_probe_2026-08-05.txt`](./tests/fixtures/seedance20_audio_probe_2026-08-05.txt)。
+
+## MiniMax Music 3 官方 Skill 与歌词边界
+
+Music 3 节点内置的是 MiniMax 官方 `music-caption-rewriter` 完整快照，固定于提交 `91410fb657c007ae57c60df8240f5ece5be089c7`：18 个 family index、1000 个完整模板、共 1022 个文件。来源、数量与归一化内容树哈希记录在 [`official_skills/SOURCE.json`](./official_skills/SOURCE.json)，测试会现场重算并阻止残缺发布。
+
+官方 Caption 固定按以下顺序输出，默认使用英文并以约 250–450 词作为软目标：
+
+```text
+### Global Metadata
+### Vocal Details
+### Arrangement
+```
+
+- 歌词文本只用于 Music 3 的 `input`；Caption 只用于 `instructions`。节点不会在 Caption 中引用、改写、概括或复述歌词正文，只会传递方括号 section tags 和整体音乐意图。
+- `生成新歌词` 与 `按要求润色` 是 T8 非官方扩展，不冒充官方 Skill；`严格保留歌词` 在本地逐字直通，不产生歌词 LLM 请求。
+- 节点先把用户要求整理为带来源标记的私有 `Music Brief`，再把同一份 BPM、调式、拍号、器乐/人声状态、乐器、排除项和结构约束传给 router、参考选择器与 Caption 编译器。否定句、融合风格或官方歧义词不会被本地关键词强行路由，而是交给官方 router 规则判断。
+- 方括号时间线同时保留 section tags 与安全 control tags，例如 `[Verse 2: breathy vocal]`、`[drums drop out]`；纯器乐的自定义结构也会完整进入 Music Brief。URL、工具调用、系统提示、密钥等疑似注入内容不会作为编曲指令进入官方 Caption 阶段。
+- “按要求润色”可限定全部歌词、指定段落或第 N 次出现；未命中的目标会在付费前报错，目标以外段落由本地逐字合并保护。`严格保留歌词` 永远逐字直通。
+- 歌词语义默认“隐私隔离”：Caption 不读取歌词正文。用户可手填宽泛语义摘要，或明确选择额外一次 LLM 分析；LLM 只返回情绪、叙事强度、能量弧线和人声密度四个枚举，不向 Caption 阶段传递歌词原句。
+- 官方资源、固定核心 Skill 哈希和 18/1000 索引模板完整性会在创建供应商会话和任何付费请求之前检查；残缺或被意外修改时直接本地失败。
+- “阶段缓存”是当前 Python 进程内、10 分钟、仅成功结果的短缓存，用于后段失败后续跑；缓存键只保存加盐哈希并隔离不同凭据，不落盘保存歌词。画布上的请求估算会提示预计阶段和缓存可能减少的调用数。
+- `纯器乐` 输出 `[Instrumental]`，并要求 Caption 不引入歌手。歌词/Caption 目标长度、歌曲时长、BPM、结构和押韵均是软约束，上游返回非空可用内容就不会因偏差报错。
+- 该节点没有 `IMAGE`、`VIDEO` 或 `AUDIO` 输入，不分析参考音乐，也不调用 Music 3 音频生成 API。它只准备文字。
 
 ## 生成类型
 
@@ -250,8 +289,11 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 | `尺度球局｜共享球体串联反差挑战` | 一个持续可见球体串联尺度反差对手、固定目标与动作阶段，以双方可见反应结束而不臆测得分 |
 | `连续变线｜逐层防守到垂直终结` | 固定球场、球与篮筐关系，连续穿过多层可见防守门并逐次改变路线，最后只用一次垂直篮筐动作收束 |
 | `技艺递进｜原料变形到成品特写` | 从单一原料开始，以功能不同且难度递增的手部操作改变形态，经一次不可逆热处理后用成品微距证明结果 |
+| `材质引路｜空间生长到版式定格` | 同一连续材质从微小锚点引导运镜、生成实体并扩展成环境，最后一次升高压成保留历史关系的平面版式 |
+| `世界悬停｜持续靠近到末端复流` | 复杂环境整体冻结而观察者连续穿行，以多个冻结地标持续证明悬停，片尾只恢复一次全局运动 |
+| `动态承载｜平衡升级到失败落点` | 先建立稳定穿越能力，再进入动态承载面并持续证明平衡，最后用一次转移失败、落点与本人反应收束 |
 
-87 条来源案例中有 77 个案例 selector 和 10 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-13-02` 新增 `连续变线｜逐层防守到垂直终结`、`技艺递进｜原料变形到成品特写` 两个稳定 selector，并把一条新证据变体合并进既有 `角色板验真｜四类证据锁定角色`，因此不会重复增加下拉。`batch-2026-08-13-04` 只按当前节点合同刷新 `08-13-01` 的 9 个既有 selector 的 H3/Seedance 2.0 adapter 哈希；名称、机制、推荐输入、GIF 和下拉数量均不变。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
+90 条来源案例中有 80 个案例 selector 和 10 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-13-05` 新增 `材质引路｜空间生长到版式定格`、`世界悬停｜持续靠近到末端复流`、`动态承载｜平衡升级到失败落点` 三个稳定 selector；此前 `08-13-04` 的 9 个 adapter 刷新继续保留。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
 
 另外两个独立的用户贡献社区 Skill 不合并进案例 registry，也不冒充官方 Skill：
 
@@ -262,7 +304,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 
 打开 `MiniMax 官方场景 Skill（8 个可选）` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择任一具体官方场景 Skill 或非官方模板后，节点内都会显示用途、适用/推荐输入格式、必须实现的结构锚点、推荐示例、GIF 和来源链接。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
-GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 89 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
+GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 92 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
 
 维护者仍可选用本地原始案例清单，以显示来源链接或在开发环境优先检查原始预览；普通用户不需要此配置：
 
@@ -298,7 +340,7 @@ python tools/bundle_t8_case_previews.py `
   --ffmpeg F:\AI-T8-video-onekey\ffmpeg\bin\ffmpeg.exe
 ```
 
-导入器要求 87 条案例记录严格组成 77 个 selector + 10 个 evidence variant + 0 个 pending case，并另验 2 个独立社区 Skill，最终生成 79 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
+导入器要求 90 条案例记录严格组成 80 个 selector + 10 个 evidence variant + 0 个 pending case，并另验 2 个独立社区 Skill，最终生成 82 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
@@ -360,7 +402,7 @@ MV 规则按以下方式工作：
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | 界面显示为“H3 核心写作 Skill（始终启用）”；`现有兼容 / 官方 Skill 严格`，默认兼容，严格档位强制英文说明正文 |
 | `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF |
-| `case_template` | `无 / 79 个非官方模板`：77 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
+| `case_template` | `无 / 82 个非官方模板`：80 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |
@@ -393,7 +435,7 @@ Seedance 没有为本节点调用的 Chat Completions 公开确定性 `seed` 请
 
 ## API Key 与接口模式
 
-两个节点中的 Key 都用于当前所选 LLM 渠道的提示词增强请求，不是下游 Seedance 2.0 视频生成 API Key。
+三个节点中的 Key 都用于当前所选 LLM 渠道的提示词增强请求，不是下游 Seedance 2.0 视频生成或 Music 3 音频生成 API Key。
 
 ### 贞贞平价小屋（推荐）
 
@@ -425,7 +467,7 @@ export SEEDANCE_API_KEY="你的 API Key"
 https://ai.t8star.org/v1/chat/completions
 ```
 
-默认模型是 `gemini-3.5-flash`。选择 `Custom（自定义）` 后会显示“自定义模型 ID”，可填写 AI 工坊模型列表中的完整 ID。自定义模型必须自行确认具备图片与视频理解能力；节点不会降级到纯文本模型。
+默认模型是 `gemini-3.5-flash`。选择 `Custom（自定义）` 后会显示“自定义模型 ID”，可填写 AI 工坊模型列表中的完整 ID。H3/Seedance 自定义模型必须自行确认具备图片与视频理解能力；Music 3 节点是纯文本请求，只要求所选模型支持 Chat Completions 文本输入。
 
 可以点击节点底部的[获取 AI 工坊 API Key](https://ai.t8star.org/register?aff=dP7j)。节点中的 Key 留空时读取环境变量 `T8STAR_API_KEY`：
 
@@ -437,7 +479,7 @@ AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL �
 
 ### OpenAI 兼容接口（备用）
 
-备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；模型 ID 必须在节点中填写供应商实际支持的视觉模型。
+备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；H3/Seedance 需要供应商实际支持的视觉模型，Music 3 只需要文本模型。
 
 #### 修复后的节点配置
 
@@ -463,7 +505,7 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 
 ## API Key 安全
 
-两个节点都提供标准 `STRING` API Key 接口，并保留底部的遮罩、显示、保存和清空按钮。外部接线值优先。遮罩只能避免画布上直接显示明文：点击“保存到工作流”后，Key 会进入工作流 JSON。
+三个节点都提供标准 `STRING` API Key 接口，并保留底部的遮罩、显示、保存和清空按钮。外部接线值优先。遮罩只能避免画布上直接显示明文：点击“保存到工作流”后，Key 会进入工作流 JSON。
 
 - 分享工作流前务必点击“清空”。
 - 更安全的方式是把节点 Key 留空并使用环境变量。
@@ -482,7 +524,7 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 
 ## 输出与错误行为
 
-输出只有：
+H3 与 Seedance 2.0 输出：
 
 ```text
 enhanced_prompt: STRING
@@ -500,6 +542,17 @@ MiniMax-H3 节点唯一的本地整理规则：
 
 Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；非空上游正文直接输出。两个节点都不会因目标字数或镜头数量偏差报错，也不会为修复格式自动发起第二次付费请求。
 
+Music 3 输出四个 `STRING`：
+
+```text
+lyrics
+music_caption
+music3_payload_json = {"input": lyrics, "instructions": music_caption}
+enhancement_report_json
+```
+
+Music 3 只在三个官方标题都被唯一命中但顺序错误时进行本地重排；标题缺失或上游使用其他可用格式时直接放行非空正文，同时在增强报告中给出警告代码。目标字数、歌词长度或结构没有精确命中不属于节点错误。报告还会做歌词原句泄漏、所选官方参考短语重叠、纯器乐误加人声、段落时间线遗漏和官方 5000 Token 预算的软检查；这些检查不把已有非空结果变成节点错误。
+
 以下情况仍会报错：
 
 - API Key 无效或余额不足；
@@ -508,7 +561,7 @@ Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；
 - 响应不是合法 JSON；
 - 响应缺少正文或正文全空白。
 
-平价小屋的 `https://api.seedance.nz/v1/chat/completions` 遇到 SSL/建连故障或 HTTP 502/503/504 时会快速重试：共 3 次尝试，间隔 0.5 秒和 1 秒；任意一次取得成功响应都会继续正常输出。401、余额不足、429、读取超时和用户自定义 OpenAI 兼容接口不会自动重试。读取超时时服务端可能已经完成生成，节点会保留错误而不盲目重复付费。免费素材上传遇到 429 时最多重试一次。
+平价小屋的 `https://api.seedance.nz/v1/chat/completions` 遇到 SSL/建连故障，或 HTTP 500/502/503/504 与 Cloudflare 520–526/530 网关故障时会快速重试：共 3 次尝试，间隔 0.5 秒和 1 秒；任意一次取得成功响应都会继续正常输出。401、余额不足、429、读取超时和用户自定义 OpenAI 兼容接口不会自动重试。读取超时时服务端可能已经完成生成，节点会保留错误而不盲目重复付费。免费素材上传遇到 429 时最多重试一次。
 
 ## 测试
 
@@ -518,7 +571,7 @@ Seedance 2.0 没有 H3 固定字段，因此不做字段重排和格式验收；
 .\python\python.exe -m unittest discover -s ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tests -v
 ```
 
-单元测试使用 mock API 和本地媒体夹具，不联网、不上传素材、不产生费用。
+单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏、三种 provider 与重试合同。
 
 `live_smoke.py` 用于平价小屋的 MiniMax-H3；`seedance20_live_smoke.py` 用于平价小屋的 Seedance 2.0。`workshop_live_smoke.py` 会让两个节点各走一次 AI 工坊：H3 使用默认模型，Seedance 2.0 使用 Custom 路径但填写同一个 `gemini-3.5-flash`。测试会生成带独有文字、颜色、形状和两阶段运动的本地图片与完整 4 秒 MP4，并核验两个节点是否真的识别图片和视频时间顺序。真实测试会产生 Token 费用，只有明确接受费用时才运行：
 
@@ -531,6 +584,20 @@ $env:T8STAR_API_KEY="你的 AI 工坊 API Key"
 
 前两个脚本运行前设置 `SEEDANCE_API_KEY`；AI 工坊脚本设置 `T8STAR_API_KEY`。不要把真实 Key 写进命令参数、脚本或工作流后上传到公开仓库。
 
+Music 3 发布质量验收使用 4 个真实工作流：中文新歌词、原歌词逐字保留、纯器乐融合、只改第二段主歌；另用一次批量结构化评审。确定性合同分占 70%，LLM 内容质量评审占 30%，每案总分必须至少 85、内容评审至少 80，且没有标题合同、payload、歌词隔离、器乐或编辑边界硬失败。结果写入脱敏 JSON，不包含 API Key。若个别案例或最终评审失败，脚本会以原子 checkpoint 续跑而不重复已完成案例；通过后自动删除 checkpoint：
+
+```powershell
+$env:SEEDANCE_API_KEY="你的平价小屋 API Key"
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\music3_live_smoke.py --confirm-paid
+```
+
+官方 Skill 不会在用户运行节点时联网更新。维护者拿到经过审阅的 MiniMax-Music3 本地 checkout 后，可先只读核验，再显式更新固定快照；工具会检查 18 个索引、1000 个模板、1022 个文件和归一化哈希，并同步 `SOURCE.json` 与运行时常量：
+
+```powershell
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\update_music3_official_skill.py --check-current
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\update_music3_official_skill.py --source-dir D:\MiniMax-Music3 --commit 40位提交SHA --apply
+```
+
 ## 参考资料
 
 - [MiniMax-H3 基础提示词指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md)
@@ -542,6 +609,8 @@ $env:T8STAR_API_KEY="你的 AI 工坊 API Key"
 - [Seedance 模型页面](https://api.seedance.nz/pricing/bytedance%2Fdoubao-seed-evolving)
 - [Seedance 2.0 官方模型页](https://seed.bytedance.com/en/seedance2_0)
 - [Seedance 2.0 官方 Prompt Optimizer Skill](https://arkdocs.tos-cn-beijing.volces.com/files/video-generation/SKILL.md)
+- [MiniMax Music 3 官方仓库](https://github.com/MiniMax-AI/MiniMax-Music3)
+- [MiniMax Music 3 官方 `music-caption-rewriter` Skill（固定提交）](https://github.com/MiniMax-AI/MiniMax-Music3/tree/91410fb657c007ae57c60df8240f5ece5be089c7/skills/music-caption-rewriter)
 
 ## 说明
 
