@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 75,
-  "case_selector_template_count": 66,
+  "source_case_count": 84,
+  "case_selector_template_count": 75,
   "community_skill_count": 2,
-  "selector_template_count": 68,
+  "selector_template_count": 77,
   "evidence_variant_count": 9,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -3861,6 +3861,501 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish a complete ensemble and its audience or work field, bring two central contributors into a shared action, isolate one lead long enough for a complete proof phrase while the ensemble remains spatially implied, then reintroduce the co-lead and finish on a wider synchronized group state.\nInvariants:\n- inv-01: Establish the full ensemble and surrounding response field before isolating a lead.\n- inv-02: Bring two central contributors into one shared action before ownership narrows.\n- inv-03: Give one lead enough uninterrupted screen ownership to complete a proof phrase.\n- inv-04: Reintroduce the co-lead before the ending.\n- inv-05: Finish wide enough to show the ensemble responding in one synchronized state.\nVariable slots:\n- lead_subject: An original stable subject or pair whose role is clear without source identity.\n- setting: A materially new setting with fixed spatial anchors and no source-specific location.\n- causal_carrier: One object, route, mark or device that visibly carries the causal chain.\n- state_change: Five ordered states with observable handoffs, not a decorative montage.\n- camera_grammar: A new proof-oriented information order that does not copy source shot boundaries.\n- payoff: A held final consequence that resolves or recontextualizes the setup.\n- sound_family: An original hierarchy of story-world cues supporting each visible change.\nFailure prevention:\n- Opening close hides the ensemble stakes.: Establish the full ensemble and surrounding response field before isolating a lead.\n- An immediate solo gives no handoff.: Bring two central contributors into one shared action before ownership narrows.\n- Rapid cutting never establishes ownership.: Give one lead enough uninterrupted screen ownership to complete a proof phrase.\n- A solo-only ending abandons the opening pair.: Reintroduce the co-lead before the ending.\n- Ending close loses the group payoff.: Finish wide enough to show the ensemble responding in one synchronized state.\nDo not copy from the source: source retro male singers and band; Eddie & The Comet Tails sign; source stage, microphones and audience; the exact rock performance blocking and wardrobe",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-readiness-microproof-departure-v1",
+      "label": "载具启程｜微观检查累积到离场证明",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先建立载具与操作者，再用多个局部检查镜头逐项证明准备状态；一次明确激活把静态部件转成联动运动，最后以远景离场证明整套系统已投入使用。",
+      "input_format": "原创操作者与载具 + 至少3项不同准备检查 + 1次明确激活 + 至少2个组件联动 + 广角持续离场证明",
+      "recommended_input": "花粉技术员在轨道温室依次检查风标、种子鼓锁扣和磁力脚板，只激活一次巡检车；轮舱与种子鼓联动后沿玻璃轨道启程，并以穿越两段种植舱的高位广角收束。",
+      "required_anchors": [
+        "Establish one operator and one inactive carrier in a shared frame.",
+        "Give each close insert a different readiness job rather than repeating beauty details.",
+        "After activation, show at least two components responding in the same causal direction.",
+        "End with sustained travel in a wider spatial proof, not another static close-up."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-dheepanratnam-2042910477320114293-video-1",
+        "case_sha256": "a9bf7305b31fa4731c7f11e3ca9919c69eb75fb20c3ebbfbe639f79bfdead8c8",
+        "release_score": 4.595,
+        "creative_dna_sha256": "f7c5fd2889b1b6692f98608eeb9f2e4370cc107b331b433ca40633a4e92ed6ab",
+        "h3_adapter_sha256": "528b5b64ce56e45b7b430af60a1baf9f6bd77360ef7545a53910b350a040d645",
+        "seedance20_adapter_sha256": "6ed53db8df4ff1f75600fe99901cbd1320c880564a6d3727cfe379dfe894fa4e"
+      },
+      "previews": [
+        {
+          "case_id": "x-dheepanratnam-2042910477320114293-video-1",
+          "label": "载具启程｜微观检查累积到离场证明",
+          "short_summary": "先建立载具与操作者，再用多个局部检查镜头逐项证明准备状态；一次明确激活把静态部件转成联动运动，最后以远景离场证明整套系统已投入使用。",
+          "recommended_input": "花粉技术员在轨道温室依次检查风标、种子鼓锁扣和磁力脚板，只激活一次巡检车；轮舱与种子鼓联动后沿玻璃轨道启程，并以穿越两段种植舱的高位广角收束。",
+          "required_anchors": [
+            "Establish one operator and one inactive carrier in a shared frame.",
+            "Give each close insert a different readiness job rather than repeating beauty details.",
+            "After activation, show at least two components responding in the same causal direction.",
+            "End with sustained travel in a wider spatial proof, not another static close-up."
+          ],
+          "sha256": "fb591b7c37870124a253d1ceb039eb5e0d854bde9d6c19cf69f9b4185d94b7bb",
+          "width": 640,
+          "height": 374,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA readiness-to-departure sequence works as a causal proof ladder: establish one operator-carrier pair, isolate several different readiness checks, trigger one visible activation, show components responding together, then leave enough wide travel evidence to prove the carrier has entered service.\nInvariants:\n- inv-01: Establish one operator and one inactive carrier in a shared frame.\n- inv-02: Give each close insert a different readiness job rather than repeating beauty details.\n- inv-03: Use one decisive visible activation cue that changes the carrier state.\n- inv-04: After activation, show at least two components responding in the same causal direction.\n- inv-05: End with sustained travel in a wider spatial proof, not another static close-up.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without the baseline, later inserts can look like unrelated machines.: Establish one operator and one inactive carrier in a shared frame.\n- Repeated decorative close-ups do not prove increasing readiness.: Give each close insert a different readiness job rather than repeating beauty details.\n- Without a state change the sequence remains a showroom montage.: Use one decisive visible activation cue that changes the carrier state.\n- A single glowing part does not prove system operation.: After activation, show at least two components responding in the same causal direction.\n- A final detail shot leaves departure unproven.: End with sustained travel in a wider spatial proof, not another static close-up.\nDo not copy from the source: warm desert-orange environment; hooded male rider; skeletal motorcycle silhouette; orange-lit mechanical chassis; source wheel and hand insert order",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-asymmetric-scale-evasion-exchange-v1",
+      "label": "巨体攻防｜共享空间中的连续闪避",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "在不切断地理关系的连续镜头中，让巨体用慢而重的承诺动作占据空间，小体型主体则靠侧移、俯身和绕行依次穿过负空间；双方始终可定位，结尾保留持续对峙而非虚构胜负。",
+      "input_format": "大小尺度明确的两主体 + 共享地面 + 巨体承诺动作 + 小体型可见变线 + 无虚构胜负的共享终态",
+      "recommended_input": "掌上巡检车在明亮纸厂穿越三条标记通道，巨型吊臂缓慢横扫占据空间；巡检车只靠等待、变线与收低传感杆通过，结尾保持双方运行，不宣称胜负。",
+      "required_anchors": [
+        "Establish the full scale difference and a common ground plane before the first exchange.",
+        "Give the large body one slow committed movement that visibly occupies a route.",
+        "Preserve both participants and the ground axis through each recovery.",
+        "Hold the final shared state without inventing defeat, rescue or alliance."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-iamfakhrealam-2041485269602631944-video-1",
+        "case_sha256": "4ad5f476fdeb0897b4f90b8d5d6b21faf36048d5941345589ab6019d4dd7b0f7",
+        "release_score": 4.589,
+        "creative_dna_sha256": "81ed892c2bc0c8b78a42343d46f7765e9d7f64afb743e0553b484f69ccbfb5a5",
+        "h3_adapter_sha256": "3876846fdea8afff20ec6309f3d4ba2785b28650404f29a072d5b95215adb08a",
+        "seedance20_adapter_sha256": "d583cf17ba6e938e61abf14e193ea0389c8a20d9933c6151b126a85ce550b452"
+      },
+      "previews": [
+        {
+          "case_id": "x-iamfakhrealam-2041485269602631944-video-1",
+          "label": "巨体攻防｜共享空间中的连续闪避",
+          "short_summary": "在不切断地理关系的连续镜头中，让巨体用慢而重的承诺动作占据空间，小体型主体则靠侧移、俯身和绕行依次穿过负空间；双方始终可定位，结尾保留持续对峙而非虚构胜负。",
+          "recommended_input": "掌上巡检车在明亮纸厂穿越三条标记通道，巨型吊臂缓慢横扫占据空间；巡检车只靠等待、变线与收低传感杆通过，结尾保持双方运行，不宣称胜负。",
+          "required_anchors": [
+            "Establish the full scale difference and a common ground plane before the first exchange.",
+            "Give the large body one slow committed movement that visibly occupies a route.",
+            "Preserve both participants and the ground axis through each recovery.",
+            "Hold the final shared state without inventing defeat, rescue or alliance."
+          ],
+          "sha256": "b3c63b4545fe792336d1df3a011c236a58ada69edb02d0e47ba5c7a967c2da2f",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.01,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nAn asymmetric-scale exchange is readable when one large body repeatedly commits slow, space-consuming movements and a smaller body answers with precise route changes through visible negative space. Continuous shared geography, not impact spectacle, proves the tactical relationship, and the ending must not claim a victory the image does not show.\nInvariants:\n- inv-01: Establish the full scale difference and a common ground plane before the first exchange.\n- inv-02: Give the large body one slow committed movement that visibly occupies a route.\n- inv-03: Answer with a smaller subject's route change through a visible gap rather than equal-force collision.\n- inv-04: Preserve both participants and the ground axis through each recovery.\n- inv-05: Hold the final shared state without inventing defeat, rescue or alliance.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Tight fragments hide the central asymmetry.: Establish the full scale difference and a common ground plane before the first exchange.\n- Random flailing produces noise instead of pressure.: Give the large body one slow committed movement that visibly occupies a route.\n- A head-on match erases the scale premise.: Answer with a smaller subject's route change through a visible gap rather than equal-force collision.\n- Reframing either participant out breaks the exchange logic.: Preserve both participants and the ground axis through each recovery.\n- An unsupported win condition overstates the visible ending.: Hold the final shared state without inventing defeat, rescue or alliance.\nDo not copy from the source: light-clothed human fighter; large dark rock-like humanoid; misty wet shoreline plane; source circling combat blocking; source body proportions and attack choreography",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-facial-action-unit-calibration-v1",
+      "label": "表情校准｜固定身份下的动作单元序列",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "锁定人物、光线和视角，只让眼睑、眉部、下颌、视线和唇形等局部动作单元分段变化；中间用微小复位防止表情混成连续表演，末段收紧景别检验身份与细节仍稳定。",
+      "input_format": "单一稳定人像 + 固定光线背景视角 + 至少4组分离面部动作 + 1次微小复位 + 后段细节近景",
+      "recommended_input": "年轻陶瓷快递员在冷色医疗亭中保持同一身份与正面机位，依次展示单侧微笑、闭眼、抬眉、侧视和圆唇；中间短暂回中性，最后只推进到面罩密封近景。",
+      "required_anchors": [
+        "Lock one face, background, lighting direction and camera axis before any expression change.",
+        "Separate the expression into readable local units rather than morphing the whole face continuously.",
+        "Keep head motion subordinate to eye, brow, mouth and cheek evidence.",
+        "Use a late closer crop only after identity has been repeatedly proven."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-jeroenvanh-2052849887041974577-video-1",
+        "case_sha256": "08194585974159394e585de6f838b3cff5da128558d562a97348f73a52ae7629",
+        "release_score": 4.591,
+        "creative_dna_sha256": "ca8a568ab89df823def2d07f1c3ef6a13fee1b71ce4aa5e09aa8b40121e5fbe6",
+        "h3_adapter_sha256": "2fe964effa0aa0fd9d64bef65b25fa4d1ba4b5caffa9554aa154d9afba501aa0",
+        "seedance20_adapter_sha256": "28ef0a3296e0e93013d99c86ab422eb650748ac8b100b198fa41a9e400158507"
+      },
+      "previews": [
+        {
+          "case_id": "x-jeroenvanh-2052849887041974577-video-1",
+          "label": "表情校准｜固定身份下的动作单元序列",
+          "short_summary": "锁定人物、光线和视角，只让眼睑、眉部、下颌、视线和唇形等局部动作单元分段变化；中间用微小复位防止表情混成连续表演，末段收紧景别检验身份与细节仍稳定。",
+          "recommended_input": "年轻陶瓷快递员在冷色医疗亭中保持同一身份与正面机位，依次展示单侧微笑、闭眼、抬眉、侧视和圆唇；中间短暂回中性，最后只推进到面罩密封近景。",
+          "required_anchors": [
+            "Lock one face, background, lighting direction and camera axis before any expression change.",
+            "Separate the expression into readable local units rather than morphing the whole face continuously.",
+            "Keep head motion subordinate to eye, brow, mouth and cheek evidence.",
+            "Use a late closer crop only after identity has been repeatedly proven."
+          ],
+          "sha256": "688445fdbfc04b62ca4e04c186d32fea6090133a602dd4de3d6bc18857993d71",
+          "width": 640,
+          "height": 640,
+          "duration_seconds": 15.01,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA facial calibration sequence becomes reusable when identity, lighting, background and camera axis stay fixed while distinct facial action units change one group at a time. Brief micro-resets preserve comparability, and a late controlled crop can test fine identity stability without turning the sequence into a narrative performance.\nInvariants:\n- inv-01: Lock one face, background, lighting direction and camera axis before any expression change.\n- inv-02: Separate the expression into readable local units rather than morphing the whole face continuously.\n- inv-03: Insert at least one partial reset toward the baseline between larger changes.\n- inv-04: Keep head motion subordinate to eye, brow, mouth and cheek evidence.\n- inv-05: Use a late closer crop only after identity has been repeatedly proven.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Changing the portrait setup makes action units impossible to compare.: Lock one face, background, lighting direction and camera axis before any expression change.\n- A blended emotional performance hides which feature changed.: Separate the expression into readable local units rather than morphing the whole face continuously.\n- Without a reset, changes can drift into a different face.: Insert at least one partial reset toward the baseline between larger changes.\n- Large head turns replace facial proof with pose variation.: Keep head motion subordinate to eye, brow, mouth and cheek evidence.\n- Opening in extreme close-up removes the identity baseline.: Use a late closer crop only after identity has been repeatedly proven.\nDo not copy from the source: older bald grey-bearded man; black shirt; dark paneled studio portrait; source facial-expression order; source final mouth close-up",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-contact-proof-to-substrate-breach-v1",
+      "label": "踏面异变｜重复触点到基底破裂",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让稳定步伐反复触发同一种局部表面反应，以可数接触建立规则；随后一次更强的接触让承载面发生不可逆破裂，镜头越过同一边界进入下层世界并以新介质状态收束。",
+      "input_format": "单一主体与连续承载面 + 至少3次可数触点反应 + 1次不可逆破裂 + 同一边界穿越 + 下层介质终态",
+      "recommended_input": "真菌快递员走过透明花粉膜，前四次落脚产生局部分枝叶脉，第五次让膜面折叠撕裂；镜头从同一破口跟随进入发光根系腔室并保持新介质。",
+      "required_anchors": [
+        "Establish one subject, one travel direction and one continuous support surface.",
+        "Repeat the same localized response at multiple contact points.",
+        "Make one contact irreversibly breach the previously proven support rule.",
+        "Carry the camera through the same boundary and hold the new medium."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-umesh-ai-2041561378495082582-video-1",
+        "case_sha256": "7876732674f7f51a2b4396bd78567c53fe769b9c59cc2a62b9202984ecc54a4d",
+        "release_score": 4.605,
+        "creative_dna_sha256": "392dd29355bba37e5e2922a6a65b4d9351ab177e2aedd9dba18742b1b8829fdb",
+        "h3_adapter_sha256": "628e70ff332054c8b45c4507cee5ad796db8f9cc8d86e846bc629e71185a3d20",
+        "seedance20_adapter_sha256": "0f8336d0d28dd434d2928374e1f16529b7adadcfac41f89f25eeca61b5bff9dd"
+      },
+      "previews": [
+        {
+          "case_id": "x-umesh-ai-2041561378495082582-video-1",
+          "label": "踏面异变｜重复触点到基底破裂",
+          "short_summary": "先让稳定步伐反复触发同一种局部表面反应，以可数接触建立规则；随后一次更强的接触让承载面发生不可逆破裂，镜头越过同一边界进入下层世界并以新介质状态收束。",
+          "recommended_input": "真菌快递员走过透明花粉膜，前四次落脚产生局部分枝叶脉，第五次让膜面折叠撕裂；镜头从同一破口跟随进入发光根系腔室并保持新介质。",
+          "required_anchors": [
+            "Establish one subject, one travel direction and one continuous support surface.",
+            "Repeat the same localized response at multiple contact points.",
+            "Make one contact irreversibly breach the previously proven support rule.",
+            "Carry the camera through the same boundary and hold the new medium."
+          ],
+          "sha256": "3f2feeeaf042e9674d3812adb65d3d1042144bd3bf8553cc7d3cdf36f720fd34",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 10.01,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA support-surface transformation is earned by first proving a repeatable contact rule several times, then breaking that exact rule with one stronger contact. The camera must cross the same physical boundary so the lower environment reads as a consequence, and the ending should hold the new medium rather than immediately resetting.\nInvariants:\n- inv-01: Establish one subject, one travel direction and one continuous support surface.\n- inv-02: Repeat the same localized response at multiple contact points.\n- inv-03: Increase response density while preserving subject identity and route.\n- inv-04: Make one contact irreversibly breach the previously proven support rule.\n- inv-05: Carry the camera through the same boundary and hold the new medium.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without a stable surface, later rupture feels arbitrary.: Establish one subject, one travel direction and one continuous support surface.\n- One decorative reaction cannot establish a rule.: Repeat the same localized response at multiple contact points.\n- Unrelated effects replace escalation with montage.: Increase response density while preserving subject identity and route.\n- A random cut below has no physical handoff.: Make one contact irreversibly breach the previously proven support rule.\n- Immediate reset erases the transformation.: Carry the camera through the same boundary and hold the new medium.\nDo not copy from the source: dark-clothed male walker; cosmic reflective water plane; starfield horizon; source foot-ripple design; source underwater particle field",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-mobility-route-to-human-benefit-v1",
+      "label": "移动兑现｜载具跃迁到生活结果",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "用极短篇幅把载具身份、出发、性能跃迁、地理抵达和人的最终使用结果串成一条因果链；技术奇观必须被具体生活结果兑现，结尾不能停在无目的飞驰。",
+      "input_format": "载具与起点 + 1次改变通行方式的能力跃迁 + 可追踪路线 + 抵达物微距 + 人物实际使用结果",
+      "recommended_input": "河上医疗小艇离开太阳能诊所，展开水翼穿越芦苇浅水区，抵达淹水村庄；微距展示冷却药剂胶囊，最后由护士把胶囊装入受损幼苗培养器。",
+      "required_anchors": [
+        "Establish the carrier and departure point before accelerating the route.",
+        "Use one visible capability upgrade that changes how the carrier traverses space.",
+        "Present the delivered object or service in tactile close detail at arrival.",
+        "End with a beneficiary visibly using the result."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-me-rock369-2043622237396410608-video-1",
+        "case_sha256": "d0ee3140071e55ca17a6173a0e58e2819a475d7d3fab7a7a43aff20333ef1f43",
+        "release_score": 4.587,
+        "creative_dna_sha256": "7e1dfc694077ecb804739a27a9d5e19694319ea3224db002c6f644640c94185e",
+        "h3_adapter_sha256": "885df8065935ba6b969f510eb826045db1abf2bf820e6bcde199d1481559d05c",
+        "seedance20_adapter_sha256": "f4f67788615c119c393e24f270e8647e01cdda87bd5106e3bc4e3c769a529595"
+      },
+      "previews": [
+        {
+          "case_id": "x-me-rock369-2043622237396410608-video-1",
+          "label": "移动兑现｜载具跃迁到生活结果",
+          "short_summary": "用极短篇幅把载具身份、出发、性能跃迁、地理抵达和人的最终使用结果串成一条因果链；技术奇观必须被具体生活结果兑现，结尾不能停在无目的飞驰。",
+          "recommended_input": "河上医疗小艇离开太阳能诊所，展开水翼穿越芦苇浅水区，抵达淹水村庄；微距展示冷却药剂胶囊，最后由护士把胶囊装入受损幼苗培养器。",
+          "required_anchors": [
+            "Establish the carrier and departure point before accelerating the route.",
+            "Use one visible capability upgrade that changes how the carrier traverses space.",
+            "Present the delivered object or service in tactile close detail at arrival.",
+            "End with a beneficiary visibly using the result."
+          ],
+          "sha256": "d4fc4e11813be42bed88c660adb367a6d0573c250ab680605ee18183b76c0d0f",
+          "width": 640,
+          "height": 640,
+          "duration_seconds": 10.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA mobility proof becomes meaningful when an identified carrier departs, demonstrates one unmistakable capability upgrade, crosses a legible route, arrives at a specific destination, and hands the sequence to a human-scale benefit. The beneficiary action must visibly consume or use the delivered result rather than merely posing beside it.\nInvariants:\n- inv-01: Establish the carrier and departure point before accelerating the route.\n- inv-02: Use one visible capability upgrade that changes how the carrier traverses space.\n- inv-03: Preserve a readable destination transition instead of random travel montage.\n- inv-04: Present the delivered object or service in tactile close detail at arrival.\n- inv-05: End with a beneficiary visibly using the result.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Opening mid-flight removes the state change and route promise.: Establish the carrier and departure point before accelerating the route.\n- Decorative light with no route effect is not an upgrade.: Use one visible capability upgrade that changes how the carrier traverses space.\n- Unrelated locations make the journey untraceable.: Preserve a readable destination transition instead of random travel montage.\n- Skipping arrival detail leaves the benefit abstract.: Present the delivered object or service in tactile close detail at arrival.\n- A product beauty shot does not prove human benefit.: End with a beneficiary visibly using the result.\nDo not copy from the source: black sport motorcycle; blue airborne motorcycle energy; Japanese urban and residential route; grilled meal close-up; female diner eating with chopsticks",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-protagonist-genre-escalation-trailer-v1",
+      "label": "类型预告｜同一主角跨场景升级到片名",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "以同一核心人物和少数关系锚点贯穿多场景预告：先建立关系，再扩展城市活动与私人压力，随后把冲突升级到公共危险和大尺度奇观，最终用独立片名卡封口；不依赖未转写对白意义。",
+      "input_format": "固定主角与关系锚点 + 公共世界扩展 + 私人脆弱阶段 + 物理危险升级 + 独立原创片名终卡",
+      "recommended_input": "毛毡植物学家预告从温室友情、河上市集远行与种子库危机，升级到机械果园救援和发光花粉爆发，最后切到独立的原创无字叶片徽记。",
+      "required_anchors": [
+        "Introduce one protagonist and one relationship anchor before the location count expands.",
+        "Return to the protagonist while broadening public settings and group size.",
+        "Escalate from interpersonal pressure to visible public physical danger.",
+        "Separate the maximum spectacle from a held, original title lockup."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-kimikoosugi-2036241060763148376-video-1",
+        "case_sha256": "e95f3d229168eaab889324b6bc61cec2969d436953338757904754846c5dddae",
+        "release_score": 4.543,
+        "creative_dna_sha256": "addaf5875329150ad339180e58f34312de480a8aff7675fc5f51dc29ca932a71",
+        "h3_adapter_sha256": "5ebb081b8f1ab67c19c3b6005905fde61ab09b0e0a8544d1913e73e3b6f4507e",
+        "seedance20_adapter_sha256": "ff47631c3829b3b3d6dc90e6f6bf2fac241737a7ff937857c4bad99975bbde32"
+      },
+      "previews": [
+        {
+          "case_id": "x-kimikoosugi-2036241060763148376-video-1",
+          "label": "类型预告｜同一主角跨场景升级到片名",
+          "short_summary": "以同一核心人物和少数关系锚点贯穿多场景预告：先建立关系，再扩展城市活动与私人压力，随后把冲突升级到公共危险和大尺度奇观，最终用独立片名卡封口；不依赖未转写对白意义。",
+          "recommended_input": "毛毡植物学家预告从温室友情、河上市集远行与种子库危机，升级到机械果园救援和发光花粉爆发，最后切到独立的原创无字叶片徽记。",
+          "required_anchors": [
+            "Introduce one protagonist and one relationship anchor before the location count expands.",
+            "Return to the protagonist while broadening public settings and group size.",
+            "Escalate from interpersonal pressure to visible public physical danger.",
+            "Separate the maximum spectacle from a held, original title lockup."
+          ],
+          "sha256": "cce40e8570284173d639df2c33e1bc0eef7b7c15088d81ff357584ac4c387af1",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 26.51,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA short trailer can escalate genre without dialogue evidence by repeatedly returning to one protagonist while broadening the world in five causal registers: relationship, public activity, private vulnerability, physical danger and maximum spectacle. A separate final title card closes the promise; recurring faces and objects, not unverified speech meaning, carry continuity.\nInvariants:\n- inv-01: Introduce one protagonist and one relationship anchor before the location count expands.\n- inv-02: Return to the protagonist while broadening public settings and group size.\n- inv-03: Insert a quieter private or clinical vulnerability phase before action escalation.\n- inv-04: Escalate from interpersonal pressure to visible public physical danger.\n- inv-05: Separate the maximum spectacle from a held, original title lockup.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Unrelated opening faces create a generic clip reel.: Introduce one protagonist and one relationship anchor before the location count expands.\n- Pure location montage loses narrative ownership.: Return to the protagonist while broadening public settings and group size.\n- Constant action leaves no emotional pressure change.: Insert a quieter private or clinical vulnerability phase before action escalation.\n- An arbitrary explosion has no dramatic ladder.: Escalate from interpersonal pressure to visible public physical danger.\n- No title closure makes the montage feel like an excerpt.: Separate the maximum spectacle from a held, original title lockup.\nDo not copy from the source: Japanese live-action cast; source taxi nightlife hospital and boxing montage; burning interior and explosion climax; source Japanese title typography; source relationship and action ordering",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-passive-anchor-to-extraordinary-exit-v1",
+      "label": "静态伏击｜从被动锚点升级到异能出口",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先用长停留把主角固定在一个可读地点，再让威胁进入同一空间并逐次压缩活动余地；主角通过连续恢复和环境锚点维持身份与方向，最后只允许一次超常出口改变冲突状态。",
+      "input_format": "被动主角与固定地点 + 威胁进入同一空间 + 连续受挫与恢复 + 至少2个环境锚点 + 仅1次超常出口",
+      "recommended_input": "纸艺档案管理员在目录桌旁休息，三只墨迹飞蛾进入同一房间；人物围绕两座编号书架受挫、恢复，最后只出现一次弹出式索引门进入折叠地图走廊。",
+      "required_anchors": [
+        "Hold one passive protagonist and a stable location long enough to establish a true calm baseline.",
+        "Let threats enter the already established geography rather than cutting to a new arena.",
+        "Keep at least two environmental anchors readable through the action.",
+        "Reserve one extraordinary device or exit for the final state change."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-ix00ai-2040784936316338316-video-1",
+        "case_sha256": "be11bd96cfdb2ba04fbb4aba8f09dcf774e9c77df6d24deb88177ec7f89c782e",
+        "release_score": 4.555,
+        "creative_dna_sha256": "1841a47f88e03e3d5caa5c35c8a3bcf2bd17ef3382cc6ede5301cdd4ae2a4671",
+        "h3_adapter_sha256": "441801841cb014832ca6746fd859440b324f5bdaa7e7c8eaebff5beac98656f9",
+        "seedance20_adapter_sha256": "9e36eaa0e34417be1ebc9be822e5ce82fb07a006d3a95442876df4a2bbb8524d"
+      },
+      "previews": [
+        {
+          "case_id": "x-ix00ai-2040784936316338316-video-1",
+          "label": "静态伏击｜从被动锚点升级到异能出口",
+          "short_summary": "先用长停留把主角固定在一个可读地点，再让威胁进入同一空间并逐次压缩活动余地；主角通过连续恢复和环境锚点维持身份与方向，最后只允许一次超常出口改变冲突状态。",
+          "recommended_input": "纸艺档案管理员在目录桌旁休息，三只墨迹飞蛾进入同一房间；人物围绕两座编号书架受挫、恢复，最后只出现一次弹出式索引门进入折叠地图走廊。",
+          "required_anchors": [
+            "Hold one passive protagonist and a stable location long enough to establish a true calm baseline.",
+            "Let threats enter the already established geography rather than cutting to a new arena.",
+            "Keep at least two environmental anchors readable through the action.",
+            "Reserve one extraordinary device or exit for the final state change."
+          ],
+          "sha256": "4550d34100c9f363c07769ce301cd667b0152888dc1237a2c16f414cca35e98c",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 30.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA calm-to-extraordinary encounter gains force by first anchoring one passive subject in a stable space, then admitting threats into that same geography, escalating through recoverable exchanges, and reserving one extraordinary transition for the final state change. Repeated environmental anchors prevent action coverage from becoming spatially anonymous.\nInvariants:\n- inv-01: Hold one passive protagonist and a stable location long enough to establish a true calm baseline.\n- inv-02: Let threats enter the already established geography rather than cutting to a new arena.\n- inv-03: Use sequential exchanges with visible recovery, not uninterrupted effortless dominance.\n- inv-04: Keep at least two environmental anchors readable through the action.\n- inv-05: Reserve one extraordinary device or exit for the final state change.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Immediate action removes the transformation arc.: Hold one passive protagonist and a stable location long enough to establish a true calm baseline.\n- A location reset breaks the passive anchor.: Let threats enter the already established geography rather than cutting to a new arena.\n- A single overpowering move collapses the middle ladder.: Use sequential exchanges with visible recovery, not uninterrupted effortless dominance.\n- Abstract effect coverage loses the encounter geometry.: Keep at least two environmental anchors readable through the action.\n- Repeated portals or powers make the final transition ordinary.: Reserve one extraordinary device or exit for the final state change.\nDo not copy from the source: school rooftop; young female student on a bench; source opponents and fight choreography; purple energy weapons and portals; source school-uniform silhouettes",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-environmental-front-area-escalation-v1",
+      "label": "环境前沿｜局部点燃到全域占据",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "在同一地理中用一个可追踪的环境前沿逐阶段扩张：局部起点、连续蔓延、跨越地标、遮蔽更多空间，最终用广角证明场地状态已整体改变；不依赖来源中的战斗身份或火焰表面。",
+      "input_format": "有边界环境 + 单一连续变化前沿 + 至少2个固定地标 + 占据面积逐级扩大 + 终态广角对照",
+      "recommended_input": "圆形水族实验室中，掌大蓝色藻团从进水口连续扩张，依次越过三座编号珊瑚门；最终俯拍证明大部分水槽已改变，同时保留一个清水口袋对照。",
+      "required_anchors": [
+        "Establish a bounded environment, an untouched region and one localized starting front.",
+        "Grow one contiguous front instead of spawning unrelated effects everywhere.",
+        "Increase occupied area and material state, not just brightness.",
+        "Hold a final wide comparison showing transformed and residual untouched regions."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-artedeingenio-2039333442077241627-video-1",
+        "case_sha256": "0d82cea4ce3048161db267ae13346d274181b9af8c8b2386ad95cd42c454d91a",
+        "release_score": 4.597,
+        "creative_dna_sha256": "a44fe95b5729cf3f9e9868fe450e0c30ddbcab2207a061df0b79431dbef4f1e9",
+        "h3_adapter_sha256": "7eb5db42501ed6587c0816fc9c244937421b82876ed84a873aba2216b4055b4d",
+        "seedance20_adapter_sha256": "97fdf3515fb5b3d01c18485e3171271285dc36dfad38893d34262e65d363d37f"
+      },
+      "previews": [
+        {
+          "case_id": "x-artedeingenio-2039333442077241627-video-1",
+          "label": "环境前沿｜局部点燃到全域占据",
+          "short_summary": "在同一地理中用一个可追踪的环境前沿逐阶段扩张：局部起点、连续蔓延、跨越地标、遮蔽更多空间，最终用广角证明场地状态已整体改变；不依赖来源中的战斗身份或火焰表面。",
+          "recommended_input": "圆形水族实验室中，掌大蓝色藻团从进水口连续扩张，依次越过三座编号珊瑚门；最终俯拍证明大部分水槽已改变，同时保留一个清水口袋对照。",
+          "required_anchors": [
+            "Establish a bounded environment, an untouched region and one localized starting front.",
+            "Grow one contiguous front instead of spawning unrelated effects everywhere.",
+            "Increase occupied area and material state, not just brightness.",
+            "Hold a final wide comparison showing transformed and residual untouched regions."
+          ],
+          "sha256": "7831cf786c59336fad591f89455c9017fdc678b7da269d726defac35da34edbf",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEnvironmental escalation is legible when one contiguous front grows through a fixed geography and each phase occupies a larger measurable area. Static anchors must remain visible long enough to prove propagation, and the final wide state should show that the environment—not merely exposure or color grading—has materially changed.\nInvariants:\n- inv-01: Establish a bounded environment, an untouched region and one localized starting front.\n- inv-02: Grow one contiguous front instead of spawning unrelated effects everywhere.\n- inv-03: Cross at least two fixed spatial anchors in order.\n- inv-04: Increase occupied area and material state, not just brightness.\n- inv-05: Hold a final wide comparison showing transformed and residual untouched regions.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Opening on a fully transformed field removes progression.: Establish a bounded environment, an untouched region and one localized starting front.\n- Random flashes create spectacle without a readable process.: Grow one contiguous front instead of spawning unrelated effects everywhere.\n- Without anchors, apparent growth may be only camera movement.: Cross at least two fixed spatial anchors in order.\n- Exposure shifts can imitate escalation without propagation.: Increase occupied area and material state, not just brightness.\n- A tight climax cannot verify site-wide change.: Hold a final wide comparison showing transformed and residual untouched regions.\nDo not copy from the source: dark battlefield terrain; large silhouetted creature; orange fire waves; source ignition layout; source battle and flame climax",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-scale-mismatch-sports-token-challenge-v1",
+      "label": "尺度球局｜共享球体串联反差挑战",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "用一个持续可见的球体把尺度反差对手、固定目标和动作阶段串在同一场地：控球建立规则、巨体封锁空间、小体型改变路线、抛物线把挑战推向目标，最后以双方可见反应收束但不臆测得分。",
+      "input_format": "两种明显尺度 + 共享球体或令牌 + 固定目标 + 可见变线 + 单一轨迹 + 不虚构结果的反应终态",
+      "recommended_input": "硬币大小的配送机器人控制发光珠，巨型充气守门体封锁桌面通道；机器人变线并把珠子抛向悬空铜环，结尾保持双方和目标同框，不在未确认时宣称成功。",
+      "required_anchors": [
+        "Establish two clearly different scales, one shared token and one fixed target in the same arena.",
+        "Use repeated token control to prove who currently owns the action.",
+        "Show one readable token trajectory toward the fixed target.",
+        "End on a visible shared reaction state and only claim success if the target result is directly shown."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-lordofacca-2039127175949922542-video-1",
+        "case_sha256": "62477cbed4003280a958f312ba922657c5eb18179565d7768ca6fb1c608a1820",
+        "release_score": 4.573,
+        "creative_dna_sha256": "389974c185bf5cbd7b696b227cf1b6b205a66469b2c11fe73297767b1713bb7a",
+        "h3_adapter_sha256": "292c90f655700e09d4e844ad0b15d3f3ee10dd2fe3f036511de89d835c6f7573",
+        "seedance20_adapter_sha256": "0254c4e6406aba8db341404bb04d14afc7fea67c585838980f2acc1e42755128"
+      },
+      "previews": [
+        {
+          "case_id": "x-lordofacca-2039127175949922542-video-1",
+          "label": "尺度球局｜共享球体串联反差挑战",
+          "short_summary": "用一个持续可见的球体把尺度反差对手、固定目标和动作阶段串在同一场地：控球建立规则、巨体封锁空间、小体型改变路线、抛物线把挑战推向目标，最后以双方可见反应收束但不臆测得分。",
+          "recommended_input": "硬币大小的配送机器人控制发光珠，巨型充气守门体封锁桌面通道；机器人变线并把珠子抛向悬空铜环，结尾保持双方和目标同框，不在未确认时宣称成功。",
+          "required_anchors": [
+            "Establish two clearly different scales, one shared token and one fixed target in the same arena.",
+            "Use repeated token control to prove who currently owns the action.",
+            "Show one readable token trajectory toward the fixed target.",
+            "End on a visible shared reaction state and only claim success if the target result is directly shown."
+          ],
+          "sha256": "de9565f1914b147f35766c315fe8766e9cdebc9f715a79137c86ec8aba257b90",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.26,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA scale-mismatch challenge stays coherent when one shared token remains visible across control, obstruction, route change and an attempt toward a fixed target. Court or arena markings must preserve geography, and the ending may show reaction or suspense without claiming a result that is not visibly confirmed.\nInvariants:\n- inv-01: Establish two clearly different scales, one shared token and one fixed target in the same arena.\n- inv-02: Use repeated token control to prove who currently owns the action.\n- inv-03: Let the larger body obstruct space while the smaller body changes route rather than matching size.\n- inv-04: Show one readable token trajectory toward the fixed target.\n- inv-05: End on a visible shared reaction state and only claim success if the target result is directly shown.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Hiding any one element reduces the scene to unrelated spectacle.: Establish two clearly different scales, one shared token and one fixed target in the same arena.\n- A disappearing token breaks the causal chain.: Use repeated token control to prove who currently owns the action.\n- Equalized movement makes the size contrast cosmetic.: Let the larger body obstruct space while the smaller body changes route rather than matching size.\n- A cut directly to reaction hides the challenge's decisive action.: Show one readable token trajectory toward the fixed target.\n- An unsupported score claim invents the payoff.: End on a visible shared reaction state and only claim success if the target result is directly shown.\nDo not copy from the source: basketball court; small male player; giant female defender; basketball and hoop staging; source crowd and reaction close-ups",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

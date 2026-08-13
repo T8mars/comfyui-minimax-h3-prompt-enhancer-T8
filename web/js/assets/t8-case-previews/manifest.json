@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 77,
+  "preview_count": 86,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -609,6 +609,78 @@
       "source_sha256": "bb1fee021051bcb3cac8adf4e6e2889fed455d84b474bc570ebc451328c28630",
       "sha256": "5676ba527dd41a9663bc8179eb3f400789bc14575802a26553e3771311376263",
       "bytes": 1499154,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-dheepanratnam-2042910477320114293-video-1",
+      "file": "208d2490cc32d42143c25c9adfea7e6bf2a8611ca7d3cb49c2013462e342241b.gif",
+      "source_sha256": "fb591b7c37870124a253d1ceb039eb5e0d854bde9d6c19cf69f9b4185d94b7bb",
+      "sha256": "208d2490cc32d42143c25c9adfea7e6bf2a8611ca7d3cb49c2013462e342241b",
+      "bytes": 1964795,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-iamfakhrealam-2041485269602631944-video-1",
+      "file": "fa47f4b35cca9db28fbd2eddbb0b85b542aa50cfdb543f008e5614faf47127fe.gif",
+      "source_sha256": "b3c63b4545fe792336d1df3a011c236a58ada69edb02d0e47ba5c7a967c2da2f",
+      "sha256": "fa47f4b35cca9db28fbd2eddbb0b85b542aa50cfdb543f008e5614faf47127fe",
+      "bytes": 2793213,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-jeroenvanh-2052849887041974577-video-1",
+      "file": "2042b47312fd790f3ad19d5245c9fc22803c32da6df51c770a28e847d68472b4.gif",
+      "source_sha256": "688445fdbfc04b62ca4e04c186d32fea6090133a602dd4de3d6bc18857993d71",
+      "sha256": "2042b47312fd790f3ad19d5245c9fc22803c32da6df51c770a28e847d68472b4",
+      "bytes": 2753123,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-umesh-ai-2041561378495082582-video-1",
+      "file": "b5f0788aec57655aa55332e187009a009580eeec312d09d4f79cd6efc8caf220.gif",
+      "source_sha256": "3f2feeeaf042e9674d3812adb65d3d1042144bd3bf8553cc7d3cdf36f720fd34",
+      "sha256": "b5f0788aec57655aa55332e187009a009580eeec312d09d4f79cd6efc8caf220",
+      "bytes": 1310361,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-me-rock369-2043622237396410608-video-1",
+      "file": "2ffd1cf868e5c86b92f4e8bf312503e09dfff266ad163035e75298eae7c7f961.gif",
+      "source_sha256": "d4fc4e11813be42bed88c660adb367a6d0573c250ab680605ee18183b76c0d0f",
+      "sha256": "2ffd1cf868e5c86b92f4e8bf312503e09dfff266ad163035e75298eae7c7f961",
+      "bytes": 2175276,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-kimikoosugi-2036241060763148376-video-1",
+      "file": "5ed1124a90d2218bc44cfeba973fd81b783d312bb5733a1cc0a9a254eb4dc434.gif",
+      "source_sha256": "cce40e8570284173d639df2c33e1bc0eef7b7c15088d81ff357584ac4c387af1",
+      "sha256": "5ed1124a90d2218bc44cfeba973fd81b783d312bb5733a1cc0a9a254eb4dc434",
+      "bytes": 2993517,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-ix00ai-2040784936316338316-video-1",
+      "file": "f95dc4ae663b73468190d559d8b5e578e4673e868657095732e4655a7cded642.gif",
+      "source_sha256": "4550d34100c9f363c07769ce301cd667b0152888dc1237a2c16f414cca35e98c",
+      "sha256": "f95dc4ae663b73468190d559d8b5e578e4673e868657095732e4655a7cded642",
+      "bytes": 4549945,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-artedeingenio-2039333442077241627-video-1",
+      "file": "abcd50ad47dae4b0d87f1d7dcae8d0749d1f9b532c5c4a8da265c0ef93a15620.gif",
+      "source_sha256": "7831cf786c59336fad591f89455c9017fdc678b7da269d726defac35da34edbf",
+      "sha256": "abcd50ad47dae4b0d87f1d7dcae8d0749d1f9b532c5c4a8da265c0ef93a15620",
+      "bytes": 1575237,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-lordofacca-2039127175949922542-video-1",
+      "file": "acb22623a27d85c7f8a961bc236d0bbe41f52b8c3c41f838662c1567e384a746.gif",
+      "source_sha256": "de9565f1914b147f35766c315fe8766e9cdebc9f715a79137c86ec8aba257b90",
+      "sha256": "acb22623a27d85c7f8a961bc236d0bbe41f52b8c3c41f838662c1567e384a746",
+      "bytes": 2369828,
       "human_preview_only": true
     },
     {
