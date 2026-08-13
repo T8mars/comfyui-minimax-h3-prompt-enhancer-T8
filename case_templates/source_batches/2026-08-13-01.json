@@ -10,8 +10,8 @@
       "summary": "先建立载具与操作者，再用多个局部检查镜头逐项证明准备状态；一次明确激活把静态部件转成联动运动，最后以远景离场证明整套系统已投入使用。",
       "case_sha256": "a9bf7305b31fa4731c7f11e3ca9919c69eb75fb20c3ebbfbe639f79bfdead8c8",
       "creative_dna_sha256": "f7c5fd2889b1b6692f98608eeb9f2e4370cc107b331b433ca40633a4e92ed6ab",
-      "h3_adapter_sha256": "528b5b64ce56e45b7b430af60a1baf9f6bd77360ef7545a53910b350a040d645",
-      "seedance20_adapter_sha256": "6ed53db8df4ff1f75600fe99901cbd1320c880564a6d3727cfe379dfe894fa4e",
+      "h3_adapter_sha256": "ff051a209768173e13431ebbb1dd724acb74fb5a4df172afe3867f61bb8dff24",
+      "seedance20_adapter_sha256": "10d9f2c22562715db37ce861c012cfb9a5f85df0b489df285e2a2944ae5b707e",
       "mechanism_fingerprint": "cdbaf441fa431d82f83398795fe7a134af076be7d0d818c10c394737d495894e"
     },
     {
@@ -21,8 +21,8 @@
       "summary": "在不切断地理关系的连续镜头中，让巨体用慢而重的承诺动作占据空间，小体型主体则靠侧移、俯身和绕行依次穿过负空间；双方始终可定位，结尾保留持续对峙而非虚构胜负。",
       "case_sha256": "4ad5f476fdeb0897b4f90b8d5d6b21faf36048d5941345589ab6019d4dd7b0f7",
       "creative_dna_sha256": "81ed892c2bc0c8b78a42343d46f7765e9d7f64afb743e0553b484f69ccbfb5a5",
-      "h3_adapter_sha256": "3876846fdea8afff20ec6309f3d4ba2785b28650404f29a072d5b95215adb08a",
-      "seedance20_adapter_sha256": "d583cf17ba6e938e61abf14e193ea0389c8a20d9933c6151b126a85ce550b452",
+      "h3_adapter_sha256": "bf80d44a9d3be3573e68f872fc07771848f0ea963d3382ba65c64683fb5419df",
+      "seedance20_adapter_sha256": "87704683cd3729504f291600755f0b71c9857be7a56737e4c3f7fbc8d8c0ea2e",
       "mechanism_fingerprint": "71d79bccce8c7a8b58367cf08bb53fa28dd066ef243d1e5a0146476017176a4a"
     },
     {
@@ -32,8 +32,8 @@
       "summary": "锁定人物、光线和视角，只让眼睑、眉部、下颌、视线和唇形等局部动作单元分段变化；中间用微小复位防止表情混成连续表演，末段收紧景别检验身份与细节仍稳定。",
       "case_sha256": "08194585974159394e585de6f838b3cff5da128558d562a97348f73a52ae7629",
       "creative_dna_sha256": "ca8a568ab89df823def2d07f1c3ef6a13fee1b71ce4aa5e09aa8b40121e5fbe6",
-      "h3_adapter_sha256": "2fe964effa0aa0fd9d64bef65b25fa4d1ba4b5caffa9554aa154d9afba501aa0",
-      "seedance20_adapter_sha256": "28ef0a3296e0e93013d99c86ab422eb650748ac8b100b198fa41a9e400158507",
+      "h3_adapter_sha256": "3bcb316c6b6308c53cd295f61aa28f39b75ec9575683ec95d9d6860e1d7ab762",
+      "seedance20_adapter_sha256": "6c63fce0d51aaa02f3c9849e4350786f8fef4b40215f99d8952eb04d1a96af1d",
       "mechanism_fingerprint": "7022fe819cf922ca59d0bffcd7668fa63596cadf3ee2ca43b05a710713666750"
     },
     {
@@ -43,8 +43,8 @@
       "summary": "先让稳定步伐反复触发同一种局部表面反应，以可数接触建立规则；随后一次更强的接触让承载面发生不可逆破裂，镜头越过同一边界进入下层世界并以新介质状态收束。",
       "case_sha256": "7876732674f7f51a2b4396bd78567c53fe769b9c59cc2a62b9202984ecc54a4d",
       "creative_dna_sha256": "392dd29355bba37e5e2922a6a65b4d9351ab177e2aedd9dba18742b1b8829fdb",
-      "h3_adapter_sha256": "628e70ff332054c8b45c4507cee5ad796db8f9cc8d86e846bc629e71185a3d20",
-      "seedance20_adapter_sha256": "0f8336d0d28dd434d2928374e1f16529b7adadcfac41f89f25eeca61b5bff9dd",
+      "h3_adapter_sha256": "f197ad368272a2d94351481fd98ffa2a2bbeeca86ef97e835e18c349ebd26c4f",
+      "seedance20_adapter_sha256": "b73ccaeb62a02cc6b83ed485496eb62e2baa7224ee3477189e8bc014bc641aea",
       "mechanism_fingerprint": "1be370608579ac3c365960da6bf641ffdbfc11cec7bee7b3b68edd8c18e15f6b"
     },
     {
@@ -54,8 +54,8 @@
       "summary": "用极短篇幅把载具身份、出发、性能跃迁、地理抵达和人的最终使用结果串成一条因果链；技术奇观必须被具体生活结果兑现，结尾不能停在无目的飞驰。",
       "case_sha256": "d0ee3140071e55ca17a6173a0e58e2819a475d7d3fab7a7a43aff20333ef1f43",
       "creative_dna_sha256": "7e1dfc694077ecb804739a27a9d5e19694319ea3224db002c6f644640c94185e",
-      "h3_adapter_sha256": "885df8065935ba6b969f510eb826045db1abf2bf820e6bcde199d1481559d05c",
-      "seedance20_adapter_sha256": "f4f67788615c119c393e24f270e8647e01cdda87bd5106e3bc4e3c769a529595",
+      "h3_adapter_sha256": "731273c6261e30ed3975fbbd7786d17f4b4099ab605c27007f959d6e1d680d7e",
+      "seedance20_adapter_sha256": "a65d47a662bb342fdf9eabeef79ce4597de28f4b654ef6a8a374856a44d4a78b",
       "mechanism_fingerprint": "89309a535e6a6b987fed71aca6ba617508f1f2898dc57b44f8415c2114c7e394"
     },
     {
@@ -65,8 +65,8 @@
       "summary": "以同一核心人物和少数关系锚点贯穿多场景预告：先建立关系，再扩展城市活动与私人压力，随后把冲突升级到公共危险和大尺度奇观，最终用独立片名卡封口；不依赖未转写对白意义。",
       "case_sha256": "e95f3d229168eaab889324b6bc61cec2969d436953338757904754846c5dddae",
       "creative_dna_sha256": "addaf5875329150ad339180e58f34312de480a8aff7675fc5f51dc29ca932a71",
-      "h3_adapter_sha256": "5ebb081b8f1ab67c19c3b6005905fde61ab09b0e0a8544d1913e73e3b6f4507e",
-      "seedance20_adapter_sha256": "ff47631c3829b3b3d6dc90e6f6bf2fac241737a7ff937857c4bad99975bbde32",
+      "h3_adapter_sha256": "d825336c616ccf49e6a5d55874bd649a4854450633e66e481131083bd7b02a29",
+      "seedance20_adapter_sha256": "32446b66e9913ecf060a63c46bde0f711bf33711cdc4db4b0c69f8745e19f951",
       "mechanism_fingerprint": "74529f6e8d5fefc6cde006f460ef9abe5d76281ae5f945b63913c2b27e15bc0d"
     },
     {
@@ -76,8 +76,8 @@
       "summary": "先用长停留把主角固定在一个可读地点，再让威胁进入同一空间并逐次压缩活动余地；主角通过连续恢复和环境锚点维持身份与方向，最后只允许一次超常出口改变冲突状态。",
       "case_sha256": "be11bd96cfdb2ba04fbb4aba8f09dcf774e9c77df6d24deb88177ec7f89c782e",
       "creative_dna_sha256": "1841a47f88e03e3d5caa5c35c8a3bcf2bd17ef3382cc6ede5301cdd4ae2a4671",
-      "h3_adapter_sha256": "441801841cb014832ca6746fd859440b324f5bdaa7e7c8eaebff5beac98656f9",
-      "seedance20_adapter_sha256": "9e36eaa0e34417be1ebc9be822e5ce82fb07a006d3a95442876df4a2bbb8524d",
+      "h3_adapter_sha256": "b6f97d1baa9b3fa8eaaf8092e21e24e4ce9cda1c301e1087958718ee4b0bf4cd",
+      "seedance20_adapter_sha256": "8aee72175457431b45d385a3aa14a1d5c899a0fdf1d9453a64238f9fe66c85cd",
       "mechanism_fingerprint": "4c4141c490faf145b3697ab3e28c88cf627a8392b2d9a4a8c1406082cd39cc8c"
     },
     {
@@ -87,8 +87,8 @@
       "summary": "在同一地理中用一个可追踪的环境前沿逐阶段扩张：局部起点、连续蔓延、跨越地标、遮蔽更多空间，最终用广角证明场地状态已整体改变；不依赖来源中的战斗身份或火焰表面。",
       "case_sha256": "0d82cea4ce3048161db267ae13346d274181b9af8c8b2386ad95cd42c454d91a",
       "creative_dna_sha256": "a44fe95b5729cf3f9e9868fe450e0c30ddbcab2207a061df0b79431dbef4f1e9",
-      "h3_adapter_sha256": "7eb5db42501ed6587c0816fc9c244937421b82876ed84a873aba2216b4055b4d",
-      "seedance20_adapter_sha256": "97fdf3515fb5b3d01c18485e3171271285dc36dfad38893d34262e65d363d37f",
+      "h3_adapter_sha256": "92c8efeecdf8ad2f34040d569b7e967fd77921d294e2d92aa11a64aae69aba93",
+      "seedance20_adapter_sha256": "3709b55c65b52f58b2fb41e13c8224509cbf2ba7f108d421f7b5b173b4adcc70",
       "mechanism_fingerprint": "8d26fbf93a630d59f8bf6ff9f485a244f5174e373dea234f045a0279a0c19560"
     },
     {
@@ -98,8 +98,8 @@
       "summary": "用一个持续可见的球体把尺度反差对手、固定目标和动作阶段串在同一场地：控球建立规则、巨体封锁空间、小体型改变路线、抛物线把挑战推向目标，最后以双方可见反应收束但不臆测得分。",
       "case_sha256": "62477cbed4003280a958f312ba922657c5eb18179565d7768ca6fb1c608a1820",
       "creative_dna_sha256": "389974c185bf5cbd7b696b227cf1b6b205a66469b2c11fe73297767b1713bb7a",
-      "h3_adapter_sha256": "292c90f655700e09d4e844ad0b15d3f3ee10dd2fe3f036511de89d835c6f7573",
-      "seedance20_adapter_sha256": "0254c4e6406aba8db341404bb04d14afc7fea67c585838980f2acc1e42755128",
+      "h3_adapter_sha256": "99867c7d7853e68a2aedf6e13ab830cae5696aa15b6983761f424442b8574d1f",
+      "seedance20_adapter_sha256": "b073d6e250bb0810d9518fe5e2cbcc1bc434713f5ae42e9bfdc0988cbe08f393",
       "mechanism_fingerprint": "9404f27794b0c34e9e47563c6f98c08c87651748645883c1a26573d359d9a7a9"
     }
   ]

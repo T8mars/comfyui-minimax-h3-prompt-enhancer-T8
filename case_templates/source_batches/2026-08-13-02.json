@@ -1,0 +1,29 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-13-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-0xbisc-2037481799325286426-video-1",
+      "template_id": "t8-case-successive-gates-vertical-finish-v1",
+      "label": "连续变线｜逐层防守到垂直终结",
+      "summary": "先固定球场、球与篮筐关系，让持球者连续穿过多层可见防守门，每次用不同路线变化解决空间问题；最后只做一次垂直篮筐动作，并用人群反应与共享场地收束。",
+      "case_sha256": "fc39dff7b764e44e116455ef4486e1c15e99cac5a7234340f9a38ff4a083347a",
+      "creative_dna_sha256": "e49724bd02428533e31eedf4bb8b8cd46997224864d45defea9d067eb31d480e",
+      "h3_adapter_sha256": "0b0c80b22b48139dbf567cc9fc905b5bc24558d558f4de9966ac800ce43eeae8",
+      "seedance20_adapter_sha256": "9b521c4cb22df565ad13524f868905a3e681a2894f59ba83d9d7061ff11872fd",
+      "mechanism_fingerprint": "c1285b56defa90b8e019e865fa35421e42a4aa463d71d9051a63583876ef2837"
+    },
+    {
+      "case_id": "x-0xbisc-2036407484836094014-video-1",
+      "template_id": "t8-case-material-skill-escalation-finished-proof-v1",
+      "label": "技艺递进｜原料变形到成品特写",
+      "summary": "先给出单一原料，再用功能不同且难度递增的手部操作连续改变其形态；一次明确热处理完成不可逆转折，随后快速装盘，并用成品微距证明前面所有动作得到结果。",
+      "case_sha256": "2af00efe3e7f520d9c61f9495087148dcdbe5874b05282ceead44efdecf4aee2",
+      "creative_dna_sha256": "dc345eac3485c29b0f3ce968583c4563d634e620178e2fcffcee8b9a2f7353ed",
+      "h3_adapter_sha256": "b4bf316d201db0ec011795d61bc0ac92ac0c65ed52eb4a0a951fcdceb725cf8f",
+      "seedance20_adapter_sha256": "8d03acd9791699f03be0646e700b2bc26ad06278562cf9ac622f84c7069229c7",
+      "mechanism_fingerprint": "b21cec6e5d40dc18fe3435f69ca9e14bcf0aa7ff52df9efd1e79ba9ebc7de0fd"
+    }
+  ]
+}

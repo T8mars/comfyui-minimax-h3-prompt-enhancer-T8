@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 84,
-  "case_selector_template_count": 75,
+  "source_case_count": 87,
+  "case_selector_template_count": 77,
   "community_skill_count": 2,
-  "selector_template_count": 77,
-  "evidence_variant_count": 9,
+  "selector_template_count": 79,
+  "evidence_variant_count": 10,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
   "templates": [
@@ -1185,6 +1185,23 @@
           "width": 480,
           "height": 480,
           "duration_seconds": 13.38,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-aimikoda-2062516255941095583-video-1",
+          "label": "角色板验真｜光轨技能跨镜锁定身份",
+          "short_summary": "固定角色板持续在画面下方，上方实景区用不同运动轮廓、距离、机位和晚段技能证明同一角色；作为既有角色卡验真模板的新证据来源，不新增下拉项。",
+          "recommended_input": "固定毛毡零重力档案员身份板不变，上方实景依次验证舱口姿势、星图工具、磁力鞋步态、护目镜反应和一次漂浮蜡封捕捉；只作为既有角色板模板的证据变体。",
+          "required_anchors": [
+            "Keep one compact identity board unchanged and readable throughout.",
+            "Verify the same subject across at least three different live-view scales or poses.",
+            "Preserve key identity anchors through camera-angle and motion changes.",
+            "Reserve one late complex skill proof and hold it beside the unchanged board."
+          ],
+          "sha256": "1bc2d16ace9177409c1f2dd7eddc457ff71401c2cb1931f8acafb06a1afa5b50",
+          "width": 640,
+          "height": 720,
+          "duration_seconds": 15.01,
           "human_preview_only": true
         }
       ],
@@ -3893,8 +3910,8 @@
         "case_sha256": "a9bf7305b31fa4731c7f11e3ca9919c69eb75fb20c3ebbfbe639f79bfdead8c8",
         "release_score": 4.595,
         "creative_dna_sha256": "f7c5fd2889b1b6692f98608eeb9f2e4370cc107b331b433ca40633a4e92ed6ab",
-        "h3_adapter_sha256": "528b5b64ce56e45b7b430af60a1baf9f6bd77360ef7545a53910b350a040d645",
-        "seedance20_adapter_sha256": "6ed53db8df4ff1f75600fe99901cbd1320c880564a6d3727cfe379dfe894fa4e"
+        "h3_adapter_sha256": "ff051a209768173e13431ebbb1dd724acb74fb5a4df172afe3867f61bb8dff24",
+        "seedance20_adapter_sha256": "10d9f2c22562715db37ce861c012cfb9a5f85df0b489df285e2a2944ae5b707e"
       },
       "previews": [
         {
@@ -3948,8 +3965,8 @@
         "case_sha256": "4ad5f476fdeb0897b4f90b8d5d6b21faf36048d5941345589ab6019d4dd7b0f7",
         "release_score": 4.589,
         "creative_dna_sha256": "81ed892c2bc0c8b78a42343d46f7765e9d7f64afb743e0553b484f69ccbfb5a5",
-        "h3_adapter_sha256": "3876846fdea8afff20ec6309f3d4ba2785b28650404f29a072d5b95215adb08a",
-        "seedance20_adapter_sha256": "d583cf17ba6e938e61abf14e193ea0389c8a20d9933c6151b126a85ce550b452"
+        "h3_adapter_sha256": "bf80d44a9d3be3573e68f872fc07771848f0ea963d3382ba65c64683fb5419df",
+        "seedance20_adapter_sha256": "87704683cd3729504f291600755f0b71c9857be7a56737e4c3f7fbc8d8c0ea2e"
       },
       "previews": [
         {
@@ -4003,8 +4020,8 @@
         "case_sha256": "08194585974159394e585de6f838b3cff5da128558d562a97348f73a52ae7629",
         "release_score": 4.591,
         "creative_dna_sha256": "ca8a568ab89df823def2d07f1c3ef6a13fee1b71ce4aa5e09aa8b40121e5fbe6",
-        "h3_adapter_sha256": "2fe964effa0aa0fd9d64bef65b25fa4d1ba4b5caffa9554aa154d9afba501aa0",
-        "seedance20_adapter_sha256": "28ef0a3296e0e93013d99c86ab422eb650748ac8b100b198fa41a9e400158507"
+        "h3_adapter_sha256": "3bcb316c6b6308c53cd295f61aa28f39b75ec9575683ec95d9d6860e1d7ab762",
+        "seedance20_adapter_sha256": "6c63fce0d51aaa02f3c9849e4350786f8fef4b40215f99d8952eb04d1a96af1d"
       },
       "previews": [
         {
@@ -4058,8 +4075,8 @@
         "case_sha256": "7876732674f7f51a2b4396bd78567c53fe769b9c59cc2a62b9202984ecc54a4d",
         "release_score": 4.605,
         "creative_dna_sha256": "392dd29355bba37e5e2922a6a65b4d9351ab177e2aedd9dba18742b1b8829fdb",
-        "h3_adapter_sha256": "628e70ff332054c8b45c4507cee5ad796db8f9cc8d86e846bc629e71185a3d20",
-        "seedance20_adapter_sha256": "0f8336d0d28dd434d2928374e1f16529b7adadcfac41f89f25eeca61b5bff9dd"
+        "h3_adapter_sha256": "f197ad368272a2d94351481fd98ffa2a2bbeeca86ef97e835e18c349ebd26c4f",
+        "seedance20_adapter_sha256": "b73ccaeb62a02cc6b83ed485496eb62e2baa7224ee3477189e8bc014bc641aea"
       },
       "previews": [
         {
@@ -4113,8 +4130,8 @@
         "case_sha256": "d0ee3140071e55ca17a6173a0e58e2819a475d7d3fab7a7a43aff20333ef1f43",
         "release_score": 4.587,
         "creative_dna_sha256": "7e1dfc694077ecb804739a27a9d5e19694319ea3224db002c6f644640c94185e",
-        "h3_adapter_sha256": "885df8065935ba6b969f510eb826045db1abf2bf820e6bcde199d1481559d05c",
-        "seedance20_adapter_sha256": "f4f67788615c119c393e24f270e8647e01cdda87bd5106e3bc4e3c769a529595"
+        "h3_adapter_sha256": "731273c6261e30ed3975fbbd7786d17f4b4099ab605c27007f959d6e1d680d7e",
+        "seedance20_adapter_sha256": "a65d47a662bb342fdf9eabeef79ce4597de28f4b654ef6a8a374856a44d4a78b"
       },
       "previews": [
         {
@@ -4168,8 +4185,8 @@
         "case_sha256": "e95f3d229168eaab889324b6bc61cec2969d436953338757904754846c5dddae",
         "release_score": 4.543,
         "creative_dna_sha256": "addaf5875329150ad339180e58f34312de480a8aff7675fc5f51dc29ca932a71",
-        "h3_adapter_sha256": "5ebb081b8f1ab67c19c3b6005905fde61ab09b0e0a8544d1913e73e3b6f4507e",
-        "seedance20_adapter_sha256": "ff47631c3829b3b3d6dc90e6f6bf2fac241737a7ff937857c4bad99975bbde32"
+        "h3_adapter_sha256": "d825336c616ccf49e6a5d55874bd649a4854450633e66e481131083bd7b02a29",
+        "seedance20_adapter_sha256": "32446b66e9913ecf060a63c46bde0f711bf33711cdc4db4b0c69f8745e19f951"
       },
       "previews": [
         {
@@ -4223,8 +4240,8 @@
         "case_sha256": "be11bd96cfdb2ba04fbb4aba8f09dcf774e9c77df6d24deb88177ec7f89c782e",
         "release_score": 4.555,
         "creative_dna_sha256": "1841a47f88e03e3d5caa5c35c8a3bcf2bd17ef3382cc6ede5301cdd4ae2a4671",
-        "h3_adapter_sha256": "441801841cb014832ca6746fd859440b324f5bdaa7e7c8eaebff5beac98656f9",
-        "seedance20_adapter_sha256": "9e36eaa0e34417be1ebc9be822e5ce82fb07a006d3a95442876df4a2bbb8524d"
+        "h3_adapter_sha256": "b6f97d1baa9b3fa8eaaf8092e21e24e4ce9cda1c301e1087958718ee4b0bf4cd",
+        "seedance20_adapter_sha256": "8aee72175457431b45d385a3aa14a1d5c899a0fdf1d9453a64238f9fe66c85cd"
       },
       "previews": [
         {
@@ -4278,8 +4295,8 @@
         "case_sha256": "0d82cea4ce3048161db267ae13346d274181b9af8c8b2386ad95cd42c454d91a",
         "release_score": 4.597,
         "creative_dna_sha256": "a44fe95b5729cf3f9e9868fe450e0c30ddbcab2207a061df0b79431dbef4f1e9",
-        "h3_adapter_sha256": "7eb5db42501ed6587c0816fc9c244937421b82876ed84a873aba2216b4055b4d",
-        "seedance20_adapter_sha256": "97fdf3515fb5b3d01c18485e3171271285dc36dfad38893d34262e65d363d37f"
+        "h3_adapter_sha256": "92c8efeecdf8ad2f34040d569b7e967fd77921d294e2d92aa11a64aae69aba93",
+        "seedance20_adapter_sha256": "3709b55c65b52f58b2fb41e13c8224509cbf2ba7f108d421f7b5b173b4adcc70"
       },
       "previews": [
         {
@@ -4333,8 +4350,8 @@
         "case_sha256": "62477cbed4003280a958f312ba922657c5eb18179565d7768ca6fb1c608a1820",
         "release_score": 4.573,
         "creative_dna_sha256": "389974c185bf5cbd7b696b227cf1b6b205a66469b2c11fe73297767b1713bb7a",
-        "h3_adapter_sha256": "292c90f655700e09d4e844ad0b15d3f3ee10dd2fe3f036511de89d835c6f7573",
-        "seedance20_adapter_sha256": "0254c4e6406aba8db341404bb04d14afc7fea67c585838980f2acc1e42755128"
+        "h3_adapter_sha256": "99867c7d7853e68a2aedf6e13ab830cae5696aa15b6983761f424442b8574d1f",
+        "seedance20_adapter_sha256": "b073d6e250bb0810d9518fe5e2cbcc1bc434713f5ae42e9bfdc0988cbe08f393"
       },
       "previews": [
         {
@@ -4356,6 +4373,116 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA scale-mismatch challenge stays coherent when one shared token remains visible across control, obstruction, route change and an attempt toward a fixed target. Court or arena markings must preserve geography, and the ending may show reaction or suspense without claiming a result that is not visibly confirmed.\nInvariants:\n- inv-01: Establish two clearly different scales, one shared token and one fixed target in the same arena.\n- inv-02: Use repeated token control to prove who currently owns the action.\n- inv-03: Let the larger body obstruct space while the smaller body changes route rather than matching size.\n- inv-04: Show one readable token trajectory toward the fixed target.\n- inv-05: End on a visible shared reaction state and only claim success if the target result is directly shown.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Hiding any one element reduces the scene to unrelated spectacle.: Establish two clearly different scales, one shared token and one fixed target in the same arena.\n- A disappearing token breaks the causal chain.: Use repeated token control to prove who currently owns the action.\n- Equalized movement makes the size contrast cosmetic.: Let the larger body obstruct space while the smaller body changes route rather than matching size.\n- A cut directly to reaction hides the challenge's decisive action.: Show one readable token trajectory toward the fixed target.\n- An unsupported score claim invents the payoff.: End on a visible shared reaction state and only claim success if the target result is directly shown.\nDo not copy from the source: basketball court; small male player; giant female defender; basketball and hoop staging; source crowd and reaction close-ups",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-successive-gates-vertical-finish-v1",
+      "label": "连续变线｜逐层防守到垂直终结",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先固定球场、球与篮筐关系，让持球者连续穿过多层可见防守门，每次用不同路线变化解决空间问题；最后只做一次垂直篮筐动作，并用人群反应与共享场地收束。",
+      "input_format": "稳定主体与手持物 + 固定终点 + 至少3道可见空间门 + 每次不同变线 + 单次垂直终结 + 不虚构比分的反应终态",
+      "recommended_input": "轨道温室快递无人机携带发光种子胶囊，依次压低、变线和侧滚穿过三道不同风幕，只借最终上升气流完成一次上方对接；两名植物学家隔窗反应，结尾不出现比分或胜负文字。",
+      "required_anchors": [
+        "Establish one stable carrier, handled token and fixed terminal goal before escalation.",
+        "Use at least three visible spatial gates, each requiring a different route change.",
+        "Use the last route opening for one decisive vertical terminal action.",
+        "End on visible witness reaction and shared geography without asserting an unshown numerical result."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-0xbisc-2037481799325286426-video-1",
+        "case_sha256": "fc39dff7b764e44e116455ef4486e1c15e99cac5a7234340f9a38ff4a083347a",
+        "release_score": 4.64,
+        "creative_dna_sha256": "e49724bd02428533e31eedf4bb8b8cd46997224864d45defea9d067eb31d480e",
+        "h3_adapter_sha256": "0b0c80b22b48139dbf567cc9fc905b5bc24558d558f4de9966ac800ce43eeae8",
+        "seedance20_adapter_sha256": "9b521c4cb22df565ad13524f868905a3e681a2894f59ba83d9d7061ff11872fd"
+      },
+      "previews": [
+        {
+          "case_id": "x-0xbisc-2037481799325286426-video-1",
+          "label": "连续变线｜逐层防守到垂直终结",
+          "short_summary": "先固定球场、球与篮筐关系，让持球者连续穿过多层可见防守门，每次用不同路线变化解决空间问题；最后只做一次垂直篮筐动作，并用人群反应与共享场地收束。",
+          "recommended_input": "轨道温室快递无人机携带发光种子胶囊，依次压低、变线和侧滚穿过三道不同风幕，只借最终上升气流完成一次上方对接；两名植物学家隔窗反应，结尾不出现比分或胜负文字。",
+          "required_anchors": [
+            "Establish one stable carrier, handled token and fixed terminal goal before escalation.",
+            "Use at least three visible spatial gates, each requiring a different route change.",
+            "Use the last route opening for one decisive vertical terminal action.",
+            "End on visible witness reaction and shared geography without asserting an unshown numerical result."
+          ],
+          "sha256": "431c32a6f9776d06d3ebf505844c249958a4af5ae5e4f1061727bea2a72082db",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBuild a short action proof around successive spatial gates: establish one carrier, one handled token and a fixed terminal goal; let each visible blocker force a different route change while preserving shared geography; convert the final opening into one decisive vertical terminal action; then hold a separate witness reaction without inventing an unshown numerical result.\nInvariants:\n- inv-01: Establish one stable carrier, handled token and fixed terminal goal before escalation.\n- inv-02: Use at least three visible spatial gates, each requiring a different route change.\n- inv-03: Preserve the carrier, token and terminal direction across every route change.\n- inv-04: Use the last route opening for one decisive vertical terminal action.\n- inv-05: End on visible witness reaction and shared geography without asserting an unshown numerical result.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without all three anchors, later movement reads as disconnected athletic montage.: Establish one stable carrier, handled token and fixed terminal goal before escalation.\n- Repeated identical dodges do not create escalating proof.: Use at least three visible spatial gates, each requiring a different route change.\n- Losing the token or goal axis breaks the causal route.: Preserve the carrier, token and terminal direction across every route change.\n- Multiple terminal attempts diffuse the climax.: Use the last route opening for one decisive vertical terminal action.\n- A scoreboard or victory claim would exceed the visible proof.: End on visible witness reaction and shared geography without asserting an unshown numerical result.\nDo not copy from the source: source urban basketball player; source basketball and hoop; source defenders and crowd; source street-court wardrobe; source dunk and crowd-reaction staging",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-material-skill-escalation-finished-proof-v1",
+      "label": "技艺递进｜原料变形到成品特写",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先给出单一原料，再用功能不同且难度递增的手部操作连续改变其形态；一次明确热处理完成不可逆转折，随后快速装盘，并用成品微距证明前面所有动作得到结果。",
+      "input_format": "单一原料 + 至少3种功能不同的形变操作 + 1次不可逆加工 + 成品组装 + 保留前序痕迹的微距终证",
+      "recommended_input": "太阳帆修复师把同一束植物纤维拉伸、分条、编织并张紧到六边形框，只热压一次完成封合，最后用微距证明成品膜仍保留拉伸、编织和封合痕迹。",
+      "required_anchors": [
+        "Establish one raw material and its maker before complex manipulation.",
+        "Use at least three functionally different manipulations that visibly change the same material.",
+        "Cross one visible irreversible processing threshold before the result assembly.",
+        "End on a macro finished-state proof that retains visible evidence of earlier transformations."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-0xbisc-2036407484836094014-video-1",
+        "case_sha256": "2af00efe3e7f520d9c61f9495087148dcdbe5874b05282ceead44efdecf4aee2",
+        "release_score": 4.655,
+        "creative_dna_sha256": "dc345eac3485c29b0f3ce968583c4563d634e620178e2fcffcee8b9a2f7353ed",
+        "h3_adapter_sha256": "b4bf316d201db0ec011795d61bc0ac92ac0c65ed52eb4a0a951fcdceb725cf8f",
+        "seedance20_adapter_sha256": "8d03acd9791699f03be0646e700b2bc26ad06278562cf9ac622f84c7069229c7"
+      },
+      "previews": [
+        {
+          "case_id": "x-0xbisc-2036407484836094014-video-1",
+          "label": "技艺递进｜原料变形到成品特写",
+          "short_summary": "先给出单一原料，再用功能不同且难度递增的手部操作连续改变其形态；一次明确热处理完成不可逆转折，随后快速装盘，并用成品微距证明前面所有动作得到结果。",
+          "recommended_input": "太阳帆修复师把同一束植物纤维拉伸、分条、编织并张紧到六边形框，只热压一次完成封合，最后用微距证明成品膜仍保留拉伸、编织和封合痕迹。",
+          "required_anchors": [
+            "Establish one raw material and its maker before complex manipulation.",
+            "Use at least three functionally different manipulations that visibly change the same material.",
+            "Cross one visible irreversible processing threshold before the result assembly.",
+            "End on a macro finished-state proof that retains visible evidence of earlier transformations."
+          ],
+          "sha256": "09fdcddf17149dc01733f58b274be0ce64034cd7ca8ce0f82af944970e25ab9d",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nTurn craft into a visible proof ladder: establish one raw material, perform several functionally different manipulations that progressively change its length, topology or organization, cross one irreversible processing threshold, assemble the result, and end on a macro finished-state proof that visibly inherits features created earlier.\nInvariants:\n- inv-01: Establish one raw material and its maker before complex manipulation.\n- inv-02: Use at least three functionally different manipulations that visibly change the same material.\n- inv-03: Keep the material identity and work-surface geography continuous across the manipulation ladder.\n- inv-04: Cross one visible irreversible processing threshold before the result assembly.\n- inv-05: End on a macro finished-state proof that retains visible evidence of earlier transformations.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Opening on spectacle removes the transformation baseline.: Establish one raw material and its maker before complex manipulation.\n- Repeated tossing without distinct material effects is only flourish.: Use at least three functionally different manipulations that visibly change the same material.\n- Unmotivated material substitutions break the proof.: Keep the material identity and work-surface geography continuous across the manipulation ladder.\n- A finished object appearing without a threshold feels swapped in.: Cross one visible irreversible processing threshold before the result assembly.\n- A wide beauty shot alone hides whether the material work mattered.: End on a macro finished-state proof that retains visible evidence of earlier transformations.\nDo not copy from the source: source muscular noodle cook; source noodle dough and shrimp bowl; source dark wood kitchen; source open-wok flame; source noodle-loop choreography and food macro finish",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
