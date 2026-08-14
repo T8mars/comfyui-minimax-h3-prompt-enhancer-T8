@@ -142,6 +142,8 @@ Seedance 2.0 目标视频模型能够处理音频，不代表提示词增强渠�
 
 Music 3 节点内置的是 MiniMax 官方 `music-caption-rewriter` 完整快照，固定于提交 `91410fb657c007ae57c60df8240f5ece5be089c7`：18 个 family index、1000 个完整模板、共 1022 个文件。来源、数量与归一化内容树哈希记录在 [`official_skills/SOURCE.json`](./official_skills/SOURCE.json)，测试会现场重算并阻止残缺发布。
 
+节点里的“歌词模式”不是官方 Skill 选择器：生成新歌词和按要求润色属于 T8 非官方扩展，严格保留属于本地保护，AUTO/纯器乐属于工作流控制。官方 Skill 的正式能力是生成 `Global Metadata / Vocal Details / Arrangement` 三段 `music_caption`；“官方 Skill 质量模式”选择“官方完整”时，才会在三段合同之外继续执行流派路由、最多两个索引和最多三个官方模板的逐级披露。
+
 官方 Caption 固定按以下顺序输出，默认使用英文并以约 250–450 词作为软目标：
 
 ```text

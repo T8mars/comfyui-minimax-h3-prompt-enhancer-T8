@@ -551,6 +551,26 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertIn("lyrics_edit_scope", source)
         self.assertIn("semantic_profile_mode", source)
         self.assertIn("阶段：本地资源检查", source)
+        self.assertIn("官方 Skill：Music Caption 结构化改写", source)
+        self.assertIn('qualityWidget.label = "官方 Skill 质量模式"', source)
+        self.assertIn("SERIALIZED_WIDGET_NAMES", source)
+        self.assertIn("PUBLISHED_V1_WIDGET_NAMES", source)
+        self.assertIn("RUNTIME_V1_WIDGET_NAMES", source)
+        self.assertIn("serializedWidgetValueMap", source)
+        self.assertIn("remapSerializedWidgetValues", source)
+        self.assertIn("if (widget) widget.value = value", source)
+        self.assertNotIn("reorderWidgets(this)", source)
+        self.assertIn("if (!node || node.music3ResizeScheduled) return;", source)
+        self.assertIn("if (widthChanged || heightChanged)", source)
+        self.assertNotIn("refreshHeight", source)
+        self.assertNotIn("requestAnimationFrame(apply)", source)
+        self.assertIn("getMinHeight: () => STATUS_CARD_HEIGHT", source)
+        self.assertIn("statusWidget.computeSize = () => [0, STATUS_CARD_HEIGHT]", source)
+        self.assertGreater(
+            source.index("addRequestEstimateWidget(this"),
+            source.index("this.music3SignUpWidget = signUpWidget"),
+        )
+        self.assertNotIn('getMinHeight: () => hiddenLyrics.style.display === "none" ? 58 : 88', source)
         self.assertNotIn("openai_upload_url", source)
 
     def test_example_workflow_has_four_outputs_and_no_secret_or_media(self):
@@ -567,8 +587,8 @@ class Music3PromptEnhancerTests(unittest.TestCase):
             [item["name"] for item in node["outputs"]],
             ["lyrics", "music_caption", "music3_payload_json", "enhancement_report_json"],
         )
-        self.assertEqual(node["widgets_values"][18], "")
-        self.assertIn("隐私隔离", node["widgets_values"][-3])
+        self.assertEqual(node["widgets_values"][27], "")
+        self.assertIn("隐私隔离", node["widgets_values"][19])
 
     def test_official_source_manifest_pins_snapshot_counts_and_hash(self):
         manifest = json.loads((PROJECT_ROOT / "official_skills" / "SOURCE.json").read_text(encoding="utf-8"))

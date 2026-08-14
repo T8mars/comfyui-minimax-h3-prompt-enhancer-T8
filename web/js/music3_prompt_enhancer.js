@@ -23,26 +23,174 @@ const EDIT_SCOPE_SECTION = "指定段落（全部同名段）";
 const EDIT_SCOPE_OCCURRENCE = "指定段落（第N次）";
 const SEMANTIC_MANUAL_MODE = "手动宽泛画像（不增加请求）";
 const SEMANTIC_LLM_MODE = "LLM宽泛分析（会发送歌词并可能增加请求）";
+const STATUS_CARD_HEIGHT = 176;
+const MUSIC_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE];
+const PUBLISHED_V1_WIDGET_NAMES = [
+    "music_idea",
+    "lyrics_mode",
+    "lyrics",
+    "lyrics_language",
+    "target_duration_seconds",
+    "rewrite_mode",
+    "quality_mode",
+    "structure_preset",
+    "custom_structure",
+    "lyrics_edit_request",
+    "constraints_and_exclusions",
+    "custom_lyrics_language",
+    "fixed_bpm",
+    "key_scale",
+    "meter",
+    "custom_meter",
+    "caption_language",
+    "caption_target_words",
+    "api_key",
+    "api_mode",
+    "ai_workshop_model",
+    "custom_model",
+    "openai_base_url",
+    "seed",
+    "control_after_generate",
+    "lyrics_edit_scope",
+    "lyrics_edit_section",
+    "lyrics_edit_occurrence",
+    "semantic_profile_mode",
+    "manual_lyrics_profile",
+    "stage_cache",
+];
+// ComfyUI groups required inputs before optional inputs, independently of the
+// declaration order. This was the real runtime order in the first release.
+const RUNTIME_V1_WIDGET_NAMES = [
+    "music_idea",
+    "lyrics_mode",
+    "lyrics_language",
+    "target_duration_seconds",
+    "rewrite_mode",
+    "quality_mode",
+    "structure_preset",
+    "fixed_bpm",
+    "meter",
+    "caption_language",
+    "caption_target_words",
+    "api_mode",
+    "ai_workshop_model",
+    "seed",
+    "control_after_generate",
+    "lyrics_edit_scope",
+    "lyrics_edit_section",
+    "lyrics_edit_occurrence",
+    "semantic_profile_mode",
+    "stage_cache",
+    "lyrics",
+    "custom_structure",
+    "lyrics_edit_request",
+    "constraints_and_exclusions",
+    "custom_lyrics_language",
+    "key_scale",
+    "custom_meter",
+    "api_key",
+    "custom_model",
+    "openai_base_url",
+    "manual_lyrics_profile",
+];
+// Lyrics is now a normal empty-by-default widget so it stays beside lyrics_mode.
+// Optional/conditional text fields remain later and are hidden until required.
+const SERIALIZED_WIDGET_NAMES = [
+    "music_idea",
+    "lyrics_mode",
+    "lyrics",
+    "lyrics_language",
+    "target_duration_seconds",
+    "rewrite_mode",
+    "quality_mode",
+    "structure_preset",
+    "fixed_bpm",
+    "meter",
+    "caption_language",
+    "caption_target_words",
+    "api_mode",
+    "ai_workshop_model",
+    "seed",
+    "control_after_generate",
+    "lyrics_edit_scope",
+    "lyrics_edit_section",
+    "lyrics_edit_occurrence",
+    "semantic_profile_mode",
+    "stage_cache",
+    "custom_structure",
+    "lyrics_edit_request",
+    "constraints_and_exclusions",
+    "custom_lyrics_language",
+    "key_scale",
+    "custom_meter",
+    "api_key",
+    "custom_model",
+    "openai_base_url",
+    "manual_lyrics_profile",
+];
 
 
 function setWidgetVisible(widget, visible) {
     if (!widget) return;
-    widget.hidden = !visible;
-    if (!widget.computeSize) widget.computeSize = function () { return [0, this.hidden ? 0 : 24]; };
+
+    if (!("music3OriginalType" in widget)) {
+        widget.music3OriginalType = widget.type;
+        widget.music3OriginalComputeSize = widget.computeSize;
+        widget.music3OriginalDisplay = widget.element?.style.display || "";
+        widget.music3OriginalHidden = Boolean(widget.hidden);
+    }
+
+    widget.type = visible ? widget.music3OriginalType : "converted-widget";
+    widget.computeSize = visible ? widget.music3OriginalComputeSize : () => [0, -4];
+    widget.hidden = visible ? widget.music3OriginalHidden : true;
     widget.disabled = !visible;
-    if (widget.element) widget.element.style.display = visible ? "" : "none";
+    if (widget.element) {
+        widget.element.dataset.shouldHide = visible ? "false" : "true";
+        widget.element.style.display = visible ? widget.music3OriginalDisplay : "none";
+        widget.element.hidden = !visible;
+    }
 }
 
 
 function resizeNode(node) {
+    if (!node || node.music3ResizeScheduled) return;
+    node.music3ResizeScheduled = true;
     requestAnimationFrame(() => {
-        const computed = node.computeSize?.() || [520, node.size?.[1] || 420];
-        node.setSize?.([
-            Math.max(node.size?.[0] || 0, 520),
-            Math.max(computed[1], 320),
-        ]);
-        node.setDirtyCanvas?.(true, true);
+        try {
+            for (const widget of node.widgets || []) {
+                if (widget.element) delete widget.computedHeight;
+            }
+            const computed = node.computeSize?.() || [520, node.size?.[1] || 420];
+            const nextWidth = Math.max(Number(node.size?.[0]) || 0, 560);
+            const nextHeight = Math.max(Number(computed[1]) || 0, 320);
+            const widthChanged = Math.abs((Number(node.size?.[0]) || 0) - nextWidth) > 0.5;
+            const heightChanged = Math.abs((Number(node.size?.[1]) || 0) - nextHeight) > 0.5;
+            if (widthChanged || heightChanged) node.setSize?.([nextWidth, nextHeight]);
+            node.setDirtyCanvas?.(true, true);
+            app.canvas?.setDirty?.(true, true);
+        } finally {
+            node.music3ResizeScheduled = false;
+        }
     });
+}
+
+
+function serializedWidgetValueMap(values) {
+    if (!Array.isArray(values) || values.length !== SERIALIZED_WIDGET_NAMES.length) return null;
+    let sourceNames = SERIALIZED_WIDGET_NAMES;
+    if (MUSIC_API_MODES.includes(String(values[19] || ""))) {
+        sourceNames = PUBLISHED_V1_WIDGET_NAMES;
+    } else if (MUSIC_API_MODES.includes(String(values[11] || ""))) {
+        sourceNames = RUNTIME_V1_WIDGET_NAMES;
+    }
+    return new Map(sourceNames.map((name, index) => [name, values[index]]));
+}
+
+
+function remapSerializedWidgetValues(values) {
+    const source = serializedWidgetValueMap(values);
+    if (!source) return values;
+    return SERIALIZED_WIDGET_NAMES.map((name) => source.get(name) ?? null);
 }
 
 
@@ -71,13 +219,20 @@ function addRequestEstimateWidget(node, widgets) {
         "display:flex", "flex-direction:column", "gap:5px", "width:100%", "box-sizing:border-box",
         "padding:8px 10px", "border:1px solid var(--border-color, #555)", "border-radius:7px",
         "background:var(--comfy-input-bg, #202020)", "color:var(--input-text, #ddd)", "font-size:12px",
+        "line-height:1.45", "white-space:normal", "overflow-wrap:anywhere", `height:${STATUS_CARD_HEIGHT}px`, "overflow:auto",
     ].join(";");
+    const officialTitle = document.createElement("div");
+    officialTitle.textContent = "官方 Skill：Music Caption 结构化改写";
+    officialTitle.style.cssText = "font-weight:700;color:var(--input-text, #eee)";
+    const officialDescription = document.createElement("div");
+    officialDescription.textContent = "输出 Global Metadata / Vocal Details / Arrangement；“官方完整”会再启用流派路由与最多 3 个官方模板。歌词生成与润色属于 T8 非官方扩展。";
+    officialDescription.style.opacity = "0.9";
     const estimate = document.createElement("div");
     estimate.style.fontWeight = "600";
     const stages = document.createElement("div");
     stages.style.opacity = "0.82";
     const hiddenLyrics = document.createElement("div");
-    hiddenLyrics.style.cssText = "display:none;align-items:center;gap:8px;color:#f0c674";
+    hiddenLyrics.style.cssText = "display:none;align-items:center;flex-wrap:wrap;gap:8px;color:#f0c674";
     const hiddenText = document.createElement("span");
     hiddenText.textContent = "纯器乐模式下工作流仍保存着隐藏歌词。";
     const clearLyrics = document.createElement("button");
@@ -93,7 +248,8 @@ function addRequestEstimateWidget(node, widgets) {
         node.music3UpdateEstimate?.();
     };
     hiddenLyrics.append(hiddenText, clearLyrics);
-    container.append(estimate, stages, hiddenLyrics);
+    container.append(officialTitle, officialDescription, estimate, stages, hiddenLyrics);
+
 
     const update = () => {
         const mode = widgets.lyricsMode?.value;
@@ -125,20 +281,24 @@ function addRequestEstimateWidget(node, widgets) {
             : `预计付费请求：${minimum}–${maximum} 次（命中10分钟阶段缓存时会减少）`;
         stages.textContent = `阶段：本地资源检查 → ${stageNames.join(" → ")}`;
         hiddenLyrics.style.display = mode === INSTRUMENTAL_MODE && hasLyrics ? "flex" : "none";
-        resizeNode(node);
+        node.setDirtyCanvas?.(true, true);
     };
     node.music3UpdateEstimate = update;
     const statusWidget = node.addDOMWidget("music3_request_estimate", "custom", container, {
         getValue: () => "",
         setValue: () => {},
-        getMinHeight: () => hiddenLyrics.style.display === "none" ? 58 : 88,
-        getMaxHeight: () => hiddenLyrics.style.display === "none" ? 58 : 88,
+        getMinHeight: () => STATUS_CARD_HEIGHT,
+        getMaxHeight: () => STATUS_CARD_HEIGHT,
         hideOnZoom: false,
         serialize: false,
         beforeResize() { delete this.width; },
-        afterResize(resizedNode) { delete this.width; resizedNode.setDirtyCanvas?.(true, true); },
+        afterResize(resizedNode) {
+            delete this.width;
+            resizedNode.setDirtyCanvas?.(true, true);
+        },
         onDraw(widget) { if ("width" in widget) delete widget.width; },
     });
+    statusWidget.computeSize = () => [0, STATUS_CARD_HEIGHT];
     delete statusWidget.width;
     statusWidget.serializeValue = () => undefined;
     update();
@@ -300,6 +460,8 @@ app.registerExtension({
         if (nodeData.name !== NODE_ID) return;
 
         const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
+        const originalOnConfigure = nodeType.prototype.onConfigure;
+        const originalOnSerialize = nodeType.prototype.onSerialize;
         nodeType.prototype.onNodeCreated = function () {
             originalOnNodeCreated?.apply(this, arguments);
             const find = (name) => this.widgets?.find((widget) => widget.name === name);
@@ -331,6 +493,13 @@ app.registerExtension({
             const manualProfileWidget = find("manual_lyrics_profile");
             const stageCacheWidget = find("stage_cache");
             const seedControlWidget = seedWidget?.linkedWidgets?.[0] || find("control_after_generate");
+            if (lyricsModeWidget) {
+                lyricsModeWidget.tooltip = "这里控制歌词工作流；生成/润色是 T8 非官方扩展，官方 Skill 的正式能力是下方 music_caption 结构化改写。";
+            }
+            if (qualityWidget) {
+                qualityWidget.label = "官方 Skill 质量模式";
+                qualityWidget.tooltip = "快速核心只执行官方三段 Caption 合同；官方完整再执行流派路由、索引筛选与最多三个官方模板参考。";
+            }
             if (seedControlWidget) {
                 seedControlWidget.label = "种子状态（运行后）";
                 seedControlWidget.tooltip = "fixed 固定；randomize 随机；increment 递增；decrement 递减。供应商不保证绝对复现。";
@@ -368,6 +537,7 @@ app.registerExtension({
                 this.music3UpdateEstimate?.();
                 resizeNode(this);
             };
+            this.music3UpdateConditional = updateConditional;
             addAdvancedControls(this, advancedWidgets, updateConditional);
 
             for (const controller of [
@@ -381,12 +551,6 @@ app.registerExtension({
                     updateConditional();
                 };
             }
-            addRequestEstimateWidget(this, {
-                lyricsMode: lyricsModeWidget,
-                lyrics: lyricsWidget,
-                quality: qualityWidget,
-                semantic: semanticModeWidget,
-            });
             addApiModeBehavior(this, apiModeWidget, aiWorkshopModelWidget, customModelWidget, baseUrlWidget);
             if (apiKeyWidget) addApiKeyWidget(this, apiKeyWidget, apiModeWidget);
 
@@ -422,9 +586,54 @@ app.registerExtension({
             );
             signUpWidget.serializeValue = () => undefined;
             this.music3SignUpWidget = signUpWidget;
+            // Keep all actionable controls above the variable-height status
+            // card. Even on frontend builds that mis-cache DOM widget heights,
+            // wrapped explanatory text can no longer cover Run or API Key.
+            addRequestEstimateWidget(this, {
+                lyricsMode: lyricsModeWidget,
+                lyrics: lyricsWidget,
+                quality: qualityWidget,
+                semantic: semanticModeWidget,
+            });
             this.music3UpdateApiMode?.();
             updateConditional();
             resizeNode(this);
+        };
+
+        nodeType.prototype.onConfigure = function () {
+            const args = [...arguments];
+            const restoredValues = serializedWidgetValueMap(args[0]?.widgets_values);
+            if (Array.isArray(args[0]?.widgets_values)) {
+                args[0] = {
+                    ...args[0],
+                    widgets_values: remapSerializedWidgetValues([...args[0].widgets_values]),
+                };
+            }
+            originalOnConfigure?.apply(this, args);
+            requestAnimationFrame(() => {
+                // Restore by stable field name as a second compatibility layer.
+                // Several ComfyUI versions calculate hidden/optional DOM widget
+                // positions differently, so positional remapping alone can still
+                // shift API mode, seed and advanced fields in old workflows.
+                if (restoredValues) {
+                    for (const [name, value] of restoredValues) {
+                        const widget = this.widgets?.find((item) => item.name === name);
+                        if (widget) widget.value = value;
+                    }
+                }
+                this.music3UpdateConditional?.();
+                this.music3UpdateApiMode?.();
+                this.music3UpdateEstimate?.();
+                resizeNode(this);
+            });
+        };
+
+        nodeType.prototype.onSerialize = function (serialized) {
+            originalOnSerialize?.apply(this, arguments);
+            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => {
+                const widget = this.widgets?.find((item) => item.name === name);
+                return widget?.value ?? null;
+            });
         };
     },
 });

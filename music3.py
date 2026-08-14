@@ -1816,7 +1816,6 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                     "lyrics",
                     display_name="歌词（可选 / 可接 STRING）",
                     multiline=True,
-                    optional=True,
                     default="",
                     tooltip="严格保留模式会由本地原样直通，不让 LLM 重新誊写。",
                 ),
