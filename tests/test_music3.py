@@ -543,6 +543,8 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertIn("运行 Music 3 提示词与歌词优化", source)
         self.assertIn("保存到工作流", source)
         self.assertIn("清空", source)
+        self.assertIn("MiniMax & Seedance本地Skill和整合包", source)
+        self.assertIn("https://github.com/T8mars/minimax-h3-prompt-skill-T8", source)
         self.assertIn("music3_api_key_secure", source)
         self.assertIn("lyrics_mode", source)
         self.assertIn("openai_base_url", source)

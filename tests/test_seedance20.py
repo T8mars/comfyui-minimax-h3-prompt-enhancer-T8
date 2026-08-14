@@ -507,6 +507,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             "app.queuePrompt(0, 1, [String(this.id)])",
             "https://api.seedance.nz/sign-up?aff=5f4w",
             "https://ai.t8star.org/register?aff=dP7j",
+            "MiniMax & Seedance本地Skill和整合包",
+            "https://github.com/T8mars/minimax-h3-prompt-skill-T8",
             'value === "参考模板融合"',
             'mode === OPENAI_API_MODE',
             'find("openai_video_urls")',

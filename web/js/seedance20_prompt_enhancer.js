@@ -5,6 +5,7 @@ import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_
 const NODE_ID = "Seedance20PromptEnhancerT8";
 const SIGN_UP_URL = "https://api.seedance.nz/sign-up?aff=5f4w";
 const AI_WORKSHOP_SIGN_UP_URL = "https://ai.t8star.org/register?aff=dP7j";
+const LOCAL_SKILL_BUNDLE_URL = "https://github.com/T8mars/minimax-h3-prompt-skill-T8";
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
@@ -400,6 +401,15 @@ app.registerExtension({
             );
             signUpWidget.serializeValue = () => undefined;
             this.s20SignUpWidget = signUpWidget;
+
+            const localSkillBundleWidget = this.addWidget(
+                "button",
+                "MiniMax & Seedance本地Skill和整合包",
+                "在新标签页打开本地 Skill 与整合包",
+                () => window.open(LOCAL_SKILL_BUNDLE_URL, "_blank", "noopener,noreferrer"),
+                { serialize: false },
+            );
+            localSkillBundleWidget.serializeValue = () => undefined;
             this.s20UpdateApiMode?.();
             resizeNode(this);
         };

@@ -617,3 +617,7 @@ $env:SEEDANCE_API_KEY="你的平价小屋 API Key"
 ## 说明
 
 本项目是第三方 ComfyUI 自定义节点，不隶属于 MiniMax、ByteDance、Seedance 或 ComfyUI 官方。API 能力、价格和可用性以服务商最新说明为准。使用真人参考素材时，用户仍需自行确认身份授权和下游平台规则。
+
+## 本地 Skill 与整合包
+
+三个核心节点底部均提供“MiniMax & Seedance本地Skill和整合包”入口，点击会在新标签页打开 [T8 本地 Skill 与整合包](https://github.com/T8mars/minimax-h3-prompt-skill-T8)。该入口仅用于访问资源，不会写入工作流，也不会参与或改变任何 LLM 请求。

@@ -288,6 +288,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("this.t8CommitApiKey?.()", source)
         self.assertIn("https://api.seedance.nz/sign-up?aff=5f4w", source)
         self.assertIn("https://ai.t8star.org/register?aff=dP7j", source)
+        self.assertIn("MiniMax & Seedance本地Skill和整合包", source)
+        self.assertIn("https://github.com/T8mars/minimax-h3-prompt-skill-T8", source)
         self.assertIn("window.open", source)
         self.assertIn("⚙️ 高级选项（可选）", source)
         self.assertIn("const advancedWidgets = [referenceContextWidget, constraintsWidget]", source)
