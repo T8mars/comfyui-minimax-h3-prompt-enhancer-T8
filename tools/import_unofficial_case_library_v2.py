@@ -11,18 +11,19 @@ from typing import Any
 CATALOG_SCHEMA = "t8-case-template-catalog/v2"
 LIBRARY_SCHEMA = "t8-unofficial-case-library/v2"
 COMMUNITY_LIBRARY_SCHEMA = "t8-standalone-community-skill-handoff/v1"
+BATCH_SCHEMA = "comfyui-handoff-batch/v1"
 NO_CASE_TEMPLATE = "无（不使用 T8 案例）"
 TARGETS = ("h3", "seedance20")
 SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 90
-EXPECTED_SELECTOR_COUNT = 80
-EXPECTED_EVIDENCE_COUNT = 10
+EXPECTED_RECORD_COUNT = 109
+EXPECTED_SELECTOR_COUNT = 94
+EXPECTED_EVIDENCE_COUNT = 15
 EXPECTED_PENDING_COUNT = 0
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 82
+EXPECTED_TOTAL_SELECTOR_COUNT = 96
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -344,7 +345,7 @@ def build_catalog(
     )
     if declared_counts != expected_counts or actual_counts != expected_counts:
         raise LibraryImportError(
-            "Expected 90 records: 80 selectors, ten evidence variants, and no pending cases"
+            "Expected 109 records: 94 selectors, 15 evidence variants, and no pending cases"
         )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
@@ -478,7 +479,7 @@ def build_catalog(
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
     if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 82 total non-official selectors")
+        raise LibraryImportError("Expected 96 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -493,6 +494,131 @@ def build_catalog(
         "official_minimax_skills_included": False,
         "templates": templates,
     }
+
+
+def build_source_batch(
+    batch_path: Path,
+    library_path: Path,
+    catalog: dict[str, Any],
+) -> dict[str, Any]:
+    batch = _read_json(batch_path)
+    library = _read_json(library_path)
+    if batch.get("schema_version") != BATCH_SCHEMA:
+        raise LibraryImportError("Unsupported increment-batch schema")
+    if library.get("schema_version") != LIBRARY_SCHEMA:
+        raise LibraryImportError("Unsupported cumulative case-library schema")
+    records = batch.get("records")
+    if not isinstance(records, list):
+        raise LibraryImportError("Increment batch records are missing")
+
+    selectors = [item for item in records if item.get("template_action") == "selector"]
+    evidence = [item for item in records if item.get("template_action") == "evidence_variant"]
+    pending = [item for item in records if item.get("template_action") == "pending"]
+    declared_counts = (
+        batch.get("record_count"),
+        batch.get("adapter_ready_count"),
+        batch.get("selector_template_count"),
+        batch.get("evidence_variant_count"),
+        batch.get("pending_completion_count"),
+    )
+    actual_counts = (
+        len(records),
+        sum(item.get("case_handoff_status") == "adapter-ready" for item in records),
+        len(selectors),
+        len(evidence),
+        len(pending),
+    )
+    if declared_counts != actual_counts or pending:
+        raise LibraryImportError(
+            f"Increment batch count or readiness mismatch: declared={declared_counts}, actual={actual_counts}"
+        )
+
+    closure = batch.get("inventory_closure")
+    expected_closure = {
+        "scope": "increment",
+        "increment_records": len(records),
+        "cumulative_case_records": EXPECTED_RECORD_COUNT,
+        "cumulative_case_selectors": EXPECTED_SELECTOR_COUNT,
+        "cumulative_evidence_variants": EXPECTED_EVIDENCE_COUNT,
+        "standalone_community_skills": EXPECTED_COMMUNITY_SKILL_COUNT,
+        "total_nonofficial_selectors": EXPECTED_TOTAL_SELECTOR_COUNT,
+        "official_minimax_skills_excluded": 9,
+    }
+    if not isinstance(closure, dict) or any(closure.get(key) != value for key, value in expected_closure.items()):
+        raise LibraryImportError("Increment batch inventory closure does not match the cumulative library")
+
+    canonical_by_case = {
+        str(item.get("case_id")): item
+        for item in library.get("records", [])
+        if isinstance(item, dict) and item.get("case_id")
+    }
+    catalog_by_case = {
+        str(item.get("source", {}).get("case_id")): item
+        for item in catalog.get("templates", [])
+        if isinstance(item, dict) and item.get("template_kind") == "case"
+    }
+    source_cases: list[dict[str, Any]] = []
+    seen_cases: set[str] = set()
+    for record in records:
+        case_id = str(record.get("case_id", ""))
+        action = str(record.get("template_action", ""))
+        canonical = canonical_by_case.get(case_id)
+        if not case_id or case_id in seen_cases or canonical is None:
+            raise LibraryImportError(f"Increment case is missing or duplicated: {case_id or '<unknown>'}")
+        if (
+            canonical.get("template_id") != record.get("template_id")
+            or canonical.get("template_action") != action
+            or canonical.get("case_sha256") != record.get("case_sha256")
+            or canonical.get("creative_dna_sha256") != record.get("creative_dna_sha256")
+        ):
+            raise LibraryImportError(f"Increment/cumulative case identity drift: {case_id}")
+        for target in TARGETS:
+            target_hash = canonical.get("models", {}).get(target, {}).get("adapter_sha256")
+            if target_hash != record.get(f"{target}_adapter_sha256"):
+                raise LibraryImportError(f"Increment/cumulative adapter drift: {case_id}/{target}")
+        seen_cases.add(case_id)
+        if action != "selector":
+            continue
+
+        template = catalog_by_case.get(case_id)
+        if template is None or template.get("id") != record.get("template_id"):
+            raise LibraryImportError(f"Increment selector is absent from the compiled catalog: {case_id}")
+        source = template["source"]
+        for field in (
+            "case_sha256", "creative_dna_sha256", "h3_adapter_sha256", "seedance20_adapter_sha256",
+        ):
+            if source.get(field) != record.get(field):
+                raise LibraryImportError(f"Increment/catalog hash drift: {case_id}/{field}")
+        fingerprint = str(record.get("mechanism_fingerprint", ""))
+        if not re.fullmatch(r"[0-9a-f]{64}", fingerprint):
+            raise LibraryImportError(f"Invalid increment mechanism fingerprint: {case_id}")
+        source_cases.append({
+            "case_id": case_id,
+            "template_id": template["id"],
+            "label": template["label"],
+            "summary": template["summary"],
+            "case_sha256": source["case_sha256"],
+            "creative_dna_sha256": source["creative_dna_sha256"],
+            "h3_adapter_sha256": source["h3_adapter_sha256"],
+            "seedance20_adapter_sha256": source["seedance20_adapter_sha256"],
+            "mechanism_fingerprint": fingerprint,
+        })
+
+    if len(source_cases) != batch.get("selector_template_count"):
+        raise LibraryImportError("Increment source-batch selector count mismatch")
+    batch_id = str(batch.get("batch_id", "")).removeprefix("batch-")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}(?:-[a-z0-9]+)+", batch_id):
+        raise LibraryImportError(f"Invalid increment batch ID: {batch_id}")
+    source_batch = {
+        "schema_version": "t8-case-template-batch/v1",
+        "batch_id": batch_id,
+        "authority": "T8 精选案例（非官方）",
+        "cases": source_cases,
+    }
+    serialized = json.dumps(source_batch, ensure_ascii=False)
+    if SECRET_RE.search(serialized) or URL_RE.search(serialized) or re.search(r"[A-Za-z]:\\", serialized):
+        raise LibraryImportError("Sanitized source batch contains a secret, URL, or local path")
+    return source_batch
 
 
 def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None:
@@ -524,7 +650,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Import the 90-record case handoff: 80 selectors, ten evidence variants, "
+            "Import the 109-record case handoff: 94 selectors, 15 evidence variants, "
             "no pending cases, plus two standalone community Skills."
         )
     )
@@ -532,15 +658,27 @@ def main() -> int:
     parser.add_argument("--community-skills", required=True, type=Path)
     parser.add_argument("--existing-catalog", type=Path)
     parser.add_argument("--source-batch-dir", type=Path)
+    parser.add_argument("--increment-batch", type=Path)
+    parser.add_argument("--source-batch-output", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    if bool(args.increment_batch) != bool(args.source_batch_output):
+        parser.error("--increment-batch and --source-batch-output must be provided together")
     catalog = build_catalog(
         args.library.resolve(),
         args.community_skills.resolve(),
         args.existing_catalog.resolve() if args.existing_catalog else None,
     )
+    source_batch = None
+    if args.increment_batch:
+        source_batch = build_source_batch(args.increment_batch.resolve(), args.library.resolve(), catalog)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if source_batch is not None:
+        args.source_batch_output.parent.mkdir(parents=True, exist_ok=True)
+        args.source_batch_output.write_text(
+            json.dumps(source_batch, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
     if args.source_batch_dir:
         sync_source_batches(catalog, args.source_batch_dir.resolve())
     print(

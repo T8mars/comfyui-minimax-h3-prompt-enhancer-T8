@@ -1,0 +1,161 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-14-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-aiwithkhan-2087390177190645831-browser-2087390177190645831-video-1",
+      "template_id": "t8-case-suspended-accident-active-sampling-v1",
+      "label": "事故悬停｜主动取样后独自离场",
+      "summary": "把一次突发事故锁在最大混乱状态，让唯一仍能行动的主体穿过固定证据、主动取走其中几件物体并完成离场；悬停现场始终不复流，异常由主体独占行动权来证明。",
+      "case_sha256": "828b4025fd66cfbb1e25eea2aa3e83748b5b69d287aa42936266227200d9de4a",
+      "creative_dna_sha256": "ef9c1344db89ae82017ad8cfd7b738caabdabab61cc0aca70733710b88435c89",
+      "h3_adapter_sha256": "33d14968d8d2c2a2c9874f1e4c99cb6c9087506e5b447a4be9019b0a5bc41f70",
+      "seedance20_adapter_sha256": "946a4612f0ac98e87fe3c7c004d4996350cc320543da424186c7fa1db393b3f3",
+      "mechanism_fingerprint": "228225d0301fc8ac49846cd4fe691c398684ded4bd2d3b1873ae78a973706578"
+    },
+    {
+      "case_id": "x-zarairahh-2087762931777716345-browser-2087762931777716345-video-1",
+      "template_id": "t8-case-emblem-world-return-loop-v1",
+      "label": "标志入境｜穿行世界后回收到原形",
+      "summary": "先把一个简洁标志当作入口和几何规则，进入由其形状、色彩与方向构成的三维世界；经过环境、角色与一次尺度跃迁后，所有结构必须可追溯地重新折回同一个标志。",
+      "case_sha256": "a7a0d8a86f8c307b141c73ba401d4ff384989b93932cd99b71b5336fd1a9203e",
+      "creative_dna_sha256": "cf75551365c1c9157843a6660cb10238199ce7fdfdfc953de1a0270f21d6d55c",
+      "h3_adapter_sha256": "0f63841c941ee2894221a8a5b7d6fa81ecbcb23f93beeb9676d88480e8472c3a",
+      "seedance20_adapter_sha256": "92479582ff6caa0d1f842d64a9fc98ca2243a4eecff6c6a862d4e5fd5667eb42",
+      "mechanism_fingerprint": "4c147bc8533e861a414e10785c2e6e13f3932162a6a75c4b9cf5872934d64ff1"
+    },
+    {
+      "case_id": "x-iam-nafisahmed-2087921744166420808-browser-2087921744166420808-video-1",
+      "template_id": "t8-case-future-message-environmental-verification-v1",
+      "label": "未来来信｜私密警告被外部世界兑现",
+      "summary": "用一个私密记录装置先给出来自未来自身的警告，再让主体主动转向可核查的外部窗口；先以熟悉城市的异常版本证明时间错位，最后让更大天空证据出现，使警告从信息升级为现实威胁。",
+      "case_sha256": "d23b1c99000c870c93990809e84b4fadf9ab97c4327838733750a3af797ab428",
+      "creative_dna_sha256": "c7bb82b0e5b915de618eee72861db98b38847581c67a9e09638936e79e0dfd1e",
+      "h3_adapter_sha256": "e4651f8dc20579de8d5e1e52f6c9a4833f68525f6b65da07451191bfa4063520",
+      "seedance20_adapter_sha256": "29b455a46cd7c8253fef6e63e97f3d7e710c2e1bbc6cf916a547d3279c56d60a",
+      "mechanism_fingerprint": "eecb622b7be1c42437e4aaa6d6208a25544a3a07021c80faafec9b10a41d87a2"
+    },
+    {
+      "case_id": "x-umesh-ai-2082499539735588916-browser-2082499539735588916-video-1",
+      "template_id": "t8-case-constricted-route-open-release-v1",
+      "label": "窄路追逐｜连续压缩后豁然释放",
+      "summary": "让高速载具与镜头始终绑定在同一狭窄路线，连续用贴墙、拱洞、垂落物与隧道压缩可用空间；最后只经过一次最窄出口，突然释放到无遮挡的大尺度环境。",
+      "case_sha256": "0cf78edf4a5716f92f9d59368a61300347eb887b7e3dfe225c80e9dc731aca6e",
+      "creative_dna_sha256": "f807ebc33e301bfd878d91196574fb34e94c66cd42f63eac7de387c1d0abbfe3",
+      "h3_adapter_sha256": "49d03b987e767ee2a0c9d4af8a40ed6af0c3253f255c6aa8382c22221cde9af4",
+      "seedance20_adapter_sha256": "1309d15be4b71b9621f41394e453487799feb9208a274ed846b4f9812c903423",
+      "mechanism_fingerprint": "fd2e6f402ef02639abdff855d2917ea894bdc5482a3eedb1b644da948508d7d2"
+    },
+    {
+      "case_id": "x-nusratsid1-2086721194527510942-browser-2086721194527510942-video-1",
+      "template_id": "t8-case-message-distance-collapse-v1",
+      "label": "信息逼近｜远端警告压缩到当前空间",
+      "summary": "先让远端信息给出模糊空间警告，主体据此检查一个仍为空的方向；第二条信息必须更精确地把发送者位置压缩到主体当前空间，最后只保留转身前的反应与未揭示威胁。",
+      "case_sha256": "a88c47752a945dbe8ecc4ea9bbd88588ddcc1b1f581f4e345a1228559036f026",
+      "creative_dna_sha256": "00b2180169701522e6102d4402854d9b89a3949b7ffbe2792af7c9b2a02ce3be",
+      "h3_adapter_sha256": "b31ca274f3cde3d072673003627a2c1a610f9c089346fc71ff613a22595a71e9",
+      "seedance20_adapter_sha256": "47f3777477b18c050c9062f6965e068dbd25df2147f71e7e708f494038222139",
+      "mechanism_fingerprint": "0e18864fcc0704d519a4752b69731d6d70ca1c701955d06f2147fe3aba459bca"
+    },
+    {
+      "case_id": "x-johnagi168-2087432258693001579-browser-2087432258693001579-video-1",
+      "template_id": "t8-case-external-assembly-integrated-audition-v1",
+      "label": "外部装配｜逐件安装到整机动作验收",
+      "summary": "让大尺度外部操作手逐件改变一个稳定主体，每次安装都先用近景证明接合，再回到全身状态确认累积结果；完成细节校准后，必须用一段完整动作测试证明所有部件能共同工作。",
+      "case_sha256": "644c59ad869dcd54ec25fbe6ba3a754a2f97b7e050bf9ba38afb6132ca0e3674",
+      "creative_dna_sha256": "852e2fba7b7e0000f97cc7aa63a37d6053cf4f9a7341fd0ed354ebe1018ef5ad",
+      "h3_adapter_sha256": "b1372ec7d33f5af81935d3aa3fd534de4894747e6ff4eacc05642ca88df16464",
+      "seedance20_adapter_sha256": "c982d7b1c78962f85cdd79524cfd96b3161ece67472289f959011cdbdd315755",
+      "mechanism_fingerprint": "028f5f4ba4cf35de5d4d4e622c1811a38e9a80c2949c21b7878776f542c52d4f"
+    },
+    {
+      "case_id": "x-ludoviccreator-1946487695011668420-browser-1946487695011668420-video-1",
+      "template_id": "t8-case-frontal-retreat-collapsing-corridor-v1",
+      "label": "正面撤退｜通道坍缩逼向唯一庇护",
+      "summary": "让主体面向威胁、背向目标持续后退，镜头以匹配速度倒退保持脸和来袭环境同框；危险从远端向前逐段占据通道，余量不断缩小，最终主体跨入唯一可见庇护并由边界闭合结束。",
+      "case_sha256": "6281156dc7fefef0ed14467df86a057155e7d0a6745ca66087642086ded5fde6",
+      "creative_dna_sha256": "adc0d63592d868cdcafd8b8fce61bfd24ad55681acf8d4d627861330bf5fd71d",
+      "h3_adapter_sha256": "c4945eafe9631faa0816b5a6b003b566479d29bfa30169dc3f4a3ca2a7a98944",
+      "seedance20_adapter_sha256": "f9aac7b3674e0739524b699c5ed744a0a06c2366e35f10e9717a0bc410f54c37",
+      "mechanism_fingerprint": "e38cf4a6a8cdbe5aeba3a4f1c4aecb65ad097f3cafda291fc6160a5011ab9f09"
+    },
+    {
+      "case_id": "x-azed-ai-1979547337077981268-browser-1979547337077981268-video-1",
+      "template_id": "t8-case-small-guide-route-destination-echo-v1",
+      "label": "微型引路｜重复现身到终点材质回声",
+      "summary": "用一个小型非语言向导先吸引注意，再让它在不同空间孔洞或路标处重复现身，带动主体与镜头沿连续路线深入；最终向导进入的目的地以同一材质、形状或色彩回声兑现前段承诺。",
+      "case_sha256": "e8c0549ec5e3db95e99d432bb680952ad53fa8d70e36cd4499dc14412fc0d3ba",
+      "creative_dna_sha256": "ea5f3269cd5848d88f32736a6dce06cde9b6c80b4ed472842960fc383b07995c",
+      "h3_adapter_sha256": "d826a226300ea0b7a6ff9dff2d2638e26f995609f67719326d3892c08b4b1e6e",
+      "seedance20_adapter_sha256": "a0c486ca483ecd14257883c6045735e5ddaecfdfcb594455ed2c3ca993fa7bf5",
+      "mechanism_fingerprint": "784365a83a3382898ad2cf379abb10a21c50720011d45dd20d36a93d4605f9e6"
+    },
+    {
+      "case_id": "x-azed-ai-1965494859818827964-browser-1965494859818827964-video-1",
+      "template_id": "t8-case-route-continuity-through-world-conversion-v1",
+      "label": "世界换材｜主体不断线穿过环境突变",
+      "summary": "先用稳定地形和连续跟拍锁定主体路线，在一次明确冲击点让周围世界整体换成另一套物质规则；主体运动、方向和速度连续不断，最终用新世界中的可读出口证明不是普通转场。",
+      "case_sha256": "5c7914182470e32cb827769636cc941bc3144ba082db9eb946ea8d74fc6e8d28",
+      "creative_dna_sha256": "9a72f454176a13421ce7a231a91ede540fad7fa7473497b7bb432cd83b0e209e",
+      "h3_adapter_sha256": "65c1ee92718dfb6eadf2cb947623c23477d6777366ff9e43d71e86a87681f3b5",
+      "seedance20_adapter_sha256": "a2045b280993dfa8cb7a55bd0d34478acad71988e710e388601c30bf8fe74243",
+      "mechanism_fingerprint": "809eaca9d1ddc54e9558e964dc2339ad0dc61faa4275e0e0381b1b0fef41743d"
+    },
+    {
+      "case_id": "x-aqsahere-2087386090315616601-browser-2087386090315616601-video-1",
+      "template_id": "t8-case-bounded-render-band-progressive-conversion-v1",
+      "label": "渲染扫描｜局部带逐段改写整体",
+      "summary": "让一条边界清楚的活动带沿主体移动，带内即时显示转换后的媒介，带外继续保留原状态；多次通过累积覆盖整体，最后让扫描带退出以证明完整、稳定的转换结果。",
+      "case_sha256": "c7fc605064d1e804b6e425e350c28f7137ecd5e4e5e7ac1ad47c863178e72d88",
+      "creative_dna_sha256": "b2710c15c1d57d72b05152ce006411289a63450be0539b1fb236db0dac26d79b",
+      "h3_adapter_sha256": "e8b37c904787fd5c9b26a864db90b14acc285753f30730a58402a867d4cf4c67",
+      "seedance20_adapter_sha256": "bbbcd04e3adf1dc09a94af8ffabda848b3fabb9c080727dfa4c421bece12e7ea",
+      "mechanism_fingerprint": "7b2a4e23049050e89d1d287dcb3e0937cdad827061b911af0f17ea725e041b34"
+    },
+    {
+      "case_id": "x-noor-ul-ain43-2087774014957850843-browser-2087774014957850843-video-1",
+      "template_id": "t8-case-hazard-gauntlet-to-scale-threat-v1",
+      "label": "连续脱险｜假安全后升级为尺度威胁",
+      "summary": "让同一主体沿单一逃生方向连续穿过多种局部危险，每次恢复都只是临时安全；晚段抵达看似更快或更安全的载具后，再用一次更大尺度的环境威胁重新定义整条路线。",
+      "case_sha256": "7df8e92db27ca8f3979fc9d540916b43b2bae9a2b4bdf161cef015c4d24d9a96",
+      "creative_dna_sha256": "8b9fcb82bb166103eb40d549de23c262970c685142b3aea47372b24703f537f3",
+      "h3_adapter_sha256": "ee06d2dcab9765885e7b2e7a612ecb8f58ed54a2309d23dc70a5259166826305",
+      "seedance20_adapter_sha256": "7b0740ec970ab6dbc82db0cad405effec532a356a16e33f9f9699e9bbc2399fa",
+      "mechanism_fingerprint": "814344c7c2bbf6d4aa780578ce4597294428bb9b449f7c2ee98e91b54bce81b6"
+    },
+    {
+      "case_id": "x-juliaclarky-2087748648981745821-browser-2087748648981745821-video-1",
+      "template_id": "t8-case-repeat-reset-escalating-mishap-anthology-v1",
+      "label": "重复复位｜多场景小灾难逐次升级",
+      "summary": "同一角色关系反复执行普通准备、主动动作、可见后果、见证者反应和场景复位；每轮更换物理问题并提高后果强度。",
+      "case_sha256": "b082d008c4db0377627972747411a5164909cafb2cb85141b1c35e0aa78cff56",
+      "creative_dna_sha256": "308ffe0d60a811ec7d1ce1dfc8189e2b6e175484b6a6f4d0cddc2a07f7de4ed7",
+      "h3_adapter_sha256": "af623bed477826c60ee42eae0ff543c5fcb458ab593f8d0b25f593011a3ab261",
+      "seedance20_adapter_sha256": "c665b0dea29f25d79a5a5445dbf576e0ef33913f558396060228c29ecc27c54a",
+      "mechanism_fingerprint": "0377db52d88330e7e1b8c15c9c9c77f76a1c04f729a2333cfad67906758c4c96"
+    },
+    {
+      "case_id": "x-zyrellix-2085927821126324588-browser-2085927821126324588-video-1",
+      "template_id": "t8-case-procedure-ladder-layered-finish-v1",
+      "label": "工序递进｜多层处理到揭膜验收",
+      "summary": "固定同一处理表面，让不同工具或材料逐步改变下一步所需状态；晚段只揭除一次覆盖层，最后用独立检查动作证明稳定结果。",
+      "case_sha256": "538a2376b0fee46d08521e57f1852143c2312b7fb7dd397430b4b87a5ec48289",
+      "creative_dna_sha256": "b9dc52748dd762ca40a4fd6d3f41830de0c2234119c2b7a2a5885800a38143e3",
+      "h3_adapter_sha256": "315c8ec5c18a4011e5b51846ac464997bb0016d3d88195ba670b61f0b8095fff",
+      "seedance20_adapter_sha256": "094ab89f29fde24571a4ef67f7ed3ac94acd30bd05b04dc88b0907785f04a543",
+      "mechanism_fingerprint": "3201d2ee1d1215587d6c88428363278a102030bcbf0e5c28eb425ec9e56a143a"
+    },
+    {
+      "case_id": "x-naiknelofar788-2087589767542407490-browser-2087589767542407490-video-1",
+      "template_id": "t8-case-protector-led-route-to-threshold-v1",
+      "label": "护送穿行｜关系确认到发光门槛",
+      "summary": "先用近距离动作建立保护者与需要护送者的关系，再让保护者转身确认路线、持续保持可见接触并穿过熟悉空间；晚段只跨越一个视觉明确的门槛，保持两人共同进入的证据。",
+      "case_sha256": "76249fbb3de9012160eb05366ac51ea70dfb802a39a720b4c0add6cce11c1b85",
+      "creative_dna_sha256": "302c6707cdec94a3ec83194147d73ffc2413e28dfacec6abf4e6cc504a987443",
+      "h3_adapter_sha256": "e9595c2215a79f2f2e5d6c3d0e7fff0207b890403b012fb369cfef0901044272",
+      "seedance20_adapter_sha256": "1a9ffa42f9385f9fb81b25dab013cef6a7deea1a185be4496e9c3410cc5dd6a6",
+      "mechanism_fingerprint": "f6c53db1aad868bf7ae5ae5006b47ffbbf46cf06aae7396a37766cffb8fe2005"
+    }
+  ]
+}
