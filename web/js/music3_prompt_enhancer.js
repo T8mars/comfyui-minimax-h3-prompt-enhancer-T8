@@ -265,6 +265,10 @@ function addRequestEstimateWidget(node, widgets) {
             minimum += 1;
             maximum += 1;
             stageNames.push(effectiveMode === EDIT_LYRICS_MODE ? "歌词润色" : "歌词生成");
+            if (effectiveMode === GENERATE_LYRICS_MODE) {
+                maximum += 1;
+                stageNames.push("歌词语言纠正（仅检测不符时）");
+            }
         }
         if (widgets.quality?.value === FULL_QUALITY_MODE) {
             minimum += 1;
@@ -497,6 +501,13 @@ app.registerExtension({
             if (lyricsModeWidget) {
                 lyricsModeWidget.tooltip = "这里控制歌词工作流；生成/润色是 T8 非官方扩展，官方 Skill 的正式能力是下方 music_caption 结构化改写。";
             }
+            if (lyricsWidget) {
+                lyricsWidget.tooltip = "仅供 AUTO、严格保留和润色模式使用；生成新歌词模式会隐藏并忽略此框的正文。";
+            }
+            if (languageWidget) {
+                languageWidget.label = "歌词语言（只控制歌词）";
+                languageWidget.tooltip = "只控制 lyrics 输出，不改变官方 Music Caption 的描述语言。AUTO 会从音乐创意和已有歌词文字推断。";
+            }
             if (qualityWidget) {
                 qualityWidget.label = "官方 Skill 质量模式";
                 qualityWidget.tooltip = "快速核心只执行官方三段 Caption 合同；官方完整再执行流派路由、索引筛选与最多三个官方模板参考。";
@@ -515,7 +526,7 @@ app.registerExtension({
             ].filter(Boolean);
             const updateConditional = () => {
                 const expanded = Boolean(this.music3AdvancedExpanded);
-                setWidgetVisible(lyricsWidget, lyricsModeWidget?.value !== INSTRUMENTAL_MODE);
+                setWidgetVisible(lyricsWidget, ![INSTRUMENTAL_MODE, GENERATE_LYRICS_MODE].includes(lyricsModeWidget?.value));
                 setWidgetVisible(structureWidget, expanded);
                 setWidgetVisible(customStructureWidget, expanded && structureWidget?.value === CUSTOM_STRUCTURE);
                 setWidgetVisible(editRequestWidget, expanded && lyricsModeWidget?.value === EDIT_LYRICS_MODE);

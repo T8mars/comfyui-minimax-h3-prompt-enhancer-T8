@@ -200,11 +200,70 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(len(session.requests), 2)
         self.assertIn("[Verse]", lyrics)
         self.assertEqual(caption, CAPTION)
+        lyric_system = session.requests[0]["json"]["messages"][0]["content"]
+        lyric_user = json.loads(session.requests[0]["json"]["messages"][1]["content"])
+        self.assertIn("MANDATORY LYRIC LANGUAGE", lyric_system)
+        self.assertEqual(lyric_user["music_brief"]["lyrics_language"]["value"], "中文")
+        self.assertNotIn("output_language", lyric_user["music_brief"])
+        self.assertNotIn("caption_word_target", lyric_user["music_brief"])
         caption_user = json.loads(session.requests[-1]["json"]["messages"][1]["content"])
         self.assertNotIn("灯火穿过雨幕", json.dumps(caption_user, ensure_ascii=False))
         timeline = caption_user["Music_Brief"]["tag_timeline"]
         self.assertEqual(timeline[0]["section"], "Verse")
         self.assertEqual(json.loads(report_text)["effective_lyrics_mode"], music3.GENERATE_LYRICS_MODE)
+
+    def test_generate_mode_infers_chinese_from_idea_and_hidden_legacy_hint(self):
+        session = AdaptiveSession()
+        lyrics, caption, _payload, _report = self.run_enhancer(
+            session,
+            music_idea="温暖的中文歌曲，女声从克制主歌走向明亮副歌。",
+            lyrics_mode=music3.GENERATE_LYRICS_MODE,
+            lyrics="中文",
+            lyrics_language=music3.LYRICS_LANGUAGES[0],
+        )
+        request = json.loads(session.requests[0]["json"]["messages"][1]["content"])
+        self.assertEqual(request["music_brief"]["lyrics_language"]["value"], "中文")
+        self.assertGreaterEqual(len(re.findall(r"[\u3400-\u9fff]", lyrics)), 8)
+        self.assertEqual(caption, CAPTION)
+
+    def test_wrong_language_generated_lyrics_are_repaired_without_changing_caption(self):
+        class WrongLanguageSession(AdaptiveSession):
+            def post(self, url, **kwargs):
+                system = kwargs["json"]["messages"][0]["content"]
+                if "T8 lyric-writing extension" in system:
+                    self.urls.append(url)
+                    self.requests.append(kwargs)
+                    return FakeResponse(
+                        200,
+                        {"choices": [{"message": {"content": json.dumps({
+                            "lyrics": "[Verse]\nMorning light across the road\n\n[Chorus]\nWe keep moving on"
+                        })}}]},
+                    )
+                if "correcting only the language" in system:
+                    self.urls.append(url)
+                    self.requests.append(kwargs)
+                    return FakeResponse(
+                        200,
+                        {"choices": [{"message": {"content": json.dumps({
+                            "lyrics": "[Verse]\n晨光越过漫长公路\n\n[Chorus]\n我们继续向前走"
+                        }, ensure_ascii=False)}}]},
+                    )
+                return super().post(url, **kwargs)
+
+        session = WrongLanguageSession()
+        lyrics, caption, payload_text, report_text = self.run_enhancer(
+            session,
+            lyrics_mode=music3.GENERATE_LYRICS_MODE,
+            lyrics="",
+            lyrics_language="中文",
+        )
+        self.assertIn("晨光越过漫长公路", lyrics)
+        self.assertNotIn("Morning light", lyrics)
+        self.assertEqual(caption, CAPTION)
+        self.assertEqual(json.loads(payload_text)["instructions"], CAPTION)
+        report = json.loads(report_text)
+        self.assertIn("lyrics_language_repair_applied", report["warnings"])
+        self.assertEqual([item["stage"] for item in report["stages"]], ["lyrics_generation", "lyrics_language_repair", "official_caption_compilation"])
 
     def test_instrumental_mode_outputs_official_tag_and_no_lyric_call(self):
         session = AdaptiveSession()
@@ -522,6 +581,75 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(caption, CAPTION)
         self.assertEqual(len(session.requests), 2)
 
+    def test_official_reference_selection_retries_524_up_to_six_attempts(self):
+        unavailable = FakeResponse(524, {"error": {"message": "origin timeout"}})
+        success = FakeResponse(200, {"choices": [{"message": {"content": "selected"}}]})
+        session = SequenceSession([unavailable] * 5 + [success])
+        with patch("time.sleep", return_value=None) as sleep:
+            result = music3._request_music_completion(
+                session=session,
+                api_key="test-secret-key",
+                messages=[{"role": "user", "content": "select"}],
+                temperature=0.1,
+                chat_url=music3.AI_WORKSHOP_CHAT_COMPLETIONS_URL.replace("ai.t8star.org", "api.seedance.nz"),
+                provider_name="Seedance",
+                model_id="test-model",
+                stage="official_reference_selection",
+            )
+        self.assertEqual(result, "selected")
+        self.assertEqual(len(session.requests), 6)
+        self.assertEqual(
+            [call.args[0] for call in sleep.call_args_list],
+            list(music3.OFFICIAL_REFERENCE_RETRY_DELAYS),
+        )
+
+    def test_official_reference_selection_reports_six_exhausted_attempts(self):
+        unavailable = FakeResponse(524, {"error": {"message": "origin timeout"}})
+        session = SequenceSession([unavailable] * 6)
+        with patch("time.sleep", return_value=None):
+            with self.assertRaisesRegex(
+                music3.Music3PromptEnhancerError,
+                r"stage 'official_reference_selection'.*attempts=6",
+            ):
+                music3._request_music_completion(
+                    session=session,
+                    api_key="test-secret-key",
+                    messages=[{"role": "user", "content": "select"}],
+                    temperature=0.1,
+                    chat_url=music3.AI_WORKSHOP_CHAT_COMPLETIONS_URL.replace(
+                        "ai.t8star.org", "api.seedance.nz"
+                    ),
+                    provider_name="Seedance",
+                    model_id="test-model",
+                    stage="official_reference_selection",
+                )
+        self.assertEqual(len(session.requests), 6)
+
+    def test_full_mode_never_continues_without_an_official_reference(self):
+        class EmptyReferenceSession(AdaptiveSession):
+            def post(self, url, **kwargs):
+                system = kwargs["json"]["messages"][0]["content"]
+                if "Select up to three references" in system:
+                    self.urls.append(url)
+                    self.requests.append(kwargs)
+                    return FakeResponse(
+                        200,
+                        {"choices": [{"message": {"content": '{"references":[]}'}}]},
+                    )
+                return super().post(url, **kwargs)
+
+        session = EmptyReferenceSession()
+        with self.assertRaisesRegex(
+            music3.Music3PromptEnhancerError,
+            "requires at least one official reference template",
+        ):
+            self.run_enhancer(
+                session,
+                music_idea="Modern Mandopop electronic production and a wide final chorus.",
+                quality_mode=music3.FULL_QUALITY_MODE,
+            )
+        self.assertEqual(len(session.requests), 1)
+
     def test_soft_length_and_missing_headings_never_turn_nonempty_content_into_error(self):
         class RawSession(AdaptiveSession):
             def post(self, url, **kwargs):
@@ -547,6 +675,9 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertIn("https://github.com/T8mars/minimax-h3-prompt-skill-T8", source)
         self.assertIn("music3_api_key_secure", source)
         self.assertIn("lyrics_mode", source)
+        self.assertIn('languageWidget.label = "歌词语言（只控制歌词）"', source)
+        self.assertIn("GENERATE_LYRICS_MODE].includes", source)
+        self.assertIn("歌词语言纠正", source)
         self.assertIn("openai_base_url", source)
         self.assertIn("music3_request_estimate", source)
         self.assertIn("清空隐藏歌词", source)
