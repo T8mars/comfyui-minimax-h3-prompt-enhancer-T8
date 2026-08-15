@@ -1,0 +1,18 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-16-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "user-video-62b8eb07cf1e85858d73598c271fb2d6",
+      "template_id": "t8-case-graphic-reset-action-proof-hero-lockup-v1",
+      "label": "图形复位｜身份卡与动作证明交替",
+      "summary": "从一次紧凑的身份激活开始，让稳定的图形身份复位与短促的实拍动作证明交替出现；后段提高动作难度，最后把峰值动作轮廓收回到一帧完整主体锁定图中。",
+      "case_sha256": "e60fb3ca95283e3bf4c53448435c09b3b1b824fd2f2b5cf016e3b3763c844824",
+      "creative_dna_sha256": "254598cce88072d0f0b004f948527441a9ffbf439825237170fbd2a5783b15f4",
+      "h3_adapter_sha256": "d3aed02e46677150b2f5d8ee91f69e424340496a71dfd1bcaaab08b7e13b768a",
+      "seedance20_adapter_sha256": "cb5029b58f100b69b2e61c4438ef21886378306148fedc6164355ef1dfb00385",
+      "mechanism_fingerprint": "bbd30ccb932633b90d7a8052c0506d3941d8a7863bbf9f05c8192b842cb21f53"
+    }
+  ]
+}

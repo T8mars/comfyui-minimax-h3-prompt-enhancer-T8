@@ -31,7 +31,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。预设只优化提示词，不运行完整制作工作流。
-- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：112 条已发布案例事实归并为 97 个稳定案例 selector（含 15 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 99 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：113 条已发布案例事实归并为 98 个稳定案例 selector（含 15 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 100 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -298,8 +298,9 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 | `屏中蒙太奇｜外层连续内屏切换` | 实体显示设备与外部现场保持同一连续镜头，内屏累积至少三种状态，结尾让内屏结果、设备载体和外部语境同时可读 |
 | `逐物改写｜局部对象到整片环境` | 从一个局部对象开始逐项传播可见变化，保持改写规则连续，最终把局部机制扩展为整片环境的新状态 |
 | `尺度展开｜微小材质扩张后原样回收` | 从微小材质锚点连续扩张到大尺度空间结果，再沿同一材质关系精确回收至原始尺度与状态 |
+| `图形复位｜身份卡与动作证明交替` | 先完成紧凑身份激活，让固定图形身份卡与短促动作证明交替出现，后段提高动作难度并把峰值动作轮廓收回完整主体锁定图 |
 
-112 条来源案例中有 97 个案例 selector 和 15 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-15-01` 新增 `屏中蒙太奇｜外层连续内屏切换`、`逐物改写｜局部对象到整片环境`、`尺度展开｜微小材质扩张后原样回收` 3 个稳定 selector。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
+113 条来源案例中有 98 个案例 selector 和 15 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-16-01` 新增 `图形复位｜身份卡与动作证明交替` 1 个稳定 selector。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
 
 另外两个独立的用户贡献社区 Skill 不合并进案例 registry，也不冒充官方 Skill：
 
@@ -310,7 +311,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 
 打开 `MiniMax 官方场景 Skill（8 个可选）` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择任一具体官方场景 Skill 或非官方模板后，节点内都会显示用途、适用/推荐输入格式、必须实现的结构锚点、推荐示例、GIF 和来源链接。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
-GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 114 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
+GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 115 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
 
 维护者仍可选用本地原始案例清单，以显示来源链接或在开发环境优先检查原始预览；普通用户不需要此配置：
 
@@ -346,7 +347,7 @@ python tools/bundle_t8_case_previews.py `
   --ffmpeg F:\AI-T8-video-onekey\ffmpeg\bin\ffmpeg.exe
 ```
 
-导入器要求 112 条案例记录严格组成 97 个 selector + 15 个 evidence variant + 0 个 pending case，并另验 2 个独立社区 Skill，最终生成 99 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
+导入器要求 113 条案例记录严格组成 98 个 selector + 15 个 evidence variant + 0 个 pending case，并另验 2 个独立社区 Skill，最终生成 100 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
@@ -408,7 +409,7 @@ MV 规则按以下方式工作：
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | 界面显示为“H3 核心写作 Skill（始终启用）”；`现有兼容 / 官方 Skill 严格`，默认兼容，严格档位强制英文说明正文 |
 | `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF |
-| `case_template` | `无 / 99 个非官方模板`：97 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
+| `case_template` | `无 / 100 个非官方模板`：98 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |

@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 114,
+  "preview_count": 115,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -905,6 +905,14 @@
       "source_sha256": "f3f22bf08fc2c0bc46f917d493725312913773625288a9bba1f745ba3e3e62ab",
       "sha256": "36ebfe4f631b89f0a7aaa8999571f33e936bbbcfb234d5a142204d169135cb2a",
       "bytes": 1746575,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-62b8eb07cf1e85858d73598c271fb2d6",
+      "file": "c1e3da75873f7309f60ce9e5b9522e0dc152764830ababd34b2120a2995bebe8.gif",
+      "source_sha256": "3f2fda1133e631432faf99f6f948b13ec394c2c050e34252496a1eedd5402b0a",
+      "sha256": "c1e3da75873f7309f60ce9e5b9522e0dc152764830ababd34b2120a2995bebe8",
+      "bytes": 3944964,
       "human_preview_only": true
     },
     {
