@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 109,
-  "case_selector_template_count": 94,
+  "source_case_count": 112,
+  "case_selector_template_count": 97,
   "community_skill_count": 2,
-  "selector_template_count": 96,
+  "selector_template_count": 99,
   "evidence_variant_count": 15,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -5503,6 +5503,171 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish a protector-dependent relationship before movement, show the protector choose and lead one continuous route while maintaining readable contact, preserve both identities through the environment, then cross one visually distinct threshold together and hold their connection.\nInvariants:\n- inv-01: Establish the protector and dependent role through visible contact before travel.\n- inv-02: Show the protector choose or confirm one route before escorting.\n- inv-03: Maintain readable physical or spatial guidance through the route.\n- inv-04: Keep both identities and recurring landmarks traceable.\n- inv-05: Cross one distinct threshold together and hold connection.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Starting in motion obscures the relationship.: Establish the protector and dependent role through visible contact before travel.\n- An unexplained cut to travel removes agency.: Show the protector choose or confirm one route before escorting.\n- Independent walking weakens protection.: Maintain readable physical or spatial guidance through the route.\n- Losing one subject breaks the route.: Keep both identities and recurring landmarks traceable.\n- Separate crossings or a premature cut leave the outcome unclear.: Cross one distinct threshold together and hold connection.\nDo not copy from the source: the source father and child; the exact apartment and wardrobe; the source embrace and escort choreography; the exact glowing portal appearance; the source family identity",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-continuous-outer-shot-inner-screen-montage-v1",
+      "label": "屏中蒙太奇｜外层连续内屏切换",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "让一台带屏设备始终占据前景并保持外层镜头连续，只允许设备内屏在不同人物或状态间切换；外层背景、手部微调和真实视差持续证明同一现场，最后让内外两层的群体能量形成可读呼应。",
+      "input_format": "实体显示设备 + 连续外层镜头 + 至少三种内屏状态 + 外层独立视差/遮挡 + 内外两层终态同框",
+      "recommended_input": "原创夜间雨林实验区内，植物学家打开石墨色折叠热成像监视器，屏幕与边框清晰，湿叶、琥珀工作灯和小型团队在后方虚化；薄雾与叶片只在外层移动，监视器内部依次切换蛾翼扫描和花朵开放，显示边界始终完整；最终内屏把蛙、蛾、花和孢子四项读数并列，实体设备、手套和同一虚化温室仍共同可见",
+      "required_anchors": [
+        "Introduce one physical display carrier and clearly separate its inner image from the outer world.",
+        "Keep the outer shot continuous with stable device, operator contact and environmental anchors.",
+        "Accumulate at least three distinguishable inner states without losing the display boundary.",
+        "End with the inner result, physical carrier and outer context readable together."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-bmx-ai13-2081350068280631801-browser-2081350068280631801-video-1",
+        "case_sha256": "c091222930940b62cd4e9995bf555684c88b9a5fb6c3295c64f8102fb278e383",
+        "release_score": 4.728,
+        "creative_dna_sha256": "d7c3cc2cf01849f189abee10663cb98b5326ffb35fbbee016e41a887e4770d2f",
+        "h3_adapter_sha256": "c03bb25a71256ccc40500915e335c3f00ad678e17e3c7d9ddb16531d1484f720",
+        "seedance20_adapter_sha256": "e0bd22dfd034ec8fae22571ee6d21adc997069a4f9f8370b97d58eb2566f7000"
+      },
+      "previews": [
+        {
+          "case_id": "x-bmx-ai13-2081350068280631801-browser-2081350068280631801-video-1",
+          "label": "屏中蒙太奇｜外层连续内屏切换",
+          "short_summary": "让一台带屏设备始终占据前景并保持外层镜头连续，只允许设备内屏在不同人物或状态间切换；外层背景、手部微调和真实视差持续证明同一现场，最后让内外两层的群体能量形成可读呼应。",
+          "recommended_input": "原创夜间雨林实验区内，植物学家打开石墨色折叠热成像监视器，屏幕与边框清晰，湿叶、琥珀工作灯和小型团队在后方虚化；薄雾与叶片只在外层移动，监视器内部依次切换蛾翼扫描和花朵开放，显示边界始终完整；最终内屏把蛙、蛾、花和孢子四项读数并列，实体设备、手套和同一虚化温室仍共同可见",
+          "required_anchors": [
+            "Introduce one physical display carrier and clearly separate its inner image from the outer world.",
+            "Keep the outer shot continuous with stable device, operator contact and environmental anchors.",
+            "Accumulate at least three distinguishable inner states without losing the display boundary.",
+            "End with the inner result, physical carrier and outer context readable together."
+          ],
+          "sha256": "ac402df2719449cd1ea74048e4a11b88ee6775ef36be946fcd0cc7e1bf82d901",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one physical display carrier in a continuous outer shot, keep its bezel, operator contact and surrounding geography visibly stable, and confine every montage cut or state change to the inner screen. Use independent outer-layer parallax or occlusion to keep proving that the exterior take has not cut, then finish by bringing the inner result and the persistent outer context into one readable held relationship.\nInvariants:\n- inv-01: Introduce one physical display carrier and clearly separate its inner image from the outer world.\n- inv-02: Keep the outer shot continuous with stable device, operator contact and environmental anchors.\n- inv-03: Allow meaningful content changes only inside the display while the outer layer supplies independent parallax or occlusion.\n- inv-04: Accumulate at least three distinguishable inner states without losing the display boundary.\n- inv-05: End with the inner result, physical carrier and outer context readable together.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- An unbounded fullscreen insert removes the screen-within-screen mechanism.: Introduce one physical display carrier and clearly separate its inner image from the outer world.\n- Outer cuts turn the sequence into an ordinary montage.: Keep the outer shot continuous with stable device, operator contact and environmental anchors.\n- Matching both layers shot-for-shot destroys the contrast.: Allow meaningful content changes only inside the display while the outer layer supplies independent parallax or occlusion.\n- One inner clip does not establish a montage system.: Accumulate at least three distinguishable inner states without losing the display boundary.\n- Ending on an isolated insert discards the continuous outer proof.: End with the inner result, physical carrier and outer context readable together.\nDo not copy from the source: the source silver early-2000s MiniDV camcorder; the source nighttime fashion crowd and old stone street; the source party portraits, sunglasses and tan fur coat; the source REC and timecode screen graphics; the source exact inner portrait order and electroclash campaign styling",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-local-object-conversion-to-environment-rewrite-v1",
+      "label": "逐物改写｜局部对象到整片环境",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "保持同一第一视角和真实环境，使用一个持续可见的触发工具依次选中不同尺度对象；每次只改写一个局部对象并保留其位置关系，最后把相同转换规则扩大到整片环境。",
+      "input_format": "连续真实环境 + 可见选择工具 + 至少三次局部对象改写 + 原位空间配准 + 一次整片环境改写",
+      "recommended_input": "原创精密洁净室内，戴手套技术员举起小型琥珀检查发射器，对准石墨色阀门，白色墙板、地面网格和传送设备保持真实；光束触及底盘后只有机器人变成分层示意图，轮位、路线和周围机器保持空间配准；光束指向顶棚网格，相同转换边界自上而下扩展，让顶棚、机器和地面成为统一青色洁净室剖面，发射器仍在前景",
+      "required_anchors": [
+        "Establish one continuous real environment and one visible selection tool.",
+        "Align the tool with one object before each local conversion.",
+        "Repeat the rule across at least three materially different object scales while keeping geography traceable.",
+        "Apply the established rule once to a whole environmental region and hold the boundary."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-naiknelofar788-2077382054275436584-browser-2077382054275436584-video-1",
+        "case_sha256": "f030af4e7d0ea2ec41c5f8883fd5b1796ea2a2bbf5b752a20551ab8b62f37227",
+        "release_score": 4.748,
+        "creative_dna_sha256": "2ec6447da13ffd86173a07a55f7d0ef2bfb3f1994a63f8648fdd2a2942e64d46",
+        "h3_adapter_sha256": "ba11273e842735783fbff9a324f4c331c51388c3d04e65702e26b5d62dcb8898",
+        "seedance20_adapter_sha256": "c61479268bd6e2c43b6130855c3582fed6da12a6173765e8cd21d41be9646d01"
+      },
+      "previews": [
+        {
+          "case_id": "x-naiknelofar788-2077382054275436584-browser-2077382054275436584-video-1",
+          "label": "逐物改写｜局部对象到整片环境",
+          "short_summary": "保持同一第一视角和真实环境，使用一个持续可见的触发工具依次选中不同尺度对象；每次只改写一个局部对象并保留其位置关系，最后把相同转换规则扩大到整片环境。",
+          "recommended_input": "原创精密洁净室内，戴手套技术员举起小型琥珀检查发射器，对准石墨色阀门，白色墙板、地面网格和传送设备保持真实；光束触及底盘后只有机器人变成分层示意图，轮位、路线和周围机器保持空间配准；光束指向顶棚网格，相同转换边界自上而下扩展，让顶棚、机器和地面成为统一青色洁净室剖面，发射器仍在前景",
+          "required_anchors": [
+            "Establish one continuous real environment and one visible selection tool.",
+            "Align the tool with one object before each local conversion.",
+            "Repeat the rule across at least three materially different object scales while keeping geography traceable.",
+            "Apply the established rule once to a whole environmental region and hold the boundary."
+          ],
+          "sha256": "9b34dc7b4015f9cd7e2974280d9a60cc1f854f23b277bbd1e1980ca47650a6e7",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nKeep one real environment and one visible selection tool continuous, align the tool with a sequence of distinct objects, and convert only the selected object into a new visual medium while preserving its spatial anchor and the rest of the world. Repeat across increasing scales, then reserve one final gesture that applies the already-proven conversion rule to a complete environmental region.\nInvariants:\n- inv-01: Establish one continuous real environment and one visible selection tool.\n- inv-02: Align the tool with one object before each local conversion.\n- inv-03: Convert only the selected object while preserving its location and surrounding reality.\n- inv-04: Repeat the rule across at least three materially different object scales while keeping geography traceable.\n- inv-05: Apply the established rule once to a whole environmental region and hold the boundary.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- An unexplained transformed opening has no conversion rule.: Establish one continuous real environment and one visible selection tool.\n- Objects changing before selection become random VFX.: Align the tool with one object before each local conversion.\n- Changing the whole frame on every beat removes local evidence.: Convert only the selected object while preserving its location and surrounding reality.\n- Repeated copies of one object do not test the rule.: Repeat the rule across at least three materially different object scales while keeping geography traceable.\n- Another local conversion cannot close the escalation.: Apply the established rule once to a whole environmental region and hold the boundary.\nDo not copy from the source: the source black marker and bare hand; the source Korean city, bus shelter, elevated train and green bus; the source illustrated train, pigeon, orange cat and seated anime girl; the source smiling sun and cloud sky; the AIGC watermark and exact object order",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-material-scale-expansion-exact-return-loop-v1",
+      "label": "尺度展开｜微小材质扩张后原样回收",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先锁定一个可辨认的微小材质锚点与触发动作，让同一材质逐级扩张为更大结构和完整世界，再沿可追踪的反向路径把所有尺度层收回，最终回到与开场一致的原始锚点。",
+      "input_format": "微小材质锚点 + 可见触发 + 至少两级尺度扩张 + 最大世界保持 + 沿同一谱系精确回收原点",
+      "recommended_input": "原创黑橡木剧场地面上，一团紧实白色羊毛位于黄铜音叉下方，小击锤只敲一次，毛团、音叉脚和木纹位置清楚；同一纤维扩展成多层云带，再显出板岩色山脊与房间尺度雾气，一根细羊毛线仍连接天空与地面原点；山脊收成雾，雾收成白云，白云收成纤维并缠回原来同一毛团，音叉和木纹恢复开场关系",
+      "required_anchors": [
+        "Establish one compact material anchor, surrounding surface and visible trigger before expansion.",
+        "Let fragments of the anchor visibly generate the first larger structure.",
+        "Hold one complete maximum-scale world before contraction begins.",
+        "Reverse the same lineage and optical axis to restore the original anchor and trigger relationship."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-noorwithwifi-2051983365688242324-browser-2051983365688242324-video-1",
+        "case_sha256": "0b9df53aec58312f2c96d3a1c3669e4add86d9d627de415311380ac2037f57cb",
+        "release_score": 4.729,
+        "creative_dna_sha256": "f6a3d4ce20cfd94364de6cf746de39a2a4ef848f614db5c2bec7b4b40041ae04",
+        "h3_adapter_sha256": "ab0100cc05a7830abe3a5a3330ba1f3c3edfa94aa93b5a3d591f4d2d83aff851",
+        "seedance20_adapter_sha256": "3d5baa90ad4898420b70410e2a55ff46b3ac12493616b4321d42f42bb32fc8cb"
+      },
+      "previews": [
+        {
+          "case_id": "x-noorwithwifi-2051983365688242324-browser-2051983365688242324-video-1",
+          "label": "尺度展开｜微小材质扩张后原样回收",
+          "short_summary": "先锁定一个可辨认的微小材质锚点与触发动作，让同一材质逐级扩张为更大结构和完整世界，再沿可追踪的反向路径把所有尺度层收回，最终回到与开场一致的原始锚点。",
+          "recommended_input": "原创黑橡木剧场地面上，一团紧实白色羊毛位于黄铜音叉下方，小击锤只敲一次，毛团、音叉脚和木纹位置清楚；同一纤维扩展成多层云带，再显出板岩色山脊与房间尺度雾气，一根细羊毛线仍连接天空与地面原点；山脊收成雾，雾收成白云，白云收成纤维并缠回原来同一毛团，音叉和木纹恢复开场关系",
+          "required_anchors": [
+            "Establish one compact material anchor, surrounding surface and visible trigger before expansion.",
+            "Let fragments of the anchor visibly generate the first larger structure.",
+            "Hold one complete maximum-scale world before contraction begins.",
+            "Reverse the same lineage and optical axis to restore the original anchor and trigger relationship."
+          ],
+          "sha256": "f3f22bf08fc2c0bc46f917d493725312913773625288a9bba1f745ba3e3e62ab",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nLock one small, materially specific anchor and one visible trigger in a stable composition. Expand fragments of that same material through several readable scale levels until they form a complete world, while retaining at least one origin cue. Hold the maximum scale, then reverse the same material lineage and camera axis until the original anchor, trigger relationship and surrounding surface are restored for an exact visual loop.\nInvariants:\n- inv-01: Establish one compact material anchor, surrounding surface and visible trigger before expansion.\n- inv-02: Let fragments of the anchor visibly generate the first larger structure.\n- inv-03: Expand through at least two readable scale levels while retaining an origin cue.\n- inv-04: Hold one complete maximum-scale world before contraction begins.\n- inv-05: Reverse the same lineage and optical axis to restore the original anchor and trigger relationship.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A generic glow has no material history.: Establish one compact material anchor, surrounding surface and visible trigger before expansion.\n- A hard cut to a new world breaks causality.: Let fragments of the anchor visibly generate the first larger structure.\n- Immediate maximum scale feels like an unrelated reveal.: Expand through at least two readable scale levels while retaining an origin cue.\n- Continuous blur hides whether expansion completed.: Hold one complete maximum-scale world before contraction begins.\n- Returning to a similar but different object is only a thematic echo.: Reverse the same lineage and optical axis to restore the original anchor and trigger relationship.\nDo not copy from the source: the source mixed chili and seed spice pile; the source adult fingers pinching the pile; the source rustic wooden tabletop; the source orange-blue galaxy and planet arrangement; the source Yapper watermark and exact spice-cosmos-spice composition",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

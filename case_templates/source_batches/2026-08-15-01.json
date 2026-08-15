@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-15-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-bmx-ai13-2081350068280631801-browser-2081350068280631801-video-1",
+      "template_id": "t8-case-continuous-outer-shot-inner-screen-montage-v1",
+      "label": "屏中蒙太奇｜外层连续内屏切换",
+      "summary": "让一台带屏设备始终占据前景并保持外层镜头连续，只允许设备内屏在不同人物或状态间切换；外层背景、手部微调和真实视差持续证明同一现场，最后让内外两层的群体能量形成可读呼应。",
+      "case_sha256": "c091222930940b62cd4e9995bf555684c88b9a5fb6c3295c64f8102fb278e383",
+      "creative_dna_sha256": "d7c3cc2cf01849f189abee10663cb98b5326ffb35fbbee016e41a887e4770d2f",
+      "h3_adapter_sha256": "c03bb25a71256ccc40500915e335c3f00ad678e17e3c7d9ddb16531d1484f720",
+      "seedance20_adapter_sha256": "e0bd22dfd034ec8fae22571ee6d21adc997069a4f9f8370b97d58eb2566f7000",
+      "mechanism_fingerprint": "441dc45b974f7efb2dee0006cd2924387e49306efd161946923081d711b1e1e0"
+    },
+    {
+      "case_id": "x-naiknelofar788-2077382054275436584-browser-2077382054275436584-video-1",
+      "template_id": "t8-case-local-object-conversion-to-environment-rewrite-v1",
+      "label": "逐物改写｜局部对象到整片环境",
+      "summary": "保持同一第一视角和真实环境，使用一个持续可见的触发工具依次选中不同尺度对象；每次只改写一个局部对象并保留其位置关系，最后把相同转换规则扩大到整片环境。",
+      "case_sha256": "f030af4e7d0ea2ec41c5f8883fd5b1796ea2a2bbf5b752a20551ab8b62f37227",
+      "creative_dna_sha256": "2ec6447da13ffd86173a07a55f7d0ef2bfb3f1994a63f8648fdd2a2942e64d46",
+      "h3_adapter_sha256": "ba11273e842735783fbff9a324f4c331c51388c3d04e65702e26b5d62dcb8898",
+      "seedance20_adapter_sha256": "c61479268bd6e2c43b6130855c3582fed6da12a6173765e8cd21d41be9646d01",
+      "mechanism_fingerprint": "24ef7966dd8452dab238b6e148fa746b98b9f429728952300b1bbf3558783eab"
+    },
+    {
+      "case_id": "x-noorwithwifi-2051983365688242324-browser-2051983365688242324-video-1",
+      "template_id": "t8-case-material-scale-expansion-exact-return-loop-v1",
+      "label": "尺度展开｜微小材质扩张后原样回收",
+      "summary": "先锁定一个可辨认的微小材质锚点与触发动作，让同一材质逐级扩张为更大结构和完整世界，再沿可追踪的反向路径把所有尺度层收回，最终回到与开场一致的原始锚点。",
+      "case_sha256": "0b9df53aec58312f2c96d3a1c3669e4add86d9d627de415311380ac2037f57cb",
+      "creative_dna_sha256": "f6a3d4ce20cfd94364de6cf746de39a2a4ef848f614db5c2bec7b4b40041ae04",
+      "h3_adapter_sha256": "ab0100cc05a7830abe3a5a3330ba1f3c3edfa94aa93b5a3d591f4d2d83aff851",
+      "seedance20_adapter_sha256": "3d5baa90ad4898420b70410e2a55ff46b3ac12493616b4321d42f42bb32fc8cb",
+      "mechanism_fingerprint": "5f8e2efbb1c77181cdade6db14301649886807f018e4a00a92220afa29ce56ec"
+    }
+  ]
+}

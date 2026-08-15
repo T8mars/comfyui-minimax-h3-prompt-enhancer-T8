@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 111,
+  "preview_count": 114,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -881,6 +881,30 @@
       "source_sha256": "cb39d6833e7fa95a5f33468f5ccc391488eee62a53903277a4bf4c6601ff6e78",
       "sha256": "89f23b0ecca64cecc5ca3cbbdc6f8b71b2a7d45113eeab98ed8c8841836b7dd3",
       "bytes": 3702714,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-bmx-ai13-2081350068280631801-browser-2081350068280631801-video-1",
+      "file": "a7294a8fe7772858dc5212fff74eb3d0de8edeb5d8a684aa1e27114fdd190b37.gif",
+      "source_sha256": "ac402df2719449cd1ea74048e4a11b88ee6775ef36be946fcd0cc7e1bf82d901",
+      "sha256": "a7294a8fe7772858dc5212fff74eb3d0de8edeb5d8a684aa1e27114fdd190b37",
+      "bytes": 2197375,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-naiknelofar788-2077382054275436584-browser-2077382054275436584-video-1",
+      "file": "a914e3e1f2f7894b16673948b75739bac5984e13a1643685a93c60b3a4e2eaad.gif",
+      "source_sha256": "9b34dc7b4015f9cd7e2974280d9a60cc1f854f23b277bbd1e1980ca47650a6e7",
+      "sha256": "a914e3e1f2f7894b16673948b75739bac5984e13a1643685a93c60b3a4e2eaad",
+      "bytes": 2121602,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-noorwithwifi-2051983365688242324-browser-2051983365688242324-video-1",
+      "file": "36ebfe4f631b89f0a7aaa8999571f33e936bbbcfb234d5a142204d169135cb2a.gif",
+      "source_sha256": "f3f22bf08fc2c0bc46f917d493725312913773625288a9bba1f745ba3e3e62ab",
+      "sha256": "36ebfe4f631b89f0a7aaa8999571f33e936bbbcfb234d5a142204d169135cb2a",
+      "bytes": 1746575,
       "human_preview_only": true
     },
     {
