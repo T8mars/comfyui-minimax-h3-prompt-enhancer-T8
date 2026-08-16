@@ -131,7 +131,9 @@ def bundle_previews(
         temporary = output_dir / f".{index:03d}.gif"
         completed = subprocess.run(
             [
-                ffmpeg_path, "-hide_banner", "-loglevel", "error", "-y", "-i", str(source),
+                ffmpeg_path, "-hide_banner", "-loglevel", "error", "-y",
+                "-threads", "1", "-filter_threads", "1", "-filter_complex_threads", "1",
+                "-i", str(source),
                 "-filter_complex", filter_graph, "-loop", "0", str(temporary),
             ],
             check=False,

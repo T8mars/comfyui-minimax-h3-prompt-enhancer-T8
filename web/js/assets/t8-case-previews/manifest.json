@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 118,
+  "preview_count": 124,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -937,6 +937,54 @@
       "source_sha256": "31176d12f0e0749a8d187c6fd92cd542acb035d0e0bf49ce572fae45184831d8",
       "sha256": "5af8b1e1e82a54c6b981a222e9865dbbbbc9081e0028e038e3b2a73f884f1a9d",
       "bytes": 1865895,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-449361583639670787",
+      "file": "5ad0066b96abee0a78779b7e6b6f798f2c66f42d4767bf50535d37d75820daa5.gif",
+      "source_sha256": "77a40e588fe5092882e816f9440d48ad57100a118f9736e688656d0a2db051f3",
+      "sha256": "5ad0066b96abee0a78779b7e6b6f798f2c66f42d4767bf50535d37d75820daa5",
+      "bytes": 4711712,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-539597726151069704",
+      "file": "6486a72822ed008a613cdad81fd190ca86f76e1946f3ffafa6158e4ceb643a67.gif",
+      "source_sha256": "1e15ce3f39039098a4ffaf18bc9582ccba4c4d7ca1d1376c327b004ad5651e2c",
+      "sha256": "6486a72822ed008a613cdad81fd190ca86f76e1946f3ffafa6158e4ceb643a67",
+      "bytes": 3343624,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-539455495249870848",
+      "file": "50ec6bc1b16da732428cfcbeaab3ad9ff8574f89ab95a056a5ffceb95587e666.gif",
+      "source_sha256": "a66a9979e498ea7d4f49bbb001c73fe3496d2e643d54ffc37a91dbfd4d5aa938",
+      "sha256": "50ec6bc1b16da732428cfcbeaab3ad9ff8574f89ab95a056a5ffceb95587e666",
+      "bytes": 1601780,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-540189229734940672",
+      "file": "895d52c50fed757b5867c86ff0c8a82bbb2eed45c3ed05b3f22330ba4ba54185.gif",
+      "source_sha256": "d35f9ae8ff85b5613a432a35a7479ff2bfdda971ec241846f80caa93f6dd3121",
+      "sha256": "895d52c50fed757b5867c86ff0c8a82bbb2eed45c3ed05b3f22330ba4ba54185",
+      "bytes": 1918259,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-539548087632777219",
+      "file": "536fab3567e3af1e2f6f7a9e4209b5176141878cbba2c69af3bc2f0c4c22343a.gif",
+      "source_sha256": "70d1b01c04c3fbf0de01969fa1bb5577259c6c8a4330b58a848fb197aa865186",
+      "sha256": "536fab3567e3af1e2f6f7a9e4209b5176141878cbba2c69af3bc2f0c4c22343a",
+      "bytes": 4221207,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-539984531455201282",
+      "file": "fa53aa7b9d256c1b04c5526491464abf05f40d9292a9e2aec2e79436840e7403.gif",
+      "source_sha256": "c45c0063ac0fbe1b1db5f18bda7740ec56984d69e80019621c2facc623c936a6",
+      "sha256": "fa53aa7b9d256c1b04c5526491464abf05f40d9292a9e2aec2e79436840e7403",
+      "bytes": 5771432,
       "human_preview_only": true
     },
     {

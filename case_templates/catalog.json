@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 116,
-  "case_selector_template_count": 101,
+  "source_case_count": 122,
+  "case_selector_template_count": 106,
   "community_skill_count": 2,
-  "selector_template_count": 103,
-  "evidence_variant_count": 15,
+  "selector_template_count": 108,
+  "evidence_variant_count": 16,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
   "templates": [
@@ -5888,6 +5888,298 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBegin with an external observer discovering and following one subject through a readable environment. Let the subject complete one site-specific exchange while the observer still owns the view, then provide one wider location proof. Use one motivated continuity bridge such as occlusion, equipment installation, mounting or carrier handoff before switching exactly once to a subject-controlled capture that still preserves subject identity and environmental context.\nInvariants:\n- inv-01: Establish one subject through an external trailing or observational camera.\n- inv-02: Use one site-specific exchange while the observer still owns the view; the exchange may be adjustment, response, installation, activation or material contact and must not require picking up or presenting an object.\n- inv-03: Provide one wider location proof with stable identity before the ownership switch.\n- inv-04: Use one motivated continuity bridge immediately before the switch, such as occlusion, equipment installation, mounting or carrier handoff.\n- inv-05: Switch exactly once to a subject-controlled capture and keep stable identity plus environmental context readable.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Opening in selfie mode removes the handoff.: Establish one subject through an external trailing or observational camera.\n- A generic pose or decontextualized gesture provides no environmental exchange.: Use one site-specific exchange while the observer still owns the view; the exchange may be adjustment, response, installation, activation or material contact and must not require picking up or presenting an object.\n- Continuous face close-ups leave the setting unproven.: Provide one wider location proof with stable identity before the ownership switch.\n- An unrelated cut to subject-controlled footage breaks continuity.: Use one motivated continuity bridge immediately before the switch, such as occlusion, equipment installation, mounting or carrier handoff.\n- Returning to observer coverage or losing all location evidence weakens the terminal handoff.: Switch exactly once to a subject-controlled capture and keep stable identity plus environmental context readable.\nDo not copy from the source: the source young woman with long dark hair and pale beach outfit; the source tropical foliage, turquoise bay and white sand; the source sandals and small shell-like found object; the source exact crouch, seated portrait, shoreline walk and selfie order; the source beauty-vlog facial presentation and beach composition",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-sensory-seal-location-swap-resumption-v1",
+      "label": "感官封闭｜人群静止点到异地恢复",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让稳定主体成为高速群流中的静止参照，再用一次主动封闭感官的动作建立触发；镜头持续靠近并让环境运动加压，只在主体完全静止时发生一次全画幅换境，最后用同一身份、轴线和恢复动作证明空间已改变。",
+      "input_format": "稳定主体与独立流动环境 + 一次完整感官封闭 + 环境继续运动 + 单次全画幅换境 + 同身份在新空间恢复动作",
+      "recommended_input": "原创深海维修码头内，一名陶瓷潜水员稳定站在标记平台中央，三台维修无人机和悬挂工具车独立穿行；无人机速度感增强，潜水员低头闭眼并完全静止，主体轴线始终居中；同一潜水员出现在安静海藻苗圃，打开系绳种荚托架并把一枚种荚释放进水流，停留证明新环境持续",
+      "required_anchors": [
+        "Establish one stable subject against independently moving surroundings before the trigger.",
+        "Use one deliberate bilateral or otherwise complete self-sealing gesture without changing location yet.",
+        "Replace the whole environment only once through a bounded full-frame perceptual wash while preserving the subject axis.",
+        "Restore the same identity in a materially different location and show one resumption action under the new physics."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-hailuo-449361583639670787",
+        "case_sha256": "4e38481743c1c5530bc0ad75bcb96314c0437d303760ccb693a794bebfd861f9",
+        "release_score": 4.733,
+        "creative_dna_sha256": "1bb0f314b373cf0a3aaf8c80852ca2adc8e5feeda93c708aff5c218e7d1f5eca",
+        "h3_adapter_sha256": "81eabc6ef0686ee139caad0a159bb9e8323c4017a07148657695cedbb818d9c5",
+        "seedance20_adapter_sha256": "bb651ff24ab23a5d7f25410853a29ea08865bcf51e5a3174a5df8a9ba8f32297"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-hailuo-449361583639670787",
+          "label": "感官封闭｜人群静止点到异地恢复",
+          "short_summary": "先让稳定主体成为高速群流中的静止参照，再用一次主动封闭感官的动作建立触发；镜头持续靠近并让环境运动加压，只在主体完全静止时发生一次全画幅换境，最后用同一身份、轴线和恢复动作证明空间已改变。",
+          "recommended_input": "原创深海维修码头内，一名陶瓷潜水员稳定站在标记平台中央，三台维修无人机和悬挂工具车独立穿行；无人机速度感增强，潜水员低头闭眼并完全静止，主体轴线始终居中；同一潜水员出现在安静海藻苗圃，打开系绳种荚托架并把一枚种荚释放进水流，停留证明新环境持续",
+          "required_anchors": [
+            "Establish one stable subject against independently moving surroundings before the trigger.",
+            "Use one deliberate bilateral or otherwise complete self-sealing gesture without changing location yet.",
+            "Replace the whole environment only once through a bounded full-frame perceptual wash while preserving the subject axis.",
+            "Restore the same identity in a materially different location and show one resumption action under the new physics."
+          ],
+          "sha256": "77a40e588fe5092882e816f9440d48ad57100a118f9736e688656d0a2db051f3",
+          "width": 640,
+          "height": 1146,
+          "duration_seconds": 15.76,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one stable subject as a quiet center inside a visibly active environment. Let the subject perform one deliberate self-sealing gesture, keep external motion escalating while the subject becomes still, then use one full-frame perceptual wash to replace the environment. Restore the same identity and optical axis in a materially different location and require one visible resumption action that proves the new space persists.\nInvariants:\n- inv-01: Establish one stable subject against independently moving surroundings before the trigger.\n- inv-02: Use one deliberate bilateral or otherwise complete self-sealing gesture without changing location yet.\n- inv-03: Continue environmental motion while the sealed subject reaches a visibly still state.\n- inv-04: Replace the whole environment only once through a bounded full-frame perceptual wash while preserving the subject axis.\n- inv-05: Restore the same identity in a materially different location and show one resumption action under the new physics.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A quiet or empty opening provides no pressure to isolate from.: Establish one stable subject against independently moving surroundings before the trigger.\n- An unexplained flash removes causal ownership.: Use one deliberate bilateral or otherwise complete self-sealing gesture without changing location yet.\n- Stopping everything together erases the subject-environment contrast.: Continue environmental motion while the sealed subject reaches a visibly still state.\n- Multiple partial swaps or a new camera axis break continuity.: Replace the whole environment only once through a bounded full-frame perceptual wash while preserving the subject axis.\n- Ending in white light or on a static portrait leaves the spatial change unverified.: Restore the same identity in a materially different location and show one resumption action under the new physics.\nDo not copy from the source: the source platinum-haired woman in white shirt and black tie; the source crowded urban zebra crossing and green rice field; the source oversized black headphones; the source exact city-whiteout-field order and arm-spread ending; MiniMax and Hailuo AI watermarks",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-dual-support-elastic-character-control-v1",
+      "label": "双支座弹性偶｜控制器驱动形变复位",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "让两个图形角色分别绑定到持续可见的物理支座；每轮只改变一种可读控制参数，以共同响应、独立响应和第三种关系测试证明绑定规则，最后让两支座重新稳定并恢复可辨双角色终态。",
+      "input_format": "两个可见支座绑定双角色 + 共享响应 + 独立响应 + 第三种关系测试 + 所有权不互换 + 配对终态",
+      "recommended_input": "原创磁悬观测室内，两座黄铜万向节底座位于独立同心环；A座系青色方眼种荚，B座系琥珀月牙眼种荚；两座底座沿不同半径绕中央校准标记运行一圈，两枚种荚形成耦合环绕但系绳始终分离；两座底座进入并排插槽，斜向张力释放，两枚种荚恢复成紧凑可辨形态；眼标、系绳和停靠灯同框停留",
+      "required_anchors": [
+        "Establish two distinct graphic characters, each visibly bound to one stable physical support.",
+        "Change one measurable support parameter and make both characters answer through a readable shared response.",
+        "Apply a third materially different support relation or controller path without repeating the prior response.",
+        "Synchronize both supports and finish with two legible characters still attached to their original sides."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-hailuo-539597726151069704",
+        "case_sha256": "55415db899be89ade1484e1985d1095d62ed01bd0833f253baaf7a8f79517346",
+        "release_score": 4.75,
+        "creative_dna_sha256": "0a911b2182789167322f6b6a6bd6a7e2f65efbdc3b4950538d5e6c8fa33439de",
+        "h3_adapter_sha256": "7d5b824d10828af41bb8e2dae4fc55189c6538e85aff4297fca4164a76136360",
+        "seedance20_adapter_sha256": "341666871a9d164c180054135146bfad05c698d723020a6942436b7c9eec9ca9"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-hailuo-539597726151069704",
+          "label": "双支座弹性偶｜控制器驱动形变复位",
+          "short_summary": "让两个图形角色分别绑定到持续可见的物理支座；每轮只改变一种可读控制参数，以共同响应、独立响应和第三种关系测试证明绑定规则，最后让两支座重新稳定并恢复可辨双角色终态。",
+          "recommended_input": "原创磁悬观测室内，两座黄铜万向节底座位于独立同心环；A座系青色方眼种荚，B座系琥珀月牙眼种荚；两座底座沿不同半径绕中央校准标记运行一圈，两枚种荚形成耦合环绕但系绳始终分离；两座底座进入并排插槽，斜向张力释放，两枚种荚恢复成紧凑可辨形态；眼标、系绳和停靠灯同框停留",
+          "required_anchors": [
+            "Establish two distinct graphic characters, each visibly bound to one stable physical support.",
+            "Change one measurable support parameter and make both characters answer through a readable shared response.",
+            "Apply a third materially different support relation or controller path without repeating the prior response.",
+            "Synchronize both supports and finish with two legible characters still attached to their original sides."
+          ],
+          "sha256": "1e15ce3f39039098a4ffaf18bc9582ccba4c4d7ca1d1376c327b004ad5651e2c",
+          "width": 640,
+          "height": 1138,
+          "duration_seconds": 14.38,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nBind two simple graphic characters to two continuously visible physical supports. Change only one measurable support parameter at a time so the pair first demonstrates a shared response, then an asymmetric independent response, then a third materially different relation test. The order, axis and controller may change across instances; character identity and support ownership must remain readable until both supports stabilize into a legible paired state.\nInvariants:\n- inv-01: Establish two distinct graphic characters, each visibly bound to one stable physical support.\n- inv-02: Change one measurable support parameter and make both characters answer through a readable shared response.\n- inv-03: Change a different parameter asymmetrically so one character responds while both bindings remain intact.\n- inv-04: Apply a third materially different support relation or controller path without repeating the prior response.\n- inv-05: Synchronize both supports and finish with two legible characters still attached to their original sides.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Floating characters with no support cannot make gesture causality readable.: Establish two distinct graphic characters, each visibly bound to one stable physical support.\n- Changing body shape without a matching support change feels arbitrary.: Change one measurable support parameter and make both characters answer through a readable shared response.\n- Applying identical changes to both sides never demonstrates separate ownership.: Change a different parameter asymmetrically so one character responds while both bindings remain intact.\n- Repeating the same axis and order makes the middle a surface routine.: Apply a third materially different support relation or controller path without repeating the prior response.\n- Losing a face, swapping sides or ending as abstract ribbons breaks identity closure.: Synchronize both supports and finish with two legible characters still attached to their original sides.\nDo not copy from the source: the source dark-haired woman in a white sweater and beige trousers; the source cream goose-like cartoon blobs with tiny eyes and orange beaks; the source apartment interior and fixed vertical framing; the source exact palm choreography and extreme long-neck ending; MiniMax and Hailuo AI watermarks",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-optical-search-evidence-contraction-v1",
+      "label": "光学搜索｜远景线索递进到细节确认",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "让同一受限光学视野承担完整搜索：先锁定远处地点，再沿一个可见异常逐级收紧到结构、主体和局部细节；每次靠近都回答一个更具体的问题，最后用极近特征完成确认而不是再切到全知镜头。",
+      "input_format": "受限光学观察界面 + 远景地点线索 + 中景主体定位 + 近景身份细节 + 极近景反射或局部证据确认",
+      "recommended_input": "原创轨道温室环位于黑色太空中，下方支杆、三段浅色外壳和青色状态灯建立地点锚点；一台黄铜维护自动机沿环轨移动并用单根探针测试冻结接头，圆形检查镜始终存在；自动机举起一枚弧形玻璃密封圈，反射中清楚出现开场温室环、下方支杆和仍脉动的霜缝",
+      "required_anchors": [
+        "Establish one persistent constrained optical interface and a distant geographic anchor.",
+        "Identify one unusual structural cue inside the same observed geography.",
+        "Stabilize one closer identity or function proof before the terminal detail.",
+        "End on one micro-detail that visibly echoes or verifies the opening geographic anchor."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-hailuo-539455495249870848",
+        "case_sha256": "93f8a98c0d030ca684e91c71c642b02fa0f1dd0696089e5885167a39ad332d93",
+        "release_score": 4.751,
+        "creative_dna_sha256": "8aa927ae0dd5148f1f34be9047380d03cc9d91d37f994a331c448b22e9bf2903",
+        "h3_adapter_sha256": "191abf0e6b74be48e54377836a4164ae169d10e85f2fe331ec7c618e5ed4a375",
+        "seedance20_adapter_sha256": "eb57cc808cf178addbe15b5a9547d7ca75de584c551c294099ebdaa73d8f1467"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-hailuo-539455495249870848",
+          "label": "光学搜索｜远景线索递进到细节确认",
+          "short_summary": "让同一受限光学视野承担完整搜索：先锁定远处地点，再沿一个可见异常逐级收紧到结构、主体和局部细节；每次靠近都回答一个更具体的问题，最后用极近特征完成确认而不是再切到全知镜头。",
+          "recommended_input": "原创轨道温室环位于黑色太空中，下方支杆、三段浅色外壳和青色状态灯建立地点锚点；一台黄铜维护自动机沿环轨移动并用单根探针测试冻结接头，圆形检查镜始终存在；自动机举起一枚弧形玻璃密封圈，反射中清楚出现开场温室环、下方支杆和仍脉动的霜缝",
+          "required_anchors": [
+            "Establish one persistent constrained optical interface and a distant geographic anchor.",
+            "Identify one unusual structural cue inside the same observed geography.",
+            "Stabilize one closer identity or function proof before the terminal detail.",
+            "End on one micro-detail that visibly echoes or verifies the opening geographic anchor."
+          ],
+          "sha256": "a66a9979e498ea7d4f49bbb001c73fe3496d2e643d54ffc37a91dbfd4d5aa938",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nKeep one constrained optical observer interface visible throughout. Begin on a distant geographic anchor, find one anomalous structural cue, contract the field of view to a subject linked to that cue, stabilize a closer identity proof, then end on one micro-detail that visibly echoes the opening location. Every optical step must answer a narrower evidence question without switching to an omniscient camera.\nInvariants:\n- inv-01: Establish one persistent constrained optical interface and a distant geographic anchor.\n- inv-02: Identify one unusual structural cue inside the same observed geography.\n- inv-03: Move from place evidence to one subject or active carrier linked to the cue.\n- inv-04: Stabilize one closer identity or function proof before the terminal detail.\n- inv-05: End on one micro-detail that visibly echoes or verifies the opening geographic anchor.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- An unrestricted establishing shot removes the optical-investigation premise.: Establish one persistent constrained optical interface and a distant geographic anchor.\n- A random zoom without a discovered cue becomes decorative.: Identify one unusual structural cue inside the same observed geography.\n- Jumping to an unrelated person breaks the evidence chain.: Move from place evidence to one subject or active carrier linked to the cue.\n- Skipping directly from distant place to detail hides the target relationship.: Stabilize one closer identity or function proof before the terminal detail.\n- A close face with no retained location evidence does not resolve the search.: End on one micro-detail that visibly echoes or verifies the opening geographic anchor.\nDo not copy from the source: the source binocular mask and red field-note interface; MINIMAX storefront, tower banner and building marks; the source tan-suited rooftop woman with red bag; the source red angular sunglasses and reflected building; the source exact storefront-banner-woman-glasses search order and AI生成 mark",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-diegetic-doodle-response-escalation-v1",
+      "label": "画内涂鸦｜现实互动逐步绘出隐藏世界",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "用第一视角真实互动作为涂鸦触发器：每次手、宠物或物件完成一个可见动作，新的线描符号就锚定在对应现实表面；符号从单个提示升级为动作回声、隐藏对象和路线，最后整套图形连接成覆盖环境的可读世界。",
+      "input_format": "现实第一视角互动 + 首个画内线稿回应 + 连续表面路径 + 至少三类响应图形 + 真实空间与完整绘制世界同框",
+      "recommended_input": "原创玻璃温室内，植物学家的手套触碰一枚露水阀，一只黄铜维修甲虫靠近；阀门玻璃外壳出现一枚青色叶片线稿并停留；路线分成三条叶脉支线，其中一条以小型三角指向标记对准关闭抽屉；植物学家只打开一次，同一青色叶脉沿金属门面铺开；叶片、土槽路线、抽屉叶脉和飞蛾与新出现的阀门、云、水线符号连接到玻璃肋架和地面沟槽；甲虫、手和真实结构全部可读",
+      "required_anchors": [
+        "Establish one embodied observer, one responsive subject and the first surface-bound drawing triggered by visible interaction.",
+        "Use a second real action to extend the drawing rule onto a different local surface or route.",
+        "Reveal one new local figure or motif that visibly inherits an earlier line family.",
+        "End on a wider view where prior symbols connect into one coherent environment-wide drawing layer."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-hailuo-540189229734940672",
+        "case_sha256": "e55482c50d015349124acf3263aedf2c09480fbeec06f5cbb622e88f6d445495",
+        "release_score": 4.755,
+        "creative_dna_sha256": "928843c536f1af23729415a59ed577a095c15136da4b11b8c3765b1f71a72969",
+        "h3_adapter_sha256": "16abc3a774a89e0080559fc69c1fffea2fb44fcc25a64b64fe67920ed4dcbcd2",
+        "seedance20_adapter_sha256": "9131c0f2ae811ccb79d139a1908e7a6eb0364555f8ea2a922392e1ce5aec1d53"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-hailuo-540189229734940672",
+          "label": "画内涂鸦｜现实互动逐步绘出隐藏世界",
+          "short_summary": "用第一视角真实互动作为涂鸦触发器：每次手、宠物或物件完成一个可见动作，新的线描符号就锚定在对应现实表面；符号从单个提示升级为动作回声、隐藏对象和路线，最后整套图形连接成覆盖环境的可读世界。",
+          "recommended_input": "原创玻璃温室内，植物学家的手套触碰一枚露水阀，一只黄铜维修甲虫靠近；阀门玻璃外壳出现一枚青色叶片线稿并停留；路线分成三条叶脉支线，其中一条以小型三角指向标记对准关闭抽屉；植物学家只打开一次，同一青色叶脉沿金属门面铺开；叶片、土槽路线、抽屉叶脉和飞蛾与新出现的阀门、云、水线符号连接到玻璃肋架和地面沟槽；甲虫、手和真实结构全部可读",
+          "required_anchors": [
+            "Establish one embodied observer, one responsive subject and the first surface-bound drawing triggered by visible interaction.",
+            "Use a second real action to extend the drawing rule onto a different local surface or route.",
+            "Reveal one new local figure or motif that visibly inherits an earlier line family.",
+            "End on a wider view where prior symbols connect into one coherent environment-wide drawing layer."
+          ],
+          "sha256": "d35f9ae8ff85b5613a432a35a7479ff2bfdda971ec241846f80caa93f6dd3121",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nUse an embodied observer and one responsive subject to author a diegetic drawing layer through visible real-world actions. Each interaction must add one new surface-anchored symbol that echoes the local object or motion, and later symbols must reuse or connect earlier marks. Escalate from single icon to route, hidden figure and local reflection, then end wide enough to prove the accumulated drawings have become one coherent environment-wide system.\nInvariants:\n- inv-01: Establish one embodied observer, one responsive subject and the first surface-bound drawing triggered by visible interaction.\n- inv-02: Use a second real action to extend the drawing rule onto a different local surface or route.\n- inv-03: Let accumulated drawings direct attention toward one hidden or newly opened area.\n- inv-04: Reveal one new local figure or motif that visibly inherits an earlier line family.\n- inv-05: End on a wider view where prior symbols connect into one coherent environment-wide drawing layer.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Unmotivated floating stickers make the effect decorative.: Establish one embodied observer, one responsive subject and the first surface-bound drawing triggered by visible interaction.\n- Repeating the same icon over the same hand never builds a world.: Use a second real action to extend the drawing rule onto a different local surface or route.\n- Random icons with no search function cannot hand off to discovery.: Let accumulated drawings direct attention toward one hidden or newly opened area.\n- A completely unrelated illustration breaks the accumulated system.: Reveal one new local figure or motif that visibly inherits an earlier line family.\n- Ending on a single sticker or close-up leaves the escalation incomplete.: End on a wider view where prior symbols connect into one coherent environment-wide drawing layer.\nDo not copy from the source: the source small shaggy dog and first-person human hand; the source domestic hallway, cabinet, rug, ball, bowl and paw prints; the source glowing question mark plus banana, paw, bone, bird and dachshund doodles; the source exact dog search route and final hallway drawing layout; AI生成 mark",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-identity-locked-style-world-carousel-v1",
+      "label": "造型轮播｜身份锁定跨风格世界",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "锁定同一高机位人物、脸部与核心比例，让背景系统、色彩、服装配件和道具按阶段成套切换；每轮至少改变两个风格通道但保留身份锚点，密度逐步升级后回到可读人像终态。",
+      "input_format": "固定主体身份与镜头关系 + 至少四个材质/版式不同的风格世界 + 每阶段改变两项风格通道 + 递增密度 + 可读身份终态",
+      "recommended_input": "原创羊皮纸仓库内，一名黄铜发条快递员以椭圆面板、月牙胸章和折叠工具带建立身份；世界切为粉色植物控制台，路线环换成两枚透明种子仪表，前臂变为粉色护甲，脸板、体型和胸章不变；短暂经过琥珀仪器舱后进入克制紫色声学舱，快递员保留椭圆脸板和月牙胸章，佩戴听音盘并只向镜头伸手一次后停留",
+      "required_anchors": [
+        "Establish one stable identity, lens relation and recurring accessory against a low-density opening world.",
+        "Change the surrounding style world while keeping face, silhouette and camera axis stable.",
+        "Use at least one additional world with different layout logic rather than a palette swap alone.",
+        "Reach a denser terminal world but preserve a readable portrait-scale identity proof."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-hailuo-539984531455201282",
+        "case_sha256": "b84e4467ebb9120a0f65e56cbf10c73e188a1814a9643f17b2e5f1514f036dbc",
+        "release_score": 4.753,
+        "creative_dna_sha256": "31db724a6dd6dad9fa34e3269a3590676e0afdce918927d8cd2cdf92c6229930",
+        "h3_adapter_sha256": "3c0e97bfda5d87d09572ab07d38067787df5617d641f833d323590c8e2aec2ac",
+        "seedance20_adapter_sha256": "3765e0112284b387e98b06bfa06463af5daa6c01b62847e56d90f1f61005708e"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-hailuo-539548087632777219",
+          "label": "造型轮播变体｜同装束跨海报版式",
+          "short_summary": "同一高机位人物与服装持续锁定，背景从纯色肖像逐步切换到黑白字版、报刊拼贴和彩色剪贴；人物只做小幅姿态变化，每轮用更高的版式密度验证身份不丢失。作为同一身份锁定式风格世界轮播的短时长证据变体，不新增选择器。",
+          "recommended_input": "原创羊皮纸仓库内，一名黄铜发条快递员以椭圆面板、月牙胸章和折叠工具带建立身份；同一快递员进入粉色植物控制台，路线环换成两枚透明种子仪表，前臂变为粉色护甲，脸板、体型和胸章不变；环境收束成克制紫色声学舱，快递员佩戴小型听音盘和紫色领片，移除多余图表，椭圆脸板、月牙胸章和姿态完整保留",
+          "required_anchors": [
+            "Establish one stable identity, lens relation and recurring accessory against a low-density opening world.",
+            "Change the surrounding style world while keeping face, silhouette and camera axis stable.",
+            "Use at least one additional world with different layout logic rather than a palette swap alone.",
+            "Return to a readable portrait-scale terminal state with the original identity anchors intact."
+          ],
+          "sha256": "70d1b01c04c3fbf0de01969fa1bb5577259c6c8a4330b58a848fb197aa865186",
+          "width": 640,
+          "height": 1138,
+          "duration_seconds": 10.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "user-video-hailuo-539984531455201282",
+          "label": "造型轮播｜身份锁定跨风格世界",
+          "short_summary": "锁定同一高机位人物、脸部与核心比例，让背景系统、色彩、服装配件和道具按阶段成套切换；每轮至少改变两个风格通道但保留身份锚点，密度逐步升级后回到可读人像终态。",
+          "recommended_input": "原创羊皮纸仓库内，一名黄铜发条快递员以椭圆面板、月牙胸章和折叠工具带建立身份；世界切为粉色植物控制台，路线环换成两枚透明种子仪表，前臂变为粉色护甲，脸板、体型和胸章不变；短暂经过琥珀仪器舱后进入克制紫色声学舱，快递员保留椭圆脸板和月牙胸章，佩戴听音盘并只向镜头伸手一次后停留",
+          "required_anchors": [
+            "Establish one stable identity, lens relation and recurring accessory against a low-density opening world.",
+            "Change the surrounding style world while keeping face, silhouette and camera axis stable.",
+            "Use at least one additional world with different layout logic rather than a palette swap alone.",
+            "Reach a denser terminal world but preserve a readable portrait-scale identity proof."
+          ],
+          "sha256": "c45c0063ac0fbe1b1db5f18bda7740ec56984d69e80019621c2facc623c936a6",
+          "width": 640,
+          "height": 1138,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nLock one subject identity, lens position and performance scale before cycling through several materially different style worlds. Change at least two coordinated channels per phase—such as backdrop system, palette, graphic density, props or wardrobe accents—while preserving face, silhouette and one recurring accessory. Escalate world density, then return to a readable portrait-scale terminal state that proves identity survived the carousel.\nInvariants:\n- inv-01: Establish one stable identity, lens relation and recurring accessory against a low-density opening world.\n- inv-02: Change the surrounding style world while keeping face, silhouette and camera axis stable.\n- inv-03: Escalate to a second complete world by changing at least two coordinated style channels.\n- inv-04: Use at least one additional world with different layout logic rather than a palette swap alone.\n- inv-05: Reach a denser terminal world but preserve a readable portrait-scale identity proof.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Beginning with maximal clutter hides identity continuity.: Establish one stable identity, lens relation and recurring accessory against a low-density opening world.\n- Simultaneous identity and camera replacement prevents comparison.: Change the surrounding style world while keeping face, silhouette and camera axis stable.\n- Changing only hue leaves the phase materially redundant.: Escalate to a second complete world by changing at least two coordinated style channels.\n- Repeated near-identical chambers become a slideshow of skins.: Use at least one additional world with different layout logic rather than a palette swap alone.\n- Ending on props or an anonymous silhouette loses the identity contract.: Reach a denser terminal world but preserve a readable portrait-scale identity proof.\nDo not copy from the source: the source blonde braided fashion woman; the source white, blue, pink, green, orange and violet Y2K chambers; the source sunglasses, heart jewelry, flip phones, discs, controllers and headphones; the source exact outfit-color order and high-fisheye poses; CYBER POP, loading/score UI and MiniMax/Hailuo marks",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

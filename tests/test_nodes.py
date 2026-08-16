@@ -261,7 +261,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(len(case_template.options), 104)
+        self.assertEqual(len(case_template.options), 109)
         self.assertEqual(case_template.display_name, "非官方模板（案例 / 社区 Skill）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
@@ -607,8 +607,8 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
         self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
-        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 104)
-        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 104)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 109)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 109)
 
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
@@ -650,7 +650,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("Selected T8 original case template", messages[0]["content"])
         self.assertIn(manual, messages[1]["content"])
 
-    def test_subject_only_case_intent_is_preserved_and_completed_by_all_103_selectors(self):
+    def test_subject_only_case_intent_is_preserved_and_completed_by_all_108_selectors(self):
         for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
             with self.subTest(selection=selection):
                 session = FakeSession(basic_output())
@@ -709,12 +709,12 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
-        self.assertEqual(len(catalog["templates"]), 103)
-        self.assertEqual(catalog["source_case_count"], 116)
-        self.assertEqual(catalog["case_selector_template_count"], 101)
+        self.assertEqual(len(catalog["templates"]), 108)
+        self.assertEqual(catalog["source_case_count"], 122)
+        self.assertEqual(catalog["case_selector_template_count"], 106)
         self.assertEqual(catalog["community_skill_count"], 2)
-        self.assertEqual(catalog["selector_template_count"], 103)
-        self.assertEqual(catalog["evidence_variant_count"], 15)
+        self.assertEqual(catalog["selector_template_count"], 108)
+        self.assertEqual(catalog["evidence_variant_count"], 16)
         self.assertEqual(catalog["pending_completion_count"], 0)
         self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
@@ -813,6 +813,11 @@ class PromptEnhancerTests(unittest.TestCase):
             "t8-case-persistent-plan-strip-execution-escalation-v1",
             "t8-case-bounded-day-loop-recurring-anchor-v1",
             "t8-case-observer-to-subject-camera-handoff-v1",
+            "t8-case-sensory-seal-location-swap-resumption-v1",
+            "t8-case-dual-support-elastic-character-control-v1",
+            "t8-case-optical-search-evidence-contraction-v1",
+            "t8-case-diegetic-doodle-response-escalation-v1",
+            "t8-case-identity-locked-style-world-carousel-v1",
         }
         self.assertTrue(imported_ids.issubset(by_id))
         self.assertIn("微缩闯关｜同一材质连续变形", nodes.CASE_TEMPLATE_OPTIONS)
@@ -847,12 +852,13 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertTrue(template["previews"])
             self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
             preview_count += len(template["previews"])
-        self.assertEqual(preview_count, 118)
+        self.assertEqual(preview_count, 124)
         self.assertEqual(len(by_id["t8c001-product-proof-state-machine"]["previews"]), 3)
         self.assertEqual(len(by_id["t8-case-imperfect-memory-farewell-v1"]["previews"]), 2)
         self.assertEqual(len(by_id["t8-case-flat-geometry-reconstruction-v1"]["previews"]), 5)
         self.assertEqual(len(by_id["t8-case-recurring-identity-board-v1"]["previews"]), 5)
         self.assertEqual(len(by_id["t8-case-observer-follow-encounter-v1"]["previews"]), 2)
+        self.assertEqual(len(by_id["t8-case-identity-locked-style-world-carousel-v1"]["previews"]), 2)
         community_ids = {
             "community-skill/direct-street-interview-video",
             "community-skill/stage-startle-to-truce-encounter",
@@ -903,7 +909,7 @@ class PromptEnhancerTests(unittest.TestCase):
             batch = json.loads(source)
             self.assertEqual(batch["schema_version"], "t8-case-template-batch/v1")
             source_cases.extend(batch["cases"])
-        self.assertEqual(len(source_cases), 101)
+        self.assertEqual(len(source_cases), 106)
         self.assertEqual({item["case_id"] for item in source_cases}, set(catalog_by_case))
         for item in source_cases:
             template = catalog_by_case[item["case_id"]]
