@@ -139,7 +139,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         api_key = next(item for item in schema.inputs if item.id == "api_key")
         case_template = next(item for item in schema.inputs if item.id == "case_template")
         self.assertEqual(shot_count.options[1:], [str(value) for value in range(1, 21)])
-        self.assertEqual(duration.options[1:], [str(value) for value in range(4, 16)])
+        self.assertEqual(duration.options[1:], [str(value) for value in range(4, 31)])
         self.assertTrue(api_key.force_input)
         self.assertIsNone(api_key.socketless)
         self.assertEqual(case_template.default, seedance20.NO_CASE_TEMPLATE)
@@ -179,6 +179,18 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("overrides an approximate count", combined)
         self.assertIn("12 seconds", combined)
         self.assertIn("without assigning absolute per-shot timestamps", combined)
+
+    def test_duration_accepts_thirty_and_rejects_out_of_range_before_network(self):
+        thirty_second = FakeSession()
+        self.run_enhancer(thirty_second, task_intent="T2V", duration_seconds="30")
+        combined = json.dumps(self.messages(thirty_second), ensure_ascii=False)
+        self.assertIn("Total duration: 30 seconds", combined)
+
+        for duration in ("3", "31"):
+            rejected = FakeSession()
+            with self.assertRaisesRegex(seedance20.Seedance20PromptEnhancerError, "4 to 30"):
+                self.run_enhancer(rejected, task_intent="T2V", duration_seconds=duration)
+            self.assertEqual(rejected.chat_requests, [])
 
     def test_shot_count_accepts_twenty_and_rejects_twenty_one(self):
         session = FakeSession()

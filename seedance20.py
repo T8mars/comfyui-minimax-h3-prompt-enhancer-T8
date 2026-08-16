@@ -74,7 +74,7 @@ TASK_INTENT_ALIASES = {label: key for key, label in TASK_INTENT_LABELS.items()}
 
 COMPLEXITY_OPTIONS = ["AUTO（自动判断）", "简单一段式", "复杂分镜式"]
 AUTO_DURATION = "AUTO（模型智能选择）"
-DURATION_OPTIONS = [AUTO_DURATION] + [str(value) for value in range(4, 16)]
+DURATION_OPTIONS = [AUTO_DURATION] + [str(value) for value in range(4, 31)]
 AUTO_SHOT_COUNT = "AUTO（系统自动判断）"
 SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT] + [str(value) for value in range(1, 21)]
 REWRITE_MODES = ["strict", "balanced", "creative"]
@@ -197,9 +197,9 @@ def _normalize_duration(duration_seconds: Any) -> int:
     try:
         duration = int(value)
     except (TypeError, ValueError) as error:
-        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or an integer from 4 to 15.") from error
-    if not 4 <= duration <= 15:
-        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or an integer from 4 to 15.")
+        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or an integer from 4 to 30.") from error
+    if not 4 <= duration <= 30:
+        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or an integer from 4 to 30.")
     return duration
 
 
@@ -553,7 +553,7 @@ def _build_messages(
         )
     )
     duration_rule = (
-        "Total duration: AUTO. Let Seedance 2.0 choose a feasible 4-15 second length from the content."
+        "Total duration: AUTO. Let Seedance 2.0 choose a feasible 4-30 second length from the content."
         if duration_seconds == 0
         else (
             f"Total duration: {duration_seconds} seconds. Fit all requested events within this total without assigning "
@@ -796,7 +796,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     display_name="目标时长",
                     options=DURATION_OPTIONS,
                     default=AUTO_DURATION,
-                    tooltip="AUTO 或 4-15 秒。只控制整体信息密度，不强制逐镜头秒数。",
+                    tooltip="AUTO 或 4-30 秒。只控制整体信息密度，不强制逐镜头秒数。",
                 ),
                 io.Combo.Input(
                     "shot_count",
