@@ -245,6 +245,7 @@ class PromptEnhancerTests(unittest.TestCase):
         ai_workshop_model = next(item for item in schema.inputs if item.id == "ai_workshop_model")
         seed = next(item for item in schema.inputs if item.id == "seed")
         shot_count = next(item for item in schema.inputs if item.id == "shot_count")
+        duration_seconds = next(item for item in schema.inputs if item.id == "duration_seconds")
         self.assertEqual((images.template.min, images.template.max), (0, 9))
         self.assertEqual((videos.template.min, videos.template.max), (0, 3))
         self.assertTrue(api_key.force_input)
@@ -275,6 +276,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(shot_count.default, nodes.AUTO_SHOT_COUNT)
         self.assertEqual(shot_count.options, nodes.SHOT_COUNT_OPTIONS)
         self.assertEqual(shot_count.options[1:], [str(count) for count in range(1, 21)])
+        self.assertEqual((duration_seconds.min, duration_seconds.max), (4, 30))
         self.assertEqual(input_names.index("shot_count"), input_names.index("duration_seconds") + 1)
         self.assertFalse(any(item.id.lower().startswith("audio") for item in schema.inputs))
 
@@ -511,7 +513,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description",
             "a 15-second MV often needs only 2-4 readable shots",
             "Do not output asset cards",
-            "This node adapts only the rules that can be expressed in one 4-15 second H3 prompt",
+            "This node adapts only the rules that can be expressed in one 4-30 second H3 prompt",
             "MV rewrite scope: balanced",
             "MV request context: H3 task=T2VA; duration=15.00s; AUTO",
         ):
@@ -1094,6 +1096,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "https://gateway.example/v1": "https://gateway.example/v1/chat/completions",
             "https://gateway.example/api/v3": "https://gateway.example/api/v3/chat/completions",
             "https://gateway.example/api/v12/": "https://gateway.example/api/v12/chat/completions",
+            "https://gateway.example/V12": "https://gateway.example/V12/chat/completions",
             "https://gateway.example/api/v3/chat/completions": "https://gateway.example/api/v3/chat/completions",
         }
         for base_url, expected in cases.items():
@@ -1428,12 +1431,14 @@ class PromptEnhancerTests(unittest.TestCase):
     def test_duration_word_target_and_shot_count_boundaries(self):
         four_second = FakeSession(basic_output(shots=2))
         self.run_enhancer(four_second, duration_seconds=4)
-        fifteen_second_output = basic_output(shots=2).replace("00:03.000", "00:14.999")
-        self.run_enhancer(FakeSession(fifteen_second_output), duration_seconds=15)
+        thirty_second_output = basic_output(shots=2).replace("00:03.000", "00:29.999")
+        thirty_second = FakeSession(thirty_second_output)
+        self.run_enhancer(thirty_second, duration_seconds=30)
+        self.assertIn("Target duration: 30.00 seconds", thirty_second.chat_requests[0]["json"]["messages"][1]["content"])
 
         for kwargs in (
             {"duration_seconds": 3},
-            {"duration_seconds": 16},
+            {"duration_seconds": 31},
             {"description_word_target": 79},
             {"description_word_target": 1001},
             {"shot_count": -1},
@@ -1531,10 +1536,15 @@ class PromptEnhancerTests(unittest.TestCase):
             requests.exceptions.ConnectionError("temporary route reset"),
             success,
         ])
-        with patch.object(nodes.time, "sleep") as sleep:
+        environment_proxy = {"https": "http://proxy.example:8080"}
+        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch.object(nodes.time, "sleep") as sleep:
             self.assertEqual(self.run_enhancer(session), expected)
         self.assertEqual(len(session.chat_requests), 3)
         self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
+        self.assertEqual(
+            [request["proxies"] for request in session.chat_requests],
+            [environment_proxy, nodes.DIRECT_ROUTE_PROXIES, environment_proxy],
+        )
 
     def test_seedance_gateway_retry_returns_the_successful_generation(self):
         expected = basic_output()
@@ -1564,6 +1574,7 @@ class PromptEnhancerTests(unittest.TestCase):
                 provider_name="OpenAI-compatible",
             )
         self.assertEqual(len(session.chat_requests), 1)
+        self.assertNotIn("proxies", session.chat_requests[0])
 
     def test_http_error_redacts_api_keys(self):
         leaked_key = "sk-" + "leaked-value-1234567890"
@@ -1597,6 +1608,37 @@ class PromptEnhancerTests(unittest.TestCase):
             self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
         sleep.assert_called_once_with(1)
         self.assertEqual(len(session.uploads), 2)
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_seedance_upload_switches_environment_and_direct_routes(self):
+        class RouteAwareUploadSession(FakeSession):
+            def __init__(self):
+                super().__init__(basic_output("I2VA"))
+                self.upload_outcomes = [
+                    requests.exceptions.SSLError("regional TLS failure"),
+                    FakeResponse(503, {"error": {"message": "temporary gateway"}}),
+                    FakeResponse(200, {"url": "https://assets.example/picture_1.png"}),
+                ]
+                self.upload_route_kwargs = []
+
+            def post(self, url, **kwargs):
+                if "files" in kwargs:
+                    self.upload_route_kwargs.append(kwargs)
+                    outcome = self.upload_outcomes.pop(0)
+                    if isinstance(outcome, Exception):
+                        raise outcome
+                    return outcome
+                return super().post(url, **kwargs)
+
+        environment_proxy = {"https": "http://proxy.example:8080"}
+        session = RouteAwareUploadSession()
+        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch.object(nodes.time, "sleep") as sleep:
+            self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
+        self.assertEqual(
+            [request["proxies"] for request in session.upload_route_kwargs],
+            [environment_proxy, nodes.DIRECT_ROUTE_PROXIES, environment_proxy],
+        )
+        self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
         self.assertEqual(len(session.chat_requests), 1)
 
     def test_invalid_json_and_empty_responses_fail_but_length_content_is_returned(self):

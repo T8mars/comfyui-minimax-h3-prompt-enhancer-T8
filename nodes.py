@@ -5,7 +5,7 @@ import os
 import re
 import time
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 import numpy as np
 import requests
@@ -41,6 +41,8 @@ AI_WORKSHOP_MODEL_OPTIONS = [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION]
 MAX_FILE_BYTES = 50 * 1024 * 1024
 REQUEST_TIMEOUT = (20, 300)
 SEEDANCE_CHAT_RETRY_DELAYS = (0.5, 1.0)
+SEEDANCE_ROUTE_SEQUENCE = ("environment", "direct")
+DIRECT_ROUTE_PROXIES = {"http": "", "https": "", "all": ""}
 # Seedance.nz is fronted by regional gateways. These statuses all mean that the
 # gateway/TLS path failed before a usable completion reached the client; unlike
 # 401/402/429/read-timeout they are safe candidates for the existing short,
@@ -151,7 +153,7 @@ PRESET_BOUNDARY_RULE = """Creative preset boundary: the preset is a prompt-writi
 MV_OFFICIAL_SCOPE_RULES = f"""Official MiniMax music-video-subtitle-generator Skill v{OFFICIAL_MV_SKILL_VERSION}, frozen from MiniMax-AI/MiniMax-H3 at commit {OFFICIAL_MV_SKILL_SOURCE_SHA}:
 - Use this profile for AI music videos or emotional music shorts in which music intent, locked lyrics, spatial typography, reference roles, rhythm, performance, and camera language must be designed together. It is not ordinary subtitle cleanup, generic editing, a non-music product ad, licensed-IP copying, or a simple request with no MV structure.
 - Respect any user-supplied target platform, aspect ratio, music genre, instrumentation, tempo feel, vocal mode, emotional temperature, camera language, edit density, and exclusions. Never silently replace them with a preset default.
-- The complete official Skill can plan character, scene, and typography cards, multi-clip generation, Master Audio alignment, canvas delivery, editing, and finishing. This node adapts only the rules that can be expressed in one 4-15 second H3 prompt; it does not claim to create cards, analyze an audio file, generate clips, stitch footage, or deliver a finished MV.
+- The complete official Skill can plan character, scene, and typography cards, multi-clip generation, Master Audio alignment, canvas delivery, editing, and finishing. This node adapts only the rules that can be expressed in one 4-30 second H3 prompt; it does not claim to create cards, analyze an audio file, generate clips, stitch footage, or deliver a finished MV.
 - Omit irrelevant MV dimensions. Do not mechanically add a performer, lyrics, typography, a transition, or a preset visual treatment when the request does not need it."""
 
 MV_LYRIC_AND_PERFORMANCE_RULES = """MV Skill — locked lyrics and conditional performance:
@@ -178,7 +180,7 @@ MV_REFERENCE_ROLE_RULES = """MV Skill — reference-role isolation:
 
 MV_OUTPUT_FOLDING_RULES = """MV Skill — H3 folding and single-clip boundary:
 - Use Global Aesthetic & Character Lock, Vocal Line, Typography, Visual & Action, Camera & Motion, and Transition Out only as internal planning dimensions. Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description; never emit them as extra top-level fields.
-- This request produces one 4-15 second H3 prompt. AUTO shot count should consider duration, complete lyric phrases, textual rhythm evidence, and visual density; a 15-second MV often needs only 2-4 readable shots, but that is guidance, not a hard limit. A fixed 1-20 shot selection still wins as the requested generation constraint.
+- This request produces one 4-30 second H3 prompt. AUTO shot count should consider duration, complete lyric phrases, textual rhythm evidence, and visual density; a 15-second MV often needs only 2-4 readable shots, but that is guidance, not a hard limit. A fixed 1-20 shot selection still wins as the requested generation constraint.
 - Diegetic singing, instruments, and music audible to the depicted performers stay in the shot timeline. overall_soundscape contains only ambience, physical sounds, and nonverbal vocal sounds. Audience-only score belongs in non_diegetic_music.
 - Do not output asset cards, a shot-list document outside H3 fields, production approvals, Master Audio instructions, long-form segmentation, stitching, editing, grading, or delivery steps."""
 
@@ -270,7 +272,7 @@ CREATIVE_PRESET_RULES = {
     NO_CREATIVE_PRESET: """Creative preset: none. Apply only the H3 core contract and the user's own requested style.""",
     AUTO_CREATIVE_PRESET: """Creative preset: AUTO. Infer at most one of the eight available prompt-writing profiles only when the user's intent or media clearly matches it; otherwise apply none. Do not print a preset name. Do not invent a workflow, asset, brand fact, lyric timing, audio analysis, or game function merely to force a match.""",
     "极简产品广告": """Creative preset: minimalist product advertisement. Lock the product's identity, silhouette, main colors, materials, and requested features. Favor negative space, a clean composition, one principal visual action per beat, and a stable full-frame product-led closing. Avoid grids, split panels, anchor-sheet layouts, crowded props, and unnecessary copy. When copy is requested, show at most one concise single-line text event at a time, keep it out of the lower-subtitle position, preserve supplied wording exactly, and never invent a logo, claim, metric, feature, or endorsement.""",
-    "3D 动画短片": """Creative preset: 3D animation short. Anchor each important character with two or three stable visual traits, and preserve scene landmarks, light direction, scale, and prop continuity. Keep no more than three important active characters in one shot unless the user explicitly requires more. Favor readable silhouettes and physically legible anticipation, squash-and-stretch, overshoot, rebound, and follow-through only when compatible with the requested animation style. Produce one 4-15 second H3 timeline, not a long-film production plan.""",
+    "3D 动画短片": """Creative preset: 3D animation short. Anchor each important character with two or three stable visual traits, and preserve scene landmarks, light direction, scale, and prop continuity. Keep no more than three important active characters in one shot unless the user explicitly requires more. Favor readable silhouettes and physically legible anticipation, squash-and-stretch, overshoot, rebound, and follow-through only when compatible with the requested animation style. Produce one 4-30 second H3 timeline, not a long-film production plan.""",
     "品牌宣传短片": """Creative preset: brand promotional video. Use only brand names, logos, product facts, functions, metrics, slogans, and calls to action supplied by the user or visibly verified in attached media. Preserve exact names and copy; never fabricate a capability or claim. Keep brand/product assets readable with safe space, and make each beat demonstrate a concrete requested benefit or proof rather than generic spectacle.""",
     MV_CREATIVE_PRESET: f"""Creative preset: official music-video-subtitle-generator v{OFFICIAL_MV_SKILL_VERSION}. Apply the official MiniMax MV Skill as a conditional single-prompt writing profile: locked or explicitly authorized original lyrics, conditional performance, spatial typography, evidence-based rhythm, isolated character/scene/typography reference roles, and H3-correct sound classification.""",
     "双人合作游戏开场": """Creative preset: two-player cooperative game intro. Lock exactly two player identities when the user supplies them, along with consistent left/right placement, exact player names, game title, UI labels, and button copy. Use a clear single-line hierarchy for actionable UI, a coherent palette of no more than about five main colors, and reduce decorative text when readability suffers. Do not invent gameplay mechanics, working interactions, scores, online services, or UI functionality.""",
@@ -349,13 +351,20 @@ def _normalize_shot_count(shot_count: Any) -> int:
 
 def _openai_chat_url(base_url: str) -> str:
     base_url = str(base_url or "").strip().rstrip("/")
-    if not re.match(r"^https?://", base_url):
+    try:
+        parsed = urlsplit(base_url)
+    except ValueError as error:
+        raise PromptEnhancerError("OpenAI-compatible Base URL is invalid.") from error
+    if parsed.scheme.lower() not in {"http", "https"} or not parsed.netloc:
         raise PromptEnhancerError("OpenAI-compatible Base URL must begin with http:// or https://.")
-    if base_url.endswith("/chat/completions"):
-        return base_url
-    if re.search(r"/v\d+$", base_url):
-        return f"{base_url}/chat/completions"
-    return f"{base_url}/v1/chat/completions"
+    path = parsed.path.rstrip("/")
+    if path.endswith("/chat/completions"):
+        chat_path = path
+    elif re.search(r"/v\d+$", path, flags=re.IGNORECASE):
+        chat_path = f"{path}/chat/completions"
+    else:
+        chat_path = f"{path}/v1/chat/completions"
+    return urlunsplit((parsed.scheme, parsed.netloc, chat_path, parsed.query, parsed.fragment))
 
 
 def _provider_config(
@@ -597,8 +606,8 @@ def _validate_inputs(
         raise PromptEnhancerError(f"Unsupported creative_preset: {creative_preset}")
     if prompt_mode == "参考模板融合" and not str(reference_template or "").strip():
         raise PromptEnhancerError("reference_template is required when prompt_mode is 参考模板融合.")
-    if not 4 <= int(duration_seconds) <= 15:
-        raise PromptEnhancerError("duration_seconds must be between 4 and 15.")
+    if not 4 <= int(duration_seconds) <= 30:
+        raise PromptEnhancerError("duration_seconds must be between 4 and 30.")
     if description_word_target != 0 and not 80 <= int(description_word_target) <= 1000:
         raise PromptEnhancerError("description_word_target must be 0 (auto) or between 80 and 1000.")
 
@@ -750,6 +759,27 @@ def _is_retryable_seedance_network_error(error: requests.RequestException) -> bo
     )
 
 
+def _seedance_request_route_kwargs(
+    url: str,
+    attempt: int,
+    enabled: bool,
+) -> dict[str, dict[str, str]]:
+    """Alternate the normal environment route with an explicit direct route.
+
+    The first attempt preserves the user's configured proxy behavior. A retry
+    bypasses a broken regional/system proxy, and the final attempt restores the
+    configured route. Custom OpenAI-compatible endpoints never inherit this
+    Seedance.nz-only policy.
+    """
+    if not enabled:
+        return {}
+    index = max(int(attempt) - 1, 0) % len(SEEDANCE_ROUTE_SEQUENCE)
+    route = SEEDANCE_ROUTE_SEQUENCE[index]
+    if route == "direct":
+        return {"proxies": dict(DIRECT_ROUTE_PROXIES)}
+    return {"proxies": requests.utils.get_environ_proxies(url)}
+
+
 def _upload_media(
     session: requests.Session,
     api_key: str,
@@ -761,24 +791,46 @@ def _upload_media(
 ) -> str:
     if len(data) > MAX_FILE_BYTES:
         raise PromptEnhancerError(f"{filename} exceeds the Seedance 50 MB upload limit.")
+    is_seedance_upload = (urlsplit(str(upload_url or "")).hostname or "").lower() == "api.seedance.nz"
+    retry_delays = SEEDANCE_CHAT_RETRY_DELAYS if is_seedance_upload else ()
+    max_attempts = len(retry_delays) + 1 if retry_delays else 2
     response = None
-    for attempt in range(2):
+    attempt = 0
+    while attempt < max_attempts:
+        attempt += 1
         try:
             response = session.post(
                 upload_url,
                 headers={"Authorization": f"Bearer {api_key}"},
                 files={"file": (filename, data, mime_type)},
                 timeout=REQUEST_TIMEOUT,
+                **_seedance_request_route_kwargs(upload_url, attempt, is_seedance_upload),
             )
         except requests.RequestException as error:
+            if (
+                is_seedance_upload
+                and _is_retryable_seedance_network_error(error)
+                and attempt < max_attempts
+            ):
+                time.sleep(retry_delays[attempt - 1])
+                continue
             raise PromptEnhancerError(f"{provider_name} media upload network error: {type(error).__name__}") from error
-        if response.status_code != 429 or attempt == 1:
-            break
-        retry_after = str(getattr(response, "headers", {}).get("Retry-After", "")).strip()
-        wait_seconds = int(retry_after) if retry_after.isdigit() else 60
-        time.sleep(min(max(wait_seconds, 1), 60))
+        if response.status_code == 429 and attempt < max_attempts:
+            retry_after = str(getattr(response, "headers", {}).get("Retry-After", "")).strip()
+            wait_seconds = int(retry_after) if retry_after.isdigit() else 60
+            time.sleep(min(max(wait_seconds, 1), 60))
+            continue
+        if (
+            is_seedance_upload
+            and response.status_code in SEEDANCE_CHAT_RETRYABLE_STATUS_CODES
+            and attempt < max_attempts
+        ):
+            time.sleep(retry_delays[attempt - 1])
+            continue
+        break
+    assert response is not None
     if response.status_code != 200:
-        _raise_http_error(response, api_key, "media upload", provider_name)
+        _raise_http_error(response, api_key, "media upload", provider_name, attempts=attempt)
     try:
         payload = response.json()
     except ValueError as error:
@@ -1066,6 +1118,7 @@ def _request_completion(
                 },
                 json=payload,
                 timeout=REQUEST_TIMEOUT,
+                **_seedance_request_route_kwargs(chat_url, attempt, bool(retry_delays)),
             )
         except requests.RequestException as error:
             can_retry = _is_retryable_seedance_network_error(error)
@@ -1289,7 +1342,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     options=list(TASK_TYPE_LABELS.values()),
                     default=TASK_TYPE_LABELS["T2VA"],
                 ),
-                io.Int.Input("duration_seconds", display_name="目标时长（秒）", default=5, min=4, max=15, step=1),
+                io.Int.Input("duration_seconds", display_name="目标时长（秒）", default=5, min=4, max=30, step=1),
                 io.Combo.Input(
                     "shot_count",
                     display_name="镜头数量",

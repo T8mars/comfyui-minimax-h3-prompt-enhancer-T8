@@ -542,6 +542,16 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(session.urls, ["https://gateway.example/v1/chat/completions"])
         self.assertEqual(session.requests[0]["json"]["model"], "provider/text-model")
 
+    def test_openai_compatible_accepts_v3_base_url(self):
+        session = AdaptiveSession()
+        self.run_enhancer(
+            session,
+            api_mode=music3.OPENAI_API_MODE,
+            openai_base_url="https://ark.example/api/v3",
+            custom_model="provider/text-model",
+        )
+        self.assertEqual(session.urls, ["https://ark.example/api/v3/chat/completions"])
+
     def test_ai_workshop_uses_default_model(self):
         session = AdaptiveSession()
         self.run_enhancer(session, api_mode=music3.MUSIC_AI_WORKSHOP_API_MODE)
@@ -558,10 +568,15 @@ class Music3PromptEnhancerTests(unittest.TestCase):
     def test_seedance_ssl_fast_retry_returns_success(self):
         success = FakeResponse(200, {"choices": [{"message": {"content": CAPTION}}]})
         session = SequenceSession([requests.exceptions.SSLError("regional TLS"), success])
-        with patch("time.sleep", return_value=None):
+        environment_proxy = {"https": "http://proxy.example:8080"}
+        with patch.object(music3.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch("time.sleep", return_value=None):
             _lyrics, caption, _payload, _report = self.run_enhancer(session)
         self.assertEqual(caption, CAPTION)
         self.assertEqual(len(session.requests), 2)
+        self.assertEqual(
+            [request["proxies"] for request in session.requests],
+            [environment_proxy, {"http": "", "https": "", "all": ""}],
+        )
 
     def test_seedance_cloudflare_530_fast_retry_returns_success(self):
         unavailable = FakeResponse(530, {"error": {"message": "regional gateway"}})
@@ -585,7 +600,8 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         unavailable = FakeResponse(524, {"error": {"message": "origin timeout"}})
         success = FakeResponse(200, {"choices": [{"message": {"content": "selected"}}]})
         session = SequenceSession([unavailable] * 5 + [success])
-        with patch("time.sleep", return_value=None) as sleep:
+        environment_proxy = {"https": "http://proxy.example:8080"}
+        with patch.object(music3.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch("time.sleep", return_value=None) as sleep:
             result = music3._request_music_completion(
                 session=session,
                 api_key="test-secret-key",
@@ -601,6 +617,10 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(
             [call.args[0] for call in sleep.call_args_list],
             list(music3.OFFICIAL_REFERENCE_RETRY_DELAYS),
+        )
+        self.assertEqual(
+            [request["proxies"] for request in session.requests],
+            [environment_proxy, {"http": "", "https": "", "all": ""}] * 3,
         )
 
     def test_official_reference_selection_reports_six_exhausted_attempts(self):

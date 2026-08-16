@@ -34,6 +34,7 @@ from .nodes import (
     _is_seedance_chat_endpoint,
     _provider_config,
     _resolve_llm_model,
+    _seedance_request_route_kwargs,
 )
 
 
@@ -660,6 +661,7 @@ def _request_music_completion(
                 },
                 json=payload,
                 timeout=REQUEST_TIMEOUT,
+                **_seedance_request_route_kwargs(chat_url, attempt, bool(retry_delays)),
             )
         except requests.RequestException as error:
             can_retry = _is_retryable_seedance_network_error(error)

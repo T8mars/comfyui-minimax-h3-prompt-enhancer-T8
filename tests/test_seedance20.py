@@ -468,6 +468,16 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertTrue(fallback_url.startswith("data:video/mp4;base64,"))
         self.assertEqual(base64.b64decode(fallback_url.split(",", 1)[1]), fallback_video)
 
+    def test_openai_compatible_accepts_v3_base_url(self):
+        session = FakeSession()
+        self.run_enhancer(
+            session,
+            api_mode=seedance20.OPENAI_API_MODE,
+            openai_base_url="https://ark.example/api/v3",
+            custom_model="provider/video-vision-model",
+        )
+        self.assertEqual(session.chat_urls, ["https://ark.example/api/v3/chat/completions"])
+
     def test_ai_workshop_uses_inline_complete_media_and_custom_model(self):
         session = FakeSession()
         image = torch.zeros((1, 8, 8, 3), dtype=torch.float32)
