@@ -1087,6 +1087,19 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(result, basic_output())
         self.assertIn("H3 task type: T2VA", session.chat_requests[0]["json"]["messages"][1]["content"])
 
+    def test_openai_chat_url_supports_root_versioned_and_complete_endpoints(self):
+        cases = {
+            "https://gateway.example": "https://gateway.example/v1/chat/completions",
+            "https://gateway.example/": "https://gateway.example/v1/chat/completions",
+            "https://gateway.example/v1": "https://gateway.example/v1/chat/completions",
+            "https://gateway.example/api/v3": "https://gateway.example/api/v3/chat/completions",
+            "https://gateway.example/api/v12/": "https://gateway.example/api/v12/chat/completions",
+            "https://gateway.example/api/v3/chat/completions": "https://gateway.example/api/v3/chat/completions",
+        }
+        for base_url, expected in cases.items():
+            with self.subTest(base_url=base_url):
+                self.assertEqual(nodes._openai_chat_url(base_url), expected)
+
     def test_openai_compatible_mode_uses_one_base_url_and_custom_model(self):
         session = FakeSession(basic_output())
         with patch.dict(os.environ, {}, clear=True):

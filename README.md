@@ -494,7 +494,7 @@ AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL �
 
 ### OpenAI 兼容接口（备用）
 
-备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/v1` 结尾的地址，或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；H3/Seedance 需要供应商实际支持的视觉模型，Music 3 只需要文本模型。
+备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/vN` 版本段结尾的地址（例如 `/v1` 或火山方舟的 `/api/v3`），或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；H3/Seedance 需要供应商实际支持的视觉模型，Music 3 只需要文本模型。
 
 #### 修复后的节点配置
 
@@ -504,7 +504,7 @@ MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：
 | --- | --- | --- |
 | `API Key` | 是 | 可连接任意 `STRING`，也可在节点内填写；节点留空时读取 `OPENAI_API_KEY` |
 | `OpenAI 模型 ID` | 是 | 填写兼容服务商提供的完整视觉模型 ID，不再固定为 `bytedance/doubao-seed-evolving` |
-| `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；节点会把服务根地址或 `/v1` 地址规范化为 `/v1/chat/completions` |
+| `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；服务根地址补全为 `/v1/chat/completions`，已有 `/vN` 版本段则直接追加 `/chat/completions` |
 | `视频素材 URL` | 否 | 仅用于视频，每行一个，按已连接 `VIDEO` 的顺序对应；未填写的已连接视频自动使用 Base64 |
 
 不再需要、也不要填写单独的“兼容素材上传 URL”。图片没有素材 URL 字段，始终由节点编码成 Base64 并随聊天请求直接发送。
@@ -576,7 +576,7 @@ Music 3 只在三个官方标题都被唯一命中但顺序错误时进行本地
 - 响应不是合法 JSON；
 - 响应缺少正文或正文全空白。
 
-平价小屋的 `https://api.seedance.nz/v1/chat/completions` 遇到 SSL/建连故障，或 HTTP 500/502/503/504 与 Cloudflare 520–526/530 网关故障时会快速重试：共 3 次尝试，间隔 0.5 秒和 1 秒；任意一次取得成功响应都会继续正常输出。401、余额不足、429、读取超时和用户自定义 OpenAI 兼容接口不会自动重试。读取超时时服务端可能已经完成生成，节点会保留错误而不盲目重复付费。免费素材上传遇到 429 时最多重试一次。
+平价小屋的 `https://api.seedance.nz/v1/chat/completions` 遇到 SSL/建连故障，或 HTTP 500/502/503/504 与 Cloudflare 520–526/530 网关故障时会快速重试：共 3 次尝试，间隔 0.5 秒和 1 秒；任意一次取得成功响应都会继续正常输出。401、余额不足、429、读取超时和用户自定义 OpenAI 兼容接口不会自动重试。读取超时时服务端可能已经完成生成，节点会保留错误而不盲目重复付费。节点也不会自动在直连与系统代理之间来回切换；网络路线由用户的 ComfyUI 运行环境明确配置。免费素材上传遇到 429 时最多重试一次。
 
 Music 3 的 `official_reference_selection` 是“官方完整”模式必经阶段：必须成功选中至少 1 个官方模板才能继续编译 Caption。在 `api.seedance.nz` 遇到临时网关故障时最多尝试 6 次，按 0.5、1、2、4、8 秒有界退避；不会静默降级为无模板生成。
 
