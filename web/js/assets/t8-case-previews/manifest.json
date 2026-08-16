@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 115,
+  "preview_count": 118,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -913,6 +913,30 @@
       "source_sha256": "3f2fda1133e631432faf99f6f948b13ec394c2c050e34252496a1eedd5402b0a",
       "sha256": "c1e3da75873f7309f60ce9e5b9522e0dc152764830ababd34b2120a2995bebe8",
       "bytes": 3944964,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-beginnersblog1-2088312289405673506-browser-2088312289405673506-video-1",
+      "file": "6074c03d93d2def9d494ab6d05581960c851644311eccbc40e9e65b6ee81046f.gif",
+      "source_sha256": "65ad4e27bb268372338421e9c6e5ae196c49af9c2acea43434fbfededbc5cd83",
+      "sha256": "6074c03d93d2def9d494ab6d05581960c851644311eccbc40e9e65b6ee81046f",
+      "bytes": 2521992,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-aimikoda-2088569547494199485-browser-2088569547494199485-video-1",
+      "file": "fec97e47643cffee705771c50cab3f3f37a5126a500fa90299a39a3113d7e973.gif",
+      "source_sha256": "6370f22d48a85cfa323df58a0672e3308986d1dbdaa837233a933d223e7c8340",
+      "sha256": "fec97e47643cffee705771c50cab3f3f37a5126a500fa90299a39a3113d7e973",
+      "bytes": 1546255,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-aqsahere-2088105767408730563-browser-2088105767408730563-video-1",
+      "file": "5af8b1e1e82a54c6b981a222e9865dbbbbc9081e0028e038e3b2a73f884f1a9d.gif",
+      "source_sha256": "31176d12f0e0749a8d187c6fd92cd542acb035d0e0bf49ce572fae45184831d8",
+      "sha256": "5af8b1e1e82a54c6b981a222e9865dbbbbc9081e0028e038e3b2a73f884f1a9d",
+      "bytes": 1865895,
       "human_preview_only": true
     },
     {

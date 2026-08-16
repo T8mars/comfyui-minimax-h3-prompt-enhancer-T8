@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-16-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-beginnersblog1-2088312289405673506-browser-2088312289405673506-video-1",
+      "template_id": "t8-case-persistent-plan-strip-execution-escalation-v1",
+      "label": "计划对照｜固定分镜条见证执行升级",
+      "summary": "让一条静态计划板持续可读，执行区按计划顺序逐步完成动作，并用不断累积的现场变化证明执行正在推进；最后让实际结果与计划末项形成可读闭合。",
+      "case_sha256": "e1d8c842634ca255c8728a0aaf51520357e26017cc94028c27f8ac52eb8e043a",
+      "creative_dna_sha256": "c6ae37847ca37acae349b92a0b34f9d11c749dd23afef3b98fedf62513f45cac",
+      "h3_adapter_sha256": "dbec3f571f2dcdaeb5f5028785c7a239a769a8b02e88612436922fc24048b823",
+      "seedance20_adapter_sha256": "ebda13da55273b483d597d81a8585de284d81b4e6108621ecba3e943fc8a42d8",
+      "mechanism_fingerprint": "76d774fd56dde0c72664e311d7e850aaaa46837afdc509091347acbb407058b4"
+    },
+    {
+      "case_id": "x-aimikoda-2088569547494199485-browser-2088569547494199485-video-1",
+      "template_id": "t8-case-bounded-day-loop-recurring-anchor-v1",
+      "label": "日程闭环｜重复锚点串联整日任务",
+      "summary": "从一个静止起点出发，用重复人物特征和随身物串联准备、出发、通勤与工作，并在片尾回到与开场相呼应的休息状态；高密度切换仍保持一天的因果顺序。",
+      "case_sha256": "c22a08cf8af4a25683c4cb5475e2709ebd6b032126fdd615489a7a2ee01c09f8",
+      "creative_dna_sha256": "976d7f5ee34bb5b24f132b184e657f4b24701cc222f6efdb0f904953a393f90a",
+      "h3_adapter_sha256": "93166226ba9bc8cb40b2010250deabeb54ed15d4f700df671137d4ac2920d0d0",
+      "seedance20_adapter_sha256": "538e181f861570cb1c82f199fb09234477831f5f325a98c6f6d738f44400a83a",
+      "mechanism_fingerprint": "ac3fe8b488b2ee23052f2091671a3b32c986add306fc64ee28c2d8a02e2b947c"
+    },
+    {
+      "case_id": "x-aqsahere-2088105767408730563-browser-2088105767408730563-video-1",
+      "template_id": "t8-case-observer-to-subject-camera-handoff-v1",
+      "label": "镜头交接｜观察者跟随转主体自拍",
+      "summary": "先由外部观察镜头发现并跟随主体，让主体完成一次地点专属的环境交互，再给出环境尺度证明；随后使用遮挡、设备安装或载体交接等有动机的连续桥，片尾只把拍摄权交给主体一次。",
+      "case_sha256": "298c219b9249ed926754c1f5e9388fdce5bd5297a23b5cc6aa046e2cd02ce6bf",
+      "creative_dna_sha256": "b2122d7485601a22cc2a2ccf8db6b644b5dbfd4b156651edeaf3f452662cfc1b",
+      "h3_adapter_sha256": "dfc93012c85773251f55712afb0c8a3ea6ecf00166bdc161164ca86510723044",
+      "seedance20_adapter_sha256": "ca86fe590e8ec5e094cb53a3e3a75c283f108acfec61fbdf4cb0bd293a3baedc",
+      "mechanism_fingerprint": "e3ea6c76d32c79eb67d7f1cc67fa9b90fa20ed9c518907957d81613b7f69ff36"
+    }
+  ]
+}
