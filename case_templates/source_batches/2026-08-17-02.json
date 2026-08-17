@@ -1,0 +1,18 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-17-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "user-video-a3110e84c7e432b0cef18edfe0b99c30",
+      "template_id": "t8-case-rule-acquisition-dimensional-course-escalation-v1",
+      "label": "规则闯关｜吸收能力后从平面赛道升维",
+      "summary": "让一个外来主体进入规则清晰的平面路线，先用移动、避障和收集建立关卡语法，再通过一次可见能力获取改变运动方式；临近终点时让同一路线整体升为三维，主体方向、身份和目标连续不断，最终抵达可读终点。",
+      "case_sha256": "e865bd0806f43b49a561e946c7ce1a91f10017c2d38a46f2a54e90e57dd1678a",
+      "creative_dna_sha256": "43d406988318c687af0c2ff2105921ebd2a3c9e2605ffc824d96a43433433205",
+      "h3_adapter_sha256": "55290227deaa4832fd4f1997408322b7fdc93e29041979a41188fa506c1f13d4",
+      "seedance20_adapter_sha256": "e351e41b4c976ad40a75024307c15da6b4877b6bed0d30b6e2b33a876b6784c0",
+      "mechanism_fingerprint": "0f896310d424d27da4ff37d774f93a9ede3d11903d6b69a38023d2abc3282558"
+    }
+  ]
+}

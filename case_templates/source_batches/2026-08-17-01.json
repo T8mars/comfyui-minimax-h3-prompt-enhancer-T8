@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-17-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "user-video-hailuo-423900387218210818",
+      "template_id": "t8-case-identity-motif-mobility-class-escalation-v1",
+      "label": "身份机体跃迁｜同一特征跨陆空载具升级",
+      "summary": "先建立一个可辨认身份，再让其核心特征连续嵌入功能等级逐步提升的移动机体；每一阶段都同时保留身份锚点和新机体的可见功能，最后跨入新的运动类别并以完整混合体收束。",
+      "case_sha256": "a94ee107ec593cd7657d490b4bda968ee38e4f9d21d941387de257ff2b3c1e40",
+      "creative_dna_sha256": "422dc90994ac4ec7c351890ed05dc52724ff1cdba563303cbf25e1675c92ab04",
+      "h3_adapter_sha256": "628114ba3ef78e14d16b39201774fa22f7b8083bfb4c8e78e25d2c0905a7ee85",
+      "seedance20_adapter_sha256": "c30494e4160084af5a0b7fc90135c29e4166db2178bf767e1b7735b04c23da60",
+      "mechanism_fingerprint": "435350957ddacbb79e8bde576e49b7f1c9aaaf05ccc35c174526b127ca4198a3"
+    },
+    {
+      "case_id": "user-video-hailuo-394176964477943816",
+      "template_id": "t8-case-solo-form-material-adversary-clash-v1",
+      "label": "独演成敌｜动作材质凝成对手后碰撞",
+      "summary": "先用单一主体的完整动作建立可辨招式与材质签名，再让环境材质积累并凝成独立对手；中后段通过一次空间跃迁把双方拉入正面对抗，最后引入第二能量材质完成碰撞并回到主体可读终态。",
+      "case_sha256": "a63e86323a049e434f47aae7130e25214735dd1bed6dd4feab03eb64dd973f1e",
+      "creative_dna_sha256": "9b3509d22c94b0795968548713642985cb8061859d649a4670319a6d25f3d17b",
+      "h3_adapter_sha256": "d460282c2eb03b3297bcdad754f42e942ccb57663ea196384cdd01263accfbb6",
+      "seedance20_adapter_sha256": "6f1ee3247b44ed23aae04c31316ccce32c722621c01ff84c5de1bd204e781b86",
+      "mechanism_fingerprint": "2f6746ef366063f8aafdf0c1c8c659b815b66fe17c8c25c566423720c84747ab"
+    },
+    {
+      "case_id": "user-video-hailuo-437298335184588801",
+      "template_id": "t8-case-exemplar-triggered-output-multiplication-v1",
+      "label": "样本倍增｜机器开启后连续输出同类群体",
+      "summary": "先让一个可辨样本与封闭机器同框，经过一次外部触发后打开独立输出阈值；同类实例从阈值连续出现并在机器周围累积，而原样本始终留在顶部作为身份对照，最终同框证明倍增结果。",
+      "case_sha256": "578a7eee124e37764c08047369fe65a73def5eb797426a8d165e761a557112c9",
+      "creative_dna_sha256": "ddcc519fabbfa25d907e299be3e26c91a5c285f021f7701342da12bb13e14c23",
+      "h3_adapter_sha256": "c0b7addda5779c85dbcdb439bf2199cebc4276acd5a3cd0522f60cfffb332c73",
+      "seedance20_adapter_sha256": "b6605b369eb9b189cf11b36cd18cbec47a12037f5ca9d9c8e51189e00827ab4d",
+      "mechanism_fingerprint": "97005a2a9d9ddfa648a4bacbf2f5417a092c5b33eff58b3b80703738caed4d34"
+    }
+  ]
+}

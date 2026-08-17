@@ -1,7 +1,7 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 124,
+  "preview_count": 131,
   "encoding": {
     "format": "gif",
     "fps": 6,
@@ -41,6 +41,22 @@
       "source_sha256": "4994b5b35ac758dd4ae2612c27d1fe0f63143a9f0cbd577e6700b4d3e6f07240",
       "sha256": "08de8e0b24ad82eeec7f3dfa1ad89dbea7c8aaa686bc9788ba221e1619db5c6f",
       "bytes": 1503026,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-448227283749875713",
+      "file": "8ef5183ae58ed5632427af2e0e11a8eac8b92194f74fe8eab73bc24ffc01d82d.gif",
+      "source_sha256": "483a7e5589827aa7774b2878125923f7d4b7c89428cbb4f84cabf99ff72726f0",
+      "sha256": "8ef5183ae58ed5632427af2e0e11a8eac8b92194f74fe8eab73bc24ffc01d82d",
+      "bytes": 2480597,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-418751301536092163",
+      "file": "b4e2a8fcc343aa406c1166c26c527d144dbf39dd0da368d1c8b1921fe813f260.gif",
+      "source_sha256": "d462aa357795dc71c67d527992014d153db6c1f70afa288774ebfffef76e0727",
+      "sha256": "b4e2a8fcc343aa406c1166c26c527d144dbf39dd0da368d1c8b1921fe813f260",
+      "bytes": 571671,
       "human_preview_only": true
     },
     {
@@ -101,10 +117,10 @@
     },
     {
       "case_id": "x-zephyraleigh-2086466812347297938-browser-2086466812347297938-video-1",
-      "file": "230236093904166a5c38c509154fa761f360a6c52efc11891ef30bcf593d3b76.gif",
+      "file": "df8a9de728cac3a60555aeca6c0c4a52b5cfa8dafea8cad84193458f9cd0541d.gif",
       "source_sha256": "589418ba002e2fb44bc0bb2ed2466c1020fd51e724f04d6512f098a90b44a882",
-      "sha256": "230236093904166a5c38c509154fa761f360a6c52efc11891ef30bcf593d3b76",
-      "bytes": 2736877,
+      "sha256": "df8a9de728cac3a60555aeca6c0c4a52b5cfa8dafea8cad84193458f9cd0541d",
+      "bytes": 2736873,
       "human_preview_only": true
     },
     {
@@ -125,10 +141,10 @@
     },
     {
       "case_id": "x-adithatipalli-2086477914699170293-browser-2086477914699170293-video-1",
-      "file": "4160cea45e1851aae356dea8dd924c97bf91f6e0178bc58924f3af7568028c4d.gif",
+      "file": "a70002e229660aa7b3cd8132915dd0d7296da9aaf002e5bcc0752016f1a05216.gif",
       "source_sha256": "e59ca5683c1e82e20feaead891d881a2dc074d80d15ecde686320543d124929f",
-      "sha256": "4160cea45e1851aae356dea8dd924c97bf91f6e0178bc58924f3af7568028c4d",
-      "bytes": 2526880,
+      "sha256": "a70002e229660aa7b3cd8132915dd0d7296da9aaf002e5bcc0752016f1a05216",
+      "bytes": 2526911,
       "human_preview_only": true
     },
     {
@@ -253,10 +269,10 @@
     },
     {
       "case_id": "x-airina-xyz-2086404681480233236-browser-2086404681480233236-video-1",
-      "file": "4c85f0f6aa9f807b37dda6aa9c6764a529990b232aa0748696f71b142e305b5f.gif",
+      "file": "c47699d9f0c55237e31e8ad9ffd694379279488fd289b17159c72b53e22c6b32.gif",
       "source_sha256": "e54809d1a7abc327ac18144f9fab804e3bf667fb3038a13e3de9f296e2080450",
-      "sha256": "4c85f0f6aa9f807b37dda6aa9c6764a529990b232aa0748696f71b142e305b5f",
-      "bytes": 3706842,
+      "sha256": "c47699d9f0c55237e31e8ad9ffd694379279488fd289b17159c72b53e22c6b32",
+      "bytes": 3706813,
       "human_preview_only": true
     },
     {
@@ -677,10 +693,10 @@
     },
     {
       "case_id": "x-jeroenvanh-2052849887041974577-video-1",
-      "file": "920c53bf89bbedec25d396b14360270e9af03912c71ff03fbff586cd67ef03c0.gif",
+      "file": "2042b47312fd790f3ad19d5245c9fc22803c32da6df51c770a28e847d68472b4.gif",
       "source_sha256": "688445fdbfc04b62ca4e04c186d32fea6090133a602dd4de3d6bc18857993d71",
-      "sha256": "920c53bf89bbedec25d396b14360270e9af03912c71ff03fbff586cd67ef03c0",
-      "bytes": 2753158,
+      "sha256": "2042b47312fd790f3ad19d5245c9fc22803c32da6df51c770a28e847d68472b4",
+      "bytes": 2753123,
       "human_preview_only": true
     },
     {
@@ -813,10 +829,10 @@
     },
     {
       "case_id": "x-johnagi168-2087432258693001579-browser-2087432258693001579-video-1",
-      "file": "a525db7d7dbc93caea03a8a094b39afbae121fc21651c6666608d9b8f3051dc8.gif",
+      "file": "20ac966fbd2697a59ee6e09ebdd599200e121728999a02799eb8228ea9b431dc.gif",
       "source_sha256": "886e37c8e3127f3d25ded0e5c81ef132576520f129296e7c85bfe1f469254d36",
-      "sha256": "a525db7d7dbc93caea03a8a094b39afbae121fc21651c6666608d9b8f3051dc8",
-      "bytes": 7678543,
+      "sha256": "20ac966fbd2697a59ee6e09ebdd599200e121728999a02799eb8228ea9b431dc",
+      "bytes": 7678530,
       "human_preview_only": true
     },
     {
@@ -869,10 +885,10 @@
     },
     {
       "case_id": "x-zyrellix-2085927821126324588-browser-2085927821126324588-video-1",
-      "file": "2eb152a8bd4db8349e4f1d92545ce842685fb421fc44bfef2b9d022ff483542d.gif",
+      "file": "b8e2a49deb7563113de53f2c8c684a0876d6f37be65614f2b921554ba295e810.gif",
       "source_sha256": "df32cd8f1b435bc81eb6655403cfc4d84ef1fa25f9407203209cedc0ce799b22",
-      "sha256": "2eb152a8bd4db8349e4f1d92545ce842685fb421fc44bfef2b9d022ff483542d",
-      "bytes": 5475970,
+      "sha256": "b8e2a49deb7563113de53f2c8c684a0876d6f37be65614f2b921554ba295e810",
+      "bytes": 5475989,
       "human_preview_only": true
     },
     {
@@ -988,6 +1004,46 @@
       "human_preview_only": true
     },
     {
+      "case_id": "user-video-hailuo-460563497509273606",
+      "file": "a6c71d40064503a7702e4e2456973a1eb26e4dee7f67d0586e6b4da29af9f92c.gif",
+      "source_sha256": "978b3e6373428699670af0b7e6023da5dd4ccc1ac85258efc9c7c35a5c21ffa6",
+      "sha256": "a6c71d40064503a7702e4e2456973a1eb26e4dee7f67d0586e6b4da29af9f92c",
+      "bytes": 2759135,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-423900387218210818",
+      "file": "ace09985a5fc651a7e0b84083e5db25cb441e34861d294e5c86c45bb88f12055.gif",
+      "source_sha256": "f55032acbc62e18ac14350d2bf19942296802375f3c5249615747189f7e59639",
+      "sha256": "ace09985a5fc651a7e0b84083e5db25cb441e34861d294e5c86c45bb88f12055",
+      "bytes": 5930721,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-394176964477943816",
+      "file": "283ecd29ce77b1ed7f38cc5691c96aae85845ec8087c4454a546b459ed03722d.gif",
+      "source_sha256": "e09ca34c5df4feb2af892cd4c111512b294dccc668642340ed15f975e233658d",
+      "sha256": "283ecd29ce77b1ed7f38cc5691c96aae85845ec8087c4454a546b459ed03722d",
+      "bytes": 2547874,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-hailuo-437298335184588801",
+      "file": "ba9e18a828adae48723d737bf5b53d5238a6e65ea39bb4ac9d682aab50458493.gif",
+      "source_sha256": "58c99923db4d561afb9a5ac63f109204a17b30d499646cec52e9b16bf4fb44f2",
+      "sha256": "ba9e18a828adae48723d737bf5b53d5238a6e65ea39bb4ac9d682aab50458493",
+      "bytes": 3669925,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-a3110e84c7e432b0cef18edfe0b99c30",
+      "file": "26986a52c56ed514332815749abee7a10cdb88613e3f720a5c1dbda4ae7be715.gif",
+      "source_sha256": "12e7be23892351ddf6f63bc9d8bde1d8adc341f68fbce8f30198a2ad8a8c3cb3",
+      "sha256": "26986a52c56ed514332815749abee7a10cdb88613e3f720a5c1dbda4ae7be715",
+      "bytes": 878470,
+      "human_preview_only": true
+    },
+    {
       "case_id": "community-skill--direct-street-interview-video",
       "file": "577214393cca804a0a062a30643e48897ae093cc4974877d14ff946b8a5d5350.gif",
       "source_sha256": "7a970fddd4184bed3efb18a0b36ab42a2cb4c09d38051cf073521f67e5850cf4",
@@ -997,9 +1053,9 @@
     },
     {
       "case_id": "community-skill--stage-startle-to-truce-encounter",
-      "file": "eb1001c89f9cd2d7d2d02684f4f60a353a0fee6e8bb3445cf441702cae9940fb.gif",
+      "file": "956e207865473f3abfaf9c0b8d9fb2e4bb687d6284dde04e1e95b2791bcd4f99.gif",
       "source_sha256": "7e9f89ec423798b249e7c4541210694dad3f6e11f51919c57cd49ff5a95825bf",
-      "sha256": "eb1001c89f9cd2d7d2d02684f4f60a353a0fee6e8bb3445cf441702cae9940fb",
+      "sha256": "956e207865473f3abfaf9c0b8d9fb2e4bb687d6284dde04e1e95b2791bcd4f99",
       "bytes": 612319,
       "human_preview_only": true
     }
