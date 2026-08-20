@@ -21,11 +21,18 @@ RUNTIME_ROOT = NODE_ROOT / "runtime" / "local_qwen"
 RUNTIME_CONFIG_PATH = RUNTIME_ROOT / "runtime_config.json"
 MODEL_SUBDIRECTORY = Path("LLM") / "Qwen3.8"
 DEFAULT_MODEL_FILENAME = "Qwen3.8-27B-Q4_K_M.gguf"
+UNCENSORED_MODEL_FILENAME = "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf"
 DEFAULT_MMPROJ_FILENAME = "mmproj-F16.gguf"
 DEFAULT_MODEL_SIZE = 17_106_775_008
 DEFAULT_MODEL_SHA256 = "7e78da5d7e3ae28d178121f58646953305f3e5bd3cb46f4a75584e8b6c6fe169"
+UNCENSORED_MODEL_SIZE = 16_810_714_976
+UNCENSORED_MODEL_SHA256 = "66bb238d41de38b11dd406d932d8fb97433d529022cef60f2f422b9221cae743"
 DEFAULT_MMPROJ_SIZE = 927_607_488
 DEFAULT_MMPROJ_SHA256 = "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e"
+KNOWN_MODEL_FILES = {
+    DEFAULT_MODEL_FILENAME: (DEFAULT_MODEL_SIZE, DEFAULT_MODEL_SHA256),
+    UNCENSORED_MODEL_FILENAME: (UNCENSORED_MODEL_SIZE, UNCENSORED_MODEL_SHA256),
+}
 LOCAL_MODEL_ALIAS = "qwen3.8-27b"
 LLAMA_SEED_MODULUS = 0xFFFFFFFF
 
@@ -173,17 +180,28 @@ def load_runtime_spec() -> RuntimeSpec:
 
 
 def runtime_status() -> dict[str, Any]:
-    model_path = resolve_model_path(DEFAULT_MODEL_FILENAME, label="local model", required=False)
+    model_status = {}
+    for filename, (expected_size, _expected_sha256) in KNOWN_MODEL_FILES.items():
+        path = resolve_model_path(filename, label="local model", required=False)
+        model_status[filename] = bool(
+            path.is_file() and path.stat().st_size == expected_size
+        )
+    model_installed = model_status[DEFAULT_MODEL_FILENAME]
+    uncensored_model_installed = model_status[UNCENSORED_MODEL_FILENAME]
+    any_model_installed = any(model_status.values())
     mmproj_path = resolve_model_path(
         DEFAULT_MMPROJ_FILENAME, label="vision projector", required=False
     )
-    model_installed = model_path.is_file() and model_path.stat().st_size == DEFAULT_MODEL_SIZE
     mmproj_installed = (
         mmproj_path.is_file() and mmproj_path.stat().st_size == DEFAULT_MMPROJ_SIZE
     )
     result: dict[str, Any] = {
         "runtime_installed": False,
         "model_installed": model_installed,
+        "uncensored_model_installed": uncensored_model_installed,
+        "available_verified_models": [
+            filename for filename, installed in model_status.items() if installed
+        ],
         "mmproj_installed": mmproj_installed,
         "model_directory": str(qwen_model_directory()),
     }
@@ -196,7 +214,7 @@ def runtime_status() -> dict[str, Any]:
             runtime_installed=True,
             backend=spec.backend,
         )
-    result["text_ready"] = bool(result["runtime_installed"] and model_installed)
+    result["text_ready"] = bool(result["runtime_installed"] and any_model_installed)
     result["vision_ready"] = bool(result["text_ready"] and mmproj_installed)
     return result
 
@@ -599,6 +617,10 @@ atexit.register(LOCAL_QWEN_MANAGER.release)
 __all__ = [
     "DEFAULT_MMPROJ_FILENAME",
     "DEFAULT_MODEL_FILENAME",
+    "KNOWN_MODEL_FILES",
+    "UNCENSORED_MODEL_FILENAME",
+    "UNCENSORED_MODEL_SHA256",
+    "UNCENSORED_MODEL_SIZE",
     "LOCAL_COMFY_MEMORY_POLICIES",
     "LOCAL_IDLE_TTL",
     "LOCAL_KEEP_COMFY_MODELS",

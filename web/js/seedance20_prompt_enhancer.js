@@ -196,6 +196,12 @@ function addApiModeBehavior(node, modeWidget, baseUrlWidget, videoUrlsWidget, mo
 }
 
 
+function isApiKeyLinked(node) {
+    const input = node.inputs?.find((item) => item.name === "api_key" || item.widget?.name === "api_key");
+    return input?.link != null;
+}
+
+
 function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     const container = document.createElement("div");
     container.style.cssText = "display:flex;flex-direction:column;gap:6px;width:100%;box-sizing:border-box";
@@ -212,7 +218,9 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
         "background:var(--comfy-input-bg, #1f1f1f)", "color:var(--input-text, #ddd)", "padding:0 9px",
     ].join(";");
     const updatePlaceholder = () => {
-        if (apiModeWidget?.value === OPENAI_API_MODE) {
+        if (isApiKeyLinked(node)) {
+            input.placeholder = "已连接外部 API Key STRING（连接值优先生效）";
+        } else if (apiModeWidget?.value === OPENAI_API_MODE) {
             input.placeholder = "提示词增强 LLM 的 OpenAI 兼容 API Key";
         } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
             input.placeholder = "AI 工坊 API Key（可保存到工作流）";
@@ -269,6 +277,10 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     });
 
     const commit = () => {
+        if (isApiKeyLinked(node)) {
+            updateConnectionState();
+            return;
+        }
         sourceWidget.value = input.value.trim();
         sourceWidget.callback?.(sourceWidget.value);
         node.graph?.change?.();
@@ -285,6 +297,20 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
         save.textContent = "💾 保存到工作流";
     };
     node.s20CommitApiKey = commit;
+
+    const updateConnectionState = () => {
+        const linked = isApiKeyLinked(node);
+        input.disabled = linked;
+        reveal.disabled = linked;
+        save.disabled = linked;
+        input.title = linked
+            ? "当前使用 api_key 插口连接的外部 STRING；下方工作流密钥不会覆盖连接值。"
+            : "可在此输入 API Key，并选择是否保存到工作流。";
+        save.textContent = linked ? "✓ 外部 STRING 已连接" : "💾 保存到工作流";
+        updatePlaceholder();
+    };
+    node.s20UpdateApiKeyConnection = updateConnectionState;
+    updateConnectionState();
 
     setWidgetVisible(sourceWidget, false);
     const secureWidget = node.addDOMWidget("seedance20_api_key_secure", "custom", container, {
@@ -318,6 +344,7 @@ app.registerExtension({
         const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
         const originalOnConfigure = nodeType.prototype.onConfigure;
         const originalOnSerialize = nodeType.prototype.onSerialize;
+        const originalOnConnectionsChange = nodeType.prototype.onConnectionsChange;
         nodeType.prototype.onNodeCreated = function () {
             originalOnNodeCreated?.apply(this, arguments);
 
@@ -471,6 +498,12 @@ app.registerExtension({
                 if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.s20NormalizeOptions?.();
             });
+        };
+
+        nodeType.prototype.onConnectionsChange = function () {
+            const result = originalOnConnectionsChange?.apply(this, arguments);
+            requestAnimationFrame(() => this.s20UpdateApiKeyConnection?.());
+            return result;
         };
 
         nodeType.prototype.onSerialize = function (serialized) {

@@ -26,6 +26,18 @@ UPSTREAM_INSTALLER_URL = (
 )
 MODEL_REVISION = "f1bfb127c64f7072bdd2cad55f258b9c8b2910fe"
 MODEL_REPOSITORY = "unsloth/Qwen3.8-27B-GGUF"
+UNCENSORED_MODEL_REVISION = "5bdf224e6f9b1e18c7598fea63e238e014ee8e3e"
+UNCENSORED_MODEL_REPOSITORY = (
+    "theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF"
+)
+MODEL_VARIANT_OFFICIAL = "official"
+MODEL_VARIANT_UNCENSORED = "uncensored"
+MODEL_VARIANT_ALL = "all"
+MODEL_VARIANTS = (
+    MODEL_VARIANT_OFFICIAL,
+    MODEL_VARIANT_UNCENSORED,
+    MODEL_VARIANT_ALL,
+)
 USER_AGENT = "comfyui-minimax-h3-prompt-enhancer-T8-local-qwen-installer/1.0"
 
 
@@ -34,27 +46,48 @@ class Download:
     filename: str
     size: int
     sha256: str
+    repository: str = MODEL_REPOSITORY
+    revision: str = MODEL_REVISION
 
     @property
     def url(self) -> str:
         return (
-            f"https://huggingface.co/{MODEL_REPOSITORY}/resolve/{MODEL_REVISION}/"
+            f"https://huggingface.co/{self.repository}/resolve/{self.revision}/"
             f"{self.filename}?download=true"
         )
 
 
-MODEL_FILES = (
-    Download(
-        "Qwen3.8-27B-Q4_K_M.gguf",
-        17_106_775_008,
-        "7e78da5d7e3ae28d178121f58646953305f3e5bd3cb46f4a75584e8b6c6fe169",
-    ),
-    Download(
-        "mmproj-F16.gguf",
-        927_607_488,
-        "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e",
-    ),
+OFFICIAL_MODEL_FILE = Download(
+    "Qwen3.8-27B-Q4_K_M.gguf",
+    17_106_775_008,
+    "7e78da5d7e3ae28d178121f58646953305f3e5bd3cb46f4a75584e8b6c6fe169",
 )
+UNCENSORED_MODEL_FILE = Download(
+    "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf",
+    16_810_714_976,
+    "66bb238d41de38b11dd406d932d8fb97433d529022cef60f2f422b9221cae743",
+    repository=UNCENSORED_MODEL_REPOSITORY,
+    revision=UNCENSORED_MODEL_REVISION,
+)
+VISION_PROJECTOR_FILE = Download(
+    "mmproj-F16.gguf",
+    927_607_488,
+    "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e",
+)
+MODEL_FILES = (OFFICIAL_MODEL_FILE, VISION_PROJECTOR_FILE)
+
+
+def model_files_for_variant(variant: str) -> tuple[Download, ...]:
+    normalized = str(variant or MODEL_VARIANT_OFFICIAL).strip().casefold()
+    if normalized == MODEL_VARIANT_OFFICIAL:
+        return OFFICIAL_MODEL_FILE, VISION_PROJECTOR_FILE
+    if normalized == MODEL_VARIANT_UNCENSORED:
+        return UNCENSORED_MODEL_FILE, VISION_PROJECTOR_FILE
+    if normalized == MODEL_VARIANT_ALL:
+        return OFFICIAL_MODEL_FILE, UNCENSORED_MODEL_FILE, VISION_PROJECTOR_FILE
+    raise ValueError(
+        f"Unsupported model variant {variant!r}; choose one of {', '.join(MODEL_VARIANTS)}."
+    )
 
 
 def _models_root() -> Path:
@@ -203,19 +236,24 @@ def _download_with_resume(item: Download, destination: Path, *, offline: bool) -
     return destination
 
 
-def install_models(*, offline: bool, dry_run: bool) -> None:
+def install_models(*, variant: str, offline: bool, dry_run: bool) -> None:
+    downloads = model_files_for_variant(variant)
     destination = model_directory()
     print(f"[PLAN] Model directory: {destination}")
-    for item in MODEL_FILES:
-        print(f"[PLAN] {item.filename}: {item.size / 1024**3:.2f} GiB, sha256={item.sha256}")
+    print(f"[PLAN] Model variant: {variant}")
+    for item in downloads:
+        print(
+            f"[PLAN] {item.filename}: {item.size / 1024**3:.2f} GiB, "
+            f"sha256={item.sha256}, source={item.repository}@{item.revision}"
+        )
     if dry_run:
         return
     verified = {
         item.filename: _prepare_existing(item, destination / item.filename, offline=offline)
-        for item in MODEL_FILES
+        for item in downloads
     }
-    _check_disk_space(destination, MODEL_FILES)
-    for item in MODEL_FILES:
+    _check_disk_space(destination, downloads)
+    for item in downloads:
         if not verified[item.filename]:
             _download_with_resume(item, destination / item.filename, offline=offline)
 
@@ -298,6 +336,15 @@ def build_parser() -> argparse.ArgumentParser:
         description="Install the pinned local Qwen3.8 GGUF model and llama.cpp runtime for the three T8 enhancer nodes."
     )
     parser.add_argument("--model", action="store_true", help="Install/verify GGUF model and mmproj only.")
+    parser.add_argument(
+        "--model-variant",
+        choices=MODEL_VARIANTS,
+        default=MODEL_VARIANT_OFFICIAL,
+        help=(
+            "Model set to install: official (default), uncensored (third-party FP8-derived Q4_K_M), "
+            "or all. Both vision-capable variants reuse the pinned mmproj after compatibility testing."
+        ),
+    )
     parser.add_argument("--runtime", action="store_true", help="Install/verify llama.cpp runtime only.")
     parser.add_argument("--backend", default="auto", help="Runtime backend; default auto hardware detection.")
     parser.add_argument("--offline", action="store_true", help="Use only existing verified files/caches.")
@@ -319,7 +366,11 @@ def main(argv: list[str] | None = None) -> int:
                 dry_run=bool(args.dry_run),
             )
         if install_model:
-            install_models(offline=bool(args.offline), dry_run=bool(args.dry_run))
+            install_models(
+                variant=str(args.model_variant),
+                offline=bool(args.offline),
+                dry_run=bool(args.dry_run),
+            )
     except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as error:
         print(f"[ERROR] {error}", file=sys.stderr)
         return 1

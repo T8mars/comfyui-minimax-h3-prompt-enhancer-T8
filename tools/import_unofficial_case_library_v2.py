@@ -18,12 +18,12 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 129
-EXPECTED_SELECTOR_COUNT = 110
+EXPECTED_RECORD_COUNT = 132
+EXPECTED_SELECTOR_COUNT = 113
 EXPECTED_EVIDENCE_COUNT = 19
 EXPECTED_PENDING_COUNT = 0
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 112
+EXPECTED_TOTAL_SELECTOR_COUNT = 115
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -345,7 +345,7 @@ def build_catalog(
     )
     if declared_counts != expected_counts or actual_counts != expected_counts:
         raise LibraryImportError(
-            "Expected 129 records: 110 selectors, 19 evidence variants, and no pending cases"
+            "Expected 132 records: 113 selectors, 19 evidence variants, and no pending cases"
         )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
@@ -482,7 +482,7 @@ def build_catalog(
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
     if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 112 total non-official selectors")
+        raise LibraryImportError("Expected 115 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -653,7 +653,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Import the 129-record case handoff: 110 selectors, 19 evidence variants, "
+            "Import the 132-record case handoff: 113 selectors, 19 evidence variants, "
             "no pending cases, plus two standalone community Skills."
         )
     )

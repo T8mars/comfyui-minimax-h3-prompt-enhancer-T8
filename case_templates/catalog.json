@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 129,
-  "case_selector_template_count": 110,
+  "source_case_count": 132,
+  "case_selector_template_count": 113,
   "community_skill_count": 2,
-  "selector_template_count": 112,
+  "selector_template_count": 115,
   "evidence_variant_count": 19,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -6451,6 +6451,171 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nIntroduce one visually distinct outsider into a rule-bound flat route and establish one stable travel direction. Let the outsider first demonstrate the route's base grammar through movement, avoidance or collection, then acquire exactly one visible capability through physical contact with a clearly presented trigger. Use that capability to enter a genuinely different travel mode while preserving identity and destination. Near the finish, extrude the already-established route into a deeper spatial regime without resetting direction or objective, and hold the outsider at a readable goal so both rule learning and dimensional escalation can be verified.\nInvariants:\n- inv-01: Establish one outsider, one flat rule-bound route and one stable destination direction before any upgrade.\n- inv-02: Show the outsider successfully using at least two different base route rules before capability acquisition.\n- inv-03: Bind exactly one capability change to visible contact with a presented trigger.\n- inv-04: Use the acquired capability to enter a different movement mode while keeping identity and destination continuous.\n- inv-05: Return from the upgraded movement to one readable final approach, then extrude the established route near the finish and end at one goal without resetting direction.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Starting after the upgrade removes proof that the subject learned or changed.: Establish one outsider, one flat rule-bound route and one stable destination direction before any upgrade.\n- An immediate capability change makes the earlier route irrelevant.: Show the outsider successfully using at least two different base route rules before capability acquisition.\n- An unexplained morph reads as a disconnected effect.: Bind exactly one capability change to visible contact with a presented trigger.\n- A cosmetic change without new movement does not escalate the route.: Use the acquired capability to enter a different movement mode while keeping identity and destination continuous.\n- A cut from the upgraded movement to an unrelated 3D finish would hide the route handoff.: Return from the upgraded movement to one readable final approach, then extrude the established route near the finish and end at one goal without resetting direction.\nDo not copy from the source: Nintendo and Mario names, logos, HUD text and website marks; the source Super Mario-style blue-sky brick platform level and native enemies; the source coin rows, question blocks, mushroom power-up, cloud ride and flagpole goal; the source yellow bull character, body inflation gag and exact celebratory pose; the source exact obstacle order, camera conversion and copyrighted game composition",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-single-decision-impact-return-lockup-v1",
+      "label": "单次决策兑现｜准备—执行—后果—回归",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先把单一高压威胁建立清楚，再把准备、校准和一次不可逆决策拆开证明；动作发生后必须显示可见后果，并回到执行者或责任主体完成结果确认与终版锁定。",
+      "input_format": "威胁或失效状态 + 责任主体 + 准备动作 + 校准确认 + 一次决定性动作 + 可见后果 + 主体或结果终版锁定",
+      "recommended_input": "原创高山雪崩观测站，蓝灰清晨中一段不稳定雪檐悬在小型研究站上方，红色测量杆和空置承雪槽清楚证明距离与尺度；她旋转黄铜张力环，直到两道刻线对齐且一个实体绿色指示点稳定，不触发主动作；研究站前方已安全畅通，冰川学家放下锚柄、确认稳定坡面并站在无文字六边形安全标志旁保持",
+      "required_anchors": [
+        "Establish one dominant external threat or failure state before the actor commits.",
+        "Separate preparation from execution with one visible readiness action.",
+        "Execute one decisive action and show one directly attributable material consequence.",
+        "Return to the actor or outcome owner and hold a final lockup after the consequence."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-lily-collins3-2090096886405591532-browser-2090096886405591532-video-1",
+        "case_sha256": "883d35b0ebc2c3a54973e65f9838decde6cf97042b32c72ef3fdc8f18cdf8242",
+        "release_score": 4.694,
+        "creative_dna_sha256": "d3813ce5427ef98d46bd2f959a789d0b7ee601d4503e683929ec8d1bf3cf1678",
+        "h3_adapter_sha256": "a49d3b37d61ef8cd7ccbc8054e13ab2ac909e089adb2974645d56468fdf5fb78",
+        "seedance20_adapter_sha256": "20baf5c493ab72f062b48dc0df161d4470418a57c2fc366163df9c3e50f462f4"
+      },
+      "previews": [
+        {
+          "case_id": "x-lily-collins3-2090096886405591532-browser-2090096886405591532-video-1",
+          "label": "单次决策兑现｜准备—执行—后果—回归",
+          "short_summary": "先把单一高压威胁建立清楚，再把准备、校准和一次不可逆决策拆开证明；动作发生后必须显示可见后果，并回到执行者或责任主体完成结果确认与终版锁定。",
+          "recommended_input": "原创高山雪崩观测站，蓝灰清晨中一段不稳定雪檐悬在小型研究站上方，红色测量杆和空置承雪槽清楚证明距离与尺度；她旋转黄铜张力环，直到两道刻线对齐且一个实体绿色指示点稳定，不触发主动作；研究站前方已安全畅通，冰川学家放下锚柄、确认稳定坡面并站在无文字六边形安全标志旁保持",
+          "required_anchors": [
+            "Establish one dominant external threat or failure state before the actor commits.",
+            "Separate preparation from execution with one visible readiness action.",
+            "Execute one decisive action and show one directly attributable material consequence.",
+            "Return to the actor or outcome owner and hold a final lockup after the consequence."
+          ],
+          "sha256": "1a22c0d82c1a99383a89e837e95ed1ec027f34d9c32c1adde9a279090259fc52",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one dominant external threat, isolate a responsible actor through a dedicated preparation phase, make the decision legible through a visible calibration or commitment cue, execute exactly one decisive action, show its material consequence, then return to the responsible actor or outcome owner before a final lockup. The mechanism depends on causal proof, not on combat, weapons or destruction.\nInvariants:\n- inv-01: Establish one dominant external threat or failure state before the actor commits.\n- inv-02: Separate preparation from execution with one visible readiness action.\n- inv-03: Insert one calibration, alignment or confirmation cue immediately before the decisive action.\n- inv-04: Execute one decisive action and show one directly attributable material consequence.\n- inv-05: Return to the actor or outcome owner and hold a final lockup after the consequence.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without an opening threat, preparation becomes generic spectacle.: Establish one dominant external threat or failure state before the actor commits.\n- Immediate action removes the feeling of a deliberate decision.: Separate preparation from execution with one visible readiness action.\n- A missing confirmation cue turns execution into an arbitrary cut.: Insert one calibration, alignment or confirmation cue immediately before the decisive action.\n- Multiple unrelated actions or an unseen result dissolve accountability.: Execute one decisive action and show one directly attributable material consequence.\n- Ending only on the effect abandons the decision-maker and weakens closure.: Return to the actor or outcome owner and hold a final lockup after the consequence.\nDo not copy from the source: the source armored woman and shoulder launcher; the source ruined futuristic warzone and approaching aircraft; the source eye-targeting HUD and projectile-follow shot; the source aircraft fireball and burning skyline; the source SKYFALL title card and exact threat-preparation-launch-impact order",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-trusted-carrier-delayed-interior-release-v1",
+      "label": "延迟载体释放｜进入—静置—开启—扩散",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "让一个密封载体通过外部流程进入可信空间，并在一段清楚的静置或时间变化后从内部开启；隐藏内容物随后扩散，并在整个环境尺度留下可见后果。",
+      "input_format": "可信边界 + 密封载体 + 可见入场流程 + 延迟状态变化 + 无可见操作者的开启 + 隐藏内容释放 + 环境尺度后果",
+      "recommended_input": "原创玻璃温室接收区，黄铜地面输送带把一个密封哑光陶瓷种子库送过透明气闸，后方是整齐闭合的植物行列；生长灯从黄昏切换为紫色夜间模式，种子库位置、接缝、地面轨道和闭合植物全部保持一致；无人机沿三条分支路径扩散，花朵从种子库向远处玻璃墙依次开放，打开的载体始终留在起点",
+      "required_anchors": [
+        "Use a visible external process to admit one sealed carrier through a trusted boundary.",
+        "Establish the carrier intact and inert inside the bounded destination.",
+        "Open the carrier only after the delay, show no opening operator and let concealed contents emerge.",
+        "Let the released contents produce one visible environment-scale consequence."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-mayorkingai-2090145591083077637-browser-2090145591083077637-video-1",
+        "case_sha256": "363fb53207cbfe3d4726025bfb565ddbe038aaa48fc119561caf73383071cc85",
+        "release_score": 4.71,
+        "creative_dna_sha256": "4acce2e52ec8cc008fb41a911c840c9d1afd41396cdee4c8c7b3477c3191cf51",
+        "h3_adapter_sha256": "a1347212bef67a9ae830f4448243a872cf1b900ba2203180c26020f783504e8a",
+        "seedance20_adapter_sha256": "b9483b1e788e36b1a6fb9417d9cff58abee7b13c538c572bd0896be3483cf271"
+      },
+      "previews": [
+        {
+          "case_id": "x-mayorkingai-2090145591083077637-browser-2090145591083077637-video-1",
+          "label": "延迟载体释放｜进入—静置—开启—扩散",
+          "short_summary": "让一个密封载体通过外部流程进入可信空间，并在一段清楚的静置或时间变化后从内部开启；隐藏内容物随后扩散，并在整个环境尺度留下可见后果。",
+          "recommended_input": "原创玻璃温室接收区，黄铜地面输送带把一个密封哑光陶瓷种子库送过透明气闸，后方是整齐闭合的植物行列；生长灯从黄昏切换为紫色夜间模式，种子库位置、接缝、地面轨道和闭合植物全部保持一致；无人机沿三条分支路径扩散，花朵从种子库向远处玻璃墙依次开放，打开的载体始终留在起点",
+          "required_anchors": [
+            "Use a visible external process to admit one sealed carrier through a trusted boundary.",
+            "Establish the carrier intact and inert inside the bounded destination.",
+            "Open the carrier only after the delay, show no opening operator and let concealed contents emerge.",
+            "Let the released contents produce one visible environment-scale consequence."
+          ],
+          "sha256": "40a93131f70e60bee130b4c56cd31748ef44ccbd236f7f0e8160497e7afbaf8c",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nShow a sealed carrier being admitted through a visible external process, place it intact inside a trusted bounded space, preserve its identity through a readable delay or ambient-state change, let it visibly open only after entry with no opening operator shown, then let concealed contents emerge and create an environment-scale consequence. The source does not prove the hidden actuation method; the mechanism is independent of warfare, animals, cities, fire or paper craft.\nInvariants:\n- inv-01: Use a visible external process to admit one sealed carrier through a trusted boundary.\n- inv-02: Establish the carrier intact and inert inside the bounded destination.\n- inv-03: Preserve carrier identity and location through one readable delay or ambient-state change.\n- inv-04: Open the carrier only after the delay, show no opening operator and let concealed contents emerge.\n- inv-05: Let the released contents produce one visible environment-scale consequence.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A carrier that simply appears inside has no admission proof.: Use a visible external process to admit one sealed carrier through a trusted boundary.\n- Opening during entry removes the delayed-release premise.: Establish the carrier intact and inert inside the bounded destination.\n- No delay makes the result an ordinary delivery.: Preserve carrier identity and location through one readable delay or ambient-state change.\n- Contents visible before the delayed opening remove the concealed-release turn.: Open the carrier only after the delay, show no opening operator and let concealed contents emerge.\n- A local exit without a wider consequence leaves the carrier function unproven.: Let the released contents produce one visible environment-scale consequence.\nDo not copy from the source: the source cardboard Trojan horse and ancient city walls; the source black paper soldiers, ropes and gate entry; the source paper-cut war staging and day-to-night square; the source internal ramp, troop emergence and city fire; the source exact carrier-entry-night-release-burning-city order",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-offscreen-cue-progressive-tightening-unrevealed-source-v1",
+      "label": "画外定位悬念｜反应递进但不揭示来源",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "在有界空间中只呈现反应者，让画外线索改变其注意方向；每次线索后都以更近的景别和更小的动作更新定位，始终不揭示来源，最后用停顿或黑场保留悬念。",
+      "input_format": "反应主体 + 有界画外区域 + 两到三个原创定向声线索 + 逐级收紧景别 + 微反应 + 不揭示来源的停顿或黑场",
+      "recommended_input": "原创轨道温室夜间维护舱，一名技术员站在石墨色传感台前，上方灌溉管、深青玻璃、凝露叶片和侧面压力通风口建立有界空间；第二声原创压力滴答从侧面通风口回应，她先转动眼睛再轻轻侧耳，传感台边缘和一盏琥珀灯保持同一空间关系；轮廓与仍在轻颤的压力表停留一拍，温室实用灯依次熄灭并进入完整黑场，不反打、不揭示、不出现说明文字",
+      "required_anchors": [
+        "Establish one reaction subject and one bounded offscreen region without showing a source.",
+        "For each new instance, explicitly design a directional offscreen cue for a visible reorientation while the subject stays in the same bounded area; source cue timing remains inferred.",
+        "Keep the cue source outside every frame and avoid explanatory inserts.",
+        "End on a held reaction, residual instrument state or blackout without a source reveal."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-promptsin-2090166948239909375-browser-2090166948239909375-video-1",
+        "case_sha256": "4e90fde48c527390c03c1d8451cd0e784739c2d783cbbd31e4e23b8a1a667602",
+        "release_score": 4.709,
+        "creative_dna_sha256": "c34cb4856a395c0a89f2602176cb1515dd0c55ceb27dc35b73b1365771f3b7e7",
+        "h3_adapter_sha256": "60f364768a18183ca85f84171016ab41b7826620ad5cde700e08856f7e9397c8",
+        "seedance20_adapter_sha256": "eb8fe3fe15683eadfc5e037a019afe5943f749538e4c15b65ffc65cbb375ae6c"
+      },
+      "previews": [
+        {
+          "case_id": "x-promptsin-2090166948239909375-browser-2090166948239909375-video-1",
+          "label": "画外定位悬念｜反应递进但不揭示来源",
+          "short_summary": "在有界空间中只呈现反应者，让画外线索改变其注意方向；每次线索后都以更近的景别和更小的动作更新定位，始终不揭示来源，最后用停顿或黑场保留悬念。",
+          "recommended_input": "原创轨道温室夜间维护舱，一名技术员站在石墨色传感台前，上方灌溉管、深青玻璃、凝露叶片和侧面压力通风口建立有界空间；第二声原创压力滴答从侧面通风口回应，她先转动眼睛再轻轻侧耳，传感台边缘和一盏琥珀灯保持同一空间关系；轮廓与仍在轻颤的压力表停留一拍，温室实用灯依次熄灭并进入完整黑场，不反打、不揭示、不出现说明文字",
+          "required_anchors": [
+            "Establish one reaction subject and one bounded offscreen region without showing a source.",
+            "For each new instance, explicitly design a directional offscreen cue for a visible reorientation while the subject stays in the same bounded area; source cue timing remains inferred.",
+            "Keep the cue source outside every frame and avoid explanatory inserts.",
+            "End on a held reaction, residual instrument state or blackout without a source reveal."
+          ],
+          "sha256": "bd9277d22ce568101cd60a6f6882babbef00da1467f03b011ce10bdd8bbafcf1",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one bounded subject-space relationship with a clearly hidden offscreen region and progressively tighten from body-scale reorientation to micro-reaction without revealing a source. The creator states that sound supplies spatial information, while local ASR proves narration but not exact cue direction or synchronization; therefore each new transfer must explicitly design its own directional offscreen cues rather than treating source cue timing as observed fact. End on a held response, residual instrument state or blackout.\nInvariants:\n- inv-01: Establish one reaction subject and one bounded offscreen region without showing a source.\n- inv-02: For each new instance, explicitly design a directional offscreen cue for a visible reorientation while the subject stays in the same bounded area; source cue timing remains inferred.\n- inv-03: Tighten the camera after each visible reorientation and reduce motion from body turn to gaze or facial adjustment.\n- inv-04: Keep the cue source outside every frame and avoid explanatory inserts.\n- inv-05: End on a held reaction, residual instrument state or blackout without a source reveal.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- An unbounded or already visible source removes the suspense mechanism.: Establish one reaction subject and one bounded offscreen region without showing a source.\n- Large relocation or an unspecified cue breaks localization continuity.: For each new instance, explicitly design a directional offscreen cue for a visible reorientation while the subject stays in the same bounded area; source cue timing remains inferred.\n- Constant shot scale prevents escalation.: Tighten the camera after each visible reorientation and reduce motion from body turn to gaze or facial adjustment.\n- Showing the source converts suspense into ordinary coverage.: Keep the cue source outside every frame and avoid explanatory inserts.\n- A final reveal cancels the central withholding rule.: End on a held reaction, residual instrument state or blackout without a source reveal.\nDo not copy from the source: the source woman, keys and dim residential corridor; the source wall-dominant foreground and single wall lamp; the source exact rear silhouette to tight face order; the source implied monster, voice, whisper and knock wording; the source black ending and exact corridor reaction staging",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

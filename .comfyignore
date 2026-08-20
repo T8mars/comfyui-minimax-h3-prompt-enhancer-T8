@@ -1,0 +1,27 @@
+# Repository and CI metadata are not needed at runtime.
+.github/
+.gitattributes
+.gitignore
+.comfyignore
+
+# Development and release-validation material.
+tests/
+tools/
+case_templates/source_batches/
+live_smoke.py
+music3_live_smoke.py
+seedance20_live_smoke.py
+workshop_live_smoke.py
+local_qwen_live_smoke.py
+local_qwen_model_compat_smoke.py
+
+# Local-only state and large model/runtime payloads are never published.
+roadmap.md
+.env
+.env.*
+runtime/
+runtime_config.json
+*.gguf
+*.part
+__pycache__/
+*.py[cod]

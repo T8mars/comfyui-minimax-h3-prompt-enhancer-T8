@@ -43,7 +43,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。预设只优化提示词，不运行完整制作工作流。
-- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：129 条已发布案例事实归并为 110 个稳定案例 selector（含 19 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 112 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：132 条已发布案例事实归并为 113 个稳定案例 selector（含 19 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 115 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -57,6 +57,24 @@
 - Music 3 的官方 Caption 与歌词完全分离；生成/润色歌词属于清楚标注的 T8 非官方扩展，严格保留模式不会改动用户歌词。
 
 ## 安装
+
+### ComfyUI-Manager / Registry（推荐）
+
+在 ComfyUI-Manager 的节点管理器中搜索：
+
+```text
+MiniMax H3 / Seedance 2.0 / Music 3 Prompt Enhancer (T8)
+```
+
+也可以使用 Comfy CLI：
+
+```bash
+comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
+```
+
+Registry 发布包会包含节点运行所需的官方 Skill、非官方案例库与轻量 GIF 预览，不包含测试、来源批次、API Key、本地运行时或 GGUF 模型。
+
+### Git 安装
 
 在 ComfyUI 的 `custom_nodes` 目录执行：
 
@@ -320,7 +338,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 | `画内涂鸦｜现实互动逐步绘出隐藏世界` | 让现实互动逐次生成锚定在表面的同族线稿，从局部符号、路线与新图形升级到环境范围的连通绘制世界 |
 | `造型轮播｜身份锁定跨风格世界` | 固定主体身份与镜头关系，让背景、材质、配色和配件成套切换并逐步增密，最后回到可读身份终态 |
 
-129 条来源案例中有 110 个案例 selector 和 19 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-17-01` 新增 `身份机体跃迁`、`独演成敌`、`样本倍增` 3 个稳定 selector，并为 `固定机位｜从线稿生成成品` 增加 2 个 evidence variant、为 `造型轮播｜身份锁定跨风格世界` 增加 1 个 evidence variant；`batch-2026-08-17-02` 新增 `规则闯关｜吸收能力后从平面赛道升维`。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
+132 条来源案例中有 113 个案例 selector 和 19 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-17-01` 新增 `身份机体跃迁`、`独演成敌`、`样本倍增` 3 个稳定 selector，并为 `固定机位｜从线稿生成成品` 增加 2 个 evidence variant、为 `造型轮播｜身份锁定跨风格世界` 增加 1 个 evidence variant；`batch-2026-08-17-02` 新增 `规则闯关｜吸收能力后从平面赛道升维`；`batch-2026-08-20-01` 新增 `单次决策兑现｜准备—执行—后果—回归`、`延迟载体释放｜进入—静置—开启—扩散`、`画外定位悬念｜反应递进但不揭示来源`。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
 
 另外两个独立的用户贡献社区 Skill 不合并进案例 registry，也不冒充官方 Skill：
 
@@ -331,7 +349,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 
 打开 `MiniMax 官方场景 Skill（8 个可选）` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择任一具体官方场景 Skill 或非官方模板后，节点内都会显示用途、适用/推荐输入格式、必须实现的结构锚点、推荐示例、GIF 和来源链接。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
-GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 131 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
+GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 134 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
 
 维护者仍可选用本地原始案例清单，以显示来源链接或在开发环境优先检查原始预览；普通用户不需要此配置：
 
@@ -349,8 +367,8 @@ Copy-Item .t8-case-library.example.json .t8-case-library.local.json
 
 ```powershell
 python tools/import_unofficial_case_library_v2.py `
-  --library G:\minimax-skill-T8\comfyui-handoffs\unofficial-case-library-v2.json `
-  --community-skills G:\minimax-skill-T8\comfyui-handoffs\standalone-community-skills-v1.json `
+  --library <handoff-dir>\unofficial-case-library-v2.json `
+  --community-skills <handoff-dir>\standalone-community-skills-v1.json `
   --existing-catalog case_templates\catalog.json `
   --source-batch-dir case_templates\source_batches `
   --output case_templates/catalog.json
@@ -360,14 +378,14 @@ python tools/import_unofficial_case_library_v2.py `
 
 ```powershell
 python tools/bundle_t8_case_previews.py `
-  --library G:\minimax-skill-T8\comfyui-handoffs\unofficial-case-library-v2.json `
-  --community-skills G:\minimax-skill-T8\comfyui-handoffs\standalone-community-skills-v1.json `
+  --library <handoff-dir>\unofficial-case-library-v2.json `
+  --community-skills <handoff-dir>\standalone-community-skills-v1.json `
   --catalog case_templates\catalog.json `
   --output-dir web\js\assets\t8-case-previews-next `
-  --ffmpeg F:\AI-T8-video-onekey\ffmpeg\bin\ffmpeg.exe
+  --ffmpeg <ffmpeg-dir>\bin\ffmpeg.exe
 ```
 
-导入器要求 129 条案例记录严格组成 110 个 selector + 19 个 evidence variant + 0 个 pending case，并另验 2 个独立社区 Skill，最终生成 112 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
+导入器要求 132 条案例记录严格组成 113 个 selector + 19 个 evidence variant + 0 个 pending case，并另验 2 个独立社区 Skill，最终生成 115 个非官方下拉项。已发布案例必须 `released/approved`，H3 与 Seedance 2.0 recipe 均通过、`media_connections=[]`、provider/secret 字段为空、无旧 `openai_upload_url`、两份 recipe 的 Creative DNA 一致；若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存已发布项的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 
@@ -429,7 +447,7 @@ MV 规则按以下方式工作：
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | 界面显示为“H3 核心写作 Skill（始终启用）”；`现有兼容 / 官方 Skill 严格`，默认兼容，严格档位强制英文说明正文 |
 | `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF |
-| `case_template` | `无 / 112 个非官方模板`：110 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
+| `case_template` | `无 / 115 个非官方模板`：113 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |
@@ -550,19 +568,26 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 
 ```powershell
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --runtime
-& "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model
+& "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant official
+& "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant uncensored
+& "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant all
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --offline
 ```
+
+`official` 是默认模型；`uncensored` 是用户可选的第三方 FP8 衍生 Q4_K_M 量化；`all` 同时安装两种文字模型并共用一个视觉投影器。安装后重启 ComfyUI，三个节点的“本地模型”下拉会自动列出已下载的 GGUF。第三方模型不会替换默认模型，也不会绕过本项目的提示词合同、输入验证或输出保护。
 
 安装器固定并核验以下资产，支持 `.part` 断点续传、磁盘空间预检和原子改名：
 
 | 资产 | 固定版本 | 体积 |
 | --- | --- | --- |
-| Qwen 模型 | `Qwen3.8-27B-Q4_K_M.gguf`，固定 HF revision 与 SHA-256 | 约 15.93 GiB |
+| 默认 Qwen 模型 | `Qwen3.8-27B-Q4_K_M.gguf`，固定 HF revision 与 SHA-256 | 约 15.93 GiB |
+| 可选第三方模型 | `qwen3.8-27b-uncensored-fp8-q4_k_m.gguf`，固定 `theresa00l/...` revision 与 SHA-256 | 约 15.66 GiB |
 | 视觉投影器 | `mmproj-F16.gguf`，固定 SHA-256 | 约 0.86 GiB |
 | 推理运行时 | llama.cpp `b10436`，固定安装器提交与 SHA-256 | 依平台/后端而定 |
 
-GGUF 与 mmproj 放入 ComfyUI 的 `models/LLM/Qwen3.8/`；llama.cpp 放在本节点已忽略的 `runtime/local_qwen/`。模型来自 `unsloth/Qwen3.8-27B-GGUF`，模型与基模为 Apache-2.0；参考安装器、参考插件和 llama.cpp 为 MIT。具体固定哈希及归属见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
+GGUF 与 mmproj 放入 ComfyUI 的 `models/LLM/Qwen3.8/`；llama.cpp 放在本节点已忽略的 `runtime/local_qwen/`。默认模型来自 `unsloth/Qwen3.8-27B-GGUF`；可选模型来自 `theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF`，其模型卡声明 Apache-2.0、基于 `orcarouter/Qwen3.8-27B-Uncensored-FP8` 的量化。参考安装器、参考插件和 llama.cpp 为 MIT。具体固定提交、哈希及归属见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
+
+可选模型已用本项目固定的 `mmproj-F16.gguf` 和 llama.cpp 本地运行时完成真实兼容验收：文字精确 token、图片 OCR/颜色/形状、视频采样帧的双阶段 OCR、早晚运动方向与时间顺序共 12/12 项通过。它支持节点现有的“图片 + 按时间戳采样视频画面”路径；这仍不等于读取完整视频字节或分析音轨。脱敏证据见 [`tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json`](./tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json)。
 
 建议 24GB 以上显存获得较好的交互体验；16GB 显存会由 `--fit` 自动部分卸载到系统内存，建议至少 32GB RAM，速度会明显下降。CPU-only 功能上可运行，但本项目不承诺交互速度。首次使用前可点击三个节点中的“检查本地 Qwen 安装”查看 GGUF、mmproj、运行时、后端和实际模型目录。
 

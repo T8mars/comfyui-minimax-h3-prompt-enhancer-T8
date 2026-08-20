@@ -185,10 +185,17 @@ def _music_constraint_checks(caption):
     }
 
 
-def run_quality_acceptance():
+def run_quality_acceptance(model_filename=local_runtime.DEFAULT_MODEL_FILENAME):
     status = local_runtime.runtime_status()
-    if not all(status.get(key) for key in ("runtime_installed", "model_installed", "mmproj_installed")):
+    model_path = local_runtime.resolve_model_path(model_filename, label="local Qwen model")
+    expected = local_runtime.KNOWN_MODEL_FILES.get(model_filename)
+    if expected is not None and model_path.stat().st_size != expected[0]:
+        raise RuntimeError(
+            f"Selected local model size mismatch: {model_path.stat().st_size}, expected {expected[0]}."
+        )
+    if not all(status.get(key) for key in ("runtime_installed", "mmproj_installed")):
         raise RuntimeError("Local Qwen runtime/model/mmproj is not fully installed: " + json.dumps(status))
+    local_common = {**LOCAL_COMMON, "local_model": model_filename}
 
     cases = []
     hard_failures = []
@@ -197,6 +204,7 @@ def run_quality_acceptance():
     try:
         with monitor:
             settings = local_provider.settings_from_values(
+                local_model=model_filename,
                 local_context_size=32768,
                 local_max_tokens=1024,
                 local_unload_policy=local_runtime.LOCAL_KEEP_WARM,
@@ -238,7 +246,7 @@ def run_quality_acceptance():
                     official_skill_profile=h3.STRICT_SKILL_PROFILE,
                     constraints="Exactly two shots; no dialogue; preserve the paper bird, library, and glowing map.",
                     seed=2026081902,
-                    **LOCAL_COMMON,
+                    **local_common,
                 )
             )
             h3_text_checks = {
@@ -278,7 +286,7 @@ def run_quality_acceptance():
                     key_scale="D major",
                     meter="4/4",
                     seed=2026081903,
-                    **{key: value for key, value in LOCAL_COMMON.items() if key != "local_max_tokens"},
+                    **{key: value for key, value in local_common.items() if key != "local_max_tokens"},
                 )
             )
             lyrics, caption, payload_text, enhancement_report_text = music_result
@@ -333,7 +341,7 @@ def run_quality_acceptance():
                     "and late shapes, colors, movement directions, hard transition, and temporal order."
                 )
                 visual_kwargs = {
-                    **LOCAL_COMMON,
+                    **local_common,
                     "local_video_sample_fps": 2.0,
                 }
                 h3_visual, h3_visual_time = _timed(
@@ -409,11 +417,12 @@ def run_quality_acceptance():
     passed = not hard_failures and overall_score >= 90 and all(case["passed"] for case in cases)
     return {
         "schema_version": "t8-local-qwen-quality/v1",
-        "provider": "Qwen3.8-27B-Q4_K_M.gguf via llama.cpp",
+        "provider": f"{model_filename} via llama.cpp",
         "runtime": {
             "backend": status.get("backend"),
-            "model_size": local_runtime.DEFAULT_MODEL_SIZE,
-            "model_sha256": local_runtime.DEFAULT_MODEL_SHA256,
+            "model_filename": model_filename,
+            "model_size": model_path.stat().st_size,
+            "model_sha256": expected[1] if expected is not None else None,
             "mmproj_size": local_runtime.DEFAULT_MMPROJ_SIZE,
             "mmproj_sha256": local_runtime.DEFAULT_MMPROJ_SHA256,
             "llama_cpp_tag": "b10436",
@@ -436,15 +445,28 @@ def main(argv=None):
         action="store_true",
         help="Acknowledge loading the installed ~18GB local model and running multiple long inferences.",
     )
-    parser.add_argument("--output", type=Path, default=REPORT_PATH)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--model",
+        default=local_runtime.DEFAULT_MODEL_FILENAME,
+        help="Installed GGUF filename under ComfyUI/models/LLM/Qwen3.8.",
+    )
     args = parser.parse_args(argv)
     if not args.confirm_local_large_model:
         parser.error("Refusing the long local run without --confirm-local-large-model.")
-    report = run_quality_acceptance()
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = args.output.with_suffix(args.output.suffix + ".part")
+    model_filename = str(args.model)
+    report = run_quality_acceptance(model_filename=model_filename)
+    output = args.output
+    if output is None:
+        if model_filename == local_runtime.DEFAULT_MODEL_FILENAME:
+            output = REPORT_PATH
+        else:
+            safe_stem = re.sub(r"[^A-Za-z0-9._-]+", "_", Path(model_filename).stem)
+            output = PROJECT_DIR / "tests" / "fixtures" / f"local_qwen_quality_{safe_stem}.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_suffix(output.suffix + ".part")
     temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temporary.replace(args.output)
+    temporary.replace(output)
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if report["passed"] else 1
 

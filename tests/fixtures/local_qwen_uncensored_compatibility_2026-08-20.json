@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "model": {
+    "filename": "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf",
+    "size": 16810714976,
+    "sha256": "66bb238d41de38b11dd406d932d8fb97433d529022cef60f2f422b9221cae743"
+  },
+  "mmproj": {
+    "filename": "mmproj-F16.gguf",
+    "size": 927607488,
+    "sha256": "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e"
+  },
+  "runtime": "llama.cpp local provider",
+  "checks": {
+    "text_exact_token": true,
+    "vision_exact_ocr": true,
+    "vision_left_magenta_triangle": true,
+    "vision_right_yellow_circle": true,
+    "video_early_exact_ocr": true,
+    "video_late_exact_ocr": true,
+    "video_early_blue_square_left_to_right": true,
+    "video_late_green_circle_downward": true,
+    "video_temporal_order": true,
+    "single_image_sent": true,
+    "single_video_sent": true,
+    "audio_not_analyzed": true
+  },
+  "passed": true,
+  "elapsed_seconds": 39.085,
+  "text_output_sha256": "c48dd72bdd6156c51e577379b24bf6fdb98cc0081ec197991557918c284758f7",
+  "vision_output_sha256": "de9982faefc212d069730634f7c0305bf96b1e9c49d0072f936d576345c42753",
+  "privacy": "Outputs and Base64 image bytes are not stored in this report."
+}

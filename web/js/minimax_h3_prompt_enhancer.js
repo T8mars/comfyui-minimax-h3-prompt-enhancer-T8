@@ -128,6 +128,12 @@ function resizeNode(node) {
 }
 
 
+function isApiKeyLinked(node) {
+    const input = node.inputs?.find((item) => item.name === "api_key" || item.widget?.name === "api_key");
+    return input?.link != null;
+}
+
+
 function normalizeChoice(widget, options, fallback) {
     if (widget && !options.includes(widget.value)) widget.value = fallback;
 }
@@ -297,7 +303,9 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     const input = document.createElement("input");
     input.type = "password";
     const updatePlaceholder = () => {
-        if (apiModeWidget?.value === OPENAI_API_MODE) {
+        if (isApiKeyLinked(node)) {
+            input.placeholder = "已连接外部 API Key STRING（连接值优先生效）";
+        } else if (apiModeWidget?.value === OPENAI_API_MODE) {
             input.placeholder = "OpenAI兼容 API Key（输入后保存到工作流）";
         } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
             input.placeholder = "AI 工坊 API Key（输入后保存到工作流）";
@@ -396,6 +404,10 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     });
 
     const commit = () => {
+        if (isApiKeyLinked(node)) {
+            updateConnectionState();
+            return;
+        }
         sourceWidget.value = input.value.trim();
         sourceWidget.callback?.(sourceWidget.value);
         node.graph?.change?.();
@@ -412,6 +424,20 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
         save.textContent = "💾 保存到工作流";
     };
     node.t8CommitApiKey = commit;
+
+    const updateConnectionState = () => {
+        const linked = isApiKeyLinked(node);
+        input.disabled = linked;
+        reveal.disabled = linked;
+        save.disabled = linked;
+        input.title = linked
+            ? "当前使用 api_key 插口连接的外部 STRING；下方工作流密钥不会覆盖连接值。"
+            : "可在此输入 API Key，并选择是否保存到工作流。";
+        save.textContent = linked ? "✓ 外部 STRING 已连接" : "💾 保存到工作流";
+        updatePlaceholder();
+    };
+    node.t8UpdateApiKeyConnection = updateConnectionState;
+    updateConnectionState();
 
     setWidgetVisible(sourceWidget, false);
     const secureWidget = node.addDOMWidget("seedance_api_key_secure", "custom", container, {
@@ -449,6 +475,7 @@ app.registerExtension({
         const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
         const originalOnConfigure = nodeType.prototype.onConfigure;
         const originalOnSerialize = nodeType.prototype.onSerialize;
+        const originalOnConnectionsChange = nodeType.prototype.onConnectionsChange;
         nodeType.prototype.onNodeCreated = function () {
             originalOnNodeCreated?.apply(this, arguments);
 
@@ -637,6 +664,11 @@ app.registerExtension({
                 if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.t8NormalizePromptOptions?.();
             });
+        };
+        nodeType.prototype.onConnectionsChange = function () {
+            const result = originalOnConnectionsChange?.apply(this, arguments);
+            requestAnimationFrame(() => this.t8UpdateApiKeyConnection?.());
+            return result;
         };
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);

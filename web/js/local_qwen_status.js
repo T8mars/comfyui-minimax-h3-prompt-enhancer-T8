@@ -14,15 +14,21 @@ export async function showLocalQwenStatus() {
     const yesNo = (value) => value ? "已安装" : "缺失";
     const textReady = payload.text_ready ?? (payload.runtime_installed && payload.model_installed);
     const visionReady = payload.vision_ready ?? (textReady && payload.mmproj_installed);
+    const verifiedModels = Array.isArray(payload.available_verified_models)
+        ? payload.available_verified_models.join("、")
+        : "";
     window.alert([
         textReady ? "文字能力：已就绪（可用于 Music 3 及纯文字提示词）。" : "文字能力：未就绪。",
         visionReady ? "视觉能力：已就绪（可用于图像与视频采样帧）。" : "视觉能力：未就绪（需要 mmproj）。",
         `llama.cpp 运行时：${yesNo(payload.runtime_installed)}`,
-        `Qwen3.8-27B GGUF：${yesNo(payload.model_installed)}`,
+        `官方 Qwen3.8-27B Q4_K_M：${yesNo(payload.model_installed)}`,
+        `第三方 Uncensored FP8-Q4_K_M：${yesNo(payload.uncensored_model_installed)}`,
+        verifiedModels ? `已验证文件：${verifiedModels}` : "",
         `视觉投影器 mmproj：${yesNo(payload.mmproj_installed)}`,
         payload.backend ? `运行后端：${payload.backend}` : "",
         `模型目录：${payload.model_directory || "未知"}`,
-        "安装命令：python install_local_qwen.py",
+        "官方模型：python install_local_qwen.py --model --model-variant official",
+        "第三方模型：python install_local_qwen.py --model --model-variant uncensored",
         "视频边界：按真实时间戳采样可见画面；不读取视频音轨。",
         "Music 3 边界：仅处理文字，不加载视觉投影器。",
     ].filter(Boolean).join("\n"));

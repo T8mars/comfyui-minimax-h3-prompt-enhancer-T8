@@ -294,7 +294,7 @@ class LocalQwenUnitTests(unittest.TestCase):
                 task_type="Ref2VA",
                 reference_videos={"reference_video_0": video},
                 api_mode=nodes.SEEDANCE_API_MODE,
-                api_key="sk-test-placeholder-1234567890",
+                api_key="placeholder-not-a-live-secret",
             )
 
         FakeLocalProvider.response = "镜头1：按裁剪窗口中的可见顺序推进。"
@@ -390,7 +390,7 @@ class LocalQwenUnitTests(unittest.TestCase):
         good = b"verified-model-bytes"
         item = installer.Download("tiny.gguf", len(good), hashlib.sha256(good).hexdigest())
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             target = root / item.filename
             partial = target.with_suffix(target.suffix + ".part")
 
@@ -412,6 +412,61 @@ class LocalQwenUnitTests(unittest.TestCase):
             partial.write_bytes(b"z" * (len(good) - 1))
             with self.assertRaises(RuntimeError):
                 installer._download_with_resume(item, target, offline=True)
+
+    def test_installer_exposes_pinned_official_uncensored_and_all_variants(self):
+        official = installer.model_files_for_variant(installer.MODEL_VARIANT_OFFICIAL)
+        uncensored = installer.model_files_for_variant(installer.MODEL_VARIANT_UNCENSORED)
+        combined = installer.model_files_for_variant(installer.MODEL_VARIANT_ALL)
+        self.assertEqual(
+            [item.filename for item in official],
+            ["Qwen3.8-27B-Q4_K_M.gguf", "mmproj-F16.gguf"],
+        )
+        self.assertEqual(
+            [item.filename for item in uncensored],
+            ["qwen3.8-27b-uncensored-fp8-q4_k_m.gguf", "mmproj-F16.gguf"],
+        )
+        self.assertEqual(len({item.filename for item in combined}), 3)
+        alternate = uncensored[0]
+        self.assertIn("theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF", alternate.url)
+        self.assertIn("5bdf224e6f9b1e18c7598fea63e238e014ee8e3e", alternate.url)
+        self.assertEqual(
+            alternate.sha256,
+            "66bb238d41de38b11dd406d932d8fb97433d529022cef60f2f422b9221cae743",
+        )
+        with self.assertRaises(ValueError):
+            installer.model_files_for_variant("unknown")
+
+    def test_runtime_status_accepts_uncensored_model_as_text_and_vision_ready(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            alternate = root / runtime.UNCENSORED_MODEL_FILENAME
+            projector = root / runtime.DEFAULT_MMPROJ_FILENAME
+            alternate.write_bytes(b"model")
+            projector.write_bytes(b"projector")
+            known = {
+                runtime.DEFAULT_MODEL_FILENAME: (999, "unused"),
+                runtime.UNCENSORED_MODEL_FILENAME: (len(b"model"), "unused"),
+            }
+            fake_spec = runtime.RuntimeSpec(
+                executable=PROJECT_ROOT / "fake-llama-server",
+                library_dirs=(),
+                backend="test",
+            )
+            with (
+                patch.object(runtime, "qwen_model_directory", return_value=root),
+                patch.object(runtime, "KNOWN_MODEL_FILES", known),
+                patch.object(runtime, "DEFAULT_MMPROJ_SIZE", len(b"projector")),
+                patch.object(runtime, "load_runtime_spec", return_value=fake_spec),
+            ):
+                status = runtime.runtime_status()
+        self.assertFalse(status["model_installed"])
+        self.assertTrue(status["uncensored_model_installed"])
+        self.assertTrue(status["text_ready"])
+        self.assertTrue(status["vision_ready"])
+        self.assertEqual(
+            status["available_verified_models"],
+            [runtime.UNCENSORED_MODEL_FILENAME],
+        )
 
 
 if __name__ == "__main__":

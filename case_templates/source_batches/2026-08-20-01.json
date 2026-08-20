@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-20-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-lily-collins3-2090096886405591532-browser-2090096886405591532-video-1",
+      "template_id": "t8-case-single-decision-impact-return-lockup-v1",
+      "label": "单次决策兑现｜准备—执行—后果—回归",
+      "summary": "先把单一高压威胁建立清楚，再把准备、校准和一次不可逆决策拆开证明；动作发生后必须显示可见后果，并回到执行者或责任主体完成结果确认与终版锁定。",
+      "case_sha256": "883d35b0ebc2c3a54973e65f9838decde6cf97042b32c72ef3fdc8f18cdf8242",
+      "creative_dna_sha256": "d3813ce5427ef98d46bd2f959a789d0b7ee601d4503e683929ec8d1bf3cf1678",
+      "h3_adapter_sha256": "a49d3b37d61ef8cd7ccbc8054e13ab2ac909e089adb2974645d56468fdf5fb78",
+      "seedance20_adapter_sha256": "20baf5c493ab72f062b48dc0df161d4470418a57c2fc366163df9c3e50f462f4",
+      "mechanism_fingerprint": "c3dedb8bec9a95a3f8021d323ced9256309cf6ae88cc9267381de0ed11acce32"
+    },
+    {
+      "case_id": "x-mayorkingai-2090145591083077637-browser-2090145591083077637-video-1",
+      "template_id": "t8-case-trusted-carrier-delayed-interior-release-v1",
+      "label": "延迟载体释放｜进入—静置—开启—扩散",
+      "summary": "让一个密封载体通过外部流程进入可信空间，并在一段清楚的静置或时间变化后从内部开启；隐藏内容物随后扩散，并在整个环境尺度留下可见后果。",
+      "case_sha256": "363fb53207cbfe3d4726025bfb565ddbe038aaa48fc119561caf73383071cc85",
+      "creative_dna_sha256": "4acce2e52ec8cc008fb41a911c840c9d1afd41396cdee4c8c7b3477c3191cf51",
+      "h3_adapter_sha256": "a1347212bef67a9ae830f4448243a872cf1b900ba2203180c26020f783504e8a",
+      "seedance20_adapter_sha256": "b9483b1e788e36b1a6fb9417d9cff58abee7b13c538c572bd0896be3483cf271",
+      "mechanism_fingerprint": "de207963aecd6d842122da4f21c9da9be80c1c9ff90152a354b3a8a2de85422c"
+    },
+    {
+      "case_id": "x-promptsin-2090166948239909375-browser-2090166948239909375-video-1",
+      "template_id": "t8-case-offscreen-cue-progressive-tightening-unrevealed-source-v1",
+      "label": "画外定位悬念｜反应递进但不揭示来源",
+      "summary": "在有界空间中只呈现反应者，让画外线索改变其注意方向；每次线索后都以更近的景别和更小的动作更新定位，始终不揭示来源，最后用停顿或黑场保留悬念。",
+      "case_sha256": "4e90fde48c527390c03c1d8451cd0e784739c2d783cbbd31e4e23b8a1a667602",
+      "creative_dna_sha256": "c34cb4856a395c0a89f2602176cb1515dd0c55ceb27dc35b73b1365771f3b7e7",
+      "h3_adapter_sha256": "60f364768a18183ca85f84171016ab41b7826620ad5cde700e08856f7e9397c8",
+      "seedance20_adapter_sha256": "eb8fe3fe15683eadfc5e037a019afe5943f749538e4c15b65ffc65cbb375ae6c",
+      "mechanism_fingerprint": "8b9f585b46b802d4afe9a0e60f8a0dca585719ce6eb3a77911b1f2650ab4150b"
+    }
+  ]
+}
