@@ -6,5 +6,9 @@ __pycache__/
 .env.*
 !.env.example
 *.log
+runtime/
+runtime_config.json
+*.gguf
+*.gguf.part
 .idea/
 .vscode/

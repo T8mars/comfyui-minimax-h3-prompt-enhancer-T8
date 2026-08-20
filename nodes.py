@@ -14,6 +14,55 @@ from PIL import Image
 from comfy_api.latest import ComfyExtension, io
 
 try:
+    from .local_qwen_provider import (
+        DEFAULT_CONTEXT_SIZE,
+        DEFAULT_MAX_TOKENS,
+        DEFAULT_VIDEO_SAMPLE_FPS,
+        LOCAL_QWEN_API_MODE,
+        LocalQwenProvider,
+        LocalQwenProviderError,
+        build_local_multimodal_parts,
+        local_visual_part_budget,
+        settings_from_values as local_qwen_settings,
+    )
+    from .local_qwen_runtime import (
+        DEFAULT_MMPROJ_FILENAME,
+        DEFAULT_MODEL_FILENAME,
+        LOCAL_COMFY_MEMORY_POLICIES,
+        LOCAL_REASONING_OPTIONS,
+        LOCAL_THINK_OFF,
+        LOCAL_THINK_OPTIONS,
+        LOCAL_UNLOAD_AFTER_RUN,
+        LOCAL_UNLOAD_POLICIES,
+        list_gguf_models,
+        list_mmproj_models,
+    )
+except ImportError:
+    from local_qwen_provider import (
+        DEFAULT_CONTEXT_SIZE,
+        DEFAULT_MAX_TOKENS,
+        DEFAULT_VIDEO_SAMPLE_FPS,
+        LOCAL_QWEN_API_MODE,
+        LocalQwenProvider,
+        LocalQwenProviderError,
+        build_local_multimodal_parts,
+        local_visual_part_budget,
+        settings_from_values as local_qwen_settings,
+    )
+    from local_qwen_runtime import (
+        DEFAULT_MMPROJ_FILENAME,
+        DEFAULT_MODEL_FILENAME,
+        LOCAL_COMFY_MEMORY_POLICIES,
+        LOCAL_REASONING_OPTIONS,
+        LOCAL_THINK_OFF,
+        LOCAL_THINK_OPTIONS,
+        LOCAL_UNLOAD_AFTER_RUN,
+        LOCAL_UNLOAD_POLICIES,
+        list_gguf_models,
+        list_mmproj_models,
+    )
+
+try:
     from .case_templates import (
         CASE_TEMPLATE_OPTIONS,
         NO_CASE_TEMPLATE,
@@ -90,7 +139,7 @@ SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT] + [str(count) for count in range(1, 21)]
 SEEDANCE_API_MODE = "贞贞平价小屋（推荐）"
 AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）"
 OPENAI_API_MODE = "OpenAI兼容接口（备用）"
-API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE]
+API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE]
 LEGACY_UI_VALUES = {"展开", "收起", "提交当前工作流", "打开 Seedance 注册页面"}
 API_KEY_PATTERN = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 
@@ -373,6 +422,8 @@ def _provider_config(
     openai_base_url: str,
 ) -> tuple[str, str, str, str]:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
+    if api_mode == LOCAL_QWEN_API_MODE:
+        return "", "", "", "Local Qwen3.8-27B"
     if api_mode == SEEDANCE_API_MODE:
         api_key = api_key or os.environ.get("SEEDANCE_API_KEY", "").strip()
         if not api_key:
@@ -399,6 +450,8 @@ def _provider_config(
 
 def _resolve_llm_model(api_mode: str, ai_workshop_model: str, custom_model: str) -> str:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
+    if api_mode == LOCAL_QWEN_API_MODE:
+        return "qwen3.8-27b"
     if api_mode == OPENAI_API_MODE:
         model = str(custom_model or "").strip()
         if not model:
@@ -490,7 +543,7 @@ def _video_format(video: Any, source: Any) -> tuple[str, str]:
     )
 
 
-def _video_duration(video: Any) -> float:
+def _video_duration(video: Any, *, use_active_trim: bool = False) -> float:
     if not hasattr(video, "get_duration"):
         raise PromptEnhancerError("VIDEO input does not expose duration metadata.")
     try:
@@ -499,7 +552,24 @@ def _video_duration(video: Any) -> float:
         raise PromptEnhancerError("Could not read VIDEO duration metadata.") from error
     if not np.isfinite(duration) or duration <= 0:
         raise PromptEnhancerError("VIDEO duration metadata is invalid.")
-    return duration
+    if not use_active_trim or not hasattr(video, "get_active_trim_window"):
+        return duration
+    try:
+        start_time, trim_duration = video.get_active_trim_window()
+        start_time = float(start_time)
+        trim_duration = float(trim_duration)
+    except (TypeError, ValueError, OSError) as error:
+        raise PromptEnhancerError("Could not read the VIDEO trim window.") from error
+    if not np.isfinite(start_time) or not np.isfinite(trim_duration):
+        raise PromptEnhancerError("VIDEO trim metadata is invalid.")
+    start_time = max(0.0, start_time)
+    if start_time >= duration:
+        raise PromptEnhancerError("VIDEO trim window is empty.")
+    effective = trim_duration if trim_duration > 0 else duration - start_time
+    effective = min(effective, duration - start_time)
+    if effective <= 0:
+        raise PromptEnhancerError("VIDEO trim window is empty.")
+    return effective
 
 
 def _validate_video_trim(video: Any):
@@ -520,10 +590,11 @@ def _validate_video_trim(video: Any):
         )
 
 
-def _validate_video_source(video: Any):
+def _validate_video_source(video: Any, *, allow_trim: bool = False):
     if not hasattr(video, "get_stream_source"):
         raise PromptEnhancerError("VIDEO input must come from a native ComfyUI video node.")
-    _validate_video_trim(video)
+    if not allow_trim:
+        _validate_video_trim(video)
     try:
         source = video.get_stream_source()
     except (OSError, ValueError) as error:
@@ -589,6 +660,7 @@ def _validate_inputs(
     reference_videos: dict[str, Any] | None,
     official_skill_profile: str,
     creative_preset: str,
+    allow_trimmed_video: bool = False,
 ) -> list[dict[str, Any]]:
     if not str(prompt or "").strip():
         raise PromptEnhancerError("prompt cannot be empty.")
@@ -659,8 +731,8 @@ def _validate_inputs(
 
     video_durations = []
     for video in reference_video_values:
-        _validate_video_source(video)
-        video_durations.append(_video_duration(video))
+        _validate_video_source(video, allow_trim=allow_trimmed_video)
+        video_durations.append(_video_duration(video, use_active_trim=allow_trimmed_video))
     for index, duration in enumerate(video_durations, start=1):
         if not 2 <= duration <= 15:
             raise PromptEnhancerError(f"<Video {index}> must be between 2 and 15 seconds.")
@@ -1214,6 +1286,15 @@ def enhance_prompt(
     ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
     custom_model: str = "",
     case_template: str = NO_CASE_TEMPLATE,
+    local_model: str = DEFAULT_MODEL_FILENAME,
+    local_mmproj: str = DEFAULT_MMPROJ_FILENAME,
+    local_context_size: int = DEFAULT_CONTEXT_SIZE,
+    local_max_tokens: int = DEFAULT_MAX_TOKENS,
+    local_think_mode: str = LOCAL_THINK_OFF,
+    local_reasoning_effort: str = "medium",
+    local_video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
+    local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
+    local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
@@ -1270,7 +1351,81 @@ def enhance_prompt(
         reference_videos,
         official_skill_profile,
         creative_preset,
+        str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE,
     )
+    if str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE:
+        try:
+            settings = local_qwen_settings(
+                local_model=local_model,
+                local_mmproj=local_mmproj,
+                local_context_size=local_context_size,
+                local_max_tokens=local_max_tokens,
+                local_think_mode=local_think_mode,
+                local_reasoning_effort=local_reasoning_effort,
+                local_video_sample_fps=local_video_sample_fps,
+                local_unload_policy=local_unload_policy,
+                local_comfy_memory_policy=local_comfy_memory_policy,
+            )
+            messages = _build_messages(
+                prompt,
+                task_type,
+                duration_seconds,
+                rewrite_mode,
+                description_word_target,
+                output_language,
+                prompt_mode,
+                reference_template,
+                reference_context,
+                constraints,
+                media_plan,
+                [],
+                seed,
+                shot_count,
+                official_skill_profile,
+                creative_preset,
+                case_template,
+            )
+            visual_budget = local_visual_part_budget(messages, settings)
+            media_parts, _media_report = build_local_multimodal_parts(
+                media_plan,
+                settings,
+                max_visual_parts=visual_budget,
+            )
+            messages = _build_messages(
+                prompt,
+                task_type,
+                duration_seconds,
+                rewrite_mode,
+                description_word_target,
+                output_language,
+                prompt_mode,
+                reference_template,
+                reference_context,
+                constraints,
+                media_plan,
+                media_parts,
+                seed,
+                shot_count,
+                official_skill_profile,
+                creative_preset,
+                case_template,
+            )
+            if any(asset.get("kind") == "video" for asset in media_plan):
+                messages[0]["content"] += (
+                    "\n\nLOCAL_QWEN_VIDEO_EVIDENCE_BOUNDARY: Connected videos are represented only by ordered "
+                    "timestamped visual samples. State only changes supported by those samples; do not claim exhaustive "
+                    "frame coverage, complete-video access, heard audio, speech transcription, or soundtrack analysis."
+                )
+            with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
+                response_text = provider.complete(
+                    messages,
+                    temperature=MODE_TEMPERATURES[rewrite_mode],
+                    seed=int(seed),
+                )
+            return _reorder_complete_fields(response_text, task_type)
+        except LocalQwenProviderError as error:
+            raise PromptEnhancerError(str(error)) from error
+
     api_key, chat_url, upload_url, provider_name = _provider_config(
         api_mode,
         api_key,
@@ -1321,11 +1476,12 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3PromptEnhancerT8",
-            display_name="MiniMax H3 Prompt Enhancer (Seedance / AI Workshop / OpenAI)",
+            display_name="MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)",
             category="T8/MiniMax H3",
             description=(
-                "Uses the selected visual LLM channel to analyze connected images/complete videos and rewrite one prompt "
-                "into the official MiniMax-H3 T2VA, I2VA, FL2VA, L2VA, or Ref2VA format."
+                "Uses one selected cloud or local visual LLM channel to rewrite a prompt into the official MiniMax-H3 "
+                "T2VA, I2VA, FL2VA, L2VA, or Ref2VA format. Cloud channels receive complete videos; local Qwen reads "
+                "ordered timestamped visual samples and never claims to analyze the video audio track."
             ),
             inputs=[
                 io.String.Input(
@@ -1491,6 +1647,87 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                         "供应商未公开 Chat Completions 的确定性种子参数。"
                     ),
                 ),
+                io.Combo.Input(
+                    "local_model",
+                    display_name="本地 Qwen GGUF",
+                    options=list_gguf_models(),
+                    default=DEFAULT_MODEL_FILENAME,
+                    optional=True,
+                    advanced=True,
+                    tooltip="仅本地模式使用。模型目录：ComfyUI/models/LLM/Qwen3.8。",
+                ),
+                io.Combo.Input(
+                    "local_mmproj",
+                    display_name="本地视觉投影器",
+                    options=list_mmproj_models(),
+                    default=DEFAULT_MMPROJ_FILENAME,
+                    optional=True,
+                    advanced=True,
+                    tooltip="仅本地模式的图片/视频采样帧分析使用。",
+                ),
+                io.Int.Input(
+                    "local_context_size",
+                    display_name="本地上下文 Token",
+                    default=DEFAULT_CONTEXT_SIZE,
+                    min=8192,
+                    max=65536,
+                    step=4096,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Int.Input(
+                    "local_max_tokens",
+                    display_name="本地最大输出 Token",
+                    default=DEFAULT_MAX_TOKENS,
+                    min=256,
+                    max=8192,
+                    step=256,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_think_mode",
+                    display_name="本地思考模式",
+                    options=LOCAL_THINK_OPTIONS,
+                    default=LOCAL_THINK_OFF,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_reasoning_effort",
+                    display_name="本地推理强度",
+                    options=LOCAL_REASONING_OPTIONS,
+                    default="medium",
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Float.Input(
+                    "local_video_sample_fps",
+                    display_name="本地视频采样率（帧/秒）",
+                    default=DEFAULT_VIDEO_SAMPLE_FPS,
+                    min=0.25,
+                    max=8.0,
+                    step=0.25,
+                    optional=True,
+                    advanced=True,
+                    tooltip="只分析按真实时间戳采样的画面，不读取视频音轨。",
+                ),
+                io.Combo.Input(
+                    "local_unload_policy",
+                    display_name="本地模型卸载策略",
+                    options=LOCAL_UNLOAD_POLICIES,
+                    default=LOCAL_UNLOAD_AFTER_RUN,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_comfy_memory_policy",
+                    display_name="本地加载前显存策略",
+                    options=LOCAL_COMFY_MEMORY_POLICIES,
+                    default=LOCAL_COMFY_MEMORY_POLICIES[0],
+                    optional=True,
+                    advanced=True,
+                ),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1523,6 +1760,15 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
         custom_model="",
         case_template=NO_CASE_TEMPLATE,
+        local_model=DEFAULT_MODEL_FILENAME,
+        local_mmproj=DEFAULT_MMPROJ_FILENAME,
+        local_context_size=DEFAULT_CONTEXT_SIZE,
+        local_max_tokens=DEFAULT_MAX_TOKENS,
+        local_think_mode=LOCAL_THINK_OFF,
+        local_reasoning_effort="medium",
+        local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
+        local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
+        local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
     ) -> io.NodeOutput:
         result = enhance_prompt(
             prompt=prompt,
@@ -1550,6 +1796,15 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             ai_workshop_model=ai_workshop_model,
             custom_model=custom_model,
             case_template=case_template,
+            local_model=local_model,
+            local_mmproj=local_mmproj,
+            local_context_size=local_context_size,
+            local_max_tokens=local_max_tokens,
+            local_think_mode=local_think_mode,
+            local_reasoning_effort=local_reasoning_effort,
+            local_video_sample_fps=local_video_sample_fps,
+            local_unload_policy=local_unload_policy,
+            local_comfy_memory_policy=local_comfy_memory_policy,
         )
         return io.NodeOutput(result)
 

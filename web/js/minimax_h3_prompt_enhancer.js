@@ -1,6 +1,7 @@
 import { app } from "../../scripts/app.js";
 import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
 import { addOfficialPresetUI } from "./official_preset_previews.js";
+import { showLocalQwenStatus } from "./local_qwen_status.js";
 
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
@@ -10,6 +11,7 @@ const LOCAL_SKILL_BUNDLE_URL = "https://github.com/T8mars/minimax-h3-prompt-skil
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
+const LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
 const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
 const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
@@ -79,6 +81,15 @@ const SERIALIZED_WIDGET_NAMES = [
     "openai_video_urls",
     "seed",
     "control_after_generate",
+    "local_model",
+    "local_mmproj",
+    "local_context_size",
+    "local_max_tokens",
+    "local_think_mode",
+    "local_reasoning_effort",
+    "local_video_sample_fps",
+    "local_unload_policy",
+    "local_comfy_memory_policy",
 ];
 
 
@@ -216,7 +227,7 @@ function addReferenceTemplateBehavior(node, modeWidget, templateWidget) {
 }
 
 
-function addApiModeBehavior(node, modeWidget, baseUrlWidget, videoUrlsWidget, modelWidget, customModelWidget) {
+function addApiModeBehavior(node, modeWidget, baseUrlWidget, videoUrlsWidget, modelWidget, customModelWidget, localWidgets) {
     const updateModel = () => {
         const workshop = modeWidget.value === AI_WORKSHOP_API_MODE;
         const compatible = modeWidget.value === OPENAI_API_MODE;
@@ -235,19 +246,23 @@ function addApiModeBehavior(node, modeWidget, baseUrlWidget, videoUrlsWidget, mo
             if (LEGACY_UI_VALUES.has(String(widget.value || "").trim())) setTextWidgetValue(widget, "");
         }
         const compatible = mode === OPENAI_API_MODE;
+        const local = mode === LOCAL_QWEN_API_MODE;
         baseUrlWidget.label = "OpenAI Base URL";
         videoUrlsWidget.label = "视频素材 URL（可选，每行一个）";
         setWidgetVisible(baseUrlWidget, compatible);
         setWidgetVisible(videoUrlsWidget, compatible);
+        for (const widget of localWidgets || []) setWidgetVisible(widget, local);
         updateModel();
         if (node.t8SignUpWidget) {
-            setWidgetVisible(node.t8SignUpWidget, !compatible);
+            setWidgetVisible(node.t8SignUpWidget, !compatible && !local);
             const signupLabel = mode === AI_WORKSHOP_API_MODE
                 ? "🔑 获取 AI 工坊 API Key"
                 : "🔑 获取贞贞 API Key";
             node.t8SignUpWidget.label = signupLabel;
             node.t8SignUpWidget.name = signupLabel;
         }
+        if (node.t8ApiKeySecureWidget) setWidgetVisible(node.t8ApiKeySecureWidget, !local);
+        if (node.t8LocalQwenStatusWidget) setWidgetVisible(node.t8LocalQwenStatusWidget, local);
         node.t8UpdateApiKeyPlaceholder?.();
         resizeNode(node);
     };
@@ -286,6 +301,8 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
             input.placeholder = "OpenAI兼容 API Key（输入后保存到工作流）";
         } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
             input.placeholder = "AI 工坊 API Key（输入后保存到工作流）";
+        } else if (apiModeWidget?.value === LOCAL_QWEN_API_MODE) {
+            input.placeholder = "本地模式不需要 API Key";
         } else {
             input.placeholder = "贞贞 API Key（输入后保存到工作流）";
         }
@@ -419,6 +436,7 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     });
     delete secureWidget.width;
     secureWidget.serializeValue = () => undefined;
+    node.t8ApiKeySecureWidget = secureWidget;
 }
 
 
@@ -453,6 +471,11 @@ app.registerExtension({
             const openaiBaseUrlWidget = this.widgets?.find((widget) => widget.name === "openai_base_url");
             const openaiVideoUrlsWidget = this.widgets?.find((widget) => widget.name === "openai_video_urls");
             const seedWidget = this.widgets?.find((widget) => widget.name === "seed");
+            const localWidgets = [
+                "local_model", "local_mmproj", "local_context_size", "local_max_tokens",
+                "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
+                "local_unload_policy", "local_comfy_memory_policy",
+            ].map((name) => this.widgets?.find((widget) => widget.name === name)).filter(Boolean);
             const seedControlWidget = seedWidget?.linkedWidgets?.[0]
                 || this.widgets?.find((widget) => widget.name === "control_after_generate");
             if (seedControlWidget) {
@@ -477,7 +500,7 @@ app.registerExtension({
             if (apiModeWidget && openaiBaseUrlWidget && openaiVideoUrlsWidget && aiWorkshopModelWidget && customModelWidget) {
                 addApiModeBehavior(
                     this, apiModeWidget, openaiBaseUrlWidget, openaiVideoUrlsWidget,
-                    aiWorkshopModelWidget, customModelWidget,
+                    aiWorkshopModelWidget, customModelWidget, localWidgets,
                 );
             }
             if (creativePresetWidget && promptWidget) {
@@ -496,7 +519,7 @@ app.registerExtension({
                 normalizeChoice(creativePresetWidget, CREATIVE_PRESET_OPTIONS, NO_CREATIVE_PRESET);
                 normalizeChoice(
                     apiModeWidget,
-                    [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE],
+                    [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE],
                     SEEDANCE_API_MODE,
                 );
                 normalizeChoice(
@@ -560,6 +583,16 @@ app.registerExtension({
             );
             signUpWidget.serializeValue = () => undefined;
             this.t8SignUpWidget = signUpWidget;
+
+            const localStatusWidget = this.addWidget(
+                "button",
+                "🧩 检查本地 Qwen 安装",
+                "查看 GGUF、mmproj 与 llama.cpp 运行时状态",
+                showLocalQwenStatus,
+                { serialize: false },
+            );
+            localStatusWidget.serializeValue = () => undefined;
+            this.t8LocalQwenStatusWidget = localStatusWidget;
 
             const localSkillBundleWidget = this.addWidget(
                 "button",

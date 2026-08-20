@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import { showLocalQwenStatus } from "./local_qwen_status.js";
 
 
 const NODE_ID = "MiniMaxMusic3PromptEnhancerT8";
@@ -8,6 +9,7 @@ const LOCAL_SKILL_BUNDLE_URL = "https://github.com/T8mars/minimax-h3-prompt-skil
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（文本 LLM）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
+const LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
 const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
 const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const CUSTOM_LANGUAGE = "Custom（自定义）";
@@ -25,7 +27,7 @@ const EDIT_SCOPE_OCCURRENCE = "指定段落（第N次）";
 const SEMANTIC_MANUAL_MODE = "手动宽泛画像（不增加请求）";
 const SEMANTIC_LLM_MODE = "LLM宽泛分析（会发送歌词并可能增加请求）";
 const STATUS_CARD_HEIGHT = 176;
-const MUSIC_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE];
+const MUSIC_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE];
 const PUBLISHED_V1_WIDGET_NAMES = [
     "music_idea",
     "lyrics_mode",
@@ -128,6 +130,13 @@ const SERIALIZED_WIDGET_NAMES = [
     "custom_model",
     "openai_base_url",
     "manual_lyrics_profile",
+    "local_model",
+    "local_context_size",
+    "local_max_tokens",
+    "local_think_mode",
+    "local_reasoning_effort",
+    "local_unload_policy",
+    "local_comfy_memory_policy",
 ];
 
 
@@ -177,12 +186,18 @@ function resizeNode(node) {
 
 
 function serializedWidgetValueMap(values) {
-    if (!Array.isArray(values) || values.length !== SERIALIZED_WIDGET_NAMES.length) return null;
-    let sourceNames = SERIALIZED_WIDGET_NAMES;
+    if (!Array.isArray(values)) return null;
+    if (values.length === SERIALIZED_WIDGET_NAMES.length) {
+        return new Map(SERIALIZED_WIDGET_NAMES.map((name, index) => [name, values[index]]));
+    }
+    if (values.length !== PUBLISHED_V1_WIDGET_NAMES.length) return null;
+    let sourceNames;
     if (MUSIC_API_MODES.includes(String(values[19] || ""))) {
         sourceNames = PUBLISHED_V1_WIDGET_NAMES;
     } else if (MUSIC_API_MODES.includes(String(values[11] || ""))) {
         sourceNames = RUNTIME_V1_WIDGET_NAMES;
+    } else {
+        return null;
     }
     return new Map(sourceNames.map((name, index) => [name, values[index]]));
 }
@@ -281,9 +296,11 @@ function addRequestEstimateWidget(node, widgets) {
             stageNames.push("宽泛歌词画像");
         }
         stageNames.push("Caption 编译");
+        const local = widgets.apiMode?.value === LOCAL_QWEN_API_MODE;
+        const requestKind = local ? "本地推理阶段" : "预计付费请求";
         estimate.textContent = minimum === maximum
-            ? `预计付费请求：${minimum} 次（命中10分钟阶段缓存时可为0）`
-            : `预计付费请求：${minimum}–${maximum} 次（命中10分钟阶段缓存时会减少）`;
+            ? `${requestKind}：${minimum} 次（命中10分钟阶段缓存时可为0）`
+            : `${requestKind}：${minimum}–${maximum} 次（命中10分钟阶段缓存时会减少）`;
         stages.textContent = `阶段：本地资源检查 → ${stageNames.join(" → ")}`;
         hiddenLyrics.style.display = mode === INSTRUMENTAL_MODE && hasLyrics ? "flex" : "none";
         node.setDirtyCanvas?.(true, true);
@@ -314,6 +331,7 @@ function addApiModeBehavior(node, modeWidget, modelWidget, customModelWidget, ba
     const update = () => {
         const workshop = modeWidget?.value === AI_WORKSHOP_API_MODE;
         const compatible = modeWidget?.value === OPENAI_API_MODE;
+        const local = modeWidget?.value === LOCAL_QWEN_API_MODE;
         setWidgetVisible(modelWidget, workshop);
         setWidgetVisible(customModelWidget, compatible || (workshop && modelWidget?.value === CUSTOM_MODEL_OPTION));
         setWidgetVisible(baseUrlWidget, compatible);
@@ -321,11 +339,14 @@ function addApiModeBehavior(node, modeWidget, modelWidget, customModelWidget, ba
             customModelWidget.label = compatible ? "OpenAI 模型 ID（必填）" : "AI工坊自定义模型 ID";
         }
         if (node.music3SignUpWidget) {
-            setWidgetVisible(node.music3SignUpWidget, !compatible);
+            setWidgetVisible(node.music3SignUpWidget, !compatible && !local);
             const label = workshop ? "🔑 获取 AI 工坊 API Key" : "🔑 获取贞贞 API Key";
             node.music3SignUpWidget.label = label;
             node.music3SignUpWidget.name = label;
         }
+        if (node.music3ApiKeySecureWidget) setWidgetVisible(node.music3ApiKeySecureWidget, !local);
+        if (node.music3LocalQwenStatusWidget) setWidgetVisible(node.music3LocalQwenStatusWidget, local);
+        node.music3UpdateConditional?.();
         node.music3UpdateApiKeyPlaceholder?.();
         resizeNode(node);
     };
@@ -368,6 +389,8 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
             input.placeholder = "Music 3 提示词 LLM 的 OpenAI 兼容 API Key";
         } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
             input.placeholder = "AI 工坊 API Key（可保存到工作流）";
+        } else if (apiModeWidget?.value === LOCAL_QWEN_API_MODE) {
+            input.placeholder = "本地模式不需要 API Key";
         } else {
             input.placeholder = "贞贞 API Key（可保存到工作流）";
         }
@@ -455,6 +478,7 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
     });
     delete secureWidget.width;
     secureWidget.serializeValue = () => undefined;
+    node.music3ApiKeySecureWidget = secureWidget;
 }
 
 
@@ -497,6 +521,10 @@ app.registerExtension({
             const semanticModeWidget = find("semantic_profile_mode");
             const manualProfileWidget = find("manual_lyrics_profile");
             const stageCacheWidget = find("stage_cache");
+            const localWidgets = [
+                "local_model", "local_context_size", "local_max_tokens", "local_think_mode",
+                "local_reasoning_effort", "local_unload_policy", "local_comfy_memory_policy",
+            ].map(find).filter(Boolean);
             const seedControlWidget = seedWidget?.linkedWidgets?.[0] || find("control_after_generate");
             if (lyricsModeWidget) {
                 lyricsModeWidget.tooltip = "这里控制歌词工作流；生成/润色是 T8 非官方扩展，官方 Skill 的正式能力是下方 music_caption 结构化改写。";
@@ -523,6 +551,7 @@ app.registerExtension({
                 customMeterWidget, captionLanguageWidget, captionWordsWidget, editScopeWidget,
                 editSectionWidget, editOccurrenceWidget, semanticModeWidget, manualProfileWidget,
                 stageCacheWidget,
+                ...localWidgets,
             ].filter(Boolean);
             const updateConditional = () => {
                 const expanded = Boolean(this.music3AdvancedExpanded);
@@ -546,6 +575,8 @@ app.registerExtension({
                 setWidgetVisible(semanticModeWidget, expanded);
                 setWidgetVisible(manualProfileWidget, expanded && semanticModeWidget?.value === SEMANTIC_MANUAL_MODE);
                 setWidgetVisible(stageCacheWidget, expanded);
+                const local = apiModeWidget?.value === LOCAL_QWEN_API_MODE;
+                for (const widget of localWidgets) setWidgetVisible(widget, expanded && local);
                 this.music3UpdateEstimate?.();
                 resizeNode(this);
             };
@@ -599,6 +630,16 @@ app.registerExtension({
             signUpWidget.serializeValue = () => undefined;
             this.music3SignUpWidget = signUpWidget;
 
+            const localStatusWidget = this.addWidget(
+                "button",
+                "🧩 检查本地 Qwen 安装",
+                "查看 GGUF 与 llama.cpp 运行时状态；Music 3 不加载 mmproj",
+                showLocalQwenStatus,
+                { serialize: false },
+            );
+            localStatusWidget.serializeValue = () => undefined;
+            this.music3LocalQwenStatusWidget = localStatusWidget;
+
             const localSkillBundleWidget = this.addWidget(
                 "button",
                 "MiniMax & Seedance本地Skill和整合包",
@@ -615,6 +656,7 @@ app.registerExtension({
                 lyrics: lyricsWidget,
                 quality: qualityWidget,
                 semantic: semanticModeWidget,
+                apiMode: apiModeWidget,
             });
             this.music3UpdateApiMode?.();
             updateConditional();

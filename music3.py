@@ -16,6 +16,26 @@ from comfy import model_management
 from comfy_api.latest import io
 from comfy.utils import ProgressBar
 
+from .local_qwen_provider import (
+    DEFAULT_CONTEXT_SIZE,
+    DEFAULT_MAX_TOKENS,
+    LOCAL_QWEN_API_MODE,
+    LocalQwenProvider,
+    LocalQwenProviderError,
+    settings_from_values as local_qwen_settings,
+)
+from .local_qwen_runtime import (
+    DEFAULT_MODEL_FILENAME,
+    LOCAL_COMFY_MEMORY_POLICIES,
+    LOCAL_REASONING_OPTIONS,
+    LOCAL_THINK_OFF,
+    LOCAL_THINK_OPTIONS,
+    LOCAL_UNLOAD_AFTER_RUN,
+    LOCAL_UNLOAD_POLICIES,
+    list_gguf_models,
+    resolve_model_path,
+)
+
 from .nodes import (
     AI_WORKSHOP_API_MODE,
     AI_WORKSHOP_CHAT_COMPLETIONS_URL,
@@ -61,7 +81,7 @@ LYRICS_MODES = [
 ]
 
 MUSIC_AI_WORKSHOP_API_MODE = "贞贞的AI工坊（文本 LLM）"
-MUSIC_API_MODES = [SEEDANCE_API_MODE, MUSIC_AI_WORKSHOP_API_MODE, OPENAI_API_MODE]
+MUSIC_API_MODES = [SEEDANCE_API_MODE, MUSIC_AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE]
 
 FAST_QUALITY_MODE = "快速核心（1–2次请求）"
 FULL_QUALITY_MODE = "官方完整（2–4次请求，推荐）"
@@ -355,6 +375,7 @@ class Music3RequestRunner:
         cache_enabled: bool,
         report: Music3RunReport,
         progress: ProgressBar | None = None,
+        local_provider: LocalQwenProvider | None = None,
     ):
         self.session = session
         self.api_key = api_key
@@ -365,6 +386,7 @@ class Music3RequestRunner:
         self.cache_enabled = cache_enabled
         self.report = report
         self.progress = progress
+        self.local_provider = local_provider
 
     def complete(self, messages: list[dict[str, Any]], temperature: float, stage: str) -> str:
         model_management.throw_exception_if_processing_interrupted()
@@ -387,20 +409,34 @@ class Music3RequestRunner:
                     self.progress.update(1)
                 return cached
         self.report.request_count += 1
-        result = _request_music_completion(
-            self.session,
-            self.api_key,
-            messages,
-            temperature,
-            self.chat_url,
-            self.provider_name,
-            self.model_id,
-            stage,
-        )
+        if self.local_provider is not None:
+            try:
+                result = self.local_provider.complete(
+                    messages,
+                    temperature=temperature,
+                    seed=self.seed,
+                )
+            except LocalQwenProviderError as error:
+                raise Music3PromptEnhancerError(
+                    f"Local Qwen Music 3 stage '{stage}' failed: {error}"
+                ) from error
+        else:
+            result = _request_music_completion(
+                self.session,
+                self.api_key,
+                messages,
+                temperature,
+                self.chat_url,
+                self.provider_name,
+                self.model_id,
+                stage,
+            )
         model_management.throw_exception_if_processing_interrupted()
         if self.cache_enabled:
             _stage_cache_put(cache_key, result)
-        self.report.stages.append({"stage": stage, "source": "network"})
+        self.report.stages.append(
+            {"stage": stage, "source": "local_model" if self.local_provider is not None else "network"}
+        )
         if self.progress:
             self.progress.update(1)
         return result
@@ -1498,6 +1534,10 @@ PRIVATE REFERENCE RULES
 - Do not copy a sentence, distinctive phrase, exact BPM, key, singer, story, instrument list, or complete structure from a reference unless independently required by the user.
 - Do not reveal reference IDs or quote reference contents.
 
+EXPLICIT USER CONSTRAINT INTEGRITY
+- Every Music_Brief field marked source=explicit is authoritative and must appear unambiguously in the appropriate final section. Preserve an explicit BPM, key/scale, meter, vocal identity, required instrument, and required production trait; state every exclusion as an explicit absence or prohibition.
+- Do not replace an explicit fact with a vague implication, omit it because a private reference differs, or reverse a negative constraint. Equivalent professional wording is allowed, but the requested fact must remain directly verifiable in the final Caption.
+
 DURATION AND TIMELINE SAFETY
 - A total target duration is not a request for exact section timestamps. Unless the user explicitly asks for section timecodes, describe relative section order and energy development without mm:ss ranges.
 - If the user explicitly requests section timecodes, every range must be forward-moving, non-overlapping, chronological, and end within the total target duration. Never copy timing ranges from a private reference.
@@ -1644,6 +1684,17 @@ def _collect_quality_warnings(
         report.warn("instrumental_caption_may_add_vocals")
     if _caption_timeline_is_inconsistent(caption, brief.target_duration_seconds):
         report.warn("caption_timeline_inconsistent_with_target_duration")
+    normalized_caption = re.sub(r"\s+", " ", caption.casefold())
+    if brief.fixed_bpm and not re.search(
+        rf"(?<!\d){int(brief.fixed_bpm)}\s*bpm\b", normalized_caption
+    ):
+        report.warn("caption_may_omit_explicit_bpm")
+    if brief.key_scale and brief.key_scale.casefold() not in normalized_caption:
+        report.warn("caption_may_omit_explicit_key_scale")
+    if brief.meter and brief.meter != "unspecified":
+        compact_meter = re.sub(r"\s+", "", brief.meter.casefold())
+        if compact_meter not in re.sub(r"\s+", "", normalized_caption):
+            report.warn("caption_may_omit_explicit_meter")
     unique_sections = {
         str(event.get("section")) for event in brief.tag_timeline if event.get("type") == "section"
     }
@@ -1690,6 +1741,13 @@ def enhance_music3_prompt(
     seed: int = 0,
     session: requests.Session | None = None,
     enable_progress: bool = False,
+    local_model: str = DEFAULT_MODEL_FILENAME,
+    local_context_size: int = DEFAULT_CONTEXT_SIZE,
+    local_max_tokens: int = DEFAULT_MAX_TOKENS,
+    local_think_mode: str = LOCAL_THINK_OFF,
+    local_reasoning_effort: str = "medium",
+    local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
+    local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
 ) -> tuple[str, str, str, str]:
     music_idea = str(music_idea or "").strip()
     if not music_idea:
@@ -1813,6 +1871,28 @@ def enhance_music3_prompt(
     provider_api_mode = _provider_api_mode(api_mode)
     api_key, chat_url, _upload_url, provider_name = _provider_config(provider_api_mode, api_key, openai_base_url)
     model_id = _resolve_llm_model(provider_api_mode, ai_workshop_model, custom_model)
+    local_provider: LocalQwenProvider | None = None
+    if provider_api_mode == LOCAL_QWEN_API_MODE:
+        try:
+            local_settings = local_qwen_settings(
+                local_model=local_model,
+                local_context_size=local_context_size,
+                local_max_tokens=local_max_tokens,
+                local_think_mode=local_think_mode,
+                local_reasoning_effort=local_reasoning_effort,
+                local_unload_policy=local_unload_policy,
+                local_comfy_memory_policy=local_comfy_memory_policy,
+            )
+        except LocalQwenProviderError as error:
+            raise Music3PromptEnhancerError(str(error)) from error
+        local_provider = LocalQwenProvider(local_settings, vision=False)
+        local_model_path = resolve_model_path(local_settings.model_filename, label="local Qwen model")
+        local_model_stat = local_model_path.stat()
+        chat_url = (
+            f"local://{local_settings.model_filename}/{local_model_stat.st_size}/{local_model_stat.st_mtime_ns}/"
+            f"{local_settings.context_size}/{local_settings.max_tokens}/"
+            f"{local_settings.think_mode}/{local_settings.reasoning_effort}"
+        )
 
     report = Music3RunReport(
         effective_lyrics_mode=effective_mode,
@@ -1842,7 +1922,9 @@ def enhance_music3_prompt(
         cache_enabled=stage_cache == STAGE_CACHE_ON,
         report=report,
         progress=progress,
+        local_provider=local_provider,
     )
+    succeeded = False
     try:
         if effective_mode == INSTRUMENTAL_MODE:
             final_lyrics = "[Instrumental]"
@@ -1939,8 +2021,11 @@ def enhance_music3_prompt(
         )
         if progress:
             progress.update_absolute(estimated_stages, estimated_stages)
+        succeeded = True
         return final_lyrics, caption, payload, report.to_json()
     finally:
+        if local_provider is not None:
+            local_provider.close(force=not succeeded)
         if owns_session:
             active_session.close()
 
@@ -1953,8 +2038,9 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
             display_name="MiniMax Music 3 Prompt & Lyrics Enhancer (T8)",
             category="T8/MiniMax Music 3",
             description=(
-                "Uses one selected LLM provider to prepare original lyrics and the official MiniMax Music 3 "
-                "Global Metadata / Vocal Details / Arrangement caption. It outputs text only and does not generate audio."
+                "Uses one selected cloud or local Qwen LLM provider to prepare original lyrics and the official MiniMax "
+                "Music 3 Global Metadata / Vocal Details / Arrangement caption. It is text-only, does not generate or "
+                "listen to audio, and never loads the local visual projector."
             ),
             inputs=[
                 io.String.Input(
@@ -2147,6 +2233,67 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                     advanced=True,
                     tooltip="仅在当前 ComfyUI 进程内保存成功阶段最多10分钟，不落盘；后段失败重跑可避免重复付费。",
                 ),
+                io.Combo.Input(
+                    "local_model",
+                    display_name="本地 Qwen GGUF",
+                    options=list_gguf_models(),
+                    default=DEFAULT_MODEL_FILENAME,
+                    optional=True,
+                    advanced=True,
+                    tooltip="Music 3 本地模式只加载文字模型，不加载 mmproj。",
+                ),
+                io.Int.Input(
+                    "local_context_size",
+                    display_name="本地上下文 Token",
+                    default=DEFAULT_CONTEXT_SIZE,
+                    min=8192,
+                    max=65536,
+                    step=4096,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Int.Input(
+                    "local_max_tokens",
+                    display_name="本地最大输出 Token",
+                    default=DEFAULT_MAX_TOKENS,
+                    min=256,
+                    max=8192,
+                    step=256,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_think_mode",
+                    display_name="本地思考模式",
+                    options=LOCAL_THINK_OPTIONS,
+                    default=LOCAL_THINK_OFF,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_reasoning_effort",
+                    display_name="本地推理强度",
+                    options=LOCAL_REASONING_OPTIONS,
+                    default="medium",
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_unload_policy",
+                    display_name="本地模型卸载策略",
+                    options=LOCAL_UNLOAD_POLICIES,
+                    default=LOCAL_UNLOAD_AFTER_RUN,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_comfy_memory_policy",
+                    display_name="本地加载前显存策略",
+                    options=LOCAL_COMFY_MEMORY_POLICIES,
+                    default=LOCAL_COMFY_MEMORY_POLICIES[0],
+                    optional=True,
+                    advanced=True,
+                ),
             ],
             outputs=[
                 io.String.Output(display_name="lyrics"),
@@ -2189,6 +2336,13 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         semantic_profile_mode=SEMANTIC_PRIVACY_MODE,
         manual_lyrics_profile="",
         stage_cache=STAGE_CACHE_ON,
+        local_model=DEFAULT_MODEL_FILENAME,
+        local_context_size=DEFAULT_CONTEXT_SIZE,
+        local_max_tokens=DEFAULT_MAX_TOKENS,
+        local_think_mode=LOCAL_THINK_OFF,
+        local_reasoning_effort="medium",
+        local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
+        local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
     ) -> io.NodeOutput:
         result = enhance_music3_prompt(
             music_idea=music_idea,
@@ -2222,6 +2376,13 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
             openai_base_url=openai_base_url,
             seed=seed,
             enable_progress=True,
+            local_model=local_model,
+            local_context_size=local_context_size,
+            local_max_tokens=local_max_tokens,
+            local_think_mode=local_think_mode,
+            local_reasoning_effort=local_reasoning_effort,
+            local_unload_policy=local_unload_policy,
+            local_comfy_memory_policy=local_comfy_memory_policy,
         )
         return io.NodeOutput(*result)
 

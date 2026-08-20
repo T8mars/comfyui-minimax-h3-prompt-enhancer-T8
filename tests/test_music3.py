@@ -410,7 +410,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
 
     def test_music_brief_reaches_router_selector_and_caption(self):
         session = AdaptiveSession()
-        self.run_enhancer(
+        _lyrics, _caption, _payload, report_text = self.run_enhancer(
             session,
             music_idea="Metalcore with Chinese traditional instruments",
             quality_mode=music3.FULL_QUALITY_MODE,
@@ -428,6 +428,12 @@ class Music3PromptEnhancerTests(unittest.TestCase):
             self.assertEqual(brief["key_scale"], {"value": "D minor", "source": "explicit"})
             self.assertEqual(brief["meter"], {"value": "6/8", "source": "explicit"})
             self.assertEqual(brief["target_duration_seconds"], {"value": 180, "source": "explicit"})
+        caption_system = session.requests[-1]["json"]["messages"][0]["content"]
+        self.assertIn("EXPLICIT USER CONSTRAINT INTEGRITY", caption_system)
+        warnings = json.loads(report_text)["warnings"]
+        self.assertIn("caption_may_omit_explicit_bpm", warnings)
+        self.assertIn("caption_may_omit_explicit_key_scale", warnings)
+        self.assertIn("caption_may_omit_explicit_meter", warnings)
 
     def test_local_router_defers_negation_fusion_and_disambiguation(self):
         self.assertEqual(music3._local_family_candidates("不是爵士，是流行"), [])

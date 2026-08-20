@@ -4,6 +4,30 @@ from typing import Any
 import requests
 from comfy_api.latest import io
 
+from .local_qwen_provider import (
+    DEFAULT_CONTEXT_SIZE,
+    DEFAULT_MAX_TOKENS,
+    DEFAULT_VIDEO_SAMPLE_FPS,
+    LOCAL_QWEN_API_MODE,
+    LocalQwenProvider,
+    LocalQwenProviderError,
+    build_local_multimodal_parts,
+    local_visual_part_budget,
+    settings_from_values as local_qwen_settings,
+)
+from .local_qwen_runtime import (
+    DEFAULT_MMPROJ_FILENAME,
+    DEFAULT_MODEL_FILENAME,
+    LOCAL_COMFY_MEMORY_POLICIES,
+    LOCAL_REASONING_OPTIONS,
+    LOCAL_THINK_OFF,
+    LOCAL_THINK_OPTIONS,
+    LOCAL_UNLOAD_AFTER_RUN,
+    LOCAL_UNLOAD_POLICIES,
+    list_gguf_models,
+    list_mmproj_models,
+)
+
 try:
     from .case_templates import (
         CASE_TEMPLATE_OPTIONS,
@@ -257,6 +281,7 @@ def _validate_media(
     reference_images: dict[str, Any] | None,
     reference_videos: dict[str, Any] | None,
     reference_syntax: str,
+    allow_trimmed_video: bool = False,
 ) -> list[dict[str, Any]]:
     if not str(prompt or "").strip():
         raise Seedance20PromptEnhancerError("prompt cannot be empty.")
@@ -287,8 +312,11 @@ def _validate_media(
         raise Seedance20PromptEnhancerError("Seedance 2.0 supports at most 9 images including first and last frames.")
 
     for video in reference_video_values:
-        _validate_video_source(video)
-    video_durations = [_video_duration(video) for video in reference_video_values]
+        _validate_video_source(video, allow_trim=allow_trimmed_video)
+    video_durations = [
+        _video_duration(video, use_active_trim=allow_trimmed_video)
+        for video in reference_video_values
+    ]
     for index, duration in enumerate(video_durations, start=1):
         if not 2 <= duration <= 15:
             raise Seedance20PromptEnhancerError(f"Reference video {index} must be between 2 and 15 seconds.")
@@ -644,6 +672,15 @@ def enhance_seedance20_prompt(
     ai_workshop_model: str = AI_WORKSHOP_DEFAULT_MODEL,
     custom_model: str = "",
     case_template: str = NO_CASE_TEMPLATE,
+    local_model: str = DEFAULT_MODEL_FILENAME,
+    local_mmproj: str = DEFAULT_MMPROJ_FILENAME,
+    local_context_size: int = DEFAULT_CONTEXT_SIZE,
+    local_max_tokens: int = DEFAULT_MAX_TOKENS,
+    local_think_mode: str = LOCAL_THINK_OFF,
+    local_reasoning_effort: str = "medium",
+    local_video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
+    local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
+    local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
 ) -> str:
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
@@ -703,7 +740,88 @@ def enhance_seedance20_prompt(
         reference_images,
         reference_videos,
         reference_syntax,
+        str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE,
     )
+    if str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE:
+        try:
+            settings = local_qwen_settings(
+                local_model=local_model,
+                local_mmproj=local_mmproj,
+                local_context_size=local_context_size,
+                local_max_tokens=local_max_tokens,
+                local_think_mode=local_think_mode,
+                local_reasoning_effort=local_reasoning_effort,
+                local_video_sample_fps=local_video_sample_fps,
+                local_unload_policy=local_unload_policy,
+                local_comfy_memory_policy=local_comfy_memory_policy,
+            )
+            messages = _build_messages(
+                prompt,
+                task_intent,
+                complexity_mode,
+                duration,
+                shots,
+                rewrite_mode,
+                output_detail,
+                custom_length_target,
+                output_language,
+                prompt_mode,
+                reference_syntax,
+                subtitle_policy,
+                stability_constraints,
+                cleaned["reference_roles"],
+                cleaned["reference_context"],
+                cleaned["constraints"],
+                cleaned["reference_template"],
+                int(seed),
+                media_plan,
+                [],
+                case_template,
+            )
+            visual_budget = local_visual_part_budget(messages, settings)
+            media_parts, _media_report = build_local_multimodal_parts(
+                media_plan,
+                settings,
+                max_visual_parts=visual_budget,
+            )
+            messages = _build_messages(
+                prompt,
+                task_intent,
+                complexity_mode,
+                duration,
+                shots,
+                rewrite_mode,
+                output_detail,
+                custom_length_target,
+                output_language,
+                prompt_mode,
+                reference_syntax,
+                subtitle_policy,
+                stability_constraints,
+                cleaned["reference_roles"],
+                cleaned["reference_context"],
+                cleaned["constraints"],
+                cleaned["reference_template"],
+                int(seed),
+                media_plan,
+                media_parts,
+                case_template,
+            )
+            if any(asset.get("kind") == "video" for asset in media_plan):
+                messages[0]["content"] += (
+                    "\n\nLOCAL_QWEN_VIDEO_EVIDENCE_BOUNDARY: Connected videos are represented only by ordered "
+                    "timestamped visual samples. State only changes supported by those samples; do not claim exhaustive "
+                    "frame coverage, complete-video access, heard audio, speech transcription, or soundtrack analysis."
+                )
+            with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
+                return provider.complete(
+                    messages,
+                    temperature={"strict": 0.2, "balanced": 0.7, "creative": 1.2}[rewrite_mode],
+                    seed=int(seed),
+                )
+        except LocalQwenProviderError as error:
+            raise Seedance20PromptEnhancerError(str(error)) from error
+
     api_key, chat_url, upload_url, provider_name = _provider_config(
         api_mode,
         api_key,
@@ -763,12 +881,13 @@ class Seedance20PromptEnhancer(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="Seedance20PromptEnhancerT8",
-            display_name="Seedance 2.0 Prompt Enhancer (Seedance / AI Workshop / OpenAI)",
+            display_name="Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)",
             category="T8/Seedance 2.0",
             description=(
-                "Uses the selected visual LLM channel to analyze connected images and complete videos, then rewrites one "
-                "prompt with the official Seedance 2.0 task phrasing and shot-order guidance. Audio-file analysis is not "
-                "exposed because the configured LLM rejected input_audio in a real capability probe."
+                "Uses one selected cloud or local visual LLM channel to apply official Seedance 2.0 task phrasing and "
+                "shot-order guidance. Cloud channels receive complete videos; local Qwen analyzes ordered timestamped "
+                "visual samples only. Audio-file analysis is not exposed because the configured remote LLM rejected "
+                "input_audio in a real capability probe; local Qwen also does not read video audio tracks."
             ),
             inputs=[
                 io.String.Input(
@@ -960,6 +1079,85 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     control_after_generate=True,
                     tooltip="控制 ComfyUI 缓存与 LLM 允许范围内的提示词变体，不是视频生成种子。",
                 ),
+                io.Combo.Input(
+                    "local_model",
+                    display_name="本地 Qwen GGUF",
+                    options=list_gguf_models(),
+                    default=DEFAULT_MODEL_FILENAME,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_mmproj",
+                    display_name="本地视觉投影器",
+                    options=list_mmproj_models(),
+                    default=DEFAULT_MMPROJ_FILENAME,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Int.Input(
+                    "local_context_size",
+                    display_name="本地上下文 Token",
+                    default=DEFAULT_CONTEXT_SIZE,
+                    min=8192,
+                    max=65536,
+                    step=4096,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Int.Input(
+                    "local_max_tokens",
+                    display_name="本地最大输出 Token",
+                    default=DEFAULT_MAX_TOKENS,
+                    min=256,
+                    max=8192,
+                    step=256,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_think_mode",
+                    display_name="本地思考模式",
+                    options=LOCAL_THINK_OPTIONS,
+                    default=LOCAL_THINK_OFF,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_reasoning_effort",
+                    display_name="本地推理强度",
+                    options=LOCAL_REASONING_OPTIONS,
+                    default="medium",
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Float.Input(
+                    "local_video_sample_fps",
+                    display_name="本地视频采样率（帧/秒）",
+                    default=DEFAULT_VIDEO_SAMPLE_FPS,
+                    min=0.25,
+                    max=8.0,
+                    step=0.25,
+                    optional=True,
+                    advanced=True,
+                    tooltip="本地模式只分析按真实时间戳采样的画面，不读取视频音轨。",
+                ),
+                io.Combo.Input(
+                    "local_unload_policy",
+                    display_name="本地模型卸载策略",
+                    options=LOCAL_UNLOAD_POLICIES,
+                    default=LOCAL_UNLOAD_AFTER_RUN,
+                    optional=True,
+                    advanced=True,
+                ),
+                io.Combo.Input(
+                    "local_comfy_memory_policy",
+                    display_name="本地加载前显存策略",
+                    options=LOCAL_COMFY_MEMORY_POLICIES,
+                    default=LOCAL_COMFY_MEMORY_POLICIES[0],
+                    optional=True,
+                    advanced=True,
+                ),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -996,6 +1194,15 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         ai_workshop_model=AI_WORKSHOP_DEFAULT_MODEL,
         custom_model="",
         case_template=NO_CASE_TEMPLATE,
+        local_model=DEFAULT_MODEL_FILENAME,
+        local_mmproj=DEFAULT_MMPROJ_FILENAME,
+        local_context_size=DEFAULT_CONTEXT_SIZE,
+        local_max_tokens=DEFAULT_MAX_TOKENS,
+        local_think_mode=LOCAL_THINK_OFF,
+        local_reasoning_effort="medium",
+        local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
+        local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
+        local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
     ) -> io.NodeOutput:
         result = enhance_seedance20_prompt(
             prompt=prompt,
@@ -1027,6 +1234,15 @@ class Seedance20PromptEnhancer(io.ComfyNode):
             ai_workshop_model=ai_workshop_model,
             custom_model=custom_model,
             case_template=case_template,
+            local_model=local_model,
+            local_mmproj=local_mmproj,
+            local_context_size=local_context_size,
+            local_max_tokens=local_max_tokens,
+            local_think_mode=local_think_mode,
+            local_reasoning_effort=local_reasoning_effort,
+            local_video_sample_fps=local_video_sample_fps,
+            local_unload_policy=local_unload_policy,
+            local_comfy_memory_policy=local_comfy_memory_policy,
         )
         return io.NodeOutput(result)
 
