@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import secrets
+import sys
 import threading
 import time
 from collections import OrderedDict
@@ -19,11 +20,19 @@ from .provider_transport import request_chat_completion
 
 
 def _throw_if_processing_interrupted() -> None:
-    # Import lazily so the node package remains importable in CPU-only test and
-    # metadata environments where ComfyUI has not initialized its device state.
-    from comfy import model_management
-
-    model_management.throw_exception_if_processing_interrupted()
+    # ComfyUI initializes model_management before executing nodes.  Reuse that
+    # initialized module instead of importing it from metadata-only/CPU-only
+    # processes, where importing it would incorrectly probe for a CUDA device.
+    model_management = sys.modules.get("comfy.model_management")
+    if model_management is None:
+        return
+    throw_if_interrupted = getattr(
+        model_management,
+        "throw_exception_if_processing_interrupted",
+        None,
+    )
+    if callable(throw_if_interrupted):
+        throw_if_interrupted()
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,

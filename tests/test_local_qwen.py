@@ -7,6 +7,7 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import numpy as np
@@ -319,7 +320,13 @@ class LocalQwenUnitTests(unittest.TestCase):
             "### Arrangement\n[Verse] piano and guitar remain intimate. [Chorus] drums widen the frame."
         )
         FakeLocalProvider.response = caption
-        with patch.object(music3, "LocalQwenProvider", FakeLocalProvider):
+        fake_model = SimpleNamespace(
+            stat=lambda: SimpleNamespace(st_size=1, st_mtime_ns=1),
+        )
+        with (
+            patch.object(music3, "LocalQwenProvider", FakeLocalProvider),
+            patch.object(music3, "resolve_model_path", return_value=fake_model),
+        ):
             lyrics, output_caption, payload, report = music3.enhance_music3_prompt(
                 "温暖的中文公路民谣",
                 lyrics_mode=music3.PRESERVE_LYRICS_MODE,

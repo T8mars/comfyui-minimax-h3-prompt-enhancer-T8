@@ -138,6 +138,9 @@ class Platform11Tests(unittest.TestCase):
             with self.subTest(relative=relative):
                 self.assertIn('sys.modules.get("server")', source)
                 self.assertNotIn("from server import PromptServer", source)
+        music_source = (ROOT / "music3.py").read_text(encoding="utf-8")
+        self.assertIn('sys.modules.get("comfy.model_management")', music_source)
+        self.assertNotIn("from comfy import model_management", music_source)
 
 
 if __name__ == "__main__":

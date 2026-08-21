@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.1.2] - 2026-08-21
+
+- Reused ComfyUI's initialized device-management module so Music 3 execution
+  remains testable in CPU-only environments without triggering a CUDA probe.
+- Made the local Music 3 provider contract test independent of GGUF files
+  installed on the developer machine.
+
 ## [1.1.1] - 2026-08-21
 
 - Added the Python 3.10 `tomli` fallback used by release verification.
