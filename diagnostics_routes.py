@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sys
+
 from .execution_diagnostics import diagnostics_snapshot
 
 
@@ -10,10 +12,15 @@ def register_diagnostics_routes() -> bool:
     global _REGISTERED
     if _REGISTERED:
         return True
+    server_module = sys.modules.get("server")
+    if server_module is None:
+        return False
     try:
         from aiohttp import web
-        from server import PromptServer
     except ImportError:
+        return False
+    PromptServer = getattr(server_module, "PromptServer", None)
+    if PromptServer is None:
         return False
 
     prompt_server = getattr(PromptServer, "instance", None)

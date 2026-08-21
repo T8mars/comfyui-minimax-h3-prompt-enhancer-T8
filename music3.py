@@ -12,11 +12,18 @@ from pathlib import Path
 from typing import Any
 
 import requests
-from comfy import model_management
 from comfy_api.latest import io
 from comfy.utils import ProgressBar
 from .execution_diagnostics import DiagnosticsRun
 from .provider_transport import request_chat_completion
+
+
+def _throw_if_processing_interrupted() -> None:
+    # Import lazily so the node package remains importable in CPU-only test and
+    # metadata environments where ComfyUI has not initialized its device state.
+    from comfy import model_management
+
+    model_management.throw_exception_if_processing_interrupted()
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,
@@ -390,7 +397,7 @@ class Music3RequestRunner:
         self.local_provider = local_provider
 
     def complete(self, messages: list[dict[str, Any]], temperature: float, stage: str) -> str:
-        model_management.throw_exception_if_processing_interrupted()
+        _throw_if_processing_interrupted()
         cache_key = _stage_cache_key(
             api_key=self.api_key,
             chat_url=self.chat_url,
@@ -432,7 +439,7 @@ class Music3RequestRunner:
                 self.model_id,
                 stage,
             )
-        model_management.throw_exception_if_processing_interrupted()
+        _throw_if_processing_interrupted()
         if self.cache_enabled:
             _stage_cache_put(cache_key, result)
         self.report.stages.append(

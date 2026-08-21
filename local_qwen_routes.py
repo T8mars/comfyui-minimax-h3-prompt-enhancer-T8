@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from typing import Any
 
 from .local_qwen_runtime import runtime_status
@@ -12,10 +13,15 @@ def register_local_qwen_routes() -> None:
     global _REGISTERED
     if _REGISTERED:
         return
+    server_module = sys.modules.get("server")
+    if server_module is None:
+        return
     try:
         from aiohttp import web
-        from server import PromptServer
     except ImportError:
+        return
+    PromptServer = getattr(server_module, "PromptServer", None)
+    if PromptServer is None:
         return
     prompt_server = getattr(PromptServer, "instance", None)
     if prompt_server is None:

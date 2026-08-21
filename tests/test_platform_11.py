@@ -129,6 +129,16 @@ class Platform11Tests(unittest.TestCase):
         self.assertIn("activeCleanup?.()", menu_preview)
         self.assertIn("if (cleaned) return", menu_preview)
 
+    def test_release_tools_and_routes_remain_importable_without_initialized_comfy_server(self):
+        verifier = (ROOT / "tools/verify_repository.py").read_text(encoding="utf-8")
+        self.assertIn("except ModuleNotFoundError", verifier)
+        self.assertIn("import tomli as tomllib", verifier)
+        for relative in ("case_library_routes.py", "local_qwen_routes.py", "diagnostics_routes.py"):
+            source = (ROOT / relative).read_text(encoding="utf-8")
+            with self.subTest(relative=relative):
+                self.assertIn('sys.modules.get("server")', source)
+                self.assertNotIn("from server import PromptServer", source)
+
 
 if __name__ == "__main__":
     unittest.main()

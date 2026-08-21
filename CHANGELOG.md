@@ -3,6 +3,12 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.1.1] - 2026-08-21
+
+- Added the Python 3.10 `tomli` fallback used by release verification.
+- Deferred ComfyUI device-state imports until Music 3 execution so CPU-only
+  metadata and CI environments can import the node package safely.
+
 ## [1.1.0] - 2026-08-21
 
 ### Added
