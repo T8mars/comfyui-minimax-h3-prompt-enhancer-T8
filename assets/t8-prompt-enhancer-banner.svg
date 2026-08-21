@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="900" viewBox="0 0 2100 900" role="img" aria-labelledby="title desc">
+  <title id="title">MiniMax H3, Seedance 2.0 and Music 3 Prompt Enhancer T8</title>
+  <desc id="desc">Registry banner for the T8 multimodal prompt enhancer suite.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="0.5" stop-color="#312e81"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#67e8f9" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#67e8f9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="2100" height="900" fill="url(#bg)"/>
+  <circle cx="1760" cy="160" r="520" fill="url(#glow)"/>
+  <circle cx="1440" cy="820" r="430" fill="url(#glow)" opacity=".5"/>
+  <g opacity=".18" fill="none" stroke="#fff" stroke-width="4">
+    <path d="M1190 140h630l180 170-270 250h-540z"/>
+    <path d="M1280 240h420l120 110-180 160h-360z"/>
+    <path d="M1390 340h240l70 65-105 95h-205z"/>
+  </g>
+  <g transform="translate(130 145)">
+    <rect width="540" height="540" rx="120" fill="#fff" opacity=".08"/>
+    <text x="65" y="390" font-family="Arial,Helvetica,sans-serif" font-size="330" font-weight="800" fill="#fff">T8</text>
+    <circle cx="476" cy="74" r="42" fill="#fbbf24"/>
+  </g>
+  <text x="790" y="330" font-family="Arial,Helvetica,sans-serif" font-size="92" font-weight="750" fill="#fff">Prompt Enhancer Suite</text>
+  <text x="795" y="440" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="600" fill="#a5f3fc">MiniMax H3 · Seedance 2.0 · MiniMax Music 3</text>
+  <text x="795" y="540" font-family="Arial,Helvetica,sans-serif" font-size="38" fill="#e2e8f0">Cloud providers + local Qwen3.8 GGUF · Image/video-aware · Official Skills</text>
+  <g transform="translate(795 620)" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="600">
+    <rect width="250" height="64" rx="32" fill="#4f46e5"/><text x="42" y="43" fill="#fff">Video Prompt</text>
+    <rect x="275" width="250" height="64" rx="32" fill="#0e7490"/><text x="324" y="43" fill="#fff">Music Caption</text>
+    <rect x="550" width="250" height="64" rx="32" fill="#b45309"/><text x="607" y="43" fill="#fff">Local LLM</text>
+  </g>
+</svg>

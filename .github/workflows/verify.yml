@@ -1,0 +1,67 @@
+name: Verify custom node
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compatibility:
+    name: ComfyUI ${{ matrix.comfy_ref }} / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - comfy_ref: v0.33.0
+            python: "3.10"
+          - comfy_ref: master
+            python: "3.12"
+    steps:
+      - name: Check out node source
+        uses: actions/checkout@v4
+        with:
+          path: _source
+      - name: Check out ComfyUI
+        uses: actions/checkout@v4
+        with:
+          repository: Comfy-Org/ComfyUI
+          ref: ${{ matrix.comfy_ref }}
+          path: ComfyUI
+      - name: Place node under ComfyUI custom_nodes
+        shell: bash
+        run: |
+          mkdir -p ComfyUI/custom_nodes
+          cp -a _source ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: |
+            _source/pyproject.toml
+            ComfyUI/requirements.txt
+      - name: Install test dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
+          python -m pip install -r ComfyUI/requirements.txt
+          python -m pip install pyyaml
+      - name: Verify release contents
+        working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+        run: python tools/verify_repository.py
+      - name: Run unit and compatibility tests
+        working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+        env:
+          PYTHONPATH: ${{ github.workspace }}/ComfyUI
+        run: python -m unittest discover -s tests

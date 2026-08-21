@@ -1,0 +1,9 @@
+Copyright (c) 2026 T8mars. All rights reserved.
+
+No permission is granted to copy, modify, redistribute, sublicense, sell, or
+otherwise exploit this repository or its original assets except where the
+copyright holder has provided separate written permission.
+
+Third-party components and official upstream resources remain governed by
+their respective terms. See THIRD_PARTY_NOTICES.md and the source notices
+bundled beside those resources.

@@ -1,5 +1,6 @@
 import { api } from "../../scripts/api.js";
 import { registerTemplateMenuPreview } from "./template_menu_preview.js";
+import { openTemplateBrowser } from "./template_browser.js";
 
 
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
@@ -288,6 +289,29 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         update(value);
     };
     node.t8UpdateCaseTemplate = update;
+    const browserWidget = node.addWidget(
+        "button",
+        "浏览 T8 模板库（分类 / 搜索 / 收藏 / 最近）",
+        null,
+        () => openTemplateBrowser({
+            catalog,
+            selectedValue: caseWidget.value,
+            onSelect: (template) => {
+                caseWidget.value = template.label;
+                caseWidget.callback?.(template.label);
+                node.graph?.change?.();
+                node.setDirtyCanvas(true, true);
+            },
+        }),
+        { serialize: false },
+    );
+    browserWidget.serializeValue = () => undefined;
+    const browserIndex = node.widgets?.indexOf(browserWidget) ?? -1;
+    const detailIndex = node.widgets?.indexOf(domWidget) ?? -1;
+    if (browserIndex > detailIndex && detailIndex >= 0) {
+        node.widgets.splice(browserIndex, 1);
+        node.widgets.splice(detailIndex, 0, browserWidget);
+    }
     update();
     return domWidget;
 }

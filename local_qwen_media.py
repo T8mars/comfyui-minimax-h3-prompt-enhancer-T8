@@ -283,6 +283,9 @@ def build_local_media_parts(
                 "text": (
                     f"The following {sheet_count} contact sheet(s) are ordered sampled visual evidence for {label}, "
                     f"covering {duration:.3f} seconds. Read timestamps left-to-right and top-to-bottom. "
+                    "Before drafting, build an internal observation ledger sorted by the printed timestamps. "
+                    "In the final response, introduce every visible phase, code, and action in first-appearance "
+                    "timestamp order; never move a later phase ahead merely because it is more visually salient. "
                     "Infer only visible temporal changes; no audio was analyzed."
                 ),
             }

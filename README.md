@@ -40,9 +40,9 @@
 - 平价小屋固定视觉模型 `bytedance/doubao-seed-evolving`；AI 工坊默认 `gemini-3.5-flash` 并支持 Custom；OpenAI 兼容模式支持填写供应商自己的视觉模型 ID。
 - 云端视觉渠道分析文字、图片和完整视频；本地 Qwen 明确使用真实时间戳抽样帧与有序联系表，只推断可见时序，不读取音轨，也不冒充完整视频字节理解。
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
-- 集成 MiniMax-H3 官方核心 Skill，规则冻结于官方提交 `093f3129a3f7bd27c74928b1cd31a54fbdebe057`。
+- 集成 MiniMax-H3 官方核心 Skill，规则冻结于经审阅的官方提交 `d21241f0a4b3acbb34c97dae47fa417b7065e438`，并固定全部 4 个文件及归一化内容树哈希。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
-- 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。预设只优化提示词，不运行完整制作工作流。
+- 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。8 个场景 Skill 的完整原生流程依赖 MiniMax Hub agent/canvas/hub 工具；本节点只适配其中可落入单条 H3 提示词的写作约束，不运行或声称移植资产生成、审批、剪辑、画布或外部工作流。
 - 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：132 条已发布案例事实归并为 113 个稳定案例 selector（含 19 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 115 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
@@ -55,6 +55,18 @@
 - 新增独立 Seedance 2.0 节点：简单/复杂双路径、AUTO/固定 1–20 镜头、官方/Seedance.nz 引用语法、字幕与稳定性策略。
 - 新增独立 Music 3 节点：完整内置官方 `music-caption-rewriter`、18 个流派索引和 1000 个模板，并严格按 router → 最多 2 个索引 → 最多 3 个模板逐级披露，绝不会把全库塞进一次 LLM 请求。
 - Music 3 的官方 Caption 与歌词完全分离；生成/润色歌词属于清楚标注的 T8 非官方扩展，严格保留模式不会改动用户歌词。
+- T8 案例支持独立浏览器：按分类筛选、搜索、收藏、最近使用和单 GIF 懒加载预览；原有下拉值与工作流 selector 保持兼容。
+- 三个节点提供 ComfyUI 原生进度和仅驻留内存的脱敏执行诊断；诊断不保存 API Key、URL、提示词、歌词、模板正文、媒体或模型推理。
+
+## 1.1.0 更新
+
+- 新增免 API Key 的本地 Qwen3.8-27B GGUF 渠道，并支持官方与第三方 Uncensored Q4_K_M 变体、视觉投影器、显存释放、执行后卸载策略和真实时间戳视频联系表。
+- MiniMax H3 核心 Skill 更新为固定官方快照；维护工具可核验内容树，并由每周工作流只读检查 H3 核心、8 个官方创意 Skill 和 Music 3 官方 Skill 的上游路径是否发生变化。
+- 142 个官方/T8 GIF 全部保留，统一压缩为 4 fps、最大宽度 256 px、48 色；总资源预算从 340 MiB 收紧到 180 MiB，菜单快速移动时取消过期预览请求。
+- 新增 4 个 ComfyUI 原生 `example_workflows` 与同名缩略图、三个节点的中英文内置文档和节点定义本地化。
+- 三种云端渠道统一使用一个经过测试的传输层，同时保留各自既有付费重试、HTTP 分类和错误文案；不记录请求或响应正文。
+- 新增版本门禁、密钥/大文件/JSON/GIF 预算检查、Changelog、License、Registry 元数据与发布前 CI。
+- 旧工作流迁移规则和稳定接口见 [`COMPATIBILITY.md`](./COMPATIBILITY.md)。
 
 ## 安装
 
@@ -110,7 +122,7 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 6. 点击节点底部的“运行提示词优化”。
 7. 从 `enhanced_prompt` 获取最终字符串。
 
-可以直接把 [`example/minimax_h3_prompt_enhancer_example.json`](./example/minimax_h3_prompt_enhancer_example.json) 拖入 ComfyUI。示例工作流不包含 API Key。
+可以直接把 [`example_workflows/minimax_h3_prompt_enhancer_example.json`](./example_workflows/minimax_h3_prompt_enhancer_example.json) 拖入 ComfyUI。示例工作流不包含 API Key；同目录 JPG 是 ComfyUI 模板缩略图。
 
 ## MiniMax Music 3 快速使用
 
@@ -122,7 +134,7 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 6. 将 `lyrics` 接到 Music 3 的 `input`，将 `music_caption` 接到 `instructions`；也可以直接解析 `music3_payload_json`。
 7. `enhancement_report_json` 只记录阶段、付费请求数、缓存命中、官方快照哈希、Token 预算估算与警告代码，不包含歌词、用户创意、API Key、供应商 URL、模板 ID 或模板正文。
 
-可以直接导入 [`example/music3_prompt_lyrics_enhancer_example.json`](./example/music3_prompt_lyrics_enhancer_example.json)。示例不包含 API Key、音频或官方模板正文。
+可以直接导入 [`example_workflows/music3_prompt_lyrics_enhancer_example.json`](./example_workflows/music3_prompt_lyrics_enhancer_example.json)。示例不包含 API Key、音频或官方模板正文。
 
 ## Seedance 2.0 快速使用
 
@@ -134,7 +146,7 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 6. 云端渠道填写“提示词增强 LLM API Key”；本地 Qwen 不需要 Key。然后点击节点底部运行按钮。
 7. 把 `enhanced_prompt` 连接到下游 Seedance 2.0 视频节点的提示词输入。
 
-可以直接导入 [`example/seedance20_prompt_enhancer_example.json`](./example/seedance20_prompt_enhancer_example.json)。示例不包含 API Key。
+可以直接导入 [`example_workflows/seedance20_prompt_enhancer_example.json`](./example_workflows/seedance20_prompt_enhancer_example.json)。示例不包含 API Key。
 
 ### Seedance 2.0 任务意图
 
@@ -589,6 +601,8 @@ GGUF 与 mmproj 放入 ComfyUI 的 `models/LLM/Qwen3.8/`；llama.cpp 放在本�
 
 可选模型已用本项目固定的 `mmproj-F16.gguf` 和 llama.cpp 本地运行时完成真实兼容验收：文字精确 token、图片 OCR/颜色/形状、视频采样帧的双阶段 OCR、早晚运动方向与时间顺序共 12/12 项通过。它支持节点现有的“图片 + 按时间戳采样视频画面”路径；这仍不等于读取完整视频字节或分析音轨。脱敏证据见 [`tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json`](./tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json)。
 
+2026-08-21 又对可选第三方模型执行了完整发布质量验收，确定性总分 `100/100`、`passed=true`，5 个用例全部通过：同 seed 三次逐字一致、H3 T2VA、Music 3 中文歌词与官方完整 Skill、H3 图像+视频证据、Seedance 2.0 图像+视频证据。视频用例同时核验早晚阶段代码、运动方向、硬切和首次出现顺序；全套耗时 476.938 秒，峰值显存 15971 MiB，卸载后回到 2007 MiB（基线 1613 MiB）。脱敏报告见 [`tests/fixtures/local_qwen_uncensored_quality_2026-08-21.json`](./tests/fixtures/local_qwen_uncensored_quality_2026-08-21.json)，仅保存分数、布尔检查、哈希、字符数和资源采样，不保存提示词、歌词、媒体、API Key 或临时令牌。
+
 建议 24GB 以上显存获得较好的交互体验；16GB 显存会由 `--fit` 自动部分卸载到系统内存，建议至少 32GB RAM，速度会明显下降。CPU-only 功能上可运行，但本项目不承诺交互速度。首次使用前可点击三个节点中的“检查本地 Qwen 安装”查看 GGUF、mmproj、运行时、后端和实际模型目录。
 
 本地选项说明：
@@ -609,6 +623,8 @@ GGUF 与 mmproj 放入 ComfyUI 的 `models/LLM/Qwen3.8/`；llama.cpp 放在本�
 - 更安全的方式是把节点 Key 留空并使用环境变量。
 - 节点不会把 Key、请求正文、素材 URL 或响应正文写入日志。
 - 仓库示例和测试不包含真实 API Key。
+
+执行期间，三个节点会向 ComfyUI 进度条报告本地准备、模型请求和结果整理阶段。最近 50 次执行的脱敏阶段信息可从本机 ComfyUI 的 `/t8-prompt-enhancer/diagnostics` 查看；记录仅含节点类别、渠道名称、结果、阶段耗时、可用时的尝试次数、素材数量、缓存命中与错误类别，进程重启后自动消失。该接口不会返回 API Key、供应商 URL、请求/响应正文、提示词、歌词、模板、媒体或模型推理。
 
 ## 图片与视频处理
 
@@ -672,12 +688,20 @@ Music 3 的 `official_reference_selection` 是“官方完整”模式必经阶�
 .\python\python.exe -m unittest discover -s ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tests -v
 ```
 
-单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏和云端 provider 重试合同；`tests/test_local_qwen.py` 核验第四渠道免 Key、模型路径安全、seed 映射、图片 Base64、真实时间戳视频抽样、无音轨声明、三节点接线以及 Music 不加载视觉能力。
+单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏和云端 provider 重试合同；`tests/test_local_qwen.py` 核验第四渠道免 Key、模型路径安全、seed 映射、图片 Base64、真实时间戳视频抽样、按首次出现顺序描述视频阶段、无音轨声明、三节点接线以及 Music 不加载视觉能力。`tests/test_platform_11.py` 独立验证共享传输重试、诊断字段白名单与 URL/Key/错误正文脱敏，以及三节点旧工作流迁移矩阵。
+
+维护者发布前还应运行确定性仓库门禁；它会检查禁入文件、疑似密钥、全部已跟踪 JSON、官方 Skill 快照、Python/JavaScript 语法和 180 MiB GIF 总预算：
+
+```powershell
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\verify_repository.py
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\release.py --check-prepush
+```
 
 本地 Qwen 发布验收不调用云端 API，但会真实加载约 18GB 权重并长时间占用本机 GPU/CPU。只有明确接受本地算力消耗时运行：
 
 ```powershell
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\local_qwen_live_smoke.py --confirm-local-large-model
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\local_qwen_live_smoke.py --confirm-local-large-model --model qwen3.8-27b-uncensored-fp8-q4_k_m.gguf --output ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tests\fixtures\local_qwen_uncensored_quality_2026-08-21.json
 ```
 
 2026-08-19 在 RTX 4060 Ti 16GB / llama.cpp CUDA 12 上的固定验收结果为 `100/100`、`passed=true`：同 seed 三次逐字一致、H3 T2VA、Music 3 中文新歌词与官方完整 Skill、H3 图像+视频、Seedance 2.0 图像+视频五项全部通过。Music 约束逐项核验 92 BPM、D major、4/4、女主唱、钢琴、原声吉他与排除 rap；视觉夹具逐项核验图片代码、视频早晚代码、运动方向、硬切和时序。全套耗时约 964 秒，峰值显存 15091 MiB，卸载后回到 2246 MiB（基线 2223 MiB）。脱敏报告见 `tests/fixtures/local_qwen_quality_2026-08-19.json`；不包含提示词正文、歌词、Base64、API Key 或本地临时令牌。
@@ -707,13 +731,21 @@ $env:SEEDANCE_API_KEY="你的平价小屋 API Key"
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\update_music3_official_skill.py --source-dir D:\MiniMax-Music3 --commit 40位提交SHA --apply
 ```
 
+H3 核心 Skill 同样使用审阅后显式更新，不会在用户运行时联网拉取：
+
+```powershell
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\update_h3_official_skill.py --check-current
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\update_h3_official_skill.py --source-dir D:\MiniMax-H3 --commit 40位提交SHA --apply
+.\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\check_upstream_skills.py
+```
+
 ## 参考资料
 
 - [MiniMax-H3 基础提示词指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md)
 - [MiniMax-H3 完整参考模式指南](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md)
-- [MiniMax-H3 官方 Skills 目录](https://github.com/MiniMax-AI/MiniMax-H3/tree/b7227fa6a6206e9fb30562383d39e53cf3866a48/skills)
-- [MiniMax-H3 官方核心 Prompt Writing Skill](https://github.com/MiniMax-AI/MiniMax-H3/blob/093f3129a3f7bd27c74928b1cd31a54fbdebe057/skills/h3-prompt-writing/SKILL.md)
-- [MiniMax-H3 官方 Music Video Subtitle Generator Skill v0.6.6](https://github.com/MiniMax-AI/MiniMax-H3/blob/b7227fa6a6206e9fb30562383d39e53cf3866a48/skills/music-video-subtitle-generator/SKILL.cn.md)
+- [MiniMax-H3 官方创意 Skills 快照](https://github.com/MiniMax-AI/MiniMax-H3/tree/743d51e83329cbae6c7694f1c7b89576e7c25e07/skills)
+- [MiniMax-H3 官方核心 Prompt Writing Skill（固定提交）](https://github.com/MiniMax-AI/MiniMax-H3/blob/d21241f0a4b3acbb34c97dae47fa417b7065e438/skills/h3-prompt-writing/SKILL.md)
+- [MiniMax-H3 官方 Music Video Subtitle Generator Skill v0.6.6](https://github.com/MiniMax-AI/MiniMax-H3/blob/743d51e83329cbae6c7694f1c7b89576e7c25e07/skills/music-video-subtitle-generator/SKILL.cn.md)
 - [Seedance API 文档](https://api.seedance.nz/docs/llms.txt)
 - [Seedance 模型页面](https://api.seedance.nz/pricing/bytedance%2Fdoubao-seed-evolving)
 - [Seedance 2.0 官方模型页](https://seed.bytedance.com/en/seedance2_0)

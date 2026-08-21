@@ -5,11 +5,13 @@ from .music3 import MiniMaxMusic3PromptEnhancer
 from .seedance20 import Seedance20PromptEnhancer
 from .case_library_routes import register_routes
 from .local_qwen_routes import register_local_qwen_routes
+from .diagnostics_routes import register_diagnostics_routes
 
 
 WEB_DIRECTORY = "./web/js"
 register_routes()
 register_local_qwen_routes()
+register_diagnostics_routes()
 
 
 class T8PromptEnhancerExtension(ComfyExtension):

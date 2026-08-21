@@ -1,0 +1,24 @@
+name: Feature request
+description: Propose a compatible enhancement
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Desired behavior and workflow impact
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Compatibility boundary
+      options:
+        - label: This request does not require bundling private media, API keys, GGUF files, or unlicensed third-party assets.
+          required: true

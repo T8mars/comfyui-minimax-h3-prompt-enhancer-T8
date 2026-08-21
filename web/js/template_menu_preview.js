@@ -1,6 +1,9 @@
 const REGISTRATION_MARKER = Symbol.for("t8.prompt-enhancer.combo-preview");
 const registrationsByNode = new WeakMap();
 let activePanel = null;
+let activeCleanup = null;
+let activeRenderTimer = null;
+let activeRenderEpoch = 0;
 
 
 function widgetValues(registration) {
@@ -103,9 +106,8 @@ function renderPreview(panel, model, reposition) {
         }
         if (preview.available !== false && preview.url) {
             const image = document.createElement("img");
-            image.src = preview.url;
             image.alt = `${preview.label || model?.title || "模板"} GIF 预览`;
-            image.loading = "eager";
+            image.loading = "lazy";
             image.decoding = "async";
             image.referrerPolicy = "no-referrer";
             image.style.cssText = [
@@ -121,6 +123,7 @@ function renderPreview(panel, model, reposition) {
                 ));
                 reposition();
             };
+            image.src = preview.url;
             figure.append(image);
         } else {
             figure.append(textBlock(
@@ -154,6 +157,11 @@ function renderPreview(panel, model, reposition) {
 function attachPreview(contextMenu, registration) {
     const root = contextMenu?.root;
     if (!root?.isConnected) return;
+    activeCleanup?.();
+    activeCleanup = null;
+    if (activeRenderTimer) clearTimeout(activeRenderTimer);
+    activeRenderTimer = null;
+    activeRenderEpoch += 1;
     activePanel?.remove();
 
     const panel = document.createElement("aside");
@@ -185,11 +193,19 @@ function attachPreview(contextMenu, registration) {
     };
 
     let renderedValue = null;
-    const showValue = (value) => {
+    const showValue = (value, immediate = false) => {
         if (value === renderedValue) return;
-        renderedValue = value;
-        const model = registration.resolve(String(value ?? ""));
-        renderPreview(panel, model, reposition);
+        if (activeRenderTimer) clearTimeout(activeRenderTimer);
+        const epoch = ++activeRenderEpoch;
+        const render = () => {
+            activeRenderTimer = null;
+            if (epoch !== activeRenderEpoch || !panel.isConnected) return;
+            renderedValue = value;
+            const model = registration.resolve(String(value ?? ""));
+            renderPreview(panel, model, reposition);
+        };
+        if (immediate) render();
+        else activeRenderTimer = setTimeout(render, 120);
     };
     const entries = Array.from(root.querySelectorAll(".litemenu-entry:not(.separator)"));
     for (const entry of entries) {
@@ -216,10 +232,17 @@ function attachPreview(contextMenu, registration) {
     });
     filter?.addEventListener("input", showKeyboardSelection);
 
+    let cleaned = false;
     const cleanup = () => {
+        if (cleaned) return;
+        cleaned = true;
+        if (activeRenderTimer) clearTimeout(activeRenderTimer);
+        activeRenderTimer = null;
+        activeRenderEpoch += 1;
         window.removeEventListener("resize", reposition);
         panel.remove();
         if (activePanel === panel) activePanel = null;
+        if (activeCleanup === cleanup) activeCleanup = null;
     };
     const originalClose = contextMenu.close;
     contextMenu.close = function () {
@@ -227,7 +250,8 @@ function attachPreview(contextMenu, registration) {
         return originalClose.apply(this, arguments);
     };
     window.addEventListener("resize", reposition);
-    showValue(registration.widget?.value);
+    activeCleanup = cleanup;
+    showValue(registration.widget?.value, true);
     requestAnimationFrame(reposition);
 }
 

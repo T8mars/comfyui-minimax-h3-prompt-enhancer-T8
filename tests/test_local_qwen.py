@@ -230,6 +230,8 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertFalse(report["audio_analyzed"])
         self.assertTrue(any(part.get("type") == "image_url" for part in parts))
         self.assertIn("no audio was analyzed", json.dumps(parts))
+        self.assertIn("observation ledger sorted by the printed timestamps", json.dumps(parts))
+        self.assertIn("first-appearance timestamp order", json.dumps(parts))
 
     def test_high_rate_frames_are_uniformly_reduced_without_dropping_the_end(self):
         data = encoded_video_bytes(frame_count=48, fps=24)
@@ -306,6 +308,9 @@ class LocalQwenUnitTests(unittest.TestCase):
                 api_mode=seedance20.LOCAL_QWEN_API_MODE,
             )
         self.assertIn("裁剪窗口", seedance_result)
+        seedance_system = FakeLocalProvider.instances[-1].messages[0][0]["content"]
+        self.assertIn("Sort observations by printed timestamp before drafting", seedance_system)
+        self.assertIn("do not mention a later-phase identifier", seedance_system)
 
     def test_music_local_provider_is_text_only_and_reused_for_caption(self):
         caption = (

@@ -353,7 +353,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("官方 9 个 Skill = 1 个始终启用的 H3 核心写作 Skill + 8 个可选场景 Skill", source)
 
     def test_example_workflow_is_importable_and_contains_no_api_key(self):
-        path = NODES_PATH.parent / "example" / "minimax_h3_prompt_enhancer_example.json"
+        path = NODES_PATH.parent / "example_workflows" / "minimax_h3_prompt_enhancer_example.json"
         source = path.read_text(encoding="utf-8")
         workflow = json.loads(source)
         node = workflow["nodes"][0]
@@ -432,7 +432,11 @@ class PromptEnhancerTests(unittest.TestCase):
         session = FakeSession(basic_output())
         self.run_enhancer(session)
         system = session.chat_requests[0]["json"]["messages"][0]["content"]
-        self.assertEqual(nodes.OFFICIAL_SKILL_SOURCE_SHA, "093f3129a3f7bd27c74928b1cd31a54fbdebe057")
+        self.assertEqual(nodes.OFFICIAL_SKILL_SOURCE_SHA, "d21241f0a4b3acbb34c97dae47fa417b7065e438")
+        self.assertEqual(nodes.OFFICIAL_SKILL_TREE_SHA256, "b6c4af89b79c044efc8c05865d52cee2cd726ec69c70a6770a707ecf1b18ba89")
+        self.assertIn("VERBATIM_OFFICIAL_H3_SKILL_SOURCE", system)
+        self.assertIn("## Tips for Better Results", system)
+        self.assertIn("references/base-en.txt", system)
         for required in (
             "Simultaneous group speech uses a compact group identifier such as (S1,S2)",
             "place <scenetrans> on both sides of the cut",
@@ -441,6 +445,16 @@ class PromptEnhancerTests(unittest.TestCase):
             "newly requested action or background is not by itself evidence",
         ):
             self.assertIn(required, system)
+
+        ref_session = FakeSession(reference_output(include_video=False))
+        self.run_enhancer(
+            ref_session,
+            task_type="Ref2VA",
+            reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
+        )
+        ref_system = ref_session.chat_requests[0]["json"]["messages"][0]["content"]
+        self.assertIn("references/ref-en.txt", ref_system)
+        self.assertNotIn("--- references/base-en.txt ---", ref_system)
 
     def test_all_official_creative_presets_are_available_and_injected_as_prompt_profiles(self):
         expected = {
@@ -468,7 +482,7 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_official_mv_skill_source_and_legacy_workflow_value_are_preserved(self):
         self.assertEqual(nodes.OFFICIAL_MV_SKILL_VERSION, "0.6.6")
-        self.assertEqual(nodes.OFFICIAL_MV_SKILL_SOURCE_SHA, "b7227fa6a6206e9fb30562383d39e53cf3866a48")
+        self.assertEqual(nodes.OFFICIAL_MV_SKILL_SOURCE_SHA, "743d51e83329cbae6c7694f1c7b89576e7c25e07")
         self.assertNotIn(nodes.LEGACY_MV_CREATIVE_PRESET, nodes.CREATIVE_PRESET_OPTIONS)
 
         session = FakeSession(basic_output())
@@ -477,6 +491,8 @@ class PromptEnhancerTests(unittest.TestCase):
         user = session.chat_requests[0]["json"]["messages"][1]["content"]
         self.assertIn("Official MiniMax music-video-subtitle-generator Skill v0.6.6", system)
         self.assertIn(f"commit {nodes.OFFICIAL_MV_SKILL_SOURCE_SHA}", system)
+        self.assertIn("require MiniMax Hub agent, canvas, and hub tools", system)
+        self.assertIn("adapts only their prompt-writing constraints", system)
         self.assertIn(f"Creative preset: {nodes.MV_CREATIVE_PRESET}", user)
 
 
@@ -897,18 +913,6 @@ class PromptEnhancerTests(unittest.TestCase):
         soran = by_id["t8-case-scale-contraction-evidence-funnel-v1"]
         self.assertIn("t8-case-audio-cause-lead-ladder-v1", soran["legacy_ids"])
         self.assertIn("声画错位递进", soran["legacy_labels"])
-        batch_01_ids = {
-            "t8-case-evidence-ladder-reality-v1",
-            "t8-case-threshold-inspection-passage-v1",
-            "t8-case-imperfect-memory-farewell-v1",
-            "t8-case-deadpan-chain-failure-v1",
-            "t8-case-layered-dossier-activation-v1",
-            "t8-case-created-mark-boundary-crossing-v1",
-            "t8-case-material-progress-clock-v1",
-            "t8-case-staged-character-reveal-v1",
-            "t8-case-mechanical-convoy-proof-v1",
-            "t8-case-flat-geometry-reconstruction-v1",
-        }
         for template_id in imported_ids:
             imported = by_id[template_id]
             self.assertRegex(imported["source"]["creative_dna_sha256"], r"^[0-9a-f]{64}$")
@@ -1007,23 +1011,33 @@ class PromptEnhancerTests(unittest.TestCase):
         root = NODES_PATH.parent
         asset_root = root / "web" / "js" / "assets" / "official-previews"
         source = (root / "web" / "js" / "official_preset_previews.js").read_text(encoding="utf-8")
-        expected = {
-            "极简产品广告": ("minimalist-product-ad-generator.gif", "f25d9b4f9c2a8d881d8bbefdb3076a4d79fd46246d11b75d1a5ee278b5cc38f7"),
-            "3D 动画短片": ("3d-animation-short-generator.gif", "1bf1ad020c4d8548a23902133c4704b2c2503efef1de40889cf0eb3a92467285"),
-            "品牌宣传短片": ("brand-promo-video-generator.gif", "1346688e90749b42ca15f94fc80078ebb7d98a9bf23f409f6a2f11d6f55c5ba5"),
-            nodes.MV_CREATIVE_PRESET: ("music-video-subtitle-generator.gif", "e266707a77965622d175d012370a638cb2bef660532950634c28434fd87697e2"),
-            "双人合作游戏开场": ("co-op-game-intro-generator.gif", "b6c12f7ac0e476645b8228e4b6b6cb9650c3b92d7e773b3d68c1dadac733cdde"),
-            "纸拼贴讲解": ("paper-collage-explainer-generator.gif", "f89d8c00943dbe02fae0b709ebb5705fc80a75bfd13bbb0cefdb01eb31b4a8f3"),
-            "立体纸艺停格讲解": ("papercraft-stop-motion-explainer.gif", "6bc26e1724e6dbe250fe10b22924fa914602d98f1634b3410bf208dfc05ec59f"),
-            "手绘实拍融合": ("handdrawn-live-video-generator.gif", "4bbc23442baedd2463e3c111221946fce59bd55d498e2c522d3da9b295083e55"),
+        labels = {
+            "极简产品广告": "minimalist-product-ad-generator.gif",
+            "3D 动画短片": "3d-animation-short-generator.gif",
+            "品牌宣传短片": "brand-promo-video-generator.gif",
+            nodes.MV_CREATIVE_PRESET: "music-video-subtitle-generator.gif",
+            "双人合作游戏开场": "co-op-game-intro-generator.gif",
+            "纸拼贴讲解": "paper-collage-explainer-generator.gif",
+            "立体纸艺停格讲解": "papercraft-stop-motion-explainer.gif",
+            "手绘实拍融合": "handdrawn-live-video-generator.gif",
         }
-        self.assertEqual({path.name for path in asset_root.glob("*.gif")}, {item[0] for item in expected.values()})
-        for label, (filename, digest) in expected.items():
+        manifest = json.loads((asset_root / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["schema_version"], "t8-bundled-official-h3-previews/v1")
+        self.assertEqual(manifest["source_commit"], "743d51e83329cbae6c7694f1c7b89576e7c25e07")
+        self.assertEqual(manifest["encoding"], {
+            "format": "gif", "fps": 4, "max_width": 256, "max_colors": 48, "loop": True,
+        })
+        records = {item["file"]: item for item in manifest["previews"]}
+        self.assertEqual({path.name for path in asset_root.glob("*.gif")}, set(labels.values()))
+        self.assertEqual(set(records), set(labels.values()))
+        for label, filename in labels.items():
             with self.subTest(label=label):
                 self.assertIn(f'"{label}"', source)
                 self.assertIn(f'file: "{filename}"', source)
-                self.assertEqual(hashlib.sha256((asset_root / filename).read_bytes()).hexdigest(), digest)
-        self.assertIn('const OFFICIAL_COMMIT = "b7227fa6a6206e9fb30562383d39e53cf3866a48"', source)
+                digest = hashlib.sha256((asset_root / filename).read_bytes()).hexdigest()
+                self.assertEqual(digest, records[filename]["sha256"])
+                self.assertEqual((asset_root / filename).stat().st_size, records[filename]["bytes"])
+        self.assertIn('const OFFICIAL_COMMIT = "743d51e83329cbae6c7694f1c7b89576e7c25e07"', source)
 
     def test_reference_template_mode_requires_and_sends_template(self):
         missing_session = FakeSession(basic_output())
@@ -1573,10 +1587,18 @@ class PromptEnhancerTests(unittest.TestCase):
             FakeResponse(504, {"error": {"message": "gateway timeout"}}),
             success,
         ])
+        progress = []
         with patch.object(nodes.time, "sleep") as sleep:
-            self.assertEqual(self.run_enhancer(session), expected)
+            self.assertEqual(
+                self.run_enhancer(
+                    session,
+                    progress_callback=lambda stage, **metrics: progress.append((stage, metrics)),
+                ),
+                expected,
+            )
         self.assertEqual(len(session.chat_requests), 3)
         self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
+        self.assertIn(("llm_completed", {"attempts": 3}), progress)
 
     def test_custom_openai_endpoint_does_not_inherit_seedance_paid_retry_policy(self):
         session = SequencedChatSession([

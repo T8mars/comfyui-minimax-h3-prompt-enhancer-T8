@@ -1,0 +1,64 @@
+{
+  "schema_version": "t8-bundled-official-h3-previews/v1",
+  "authority": "MiniMax-AI",
+  "source_commit": "743d51e83329cbae6c7694f1c7b89576e7c25e07",
+  "preview_count": 8,
+  "encoding": {
+    "format": "gif",
+    "fps": 4,
+    "max_width": 256,
+    "max_colors": 48,
+    "loop": true
+  },
+  "policy": "Official GIFs are human UI previews only and are never sent to an LLM.",
+  "previews": [
+    {
+      "file": "3d-animation-short-generator.gif",
+      "source_sha256": "1bf1ad020c4d8548a23902133c4704b2c2503efef1de40889cf0eb3a92467285",
+      "sha256": "a6194647f3d263128b95f8aa41b5c1d697ae39abd57a4159bd94efcd6e2e58d8",
+      "bytes": 534497
+    },
+    {
+      "file": "brand-promo-video-generator.gif",
+      "source_sha256": "1346688e90749b42ca15f94fc80078ebb7d98a9bf23f409f6a2f11d6f55c5ba5",
+      "sha256": "d2c79d65a113e70bd6385e8ab0d7c4aeb1a7cb7ece3d6b8b5dc7ec9d01c0b8b8",
+      "bytes": 248305
+    },
+    {
+      "file": "co-op-game-intro-generator.gif",
+      "source_sha256": "b6c12f7ac0e476645b8228e4b6b6cb9650c3b92d7e773b3d68c1dadac733cdde",
+      "sha256": "1fdd9eae459b9ccd5e81913233d7df5c6f68a62b2c68a6484d57a49f71cfad73",
+      "bytes": 525958
+    },
+    {
+      "file": "handdrawn-live-video-generator.gif",
+      "source_sha256": "4bbc23442baedd2463e3c111221946fce59bd55d498e2c522d3da9b295083e55",
+      "sha256": "bca3fff2acf60428ab34d791b415efe6d166e26c4bc35318c2d279ae2d84c67e",
+      "bytes": 471322
+    },
+    {
+      "file": "minimalist-product-ad-generator.gif",
+      "source_sha256": "f25d9b4f9c2a8d881d8bbefdb3076a4d79fd46246d11b75d1a5ee278b5cc38f7",
+      "sha256": "78e4ad374cf2e77c5e347fc5aa04ef015d108f2758a38c7e2c0ba3347bb15e70",
+      "bytes": 260764
+    },
+    {
+      "file": "music-video-subtitle-generator.gif",
+      "source_sha256": "e266707a77965622d175d012370a638cb2bef660532950634c28434fd87697e2",
+      "sha256": "c9b5cdff323166d79f4fd64222a35788a222af2c4051b16068ba35f43499d554",
+      "bytes": 488530
+    },
+    {
+      "file": "paper-collage-explainer-generator.gif",
+      "source_sha256": "f89d8c00943dbe02fae0b709ebb5705fc80a75bfd13bbb0cefdb01eb31b4a8f3",
+      "sha256": "673a66d1cc0788478fe5e311de84c213edfefb637efd71ac7276a9e363cf22f5",
+      "bytes": 380785
+    },
+    {
+      "file": "papercraft-stop-motion-explainer.gif",
+      "source_sha256": "6bc26e1724e6dbe250fe10b22924fa914602d98f1634b3410bf208dfc05ec59f",
+      "sha256": "a85e9cf366954db5a23539757b9a53641bbc698574d25168fb90ad9f979fff78",
+      "bytes": 586499
+    }
+  ]
+}

@@ -1,13 +1,17 @@
 [project]
 name = "minimax-h3-seedance-music3-prompt-enhancer-t8"
-version = "1.0.2"
+version = "1.1.0"
 description = "Enhance MiniMax H3 and Seedance 2.0 video prompts and MiniMax Music 3 captions and lyrics with cloud or local Qwen LLM providers."
-license = { text = "All Rights Reserved" }
+authors = [
+    { name = "T8mars", email = "20331866@qq.com" },
+]
+license = { file = "LICENSE.txt" }
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24.0",
     "Pillow>=9.5.0",
     "requests>=2.31.0",
+    "comfyui-frontend-package>=1.49.6",
 ]
 classifiers = [
     "Operating System :: OS Independent",
@@ -21,4 +25,6 @@ Documentation = "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8
 [tool.comfy]
 PublisherId = "t8star"
 DisplayName = "MiniMax H3 / Seedance 2.0 / Music 3 Prompt Enhancer (T8)"
+Icon = "https://raw.githubusercontent.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8/main/assets/t8-prompt-enhancer-icon.svg"
+Banner = "https://raw.githubusercontent.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8/main/assets/t8-prompt-enhancer-banner.svg"
 requires-comfyui = ">=0.33.0"

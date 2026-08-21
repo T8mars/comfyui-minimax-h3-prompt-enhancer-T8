@@ -1,0 +1,50 @@
+{
+  "MiniMaxH3PromptEnhancerT8": {
+    "display_name": "MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)",
+    "inputs": {
+      "prompt": {"name": "Video idea / prompt (required)"},
+      "task_type": {"name": "Generation type"},
+      "duration_seconds": {"name": "Target duration (seconds)"},
+      "shot_count": {"name": "Shot count"},
+      "rewrite_mode": {"name": "Rewrite mode"},
+      "output_language": {"name": "Output language"},
+      "creative_preset": {"name": "Official MiniMax creative preset"},
+      "case_template": {"name": "Unofficial template (case / community Skill)"},
+      "api_mode": {"name": "API mode"},
+      "api_key": {"name": "API Key"}
+    },
+    "outputs": {"0": {"name": "Enhanced prompt"}}
+  },
+  "Seedance20PromptEnhancerT8": {
+    "display_name": "Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)",
+    "inputs": {
+      "prompt": {"name": "Video idea / prompt (required)"},
+      "task_intent": {"name": "Task intent"},
+      "duration_seconds": {"name": "Target duration"},
+      "shot_count": {"name": "Shot count"},
+      "rewrite_mode": {"name": "Rewrite mode"},
+      "case_template": {"name": "Unofficial template (case / community Skill)"},
+      "api_mode": {"name": "LLM API mode"},
+      "api_key": {"name": "Prompt-enhancement LLM API Key"}
+    },
+    "outputs": {"0": {"name": "Enhanced prompt"}}
+  },
+  "MiniMaxMusic3PromptEnhancerT8": {
+    "display_name": "MiniMax Music 3 Prompt & Lyrics Enhancer (T8)",
+    "inputs": {
+      "music_idea": {"name": "Music idea (required)"},
+      "lyrics_mode": {"name": "Lyrics mode"},
+      "lyrics": {"name": "Lyrics (optional / STRING)"},
+      "lyrics_language": {"name": "Lyrics language"},
+      "quality_mode": {"name": "Quality mode"},
+      "api_mode": {"name": "LLM API mode"},
+      "api_key": {"name": "LLM API Key"}
+    },
+    "outputs": {
+      "0": {"name": "Lyrics"},
+      "1": {"name": "Music caption"},
+      "2": {"name": "Music 3 payload JSON"},
+      "3": {"name": "Enhancement report JSON"}
+    }
+  }
+}

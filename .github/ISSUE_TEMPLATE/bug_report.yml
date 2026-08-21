@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a reproducible node defect without secrets or private media
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Never paste API keys, private prompts/lyrics, response bodies, or private media."
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Node version, ComfyUI version, frontend version, OS
+    validations:
+      required: true
+  - type: dropdown
+    id: node
+    attributes:
+      label: Node
+      options:
+        - MiniMax H3 Prompt Enhancer
+        - Seedance 2.0 Prompt Enhancer
+        - MiniMax Music 3 Prompt & Lyrics Enhancer
+    validations:
+      required: true
+  - type: input
+    id: provider
+    attributes:
+      label: Provider mode
+      description: Do not include a key or private Base URL.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Use public or synthetic inputs only.
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Redacted error / diagnostic category
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed API keys, private URLs, prompt/lyrics bodies, personal paths, and private media.
+          required: true

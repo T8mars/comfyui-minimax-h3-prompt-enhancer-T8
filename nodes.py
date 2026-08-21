@@ -4,6 +4,8 @@ import json
 import os
 import re
 import time
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
@@ -12,6 +14,13 @@ import requests
 from PIL import Image
 
 from comfy_api.latest import ComfyExtension, io
+
+try:
+    from .execution_diagnostics import DiagnosticsRun
+    from .provider_transport import request_chat_completion
+except ImportError:
+    from execution_diagnostics import DiagnosticsRun
+    from provider_transport import request_chat_completion
 
 try:
     from .local_qwen_provider import (
@@ -111,8 +120,10 @@ REWRITE_MODES = ["strict", "balanced", "creative"]
 MODE_TEMPERATURES = {"strict": 0.2, "balanced": 0.7, "creative": 1.2}
 OUTPUT_LANGUAGES = ["中文", "English"]
 PROMPT_MODES = ["官方增强", "参考模板融合"]
-OFFICIAL_SKILL_SOURCE_SHA = "093f3129a3f7bd27c74928b1cd31a54fbdebe057"
-OFFICIAL_MV_SKILL_SOURCE_SHA = "b7227fa6a6206e9fb30562383d39e53cf3866a48"
+OFFICIAL_SKILL_SOURCE_SHA = "d21241f0a4b3acbb34c97dae47fa417b7065e438"
+OFFICIAL_SKILL_TREE_SHA256 = "b6c4af89b79c044efc8c05865d52cee2cd726ec69c70a6770a707ecf1b18ba89"
+OFFICIAL_CREATIVE_SKILLS_SOURCE_SHA = "743d51e83329cbae6c7694f1c7b89576e7c25e07"
+OFFICIAL_MV_SKILL_SOURCE_SHA = OFFICIAL_CREATIVE_SKILLS_SOURCE_SHA
 OFFICIAL_MV_SKILL_VERSION = "0.6.6"
 COMPAT_SKILL_PROFILE = "现有兼容（保留中英文）"
 STRICT_SKILL_PROFILE = "官方 Skill 严格（全英文协议）"
@@ -180,7 +191,7 @@ Non-negotiable rules:
 - When the user supplies a description length target, aim for approximately that many Chinese characters or English words according to the effective descriptive language. Never print a count.
 """
 
-OFFICIAL_CORE_ADDENDUM = """Official MiniMax-H3 core contract, frozen from MiniMax-AI/MiniMax-H3 skills at commit 093f3129a3f7bd27c74928b1cd31a54fbdebe057:
+OFFICIAL_CORE_ADDENDUM = f"""Official MiniMax-H3 core contract, frozen from MiniMax-AI/MiniMax-H3 skills at commit {OFFICIAL_SKILL_SOURCE_SHA} (normalized source tree {OFFICIAL_SKILL_TREE_SHA256}):
 - Priority is: hard user constraints > user intent and observable media facts > this H3 core contract > the selected creative preset > a reference template. A lower-priority source may never overwrite a higher-priority fact.
 - Assign (S1), (S2), ... only to real vocal sources, in the order they first produce an actual vocal event in the target timeline. Simultaneous group speech uses a compact group identifier such as (S1,S2). Keep each identity stable across shots.
 - When speech crosses a visual cut, place <scenetrans> on both sides of the cut and state that its audio remains continuous. Use <cutoff> only when the target video's ending intentionally truncates the vocal event, never for an ordinary pause or cut.
@@ -189,15 +200,36 @@ OFFICIAL_CORE_ADDENDUM = """Official MiniMax-H3 core contract, frozen from MiniM
 - Ref2VA summary task prefixes must be deduplicated and inferred from actual relationships, not merely from which sockets are connected. Audio labels have independent numbering; ordinary sound embedded in <Video N> does not automatically create an <Audio N> role, and this node has no audio-file analysis input.
 - Ref2VA visible retention markers are limited to fully_preserved, partially_preserved, attribute_transfer, and weak_reference. A newly requested action or background is not by itself evidence that a reference was only partially preserved.
 - Keep exact user-provided dialogue, lyrics, brand copy, UI copy, and visible text unchanged. Do not fabricate spoken lines, lyrics, claims, metrics, product abilities, logos, or readable text.
+- Match the described audiovisual timeline to the requested duration, keep every reference label consistent across sections, prefer concrete visible and audible details over abstract praise words, and explicitly connect first/last keyframes to the generated path.
 - This node writes one H3 prompt only. It never installs or invokes a remote Skill, generates anchor assets, calls a video-generation API, stitches clips, analyzes an audio attachment, or performs a delivery workflow.
 """
+
+OFFICIAL_H3_SKILL_ROOT = Path(__file__).resolve().parent / "official_skills" / "h3-prompt-writing"
+
+
+@lru_cache(maxsize=3)
+def _official_h3_source_instruction(task_type: str) -> str:
+    guide_name = "ref-en.txt" if task_type == "Ref2VA" else "base-en.txt"
+    skill_path = OFFICIAL_H3_SKILL_ROOT / "SKILL.md"
+    guide_path = OFFICIAL_H3_SKILL_ROOT / "references" / guide_name
+    try:
+        skill_text = skill_path.read_text(encoding="utf-8").strip()
+        guide_text = guide_path.read_text(encoding="utf-8").strip()
+    except OSError as exc:
+        raise PromptEnhancerError(f"Bundled official H3 Skill is unavailable: {exc}") from exc
+    return (
+        f"VERBATIM_OFFICIAL_H3_SKILL_SOURCE commit={OFFICIAL_SKILL_SOURCE_SHA} "
+        f"tree_sha256={OFFICIAL_SKILL_TREE_SHA256}. The selected compatibility/language profile may localize "
+        "descriptive prose, but it may not change field names, timing, label, sound, or reference-role rules.\n\n"
+        f"--- SKILL.md ---\n{skill_text}\n\n--- references/{guide_name} ---\n{guide_text}"
+    )
 
 SKILL_PROFILE_RULES = {
     COMPAT_SKILL_PROFILE: """Official Skill profile: compatibility. Preserve the selected Chinese/English descriptive-language behavior for existing workflows while applying the current structural, speaker, reference-role, and safety rules. This localized mode is not the official all-English rewrite contract.""",
     STRICT_SKILL_PROFILE: """Official Skill profile: strict all-English contract. Write every rewrite section and all descriptive prose in English, including summary, retention_analysis, detailed_description, integrated_multimodal_description, overall_soundscape, and non_diegetic_music. Only exact dialogue, lyrics, brand copy, UI copy, and visible scene text retain their source language and punctuation. The UI output-language selection cannot override this rule. Ref2VA generation tasks normally target 350-500 English words for detailed_description unless a soft explicit target or complete vocal content requires another length.""",
 }
 
-PRESET_BOUNDARY_RULE = """Creative preset boundary: the preset is a prompt-writing profile only. Apply it only where it matches the user's request and observable media. Never turn it into a production checklist, asset-generation sequence, approval gate, external research task, API call, multi-clip stitching job, or claim that unsupported analysis occurred. Explicit user facts, media evidence, duration, fixed shot count, H3 fields, and hard constraints always win."""
+PRESET_BOUNDARY_RULE = f"""Creative preset boundary: each preset is a prompt-writing profile only. The eight official creative Skills are reviewed at MiniMax-AI/MiniMax-H3 commit {OFFICIAL_CREATIVE_SKILLS_SOURCE_SHA}. Their upstream compatibility declarations require MiniMax Hub agent, canvas, and hub tools for the complete native workflows. This ComfyUI node adapts only their prompt-writing constraints into one H3 prompt; it never claims to execute or port the complete Hub workflow. Apply a preset only where it matches the user's request and observable media. Never turn it into a production checklist, asset-generation sequence, approval gate, external research task, Hub/tool call, API call, multi-clip stitching job, or claim that unsupported analysis occurred. Explicit user facts, media evidence, duration, fixed shot count, H3 fields, and hard constraints always win."""
 
 MV_OFFICIAL_SCOPE_RULES = f"""Official MiniMax music-video-subtitle-generator Skill v{OFFICIAL_MV_SKILL_VERSION}, frozen from MiniMax-AI/MiniMax-H3 at commit {OFFICIAL_MV_SKILL_SOURCE_SHA}:
 - Use this profile for AI music videos or emotional music shorts in which music intent, locked lyrics, spatial typography, reference roles, rhythm, performance, and camera language must be designed together. It is not ordinary subtitle cleanup, generic editing, a non-music product ad, licensed-IP copying, or a simple request with no MV structure.
@@ -1111,6 +1143,7 @@ def _build_messages(
     system_rules = [
         COMMON_SYSTEM_RULES,
         OFFICIAL_CORE_ADDENDUM,
+        _official_h3_source_instruction(task_type),
         SKILL_PROFILE_RULES[official_skill_profile],
         LANGUAGE_RULES[effective_language],
         MODE_RULES[rewrite_mode],
@@ -1170,6 +1203,7 @@ def _request_completion(
     chat_url: str = CHAT_COMPLETIONS_URL,
     provider_name: str = "Seedance",
     model_id: str = MODEL_ID,
+    attempts_callback: Any = None,
 ) -> str:
     payload = {
         "model": model_id,
@@ -1178,63 +1212,47 @@ def _request_completion(
         "stream": False,
     }
     retry_delays = SEEDANCE_CHAT_RETRY_DELAYS if _is_seedance_chat_endpoint(chat_url) else ()
-    attempt = 0
-    while True:
-        attempt += 1
-        try:
-            response = session.post(
-                chat_url,
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json",
-                },
-                json=payload,
-                timeout=REQUEST_TIMEOUT,
-                **_seedance_request_route_kwargs(chat_url, attempt, bool(retry_delays)),
-            )
-        except requests.RequestException as error:
-            can_retry = _is_retryable_seedance_network_error(error)
-            if can_retry and attempt <= len(retry_delays):
-                time.sleep(retry_delays[attempt - 1])
-                continue
-            if can_retry and retry_delays:
-                retry_note = f"Fast retry was exhausted after {attempt} attempts."
-            elif isinstance(error, requests.exceptions.ReadTimeout):
-                retry_note = (
-                    "The response state is ambiguous, so it was not retried automatically "
-                    "to avoid a duplicate paid generation."
-                )
-            else:
-                retry_note = "The paid request was not retried automatically."
-            raise PromptEnhancerError(
-                f"{provider_name} chat network error: {type(error).__name__}. {retry_note}"
-            ) from error
 
-        if (
-            response.status_code in SEEDANCE_CHAT_RETRYABLE_STATUS_CODES
-            and attempt <= len(retry_delays)
-        ):
-            time.sleep(retry_delays[attempt - 1])
-            continue
-        break
-    if response.status_code != 200:
-        _raise_http_error(response, api_key, "chat", provider_name, attempts=attempt)
-    try:
-        data = response.json()
-    except ValueError as error:
-        raise PromptEnhancerError(f"{provider_name} chat returned invalid JSON.") from error
-    try:
-        content = data["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError) as error:
-        raise PromptEnhancerError(f"{provider_name} chat response is missing choices[0].message.content.") from error
-    if isinstance(content, list):
-        content = "".join(
-            str(part.get("text", "")) for part in content
-            if isinstance(part, dict) and part.get("type") in (None, "text")
+    def network_error(error: requests.RequestException, attempt: int, delays: tuple[float, ...]) -> Exception:
+        if _is_retryable_seedance_network_error(error) and delays:
+            retry_note = f"Fast retry was exhausted after {attempt} attempts."
+        elif isinstance(error, requests.exceptions.ReadTimeout):
+            retry_note = (
+                "The response state is ambiguous, so it was not retried automatically "
+                "to avoid a duplicate paid generation."
+            )
+        else:
+            retry_note = "The paid request was not retried automatically."
+        return PromptEnhancerError(
+            f"{provider_name} chat network error: {type(error).__name__}. {retry_note}"
         )
-    if not isinstance(content, str) or not content.strip():
-        raise PromptEnhancerError(f"{provider_name} chat returned an empty final answer.")
-    return content
+
+    result = request_chat_completion(
+        session=session,
+        url=chat_url,
+        api_key=api_key,
+        payload=payload,
+        timeout=REQUEST_TIMEOUT,
+        retry_delays=retry_delays,
+        retryable_status_codes=SEEDANCE_CHAT_RETRYABLE_STATUS_CODES,
+        route_kwargs=lambda attempt, enabled: _seedance_request_route_kwargs(chat_url, attempt, enabled),
+        is_retryable_network_error=_is_retryable_seedance_network_error,
+        sleep=time.sleep,
+        network_error=network_error,
+        http_error=lambda response, attempt: _raise_http_error(
+            response, api_key, "chat", provider_name, attempts=attempt
+        ),
+        invalid_json_error=lambda: PromptEnhancerError(f"{provider_name} chat returned invalid JSON."),
+        missing_content_error=lambda: PromptEnhancerError(
+            f"{provider_name} chat response is missing choices[0].message.content."
+        ),
+        empty_content_error=lambda: PromptEnhancerError(
+            f"{provider_name} chat returned an empty final answer."
+        ),
+    )
+    if attempts_callback:
+        attempts_callback(result.attempts)
+    return result.text
 
 
 def _reorder_complete_fields(text: str, task_type: str) -> str:
@@ -1295,6 +1313,7 @@ def enhance_prompt(
     local_video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
+    progress_callback: Any = None,
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
@@ -1353,6 +1372,8 @@ def enhance_prompt(
         creative_preset,
         str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE,
     )
+    if progress_callback:
+        progress_callback("input_validated", asset_count=len(media_plan))
     if str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE:
         try:
             settings = local_qwen_settings(
@@ -1391,6 +1412,8 @@ def enhance_prompt(
                 settings,
                 max_visual_parts=visual_budget,
             )
+            if progress_callback:
+                progress_callback("media_prepared", asset_count=len(media_plan))
             messages = _build_messages(
                 prompt,
                 task_type,
@@ -1422,7 +1445,12 @@ def enhance_prompt(
                     temperature=MODE_TEMPERATURES[rewrite_mode],
                     seed=int(seed),
                 )
-            return _reorder_complete_fields(response_text, task_type)
+            if progress_callback:
+                progress_callback("llm_completed", attempts=1)
+            result = _reorder_complete_fields(response_text, task_type)
+            if progress_callback:
+                progress_callback("output_finalized")
+            return result
         except LocalQwenProviderError as error:
             raise PromptEnhancerError(str(error)) from error
 
@@ -1443,6 +1471,8 @@ def enhance_prompt(
             media_parts = _openai_media_plan(media_plan, openai_video_urls)
         else:
             media_parts = _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
+        if progress_callback:
+            progress_callback("media_prepared", asset_count=len(media_plan))
         messages = _build_messages(
             prompt,
             task_type,
@@ -1463,9 +1493,23 @@ def enhance_prompt(
             case_template,
         )
         response_text = _request_completion(
-            session, api_key, messages, rewrite_mode, chat_url, provider_name, model_id
+            session,
+            api_key,
+            messages,
+            rewrite_mode,
+            chat_url,
+            provider_name,
+            model_id,
+            attempts_callback=(
+                (lambda attempts: progress_callback("llm_completed", attempts=attempts))
+                if progress_callback
+                else None
+            ),
         )
-        return _reorder_complete_fields(response_text, task_type)
+        result = _reorder_complete_fields(response_text, task_type)
+        if progress_callback:
+            progress_callback("output_finalized")
+        return result
     finally:
         if owns_session:
             session.close()
@@ -1770,42 +1814,49 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
     ) -> io.NodeOutput:
-        result = enhance_prompt(
-            prompt=prompt,
-            task_type=task_type,
-            duration_seconds=duration_seconds,
-            rewrite_mode=rewrite_mode,
-            description_word_target=description_word_target,
-            output_language=output_language,
-            prompt_mode=prompt_mode,
-            official_skill_profile=official_skill_profile,
-            creative_preset=creative_preset,
-            reference_template=reference_template,
-            first_frame=first_frame,
-            last_frame=last_frame,
-            reference_images=reference_images,
-            reference_videos=reference_videos,
-            reference_context=reference_context,
-            constraints=constraints,
-            api_key=api_key,
-            api_mode=api_mode,
-            openai_base_url=openai_base_url,
-            openai_video_urls=openai_video_urls,
-            seed=seed,
-            shot_count=shot_count,
-            ai_workshop_model=ai_workshop_model,
-            custom_model=custom_model,
-            case_template=case_template,
-            local_model=local_model,
-            local_mmproj=local_mmproj,
-            local_context_size=local_context_size,
-            local_max_tokens=local_max_tokens,
-            local_think_mode=local_think_mode,
-            local_reasoning_effort=local_reasoning_effort,
-            local_video_sample_fps=local_video_sample_fps,
-            local_unload_policy=local_unload_policy,
-            local_comfy_memory_policy=local_comfy_memory_policy,
-        )
+        diagnostic = DiagnosticsRun("MiniMaxH3PromptEnhancerT8", api_mode, 4)
+        try:
+            result = enhance_prompt(
+                prompt=prompt,
+                task_type=task_type,
+                duration_seconds=duration_seconds,
+                rewrite_mode=rewrite_mode,
+                description_word_target=description_word_target,
+                output_language=output_language,
+                prompt_mode=prompt_mode,
+                official_skill_profile=official_skill_profile,
+                creative_preset=creative_preset,
+                reference_template=reference_template,
+                first_frame=first_frame,
+                last_frame=last_frame,
+                reference_images=reference_images,
+                reference_videos=reference_videos,
+                reference_context=reference_context,
+                constraints=constraints,
+                api_key=api_key,
+                api_mode=api_mode,
+                openai_base_url=openai_base_url,
+                openai_video_urls=openai_video_urls,
+                seed=seed,
+                shot_count=shot_count,
+                ai_workshop_model=ai_workshop_model,
+                custom_model=custom_model,
+                case_template=case_template,
+                local_model=local_model,
+                local_mmproj=local_mmproj,
+                local_context_size=local_context_size,
+                local_max_tokens=local_max_tokens,
+                local_think_mode=local_think_mode,
+                local_reasoning_effort=local_reasoning_effort,
+                local_video_sample_fps=local_video_sample_fps,
+                local_unload_policy=local_unload_policy,
+                local_comfy_memory_policy=local_comfy_memory_policy,
+                progress_callback=diagnostic.advance,
+            )
+        except Exception as error:
+            diagnostic.complete("failed", error)
+            raise
+        diagnostic.complete("success")
         return io.NodeOutput(result)
 
 

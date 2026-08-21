@@ -3,6 +3,7 @@ from typing import Any
 
 import requests
 from comfy_api.latest import io
+from .execution_diagnostics import DiagnosticsRun
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,
@@ -45,12 +46,12 @@ except ImportError:
 
 from .nodes import (
     AI_WORKSHOP_API_MODE,
-    AI_WORKSHOP_CHAT_COMPLETIONS_URL,
+    AI_WORKSHOP_CHAT_COMPLETIONS_URL as AI_WORKSHOP_CHAT_COMPLETIONS_URL,
     AI_WORKSHOP_DEFAULT_MODEL,
     AI_WORKSHOP_MODEL_OPTIONS,
     API_KEY_PATTERN,
     API_MODES,
-    CUSTOM_MODEL_OPTION,
+    CUSTOM_MODEL_OPTION as CUSTOM_MODEL_OPTION,
     LEGACY_UI_VALUES,
     OPENAI_API_MODE,
     OUTPUT_LANGUAGES,
@@ -681,6 +682,7 @@ def enhance_seedance20_prompt(
     local_video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
+    progress_callback: Any = None,
 ) -> str:
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
@@ -742,6 +744,8 @@ def enhance_seedance20_prompt(
         reference_syntax,
         str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE,
     )
+    if progress_callback:
+        progress_callback("input_validated", asset_count=len(media_plan))
     if str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE:
         try:
             settings = local_qwen_settings(
@@ -784,6 +788,8 @@ def enhance_seedance20_prompt(
                 settings,
                 max_visual_parts=visual_budget,
             )
+            if progress_callback:
+                progress_callback("media_prepared", asset_count=len(media_plan))
             messages = _build_messages(
                 prompt,
                 task_intent,
@@ -811,14 +817,21 @@ def enhance_seedance20_prompt(
                 messages[0]["content"] += (
                     "\n\nLOCAL_QWEN_VIDEO_EVIDENCE_BOUNDARY: Connected videos are represented only by ordered "
                     "timestamped visual samples. State only changes supported by those samples; do not claim exhaustive "
-                    "frame coverage, complete-video access, heard audio, speech transcription, or soundtrack analysis."
+                    "frame coverage, complete-video access, heard audio, speech transcription, or soundtrack analysis. "
+                    "Sort observations by printed timestamp before drafting. In every part of the final prompt, introduce "
+                    "earlier visible phases, codes, and actions before later ones; do not reorder phases by salience, and "
+                    "do not mention a later-phase identifier before its earlier-phase identifier has appeared."
                 )
             with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
-                return provider.complete(
+                result = provider.complete(
                     messages,
                     temperature={"strict": 0.2, "balanced": 0.7, "creative": 1.2}[rewrite_mode],
                     seed=int(seed),
                 )
+            if progress_callback:
+                progress_callback("llm_completed", attempts=1)
+                progress_callback("output_finalized")
+            return result
         except LocalQwenProviderError as error:
             raise Seedance20PromptEnhancerError(str(error)) from error
 
@@ -845,6 +858,8 @@ def enhance_seedance20_prompt(
                 upload_url,
                 provider_name,
             )
+        if progress_callback:
+            progress_callback("media_prepared", asset_count=len(media_plan))
         messages = _build_messages(
             prompt,
             task_intent,
@@ -868,9 +883,23 @@ def enhance_seedance20_prompt(
             media_parts,
             case_template,
         )
-        return _request_completion(
-            session, api_key, messages, rewrite_mode, chat_url, provider_name, model_id
+        result = _request_completion(
+            session,
+            api_key,
+            messages,
+            rewrite_mode,
+            chat_url,
+            provider_name,
+            model_id,
+            attempts_callback=(
+                (lambda attempts: progress_callback("llm_completed", attempts=attempts))
+                if progress_callback
+                else None
+            ),
         )
+        if progress_callback:
+            progress_callback("output_finalized")
+        return result
     finally:
         if owns_session:
             session.close()
@@ -1204,46 +1233,53 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
     ) -> io.NodeOutput:
-        result = enhance_seedance20_prompt(
-            prompt=prompt,
-            task_intent=task_intent,
-            complexity_mode=complexity_mode,
-            duration_seconds=duration_seconds,
-            shot_count=shot_count,
-            rewrite_mode=rewrite_mode,
-            output_detail=output_detail,
-            output_language=output_language,
-            prompt_mode=prompt_mode,
-            reference_syntax=reference_syntax,
-            subtitle_policy=subtitle_policy,
-            stability_constraints=stability_constraints,
-            custom_length_target=custom_length_target,
-            first_frame=first_frame,
-            last_frame=last_frame,
-            reference_images=reference_images,
-            reference_videos=reference_videos,
-            reference_roles=reference_roles,
-            reference_context=reference_context,
-            constraints=constraints,
-            api_key=api_key,
-            reference_template=reference_template,
-            api_mode=api_mode,
-            openai_base_url=openai_base_url,
-            openai_video_urls=openai_video_urls,
-            seed=seed,
-            ai_workshop_model=ai_workshop_model,
-            custom_model=custom_model,
-            case_template=case_template,
-            local_model=local_model,
-            local_mmproj=local_mmproj,
-            local_context_size=local_context_size,
-            local_max_tokens=local_max_tokens,
-            local_think_mode=local_think_mode,
-            local_reasoning_effort=local_reasoning_effort,
-            local_video_sample_fps=local_video_sample_fps,
-            local_unload_policy=local_unload_policy,
-            local_comfy_memory_policy=local_comfy_memory_policy,
-        )
+        diagnostic = DiagnosticsRun("Seedance20PromptEnhancerT8", api_mode, 4)
+        try:
+            result = enhance_seedance20_prompt(
+                prompt=prompt,
+                task_intent=task_intent,
+                complexity_mode=complexity_mode,
+                duration_seconds=duration_seconds,
+                shot_count=shot_count,
+                rewrite_mode=rewrite_mode,
+                output_detail=output_detail,
+                output_language=output_language,
+                prompt_mode=prompt_mode,
+                reference_syntax=reference_syntax,
+                subtitle_policy=subtitle_policy,
+                stability_constraints=stability_constraints,
+                custom_length_target=custom_length_target,
+                first_frame=first_frame,
+                last_frame=last_frame,
+                reference_images=reference_images,
+                reference_videos=reference_videos,
+                reference_roles=reference_roles,
+                reference_context=reference_context,
+                constraints=constraints,
+                api_key=api_key,
+                reference_template=reference_template,
+                api_mode=api_mode,
+                openai_base_url=openai_base_url,
+                openai_video_urls=openai_video_urls,
+                seed=seed,
+                ai_workshop_model=ai_workshop_model,
+                custom_model=custom_model,
+                case_template=case_template,
+                local_model=local_model,
+                local_mmproj=local_mmproj,
+                local_context_size=local_context_size,
+                local_max_tokens=local_max_tokens,
+                local_think_mode=local_think_mode,
+                local_reasoning_effort=local_reasoning_effort,
+                local_video_sample_fps=local_video_sample_fps,
+                local_unload_policy=local_unload_policy,
+                local_comfy_memory_policy=local_comfy_memory_policy,
+                progress_callback=diagnostic.advance,
+            )
+        except Exception as error:
+            diagnostic.complete("failed", error)
+            raise
+        diagnostic.complete("success")
         return io.NodeOutput(result)
 
 

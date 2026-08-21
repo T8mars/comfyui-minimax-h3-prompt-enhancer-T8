@@ -1,0 +1,118 @@
+{
+  "schema_version": "t8-local-qwen-quality/v1",
+  "provider": "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf via llama.cpp",
+  "runtime": {
+    "backend": "cuda12",
+    "model_filename": "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf",
+    "model_size": 16810714976,
+    "model_sha256": "66bb238d41de38b11dd406d932d8fb97433d529022cef60f2f422b9221cae743",
+    "mmproj_size": 927607488,
+    "mmproj_sha256": "cbb841a9ee0636b2ec172f5bb8df2ea8dfeb01e90fe7c6126581d662a0b4e43e",
+    "llama_cpp_tag": "b10436"
+  },
+  "score_formula": "Equal-weight mean of deterministic contract, constraint, language, evidence, payload, official-reference and same-seed checks; no subjective score.",
+  "minimum_score": 90,
+  "overall_score": 100.0,
+  "passed": true,
+  "hard_failures": [],
+  "elapsed_seconds": 476.938,
+  "resources": {
+    "sample_count": 451,
+    "gpu_baseline_mib": 1613,
+    "gpu_peak_mib": 15971,
+    "gpu_after_release_mib": 2007,
+    "system_ram_baseline_mib": 19881,
+    "system_ram_peak_mib": 43463,
+    "system_ram_after_release_mib": 22532
+  },
+  "cases": [
+    {
+      "id": "same_seed_repeatability",
+      "score": 100,
+      "passed": true,
+      "elapsed_seconds": [
+        10.457,
+        9.679,
+        9.252
+      ],
+      "output_sha256": [
+        "3726f019fa217d49f21b8f4b2fdc9f39b6990addf161aeb1bf8df347f193f649",
+        "3726f019fa217d49f21b8f4b2fdc9f39b6990addf161aeb1bf8df347f193f649",
+        "3726f019fa217d49f21b8f4b2fdc9f39b6990addf161aeb1bf8df347f193f649"
+      ]
+    },
+    {
+      "id": "h3_t2va_contract",
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "nonempty": true,
+        "official_fields": true,
+        "constraints": true
+      },
+      "elapsed_seconds": 47.239,
+      "output_sha256": "4ca84e0554fdd4a4db9941d61f5cd6b9525af44d6f0033059f6a2f109631aea4",
+      "output_characters": 1170
+    },
+    {
+      "id": "music3_chinese_lyrics_official_full",
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "chinese_lyrics": true,
+        "section_tags": true,
+        "official_caption_headings": true,
+        "explicit_constraints": true,
+        "payload_consistency": true,
+        "official_reference_used": true,
+        "local_stages": true,
+        "lyrics_not_copied_to_caption": true
+      },
+      "constraint_checks": {
+        "bpm_92": true,
+        "key_d_major": true,
+        "meter_4_4": true,
+        "female_lead": true,
+        "piano": true,
+        "acoustic_guitar": true,
+        "rap_excluded": true
+      },
+      "elapsed_seconds": 151.847,
+      "lyrics_sha256": "bc563fc4ce5d0da0e475ae5b46e508b4c4f01513506252314b3c2d7d17e19e1a",
+      "caption_sha256": "ba120254129a6da126f27ee4f45d6c19fda7b12c44f2a32ccb6f72917aa813d4",
+      "lyrics_characters": 308,
+      "caption_characters": 2481,
+      "request_count": 4,
+      "reference_count": 2,
+      "warnings": []
+    },
+    {
+      "id": "h3_ref2va_image_video_evidence",
+      "score": 100,
+      "passed": true,
+      "failures": [],
+      "elapsed_seconds": 156.407,
+      "output_sha256": "58a9e29edc426fa6802b941f03e278ac027d7f908f5ab0f32305c62072a112fa",
+      "output_characters": 2694,
+      "fixture_codes": [
+        "MANGO-47",
+        "BLUE-LINE-24",
+        "GREEN-DROP-91"
+      ]
+    },
+    {
+      "id": "seedance20_multiref_image_video_evidence",
+      "score": 100,
+      "passed": true,
+      "failures": [],
+      "elapsed_seconds": 74.12,
+      "output_sha256": "8db6d8fa5991cc6a5af1f4e0e50cab8b5cfe51e14eea01016808f730401cd8d4",
+      "output_characters": 1654,
+      "fixture_codes": [
+        "MANGO-47",
+        "BLUE-LINE-24",
+        "GREEN-DROP-91"
+      ]
+    }
+  ]
+}

@@ -1,7 +1,6 @@
 import asyncio
 import importlib.util
 import json
-import os
 import re
 import sys
 import unittest
@@ -738,7 +737,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn("openai_upload_url", source)
 
     def test_example_workflow_has_four_outputs_and_no_secret_or_media(self):
-        path = PROJECT_ROOT / "example" / "music3_prompt_lyrics_enhancer_example.json"
+        path = PROJECT_ROOT / "example_workflows" / "music3_prompt_lyrics_enhancer_example.json"
         raw = path.read_text(encoding="utf-8")
         self.assertNotRegex(raw, r"sk-[A-Za-z0-9_-]{20,}")
         self.assertNotIn("reference_video", raw)

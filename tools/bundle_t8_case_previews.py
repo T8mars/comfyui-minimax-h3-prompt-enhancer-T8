@@ -188,9 +188,9 @@ def main() -> int:
     parser.add_argument("--catalog", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--ffmpeg", default="ffmpeg")
-    parser.add_argument("--fps", type=int, default=6)
-    parser.add_argument("--max-width", type=int, default=320)
-    parser.add_argument("--colors", type=int, default=64)
+    parser.add_argument("--fps", type=int, default=4)
+    parser.add_argument("--max-width", type=int, default=256)
+    parser.add_argument("--colors", type=int, default=48)
     args = parser.parse_args()
     if not 1 <= args.fps <= 15 or not 160 <= args.max_width <= 640 or not 32 <= args.colors <= 128:
         raise PreviewBundleError("Encoding limits: fps 1-15, max-width 160-640, colors 32-128")

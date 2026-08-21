@@ -15,6 +15,8 @@ import requests
 from comfy import model_management
 from comfy_api.latest import io
 from comfy.utils import ProgressBar
+from .execution_diagnostics import DiagnosticsRun
+from .provider_transport import request_chat_completion
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,
@@ -38,11 +40,10 @@ from .local_qwen_runtime import (
 
 from .nodes import (
     AI_WORKSHOP_API_MODE,
-    AI_WORKSHOP_CHAT_COMPLETIONS_URL,
+    AI_WORKSHOP_CHAT_COMPLETIONS_URL as AI_WORKSHOP_CHAT_COMPLETIONS_URL,
     AI_WORKSHOP_DEFAULT_MODEL,
     AI_WORKSHOP_MODEL_OPTIONS,
     API_KEY_PATTERN,
-    CUSTOM_MODEL_OPTION,
     LEGACY_UI_VALUES,
     OPENAI_API_MODE,
     REQUEST_TIMEOUT,
@@ -685,50 +686,47 @@ def _request_music_completion(
             if stage == "official_reference_selection"
             else SEEDANCE_CHAT_RETRY_DELAYS
         )
-    attempt = 0
-    while True:
-        attempt += 1
-        try:
-            response = session.post(
-                chat_url,
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json",
-                },
-                json=payload,
-                timeout=REQUEST_TIMEOUT,
-                **_seedance_request_route_kwargs(chat_url, attempt, bool(retry_delays)),
-            )
-        except requests.RequestException as error:
-            can_retry = _is_retryable_seedance_network_error(error)
-            if can_retry and attempt <= len(retry_delays):
-                time.sleep(retry_delays[attempt - 1])
-                continue
-            if can_retry and retry_delays:
-                note = f"Fast retry was exhausted after {attempt} attempts."
-            elif isinstance(error, requests.exceptions.ReadTimeout):
-                note = "The paid response state is ambiguous, so it was not retried automatically."
-            else:
-                note = "The paid request was not retried automatically."
-            raise Music3PromptEnhancerError(
-                f"{provider_name} Music 3 stage '{stage}' network error: {type(error).__name__}. {note}"
-            ) from error
-        if response.status_code in SEEDANCE_CHAT_RETRYABLE_STATUS_CODES and attempt <= len(retry_delays):
-            time.sleep(retry_delays[attempt - 1])
-            continue
-        break
-    if response.status_code != 200:
-        _raise_music_http_error(
+    def network_error(error: requests.RequestException, attempt: int, delays: tuple[float, ...]) -> Exception:
+        if _is_retryable_seedance_network_error(error) and delays:
+            note = f"Fast retry was exhausted after {attempt} attempts."
+        elif isinstance(error, requests.exceptions.ReadTimeout):
+            note = "The paid response state is ambiguous, so it was not retried automatically."
+        else:
+            note = "The paid request was not retried automatically."
+        return Music3PromptEnhancerError(
+            f"{provider_name} Music 3 stage '{stage}' network error: {type(error).__name__}. {note}"
+        )
+
+    result = request_chat_completion(
+        session=session,
+        url=chat_url,
+        api_key=api_key,
+        payload=payload,
+        timeout=REQUEST_TIMEOUT,
+        retry_delays=retry_delays,
+        retryable_status_codes=SEEDANCE_CHAT_RETRYABLE_STATUS_CODES,
+        route_kwargs=lambda attempt, enabled: _seedance_request_route_kwargs(chat_url, attempt, enabled),
+        is_retryable_network_error=_is_retryable_seedance_network_error,
+        sleep=time.sleep,
+        network_error=network_error,
+        http_error=lambda response, attempt: _raise_music_http_error(
             status_code=response.status_code,
             provider_name=provider_name,
             stage=stage,
             attempts=attempt,
-        )
-    try:
-        data = response.json()
-    except ValueError as error:
-        raise Music3PromptEnhancerError(f"{provider_name} Music 3 stage '{stage}' returned invalid JSON.") from error
-    return _response_text(data, provider_name)
+        ),
+        invalid_json_error=lambda: Music3PromptEnhancerError(
+            f"{provider_name} Music 3 stage '{stage}' returned invalid JSON."
+        ),
+        missing_content_error=lambda: Music3PromptEnhancerError(
+            f"{provider_name} Music 3 response is missing choices[0].message.content."
+        ),
+        empty_content_error=lambda: Music3PromptEnhancerError(
+            f"{provider_name} Music 3 response is empty."
+        ),
+        strip_result=True,
+    )
+    return result.text
 
 
 def _reject_secret_text(values: dict[str, Any]) -> None:
@@ -2344,46 +2342,53 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
     ) -> io.NodeOutput:
-        result = enhance_music3_prompt(
-            music_idea=music_idea,
-            lyrics_mode=lyrics_mode,
-            lyrics=lyrics,
-            lyrics_language=lyrics_language,
-            custom_lyrics_language=custom_lyrics_language,
-            target_duration_seconds=target_duration_seconds,
-            rewrite_mode=rewrite_mode,
-            quality_mode=quality_mode,
-            structure_preset=structure_preset,
-            custom_structure=custom_structure,
-            lyrics_edit_request=lyrics_edit_request,
-            lyrics_edit_scope=lyrics_edit_scope,
-            lyrics_edit_section=lyrics_edit_section,
-            lyrics_edit_occurrence=lyrics_edit_occurrence,
-            constraints_and_exclusions=constraints_and_exclusions,
-            fixed_bpm=fixed_bpm,
-            key_scale=key_scale,
-            meter=meter,
-            custom_meter=custom_meter,
-            caption_language=caption_language,
-            caption_target_words=caption_target_words,
-            semantic_profile_mode=semantic_profile_mode,
-            manual_lyrics_profile=manual_lyrics_profile,
-            stage_cache=stage_cache,
-            api_key=api_key,
-            api_mode=api_mode,
-            ai_workshop_model=ai_workshop_model,
-            custom_model=custom_model,
-            openai_base_url=openai_base_url,
-            seed=seed,
-            enable_progress=True,
-            local_model=local_model,
-            local_context_size=local_context_size,
-            local_max_tokens=local_max_tokens,
-            local_think_mode=local_think_mode,
-            local_reasoning_effort=local_reasoning_effort,
-            local_unload_policy=local_unload_policy,
-            local_comfy_memory_policy=local_comfy_memory_policy,
-        )
+        diagnostic = DiagnosticsRun("MiniMaxMusic3PromptEnhancerT8", api_mode, 1, emit_progress=False)
+        try:
+            result = enhance_music3_prompt(
+                music_idea=music_idea,
+                lyrics_mode=lyrics_mode,
+                lyrics=lyrics,
+                lyrics_language=lyrics_language,
+                custom_lyrics_language=custom_lyrics_language,
+                target_duration_seconds=target_duration_seconds,
+                rewrite_mode=rewrite_mode,
+                quality_mode=quality_mode,
+                structure_preset=structure_preset,
+                custom_structure=custom_structure,
+                lyrics_edit_request=lyrics_edit_request,
+                lyrics_edit_scope=lyrics_edit_scope,
+                lyrics_edit_section=lyrics_edit_section,
+                lyrics_edit_occurrence=lyrics_edit_occurrence,
+                constraints_and_exclusions=constraints_and_exclusions,
+                fixed_bpm=fixed_bpm,
+                key_scale=key_scale,
+                meter=meter,
+                custom_meter=custom_meter,
+                caption_language=caption_language,
+                caption_target_words=caption_target_words,
+                semantic_profile_mode=semantic_profile_mode,
+                manual_lyrics_profile=manual_lyrics_profile,
+                stage_cache=stage_cache,
+                api_key=api_key,
+                api_mode=api_mode,
+                ai_workshop_model=ai_workshop_model,
+                custom_model=custom_model,
+                openai_base_url=openai_base_url,
+                seed=seed,
+                enable_progress=True,
+                local_model=local_model,
+                local_context_size=local_context_size,
+                local_max_tokens=local_max_tokens,
+                local_think_mode=local_think_mode,
+                local_reasoning_effort=local_reasoning_effort,
+                local_unload_policy=local_unload_policy,
+                local_comfy_memory_policy=local_comfy_memory_policy,
+            )
+        except Exception as error:
+            diagnostic.complete("failed", error)
+            raise
+        diagnostic.advance("music_pipeline_completed")
+        diagnostic.complete("success")
         return io.NodeOutput(*result)
 
 

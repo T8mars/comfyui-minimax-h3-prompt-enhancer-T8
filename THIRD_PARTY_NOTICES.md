@@ -1,5 +1,26 @@
 # Third-party notices
 
+## MiniMax official Skill resources
+
+- `official_skills/h3-prompt-writing/` is pinned to MiniMax-AI/MiniMax-H3
+  commit `d21241f0a4b3acbb34c97dae47fa417b7065e438`. Exact file and tree hashes
+  are recorded in `official_skills/H3_SOURCE.json`.
+- `official_skills/music-caption-rewriter/` is pinned to
+  MiniMax-AI/MiniMax-Music3 commit
+  `91410fb657c007ae57c60df8240f5ece5be089c7`. Its complete provenance is
+  recorded in `official_skills/SOURCE.json`.
+- The eight MiniMax-H3 creative prompt profiles and their human-facing preview
+  assets are reviewed at MiniMax-AI/MiniMax-H3 commit
+  `743d51e83329cbae6c7694f1c7b89576e7c25e07`. Upstream declares the complete
+  Skills compatible with MiniMax Hub agent/canvas/hub tools; this project only
+  adapts their prompt-writing constraints and does not port the full workflows.
+  Preview hashes and encoding provenance are recorded in
+  `web/js/assets/official-previews/manifest.json`.
+
+Those official materials remain copyright MiniMax-AI and are not relicensed by
+the T8 project license. They are bundled solely to implement the corresponding
+official prompt-writing contracts with deterministic provenance.
+
 ## Local Qwen provider
 
 The optional local provider installs and runs third-party components that are not

@@ -6,7 +6,7 @@ import {
 } from "./case_template_ui.js";
 
 
-const OFFICIAL_COMMIT = "b7227fa6a6206e9fb30562383d39e53cf3866a48";
+const OFFICIAL_COMMIT = "743d51e83329cbae6c7694f1c7b89576e7c25e07";
 const OFFICIAL_SKILL_ROOT = `https://github.com/MiniMax-AI/MiniMax-H3/tree/${OFFICIAL_COMMIT}/skills`;
 
 

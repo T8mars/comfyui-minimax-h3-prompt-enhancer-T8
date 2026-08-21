@@ -433,9 +433,9 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(content).hexdigest(), item["sha256"])
             self.assertEqual(item["source_sha256"], expected[item["case_id"]])
             self.assertTrue(item["human_preview_only"])
-            self.assertLess(len(content), 10 * 1024 * 1024)
+            self.assertLess(len(content), 5 * 1024 * 1024)
             total_bytes += len(content)
-        self.assertLess(total_bytes, 320 * 1024 * 1024)
+        self.assertLess(total_bytes, 180 * 1024 * 1024)
 
     def test_length_target_is_soft_and_arbitrary_nonempty_output_passes_through(self):
         upstream = "上游没有按任何固定格式返回，但内容非空，应原样放行。"
@@ -550,7 +550,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             self.assertIn(snippet, source)
 
     def test_example_workflow_is_importable_and_contains_no_api_key(self):
-        path = PROJECT_ROOT / "example" / "seedance20_prompt_enhancer_example.json"
+        path = PROJECT_ROOT / "example_workflows" / "seedance20_prompt_enhancer_example.json"
         workflow = json.loads(path.read_text(encoding="utf-8"))
         node = next(item for item in workflow["nodes"] if item["type"] == "Seedance20PromptEnhancerT8")
         self.assertEqual(node["type"], "Seedance20PromptEnhancerT8")

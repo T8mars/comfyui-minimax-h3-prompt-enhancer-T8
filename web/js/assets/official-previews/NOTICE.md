@@ -1,14 +1,21 @@
 # MiniMax official Skill preview assets
 
-These eight GIF files are unmodified preview assets from the official
+These eight GIF previews are derived from assets in the official
 [`MiniMax-AI/MiniMax-H3`](https://github.com/MiniMax-AI/MiniMax-H3) repository,
-pinned here to commit `b7227fa6a6206e9fb30562383d39e53cf3866a48` for the matching prompt presets.
+pinned here to commit `743d51e83329cbae6c7694f1c7b89576e7c25e07` for the matching prompt presets.
+That upstream revision adds explicit MiniMax Hub compatibility declarations;
+this project adapts only the prompt-writing constraints and does not claim to
+port or execute the complete Hub-native agent/canvas workflows. The source GIF
+assets were unchanged by that compatibility-only revision.
+For responsive local UI delivery, the distributed copies are deterministically
+re-encoded at 4 fps, maximum width 256 px, and a 48-color palette. The manifest
+pins both each original source hash and each distributed hash.
 
 They are displayed only as local human-facing examples in the ComfyUI selector.
 They are never attached to a model request. MiniMax and the original asset
 authors retain all rights not granted by the upstream project license.
 
-| File | SHA-256 |
+| File | Original source SHA-256 |
 | --- | --- |
 | `minimalist-product-ad-generator.gif` | `f25d9b4f9c2a8d881d8bbefdb3076a4d79fd46246d11b75d1a5ee278b5cc38f7` |
 | `3d-animation-short-generator.gif` | `1bf1ad020c4d8548a23902133c4704b2c2503efef1de40889cf0eb3a92467285` |

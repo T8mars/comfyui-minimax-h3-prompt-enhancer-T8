@@ -16,8 +16,55 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify:
+    name: Verify release candidate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out node source
+        uses: actions/checkout@v4
+        with:
+          path: _source
+      - name: Check out minimum supported ComfyUI
+        uses: actions/checkout@v4
+        with:
+          repository: Comfy-Org/ComfyUI
+          ref: v0.33.0
+          path: ComfyUI
+      - name: Place node under ComfyUI custom_nodes
+        shell: bash
+        run: |
+          mkdir -p ComfyUI/custom_nodes
+          cp -a _source ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: |
+            _source/pyproject.toml
+            ComfyUI/requirements.txt
+      - name: Install test dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
+          python -m pip install -r ComfyUI/requirements.txt
+          python -m pip install pyyaml
+      - name: Verify version is publishable
+        working-directory: _source
+        run: python tools/release.py --check-publish
+      - name: Verify release contents
+        working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+        run: python tools/verify_repository.py
+      - name: Run unit and compatibility tests
+        working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+        env:
+          PYTHONPATH: ${{ github.workspace }}/ComfyUI
+        run: python -m unittest discover -s tests
+
   publish-node:
     name: Publish custom node to Registry
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

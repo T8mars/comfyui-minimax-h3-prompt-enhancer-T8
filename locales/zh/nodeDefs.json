@@ -1,0 +1,50 @@
+{
+  "MiniMaxH3PromptEnhancerT8": {
+    "display_name": "MiniMax H3 提示词增强器（云端 / 本地 Qwen）",
+    "inputs": {
+      "prompt": {"name": "视频创意 / 提示词（必填）"},
+      "task_type": {"name": "生成类型"},
+      "duration_seconds": {"name": "目标时长（秒）"},
+      "shot_count": {"name": "镜头数量"},
+      "rewrite_mode": {"name": "改写模式"},
+      "output_language": {"name": "输出语言"},
+      "creative_preset": {"name": "MiniMax 官方创意预设"},
+      "case_template": {"name": "非官方模板（案例 / 社区 Skill）"},
+      "api_mode": {"name": "API 模式"},
+      "api_key": {"name": "API Key"}
+    },
+    "outputs": {"0": {"name": "增强提示词"}}
+  },
+  "Seedance20PromptEnhancerT8": {
+    "display_name": "Seedance 2.0 提示词增强器（云端 / 本地 Qwen）",
+    "inputs": {
+      "prompt": {"name": "视频创意 / 提示词（必填）"},
+      "task_intent": {"name": "任务意图"},
+      "duration_seconds": {"name": "目标时长"},
+      "shot_count": {"name": "镜头数量"},
+      "rewrite_mode": {"name": "改写模式"},
+      "case_template": {"name": "非官方模板（案例 / 社区 Skill）"},
+      "api_mode": {"name": "LLM API 模式"},
+      "api_key": {"name": "提示词增强 LLM API Key"}
+    },
+    "outputs": {"0": {"name": "增强提示词"}}
+  },
+  "MiniMaxMusic3PromptEnhancerT8": {
+    "display_name": "MiniMax Music 3 提示词与歌词增强器（T8）",
+    "inputs": {
+      "music_idea": {"name": "音乐创意（必填）"},
+      "lyrics_mode": {"name": "歌词模式"},
+      "lyrics": {"name": "歌词（可选 / 可接 STRING）"},
+      "lyrics_language": {"name": "歌词语言"},
+      "quality_mode": {"name": "质量模式"},
+      "api_mode": {"name": "LLM API 模式"},
+      "api_key": {"name": "LLM API Key"}
+    },
+    "outputs": {
+      "0": {"name": "歌词"},
+      "1": {"name": "Music Caption"},
+      "2": {"name": "Music 3 请求 JSON"},
+      "3": {"name": "增强报告 JSON"}
+    }
+  }
+}
