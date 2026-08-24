@@ -5,6 +5,15 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.5.3] - 2026-08-25
+
+### Added
+
+- Add a comprehensive English README with installation, provider, local GGUF,
+  workflow, Skill, security, media, and troubleshooting guidance.
+- Add explicit Chinese/English language switches while keeping `README.md` as
+  the default Chinese GitHub landing page.
+
 ## [1.5.2] - 2026-08-25
 
 ### Added

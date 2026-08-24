@@ -1,3 +1,7 @@
+<p align="right">
+  <strong>简体中文</strong> | <a href="./README_EN.md">English</a>
+</p>
+
 ## 入口导航
 
 | 入口 | 适合用户 | 说明 | 打开 |
