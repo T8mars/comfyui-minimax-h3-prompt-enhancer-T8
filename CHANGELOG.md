@@ -5,6 +5,14 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.5.1] - 2026-08-24
+
+### Fixed
+
+- Make the local-runtime readiness test independent of a developer machine's
+  private runtime configuration so the minimum supported Linux ComfyUI release
+  gate verifies the same runtime contract as Windows installations.
+
 ## [1.5.0] - 2026-08-24
 
 ### Added

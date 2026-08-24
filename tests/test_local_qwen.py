@@ -563,7 +563,7 @@ class LocalQwenUnitTests(unittest.TestCase):
                 patch.object(runtime, "qwen_model_directory", return_value=root),
                 patch.object(runtime, "KNOWN_MODEL_FILES", known),
                 patch.object(runtime, "DEFAULT_MMPROJ_SIZE", len(b"projector")),
-                patch.object(runtime, "load_runtime_spec", return_value=fake_spec),
+                patch.object(runtime, "available_runtime_specs", return_value=([fake_spec], [])),
             ):
                 status = runtime.runtime_status()
         self.assertFalse(status["model_installed"])
