@@ -3,6 +3,33 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.2.0] - 2026-08-24
+
+### Added
+
+- Expanded the bundled non-official library to 185 case selectors and two
+  standalone community Skills, with 30 evidence variants and no pending cases.
+- Added the approved August 21–23 case-library deliveries through stable IDs,
+  Chinese labels, editable recommended inputs, mechanism anchors, dual H3 and
+  Seedance 2.0 guidance, and bundled human-only GIF previews.
+
+### Changed
+
+- Accepted strictly traceable same-template evidence-variant chains while
+  continuing to reject missing parents, cross-template bindings, and cycles.
+- Re-encoded all 217 T8 previews at 3 fps, 224 px maximum width, and 40 colors,
+  keeping all 225 official/T8 GIFs within the 180 MiB repository budget.
+- Refined secret-pattern tests so ordinary identifiers containing
+  `risk-release` are not mistaken for API keys.
+
+### Verified
+
+- All 177 unit and compatibility tests pass.
+- The cumulative inventory closes at 215 source cases, 185 case selectors,
+  30 evidence variants, two community Skills, and 187 non-official selectors.
+- Preview files remain human-interface-only and are never connected or sent as
+  model or LLM reference material.
+
 ## [1.1.2] - 2026-08-21
 
 - Reused ComfyUI's initialized device-management module so Music 3 execution

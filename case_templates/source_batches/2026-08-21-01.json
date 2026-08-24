@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-21-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-soranlan-2090595035435692237-browser-2090595035435692237-video-1",
+      "template_id": "t8-case-ensemble-dyad-position-realignment-v1",
+      "label": "关系重排｜群体建立—双人收紧—前后站位",
+      "summary": "先用公开群体画面建立人物关系，再把注意力收紧到其中两人；通过可见发言轮次、目光和微动作持续更新两人关系，最后让一人越过原轴线、另一人跟随，形成新的前后站位。",
+      "case_sha256": "19b09c0cf2d46bdb030198603f7a367bf2c515040808848fda8af2548838ed23",
+      "creative_dna_sha256": "9970e91dc95025f5a8bf6eaa45e3eb4dc53d056aefbc350a141e1b2768e5fe55",
+      "h3_adapter_sha256": "a702afd8e2b514a197013ab7ef8f0d020c8330f86ac9610f8bfc0663c3d3ba0f",
+      "seedance20_adapter_sha256": "aa2ff73486410857ad77eeaeaccc6ad9e09b5a2990bc14ee0e19055a820cd778",
+      "mechanism_fingerprint": "685deeddd9e19f2bd60e062c967d265ece3d7afc59e9ef7eb325cef7e28720e9"
+    },
+    {
+      "case_id": "x-kinovi-ai-2090557730318881014-browser-2090557730318881014-video-1",
+      "template_id": "t8-case-enclosure-witness-release-scale-dual-proof-v1",
+      "label": "见证释放｜封闭近景—外部尺度—双视图证明",
+      "summary": "先在封闭空间中用近距离见证者建立异常，再让见证者的指向或动作把镜头释放到外部；完整展示环境尺度现象后，以不同于来源表面的双视图同时保留见证者和现象，形成尺度与反应的共同证明。",
+      "case_sha256": "de423d5f9e81559d9562319e897c448a30f1e1b8da4de6cc4a2ca2a2257c6e39",
+      "creative_dna_sha256": "ba4a969d619eb20fcfd51540b4ec9ffc329c2ffcc87b6e39f1408b4f8f47e635",
+      "h3_adapter_sha256": "ba28a9959e83febf871aa8f1449784b80c2d504e7f6027b508c789861bb8fedf",
+      "seedance20_adapter_sha256": "e436e5c350d231dc8c8f3d080b1c44ba58e749aa2de606983406c36dec262f01",
+      "mechanism_fingerprint": "7a11a21bf737566b0a42fb530574b5a6c41c616cd70a469aa24fee90e35aef0f"
+    },
+    {
+      "case_id": "x-tokyo-valentine-2090556760348323875-browser-2090556760348323875-video-1",
+      "template_id": "t8-case-message-medium-relay-stable-carrier-v1",
+      "label": "信息接力｜稳定载体穿越多种实体媒介",
+      "summary": "固定一个可追踪人物或载体，让一组相关但不断推进的短信息依次进入性质明显不同的实体媒介；每次转换都由人物动作或镜头路线触发，并用新的材质物理证明信息链连续，最终在新的终端媒介中完成清楚锁定，而不是回到起点。",
+      "case_sha256": "87d93362137551b5fb667fa3d5972177d686e487e71d11abd06e13e1b7493e18",
+      "creative_dna_sha256": "7fec61c1d5ea9301310f3f1837acfcc5c2b21b732834390fcee36b1f8dcf5c56",
+      "h3_adapter_sha256": "ddb1aab80eaba0abeb23bf8bd2eb1642f0e5999fa1cf88846f35183796ea6325",
+      "seedance20_adapter_sha256": "03fd26fe9887745ef2eb167823b275830f738d3185896faf514cb5be3e309059",
+      "mechanism_fingerprint": "c6cd99086941ef6b0591243a34a785bb4712c576d0f121ff5070ee3fcafa2489"
+    }
+  ]
+}

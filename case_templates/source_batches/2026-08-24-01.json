@@ -1,0 +1,670 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-24-01",
+  "batch_kind": "cumulative_full_snapshot_delta",
+  "authority": "T8 精选案例（非官方）",
+  "source_delivery": "errata-2026-08-24-01",
+  "adds_cases": false,
+  "cases": [
+    {
+      "case_id": "x-umesh-ai-2083909535593644291-browser-2083909535593644291-video-1",
+      "template_id": "t8-case-semantic-phrase-physics-escalation-lockup-v1",
+      "label": "语义字效｜短语物理逐级升级到整句锁定",
+      "summary": "把一条原创短句拆成连续语义段，每段用不同但相连的材质、空间和动势解释含义；能量与尺度逐级提高，最终停止运动并把完整句子重新组装成可读终态。",
+      "case_sha256": "e1393b9e0d1f2ce44dd834de9d985803d46e4e828bcfe30cafd986bc767cb685",
+      "creative_dna_sha256": "418377ccce93f7dcd135b04d01c4d4e0452ec188722c67e3805cb6a9f16df253",
+      "h3_adapter_sha256": "ba6ead4e0e31ad34ebb3fa9c8db1eb9a22ae1346ed05e25b1aeff2cea24a7cd2",
+      "seedance20_adapter_sha256": "fae9cc64e2eb9ca71ba1b6197a49bb31d704af0be6653fc11f13959b2f76624d"
+    },
+    {
+      "case_id": "x-aimikoda-2084336165369311502-browser-2084336165369311502-video-1",
+      "template_id": "t8-case-performer-anchor-semantic-lyric-escalation-v1",
+      "label": "歌词表演｜稳定主唱锚点与逐句语义升能",
+      "summary": "用一个持续可辨的原创表演者稳定身份，每句歌词都获得可读文字和与语义一致的图形动作；镜头、版式和群体能量逐句提高，最后减少文字密度，让表演者接管结尾释放。",
+      "case_sha256": "0a894e0ad2c3b8e36693f5aeaa3f2794f40eef7e2b41b1ba18c7a54a1a1c4fd2",
+      "creative_dna_sha256": "b7fe076359adc57a55018b3fb7f12dd1731eb8cdf0507b20dca55fb3583ba11c",
+      "h3_adapter_sha256": "a13c4c5a731d8d3dd187c37540f37439a79d817a6a391b6d55218898f82f4146",
+      "seedance20_adapter_sha256": "68c94d86d9f151ff97bce78ca4f9a6527263353e32e3b83a7ad00419deac2859"
+    },
+    {
+      "case_id": "x-simplyannisa-2085185518774685846-browser-2085185518774685846-video-1",
+      "template_id": "t8-case-sensory-trial-proof-reaction-terminal-state-v1",
+      "label": "感官体验｜对象建立—质感证明—试用反应—终态兑现",
+      "summary": "先让体验者与完整对象同框建立期待，再用独立微距证明质感；第一次试用后保留身体反应与缓冲动作，随后用第二个细节补充体验，最后以对象耗尽和体验者稳定状态共同兑现。",
+      "case_sha256": "c350262f517f8686847cf74662d5609c3c2e9f4ee415da3d00b4e9922acb4855",
+      "creative_dna_sha256": "61daad0019e76d9a4535557bd4de397f9dab1c58f85b7d4bdf127532a0176cfc",
+      "h3_adapter_sha256": "e625ef82f77c64641834a4b2ec363b17e8972c99702d4b7821ec2379fc4f11b1",
+      "seedance20_adapter_sha256": "e61982d18e81edd30e85e7b65f06982d90507fed59e0a2e97bfdf359704d93c9"
+    },
+    {
+      "case_id": "x-aiwithsynthia-2084107248910152167-browser-2084107248910152167-video-1",
+      "template_id": "t8-case-routine-compression-carrier-handoff-arrival-v1",
+      "label": "流程压缩｜动作载体接力到目的地兑现",
+      "summary": "把较长的日常流程压成连续短动作，每次剪辑都由姿态、手中物或运动方向接力；身份和目标始终可追踪，最后必须抵达目的地并完成一个可验证的结果动作。",
+      "case_sha256": "2ff9cb60224e3118ffe24aedffd2fcf7de7b86d8600cc5932e5600664a5d6345",
+      "creative_dna_sha256": "9993cc07e0efeef996a7baf4111895064b663b057c1db9038d45891924622afc",
+      "h3_adapter_sha256": "2f09004889b649b920f0f4ffb49bb7339dcd3ca3f5f8c35b7442ef99e3eefffa",
+      "seedance20_adapter_sha256": "265482f38aaf6a022e041dc85c44f1953ceec8c9181f38ec06d85b3be5265e57"
+    },
+    {
+      "case_id": "x-vxrender-2086375302192644445-browser-2086375302192644445-video-1",
+      "template_id": "t8-case-formal-baseline-interruption-enforcement-return-v1",
+      "label": "边界执行｜正式基线—干扰定位—处置—复位",
+      "summary": "先建立正式场合和清楚的秩序维护者，再用群体反应定位一次越界干扰；维护者离开原位、完成单一可见处置并返回，让原本秩序以新的稳定状态恢复。",
+      "case_sha256": "760f7711f531fa4460731e4faa2854619d018d5b638a7450b22ac4b09a37b6df",
+      "creative_dna_sha256": "2b10c969d1a0e30d5488a88db03ba2658fd37dffd8a31032a11e98b1f36e7c51",
+      "h3_adapter_sha256": "97e3797c79864eac465681133701e10c967369a38dce73e95746bd4a109a3015",
+      "seedance20_adapter_sha256": "528a6232800977742e0145c1778d99565a28548886ae1910b3cebde22cdf27b4"
+    },
+    {
+      "case_id": "x-michaelgannotti-2086765186107801649-browser-2086765186107801649-video-1",
+      "template_id": "t8-case-carrier-arrival-lead-crossing-group-release-v1",
+      "label": "群体登陆｜载体抵达—先锋越界—队列释放",
+      "summary": "让一个大型载体先抵达清楚边界，再由先锋率先跨越并建立安全落点；先锋的前行动作释放后续队列，镜头逐步升高揭示群体流向和仍可追踪的载体。",
+      "case_sha256": "d3830ff0ef79205d8e55971581ada8393fdec4aef20981314132a38eaf41b843",
+      "creative_dna_sha256": "a86e57f833cfbfdc5e30d9830b98c93b1baf724588dbcf7b77c424c0cca49be0",
+      "h3_adapter_sha256": "418b72c47e0c7c8f3a16d3eab113e816393d738862072182f4162a44635fcd7a",
+      "seedance20_adapter_sha256": "55a0a223da721f21e218bb5aaca05cfdc518b5478c28ff7313b34287624f3df6"
+    },
+    {
+      "case_id": "x-aiwithnatalia-2086754256439443895-browser-2086754256439443895-video-1",
+      "template_id": "t8-case-apparent-vulnerability-readiness-reversal-resumption-v1",
+      "label": "伪弱势反转｜困境诱近—准备微证据—能力破局—继续上路",
+      "summary": "先把主体放进看似无助的明确困境，让外部压力主动靠近；在真正对抗前给出两三个克制的准备微动作，把主体重新编码为有能力的一方，再用单一清楚的能力链解决问题并回到原目标路线。",
+      "case_sha256": "98a8a3fc6010627b07cead000402f8c419b7f1f915248607489ff9785353a84b",
+      "creative_dna_sha256": "1a14b41f903af86944c7db0d13e83ef70bdb787fd6515bc0bcee0946bf2415cf",
+      "h3_adapter_sha256": "122eace8b24333f961a7bbad4ecc2b05711aaa54856b65e1eb9c8ca5b1c86450",
+      "seedance20_adapter_sha256": "57a85e3f5e5fc427eba422d35a790c155a0bb230d2e4120fa2cafa6f74cf986d"
+    },
+    {
+      "case_id": "x-mrdavids1-2043483738001035369-browser-2043483738001035369-video-1",
+      "template_id": "t8-case-empty-hand-functional-object-materialization-payoff-v1",
+      "label": "显物兑现｜空手基线到道具功能与终态回扣",
+      "summary": "先用清楚的空手和稳定人物建立不可争议的基线；单一触发后让关键道具通过可追踪的分段装配出现，人物立即用它完成可验证功能，环境随使用逐步回应，结尾让道具持续存在并留下一个与功能相关的终态变化。",
+      "case_sha256": "d1fce594df23e5477941ee71f1882e0014082e9778acb6fd805e89841d3d0ed2",
+      "creative_dna_sha256": "d72fdc4328bc8d3c90352528f7d376900ea94cc6488514fc137f57a582748a91",
+      "h3_adapter_sha256": "ccd3971d089c897a4d520c1f56345b8eef381f648b3cc9959efcf4244a76d946",
+      "seedance20_adapter_sha256": "4089c2f55d54ca0fa0a28f55b5a95f846fdc391aa8d6d0370bb1691a9296c836"
+    },
+    {
+      "case_id": "x-bianca-aiart-mu-2088493898582892617-browser-2088493898582892617-video-1",
+      "template_id": "t8-case-motion-contact-paint-trail-accumulation-v1",
+      "label": "动作留痕｜接触旋转逐步绘出群舞色场",
+      "summary": "先用全景建立明确表演区域和多名成年表演者，再把动作从站立组合升级到地面支撑与旋转；每次可读接触只留下属于该表演者的连续色彩轨迹，轨迹逐步累积成可验证图形，最后回到完整队形并让色场成为表演结果。",
+      "case_sha256": "c5cb0040acf3143818fd69e88056814a2519e2e35f0528023cd298c079de333b",
+      "creative_dna_sha256": "5fdf4e307ab266e29eb7cfce1017e9505a3df1d15c27d0459879c1481d7bd066",
+      "h3_adapter_sha256": "8dfcaf94de0d33c26161f9990fda05f317c7ce82381a53482a527792262a56dd",
+      "seedance20_adapter_sha256": "6ca409f9981c336f9327405eebd167398022e42d5a02ea2aa7600cced720968c"
+    },
+    {
+      "case_id": "x-techiebysa-2088217512475287733-browser-2088217512475287733-video-1",
+      "template_id": "t8-case-recurring-route-original-tableau-reveal-montage-v1",
+      "label": "路线揭幕｜重复通道依次亮出原创反应场景",
+      "summary": "让同一条移动通道反复回场，每次用经过物形成完整遮挡，再在同一空间位置揭出一个独立原创反应场景；每个场景只保留一次清楚关系变化和短暂停顿，随后回到通道继续接力，最后用新的原创场景收束。",
+      "case_sha256": "9e261efca9d97687d4480c5a10834e7f6df38a12daab1778c548ac07aca089e0",
+      "creative_dna_sha256": "ae82d7776528b16b32095bc62f1b43505d082772cb14c1827231efe8b0012e8e",
+      "h3_adapter_sha256": "3563f4146ca5758e195aaaa981b3806593a8effef12ef32ebd1beeed396f3c3c",
+      "seedance20_adapter_sha256": "e6744cc59d880fd5d1136c167e7a82dac9d0664f2301ddd876f0dad81645ef50"
+    },
+    {
+      "case_id": "x-nadzuai-2088631283018879166-browser-2088631283018879166-video-1",
+      "template_id": "t8-case-suspended-accident-repair-before-resumption-v1",
+      "label": "冻结修复｜事故悬停、唯一修复者到全域复流",
+      "summary": "先建立拥挤空间的正常运动和一个完整物件，再让一次事故同时拆散物件并冻结环境；只允许一名专业角色继续移动，按可追踪顺序回收组件、重建物件并完成交付，最后全域只复流一次。",
+      "case_sha256": "de940de8238d58b8682b24d47fe96eb96c6071b6974d3eb061fd49cc06cf0639",
+      "creative_dna_sha256": "33d57d271660c023b16e5eae579e81cd24cc48d68e420a6c9cd046db6e2c7654",
+      "h3_adapter_sha256": "17cc800085cc114aaabf3c373318019c2ada81bf727437ae7196b7ee5a19e75c",
+      "seedance20_adapter_sha256": "675872c5cccfb1c17e954c0bff5d151295a33212bb3f5acd901cef8cef92f973"
+    },
+    {
+      "case_id": "x-minchoi-2083941707234828794-browser-2083941707234828794-video-1",
+      "template_id": "t8-case-prop-loss-consolation-hidden-recovery-v1",
+      "label": "道具复得｜外部夺走、同伴安抚与隐蔽取回",
+      "summary": "先让两个角色共同使用一个高价值道具，再由外部角色明确夺走；让两位角色分别出现失落和安抚反应，随后由同伴从早已建立的隐蔽位置取回同类道具，恢复共同活动并以默契终态收束。",
+      "case_sha256": "3673a73485507fc124c228899cc79976f63ea6a79ce3bc848a42c001de3722f6",
+      "creative_dna_sha256": "292643a6c917da5304d02f321001fd93913ce992053f8068eb217955a18ae484",
+      "h3_adapter_sha256": "d6797ef829ff5404243ecbaa18d5c8d719b855eaa0833a997c0da8d460c32e42",
+      "seedance20_adapter_sha256": "adbac438cfb8ad7e54e44bd905723389996fc2041bf683c159f0439986390462"
+    },
+    {
+      "case_id": "x-hbcoop-2087539373420228818-browser-2087539373420228818-video-1",
+      "template_id": "t8-case-material-credit-vignettes-to-master-title-v1",
+      "label": "材质片头｜多件物证承载职员表到总标题",
+      "summary": "用四个材质完全不同的物件场景依次承载短职员表，每一幕都让文字和该材质的物理动作绑定；随后回到一个已建立的主色与几何体系，把前面线索汇入清晰、稳定、可读的总标题。",
+      "case_sha256": "5790f6a44ab9af4bae6308d66b3eeca86bc5ffa42ee96708f3bc6a15e7f87425",
+      "creative_dna_sha256": "8b9c953ab3370e378024a704a01eb11df575f4804679590e913868367e674c69",
+      "h3_adapter_sha256": "05e3a62decfdb1676e96c2e7c52b38a44f9b2cc3e50af2e2b182fe0b062595f9",
+      "seedance20_adapter_sha256": "d3e3c3aca63da45aa03bff183be5ea4e548437db571ea419bddb15e93ced5d4a"
+    },
+    {
+      "case_id": "x-sairah-0-2086637783318487379-browser-2086637783318487379-video-1",
+      "template_id": "t8-case-contact-triggered-medium-toggle-progress-v1",
+      "label": "触控换媒｜接触触发、状态推进与成品回归",
+      "summary": "锁定同一对象和制作台，让一支可见工具每次接触都触发写实与二维线稿之间的媒介切换；每次切换必须同时推进一个不可逆制作状态，最终回到写实成品并保持空间注册关系。",
+      "case_sha256": "6e5477fd82d22ebb9b99d362e2efe0bc0f04060c6997953940ecd576b55a8623",
+      "creative_dna_sha256": "b5762f5d5f3ec609e7a82ed38eeaeaf668a7ad283eac9a0eced2f47ed4b77d91",
+      "h3_adapter_sha256": "7ea83a4468280fd72820d6731501d33fcdca474b0587f05067c7be2fc85987cc",
+      "seedance20_adapter_sha256": "547d9d6cbf4c9e21d63420152b80996efe6693794be44818631b4664db505442"
+    },
+    {
+      "case_id": "x-strength04-x-2086311675456823296-browser-2086311675456823296-video-1",
+      "template_id": "t8-case-selfie-carrier-rapid-group-memory-montage-v1",
+      "label": "群体随拍｜自拍锚点、快切活动到共同收束",
+      "summary": "让同一成年自拍者成为快速手机记忆蒙太奇的身份锚点，在同一活动地理中依次经过准备、食物、朋友聚集、欢呼和共同动作；每段只保留一个清楚群体变化，最后回到更完整的群体自拍并自然停住。",
+      "case_sha256": "ab3d9e47353714d3800dfbe72f269ab7041cf714914048e3f86d2ed2f3687104",
+      "creative_dna_sha256": "b0153ec1fec7286f86e41486fc2c550b435f176ea4f62b3eb4ea1485b3baed6f",
+      "h3_adapter_sha256": "a2db579fc18172b670190e17630cb979bbf890a0168b8583875ff29b58a51db4",
+      "seedance20_adapter_sha256": "8ce173cde81f3bfe2ab79db09deb7ff81e55ea122116ebef3f80262da8ece779"
+    },
+    {
+      "case_id": "x-iamahmedfaraz66-2087507191763009632-browser-2087507191763009632-video-1",
+      "template_id": "t8-case-external-blocker-resource-check-alternative-settle-v1",
+      "label": "阻断改道｜资源检查后落入替代活动",
+      "summary": "先建立一个原定离场目标，再让外部环境突然阻断行动；角色必须可见地检查解决阻断所需的资源，确认资源缺失后主动改变计划，进入一个与原场所自然相容的替代活动，并用稳定、满足的情绪终态证明新决定成立。",
+      "case_sha256": "f0752cc7414ae471e1e1bcb382f50d11f5a5aff2005cd0ccdc7d92bebd7b1a8c",
+      "creative_dna_sha256": "5ce311432f9a22c59cf6c3ff19cbf7d7038c15474cefb215adf86326e81b4919",
+      "h3_adapter_sha256": "bdab06503ecf9e0e6e811c94c7f41aa803e6b2ceee6db5957f184ff830ff6eb0",
+      "seedance20_adapter_sha256": "4b03d48447426f131915cfbfc3a1b17c5f380acdf35fb85c64c96235a0c8efb2"
+    },
+    {
+      "case_id": "x-ciri-ai-2086672264712556614-browser-2086672264712556614-video-1",
+      "template_id": "t8-case-continuous-emotion-escalation-conceal-residue-v1",
+      "label": "情绪压力曲线｜压抑、峰值、遮挡与残余",
+      "summary": "锁定同一人像、背景和镜头距离，以可累计的眼神、嘴部、呼吸与泪痕变化把中性状态连续推向一次情绪峰值；峰值后允许一个短暂遮挡动作，但必须重新露出面部，并保留可读的情绪残余，而不是瞬间恢复。",
+      "case_sha256": "6d3c2ffe94b28cd3c3dcc4d31df1b8eee9266baf66a865ef3def75196b079741",
+      "creative_dna_sha256": "dec17f8334aa31df8ebd1a6471ee7d61137a73112e48a1f11ddd2c999f6a5b9f",
+      "h3_adapter_sha256": "0c1cf79569595001b7340ca317ac40c671f626b6ba3bbf62c05d84dc7041547f",
+      "seedance20_adapter_sha256": "cc212f420b724f9546b574b94b3162cfe44b1e32d38a4ccd3b5370d383bc65ab"
+    },
+    {
+      "case_id": "x-itsshara-ai-2084164954870174171-browser-2084164954870174171-video-1",
+      "template_id": "t8-case-service-transformation-private-fit-public-return-v1",
+      "label": "服务改造｜私域工序到公开身份回归",
+      "summary": "让角色以明确的不合身或受损状态进入一个专业服务空间，由服务者通过可见测量、工具接触和阶段性工序完成改造；必须保留一次合身确认和角色主动整理，最后回到公开空间，以步态和他人反应证明功能与身份同时改变。",
+      "case_sha256": "f4a46ed5329e8ebfee4f7050260c2a2a48dbfca7d10a3d6ec9dc27d35503f1be",
+      "creative_dna_sha256": "a008a6faefa5c3192ca13f782ed89c17496267891f8706d95368389bc4d21d3f",
+      "h3_adapter_sha256": "48bd397390e6cd12917aa1e80e8b6c975967f46e4144777708abb9dacc74249d",
+      "seedance20_adapter_sha256": "05ed2da9bb51260aebfcb8d57260a5bcfb4d6d247a4c161dbb176a8dd84612a5"
+    },
+    {
+      "case_id": "x-itsshara-ai-2086339231488872478-browser-2086339231488872478-video-1",
+      "template_id": "t8-case-single-accent-scale-activation-relay-v1",
+      "label": "单色激活｜唯一色彩信号跨尺度接力",
+      "summary": "先把世界压到近单色并建立多个清楚尺度，再只允许一种高饱和强调色从一个局部激活点出现；强调色必须沿可见载体逐级跨越人物、巨构和环境网络，最终形成更大范围但仍受控的系统状态，其他颜色不得争夺注意力。",
+      "case_sha256": "d3e1be8f8fa91bea6f93c33a97efaa4f0936844a5a7d4667f47867ffc50f067b",
+      "creative_dna_sha256": "c51d5d7eba245f3a98b33eeaef155282e13c214d53e6b8ca6fc345aa41f3bc22",
+      "h3_adapter_sha256": "c6b922eb4fafa4e29954d6d7b25c437116e965e35b0d016022a9e6c970f7c065",
+      "seedance20_adapter_sha256": "b3f9ed6d498b1c54bca56c82e810b7b031f8aeee95af3f281586d16dc9923d6f"
+    },
+    {
+      "case_id": "x-elsasofia-ai-2088582116615610532-browser-2088582116615610532-video-1",
+      "template_id": "t8-case-recurring-threat-location-inventory-defense-return-v1",
+      "label": "场所反制｜追踪威胁与环境物件接力",
+      "summary": "用一个公共路线建立主角身份和运动方向，让同一追踪威胁在至少两个功能不同的室内场所重复出现；主角每次只能调用当前场所独有的可见物件完成一次不同反制，随后继续前进，最终回到开场公共路线并以稳定身份、步态和视线结束。",
+      "case_sha256": "5a4d625f61d0c2d18b8db2660cd432bc62f9a7232bc0f7d61be49a7736a17a11",
+      "creative_dna_sha256": "02f7f1ac1f47a1faf0d0bd96a16e6af0a86e24c9340f4823cd0a164d32eddc7f",
+      "h3_adapter_sha256": "2074fefe3fba2bae8c633067beedcf182d9829891a419155b85c3c0f9ef21b24",
+      "seedance20_adapter_sha256": "8f172eb669be10face492801a30653e09177421d5c20a219bf89211ad1e7748c"
+    },
+    {
+      "case_id": "x-simplyannisa-2087078357595009085-browser-2087078357595009085-video-1",
+      "template_id": "t8-case-fatigue-reset-final-set-exit-v1",
+      "label": "疲劳回场｜短恢复后完成困难末次并离开",
+      "summary": "用固定观察机位先证明角色已疲劳，让一次短暂恢复动作把呼吸和注意力拉回任务；角色随后主动重返同一工作负荷，完成至少两次可比较的控制重复和一次明显更困难的末次，释放负荷后只做克制自我确认并离开，空场保留完成证据。",
+      "case_sha256": "df12746200bb70f5b2cb0c25361027e7c3838341016d01f4b338dac86af87407",
+      "creative_dna_sha256": "6e80f375a26f7e487c2640912ffcd76aa161216d03975170357461f988596b8b",
+      "h3_adapter_sha256": "9a8e971ed458c8b46aaa3d3d68adc147715343f410747110d1041f317d332aec",
+      "seedance20_adapter_sha256": "d2f0d14de2a4e91cdbdca7657e4c4b63bca8c1d3a7eb4bdee381c9c20568ef8d"
+    },
+    {
+      "case_id": "x-shamiweb3-2087510864798576655-browser-2087510864798576655-video-1",
+      "template_id": "t8-case-extraordinary-visitor-mundane-day-return-v1",
+      "label": "异客日常化｜多项普通任务累积到黄昏返回",
+      "summary": "先用一个一眼可识别的非常规访客制造钩子，随后不解释其来历，而让同一身份锚点依次完成驾驶、取物、烹饪、护理和园艺等互不重复的普通任务；每段都以可见结果落地，最后回到与开场相同的住宅边界和夜间静止状态，让荒诞前提被日常秩序逐步正常化。",
+      "case_sha256": "25db6b6f7c9ac8825f71be0066e5d929261a092547898a2c0164e9059b45d41c",
+      "creative_dna_sha256": "b619030f36760568821ae805f3199752b083f710acf5bcc36575fdb67f79a4df",
+      "h3_adapter_sha256": "fad8094d88811735c07030b47c7fee82e1001318732bc13fd2cc7c2c94d3d083",
+      "seedance20_adapter_sha256": "29d5262b465a9517df29bc845e991201aefcb2d25d5c526538a719b4f556bc21"
+    },
+    {
+      "case_id": "x-simplyannisa-2090268350693687564-browser-2090268350693687564-video-1",
+      "template_id": "t8-case-fiction-to-production-layer-monitor-reveal-v1",
+      "label": "叙事拆幕｜情绪场景连续退到片场与监看层",
+      "summary": "先让一个完整情绪表演和可触碰道具建立可信虚构世界，再以同一动作锚点开始连续退镜；画面依次露出布景边界、灯架与工作人员，随后让同一场景进入监看屏幕，最后用极短问题卡把观众从剧情接受切换到媒介判断。",
+      "case_sha256": "e313d1923bcdb64e370158aacc2498e59cf8e1f2041bacffeec759e148dd374e",
+      "creative_dna_sha256": "9e481f4564145db812a9b99f4b9a6a1dd7363ef1da90a6aba525bad32de44519",
+      "h3_adapter_sha256": "de66355d3e067940c1c0956438117182a6117eec741d12aba571b03fd8b501cb",
+      "seedance20_adapter_sha256": "1f99cebd2cc1adafa0faa7e3c4add27d32c27c896ef119d08a2310f35790a5ce"
+    },
+    {
+      "case_id": "x-elsasofia-ai-2090260966797918629-browser-2090260966797918629-video-1",
+      "template_id": "t8-case-tactile-travel-chapters-scale-ascent-v1",
+      "label": "触觉旅行章法｜近物接触到高位全景递进",
+      "summary": "用同一人物、服装与行进方向穿过四个空间章节，每章先让手接触一种本地材质或对象，再把景别从窄巷近物逐步扩到市场、人水关系和高处城市全景；统一的模拟胶片缺陷把离散地点压成一段可回忆的旅行档案。",
+      "case_sha256": "4187da7e24f361448a00289f6b5dbd7f4cf2890ac732500bd0ec5c9e4aa8e980",
+      "creative_dna_sha256": "d7086f824a7c73a4ef235c8a447da9f8e724944406d93243dc7934a96836a367",
+      "h3_adapter_sha256": "34ed9935ebd5071549eaa17b5785d4973308d7f13b67e8039ceea76286969516",
+      "seedance20_adapter_sha256": "99cfd372ef85787c41d08b537075930e20dedaa720b5964774e641bdb8657f73"
+    },
+    {
+      "case_id": "x-aimikoda-2090242494193660134-browser-2090242494193660134-video-1",
+      "template_id": "t8-case-fixed-dossier-archetype-roster-v1",
+      "label": "定版角色谱系｜同字段框架区分多种原型",
+      "summary": "锁定一套完全相同的档案版式、字段顺序和画面注册，让至少五个不同角色依次进入同一槽位；每个角色同时改变主色、轮廓、姿态和一个职责符号，并保留短暂微动作停留，使观众能快速比较一整套世界观原型而不丢失分类体系。",
+      "case_sha256": "1637f65867e15d7607b7b1c8bd5fe2872aaa7c58d0ddb81cdacdbfbd1005057f",
+      "creative_dna_sha256": "9bd5c7725fe201721872215f7cf3eaf19ca2e881ebd7cd55edfc7ddc2170e46d",
+      "h3_adapter_sha256": "14f29ff5122fcd8f745399ee4beeadfcfe92ba5dab5c61260bfb786a21f2ddb9",
+      "seedance20_adapter_sha256": "de61a80e70a2a3aa7b3f6ec47576979ecda2981defb765d31026acb18d4bb463"
+    },
+    {
+      "case_id": "x-sarischerika-2090235034989142300-browser-2090235034989142300-video-1",
+      "template_id": "t8-case-effort-checkpoint-setback-recommitment-route-v1",
+      "label": "训练复投｜计时检查触发受挫后重新上路",
+      "summary": "先用持续路线动作证明真实投入，再切到一个可量化检查点；检查结果触发短暂失望和生理残余，但角色不直接获得能力升级，而是完成一个有限恢复动作、重新面向同一路线，并以黄昏停留和坚定表情把失败转化为下一轮承诺。",
+      "case_sha256": "9878492dce9c24db436081f930132b093f0820650e6dfe1316dd204e8e95e5e6",
+      "creative_dna_sha256": "864b47b81efec3a246b0cfacf77b143ba68e5f3d645ec7ccdc1c64fb061fd6f5",
+      "h3_adapter_sha256": "f794c09de09c4c2590b1e18f0be266487b072f348c2bd7926bbe6e6ae3664520",
+      "seedance20_adapter_sha256": "1fbd68f3b3e5a54b228a1ea88bc9fb31727215cdac7346dbfd433a7ac6b3cb34"
+    },
+    {
+      "case_id": "x-techiebysa-2090130971823612281-browser-2090130971823612281-video-1",
+      "template_id": "t8-case-persistent-matchup-strip-causal-rally-payoff-v1",
+      "label": "对阵条不掉线｜小球方向连续到决胜反应",
+      "summary": "让固定对阵信息条持续占据画面一部分，作为高速剪辑中的身份和阵营锚点；动态区域则按发球、接球、相持、险球和决胜顺序推进，每次切镜都用球的入射方向、击球手或身体重心完成接力，最后必须给出同一球的落点结果和双方不同反应。",
+      "case_sha256": "acefa3c319cf1eb3422af6dd327f8f7b015d324afa2b227401fd3c353141b543",
+      "creative_dna_sha256": "5671c032756bb229ebf6a48a271af4c494c8212ffab338ade5254219a2a92866",
+      "h3_adapter_sha256": "502ae2dd7fbb01466752e9ea333997fab214426bdd2af7f6333715c2230436d6",
+      "seedance20_adapter_sha256": "ec84aafb296fd942b3fa2eb48e01d5736cd47f3bf84aeb6a6317cd70811b88fc"
+    },
+    {
+      "case_id": "x-gamerhashcom-2090104453684748398-browser-2090104453684748398-video-1",
+      "template_id": "t8-case-question-machine-state-proof-relay-v1",
+      "label": "功能问答闭环｜人物疑问由设备状态完成证明",
+      "summary": "先让提出疑问的人与正在运行的设备同框，形成清楚的功能缺口；再切到第二位人物查看一个远程状态载体并作出可见回应，最后返回原空间，让设备状态变化和提问者反应共同承担证明，而不是只靠字幕或口头宣称。",
+      "case_sha256": "7bb4bbcc6d4ec4250a184b3dc929d99e219e9ed20f6a3f99cb5f6f42ff10193d",
+      "creative_dna_sha256": "b67aa7afc4ab7684a8e64d37eabc5324df7784249d6dc3c7417ffed9e41dff67",
+      "h3_adapter_sha256": "c27ed22566bac2fd8cc89977fb76b3dade7ad8147991d39d1b5aca0c033e2453",
+      "seedance20_adapter_sha256": "8a0bc014ea8c06528c16740a84de7929ea91da57f5470db4ff0616a44e67f4dd"
+    },
+    {
+      "case_id": "x-daimajinart-2090162242650026202-browser-2090162242650026202-video-1",
+      "template_id": "t8-case-social-arrival-delayed-baggage-anomaly-return-v1",
+      "label": "入住迟到异样｜先完成社交接纳再揭示行李异常",
+      "summary": "先让新来者以礼貌动作和普通行李完成可信抵达，再让既有成员在同一室内形成正常接纳基线；等社交关系成立后，才用连续的行李局部插镜揭示彼此呼应但不同的异常痕迹，最后返回仍未察觉的群体，让信息差成为结尾张力。",
+      "case_sha256": "e04941d285200aa1950375d1e7ed393863e8a6ea4e72c3ba6d07f801d96fbf37",
+      "creative_dna_sha256": "0432a2683c232d083996228b82c3b12dadc81fee719123acc4eb32a20f559417",
+      "h3_adapter_sha256": "9d6a4fede5a0940e22339c953bef14791f6756d6fd06f9a38603d3b3c18dc336",
+      "seedance20_adapter_sha256": "1af4bfc5ede2659ccc65dabd32285efe2ad5398dcfbc103a3b18839fdb11c5ad"
+    },
+    {
+      "case_id": "x-aymducking-2090150758758928522-browser-2090150758758928522-video-1",
+      "template_id": "t8-case-continuous-objective-defense-role-swap-escalation-v1",
+      "label": "连续目标防御｜固定核心、双角色接力与威胁环升级",
+      "summary": "把一个持续可见的核心目标作为空间原点，用不停机的环绕和贴身跟随在敏捷防守者、重型伙伴和逼近敌群之间转移注意力；每次角色接力都要继承上一动作的方向或结果，威胁从外圈逼近到贴身再扩散为环境状态，最终以共同防线和核心状态收束。",
+      "case_sha256": "bf931bc162bd4588dbf9bd267d526d2a85b2f69ba711ade8f8d2850661e6d4c6",
+      "creative_dna_sha256": "e0c0339d88c07d9826706b52d116d4e9803afff138d3f2015689760ccb401812",
+      "h3_adapter_sha256": "cb29758f4fad33798396968630aa6bac740d7cb2c5bffd9105bfe5f7583f558d",
+      "seedance20_adapter_sha256": "47219121ec2db5282e9d7256467d9fd23d9e5fee0dd936dbda2accbf2aca7bbd"
+    },
+    {
+      "case_id": "x-pabloprompt-2090146243682984134-browser-2090146243682984134-video-1",
+      "template_id": "t8-case-observer-window-confrontation-displacement-clash-v1",
+      "label": "见证窗不切换｜对峙、越界位移与能量碰撞留在同一场",
+      "summary": "用一扇固定高位见证窗先锁定两名角色、围观群体和场地边界；对峙升级后，一次高速位移必须在建筑或地面留下可见后果，随后双方回到同一可读场地完成相反蓄能，最终碰撞让冲击和遮挡都发生在原见证窗内。",
+      "case_sha256": "0d180d723b9b2f01ea2e41d9a7e0e23641f059cc78fbb2cf701ec945b65341a0",
+      "creative_dna_sha256": "221042e4f066a0efac8d9f8db2aba56f57fee82be8c7619856e358bdc9f5e26a",
+      "h3_adapter_sha256": "a5d9301ec1580d27593582b87c79722b09a4eed164bd66900628a6cea8598b62",
+      "seedance20_adapter_sha256": "b59d7fddfa8a880af21d62ae74ef9b71d11c835dbf65fafd058121793e55bd5d"
+    },
+    {
+      "case_id": "x-naiknelofar788-2090131477145227354-browser-2090131477145227354-video-1",
+      "template_id": "t8-case-selfie-route-local-find-taste-resume-v1",
+      "label": "自拍路线小发现｜街行、侧看、品尝与带物继续",
+      "summary": "先用稳定成年人物、街道方向和持续自拍步态建立真实路线；人物的目光和身体转向把镜头带到一个本地发现，随后用可见食物、一次完整品尝和自然反应完成体验证明，最后重新进入同一街道方向并携带消费结果继续走。",
+      "case_sha256": "ec8df332e3fbcdd488115851d50ff548d3afda8315e98dfc431117d9b882f807",
+      "creative_dna_sha256": "a7cde70e5e9ee326e053c2e064a30483e4f9a4523cd4f0d3608f46e2492f7116",
+      "h3_adapter_sha256": "5c503f58d8690eef2a8f1b3a516997455f7db59be0eba0ed508c5e27c2cdc75d",
+      "seedance20_adapter_sha256": "5f4c6086d79088f03f4cf1e6dee167da10637c7fc4f615ccbc2dbf223c4ed31a"
+    },
+    {
+      "case_id": "x-minuitia-2090125003463278833-browser-2090125003463278833-video-1",
+      "template_id": "t8-case-ground-caller-aerial-swarm-order-mount-departure-v1",
+      "label": "地面召集天空编队｜近距确认、首领降落与乘骑离场",
+      "summary": "先用孤立地面角色和远处空中群体建立垂直权力差，再通过一次清楚的手势或姿态让空群由散乱逼近转为有序绕行；用近距首领确认把群体回应收束到单一载体，随后让首领完成可见降落和俯身，人物登乘后以共同起飞和高位远景结束。",
+      "case_sha256": "dfbb97ccdf5e1e8ddce2c11208a6f1ad54953b5b09f821bea04f8156fb397274",
+      "creative_dna_sha256": "a117b322292735b59f8691978bf125cdfc8a7ffa05b0eb235fcb0744ea071b83",
+      "h3_adapter_sha256": "71220b824149ca1403a398ceb2a240e88a0333290d490498f03f1798f7fd8ffa",
+      "seedance20_adapter_sha256": "2fd10b8846dd3582726c1dd548b849f6bc5e211af6e247a1c686d4677c0c8ed6"
+    },
+    {
+      "case_id": "x-churvikv-2090124366134542770-browser-2090124366134542770-video-1",
+      "template_id": "t8-case-craft-play-role-conflict-prop-collapse-reconcile-v1",
+      "label": "手作角色扮演｜分工亮相、道具误伤与集体和解",
+      "summary": "先让小组共同制作轻质道具，再用服装和可穿戴装置分配对立角色；冲突必须围绕一个预先可见的脆弱公共道具展开，一次过度表演造成可读坍塌，所有人先停住确认后果，再共同退出角色并以修复或坐在一起结束。",
+      "case_sha256": "0232cad32dec5f8910ce7db358121ae098aa929eb5b57e92bd688606d6d6a2be",
+      "creative_dna_sha256": "ffa04a285069fb8d0badf0d63e89d1498de345372743021bfcb95cd3d34c5a24",
+      "h3_adapter_sha256": "d23013fff75f133c385ec4334e8218ac3a2fea3764d63cf78b5fe96a2f59bd56",
+      "seedance20_adapter_sha256": "c08aff75f322e499ea00923a1258d54f31c4e0360f830711e584678c0cb49417"
+    },
+    {
+      "case_id": "x-ladywasabee-2090114253839863934-browser-2090114253839863934-video-1",
+      "template_id": "t8-case-symbolic-layout-single-move-embodied-consequence-v1",
+      "label": "符号布局单步改写｜空间揭示、手部决策与实体后果",
+      "summary": "从贴近符号阵列的低位穿行开始，让观众先把小型布局当作世界；随后揭示一个与布局绑定的巨大实体，一只外部之手只改变一个关键标记，最后用实体的单一状态变化证明这一小步已改写更大系统。",
+      "case_sha256": "d837a262560d3588c0fd246d10faed419c7c7652789def23e7d30c5fb842c8d5",
+      "creative_dna_sha256": "4ca7a7e79dc7ea6d93942a9445434aca51c914ebadc12914c40f76cb20512970",
+      "h3_adapter_sha256": "0561e75357b12b1a853b7f87cea4f249419705928da428d42fdc6d5a012f0bfc",
+      "seedance20_adapter_sha256": "1b80683ac9a08b04c33b977c46ae70eb654b6a63f7d3101868141db504bff7d0"
+    },
+    {
+      "case_id": "x-hbcoop-2090107555712512053-browser-2090107555712512053-video-1",
+      "template_id": "t8-case-registered-geometry-material-match-credit-title-v1",
+      "label": "几何注册匹配片头｜平面路径、实体面板与终局印记",
+      "summary": "先建立可精确注册的二维线网和一个颜色锚点，让书写工具沿网格揭示第一条职员表；在同一构图接缝处把线网匹配成实体孔阵并揭示第二条职员表，随后让同一颜色锚点吸收一个关键物件、发生一次实体开裂，最后把材质铺满画面并稳定承载原创主标题。",
+      "case_sha256": "ad71657731ee56e8f4cb6b4c46cb9f5240e38b5f6c468d3fba69c459f1a8a5d3",
+      "creative_dna_sha256": "bdfe5f1ae6941006c3795821d627e70a6c56863d365b5b519f870cdb007804df",
+      "h3_adapter_sha256": "8429af052f650dc5212bca409daa1f6f8bbec018acb0aa8becb67c48b291f35b",
+      "seedance20_adapter_sha256": "3754d51454c9d3e27b17d9fb70ef331c5ea444a1216cf37fa1a37a7c4057b992"
+    },
+    {
+      "case_id": "x-johnagi168-2090099974121869462-browser-2090099974121869462-video-1",
+      "template_id": "t8-case-continuous-obstacle-route-fall-state-recovery-reunion-v1",
+      "label": "连续闯关赴约｜湿身残留、障碍升级与终点重逢",
+      "summary": "用持续跟拍把一名明确成年参与者、终点方向和同一水庭绑定；依次让柔性漂浮踏板、滚动平衡物、悬吊抓点和离散落脚点改变身体运动类别，一次落水或跌倒必须留下湿身状态并在镜头内恢复，最后以环境群体响应和终点人物相会证明整条路线完成。",
+      "case_sha256": "cba6ae7567dc9efbf9daba9504af24ee81fb78f0c35feda84fba41816a9304c9",
+      "creative_dna_sha256": "cec3dede78e3eaf1fbb38a75f49da641a861b3fa8f39cdbcaca63559264d73ac",
+      "h3_adapter_sha256": "762aedc94ae2532e7d4329fe67100594994e3186dda3e8507487997f573212f4",
+      "seedance20_adapter_sha256": "8c60d8e750ace301e511977bd63fcc8343c6ad9dbbdf2428c555830fb3f58731"
+    },
+    {
+      "case_id": "x-yapper-so-2090098617478795605-browser-2090098617478795605-video-1",
+      "template_id": "t8-case-continuous-retreat-scale-anchor-expanding-hazard-v1",
+      "label": "连续拉远尺度揭危｜小型载体、扩张暗区与临界停留",
+      "summary": "先用一个持续前进的小型载体作为尺度锚点，镜头不切地逐步升高并后退；一个起初像普通暗纹的环境异常必须保持中心关系并不断占据更大画幅，载体的航迹、速度和尺寸持续可读，最终在进入不可逆临界区之前停留，让尺度和危险都由同一连续镜头证明。",
+      "case_sha256": "d01107215361b929bed827a4eb97149e9d77d351d018841aebb2e85398195964",
+      "creative_dna_sha256": "6ce5e35a6b42341f4469e576dc77990a84c1ffd315618339c75f6879a6bfdc49",
+      "h3_adapter_sha256": "9b3bc1031ebf91af48c00f2aea7f797ded0d93593df789e0c844ed3da8f83a89",
+      "seedance20_adapter_sha256": "f6dd8bae4288e37a3df1f7a047ce4233e5cb2e8c67993b56a90dcee5e6d8bdfc"
+    },
+    {
+      "case_id": "x-techhalla-2090568539325317401-browser-2090568539325317401-video-1",
+      "template_id": "t8-case-phase-state-opponent-dispersal-reassembly-combat-v1",
+      "label": "相态敌手攻防｜实体命中、粒子卸力与反向重组",
+      "summary": "先让实体主角与可辨识敌手共享一条攻防轴线；每次重击都必须让敌手从完整轮廓转成与接触方向一致的丝束、尘粒或涡流，再由同一物质在原空间重组。用地面、逆光和尘雾维持方位，逐级扩大攻击尺度，最后让一次看似终结的分散反向复归，兑现敌手相态能力。",
+      "case_sha256": "526765c36cf44d2c4958267bc49264cb7204950c2c8b4e9fed2c2cee81dd778f",
+      "creative_dna_sha256": "924d885fd3628894d12e00caa59543e25926a9fc5f1b9050f0ed7aad802198fa",
+      "h3_adapter_sha256": "4c3817f2f501bf1111684b0e775ed73bc2db3861e4556c9c10950cc740f8d432",
+      "seedance20_adapter_sha256": "d62541a3f9bd13f709e34bf0a53d0c36f940d012c2fdc18d802a6c4535be47d5"
+    },
+    {
+      "case_id": "x-wakeupgfx-2090565921580425588-browser-2090565921580425588-video-1",
+      "template_id": "t8-case-character-action-typography-module-carousel-v1",
+      "label": "角色字卡动作片头｜身份锚点、语义动作与模块轮转",
+      "summary": "先用至少三个身份锚点锁定原创角色，再轮转多个版式模块；每个模块只引入一个原创短词或身份字段，并让角色用一次与词义相关的动作跨过、击中、遮挡或落入文字。重复配色、轮廓和标志结构连接各模块，最终把动作角色和原创名称归拢进稳定主标。",
+      "case_sha256": "f6f6cf5e5882902d383272f24a0b3c6b15c783b18252a1bf542f59014de994ca",
+      "creative_dna_sha256": "4fad5179699fbe265def0955db30d039636a82b9e952529f6f540b2c3026b470",
+      "h3_adapter_sha256": "e0ec95270ce4cc4a1910113247fdaf8e3428cf191dbcf293f51455b0913fdabb",
+      "seedance20_adapter_sha256": "c0d046f1a9c818d7532e22ef7d15173eb2b00be7413b3c824db5ecfbf8472588"
+    },
+    {
+      "case_id": "x-ivanka-humeniuk-2090065396057395276-browser-2090065396057395276-video-1",
+      "template_id": "t8-case-persistent-reference-board-multi-character-product-continuity-v1",
+      "label": "多人商品一致性｜常驻参考板与角色接力实证",
+      "summary": "先把原创商品、至少三名明确成年角色和各自身份锚点集中写入一条常驻参考板；主画面依次让角色在不同场景完成商品展示、接力与使用动作，参考板始终作为视觉核验基准。每次换人或换景都保留同一包装比例、标志位置和主色，最后让全部角色与商品同框，再切到无歧义包装终局。",
+      "case_sha256": "b86f7dd1674eae2ce97850dd82f5ca87ad8490556c89161639a8272178732f75",
+      "creative_dna_sha256": "d15282e15c44bd7d5258e7d541b31d20cb3916ad1913902321ee48826cab4da2",
+      "h3_adapter_sha256": "ba8705b233e478076ec4e6d494ccc077e094021c13e2d5ea5446a3db13d9abee",
+      "seedance20_adapter_sha256": "08fd1337e27e6dc6505ab6cdcc1c74ac7b011006c320fb01fa2b4f8bd7a24d9f"
+    },
+    {
+      "case_id": "x-castuananh-2090577363751039169-browser-2090577363751039169-video-1",
+      "template_id": "t8-case-threat-substitution-rescue-to-renewed-pursuit-v1",
+      "label": "威胁接力反转｜救援改写层级并重启追逐",
+      "summary": "先让成年主体与第一层威胁发生清楚冲突，再让更大威胁从同一空间介入并直接终止旧敌；主体利用短暂空档逃向可见救援者，但救援者的攻击只造成一次暂时压制。主体取得新工具后与救援者共同反击，结尾仍保留更大威胁的活动迹象，让每次解围都同时打开下一层危险。",
+      "case_sha256": "168bc47b2af81b0334343ac4c63f13861104a1fe396bb80b20b633f61ec71905",
+      "creative_dna_sha256": "2d5303129af9501a1c25a716690ffc5c67e8a50d8d1e592e7a19aa726465772b",
+      "h3_adapter_sha256": "c84a9b7f8189028fe85f6c1f4bfee34ee05e15ec5b05b82e0574f34ac9f4778a",
+      "seedance20_adapter_sha256": "7bc3250a85a88edb30fbbef42e1eded15eae02c9d2e0a88e1235047d515b458a"
+    },
+    {
+      "case_id": "x-gilangr90760584-2090608131722338566-browser-2090608131722338566-video-1",
+      "template_id": "t8-case-continuous-forward-gauntlet-elevated-symbolic-finish-v1",
+      "label": "连续前进闯阵｜防守闸门升级到高点标志",
+      "summary": "用一次不切镜的前向跟随，把明确成年主角、可读目标方向和重复地标锁在同一废墟路线；敌人以逐层闸门进入，每一层必须用不同身体策略解决，并让上一动作的方向直接交给下一次接触。主角不能回到安全起点，最终离开地面冲突、沿已建立建筑登高，把原创标志安放在高点并以远景证明路线完成。",
+      "case_sha256": "7905169084a9c9fb14d4d59b8c90f3e67dc5102edb4a5ece5768faadec7eabc3",
+      "creative_dna_sha256": "55e7c58d122726af65c3766fd0d70b872cdf92291c22e4876ba301dfa69a63e6",
+      "h3_adapter_sha256": "98852c593a6887dc1966e7ae1379e94480b2493e33bf4d48050c7b4cca6b3605",
+      "seedance20_adapter_sha256": "83d34c3493a7290abbbe79e2c73ddfb1a4c9a4982a81b6a68082fa0c6eae5ff1"
+    },
+    {
+      "case_id": "x-su-nagomi-2090556023178510671-browser-2090556023178510671-video-1",
+      "template_id": "t8-case-live-subject-print-collage-ad-relay-v1",
+      "label": "实拍印刷层接力｜人物、商品细节与字卡共同推进",
+      "summary": "先用一名明确成年主体和一套稳定服装锚点建立实拍身份，再让撕纸边缘、印刷纹理和短字卡依次进入同一画面。每个拼贴层都必须与人物动作、服装部件或环境转场发生可见交接，而不是盖住主体；镜头在全身、材质微距、图形海报和多人陈列之间改变职责，最后把前面出现的身份、细节和短语汇总成一张清楚停留的终局版面。",
+      "case_sha256": "f17c004c6eda4354bbb41920bc9c62cf58a934147bedc37671d8dab3578cc1d3",
+      "creative_dna_sha256": "34a4afb001e305fd77aa0c196692d805c5f392c3f34358ca7b2ad3720324536c",
+      "h3_adapter_sha256": "143268e2230f3f8c51a4996e739e2f2aef92844ad1af98c85f532e7e882d2b0b",
+      "seedance20_adapter_sha256": "700ac81088ee85da5bbf68d2cc05304f611f55ac1a3c667fd4620ff026170998"
+    },
+    {
+      "case_id": "x-nicolasmariar-2090552135947579701-browser-2090552135947579701-video-1",
+      "template_id": "t8-case-subsurface-trace-breach-pursuit-aftermath-v1",
+      "label": "地下轨迹破土｜尺度反转、追逐穿越与空场余波",
+      "summary": "先用明确成年人物、普通道路和重复地标建立日常尺度，再让一条与人物同向移动的地下轨迹成为可追踪预警。轨迹必须经过至少两次强度升级后在同一地理破土，巨物与人物短暂同框以证明比例，并沿已建立路线完成一次追逐或横穿；结尾保留尘土、破损地表和空出的道路，让突袭造成的状态变化可见。",
+      "case_sha256": "98ff2821e109b39858055551d2a14efc148846d66d8d54eb201a670c1a1438bf",
+      "creative_dna_sha256": "0c5815ea875242481534df6f1db2d710c16cd00f6e9977b51edc942f104295ec",
+      "h3_adapter_sha256": "0eeda002973bdf4f9a2cb35583e4e5c0d0b728a01f2258c69544482d1cb9f1cc",
+      "seedance20_adapter_sha256": "93f0009c189f156a7d3643f04037628ff2445e24e59c6deeca3222237c97126f"
+    },
+    {
+      "case_id": "x-0nedi4ry-2090592575627628702-browser-2090592575627628702-video-1",
+      "template_id": "t8-case-miniature-multi-material-route-elevated-goal-v1",
+      "label": "微缩多材质路线｜动作动词接力到高点终点",
+      "summary": "先用一名明确成年微缩主体、近处尺度物和远端高点目标建立完整路线；让主体依次进入至少三种材质不同的地形，每种地形都迫使移动动词发生变化，并把上一动作的落点直接交给下一段。路线与目标方向不得重置，最后主体必须真正到达此前可见的高点，并用宽景同时证明走过的材质带和终点。",
+      "case_sha256": "aa69483bb4ebdc9b4cd290423bf674ec4c2344a693b5fec55831a72b6c979912",
+      "creative_dna_sha256": "7d133801eb24478103388b212e75f705af4031556cb6632e6e94b7415aff6923",
+      "h3_adapter_sha256": "eec7f6dfed076d269d5381c3202cb1d61162c0b537aced89cb92ecfa4442b270",
+      "seedance20_adapter_sha256": "f1eafa63c711afa421a25c045fc670d86c7da64fa57c6df21b473377a0913cae"
+    },
+    {
+      "case_id": "x-shuxxess-2090601706648412626-browser-2090601706648412626-video-1",
+      "template_id": "t8-case-practical-adjustment-nonverbal-readiness-confirmation-v1",
+      "label": "实用整理确认关系｜接触、退开与双向微反应",
+      "summary": "把两名明确成年角色锁在同一安静空间，先建立一项真实可见的服装或装备不整，再让帮助者用一次连续、功能明确的双手动作完成调整。接触结束后必须退开，并分别给被帮助者与帮助者一个克制微反应；结尾回到两人同框，用整理后的物件和稳定姿态证明准备完成，不能依赖未经验证的对白语义。",
+      "case_sha256": "6eb99fe66bd8cb3435bef0e4f258d0e661c1c4fce496884323c30db3259b1e39",
+      "creative_dna_sha256": "569c3904fc03191033009d285bd4b1925dd41912af6f57ed6de7799ada02a256",
+      "h3_adapter_sha256": "824ec35aa48751562e3c112192e6205b7a3f4a72f2a0605f4cd7cf1203bbbdb7",
+      "seedance20_adapter_sha256": "e0dcd7ef77bb55571f08c669ba1c964fdb9190daf2593d35d31f0bb008f18c2e"
+    },
+    {
+      "case_id": "x-shuxxess-2090603098180132963-browser-2090603098180132963-video-1",
+      "template_id": "t8-case-performed-competence-single-mishap-social-recovery-v1",
+      "label": "帅气展示瞬间失手｜单次事故与社交收尾",
+      "summary": "先让一名明确成年角色在熟人面前主动摆出可读的自我展示意图，再用一段连续动作把自信逐级抬高。只允许一次清楚的物理失误打断表演，必须完整展示失衡、落地与后果；旁观者先作克制反应，表演者随后以一个简短恢复动作承认尴尬，笑点由社会关系闭合而不是只靠摔倒。",
+      "case_sha256": "2cf610614325098c611f2e6ebda49a238c4def9b3a24feadcbcaa8d8edd827b4",
+      "creative_dna_sha256": "816c9d16ed89615c7f14d623645ae86f385ff8aeb80891c0f91659f138c947ec",
+      "h3_adapter_sha256": "25c2fc11fdb65a717c334eeb95d4b504065069caabf0eb135ffcee1024612ee4",
+      "seedance20_adapter_sha256": "74a662403d9f2c04df16f5aed9d0f23f8e4fb5030505dfce6a874a2a451e2b02"
+    },
+    {
+      "case_id": "x-100xmart-2090597248946294902-browser-2090597248946294902-video-1",
+      "template_id": "t8-case-extreme-role-symbol-mundane-routine-relief-v1",
+      "label": "极端职业符号落入日常｜身份揭示到休假松弛",
+      "summary": "先在高度普通、忙碌且有多人反应的日常空间建立秩序，再让一个只靠轮廓就能读出极端职业的访客携带行李进入。围观反应放大威胁预期，访客随后用一次身份揭示和一串极普通的日常动作重写角色意义；结尾用可读休假标记和放松姿态把反差固定下来。",
+      "case_sha256": "289f1c772826eef2ed583898bd4c4cde92c7a8a831f06bdb7d766471a868e618",
+      "creative_dna_sha256": "8b93620f5677f6e53fdae24aca15df6b01726145e7aa6af4add650128b44d259",
+      "h3_adapter_sha256": "28386f034cdb3f19372bff0ec3e958e1641656afc2a193fa4b3c3ec045d734c8",
+      "seedance20_adapter_sha256": "e6c92663684527a89fd03ec4cefa81b1a75dea594a214f60bb96c916a195ccf6"
+    },
+    {
+      "case_id": "x-cencencahya12-2090589088567136363-browser-2090589088567136363-video-1",
+      "template_id": "t8-case-planar-folktale-chapter-unfolding-emblematic-ascent-v1",
+      "label": "平面民间故事展开｜章节换景与月轮升格",
+      "summary": "把长叙事压进一个始终可辨的手工平面舞台：先用剪影建立发现者与封闭容器，再让容器打开并释放主角；场景折叠为社区空间，外部角色以道具完成社会承认；一次全画面纸张爆发展开夜空，主角随后沿明确路径升向此前建立的天体，最终回到包含地面、见证者和天体的徽章式大全景。",
+      "case_sha256": "79b76663e04e2463896c8749ca5116b7bcfedb3ecfb55b08030de2101e183e7a",
+      "creative_dna_sha256": "1b780722cdf70d0c14def0f39f290369896cda11d9e834b662ee9fd37c3a03f6",
+      "h3_adapter_sha256": "70e6c5e4dd2d72c6f2e89df6ab23d1ba2b82d35c6516335c163bad5f2c46be3f",
+      "seedance20_adapter_sha256": "237e59029ca9a17c742623199c95e56151dcffe9debdc22f819d7654953bdf5d"
+    },
+    {
+      "case_id": "x-sarischerika-2090590155795234920-browser-2090590155795234920-video-1",
+      "template_id": "t8-case-invisible-boundary-impact-test-reroute-v1",
+      "label": "不可见边界验真｜碰撞、手测与改道离开",
+      "summary": "先用一条视觉上完全畅通的路线建立通行预期，再让明确成年角色在同一轴线上遭遇一次不可见阻断；必须完整显示接近、接触和身体回弹。角色先检查受影响部位，再回到碰撞点以手掌进行一次受控测试，让边界通过触感与涟漪证据显形；结尾角色明确改道离开，边界仍留在原路径。",
+      "case_sha256": "86dafb587b19bb122d78329d32cfa16ab9c6a1b46bf86c824024de2ffbd4d136",
+      "creative_dna_sha256": "d228444416146e75cff50ae13e7f0a869eb2df074f3b565729f119f1b71fd5d0",
+      "h3_adapter_sha256": "88fabdb11f8f16f824818e254de21addbb6f3e83586c397ae63c13ffb1ebf4ba",
+      "seedance20_adapter_sha256": "69df85bd95c4ac329a185215291b27345c3372a4ce5b98982a24710f176193bd"
+    },
+    {
+      "case_id": "x-100xmart-2090559508825210969-browser-2090559508825210969-video-1",
+      "template_id": "t8-case-destination-first-processional-scale-approach-v1",
+      "label": "目标先现的仪式行进｜前景队列与地标尺度同步放大",
+      "summary": "开场就完整展示宏大目的地、可读路线和一组前景行进者，不靠隐藏或反转制造看点。全片保持同一朝向，让行进者沿路线持续缩短与地标的距离，同时用重复旗帜、服装或载体建立队列节奏；摄影机只做克制推进和轻微升高，结尾让人物仍在场但目的地占据更大画面比例，以尺度增长兑现庄严感。",
+      "case_sha256": "ee6a9f703802770dce9fda764aa7f96017f6d366fd52bc04d0249584774f565c",
+      "creative_dna_sha256": "c7b1e71520d775a6430f3e69494acb6156d9a90e7e29e2ca036f7aab3f678641",
+      "h3_adapter_sha256": "db9f91f1da47467308d5d23a01e30ba0b075f93b5245d72fa4c2899072e78cc3",
+      "seedance20_adapter_sha256": "84d05a710ad4263d480a95937aecc1ccfed11bc8151f148a001f6cf92db9f851"
+    },
+    {
+      "case_id": "x-bmx-ai13-2091047466133283322-browser-2091047466133283322-video-1",
+      "template_id": "t8-case-selfie-affect-crest-interruption-neutral-hold-v1",
+      "label": "自拍情绪峰值回落｜亲近笑意、中断与中性停留",
+      "summary": "锁定一名明确成年原创人物、手持手机近景、持续直视关系和一个低照度环境。表情先从亲近微笑逐步推到闭眼大笑峰值，随后由一个不必显形但方向明确的画外提示打断；人物睁眼、笑意消退并重新调节呼吸，最终在同一构图内保持中性或轻微担忧状态，不依赖对白或身份变化。",
+      "case_sha256": "e3e029851e954f798da75bfdef9c476d68fe45a294949b8be4b558fb22dcfb47",
+      "creative_dna_sha256": "63ab5d610fbcad6fcb6c05116d202a5cc2e7e014d381551ff9be21fe284727b4",
+      "h3_adapter_sha256": "cf75960b3cf1d898ee644192a8f2f33f69734f71b543db528bcbf9e313a044d2",
+      "seedance20_adapter_sha256": "d9a6eaa4f2647d257b4549bab0471ebf59f37e611f00f8e9f5ab6b38b6f2596a"
+    },
+    {
+      "case_id": "x-noor-ul-ain43-2091044021460504779-browser-2091044021460504779-video-1",
+      "template_id": "t8-case-pursuit-route-collapse-remote-survivor-reframe-v1",
+      "label": "追逐路线崩塌再解释｜逃生载体毁灭后目标异地重现",
+      "summary": "先让一名明确成年原创人物在空旷交通节点发现逼近者，并把最后一班载体建立为唯一可读逃生路线；连续追逐把人物送入载体后，路线在离站阶段遭到一次不可逆破坏。随后从烟尘与残骸切到远处安全高位，让同一成年人物稳定重现并直视来向，以空间分离重新解释前段追逐，但不复制原片人物、地铁、爆炸、台词或结尾文字。",
+      "case_sha256": "49011d33d2dbe16b3d6bfd82bb484136cd3dd5a401e7bfb3dd727103b4733087",
+      "creative_dna_sha256": "3839a7c3560b6b2da9e0d7d613d766c4a2278e464d273082fcf3c3303566af44",
+      "h3_adapter_sha256": "6815eee3c4520c2e443c0a11c5cabf4add528e07929d9259b85574c258099353",
+      "seedance20_adapter_sha256": "e7b3559d4154397fb1e31832eb4e35ab8ae5d73704febfa54bd4f02d03931f91"
+    },
+    {
+      "case_id": "x-aiwithnomi-2091033183789912451-browser-2091033183789912451-video-1",
+      "template_id": "t8-case-foreground-fixation-background-hazard-escalation-v1",
+      "label": "前景执念对抗背景灾难｜危险升级但微小任务不断线",
+      "summary": "把一名明确成年原创人物和一个微小、可持续操作的前景任务锁在画面中心，让背景危险从人群混乱、横穿武器、爆炸到贴脸擦过逐级升级；人物只做必要闪避并始终返回同一任务，结尾危险退去而注意力依旧不变，以尺度与行为反差形成喜剧。",
+      "case_sha256": "980ec356d154e7d4ac11b15cb4188b2e0596aa4ebc403ebe2fc27bdeeed209d5",
+      "creative_dna_sha256": "e80a2e89830898ccb99c3dc04859759946190465bae6906c97980544d365d520",
+      "h3_adapter_sha256": "cddf68f582e54bf092024b2b768fc8a4ddeb0f732277a2a3598d50561d9763e1",
+      "seedance20_adapter_sha256": "ef9cc3f27cf686d361a82fc90eb003bea3ca654b73398c44a5c5b753d36c671a"
+    },
+    {
+      "case_id": "x-iamrealsnow-2091030795893043562-browser-2091030795893043562-video-1",
+      "template_id": "t8-case-still-group-anomaly-displacement-direct-threat-v1",
+      "label": "静态群像异常升级｜表情异变、空间击穿与贴脸威胁",
+      "summary": "从安静群像与单一普通人物开始，用局部表情异常把注意力锁到同一身份；随后让摄影机和群体空间发生一次强制位移，短暂留出空场作为后果证据，最后让已异变人物以相同身份锚点从深处逼近并占满镜头，完成从社会安全到直接威胁的四级升级。",
+      "case_sha256": "a859aec06057c826748dd1743d573cd71abae95f807fc822445da321c4fbb11a",
+      "creative_dna_sha256": "5c05d9aa6f67fb3aa1583515a55528ab700fed969bc55237857b90aeee05cfba",
+      "h3_adapter_sha256": "3bc060c79c3009440eb8d32e813b0fa0cc9e4380c3a665617a20ed50c3a4a893",
+      "seedance20_adapter_sha256": "044a7446605f54de5c0530bb147d2e880bd5b59ab1e5df16e27573acf390960f"
+    },
+    {
+      "case_id": "x-techtalknavi-2091027098920157357-browser-2091027098920157357-video-1",
+      "template_id": "t8-case-depth-layer-carriers-destination-light-reveal-v1",
+      "label": "纵深载体引导目的光｜稳定结构中逐级扩大出口",
+      "summary": "在封闭暗空间里先建立一条清楚的纵向运动轴，让重复慢速载体分布在前中后景，固定建筑肋骨持续提供比例和位移参照；摄影机沿同一轴平稳推进或上升，远端目的光逐步增大并提高占比，最终以光口压倒结构完成空间释放。",
+      "case_sha256": "1c4f8997ca58b02be4087b16a926f42e63a20cd59e3ad3a18c2980d896c38068",
+      "creative_dna_sha256": "712dab4930118b26f15d3a7171db8f45970cffaf9cc99243281c9a8b4159b34b",
+      "h3_adapter_sha256": "e50cc949c87d96cbed29630158892c52820049788285cd02d497b20c5de0fd8a",
+      "seedance20_adapter_sha256": "1a1457366ae454494f7a3fb24a12701dd60dba88b257b1f7300a842c6351740f"
+    },
+    {
+      "case_id": "x-mrdasonx-2091026087254036508-browser-2091026087254036508-video-1",
+      "template_id": "t8-case-prop-bearing-helper-shared-shelter-bond-v1",
+      "label": "道具携带者主动共享｜遮蔽物到位后完成亲密确认",
+      "summary": "先让一个等待者暴露在清楚天气压力下，再让较小的道具携带者从画外进入；以道具覆盖范围作为可见进度条，靠近后先让遮蔽物同时覆盖双方，再用一次克制的身体贴近确认关系，结尾保持共同庇护状态而不是继续动作。",
+      "case_sha256": "1143e8214e8487d19a7e7b205402cd74ee3207eb59a5378cbf1f06eca2428c05",
+      "creative_dna_sha256": "3350116f31cc8847340c6c318c0e013a4e563bde00febb4dec29167be8f64999",
+      "h3_adapter_sha256": "c140a76b6d06bd95a1caaa9e3454c3437272ff24097205dc0d075c2e5ee8ff82",
+      "seedance20_adapter_sha256": "9a917b2bda944001aae6f5341dea0e07c95b76b346abfdcf66585530d9668f48"
+    },
+    {
+      "case_id": "x-aiwithalyar-2091023557560021314-browser-2091023557560021314-video-1",
+      "template_id": "t8-case-fixed-witness-window-world-state-descent-v1",
+      "label": "固定见证框架世界降级｜车厢不变、窗外状态逐级坠落",
+      "summary": "把移动载体内部、窗框与同一组成年见证者锁成稳定现实锚点，只让窗外世界按可辨识状态逐级降级；每一级先由景观证明，再让乘客反应滞后一拍并逐步增强，最终让载体仍继续运行而外部抵达不可逆异域状态。",
+      "case_sha256": "677f5c11effab2d78444c9f4674722baaa324ec8fb3c979200adef2e46da05d3",
+      "creative_dna_sha256": "a0480c393b42652510c90b9145cecc85474e39ad900f520500665cfaa12de170",
+      "h3_adapter_sha256": "7cae949d0ddb15834a20161dc1bcdbafa3c7cf3e82e5788f1422ae7f4dfb657f",
+      "seedance20_adapter_sha256": "3861071dc5ce7abe2e33239607cf28a48c930d9e69ad34e0081dee57ffe501c9"
+    },
+    {
+      "case_id": "x-ruzainameer-2091022283569872939-browser-2091022283569872939-video-1",
+      "template_id": "t8-case-tactile-climb-risk-release-summit-scale-v1",
+      "label": "触觉攀登风险递增｜近身工具证据到峰顶尺度释放",
+      "summary": "用远景先交代单人目标和压倒性高度，再在近身视角中逐级展示工具咬合、抓点失稳和身体恢复；每次风险后保留相同装备与地理方向，最后由近身动作突然释放到稳定峰顶远景，让完成感来自尺度变化而非庆祝表演。",
+      "case_sha256": "1244fe8c69b520bc6d10d306ccceaf6a1a53d23085cbfa093d941f7c8530265b",
+      "creative_dna_sha256": "5d6c5686006e1611c6b9b75a981889207b7e1418c15fa230df9cc1e631ecd10b",
+      "h3_adapter_sha256": "d14d87e65f455435f8531812634ced985c7b9750819406522e77343b70fb8485",
+      "seedance20_adapter_sha256": "15a80b71b3d7b3a6a60043c54878e52761fabc53514d0744b0f7ff826712ed89"
+    },
+    {
+      "case_id": "x-manuagi01-2091022062404137221-browser-2091022062404137221-video-1",
+      "template_id": "t8-case-held-character-brush-title-action-release-emblem-v1",
+      "label": "停顿型角色预告｜凝视、书法字卡、一次动作释放与徽记收束",
+      "summary": "先用长于常规剪辑的角色凝视建立身份与情绪，再让一条墨迹和极少文字承担概念转场；回到远景继续等待，随后只释放一次清楚动作，把此前静止蓄积的能量兑现，最后以角色全身、原创名称和单一徽记组成稳定海报。",
+      "case_sha256": "65cc9dbaab2290e1fa078ac5bf070511632461e5406ed76c1ab1f6134364dc9e",
+      "creative_dna_sha256": "3c8c8713e053531003ef461aa01afe17e753f575f706bc981255de15ebd9fa39",
+      "h3_adapter_sha256": "dda167d848501751f2c1912d60467a5198fd2a81556050d36fa1da7b48a4b840",
+      "seedance20_adapter_sha256": "ef57d139a902e5a8be68b235eadac64f1606ba8d2b26f44f1cb44a9dc8410579"
+    },
+    {
+      "case_id": "x-nooneishere2603-2091021342602866951-browser-2091021342602866951-video-1",
+      "template_id": "t8-case-gesture-collect-intangible-orb-release-environment-response-v1",
+      "label": "手势收集无形现象｜凝聚成球后释放并让环境回应",
+      "summary": "一名明确成年原创人物在连续行进中停下，先以空手和环境常态建立“不可见”基线，再用双手形成可读收集容器；细线、微粒或波纹只从周边环境向掌心汇聚，压缩成单一可握持核心，人物完成一次释放后让同一物质扩散回城市并改变可见氛围。",
+      "case_sha256": "4c0cb525871b558734d7609a753a27191c57bfe117dd7f547013edeb85d6a73b",
+      "creative_dna_sha256": "09eb08fc625987ccbeeb03b42d22a34f90b898ee30538f5b30ccdea32d477950",
+      "h3_adapter_sha256": "ac0c976967f854e496062804fc5d739418c9abde2e62a91d92539ca36c0ebd54",
+      "seedance20_adapter_sha256": "f08177b4e088b714d76bf79242891df2a8ce29ec11d0d622698958cd98006c11"
+    },
+    {
+      "case_id": "x-ryo05m-2091019054597431652-browser-2091019054597431652-video-1",
+      "template_id": "t8-case-whole-first-component-grammar-returning-mark-v1",
+      "label": "成品先现的组件语法｜首秒爆拆、材质章节与符号化复归",
+      "summary": "首帧先展示完整成品并在第一秒做最大速度爆拆，随后不急着复原，而是让每个核心组件进入一种独立的材质或制造语法；完整成品作为记忆锚点间歇回归，最终所有组件从实体层压缩成简化轮廓并组成原创标记。",
+      "case_sha256": "e689b4b614950f0d231f3bdf8642e4e2d2fb6614b782e31ae2a3d21bb82002f8",
+      "creative_dna_sha256": "ae2cc59a54979f2989f6dc86b1c4f88840d997a2701851ca41a8dad1a5d9f5cb",
+      "h3_adapter_sha256": "28ce929646400085447741d443a59c48a6972145c9fa5a7e835e74c962689eeb",
+      "seedance20_adapter_sha256": "a6751788f74d6d8b2fe4fdae888b0f57d8d32c4d176aa9a5221108ae2de49459"
+    },
+    {
+      "case_id": "x-synthesarah-2091007759130988559-browser-2091007759130988559-video-1",
+      "template_id": "t8-case-asymmetric-ability-commit-evade-impact-proof-v1",
+      "label": "速度对蛮力的非对称证明｜重击承诺、连续闪避与环境撞击",
+      "summary": "先让轻型成年角色与重型原创对手在同一仓库轴线上建立能力反差；重型角色每次必须完整承诺一条可读攻击轨迹，轻型角色只靠位移、绕身和借力闪避，不用对等力量回击。最大重击最终撞毁已建立的墙体，环境后果证明力量，而轻型角色从另一侧稳定起身证明速度。",
+      "case_sha256": "e52697850881d60a0afdbb892faef71f85529c18bded3b7d6bb76f2940f1cd4f",
+      "creative_dna_sha256": "5f980af53f83b2c18369b9c1a9a63d78e49bf4fcdd3137d956d0a6d609c4fd88",
+      "h3_adapter_sha256": "ac9e152e5728e5e64f78cf383e01947275faa8197715456c601b900c730d1199",
+      "seedance20_adapter_sha256": "abeae9f98a7de13f1080f6090d24f183371837dfb5cab4e26d7e4e66ccd33ad8"
+    },
+    {
+      "case_id": "x-gilangr90760584-2091004987023454599-browser-2091004987023454599-video-1",
+      "template_id": "t8-case-micro-carrier-fpv-obstacle-chapters-product-return-v1",
+      "label": "微型载体FPV产品回环｜桌面障碍、生态穿越与包装复归",
+      "summary": "以微型飞行载体和产品包装同框建立尺度与方向，持续低空FPV穿越桌面食物、草丛花朵和果实内部，让每个障碍同时回答一种运动或感官问题；路线最终沿已识别孔道返回原野餐桌，载体停到包装上方并触发克制产品光效与字标收束。",
+      "case_sha256": "cb13e10fb1d08ae25fcab77d434f34d5b8506938f7c717fdfc61a4065487ac3c",
+      "creative_dna_sha256": "d3b2172358968097ab77e81b71aa9624b6da432c149fe452a40d72cbfe75c538",
+      "h3_adapter_sha256": "3b2c2aad2b068e1e768a793a92332b7222abae31cd542c17832b1f8733eff1c8",
+      "seedance20_adapter_sha256": "b464ac0d8e906269381194048980220c2d834dcb9f76e427d7e01c75d66a8d62"
+    },
+    {
+      "case_id": "x-tanluai-2091004028180431097-browser-2091004028180431097-video-1",
+      "template_id": "t8-case-playful-threat-soft-interrupt-escalate-partnered-exit-v1",
+      "label": "威胁动作被亲昵打断｜升级再打断后转成双人撤离",
+      "summary": "在一镜式双人关系场景中，先让明确成年角色以可控道具动作提出威胁，再让熟悉伙伴只用一次轻触或亲昵动作越过武器语义；被打断者以表情和更大但安全的动作升级，伙伴第二次柔性化解，最终双方把冲突能量转成同向跑离。",
+      "case_sha256": "fc929b706d44e88674fee45e305ba66e1b70c7341df415889acc60ae9c7f7eee",
+      "creative_dna_sha256": "2724d3c0c99cd59651ae06eb1271c3a3e4c08ae0fa6e138c309fdc9abe04b8a6",
+      "h3_adapter_sha256": "fe08c7c8a1e53cf33eb17f2d0969f6b0283da9aefae78a8977730a4e85d60bb9",
+      "seedance20_adapter_sha256": "259f6511ed60a0eab2c338708fbc9e5601a79dbef23d28047e3cf4c60ba65f6e"
+    }
+  ]
+}

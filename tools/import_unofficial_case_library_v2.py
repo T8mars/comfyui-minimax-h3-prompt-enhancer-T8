@@ -18,12 +18,12 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 132
-EXPECTED_SELECTOR_COUNT = 113
-EXPECTED_EVIDENCE_COUNT = 19
+EXPECTED_RECORD_COUNT = 215
+EXPECTED_SELECTOR_COUNT = 185
+EXPECTED_EVIDENCE_COUNT = 30
 EXPECTED_PENDING_COUNT = 0
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 115
+EXPECTED_TOTAL_SELECTOR_COUNT = 187
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -345,7 +345,7 @@ def build_catalog(
     )
     if declared_counts != expected_counts or actual_counts != expected_counts:
         raise LibraryImportError(
-            "Expected 132 records: 113 selectors, 19 evidence variants, and no pending cases"
+            "Expected 215 records: 185 selectors, 30 evidence variants, and no pending cases"
         )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
@@ -414,10 +414,29 @@ def build_catalog(
         seen_cases.add(case_id)
 
     selector_by_template = {str(record["template_id"]): record for record in selectors}
+    record_by_case = {str(record["case_id"]): record for record in records}
     for evidence_record in evidence:
-        primary = selector_by_template.get(str(evidence_record["template_id"]))
-        if primary is None or evidence_record.get("duplicate_of") != primary.get("case_id"):
-            raise LibraryImportError("Evidence variant must bind to its selector's primary case")
+        template_id = str(evidence_record["template_id"])
+        primary = selector_by_template.get(template_id)
+        if primary is None:
+            raise LibraryImportError("Evidence variant must bind to an existing selector template")
+        cursor = evidence_record
+        visited = {str(evidence_record["case_id"])}
+        while cursor.get("duplicate_of") != primary.get("case_id"):
+            parent_id = str(cursor.get("duplicate_of", ""))
+            parent = record_by_case.get(parent_id)
+            if (
+                not parent_id
+                or parent_id in visited
+                or parent is None
+                or parent.get("template_action") != "evidence_variant"
+                or str(parent.get("template_id")) != template_id
+            ):
+                raise LibraryImportError(
+                    "Evidence variant chain must stay inside one template and resolve to its primary case"
+                )
+            visited.add(parent_id)
+            cursor = parent
 
     existing: dict[str, dict[str, Any]] = {}
     if existing_catalog_path and existing_catalog_path.is_file():
@@ -482,7 +501,7 @@ def build_catalog(
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
     if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 115 total non-official selectors")
+        raise LibraryImportError("Expected 187 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -653,7 +672,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Import the 132-record case handoff: 113 selectors, 19 evidence variants, "
+            "Import the 215-record case handoff: 185 selectors, 30 evidence variants, "
             "no pending cases, plus two standalone community Skills."
         )
     )

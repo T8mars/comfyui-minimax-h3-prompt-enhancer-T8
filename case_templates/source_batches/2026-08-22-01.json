@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-22-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-itswsm105f-2091031704873881889-browser-2091031704873881889-video-1",
+      "template_id": "t8-case-material-value-ladder-human-payoff-v1",
+      "label": "价值阶梯｜原料—转化—装配—使用回报",
+      "summary": "先用可识别原料建立价值起点，再以可见的转化、定型和精密装配逐级增加完成度；最后把成品交到真实使用者手中，让工业过程落到清楚的人类回报。",
+      "case_sha256": "b436ab048f73f6b844aba8827f03a7a28a231e9664d137918b6c817feee4845d",
+      "creative_dna_sha256": "b8b223ef4cdc1f38800a9aaa06bec68c6004cdfd019326ecbbaaaa3ee189fb7f",
+      "h3_adapter_sha256": "651b7e8038c6d0bfc4151e68a9ec83bd6c3ff29b4afa965674acb862ee88e871",
+      "seedance20_adapter_sha256": "b9bb068b1801419a0d39715b8773237ab1fff5b5a1188e8c110701ea27720ba1",
+      "mechanism_fingerprint": "3977ffa1e8943410a86189ed74c496765d2d27d1de7c53a95cd0dd7b770b880d"
+    },
+    {
+      "case_id": "x-ayzalnooor24521-2091039543046943010-browser-2091039543046943010-video-1",
+      "template_id": "t8-case-capability-demo-crowd-witness-challenge-v1",
+      "label": "能力见证｜装备特写—连贯表演—人群反应—挑战交接",
+      "summary": "先用装备细节提出能力问题，再揭示表演者并连续完成一段可读动作；让围观者的惊讶、拍摄和让路成为公开证明，最后由第二位参与者进入，形成下一轮挑战。",
+      "case_sha256": "ae72f9592b988d0afe786fea5868e7b7230ee0eee45c97dad0f03853d172600a",
+      "creative_dna_sha256": "27113143c78a2b30cbd3e9f4e1834758a01e3b5210cc74be928ea8583691bc5d",
+      "h3_adapter_sha256": "5c0f75319b852960b2c9fdf6e8fc7201f43162705a54cb0ee45944d68eafb4a4",
+      "seedance20_adapter_sha256": "d0a0e16a50cf8c36896f4555c65205ad921f8707c0ac193eeaba5e4604801fc7",
+      "mechanism_fingerprint": "e5573e101211cca06ad8feafeb705e858036e9d7bc7aacfe4a19951ef517f923"
+    },
+    {
+      "case_id": "x-diplomeme-2091037153463791956-browser-2091037153463791956-video-1",
+      "template_id": "t8-case-public-recognition-table-to-stage-payoff-v1",
+      "label": "公共兑现｜席间期待—揭晓—群体释放—登台锁定",
+      "summary": "先用大型正式场合和席间小群体建立期待，再让公开揭晓把私人关系瞬间转成共同反应；通过拥抱和穿越人群的连续路线释放情绪，最终把被认可者锁定在舞台终点。",
+      "case_sha256": "0949e1f27c37a2c9559fc5e333adfcc0044218257da5dfd8fe778bb8b12c95d1",
+      "creative_dna_sha256": "6f23fa13b666cb8f19104ac3a3ca107a5757c94bf3c4acdac3c47fbf6ca1a458",
+      "h3_adapter_sha256": "629be52462c1beef9e0ec238de486e80b280fd883725b1926cf1fa0bb23859c6",
+      "seedance20_adapter_sha256": "81f6d78aabb932ae9735925a9a84c655293c657867eec48696eebdcfad2bbe5d",
+      "mechanism_fingerprint": "2bdf73b8a4aadfe8e76d4f9d271b819097f4a554ea914ca08b0d6c9475cc625f"
+    }
+  ]
+}

@@ -91,7 +91,7 @@ class MaintenanceTests(unittest.TestCase):
             with self.subTest(workflow=workflow.name):
                 self.assertTrue(workflow.with_suffix(".jpg").is_file())
                 source = workflow.read_text(encoding="utf-8")
-                self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{16,}")
+                self.assertNotRegex(source, r"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{16,}")
 
     def test_locales_and_node_docs_cover_all_v3_nodes(self):
         node_ids = {
