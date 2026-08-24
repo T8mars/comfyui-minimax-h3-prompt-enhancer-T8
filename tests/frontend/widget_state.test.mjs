@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+    expandNamedWidgetValues,
     namedWidgetValueMap,
     restoreNamedWidgetValues,
     serializeNamedWidgetValues,
@@ -30,6 +31,18 @@ test("legacy prefix restores named values without shifting appended defaults", (
     restoreNamedWidgetValues(node, restored);
     assert.equal(node.widgets[2].value, "visual-model");
     assert.equal(node.widgets[3].value, "default.gguf");
+});
+
+
+test("legacy workflow is padded before ComfyUI validates appended local Qwen widgets", () => {
+    const names = ["prompt", "seed", "control_after_generate", "local_model", "local_context_size"];
+    const expanded = expandNamedWidgetValues(
+        names,
+        ["idea", 42, "randomize"],
+        { local_model: "Qwen3.8-27B-Q4_K_M.gguf", local_context_size: 32768 },
+        [3, 5],
+    );
+    assert.deepEqual(expanded, ["idea", 42, "randomize", "Qwen3.8-27B-Q4_K_M.gguf", 32768]);
 });
 
 

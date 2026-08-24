@@ -1,135 +1,77 @@
 {
-  "id": "2c352a1c-0f52-46ba-b0ae-cccc635b1147",
+  "id": "609a86fa-5af2-503d-88fd-e5024a6b2ae7",
   "revision": 0,
-  "last_node_id": 30,
-  "last_link_id": 33,
+  "last_node_id": 8,
+  "last_link_id": 7,
   "nodes": [
     {
-      "id": 20,
-      "type": "Note",
+      "id": 1,
+      "type": "T8LLMProviderConfig",
       "pos": [
-        -720,
-        440
+        40,
+        360
       ],
       "size": [
-        340,
-        160
+        440,
+        520
       ],
       "flags": {},
       "order": 0,
       "mode": 0,
       "inputs": [],
-      "outputs": [],
-      "properties": {
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
+      "outputs": [
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "links": [
+            1,
+            2,
+            3
+          ]
         }
+      ],
+      "properties": {
+        "Node name for S&R": "T8LLMProviderConfig"
       },
       "widgets_values": [
-        "贞贞的AI工坊（注册送0.2刀，各种API）：https://ai.t8star.cn/register?aff=cbff0534884\n\n左侧令牌，创建令牌，分组选择default，随便取个名字，复制API即可使用，支持直接用（聊天模式），也支持各种工具调用（comfyui,sillytavern,cusor等），每日签到领积分\n\nComfyui调用API节点：https://github.com/T8mars/Comfyui-zhenzhen"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
+        "Local Qwen",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "mmproj-F16.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
+        ""
+      ]
     },
     {
-      "id": 28,
-      "type": "LoadImage",
+      "id": 2,
+      "type": "MiniMaxH3PromptEnhancerT8",
       "pos": [
-        -209.44766593561667,
-        281.40096558953206
+        540,
+        40
       ],
       "size": [
-        270,
-        314.0000000000001
+        620,
+        980
       ],
       "flags": {},
       "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            31
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "10Db.jpg",
-        "image"
-      ]
-    },
-    {
-      "id": 27,
-      "type": "easy showAnything",
-      "pos": [
-        899.1804125233024,
-        245.8176420565467
-      ],
-      "size": [
-        489.3436378866695,
-        380.31191216748107
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "anything",
-          "shape": 7,
-          "type": "*",
-          "link": 33
-        }
-      ],
-      "outputs": [
-        {
-          "name": "output",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfyui-easy-use",
-        "ver": "595e0738a9e3f8d0d9c4d875461b2d2c9e7559c7",
-        "Node name for S&R": "easy showAnything"
-      },
-      "widgets_values": [
-        "For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.\n\nintegrated_multimodal_description:\n[Shot 1] 冷调蓝绿色光线下，长发年轻女性的肖像填满画面：棕色直发中分，黑色细吊带上衣，肤色白皙，唇色淡红，神情平静地直视镜头。镜头极缓向后拉，画面边缘逐渐显露出这是一张贴在深青色桌垫上的纸质贴纸，薄纸边缘投下纤细而稳定的阴影；贴纸中的女孩保持平面、静止，中性表情不变。\n[Shot 2] At 03.000, 镜头锁定。一只真人的手从右侧入画，食指缓慢靠近贴纸女孩右上臂；约在04.200，指尖在纸面上轻轻一点，随即收回。整个过程只有这一次跨媒介接触，贴纸女孩仍保持平静。\n[Shot 3] At 06.000, 指尖离开后不久，纸面突然轻颤：贴纸整体高频抖动，发丝、肩带和轮廓线出现波纹状错位，接触点旁泛起细小纸褶，女孩眉头微蹙，像被静电惊扰，但始终没有离开桌面。\n[Shot 4] At 09.000, 颤动迅速升级：贴纸女孩从脸颊到肩部像折纸般鼓起成浅浮雕，纸面绷紧并保留清晰纸边；下一瞬间从鼓起处爆开，喷出大量细碎纸屑和银亮闪烁的纸火花，碎屑在空中翻转。\n[Shot 5] At 12.000, 周围整张深青色桌垫自行抬起，沿整齐折痕反复折叠、拱起，形成一座从画面下方通往贴纸女孩的纸桥；残余纸屑落在桥面上，贴纸女孩停在桥的尽头，保持纸浮雕形态，冷光在折纸上反射，画面静止至15.000。\n\noverall_soundscape: 安静的室内环境底噪持续铺底；指尖碰到贴纸时发出一声轻脆的触点声和细微纸摩擦；颤动阶段是细密的沙沙声；爆开时有柔软的纸屑喷发与纸片翻动声；桌垫折叠时传来连续、清晰的折痕脆响。\n\nnon_diegetic_music: 极轻的奇幻感纯音乐若有若无，以钢片琴点音和细碎合成器纹理为主，速度缓慢；随贴纸鼓起和喷发略微提升亮度，在纸桥成形后渐弱收束。"
-      ]
-    },
-    {
-      "id": 29,
-      "type": "MiniMaxH3PromptEnhancerT8",
-      "pos": [
-        120.53450390105377,
-        249.39601190990098
-      ],
-      "size": [
-        716.0720561473503,
-        1108
-      ],
-      "flags": {},
-      "order": 3,
       "mode": 0,
       "inputs": [
         {
           "name": "first_frame",
           "shape": 7,
           "type": "IMAGE",
-          "link": 31
+          "link": null
         },
         {
           "name": "last_frame",
@@ -138,25 +80,32 @@
           "link": null
         },
         {
-          "label": "reference_image_0",
           "name": "reference_images.reference_image_0",
           "shape": 7,
           "type": "IMAGE",
-          "link": null
+          "link": null,
+          "label": "reference_image_0"
         },
         {
-          "label": "reference_video_0",
           "name": "reference_videos.reference_video_0",
           "shape": 7,
           "type": "VIDEO",
-          "link": null
+          "link": null,
+          "label": "reference_video_0"
         },
         {
-          "label": "API Key",
           "name": "api_key",
           "shape": 7,
           "type": "STRING",
-          "link": 32
+          "link": null,
+          "label": "API Key"
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 1,
+          "label": "共享 LLM 渠道配置（可选）"
         }
       ],
       "outputs": [
@@ -164,18 +113,16 @@
           "name": "enhanced_prompt",
           "type": "STRING",
           "links": [
-            33
+            4
           ]
         }
       ],
       "properties": {
-        "aux_id": "T8mars/comfyui-minimax-h3-prompt-enhancer-T8",
-        "ver": "fb2a6d10f58314635eb64999a10186398d83f7cf",
         "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
       },
       "widgets_values": [
-        "书桌贴纸上的纸片女孩被真人手指轻触：先轻颤，再鼓起并喷出纸屑火花，最后整张桌垫折成通往它的纸桥。",
-        "I2VA（首帧图生音视频）",
+        "国风水墨竹林中，白衣剑客踏过浅水，镜头由低机位跟拍转为环绕，剑气掀起墨色涟漪，环境声与衣袂破风声清晰。",
+        "T2VA（文生音视频）",
         15,
         "5",
         "balanced",
@@ -184,116 +131,444 @@
         "官方增强",
         "现有兼容（保留中英文）",
         "无（仅核心规则）",
-        "t8c005-cross-medium-contact-reaction",
-        "贞贞平价小屋（推荐）",
+        "无（不使用 T8 案例）",
+        "本地 Qwen3.8-27B（GGUF，离线）",
         "gemini-3.5-flash",
         "",
         "",
         "",
-        null,
         "",
         "",
         "",
-        252626364614662,
-        "randomize"
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "mmproj-F16.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）"
       ]
     },
     {
-      "id": 26,
-      "type": "CR Prompt Text",
+      "id": 3,
+      "type": "Seedance20PromptEnhancerT8",
       "pos": [
-        -352.0733561881189,
-        693.4023960354334
+        1220,
+        40
       ],
       "size": [
-        400,
-        200
+        620,
+        980
       ],
       "flags": {},
-      "order": 2,
+      "order": 1,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": null,
+          "label": "提示词增强 LLM API Key"
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 2,
+          "label": "共享 LLM 渠道配置（可选）"
+        }
+      ],
       "outputs": [
         {
-          "name": "prompt",
+          "name": "enhanced_prompt",
           "type": "STRING",
           "links": [
-            32
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Seedance20PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "15秒电影感追逐：雨夜霓虹街区，一名红衣女性穿过人群并跃上驶离的电车，保持人物服装、面部和空间方向一致。",
+        "AUTO（根据意图与素材判断）",
+        "AUTO（自动判断）",
+        "15",
+        "5",
+        "balanced",
+        "AUTO（按内容判断）",
+        "中文",
+        "官方优化",
+        "无（不使用 T8 案例）",
+        "火山官方（@图片N/@视频N/@音频N）",
+        "AUTO（按用户意图）",
+        "AUTO（按场景添加）",
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "本地 Qwen3.8-27B（GGUF，离线）",
+        "gemini-3.5-flash",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "mmproj-F16.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "MiniMaxMusic3PromptEnhancerT8",
+      "pos": [
+        1900,
+        40
+      ],
+      "size": [
+        620,
+        940
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": null,
+          "label": "LLM API Key"
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 3,
+          "label": "共享 LLM 渠道配置（可选）"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
           ]
         },
         {
-          "name": "show_help",
+          "name": "music_caption",
+          "type": "STRING",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "music3_payload_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "enhancement_report_json",
           "type": "STRING",
           "links": null
         }
       ],
       "properties": {
-        "cnr_id": "ComfyUI_Comfyroll_CustomNodes",
-        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
-        "Node name for S&R": "CR Prompt Text"
+        "Node name for S&R": "MiniMaxMusic3PromptEnhancerT8"
       },
       "widgets_values": [
-        ""
+        "温暖的华语公路流行歌曲，女声由克制主歌走向明亮最终副歌，钢琴与原声吉他为核心，生成原创中文歌词。",
+        "生成新歌词（T8非官方）",
+        "",
+        "中文",
+        180,
+        "balanced",
+        "官方完整（2–4次请求，推荐）",
+        "AUTO（按风格与时长）",
+        0,
+        "AUTO",
+        "English（官方默认）",
+        0,
+        "本地 Qwen3.8-27B（GGUF，离线）",
+        "gemini-3.5-flash",
+        0,
+        "fixed",
+        "AUTO（从润色要求识别）",
+        "Verse（主歌）",
+        0,
+        "隐私隔离（不发送歌词给Caption阶段）",
+        "开启（内存10分钟，推荐）",
+        "",
+        "",
+        "不要直接模仿任何现有歌手或歌曲；副歌需要清晰且容易记忆的原创 hook。",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）"
       ]
+    },
+    {
+      "id": 5,
+      "type": "T8ShowText",
+      "pos": [
+        540,
+        1080
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "T8ShowText",
+      "pos": [
+        1220,
+        1080
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 5,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "T8ShowText",
+      "pos": [
+        1900,
+        1020
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 6,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 8,
+      "type": "T8ShowText",
+      "pos": [
+        2360,
+        1020
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 7,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
     }
   ],
   "links": [
     [
-      31,
-      28,
+      1,
+      1,
       0,
-      29,
-      0,
-      "IMAGE"
+      2,
+      5,
+      "T8_LLM_PROVIDER_CONFIG"
     ],
     [
-      32,
-      26,
+      2,
+      1,
       0,
-      29,
+      3,
+      5,
+      "T8_LLM_PROVIDER_CONFIG"
+    ],
+    [
+      3,
+      1,
+      0,
       4,
+      1,
+      "T8_LLM_PROVIDER_CONFIG"
+    ],
+    [
+      4,
+      2,
+      0,
+      5,
+      0,
       "STRING"
     ],
     [
-      33,
-      29,
+      5,
+      3,
       0,
-      27,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      4,
+      0,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      7,
+      4,
+      1,
+      8,
       0,
       "STRING"
     ]
   ],
-  "groups": [
-    {
-      "id": 1,
-      "title": "B站、Youtube：T8star-Aix",
-      "bounding": [
-        -470,
-        -750,
-        2890.2244432300004,
-        461.55880818
-      ],
-      "color": "#3f789e",
-      "flags": {}
-    }
-  ],
+  "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.2100000000000002,
+      "scale": 0.8,
       "offset": [
-        652.9929187923677,
-        -203.4825344847486
+        80,
+        60
       ]
-    },
-    "workflowRendererVersion": "LG",
-    "frontendVersion": "1.48.7",
-    "VHS_latentpreview": false,
-    "VHS_latentpreviewrate": 0,
-    "VHS_MetadataImage": true,
-    "VHS_KeepIntermediate": true,
-    "ue_links": [],
-    "links_added_by_ue": []
+    }
   },
   "version": 0.4
 }

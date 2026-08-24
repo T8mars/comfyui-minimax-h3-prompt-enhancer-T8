@@ -118,7 +118,10 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             registered[:3],
             ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"],
         )
-        self.assertEqual(registered[3:], ["T8LLMProviderConfig", "T8PromptInspector"])
+        self.assertEqual(
+            registered[3:],
+            ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
+        )
 
     def test_schema_has_seedance20_options_and_no_audio_port_or_h3_fields(self):
         schema = seedance20.Seedance20PromptEnhancer.define_schema()
@@ -368,18 +371,18 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(offsets, sorted(offsets))
                 self.assertTrue(output.rstrip().endswith(f"实现{anchors[-1]}。"))
 
-    def test_configured_local_template_library_serves_all_217_human_only_gifs(self):
+    def test_configured_local_template_library_serves_all_218_human_only_gifs(self):
         manifest_path = case_library_routes.configured_manifest_path()
         if manifest_path is None or not manifest_path.is_file():
             self.skipTest("Local GIF case library is not configured on this machine")
         catalog = case_library_routes.runtime_public_catalog()
         previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-        self.assertEqual(len(previews), 217)
+        self.assertEqual(len(previews), 218)
         self.assertTrue(all(preview["available"] for preview in previews))
         self.assertTrue(all(preview["preview_url"].startswith("/t8-prompt-enhancer/case-preview/") for preview in previews))
         case_previews = [preview for preview in previews if not preview["case_id"].startswith("community-skill--")]
         community_previews = [preview for preview in previews if preview["case_id"].startswith("community-skill--")]
-        self.assertEqual(len(case_previews), 215)
+        self.assertEqual(len(case_previews), 216)
         self.assertEqual(len(community_previews), 2)
         self.assertTrue(all(preview["source_url"].startswith("https://") for preview in case_previews))
         self.assertTrue(all(preview["source_url"] == "" for preview in community_previews))
@@ -393,17 +396,17 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertTrue(record["import_policy"]["preview_only"])
                 self.assertFalse(record["import_policy"]["source_media_connected"])
 
-    def test_github_checkout_serves_all_217_bundled_gifs_without_local_manifests(self):
+    def test_github_checkout_serves_all_218_bundled_gifs_without_local_manifests(self):
         with (
             patch.object(case_library_routes, "configured_manifest_path", return_value=None),
             patch.object(case_library_routes, "configured_community_manifest_path", return_value=None),
         ):
             catalog = case_library_routes.runtime_public_catalog()
             previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-            self.assertEqual(len(previews), 217)
+            self.assertEqual(len(previews), 218)
             self.assertFalse(catalog["preview_manifest_configured"])
             self.assertTrue(catalog["bundled_previews_included"])
-            self.assertEqual(catalog["bundled_preview_count"], 217)
+            self.assertEqual(catalog["bundled_preview_count"], 218)
             self.assertTrue(all(preview["available"] for preview in previews))
             self.assertTrue(all(preview["source_url"] == "" for preview in previews))
             for preview in previews:
@@ -420,7 +423,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             for preview in template["previews"]
         }
         self.assertEqual(manifest["schema_version"], "t8-bundled-case-previews/v1")
-        self.assertEqual(manifest["preview_count"], 217)
+        self.assertEqual(manifest["preview_count"], 218)
         self.assertEqual({item["case_id"] for item in manifest["previews"]}, set(expected))
         self.assertEqual(
             {path.name for path in case_library_routes.BUNDLED_PREVIEW_ROOT.glob("*.gif")},
@@ -547,6 +550,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             'find("custom_length_target")',
             'const NO_CASE_TEMPLATE = "无（不使用 T8 案例）"',
             "widgets_values.splice(9, 0, NO_CASE_TEMPLATE)",
+            "expandNamedWidgetValues",
+            'local_model: "Qwen3.8-27B-Q4_K_M.gguf"',
             '"control_after_generate"',
         ):
             self.assertIn(snippet, source)
@@ -556,13 +561,21 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         workflow = json.loads(path.read_text(encoding="utf-8"))
         node = next(item for item in workflow["nodes"] if item["type"] == "Seedance20PromptEnhancerT8")
         self.assertEqual(node["type"], "Seedance20PromptEnhancerT8")
-        self.assertEqual(len(node["widgets_values"]), 26)
+        self.assertEqual(len(node["widgets_values"]), 35)
         self.assertEqual(node["widgets_values"][1], seedance20.TASK_INTENT_LABELS["AUTO"])
         self.assertEqual(node["widgets_values"][9], seedance20.NO_CASE_TEMPLATE)
         self.assertEqual(node["widgets_values"][19], seedance20.SEEDANCE_API_MODE)
         self.assertEqual(node["widgets_values"][20:22], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, ""])
-        self.assertIn("openai_video_urls", [item["name"] for item in node["inputs"]])
-        self.assertNotIn("openai_upload_url", [item["name"] for item in node["inputs"]])
+        self.assertEqual(
+            [item["name"] for item in node["inputs"]],
+            [
+                "first_frame", "last_frame", "reference_images.reference_image_0",
+                "reference_videos.reference_video_0", "api_key", "provider_config",
+            ],
+        )
+        self.assertEqual(node["widgets_values"][26], "Qwen3.8-27B-Q4_K_M.gguf")
+        self.assertEqual(node["widgets_values"][27], "mmproj-F16.gguf")
+        self.assertEqual(node["widgets_values"][28:30], [32768, 4096])
         self.assertNotIn("sk-", path.read_text(encoding="utf-8"))
 
     def test_real_paid_smoke_fixture_passes_seedance20_temporal_evaluation(self):

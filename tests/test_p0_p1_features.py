@@ -35,6 +35,37 @@ class FakeConnectionResponse:
 
 
 class P0P1FeatureTests(unittest.TestCase):
+    def test_utility_example_widget_order_matches_comfy_runtime_order(self):
+        workflow = json.loads((ROOT / "example_workflows" / "prompt_inspector_local_qwen_example.json").read_text(encoding="utf-8"))
+        by_type = {node["type"]: node for node in workflow["nodes"]}
+
+        config_schema = provider_config.T8LLMProviderConfig.define_schema()
+        config_info = config_schema.get_v1_info(provider_config.T8LLMProviderConfig)
+        config_names = config_info.input_order["required"] + config_info.input_order["optional"]
+        self.assertEqual(
+            config_names,
+            [
+                "provider", "temperature_policy", "local_model", "local_mmproj", "local_context_size",
+                "local_max_tokens", "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
+                "local_unload_policy", "local_comfy_memory_policy", "credential_alias", "openai_base_url",
+                "custom_model", "ai_workshop_model", "extra_parameters_json",
+            ],
+        )
+        config_values = dict(zip(config_names, by_type["T8LLMProviderConfig"]["widgets_values"], strict=True))
+        self.assertEqual(config_values["provider"], provider_config.PROVIDER_LOCAL)
+        self.assertEqual(config_values["local_model"], core_nodes.DEFAULT_MODEL_FILENAME)
+        self.assertEqual(config_values["local_mmproj"], core_nodes.DEFAULT_MMPROJ_FILENAME)
+
+        inspector_schema = inspector.T8PromptInspector.define_schema()
+        inspector_info = inspector_schema.get_v1_info(inspector.T8PromptInspector)
+        inspector_names = [
+            name for name in inspector_info.input_order["required"] + inspector_info.input_order["optional"]
+            if name != "prompt"
+        ]
+        inspector_values = dict(zip(inspector_names, by_type["T8PromptInspector"]["widgets_values"], strict=True))
+        self.assertEqual(inspector_values["duration_seconds"], 15)
+        self.assertEqual(inspector_values["task_intent"], "")
+
     def test_original_node_ids_and_outputs_remain_first_and_unchanged(self):
         import asyncio
 
@@ -51,7 +82,10 @@ class P0P1FeatureTests(unittest.TestCase):
             [item.display_name for item in schemas[2].outputs],
             ["lyrics", "music_caption", "music3_payload_json", "enhancement_report_json"],
         )
-        self.assertEqual([schema.node_id for schema in schemas[3:]], ["T8LLMProviderConfig", "T8PromptInspector"])
+        self.assertEqual(
+            [schema.node_id for schema in schemas[3:]],
+            ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
+        )
         for schema in schemas[:3]:
             self.assertEqual(schema.inputs[-1].id, "provider_config")
 

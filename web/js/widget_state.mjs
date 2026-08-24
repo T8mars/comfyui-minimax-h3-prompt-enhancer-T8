@@ -5,6 +5,22 @@ export function namedWidgetValueMap(names, values, acceptedLengths = [names.leng
 }
 
 
+export function expandNamedWidgetValues(
+    names,
+    values,
+    defaults = {},
+    acceptedLengths = [names.length],
+) {
+    const mapped = namedWidgetValueMap(names, values, acceptedLengths);
+    if (!mapped) return values;
+    return names.map((name) => {
+        const value = mapped.get(name);
+        if (value !== undefined && value !== null) return value;
+        return Object.hasOwn(defaults, name) ? defaults[name] : null;
+    });
+}
+
+
 export function restoreNamedWidgetValues(node, values, excludedNames = new Set()) {
     if (!values) return;
     for (const [name, value] of values) {

@@ -237,6 +237,7 @@ def main() -> int:
                 fps=int(current_encoding.get("fps", 3)),
                 max_width=int(current_encoding.get("max_width", 224)),
                 colors=int(current_encoding.get("max_colors", 40)),
+                existing_bundle=PREVIEW_ROOT,
             )
             total = int(staged_manifest["total_bytes"])
             if total > bundler.PREVIEW_HARD_LIMIT_BYTES:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -95,6 +96,35 @@ def _resolve_executable(value: str) -> str:
     raise PreviewBundleError(f"Executable not found: {value}")
 
 
+def _existing_preview_index(bundle_dir: Path | None) -> dict[str, dict[str, Any]]:
+    if bundle_dir is None:
+        return {}
+    bundle_dir = bundle_dir.resolve()
+    manifest_path = bundle_dir / "manifest.json"
+    if not manifest_path.is_file():
+        return {}
+    manifest = _read_json(manifest_path)
+    if manifest.get("schema_version") != BUNDLE_SCHEMA:
+        raise PreviewBundleError(f"Unsupported reusable preview manifest: {manifest_path}")
+    result: dict[str, dict[str, Any]] = {}
+    for item in manifest.get("previews", []):
+        if not isinstance(item, dict):
+            raise PreviewBundleError(f"Reusable preview manifest contains an invalid entry: {manifest_path}")
+        case_id = str(item.get("case_id", ""))
+        filename = str(item.get("file", ""))
+        bundled_hash = str(item.get("sha256", ""))
+        if (
+            not case_id
+            or case_id in result
+            or Path(filename).name != filename
+            or not re.fullmatch(r"[0-9a-f]{64}\.gif", filename)
+            or filename != f"{bundled_hash}.gif"
+        ):
+            raise PreviewBundleError(f"Reusable preview manifest identity is invalid: {case_id or '<unknown>'}")
+        result[case_id] = item
+    return result
+
+
 def bundle_previews(
     case_library: Path,
     community_library: Path,
@@ -105,6 +135,7 @@ def bundle_previews(
     fps: int,
     max_width: int,
     colors: int,
+    existing_bundle: Path | None = None,
 ) -> dict[str, Any]:
     sources = _source_previews(case_library, community_library)
     previews = _catalog_previews(catalog_path)
@@ -117,6 +148,8 @@ def bundle_previews(
         raise PreviewBundleError(f"Output directory must be absent or empty: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
     ffmpeg_path = _resolve_executable(ffmpeg)
+    reusable = _existing_preview_index(existing_bundle)
+    reusable_root = existing_bundle.resolve() if existing_bundle is not None else None
     filter_graph = (
         f"fps={fps},scale='min({max_width},iw)':-2:flags=lanczos,split[s0][s1];"
         f"[s0]palettegen=max_colors={colors}:stats_mode=diff[p];"
@@ -125,7 +158,6 @@ def bundle_previews(
 
     entries: list[dict[str, Any]] = []
     bundled_by_hash: dict[str, Path] = {}
-    dedup_references = 0
     for index, preview in enumerate(previews, 1):
         case_id = str(preview["case_id"])
         source = Path(sources[case_id]["path"])
@@ -134,6 +166,37 @@ def bundle_previews(
             raise PreviewBundleError(f"Source GIF is missing: {case_id}: {source}")
         if _sha256(source) != source_hash or source_hash != str(preview.get("sha256", "")):
             raise PreviewBundleError(f"Source/catalog SHA-256 mismatch: {case_id}")
+        reusable_entry = reusable.get(case_id)
+        if reusable_entry is not None and reusable_entry.get("source_sha256") == source_hash:
+            assert reusable_root is not None
+            filename = str(reusable_entry["file"])
+            bundled_hash = str(reusable_entry["sha256"])
+            current = reusable_root / filename
+            if not current.is_file() or _sha256(current) != bundled_hash:
+                raise PreviewBundleError(f"Reusable bundled GIF hash mismatch: {case_id}: {filename}")
+            with current.open("rb") as handle:
+                if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
+                    raise PreviewBundleError(f"Reusable bundled output is not a GIF: {case_id}")
+            final_path = output_dir / filename
+            if final_path.exists():
+                if _sha256(final_path) != bundled_hash:
+                    raise PreviewBundleError(f"Conflicting reusable bundled GIF: {case_id}: {filename}")
+            else:
+                shutil.copy2(current, final_path)
+            entries.append({
+                "case_id": case_id,
+                "file": filename,
+                "source_sha256": source_hash,
+                "sha256": bundled_hash,
+                "bytes": final_path.stat().st_size,
+                "human_preview_only": True,
+            })
+            bundled_by_hash[bundled_hash] = final_path
+            print(
+                f"[{index:02d}/{len(previews)}] {case_id} -> {filename} "
+                f"({final_path.stat().st_size} bytes, reused)"
+            )
+            continue
         temporary = output_dir / f".{index:03d}.gif"
         completed = subprocess.run(
             [
@@ -161,7 +224,6 @@ def bundle_previews(
             if bundled_hash not in bundled_by_hash or _sha256(final_path) != bundled_hash:
                 raise PreviewBundleError(f"Conflicting duplicate bundled GIF: {case_id}: {filename}")
             temporary.unlink()
-            dedup_references += 1
         else:
             if temporary.stat().st_size > NEW_PREVIEW_FILE_LIMIT_BYTES:
                 raise PreviewBundleError(
@@ -181,6 +243,7 @@ def bundle_previews(
         print(f"[{index:02d}/{len(previews)}] {case_id} -> {filename} ({final_path.stat().st_size} bytes)")
 
     assets = list(output_dir.glob("*.gif"))
+    dedup_references = len(entries) - len(assets)
     total_bytes = sum(path.stat().st_size for path in assets)
     largest_bytes = max((path.stat().st_size for path in assets), default=0)
     manifest = {
@@ -204,6 +267,24 @@ def bundle_previews(
     (output_dir / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+    community_count = sum(item["case_id"].startswith("community-skill--") for item in entries)
+    case_count = len(entries) - community_count
+    (output_dir / "NOTICE.md").write_text(
+        "# T8 case preview GIFs\n\n"
+        "This directory contains lightweight GIF previews bundled for the non-official T8 template library.\n\n"
+        f"- {len(entries)} preview references are included: {case_count} released case previews and "
+        f"{community_count} standalone community-Skill previews.\n"
+        "- They are human UI previews only. The node never connects or sends them as image, video, model, or "
+        "LLM reference material.\n"
+        "- Files are indexed by `manifest.json`; both source and bundled SHA-256 values are pinned.\n"
+        f"- The distributable encoding profile is {fps} fps, maximum width {max_width} px, and a "
+        f"{colors}-color palette.\n"
+        "- Source videos are not included.\n\n"
+        "Regenerate the directory with `tools/bundle_t8_case_previews.py` whenever the selector catalog changes. "
+        "Generate into an empty directory, validate the manifest and tests, then replace this directory as one "
+        "reviewed change.\n",
+        encoding="utf-8",
+    )
     return manifest
 
 
@@ -217,6 +298,11 @@ def main() -> int:
     parser.add_argument("--fps", type=int, default=4)
     parser.add_argument("--max-width", type=int, default=256)
     parser.add_argument("--colors", type=int, default=48)
+    parser.add_argument(
+        "--existing-bundle",
+        type=Path,
+        help="Reuse hash-verified encoded GIFs when their source SHA-256 has not changed.",
+    )
     args = parser.parse_args()
     if not 1 <= args.fps <= 15 or not 160 <= args.max_width <= 640 or not 32 <= args.colors <= 128:
         raise PreviewBundleError("Encoding limits: fps 1-15, max-width 160-640, colors 32-128")
@@ -229,6 +315,7 @@ def main() -> int:
         fps=args.fps,
         max_width=args.max_width,
         colors=args.colors,
+        existing_bundle=args.existing_bundle.resolve() if args.existing_bundle else None,
     )
     total_bytes = int(manifest["total_bytes"])
     if total_bytes > PREVIEW_HARD_LIMIT_BYTES:

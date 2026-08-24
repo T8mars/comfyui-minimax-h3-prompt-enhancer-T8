@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 215,
-  "case_selector_template_count": 185,
+  "source_case_count": 216,
+  "case_selector_template_count": 186,
   "community_skill_count": 2,
-  "selector_template_count": 187,
+  "selector_template_count": 188,
   "evidence_variant_count": 30,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -10763,6 +10763,61 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish two original clearly adult characters with an already-legible familiar relationship on one continuous path. Let one adult introduce a controlled prop-based threat that stays physically separated from faces and bodies, then have the partner cross its dramatic meaning with exactly one brief non-harmful interpersonal interruption. Show the threatened adult's surprise before escalating to one larger but still safe movement; the partner responds with a second distinct soft interruption rather than force. Preserve costume, prop, path direction and personal boundaries throughout. End when both adults voluntarily align to the same travel direction and leave together, reframing conflict as bonded play. The reusable mechanism is controlled threat, soft semantic interruption, reaction, safe escalation, repeated relational override and partnered exit—not the source woman, man, faces, robes, sword, bamboo forest, finger tap, sleeves, kicks, exact gestures, creator identity or timing.\nInvariants:\n- inv-01: Establish two clearly adult original characters, a familiar relationship and one continuous shared path.\n- inv-02: Introduce one controlled prop threat with clear physical separation from bodies and faces.\n- inv-03: Use one brief non-harmful interpersonal interruption and hold the threatened adult's reaction.\n- inv-04: Escalate once through a larger safe movement, then answer with a second distinct soft interruption.\n- inv-05: End with both adults voluntarily aligned and moving together along the established path.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Unknown or minor-coded characters make soft contact unsafe or ambiguous.: Establish two clearly adult original characters, a familiar relationship and one continuous shared path.\n- Contact with the weapon changes the scene into violence.: Introduce one controlled prop threat with clear physical separation from bodies and faces.\n- Skipping the reaction makes the touch decorative.: Use one brief non-harmful interpersonal interruption and hold the threatened adult's reaction.\n- Repeated identical beats feel mechanical; real force breaks the tone.: Escalate once through a larger safe movement, then answer with a second distinct soft interruption.\n- One character fleeing alone would imply unresolved threat.: End with both adults voluntarily aligned and moving together along the established path.\nDo not copy from the source: the source adult woman and man, faces, hair, makeup, body identities and exact expressions; the source pale and black robes, sword, hair ornaments and costume motion; the source bamboo forest, stone path, sunlight shafts and exact continuous geography; the source finger tap, sleeve spins, kicks, sword moves, chase and exact relationship choreography; the source creator identity, Seedance 2.5 wording, reverse-engineering claim and 22-second timing",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-visible-four-axis-controller-same-beat-response-v1",
+      "label": "指尖控制｜四向同拍全身响应",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "前景控制器用固定上下左右屏幕映射逐拍驱动同框响应者做清楚全身动作；纵横轴重复验证后才允许一次短收尾。",
+      "input_format": "稳定单镜头 + 同框前景控制器与完整响应者 + 固定四向映射 + 每拍一条指令与一个同拍全身响应 + 纵横轴重复验证 + 最后一次短收尾",
+      "recommended_input": "明亮机器人实验室里，浅灰手套技术员只把小型发光触控笔留在右下前景；原创全尺寸机器人按“上、下、左、右、左、右、上、下、左、右”十拍同步升降或全身横移，最后只闪一次琥珀灯并抬臂。",
+      "required_anchors": [
+        "第一条指令前，控制器和完整响应者已经同框且都可读。",
+        "屏幕方向固定：上=升、下=降、左=整体左移、右=整体右移。",
+        "每个指令只对应一个同拍响应；无提前、延迟、轴向翻转或独立即兴。",
+        "横向是可见全身位移，纵向改变重心；纵横轴都至少重复一次再收尾。"
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-094e45c4f44a2cb1b9170c0689af8327",
+        "case_sha256": "2b676b6bffe2b67dc25c87233d431460528b81b814871d1821beb195203217d3",
+        "release_score": 4.673,
+        "creative_dna_sha256": "2d1fe774b234eb6dbc2ce18b1261a1ff9cc2d7821ab778d7360a651375f7293f",
+        "h3_adapter_sha256": "57d113ab8a8cc01cf3c2c7ad6c030ead15d11052bf0e90e0e771caf3419bbd1d",
+        "seedance20_adapter_sha256": "3716982204b67c058d7c355e1a5715efe2aa112dfefa8cef8a7ca8609b937df0"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-094e45c4f44a2cb1b9170c0689af8327",
+          "label": "指尖控制｜四向同拍全身响应",
+          "short_summary": "前景控制器用固定上下左右屏幕映射逐拍驱动同框响应者做清楚全身动作；纵横轴重复验证后才允许一次短收尾。",
+          "recommended_input": "明亮机器人实验室里，浅灰手套技术员只把小型发光触控笔留在右下前景；原创全尺寸机器人按“上、下、左、右、左、右、上、下、左、右”十拍同步升降或全身横移，最后只闪一次琥珀灯并抬臂。",
+          "required_anchors": [
+            "第一条指令前，控制器和完整响应者已经同框且都可读。",
+            "屏幕方向固定：上=升、下=降、左=整体左移、右=整体右移。",
+            "每个指令只对应一个同拍响应；无提前、延迟、轴向翻转或独立即兴。",
+            "横向是可见全身位移，纵向改变重心；纵横轴都至少重复一次再收尾。"
+          ],
+          "sha256": "54bad2db02f8cce0a1c76c71e2e8b9119ea1f521756dff78444e084af793b2dd",
+          "width": 480,
+          "height": 276,
+          "duration_seconds": 15.08,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only)\nAuthority: T8 original case template (non-official).\n\nMECHANISM:\nA visible foreground controller establishes a fixed four-direction screen-space language; a co-visible responder begins one matching full-body movement within the same beat for every cue, and repeated axis alternation lets the audience learn and verify the causal rule inside one continuous frame.\n\nINVARIANTS:\n1. The visible controller and full responder must be co-visible before the first command and remain jointly readable throughout.\n2. Use one fixed screen-coordinate mapping: up means rise, down means lower, left means shift left and right means shift right.\n3. Each deliberate cue receives one immediate beat-level response; the responder does not freestyle between commands.\n4. Horizontal commands produce whole-body displacement and vertical commands change center of gravity, keeping response amplitude unmistakable.\n5. Alternate and repeat both axes in one continuous take, then end with a brief release only after the rule has been proven.\n\nTRANSFERABLE SLOTS:\n- responder: Adult performer, original robot, puppet or other clearly readable full-body responder.\n- controller: Finger, stylus, baton, wand or other small foreground directional instrument.\n- setting: Room, studio, lab, stage or miniature theatre with a stable spatial baseline.\n- command_sequence: A beat-aligned order containing vertical and horizontal commands with at least one repeated axis test.\n- response_vocabulary: Rise/lower center-of-gravity changes plus visible full-body left/right shifts.\n- camera: One continuous view that preserves both cue and response; angle and lens may change by instantiation.\n- sound_family: Original beat or diegetic cue family that clearly marks each command without copying source audio.\n- release: A brief final flourish after the mapping has been proven.\n\nFAILURE REPAIRS:\n- The controller crosses the center or covers the responder. -> Keep the controller inside a reserved foreground quadrant and cap its apparent area before rendering.\n- The responder uses tiny ambiguous twitches. -> Require visible center-of-gravity change for vertical cues and whole-body displacement for horizontal cues.\n- The responder anticipates, lags or freestyles. -> Use one cue per beat, start cue and response together, and prohibit unrelated movement between commands.\n- The camera or responder scale drifts until one party becomes unreadable. -> Lock a continuous framing corridor and keep both controller and responder legible for all commands.\n- Left/right mapping flips across the take. -> Define screen coordinates once and restate them as a hard continuity constraint.\n- Complex choreography obscures causality. -> Reduce the vocabulary to rise, lower and full-body side shifts; reserve one flourish for the final release.\n\nDo not copy from the source:\nChange subject identity, wardrobe, setting, props, palette, sound and performance surface for every new instance. Preserve only the abstract causal mechanism and ordered anchors.",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

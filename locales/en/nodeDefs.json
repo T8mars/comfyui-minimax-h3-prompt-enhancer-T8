@@ -75,5 +75,19 @@
       "1": {"name": "Warnings JSON"},
       "2": {"name": "Inspection summary"}
     }
+  },
+  "T8PromptText": {
+    "display_name": "T8 Prompt Text",
+    "inputs": {
+      "text": {"name": "Text / Prompt"}
+    },
+    "outputs": {"0": {"name": "Text"}}
+  },
+  "T8ShowText": {
+    "display_name": "T8 Show Text",
+    "inputs": {
+      "text": {"name": "Text to display"}
+    },
+    "outputs": {"0": {"name": "Text"}}
   }
 }

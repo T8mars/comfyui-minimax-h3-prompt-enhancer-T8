@@ -18,12 +18,12 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 215
-EXPECTED_SELECTOR_COUNT = 185
+EXPECTED_RECORD_COUNT = 216
+EXPECTED_SELECTOR_COUNT = 186
 EXPECTED_EVIDENCE_COUNT = 30
 EXPECTED_PENDING_COUNT = 0
 EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 187
+EXPECTED_TOTAL_SELECTOR_COUNT = 188
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -125,28 +125,122 @@ def _validate_community_preview(record: dict[str, Any]) -> tuple[dict[str, Any],
     }, actual_hash
 
 
+def _creative_dna_from_case_file(record: dict[str, Any]) -> str:
+    case_id = str(record.get("case_id", ""))
+    case_root = Path(str(record.get("case_path", ""))).resolve()
+    path = (case_root / "creative-dna.json").resolve()
+    try:
+        path.relative_to(case_root)
+    except ValueError as exc:
+        raise LibraryImportError(f"Creative DNA escapes its case directory: {case_id}") from exc
+    expected_hash = str(record.get("creative_dna_sha256", ""))
+    if not path.is_file() or not re.fullmatch(r"[0-9a-f]{64}", expected_hash):
+        raise LibraryImportError(f"Creative DNA asset is missing or invalid: {case_id}")
+    if _sha256(path) != expected_hash:
+        raise LibraryImportError(f"Creative DNA SHA-256 mismatch: {case_id}")
+    source = _read_json(path)
+    mechanism = str(source.get("mechanism", "")).strip()
+    invariants = source.get("invariants")
+    slots = source.get("slots")
+    failure_modes = source.get("failure_modes")
+    if not mechanism or not isinstance(invariants, list) or not 2 <= len(invariants) <= 5:
+        raise LibraryImportError(f"Creative DNA mechanism/invariants are invalid: {case_id}")
+    invariant_rules = [str(item.get("rule", "")).strip() for item in invariants if isinstance(item, dict)]
+    if len(invariant_rules) != len(invariants) or not all(invariant_rules):
+        raise LibraryImportError(f"Creative DNA contains an empty invariant: {case_id}")
+    if not isinstance(slots, list) or not slots:
+        raise LibraryImportError(f"Creative DNA transferable slots are missing: {case_id}")
+    slot_lines: list[str] = []
+    for item in slots:
+        if not isinstance(item, dict):
+            raise LibraryImportError(f"Creative DNA contains an invalid slot: {case_id}")
+        name = str(item.get("name", "")).strip()
+        description = str(item.get("description", "")).strip()
+        if not name or not description:
+            raise LibraryImportError(f"Creative DNA contains an empty slot: {case_id}")
+        slot_lines.append(f"- {name}: {description}")
+    if not isinstance(failure_modes, list) or not failure_modes:
+        raise LibraryImportError(f"Creative DNA failure repairs are missing: {case_id}")
+    repair_lines: list[str] = []
+    for item in failure_modes:
+        if not isinstance(item, dict):
+            raise LibraryImportError(f"Creative DNA contains an invalid failure repair: {case_id}")
+        failure = str(item.get("failure", "")).strip()
+        repair = str(item.get("repair", "")).strip()
+        if not failure or not repair:
+            raise LibraryImportError(f"Creative DNA contains an empty failure repair: {case_id}")
+        repair_lines.append(f"- {failure} -> {repair}")
+    text = "\n".join([
+        "Reusable Creative DNA (mechanism and production grammar only)",
+        "Authority: T8 original case template (non-official).",
+        "",
+        "MECHANISM:",
+        mechanism,
+        "",
+        "INVARIANTS:",
+        *(f"{index}. {rule}" for index, rule in enumerate(invariant_rules, start=1)),
+        "",
+        "TRANSFERABLE SLOTS:",
+        *slot_lines,
+        "",
+        "FAILURE REPAIRS:",
+        *repair_lines,
+        "",
+        "Do not copy from the source:",
+        "Change subject identity, wardrobe, setting, props, palette, sound and performance surface for every new "
+        "instance. Preserve only the abstract causal mechanism and ordered anchors.",
+    ]).strip()
+    if SECRET_RE.search(text) or URL_RE.search(text):
+        raise LibraryImportError(f"Creative DNA contains a secret or URL: {case_id}")
+    return text
+
+
 def _load_creative_dna(record: dict[str, Any]) -> tuple[str, dict[str, str]]:
     recipes: dict[str, dict[str, Any]] = {}
     actual_hashes: dict[str, str] = {}
+    recipe_modes: set[str] = set()
     for target in TARGETS:
         path = Path(str(record["models"][target]["adapter_path"])).resolve()
         recipe = _read_json(path)
         if recipe.get("case_id") != record["case_id"] or recipe.get("target") != target:
             raise LibraryImportError(f"Adapter identity mismatch: {path}")
-        if recipe.get("node_execution") is not True or recipe.get("media_connections") != []:
-            raise LibraryImportError(f"Built-in selector must be a text-only node recipe: {path}")
-        inputs = recipe.get("inputs")
-        if not isinstance(inputs, dict):
-            raise LibraryImportError(f"Adapter inputs are missing: {path}")
-        for field in ("api_key", "custom_model", "openai_base_url", "openai_video_urls"):
-            if inputs.get(field) != "":
-                raise LibraryImportError(f"Provider/secret field must be empty: {path}: {field}")
-        if "openai_upload_url" in inputs:
-            raise LibraryImportError(f"Removed openai_upload_url found: {path}")
+        if recipe.get("node_execution") is True:
+            recipe_modes.add("node_recipe")
+            if recipe.get("media_connections") != []:
+                raise LibraryImportError(f"Built-in selector must be a text-only node recipe: {path}")
+            inputs = recipe.get("inputs")
+            if not isinstance(inputs, dict):
+                raise LibraryImportError(f"Adapter inputs are missing: {path}")
+            for field in ("api_key", "custom_model", "openai_base_url", "openai_video_urls"):
+                if inputs.get(field) != "":
+                    raise LibraryImportError(f"Provider/secret field must be empty: {path}: {field}")
+            if "openai_upload_url" in inputs:
+                raise LibraryImportError(f"Removed openai_upload_url found: {path}")
+        elif recipe.get("direct_final") is True and recipe.get("node_execution") is False:
+            recipe_modes.add("direct_final")
+            if (
+                recipe.get("media_connections") != []
+                or recipe.get("node") is not None
+                or recipe.get("inputs") != {}
+            ):
+                raise LibraryImportError(f"Direct-final adapter must remain disconnected and input-free: {path}")
+            compiled_prompt = recipe.get("compiled_prompt")
+            if not isinstance(compiled_prompt, str) or not compiled_prompt.strip() or SECRET_RE.search(compiled_prompt):
+                raise LibraryImportError(f"Direct-final adapter prompt is missing or contains a secret: {path}")
+            prompt_hash = hashlib.sha256(compiled_prompt.encode("utf-8")).hexdigest()
+            validation_hash = str(recipe.get("prompt_validation_context", {}).get("prompt_sha256", ""))
+            if prompt_hash != validation_hash:
+                raise LibraryImportError(f"Direct-final adapter prompt SHA-256 mismatch: {path}")
+        else:
+            raise LibraryImportError(f"Unsupported adapter execution contract: {path}")
         recipes[target] = recipe
         actual_hashes[target] = _sha256(path)
         if record["models"][target].get("adapter_sha256") != actual_hashes[target]:
             raise LibraryImportError(f"Adapter SHA-256 mismatch: {path}")
+    if len(recipe_modes) != 1:
+        raise LibraryImportError(f"Dual-model adapter modes do not match: {record['case_id']}")
+    if recipe_modes == {"direct_final"}:
+        return _creative_dna_from_case_file(record), actual_hashes
     h3_dna = str(recipes["h3"]["inputs"].get("reference_template", "")).strip()
     seedance_dna = str(recipes["seedance20"]["inputs"].get("reference_template", "")).strip()
     if not h3_dna or h3_dna != seedance_dna:
@@ -345,7 +439,7 @@ def build_catalog(
     )
     if declared_counts != expected_counts or actual_counts != expected_counts:
         raise LibraryImportError(
-            "Expected 215 records: 185 selectors, 30 evidence variants, and no pending cases"
+            "Expected 216 records: 186 selectors, 30 evidence variants, and no pending cases"
         )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
@@ -501,7 +595,7 @@ def build_catalog(
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
     if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 187 total non-official selectors")
+        raise LibraryImportError("Expected 188 total non-official selectors")
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -672,7 +766,7 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Import the 215-record case handoff: 185 selectors, 30 evidence variants, "
+            "Import the 216-record case handoff: 186 selectors, 30 evidence variants, "
             "no pending cases, plus two standalone community Skills."
         )
     )

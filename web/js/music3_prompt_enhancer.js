@@ -140,6 +140,15 @@ const SERIALIZED_WIDGET_NAMES = [
     "local_unload_policy",
     "local_comfy_memory_policy",
 ];
+const LOCAL_WIDGET_DEFAULTS = {
+    local_model: "Qwen3.8-27B-Q4_K_M.gguf",
+    local_context_size: 32768,
+    local_max_tokens: 4096,
+    local_think_mode: "关闭（推荐，速度优先）",
+    local_reasoning_effort: "medium",
+    local_unload_policy: "执行后卸载（推荐）",
+    local_comfy_memory_policy: "AUTO（显存不足时释放）",
+};
 
 
 function setWidgetVisible(widget, visible) {
@@ -208,7 +217,11 @@ function serializedWidgetValueMap(values) {
 function remapSerializedWidgetValues(values) {
     const source = serializedWidgetValueMap(values);
     if (!source) return values;
-    return SERIALIZED_WIDGET_NAMES.map((name) => source.get(name) ?? null);
+    return SERIALIZED_WIDGET_NAMES.map((name) => {
+        const value = source.get(name);
+        if (value !== undefined && value !== null) return value;
+        return Object.hasOwn(LOCAL_WIDGET_DEFAULTS, name) ? LOCAL_WIDGET_DEFAULTS[name] : null;
+    });
 }
 
 

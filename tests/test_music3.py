@@ -140,7 +140,10 @@ class Music3PromptEnhancerTests(unittest.TestCase):
             registered[:3],
             ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"],
         )
-        self.assertEqual(registered[3:], ["T8LLMProviderConfig", "T8PromptInspector"])
+        self.assertEqual(
+            registered[3:],
+            ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
+        )
 
     def test_schema_is_text_only_and_appends_safe_report_output(self):
         schema = music3.MiniMaxMusic3PromptEnhancer.define_schema()
@@ -736,6 +739,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertIn("RUNTIME_V1_WIDGET_NAMES", source)
         self.assertIn("serializedWidgetValueMap", source)
         self.assertIn("remapSerializedWidgetValues", source)
+        self.assertIn('local_model: "Qwen3.8-27B-Q4_K_M.gguf"', source)
         self.assertIn("if (widget) widget.value = value", source)
         self.assertNotIn("reorderWidgets(this)", source)
         self.assertIn("if (!node || node.music3ResizeScheduled) return;", source)
@@ -758,8 +762,8 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn("reference_video", raw)
         self.assertNotIn("reference_image", raw)
         workflow = json.loads(raw)
-        self.assertEqual(len(workflow["nodes"]), 1)
-        node = workflow["nodes"][0]
+        self.assertEqual(len(workflow["nodes"]), 4)
+        node = next(item for item in workflow["nodes"] if item["type"] == "MiniMaxMusic3PromptEnhancerT8")
         self.assertEqual(node["type"], "MiniMaxMusic3PromptEnhancerT8")
         self.assertEqual(
             [item["name"] for item in node["outputs"]],
@@ -767,6 +771,9 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         )
         self.assertEqual(node["widgets_values"][27], "")
         self.assertIn("隐私隔离", node["widgets_values"][19])
+        self.assertEqual(len(node["widgets_values"]), 38)
+        self.assertEqual(node["widgets_values"][31], "Qwen3.8-27B-Q4_K_M.gguf")
+        self.assertEqual(node["widgets_values"][32:34], [32768, 4096])
 
     def test_official_source_manifest_pins_snapshot_counts_and_hash(self):
         manifest = json.loads((PROJECT_ROOT / "official_skills" / "SOURCE.json").read_text(encoding="utf-8"))

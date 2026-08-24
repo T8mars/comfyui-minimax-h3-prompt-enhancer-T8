@@ -1,63 +1,121 @@
 {
-  "id": "8aa0b5b8-38b5-4a74-b712-ec9f8ff6b793",
+  "id": "33a44185-1733-5a92-bea7-c9f2369d6753",
   "revision": 0,
-  "last_node_id": 1,
-  "last_link_id": 0,
+  "last_node_id": 3,
+  "last_link_id": 2,
   "nodes": [
     {
       "id": 1,
-      "type": "Seedance20PromptEnhancerT8",
-      "pos": [480, 120],
-      "size": [520, 720],
+      "type": "T8PromptText",
+      "pos": [
+        60,
+        260
+      ],
+      "size": [
+        420,
+        260
+      ],
       "flags": {},
       "order": 0,
       "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写 API Key（保存工作流会包含明文）"
+    },
+    {
+      "id": 2,
+      "type": "Seedance20PromptEnhancerT8",
+      "pos": [
+        560,
+        60
+      ],
+      "size": [
+        620,
+        980
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
       "inputs": [
-        {"name": "first_frame", "localized_name": "first_frame", "shape": 7, "type": "IMAGE", "link": null},
-        {"name": "last_frame", "localized_name": "last_frame", "shape": 7, "type": "IMAGE", "link": null},
-        {"name": "reference_images.reference_image_0", "localized_name": "reference_images.reference_image_0", "label": "reference_image_0", "shape": 7, "type": "IMAGE", "link": null},
-        {"name": "reference_videos.reference_video_0", "localized_name": "reference_videos.reference_video_0", "label": "reference_video_0", "shape": 7, "type": "VIDEO", "link": null},
-        {"name": "prompt", "localized_name": "prompt", "type": "STRING", "widget": {"name": "prompt"}, "link": null},
-        {"name": "task_intent", "localized_name": "task_intent", "type": "COMBO", "widget": {"name": "task_intent"}, "link": null},
-        {"name": "complexity_mode", "localized_name": "complexity_mode", "type": "COMBO", "widget": {"name": "complexity_mode"}, "link": null},
-        {"name": "duration_seconds", "localized_name": "duration_seconds", "type": "COMBO", "widget": {"name": "duration_seconds"}, "link": null},
-        {"name": "shot_count", "localized_name": "shot_count", "type": "COMBO", "widget": {"name": "shot_count"}, "link": null},
-        {"name": "rewrite_mode", "localized_name": "rewrite_mode", "type": "COMBO", "widget": {"name": "rewrite_mode"}, "link": null},
-        {"name": "output_detail", "localized_name": "output_detail", "type": "COMBO", "widget": {"name": "output_detail"}, "link": null},
-        {"name": "output_language", "localized_name": "output_language", "type": "COMBO", "widget": {"name": "output_language"}, "link": null},
-        {"name": "prompt_mode", "localized_name": "prompt_mode", "type": "COMBO", "widget": {"name": "prompt_mode"}, "link": null},
-        {"name": "reference_syntax", "localized_name": "reference_syntax", "type": "COMBO", "widget": {"name": "reference_syntax"}, "link": null},
-        {"name": "subtitle_policy", "localized_name": "subtitle_policy", "type": "COMBO", "widget": {"name": "subtitle_policy"}, "link": null},
-        {"name": "stability_constraints", "localized_name": "stability_constraints", "type": "COMBO", "widget": {"name": "stability_constraints"}, "link": null},
-        {"name": "custom_length_target", "localized_name": "custom_length_target", "shape": 7, "type": "INT", "widget": {"name": "custom_length_target"}, "link": null},
-        {"name": "reference_roles", "localized_name": "reference_roles", "shape": 7, "type": "STRING", "widget": {"name": "reference_roles"}, "link": null},
-        {"name": "reference_context", "localized_name": "reference_context", "shape": 7, "type": "STRING", "widget": {"name": "reference_context"}, "link": null},
-        {"name": "constraints", "localized_name": "constraints", "shape": 7, "type": "STRING", "widget": {"name": "constraints"}, "link": null},
-        {"name": "api_key", "localized_name": "api_key", "shape": 7, "type": "STRING", "widget": {"name": "api_key"}, "link": null},
-        {"name": "reference_template", "localized_name": "reference_template", "shape": 7, "type": "STRING", "widget": {"name": "reference_template"}, "link": null},
-        {"name": "api_mode", "localized_name": "api_mode", "type": "COMBO", "widget": {"name": "api_mode"}, "link": null},
-        {"name": "ai_workshop_model", "localized_name": "ai_workshop_model", "type": "COMBO", "widget": {"name": "ai_workshop_model"}, "link": null},
-        {"name": "custom_model", "localized_name": "custom_model", "shape": 7, "type": "STRING", "widget": {"name": "custom_model"}, "link": null},
-        {"name": "openai_base_url", "localized_name": "openai_base_url", "shape": 7, "type": "STRING", "widget": {"name": "openai_base_url"}, "link": null},
-        {"name": "openai_video_urls", "localized_name": "openai_video_urls", "shape": 7, "type": "STRING", "widget": {"name": "openai_video_urls"}, "link": null},
-        {"name": "seed", "localized_name": "seed", "shape": 7, "type": "INT", "widget": {"name": "seed"}, "link": null}
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 1,
+          "label": "提示词增强 LLM API Key"
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        }
       ],
       "outputs": [
-        {"name": "enhanced_prompt", "localized_name": "enhanced_prompt", "type": "STRING", "links": null}
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
       ],
-      "properties": {"Node name for S&R": "Seedance20PromptEnhancerT8"},
+      "properties": {
+        "Node name for S&R": "Seedance20PromptEnhancerT8"
+      },
       "widgets_values": [
-        "雨夜的霓虹街道上，一名穿红色风衣的女人缓步走向镜头，镜头低机位跟拍，风吹动衣摆，远处雷声与城市环境声交织。",
+        "15秒电影感追逐：雨夜霓虹街区，一名红衣女性穿过人群并跃上驶离的电车，保持人物服装、面部和空间方向一致。",
         "AUTO（根据意图与素材判断）",
         "AUTO（自动判断）",
-        "AUTO（模型智能选择）",
-        "AUTO（系统自动判断）",
+        "15",
+        "5",
         "balanced",
         "AUTO（按内容判断）",
-      "中文",
-      "官方优化",
-      "无（不使用 T8 案例）",
-      "火山官方（@图片N/@视频N/@音频N）",
+        "中文",
+        "官方优化",
+        "无（不使用 T8 案例）",
+        "火山官方（@图片N/@视频N/@音频N）",
         "AUTO（按用户意图）",
         "AUTO（按场景添加）",
         0,
@@ -72,13 +130,82 @@
         "",
         "",
         0,
-        "randomize"
+        "fixed",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "mmproj-F16.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）"
       ]
+    },
+    {
+      "id": 3,
+      "type": "T8ShowText",
+      "pos": [
+        1240,
+        300
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
     }
   ],
-  "links": [],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      4,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ]
+  ],
   "groups": [],
   "config": {},
-  "extra": {"ds": {"scale": 1.0, "offset": [0, 0]}},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
   "version": 0.4
 }

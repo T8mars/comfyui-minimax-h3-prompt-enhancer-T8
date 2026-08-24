@@ -1,19 +1,19 @@
 {
-  "id": "9b08af1d-63e2-58a7-9f37-d9a9945d64ea",
+  "id": "e6add542-4c44-5b24-b923-71762037fa64",
   "revision": 0,
   "last_node_id": 4,
   "last_link_id": 3,
   "nodes": [
     {
       "id": 1,
-      "type": "T8PromptText",
+      "type": "T8LLMProviderConfig",
       "pos": [
         60,
-        260
+        100
       ],
       "size": [
-        420,
-        260
+        440,
+        520
       ],
       "flags": {},
       "order": 0,
@@ -21,27 +21,41 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "text",
-          "type": "STRING",
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
           "links": [
             1
           ]
         }
       ],
       "properties": {
-        "Node name for S&R": "T8PromptText"
+        "Node name for S&R": "T8LLMProviderConfig"
       },
       "widgets_values": [
+        "Local Qwen",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "mmproj-F16.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
         ""
-      ],
-      "title": "填写 API Key（保存工作流会包含明文）"
+      ]
     },
     {
       "id": 2,
       "type": "MiniMaxMusic3PromptEnhancerT8",
       "pos": [
-        560,
-        60
+        580,
+        80
       ],
       "size": [
         620,
@@ -55,14 +69,14 @@
           "name": "api_key",
           "shape": 7,
           "type": "STRING",
-          "link": 1,
+          "link": null,
           "label": "LLM API Key"
         },
         {
           "name": "provider_config",
           "shape": 7,
           "type": "T8_LLM_PROVIDER_CONFIG",
-          "link": null,
+          "link": 1,
           "label": "共享 LLM 渠道配置（可选）"
         }
       ],
@@ -108,7 +122,7 @@
         "AUTO",
         "English（官方默认）",
         0,
-        "贞贞平价小屋（推荐）",
+        "本地 Qwen3.8-27B（GGUF，离线）",
         "gemini-3.5-flash",
         0,
         "fixed",
@@ -140,7 +154,7 @@
       "id": 3,
       "type": "T8ShowText",
       "pos": [
-        1240,
+        1260,
         100
       ],
       "size": [
@@ -175,7 +189,7 @@
       "id": 4,
       "type": "T8ShowText",
       "pos": [
-        1240,
+        1260,
         440
       ],
       "size": [
@@ -213,8 +227,8 @@
       1,
       0,
       2,
-      0,
-      "STRING"
+      1,
+      "T8_LLM_PROVIDER_CONFIG"
     ],
     [
       2,

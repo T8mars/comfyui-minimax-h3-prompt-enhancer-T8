@@ -75,5 +75,19 @@
       "1": {"name": "提示 JSON"},
       "2": {"name": "检查摘要"}
     }
+  },
+  "T8PromptText": {
+    "display_name": "T8 文本输入（Prompt）",
+    "inputs": {
+      "text": {"name": "文本 / Prompt"}
+    },
+    "outputs": {"0": {"name": "文本"}}
+  },
+  "T8ShowText": {
+    "display_name": "T8 显示文本",
+    "inputs": {
+      "text": {"name": "待显示文本"}
+    },
+    "outputs": {"0": {"name": "文本"}}
   }
 }

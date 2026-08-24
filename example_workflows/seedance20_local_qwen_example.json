@@ -1,19 +1,19 @@
 {
-  "id": "1f767938-fc92-58a1-b390-8726be6870b6",
+  "id": "5d9a52f9-bbae-58cd-9749-367672b5fa7f",
   "revision": 0,
   "last_node_id": 3,
   "last_link_id": 2,
   "nodes": [
     {
       "id": 1,
-      "type": "T8PromptText",
+      "type": "T8LLMProviderConfig",
       "pos": [
         60,
-        260
+        100
       ],
       "size": [
-        420,
-        260
+        440,
+        520
       ],
       "flags": {},
       "order": 0,
@@ -21,27 +21,41 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "text",
-          "type": "STRING",
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
           "links": [
             1
           ]
         }
       ],
       "properties": {
-        "Node name for S&R": "T8PromptText"
+        "Node name for S&R": "T8LLMProviderConfig"
       },
       "widgets_values": [
+        "Local Qwen",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "mmproj-F16.gguf",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
         ""
-      ],
-      "title": "填写 API Key（保存工作流会包含明文）"
+      ]
     },
     {
       "id": 2,
-      "type": "MiniMaxH3PromptEnhancerT8",
+      "type": "Seedance20PromptEnhancerT8",
       "pos": [
-        560,
-        60
+        580,
+        80
       ],
       "size": [
         620,
@@ -81,14 +95,14 @@
           "name": "api_key",
           "shape": 7,
           "type": "STRING",
-          "link": 1,
-          "label": "API Key"
+          "link": null,
+          "label": "提示词增强 LLM API Key"
         },
         {
           "name": "provider_config",
           "shape": 7,
           "type": "T8_LLM_PROVIDER_CONFIG",
-          "link": null,
+          "link": 1,
           "label": "共享 LLM 渠道配置（可选）"
         }
       ],
@@ -102,26 +116,30 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+        "Node name for S&R": "Seedance20PromptEnhancerT8"
       },
       "widgets_values": [
-        "国风水墨竹林中，白衣剑客踏过浅水，镜头由低机位跟拍转为环绕，剑气掀起墨色涟漪，环境声与衣袂破风声清晰。",
-        "T2VA（文生音视频）",
-        15,
+        "15秒电影感追逐：雨夜霓虹街区，一名红衣女性穿过人群并跃上驶离的电车，保持人物服装、面部和空间方向一致。",
+        "AUTO（根据意图与素材判断）",
+        "AUTO（自动判断）",
+        "15",
         "5",
         "balanced",
-        0,
+        "AUTO（按内容判断）",
         "中文",
-        "官方增强",
-        "现有兼容（保留中英文）",
-        "无（仅核心规则）",
+        "官方优化",
         "无（不使用 T8 案例）",
-        "贞贞平价小屋（推荐）",
+        "火山官方（@图片N/@视频N/@音频N）",
+        "AUTO（按用户意图）",
+        "AUTO（按场景添加）",
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "本地 Qwen3.8-27B（GGUF，离线）",
         "gemini-3.5-flash",
-        "",
-        "",
-        "",
-        "",
         "",
         "",
         "",
@@ -142,7 +160,7 @@
       "id": 3,
       "type": "T8ShowText",
       "pos": [
-        1240,
+        1260,
         300
       ],
       "size": [
@@ -180,8 +198,8 @@
       1,
       0,
       2,
-      4,
-      "STRING"
+      5,
+      "T8_LLM_PROVIDER_CONFIG"
     ],
     [
       2,

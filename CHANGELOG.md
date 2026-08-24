@@ -3,6 +3,33 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## Unreleased
+
+## [1.4.0] - 2026-08-24
+
+### Fixed
+
+- Expanded legacy H3, Seedance 2.0, and Music 3 widget arrays before ComfyUI
+  validates appended local-Qwen combo fields, preventing `randomize` or `null`
+  from being interpreted as a GGUF model name.
+- Rebuilt all four existing example workflows with the current 31/35/38 widget
+  contracts.
+
+### Added
+
+- Added the author-authorized `指尖控制｜四向同拍全身响应` T8 selector for
+  both MiniMax H3 and Seedance 2.0, with one bundled human-only lightweight GIF.
+  The source video and direct-final example prompts are not bundled or sent to
+  the LLM.
+- Added dependency-free `T8 Prompt Text` and `T8 Show Text` STRING utility nodes,
+  including a read-only result preview, copy action, localization, node
+  documentation, and a dedicated example workflow.
+- Added native output viewers to generated local-Qwen and multi-task workflows,
+  so results can be inspected without EasyUse or Comfyroll.
+- Added dedicated local Qwen3.8-27B workflows for H3, Seedance 2.0, and Music 3,
+  plus a local H3-to-Prompt-Inspector workflow. Every local example includes a
+  preconnected `T8 LLM Provider Config` node and a matching thumbnail.
+
 ## [1.3.0] - 2026-08-24
 
 ### Added

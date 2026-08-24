@@ -1,10 +1,10 @@
 # T8 case preview GIFs
 
-This directory contains lightweight GIF previews bundled for the 187 non-official T8 selectors.
+This directory contains lightweight GIF previews bundled for the non-official T8 template library.
 
-- 217 previews are included: 215 released case previews and 2 standalone community-Skill previews.
+- 218 preview references are included: 216 released case previews and 2 standalone community-Skill previews.
 - They are human UI previews only. The node never connects or sends them as image, video, model, or LLM reference material.
-- Files are deterministically indexed by `manifest.json`; both source and bundled SHA-256 values are pinned.
+- Files are indexed by `manifest.json`; both source and bundled SHA-256 values are pinned.
 - The distributable encoding profile is 3 fps, maximum width 224 px, and a 40-color palette.
 - Source videos are not included.
 

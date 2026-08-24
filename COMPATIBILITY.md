@@ -22,10 +22,18 @@ Compatibility invariants:
 - The optional `provider_config` socket is appended after every existing input.
   It has no serialized widget and defaults to `None`, so 1.0.x/1.1.x/1.2.0
   workflows keep their 31/35/38 widget arrays and original execution path.
-- `T8LLMProviderConfig` and `T8PromptInspector` are additional utility node IDs;
+- `T8LLMProviderConfig`, `T8PromptInspector`, `T8PromptText`, and `T8ShowText`
+  are additional utility node IDs;
   they do not replace, rename, or reorder the original three node registrations.
 - A connected provider config does not mutate the original node widgets.
   Disconnecting it restores the saved per-node provider values immediately.
+- Legacy H3 21/22-value, Seedance 25/26-value, and Music 31-value arrays are
+  expanded with valid local-Qwen defaults before ComfyUI validates combo values.
+  This prevents the historical seed control value `randomize` from being read as
+  `local_model`; current 31/35/38-value workflows remain unchanged.
+- Bundled workflows use the repository's own `T8PromptText` and `T8ShowText`
+  STRING utilities, so text entry and result display do not require Comfyroll or
+  EasyUse.
 
 The migration contracts are covered by `tests/test_nodes.py`,
 `tests/test_seedance20.py`, `tests/test_music3.py`, and

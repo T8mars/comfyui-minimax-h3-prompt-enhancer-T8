@@ -86,12 +86,35 @@ class MaintenanceTests(unittest.TestCase):
 
     def test_native_workflows_have_same_name_thumbnails(self):
         workflows = sorted((ROOT / "example_workflows").glob("*.json"))
-        self.assertEqual(len(workflows), 4)
+        self.assertEqual(len(workflows), 9)
+        seen_types = set()
         for workflow in workflows:
             with self.subTest(workflow=workflow.name):
                 self.assertTrue(workflow.with_suffix(".jpg").is_file())
                 source = workflow.read_text(encoding="utf-8")
                 self.assertNotRegex(source, r"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{16,}")
+                payload = json.loads(source)
+                seen_types.update(node["type"] for node in payload["nodes"])
+                for node in payload["nodes"]:
+                    expected = {
+                        "MiniMaxH3PromptEnhancerT8": (31, 22),
+                        "Seedance20PromptEnhancerT8": (35, 26),
+                        "MiniMaxMusic3PromptEnhancerT8": (38, 31),
+                    }.get(node["type"])
+                    if expected:
+                        count, model_index = expected
+                        self.assertEqual(len(node["widgets_values"]), count)
+                        self.assertNotIn(node["widgets_values"][model_index], (None, "", "randomize"))
+        self.assertTrue({
+            "MiniMaxH3PromptEnhancerT8",
+            "Seedance20PromptEnhancerT8",
+            "MiniMaxMusic3PromptEnhancerT8",
+            "T8LLMProviderConfig",
+            "T8PromptInspector",
+            "T8PromptText",
+            "T8ShowText",
+        }.issubset(seen_types))
+        self.assertFalse({"CR Prompt Text", "easy showAnything"}.intersection(seen_types))
 
     def test_locales_and_node_docs_cover_all_v3_nodes(self):
         node_ids = {
@@ -100,6 +123,8 @@ class MaintenanceTests(unittest.TestCase):
             "MiniMaxMusic3PromptEnhancerT8",
             "T8LLMProviderConfig",
             "T8PromptInspector",
+            "T8PromptText",
+            "T8ShowText",
         }
         for locale in ("en", "zh"):
             data = json.loads((ROOT / "locales" / locale / "nodeDefs.json").read_text(encoding="utf-8"))

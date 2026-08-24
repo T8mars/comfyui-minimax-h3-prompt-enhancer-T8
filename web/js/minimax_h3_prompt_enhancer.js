@@ -4,7 +4,12 @@ import { addOfficialPresetUI } from "./official_preset_previews.js";
 import { showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
-import { namedWidgetValueMap, restoreNamedWidgetValues, serializeNamedWidgetValues } from "./widget_state.mjs";
+import {
+    expandNamedWidgetValues,
+    namedWidgetValueMap,
+    restoreNamedWidgetValues,
+    serializeNamedWidgetValues,
+} from "./widget_state.mjs";
 
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
@@ -94,6 +99,17 @@ const SERIALIZED_WIDGET_NAMES = [
     "local_unload_policy",
     "local_comfy_memory_policy",
 ];
+const LOCAL_WIDGET_DEFAULTS = {
+    local_model: "Qwen3.8-27B-Q4_K_M.gguf",
+    local_mmproj: "mmproj-F16.gguf",
+    local_context_size: 32768,
+    local_max_tokens: 4096,
+    local_think_mode: "关闭（推荐，速度优先）",
+    local_reasoning_effort: "medium",
+    local_video_sample_fps: 2.0,
+    local_unload_policy: "执行后卸载（推荐）",
+    local_comfy_memory_policy: "AUTO（显存不足时释放）",
+};
 
 
 function setWidgetVisible(widget, visible) {
@@ -678,6 +694,17 @@ app.registerExtension({
                 args[0]?.widgets_values,
                 [22, SERIALIZED_WIDGET_NAMES.length],
             );
+            if (restoredValues) {
+                args[0] = {
+                    ...args[0],
+                    widgets_values: expandNamedWidgetValues(
+                        SERIALIZED_WIDGET_NAMES,
+                        args[0].widgets_values,
+                        LOCAL_WIDGET_DEFAULTS,
+                        [22, SERIALIZED_WIDGET_NAMES.length],
+                    ),
+                };
+            }
             if (Array.isArray(args[0]?.widgets_values)) {
                 this.t8PendingCaseTemplateValue = args[0].widgets_values[10];
             }

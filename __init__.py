@@ -9,6 +9,7 @@ from .diagnostics_routes import register_diagnostics_routes
 from .provider_config import T8LLMProviderConfig
 from .credential_routes import register_credential_routes
 from .prompt_inspector import T8PromptInspector
+from .text_utilities import T8PromptText, T8ShowText
 
 
 WEB_DIRECTORY = "./web/js"
@@ -26,6 +27,8 @@ class T8PromptEnhancerExtension(ComfyExtension):
             MiniMaxMusic3PromptEnhancer,
             T8LLMProviderConfig,
             T8PromptInspector,
+            T8PromptText,
+            T8ShowText,
         ]
 
 
@@ -39,5 +42,7 @@ __all__ = [
     "MiniMaxMusic3PromptEnhancer",
     "T8LLMProviderConfig",
     "T8PromptInspector",
+    "T8PromptText",
+    "T8ShowText",
     "comfy_entrypoint",
 ]

@@ -183,8 +183,13 @@ def _verify_t8_preview_manifest() -> dict[str, int]:
 
 
 def verify_preview_budget() -> dict[str, int | str]:
-    preview_root = ROOT / "web" / "js" / "assets"
-    gifs = list(preview_root.rglob("*.gif"))
+    asset_root = ROOT / "web" / "js" / "assets"
+    # Count only the two distributable preview roots. During an atomic case
+    # update a hidden sibling temporarily holds the rollback bundle; including
+    # it would double-count identical assets and reject an otherwise safe
+    # release before the rollback directory can be removed.
+    gifs = list((asset_root / "official-previews").glob("*.gif"))
+    gifs.extend((asset_root / "t8-case-previews").glob("*.gif"))
     total = sum(path.stat().st_size for path in gifs)
     if total > MAX_BUNDLED_PREVIEW_BYTES:
         raise VerificationError(
@@ -230,6 +235,11 @@ def verify_required_release_files() -> None:
 
 
 def run_optional_checks() -> None:
+    subprocess.run(
+        [sys.executable, "tools/build_example_workflows.py", "--check"],
+        cwd=ROOT,
+        check=True,
+    )
     subprocess.run(
         [sys.executable, "tools/update_h3_official_skill.py", "--check-current"],
         cwd=ROOT,
