@@ -1,12 +1,13 @@
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const AI_WORKSHOP_API_MODE_PREFIX = "贞贞的AI工坊";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
-const LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
+const LOCAL_QWEN_API_MODE = "本地 GGUF（llama.cpp / Qwen，离线）";
+const LEGACY_LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
 
 
 export function providerCapabilitySummary(apiMode, baseUrl = "", { textOnly = false } = {}) {
     const mode = String(apiMode || "");
-    if (mode === LOCAL_QWEN_API_MODE) {
+    if ([LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE].includes(mode)) {
         return {
             profile: "local-qwen-verified",
             image: textOnly ? "此节点无媒体输入" : "支持：视觉投影器读取图片",

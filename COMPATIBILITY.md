@@ -31,6 +31,14 @@ Compatibility invariants:
   expanded with valid local-Qwen defaults before ComfyUI validates combo values.
   This prevents the historical seed control value `randomize` from being read as
   `local_model`; current 31/35/38-value workflows remain unchanged.
+- The historical API-mode value `本地 Qwen3.8-27B（GGUF，离线）` remains an
+  accepted execution alias for the current generic local-GGUF label.
+- Historical bare filenames still resolve in `models/LLM/Qwen3.8`; new models
+  may use recursive `models/LLM` relative paths, so duplicate basenames never
+  silently select an arbitrary file.
+- Existing explicit `mmproj-F16.gguf` values remain valid. New nodes default to
+  metadata-based `AUTO（自动匹配）` without adding or reordering serialized
+  widgets.
 - Bundled workflows use the repository's own `T8PromptText` and `T8ShowText`
   STRING utilities, so text entry and result display do not require Comfyroll or
   EasyUse.

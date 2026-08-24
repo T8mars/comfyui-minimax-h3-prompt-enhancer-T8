@@ -582,7 +582,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             ],
         )
         self.assertEqual(node["widgets_values"][26], "Qwen3.8-27B-Q4_K_M.gguf")
-        self.assertEqual(node["widgets_values"][27], "mmproj-F16.gguf")
+        self.assertEqual(node["widgets_values"][27], seedance20.AUTO_MMPROJ)
         self.assertEqual(node["widgets_values"][28:30], [32768, 4096])
         self.assertNotIn("sk-", path.read_text(encoding="utf-8"))
 

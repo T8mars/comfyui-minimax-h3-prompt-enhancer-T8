@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import atexit
+import gc
+import importlib.util
 import json
 import os
 import secrets
+import shutil
 import socket
 import subprocess
 import tempfile
@@ -15,11 +18,37 @@ from typing import Any
 
 import requests
 
+try:
+    from .local_gguf_catalog import (
+        AUTO_MMPROJ,
+        GGUFMetadataError,
+        catalog_public_payload,
+        legacy_qwen_model_directory,
+        llm_model_directory,
+        model_info_for_path,
+        model_options,
+        projector_options,
+        resolve_gguf_path,
+        resolve_projector_path,
+    )
+except ImportError:
+    from local_gguf_catalog import (
+        AUTO_MMPROJ,
+        GGUFMetadataError,
+        catalog_public_payload,
+        legacy_qwen_model_directory,
+        llm_model_directory,
+        model_info_for_path,
+        model_options,
+        projector_options,
+        resolve_gguf_path,
+        resolve_projector_path,
+    )
+
 
 NODE_ROOT = Path(__file__).resolve().parent
 RUNTIME_ROOT = NODE_ROOT / "runtime" / "local_qwen"
 RUNTIME_CONFIG_PATH = RUNTIME_ROOT / "runtime_config.json"
-MODEL_SUBDIRECTORY = Path("LLM") / "Qwen3.8"
 DEFAULT_MODEL_FILENAME = "Qwen3.8-27B-Q4_K_M.gguf"
 UNCENSORED_MODEL_FILENAME = "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf"
 DEFAULT_MMPROJ_FILENAME = "mmproj-F16.gguf"
@@ -60,70 +89,38 @@ def normalize_llama_seed(seed: int) -> int:
     return int(seed) % LLAMA_SEED_MODULUS
 
 
-def _models_root() -> Path:
-    try:
-        import folder_paths
-
-        return Path(folder_paths.models_dir).resolve()
-    except (ImportError, AttributeError):
-        return (NODE_ROOT.parents[1] / "models").resolve()
-
-
 def qwen_model_directory() -> Path:
-    return (_models_root() / MODEL_SUBDIRECTORY).resolve()
-
-
-def _safe_model_filename(value: str, *, label: str) -> str:
-    filename = str(value or "").strip()
-    if not filename:
-        raise LocalQwenRuntimeError(f"{label} is empty.")
-    if filename != Path(filename).name or Path(filename).suffix.casefold() != ".gguf":
-        raise LocalQwenRuntimeError(f"{label} must be a GGUF filename without a directory path.")
-    return filename
+    return legacy_qwen_model_directory()
 
 
 def resolve_model_path(filename: str, *, label: str, required: bool = True) -> Path:
-    safe_name = _safe_model_filename(filename, label=label)
-    root = qwen_model_directory()
-    path = (root / safe_name).resolve()
+    raw = str(filename or "").strip()
+    if raw and "/" not in raw and "\\" not in raw and Path(raw).suffix.casefold() == ".gguf":
+        legacy_candidate = (qwen_model_directory() / raw).resolve()
+        if legacy_candidate.is_file():
+            return legacy_candidate
     try:
-        path.relative_to(root)
-    except ValueError as error:
-        raise LocalQwenRuntimeError(f"{label} must remain inside {root}.") from error
-    if required and not path.is_file():
-        raise LocalQwenRuntimeError(
-            f"Missing {label}: {path}. Run install_local_qwen.py --model to download and verify it."
-        )
-    return path
+        return resolve_gguf_path(filename, label=label, required=required)
+    except GGUFMetadataError as error:
+        raise LocalQwenRuntimeError(str(error)) from error
+
+
+def resolve_mmproj_path(selection: str, *, model_filename: str) -> Path:
+    try:
+        return resolve_projector_path(selection, model_identifier=model_filename)
+    except GGUFMetadataError as error:
+        raise LocalQwenRuntimeError(str(error)) from error
 
 
 def list_gguf_models() -> list[str]:
-    root = qwen_model_directory()
-    if not root.is_dir():
-        return [DEFAULT_MODEL_FILENAME]
-    names = sorted(
-        (item.name for item in root.iterdir() if item.is_file() and item.suffix.casefold() == ".gguf"),
-        key=str.casefold,
-    )
-    non_projectors = [name for name in names if not name.casefold().startswith("mmproj")]
-    return non_projectors or [DEFAULT_MODEL_FILENAME]
+    return model_options() or [DEFAULT_MODEL_FILENAME]
 
 
 def list_mmproj_models() -> list[str]:
-    root = qwen_model_directory()
-    if not root.is_dir():
-        return [DEFAULT_MMPROJ_FILENAME]
-    names = sorted(
-        (
-            item.name
-            for item in root.iterdir()
-            if item.is_file()
-            and item.suffix.casefold() == ".gguf"
-            and item.name.casefold().startswith("mmproj")
-        ),
-        key=str.casefold,
-    )
-    return names or [DEFAULT_MMPROJ_FILENAME]
+    values = projector_options()
+    if len(values) == 1:
+        values.append(DEFAULT_MMPROJ_FILENAME)
+    return values
 
 
 @dataclass(frozen=True)
@@ -135,16 +132,21 @@ class RuntimeSpec:
     fit: bool = True
     fit_target_mib: int = 1536
     flash_attention: str = "auto"
+    source: str = "bundled"
+
+
+@dataclass(frozen=True)
+class PythonRuntimeSpec:
+    backend: str = "llama-cpp-python"
+    version: str = "unknown"
+    source: str = "ComfyUI Python environment"
 
 
 def _runtime_path(value: Any, label: str) -> Path:
     if not isinstance(value, str) or not value.strip():
         raise LocalQwenRuntimeError(f"Invalid {label} in {RUNTIME_CONFIG_PATH}.")
-    path = (RUNTIME_ROOT / value).resolve()
-    try:
-        path.relative_to(RUNTIME_ROOT.resolve())
-    except ValueError as error:
-        raise LocalQwenRuntimeError(f"{label} must remain inside {RUNTIME_ROOT}.") from error
+    raw = Path(value).expanduser()
+    path = raw.resolve() if raw.is_absolute() else (RUNTIME_ROOT / raw).resolve()
     return path
 
 
@@ -164,7 +166,7 @@ def load_runtime_spec() -> RuntimeSpec:
     executable = _runtime_path(payload.get("executable"), "runtime executable")
     if not executable.is_file():
         raise LocalQwenRuntimeError(f"llama-server is missing: {executable}")
-    raw_dirs = payload.get("library_dirs") or [str(executable.parent.relative_to(RUNTIME_ROOT))]
+    raw_dirs = payload.get("library_dirs") or [str(executable.parent)]
     if not isinstance(raw_dirs, list):
         raise LocalQwenRuntimeError("runtime library_dirs must be a list.")
     options = payload.get("runtime_options") or {}
@@ -176,10 +178,73 @@ def load_runtime_spec() -> RuntimeSpec:
         fit=bool(options.get("fit", True)),
         fit_target_mib=max(256, int(options.get("fit_target_mib", 1536))),
         flash_attention=str(options.get("flash_attention") or "auto"),
+        source=str(RUNTIME_CONFIG_PATH),
     )
 
 
-def runtime_status() -> dict[str, Any]:
+def _path_runtime_spec() -> RuntimeSpec | None:
+    executable = shutil.which("llama-server") or shutil.which("llama-server.exe")
+    if not executable:
+        return None
+    path = Path(executable).resolve()
+    return RuntimeSpec(
+        executable=path,
+        library_dirs=(path.parent,),
+        backend="llama.cpp PATH",
+        source="PATH",
+    )
+
+
+def load_python_runtime_spec() -> PythonRuntimeSpec:
+    if importlib.util.find_spec("llama_cpp") is None:
+        raise LocalQwenRuntimeError("llama-cpp-python is not installed in the active ComfyUI Python environment.")
+    try:
+        import llama_cpp
+    except (ImportError, OSError) as error:
+        raise LocalQwenRuntimeError(
+            "llama-cpp-python was found but could not load its native library. "
+            f"{type(error).__name__}: {error}"
+        ) from error
+    return PythonRuntimeSpec(version=str(getattr(llama_cpp, "__version__", "unknown")))
+
+
+def available_runtime_specs() -> tuple[list[RuntimeSpec | PythonRuntimeSpec], list[str]]:
+    specs: list[RuntimeSpec | PythonRuntimeSpec] = []
+    warnings: list[str] = []
+    if RUNTIME_CONFIG_PATH.is_file():
+        try:
+            specs.append(load_runtime_spec())
+        except LocalQwenRuntimeError as error:
+            warnings.append(str(error))
+    path_spec = _path_runtime_spec()
+    if path_spec is not None and not any(
+        isinstance(item, RuntimeSpec) and item.executable == path_spec.executable for item in specs
+    ):
+        specs.append(path_spec)
+    try:
+        specs.append(load_python_runtime_spec())
+    except LocalQwenRuntimeError as error:
+        if not specs:
+            warnings.append(str(error))
+    return specs, warnings
+
+
+def select_runtime_spec() -> RuntimeSpec | PythonRuntimeSpec:
+    specs, warnings = available_runtime_specs()
+    if specs:
+        # Keep the pinned standalone runtime first for fully compatible old
+        # installs, then PATH, then llama-cpp-python as a no-private-runtime
+        # fallback shared with other ComfyUI nodes.
+        return specs[0]
+    details = " ".join(warnings)
+    raise LocalQwenRuntimeError(
+        "No usable local llama.cpp runtime was found. Install llama-cpp-python in the active ComfyUI "
+        "Python environment, place llama-server on PATH, or run install_local_qwen.py --runtime. "
+        + details
+    )
+
+
+def runtime_status(*, refresh: bool = False) -> dict[str, Any]:
     model_status = {}
     for filename, (expected_size, _expected_sha256) in KNOWN_MODEL_FILES.items():
         path = resolve_model_path(filename, label="local model", required=False)
@@ -195,6 +260,17 @@ def runtime_status() -> dict[str, Any]:
     mmproj_installed = (
         mmproj_path.is_file() and mmproj_path.stat().st_size == DEFAULT_MMPROJ_SIZE
     )
+    catalog = catalog_public_payload(refresh=refresh)
+    verified_names = {
+        filename for filename, installed in model_status.items() if installed
+    }
+    for item in catalog.get("models", []):
+        if item.get("filename") in verified_names:
+            item["verification_tier"] = "project_tested_pinned_size_match"
+        elif item.get("metadata_readable"):
+            item["verification_tier"] = "runtime_supported_unverified"
+        else:
+            item["verification_tier"] = "discovered_unverified"
     result: dict[str, Any] = {
         "runtime_installed": False,
         "model_installed": model_installed,
@@ -203,19 +279,41 @@ def runtime_status() -> dict[str, Any]:
             filename for filename, installed in model_status.items() if installed
         ],
         "mmproj_installed": mmproj_installed,
-        "model_directory": str(qwen_model_directory()),
+        **catalog,
+        "legacy_model_directory": str(qwen_model_directory()),
     }
-    try:
-        spec = load_runtime_spec()
-    except LocalQwenRuntimeError as error:
-        result["runtime_error"] = str(error)
-    else:
+    specs, warnings = available_runtime_specs()
+    if specs:
         result.update(
             runtime_installed=True,
-            backend=spec.backend,
+            backend=specs[0].backend,
+            runtime_source=specs[0].source,
+            runtime_backends=[
+                {
+                    "backend": item.backend,
+                    "source": item.source,
+                    "version": getattr(item, "version", ""),
+                }
+                for item in specs
+            ],
         )
-    result["text_ready"] = bool(result["runtime_installed"] and any_model_installed)
-    result["vision_ready"] = bool(result["text_ready"] and mmproj_installed)
+    if warnings:
+        result["runtime_warnings"] = warnings
+    discovered_models = int(catalog.get("model_count") or 0)
+    discovered_projectors = int(catalog.get("projector_count") or 0)
+    result["text_ready"] = bool(
+        result["runtime_installed"] and (discovered_models or any_model_installed)
+    )
+    result["vision_ready"] = bool(
+        result["text_ready"]
+        and (
+            mmproj_installed
+            or (
+                discovered_projectors
+                and any(item.get("vision_capable") for item in catalog.get("models", []))
+            )
+        )
+    )
     return result
 
 
@@ -486,13 +584,182 @@ class LlamaServer:
         return content.strip(), result.get("usage") or {}
 
 
+class LlamaPythonRuntime:
+    """In-process fallback for ComfyUI installs that already provide llama-cpp-python."""
+
+    def __init__(
+        self,
+        *,
+        model: Path,
+        mmproj: Path | None,
+        context_size: int,
+        spec: PythonRuntimeSpec,
+        think_mode: bool,
+    ):
+        self.model = model
+        self.mmproj = mmproj
+        self.context_size = int(context_size)
+        self.spec = spec
+        self.think_mode = bool(think_mode)
+        self.llm: Any = None
+        self.chat_handler: Any = None
+        self._stop_lock = threading.RLock()
+
+    @property
+    def is_running(self) -> bool:
+        return self.llm is not None
+
+    def _handler_class(self, architecture: str) -> tuple[type[Any], dict[str, Any]]:
+        try:
+            from llama_cpp import llama_chat_format
+        except (ImportError, OSError) as error:
+            raise LocalQwenRuntimeError("llama-cpp-python chat handlers could not be loaded.") from error
+        normalized = architecture.casefold().replace("-", "").replace("_", "")
+        candidates: list[tuple[str, dict[str, Any]]] = []
+        if normalized == "qwen35":
+            candidates.append(("Qwen35ChatHandler", {"enable_thinking": self.think_mode}))
+        elif "qwen3" in normalized:
+            candidates.append(("Qwen3VLChatHandler", {"force_reasoning": self.think_mode}))
+        elif "qwen2" in normalized:
+            candidates.append(("Qwen25VLChatHandler", {}))
+        elif "gemma3" in normalized:
+            candidates.append(("Gemma3ChatHandler", {}))
+        elif "gemma4" in normalized:
+            candidates.append(("Gemma4ChatHandler", {}))
+        candidates.append(("MTMDChatHandler", {}))
+        for name, options in candidates:
+            handler = getattr(llama_chat_format, name, None)
+            if handler is not None:
+                return handler, options
+        raise LocalQwenRuntimeError(
+            "The installed llama-cpp-python build has no compatible multimodal chat handler. "
+            "Update it or use the bundled llama-server runtime."
+        )
+
+    def start(self, timeout: float = 240.0) -> None:
+        del timeout
+        try:
+            from llama_cpp import Llama
+        except (ImportError, OSError) as error:
+            raise LocalQwenRuntimeError(
+                "llama-cpp-python could not be imported from the active ComfyUI Python environment."
+            ) from error
+        handler = None
+        if self.mmproj is not None:
+            model_info = model_info_for_path(self.model)
+            architecture = model_info.architecture if model_info else ""
+            handler_class, handler_options = self._handler_class(architecture)
+            try:
+                handler = handler_class(
+                    clip_model_path=str(self.mmproj),
+                    verbose=False,
+                    use_gpu=True,
+                    image_min_tokens=1024,
+                    image_max_tokens=1024,
+                    **handler_options,
+                )
+            except (TypeError, ValueError, RuntimeError, OSError) as error:
+                raise LocalQwenRuntimeError(
+                    "llama-cpp-python could not initialize the selected model/mmproj pair. "
+                    f"{type(error).__name__}: {error}"
+                ) from error
+        try:
+            self.chat_handler = handler
+            self.llm = Llama(
+                model_path=str(self.model),
+                chat_handler=handler,
+                n_gpu_layers=-1,
+                n_ctx=self.context_size,
+                verbose=False,
+            )
+        except (TypeError, ValueError, RuntimeError, OSError) as error:
+            self.stop()
+            raise LocalQwenRuntimeError(
+                "llama-cpp-python failed to load the selected GGUF. "
+                f"{type(error).__name__}: {error}"
+            ) from error
+
+    def stop(self) -> None:
+        with self._stop_lock:
+            llm = self.llm
+            handler = self.chat_handler
+            self.llm = None
+            self.chat_handler = None
+            try:
+                if llm is not None:
+                    llm.close()
+            except (AttributeError, RuntimeError, OSError):
+                pass
+            try:
+                exit_stack = getattr(handler, "_exit_stack", None)
+                if exit_stack is not None:
+                    exit_stack.close()
+            except (AttributeError, RuntimeError, OSError):
+                pass
+            gc.collect()
+
+    def chat(
+        self,
+        messages: list[dict[str, Any]],
+        *,
+        seed: int,
+        max_tokens: int,
+        temperature: float,
+        think_mode: bool,
+        reasoning_effort: str,
+    ) -> tuple[str, dict[str, Any]]:
+        del reasoning_effort
+        if self.llm is None:
+            raise LocalQwenRuntimeError("llama-cpp-python model is not loaded.")
+        if bool(think_mode) != self.think_mode and self.mmproj is not None:
+            raise LocalQwenRuntimeError(
+                "The active llama-cpp-python vision handler was loaded with a different thinking mode."
+            )
+        options: dict[str, Any] = {
+            "messages": messages,
+            "seed": normalize_llama_seed(seed),
+            "max_tokens": int(max_tokens),
+            "temperature": 1.0 if think_mode else float(temperature),
+            "stream": False,
+            "top_p": 0.95 if think_mode else 0.8,
+            "top_k": 20,
+            "min_p": 0.0,
+            "repeat_penalty": 1.0,
+            "present_penalty": 0.0 if think_mode else 1.5,
+        }
+        try:
+            result = self.llm.create_chat_completion(**options)
+        except (TypeError, ValueError, RuntimeError, OSError) as error:
+            raise LocalQwenRuntimeError(
+                "llama-cpp-python inference failed. "
+                f"{type(error).__name__}: {error}"
+            ) from error
+        try:
+            content = result["choices"][0]["message"].get("content") or ""
+        except (KeyError, IndexError, TypeError, AttributeError) as error:
+            raise LocalQwenRuntimeError(
+                "llama-cpp-python response is missing choices[0].message.content."
+            ) from error
+        if isinstance(content, list):
+            content = "".join(
+                str(part.get("text") or "")
+                for part in content
+                if isinstance(part, dict) and part.get("type") in (None, "text")
+            )
+        if not isinstance(content, str) or not content.strip():
+            raise LocalQwenRuntimeError(
+                "The local GGUF returned no final answer. Disable thinking or increase max output tokens."
+            )
+        return content.strip(), result.get("usage") or {}
+
+
 class LocalQwenManager:
     def __init__(self):
         self._run_lock = threading.Lock()
         self._lifecycle_lock = threading.RLock()
         self._inference_lock = threading.Lock()
-        self._server: LlamaServer | None = None
-        self._key: tuple[Path, Path | None, int, Path, str] | None = None
+        self._server: LlamaServer | LlamaPythonRuntime | None = None
+        self._key: tuple[Any, ...] | None = None
         self._idle_timer: threading.Timer | None = None
         self._idle_epoch = 0
 
@@ -503,7 +770,8 @@ class LocalQwenManager:
         mmproj: Path | None,
         context_size: int,
         comfy_memory_policy: str,
-    ) -> LlamaServer:
+        think_mode: bool = False,
+    ) -> LlamaServer | LlamaPythonRuntime:
         while not self._run_lock.acquire(timeout=0.25):
             _throw_if_interrupted()
         try:
@@ -512,6 +780,7 @@ class LocalQwenManager:
                 mmproj=mmproj,
                 context_size=context_size,
                 comfy_memory_policy=comfy_memory_policy,
+                think_mode=think_mode,
             )
         except BaseException:
             self._run_lock.release()
@@ -540,16 +809,39 @@ class LocalQwenManager:
         mmproj: Path | None,
         context_size: int,
         comfy_memory_policy: str,
-    ) -> LlamaServer:
-        spec = load_runtime_spec()
-        key = (model.resolve(), mmproj.resolve() if mmproj else None, int(context_size), spec.executable.resolve(), spec.backend)
+        think_mode: bool = False,
+    ) -> LlamaServer | LlamaPythonRuntime:
+        spec = select_runtime_spec()
+        runtime_identity: tuple[Any, ...]
+        if isinstance(spec, RuntimeSpec):
+            runtime_identity = ("server", spec.executable.resolve(), spec.backend)
+        else:
+            runtime_identity = ("python", spec.version, spec.backend)
+        key = (
+            model.resolve(),
+            mmproj.resolve() if mmproj else None,
+            int(context_size),
+            bool(think_mode),
+            *runtime_identity,
+        )
         with self._lifecycle_lock:
             self._cancel_timer()
             if self._server is not None and self._key == key and self._server.is_running:
                 return self._server
             self.release()
             _release_comfy_models_if_needed(comfy_memory_policy)
-            server = LlamaServer(model=model, mmproj=mmproj, context_size=context_size, spec=spec)
+            if isinstance(spec, RuntimeSpec):
+                server: LlamaServer | LlamaPythonRuntime = LlamaServer(
+                    model=model, mmproj=mmproj, context_size=context_size, spec=spec
+                )
+            else:
+                server = LlamaPythonRuntime(
+                    model=model,
+                    mmproj=mmproj,
+                    context_size=context_size,
+                    spec=spec,
+                    think_mode=think_mode,
+                )
             try:
                 server.start()
             except BaseException:
@@ -559,11 +851,13 @@ class LocalQwenManager:
             self._key = key
             return server
 
-    def complete(self, server: LlamaServer, **kwargs: Any) -> tuple[str, dict[str, Any]]:
+    def complete(
+        self, server: LlamaServer | LlamaPythonRuntime, **kwargs: Any
+    ) -> tuple[str, dict[str, Any]]:
         with self._inference_lock:
             _throw_if_interrupted()
             if server is not self._server or not server.is_running:
-                raise LocalQwenRuntimeError("Local Qwen server changed before the request could run.")
+                raise LocalQwenRuntimeError("Local GGUF runtime changed before the request could run.")
             return server.chat(**kwargs)
 
     def finish(self, unload_policy: str) -> None:
@@ -615,6 +909,7 @@ atexit.register(LOCAL_QWEN_MANAGER.release)
 
 
 __all__ = [
+    "AUTO_MMPROJ",
     "DEFAULT_MMPROJ_FILENAME",
     "DEFAULT_MODEL_FILENAME",
     "KNOWN_MODEL_FILES",
@@ -634,10 +929,17 @@ __all__ = [
     "LOCAL_UNLOAD_AFTER_RUN",
     "LOCAL_UNLOAD_POLICIES",
     "LocalQwenRuntimeError",
+    "LlamaPythonRuntime",
+    "PythonRuntimeSpec",
+    "available_runtime_specs",
+    "catalog_public_payload",
+    "llm_model_directory",
     "list_gguf_models",
     "list_mmproj_models",
     "normalize_llama_seed",
     "qwen_model_directory",
+    "resolve_mmproj_path",
     "resolve_model_path",
     "runtime_status",
+    "select_runtime_spec",
 ]

@@ -10,6 +10,7 @@ try:
         estimate_message_tokens,
     )
     from .local_qwen_runtime import (
+        AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
         DEFAULT_MODEL_FILENAME,
         LOCAL_QWEN_MANAGER,
@@ -21,6 +22,7 @@ try:
         LOCAL_UNLOAD_AFTER_RUN,
         LOCAL_UNLOAD_POLICIES,
         LocalQwenRuntimeError,
+        resolve_mmproj_path,
         resolve_model_path,
     )
 except ImportError:
@@ -30,6 +32,7 @@ except ImportError:
         estimate_message_tokens,
     )
     from local_qwen_runtime import (
+        AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
         DEFAULT_MODEL_FILENAME,
         LOCAL_QWEN_MANAGER,
@@ -41,11 +44,13 @@ except ImportError:
         LOCAL_UNLOAD_AFTER_RUN,
         LOCAL_UNLOAD_POLICIES,
         LocalQwenRuntimeError,
+        resolve_mmproj_path,
         resolve_model_path,
     )
 
 
-LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）"
+LOCAL_QWEN_API_MODE = "本地 GGUF（llama.cpp / Qwen，离线）"
+LEGACY_LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）"
 DEFAULT_CONTEXT_SIZE = 32768
 DEFAULT_MAX_TOKENS = 4096
 DEFAULT_VIDEO_SAMPLE_FPS = 2.0
@@ -55,6 +60,10 @@ CONTEXT_SAFETY_TOKENS = 1024
 
 class LocalQwenProviderError(RuntimeError):
     pass
+
+
+def is_local_qwen_api_mode(value: Any) -> bool:
+    return str(value or "").strip() in {LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE}
 
 
 @dataclass(frozen=True)
@@ -74,11 +83,11 @@ class LocalQwenSettings:
         max_tokens = int(self.max_tokens)
         sample_fps = float(self.video_sample_fps)
         if context_size < 8192 or context_size > 65536:
-            raise LocalQwenProviderError("Local Qwen context size must be between 8192 and 65536 tokens.")
+            raise LocalQwenProviderError("Local GGUF context size must be between 8192 and 65536 tokens.")
         if max_tokens < 256 or max_tokens > 8192:
-            raise LocalQwenProviderError("Local Qwen output token limit must be between 256 and 8192.")
+            raise LocalQwenProviderError("Local GGUF output token limit must be between 256 and 8192.")
         if max_tokens + CONTEXT_SAFETY_TOKENS >= context_size:
-            raise LocalQwenProviderError("Local Qwen output token limit leaves no usable input context.")
+            raise LocalQwenProviderError("Local GGUF output token limit leaves no usable input context.")
         if sample_fps < 0.25 or sample_fps > 8.0:
             raise LocalQwenProviderError("Local video sample rate must be between 0.25 and 8 fps.")
         if self.think_mode not in (LOCAL_THINK_OFF, LOCAL_THINK_ON):
@@ -142,7 +151,7 @@ def build_local_multimodal_parts(
     )
     if media_plan and visual_limit <= 0:
         raise LocalQwenProviderError(
-            "Local Qwen has no context budget left for connected visual media. "
+            "Local GGUF has no context budget left for connected visual media. "
             "Reduce prompt/template text, lower max output tokens, or increase local_context_size."
         )
     try:
@@ -182,7 +191,10 @@ class LocalQwenProvider:
         try:
             model = resolve_model_path(self.settings.model_filename, label="local Qwen model")
             mmproj = (
-                resolve_model_path(self.settings.mmproj_filename, label="local Qwen vision projector")
+                resolve_mmproj_path(
+                    self.settings.mmproj_filename,
+                    model_filename=self.settings.model_filename,
+                )
                 if self.vision
                 else None
             )
@@ -191,6 +203,7 @@ class LocalQwenProvider:
                 mmproj=mmproj,
                 context_size=self.settings.context_size,
                 comfy_memory_policy=self.settings.comfy_memory_policy,
+                think_mode=self.settings.think_mode == LOCAL_THINK_ON,
             )
             self._owns_run = True
         except LocalQwenRuntimeError as error:
@@ -223,7 +236,7 @@ class LocalQwenProvider:
         if self.server is None:
             self.__enter__()
         if self.server is None:
-            raise LocalQwenProviderError("Local Qwen provider could not start.")
+            raise LocalQwenProviderError("Local GGUF provider could not start.")
         output_tokens = int(max_tokens or self.settings.max_tokens)
         if output_tokens < 256 or output_tokens > self.settings.max_tokens:
             raise LocalQwenProviderError(
@@ -233,7 +246,7 @@ class LocalQwenProvider:
         available = self.settings.context_size - output_tokens - CONTEXT_SAFETY_TOKENS
         if estimated_input > available:
             raise LocalQwenProviderError(
-                "Local Qwen context budget exceeded before inference: "
+                "Local GGUF context budget exceeded before inference: "
                 f"estimated input {estimated_input} tokens, available {available}. "
                 "Reduce reference media/template text, lower video sample rate, or increase local_context_size."
             )
@@ -256,11 +269,14 @@ __all__ = [
     "DEFAULT_CONTEXT_SIZE",
     "DEFAULT_MAX_TOKENS",
     "DEFAULT_VIDEO_SAMPLE_FPS",
+    "AUTO_MMPROJ",
     "LOCAL_QWEN_API_MODE",
+    "LEGACY_LOCAL_QWEN_API_MODE",
     "LocalQwenProvider",
     "LocalQwenProviderError",
     "LocalQwenSettings",
     "build_local_multimodal_parts",
     "local_visual_part_budget",
+    "is_local_qwen_api_mode",
     "settings_from_values",
 ]

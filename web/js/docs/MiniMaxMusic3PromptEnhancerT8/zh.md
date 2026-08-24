@@ -8,3 +8,5 @@
 - `enhancement_report_json`：脱敏阶段与质量报告，不含 API Key、歌词全文或模板正文。
 
 “官方完整”模式按官方渐进披露流程选择最多两个流派索引和三个职责不同的模板。歌词创作/润色是 T8 非官方能力，不冒充官方 Skill。
+
+本地模式可使用 `ComfyUI/models/LLM` 及任意子目录中的 llama.cpp 兼容文字 GGUF；Music 3 不加载 mmproj。节点会优先使用固定 llama-server，也可复用当前 ComfyUI Python 已安装的 llama-cpp-python。

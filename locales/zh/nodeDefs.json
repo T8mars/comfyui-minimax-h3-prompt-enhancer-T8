@@ -1,6 +1,6 @@
 {
   "MiniMaxH3PromptEnhancerT8": {
-    "display_name": "MiniMax H3 提示词增强器（云端 / 本地 Qwen）",
+    "display_name": "MiniMax H3 提示词增强器（云端 / 本地 GGUF）",
     "inputs": {
       "prompt": {"name": "视频创意 / 提示词（必填）"},
       "task_type": {"name": "生成类型"},
@@ -16,7 +16,7 @@
     "outputs": {"0": {"name": "增强提示词"}}
   },
   "Seedance20PromptEnhancerT8": {
-    "display_name": "Seedance 2.0 提示词增强器（云端 / 本地 Qwen）",
+    "display_name": "Seedance 2.0 提示词增强器（云端 / 本地 GGUF）",
     "inputs": {
       "prompt": {"name": "视频创意 / 提示词（必填）"},
       "task_intent": {"name": "任务意图"},

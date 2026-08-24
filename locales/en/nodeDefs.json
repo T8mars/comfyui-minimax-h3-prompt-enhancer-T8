@@ -1,6 +1,6 @@
 {
   "MiniMaxH3PromptEnhancerT8": {
-    "display_name": "MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)",
+    "display_name": "MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)",
     "inputs": {
       "prompt": {"name": "Video idea / prompt (required)"},
       "task_type": {"name": "Generation type"},
@@ -16,7 +16,7 @@
     "outputs": {"0": {"name": "Enhanced prompt"}}
   },
   "Seedance20PromptEnhancerT8": {
-    "display_name": "Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)",
+    "display_name": "Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)",
     "inputs": {
       "prompt": {"name": "Video idea / prompt (required)"},
       "task_intent": {"name": "Task intent"},

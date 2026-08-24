@@ -9,6 +9,7 @@ try:
     from .credential_store import CredentialStoreError, get_credential
     from .local_qwen_provider import DEFAULT_CONTEXT_SIZE, DEFAULT_MAX_TOKENS, DEFAULT_VIDEO_SAMPLE_FPS
     from .local_qwen_runtime import (
+        AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
         DEFAULT_MODEL_FILENAME,
         LOCAL_COMFY_MEMORY_POLICIES,
@@ -31,6 +32,7 @@ except ImportError:
     from credential_store import CredentialStoreError, get_credential
     from local_qwen_provider import DEFAULT_CONTEXT_SIZE, DEFAULT_MAX_TOKENS, DEFAULT_VIDEO_SAMPLE_FPS
     from local_qwen_runtime import (
+        AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
         DEFAULT_MODEL_FILENAME,
         LOCAL_COMFY_MEMORY_POLICIES,
@@ -177,8 +179,8 @@ class T8LLMProviderConfig(io.ComfyNode):
                     advanced=True,
                     socketless=True,
                 ),
-                io.Combo.Input("local_model", display_name="本地 Qwen GGUF", options=list_gguf_models(), default=DEFAULT_MODEL_FILENAME, advanced=True),
-                io.Combo.Input("local_mmproj", display_name="本地视觉投影器", options=list_mmproj_models(), default=DEFAULT_MMPROJ_FILENAME, advanced=True),
+                io.Combo.Input("local_model", display_name="本地 GGUF 主模型", options=list_gguf_models(), default=DEFAULT_MODEL_FILENAME, advanced=True),
+                io.Combo.Input("local_mmproj", display_name="本地视觉投影器", options=list_mmproj_models(), default=AUTO_MMPROJ, advanced=True),
                 io.Int.Input("local_context_size", display_name="本地上下文 Token", default=DEFAULT_CONTEXT_SIZE, min=8192, max=65536, step=4096, advanced=True),
                 io.Int.Input("local_max_tokens", display_name="本地最大输出 Token", default=DEFAULT_MAX_TOKENS, min=256, max=8192, step=256, advanced=True),
                 io.Combo.Input("local_think_mode", display_name="本地思考模式", options=LOCAL_THINK_OPTIONS, default=LOCAL_THINK_OFF, advanced=True),

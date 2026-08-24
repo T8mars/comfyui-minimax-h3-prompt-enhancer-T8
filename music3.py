@@ -53,6 +53,7 @@ from .local_qwen_provider import (
     LOCAL_QWEN_API_MODE,
     LocalQwenProvider,
     LocalQwenProviderError,
+    is_local_qwen_api_mode,
     settings_from_values as local_qwen_settings,
 )
 from .local_qwen_runtime import (
@@ -451,7 +452,7 @@ class Music3RequestRunner:
                 )
             except LocalQwenProviderError as error:
                 raise Music3PromptEnhancerError(
-                    f"Local Qwen Music 3 stage '{stage}' failed: {error}"
+                    f"Local GGUF Music 3 stage '{stage}' failed: {error}"
                 ) from error
         else:
             result = _request_music_completion(
@@ -1905,7 +1906,7 @@ def enhance_music3_prompt(
     api_key, chat_url, _upload_url, provider_name = _provider_config(provider_api_mode, api_key, openai_base_url)
     model_id = _resolve_llm_model(provider_api_mode, ai_workshop_model, custom_model)
     local_provider: LocalQwenProvider | None = None
-    if provider_api_mode == LOCAL_QWEN_API_MODE:
+    if is_local_qwen_api_mode(provider_api_mode):
         try:
             local_settings = local_qwen_settings(
                 local_model=local_model,
@@ -2269,12 +2270,12 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                 ),
                 io.Combo.Input(
                     "local_model",
-                    display_name="本地 Qwen GGUF",
+                    display_name="本地 GGUF 主模型",
                     options=list_gguf_models(),
                     default=DEFAULT_MODEL_FILENAME,
                     optional=True,
                     advanced=True,
-                    tooltip="Music 3 本地模式只加载文字模型，不加载 mmproj。",
+                    tooltip="Music 3 只加载文字 GGUF，不加载 mmproj；递归扫描 ComfyUI/models/LLM 及其任意子目录。",
                 ),
                 io.Int.Input(
                     "local_context_size",

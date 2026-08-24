@@ -8,3 +8,5 @@ This is a text-only node; it does not generate or listen to audio. Lyrics and th
 - `enhancement_report_json`: redacted stage and quality diagnostics without API keys, full lyrics, or template bodies.
 
 Official Full mode follows progressive disclosure and selects at most two genre indexes and three role-distinct templates. Lyrics writing/editing is a clearly labeled T8 capability, not an official Skill feature.
+
+Local mode accepts llama.cpp-compatible text GGUF files anywhere below `ComfyUI/models/LLM`; Music 3 never loads mmproj. The pinned llama-server remains preferred, with the active ComfyUI Python environment's llama-cpp-python as a fallback.

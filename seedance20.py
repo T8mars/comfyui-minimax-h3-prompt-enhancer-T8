@@ -22,10 +22,12 @@ from .local_qwen_provider import (
     LocalQwenProvider,
     LocalQwenProviderError,
     build_local_multimodal_parts,
+    is_local_qwen_api_mode,
     local_visual_part_budget,
     settings_from_values as local_qwen_settings,
 )
 from .local_qwen_runtime import (
+    AUTO_MMPROJ,
     DEFAULT_MMPROJ_FILENAME,
     DEFAULT_MODEL_FILENAME,
     LOCAL_COMFY_MEMORY_POLICIES,
@@ -752,11 +754,11 @@ def enhance_seedance20_prompt(
         reference_images,
         reference_videos,
         reference_syntax,
-        str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE,
+        is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE),
     )
     if progress_callback:
         progress_callback("input_validated", asset_count=len(media_plan))
-    if str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE:
+    if is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE):
         try:
             settings = local_qwen_settings(
                 local_model=local_model,
@@ -921,7 +923,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="Seedance20PromptEnhancerT8",
-            display_name="Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)",
+            display_name="Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)",
             category="T8/Seedance 2.0",
             description=(
                 "Uses one selected cloud or local visual LLM channel to apply official Seedance 2.0 task phrasing and "
@@ -1121,19 +1123,21 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 ),
                 io.Combo.Input(
                     "local_model",
-                    display_name="本地 Qwen GGUF",
+                    display_name="本地 GGUF 主模型",
                     options=list_gguf_models(),
                     default=DEFAULT_MODEL_FILENAME,
                     optional=True,
                     advanced=True,
+                    tooltip="递归扫描 ComfyUI/models/LLM 及其任意子目录。",
                 ),
                 io.Combo.Input(
                     "local_mmproj",
                     display_name="本地视觉投影器",
                     options=list_mmproj_models(),
-                    default=DEFAULT_MMPROJ_FILENAME,
+                    default=AUTO_MMPROJ,
                     optional=True,
                     advanced=True,
+                    tooltip="AUTO 会按 GGUF 元数据为当前主模型匹配视觉投影器。",
                 ),
                 io.Int.Input(
                     "local_context_size",

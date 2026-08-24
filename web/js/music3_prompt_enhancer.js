@@ -1,5 +1,5 @@
 import { app } from "../../scripts/app.js";
-import { showLocalQwenStatus } from "./local_qwen_status.js";
+import { copyLocalModelDirectory, showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import {
@@ -17,7 +17,9 @@ const LOCAL_SKILL_BUNDLE_URL = "https://github.com/T8mars/minimax-h3-prompt-skil
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（文本 LLM）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
-const LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
+const LOCAL_QWEN_API_MODE = "本地 GGUF（llama.cpp / Qwen，离线）";
+const LEGACY_LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
+const isLocalApiMode = (value) => [LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE].includes(value);
 const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
 const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const CUSTOM_LANGUAGE = "Custom（自定义）";
@@ -35,7 +37,7 @@ const EDIT_SCOPE_OCCURRENCE = "指定段落（第N次）";
 const SEMANTIC_MANUAL_MODE = "手动宽泛画像（不增加请求）";
 const SEMANTIC_LLM_MODE = "LLM宽泛分析（会发送歌词并可能增加请求）";
 const STATUS_CARD_HEIGHT = 176;
-const MUSIC_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE];
+const MUSIC_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE];
 const PUBLISHED_V1_WIDGET_NAMES = [
     "music_idea",
     "lyrics_mode",
@@ -317,7 +319,7 @@ function addRequestEstimateWidget(node, widgets) {
             stageNames.push("宽泛歌词画像");
         }
         stageNames.push("Caption 编译");
-        const local = widgets.apiMode?.value === LOCAL_QWEN_API_MODE;
+        const local = isLocalApiMode(widgets.apiMode?.value);
         const requestKind = local ? "本地推理阶段" : "预计付费请求";
         estimate.textContent = minimum === maximum
             ? `${requestKind}：${minimum} 次（命中10分钟阶段缓存时可为0）`
@@ -352,7 +354,7 @@ function addApiModeBehavior(node, modeWidget, modelWidget, customModelWidget, ba
     const update = () => {
         const workshop = modeWidget?.value === AI_WORKSHOP_API_MODE;
         const compatible = modeWidget?.value === OPENAI_API_MODE;
-        const local = modeWidget?.value === LOCAL_QWEN_API_MODE;
+        const local = isLocalApiMode(modeWidget?.value);
         setWidgetVisible(modelWidget, workshop);
         setWidgetVisible(customModelWidget, compatible || (workshop && modelWidget?.value === CUSTOM_MODEL_OPTION));
         setWidgetVisible(baseUrlWidget, compatible);
@@ -418,7 +420,7 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
             input.placeholder = "Music 3 提示词 LLM 的 OpenAI 兼容 API Key";
         } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
             input.placeholder = "AI 工坊 API Key（可保存到工作流）";
-        } else if (apiModeWidget?.value === LOCAL_QWEN_API_MODE) {
+        } else if (isLocalApiMode(apiModeWidget?.value)) {
             input.placeholder = "本地模式不需要 API Key";
         } else {
             input.placeholder = "贞贞 API Key（可保存到工作流）";
@@ -624,7 +626,7 @@ app.registerExtension({
                 setWidgetVisible(semanticModeWidget, expanded);
                 setWidgetVisible(manualProfileWidget, expanded && semanticModeWidget?.value === SEMANTIC_MANUAL_MODE);
                 setWidgetVisible(stageCacheWidget, expanded);
-                const local = apiModeWidget?.value === LOCAL_QWEN_API_MODE;
+                const local = isLocalApiMode(apiModeWidget?.value);
                 for (const widget of localWidgets) setWidgetVisible(widget, expanded && local);
                 this.music3UpdateEstimate?.();
                 resizeNode(this);
@@ -700,13 +702,22 @@ app.registerExtension({
 
             const localStatusWidget = this.addWidget(
                 "button",
-                "🧩 检查本地 Qwen 安装",
-                "查看 GGUF 与 llama.cpp 运行时状态；Music 3 不加载 mmproj",
-                showLocalQwenStatus,
+                "🧩 检查本地 Qwen 安装 / 扫描 GGUF",
+                "重新扫描 models/LLM 并检查运行时；Music 3 不加载 mmproj",
+                () => showLocalQwenStatus(this),
                 { serialize: false },
             );
             localStatusWidget.serializeValue = () => undefined;
             this.music3LocalQwenStatusWidget = localStatusWidget;
+
+            const localPathWidget = this.addWidget(
+                "button",
+                "📁 模型路径：ComfyUI/models/LLM（点击复制）",
+                "Music 3 可使用目录中的任意 llama.cpp 兼容文字 GGUF",
+                copyLocalModelDirectory,
+                { serialize: false },
+            );
+            localPathWidget.serializeValue = () => undefined;
 
             const localSkillBundleWidget = this.addWidget(
                 "button",

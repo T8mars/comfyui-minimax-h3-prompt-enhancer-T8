@@ -10,10 +10,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "example_workflows"
 
-LOCAL_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）"
+LOCAL_API_MODE = "本地 GGUF（llama.cpp / Qwen，离线）"
 SEEDANCE_API_MODE = "贞贞平价小屋（推荐）"
 LOCAL_MODEL = "Qwen3.8-27B-Q4_K_M.gguf"
-LOCAL_MMPROJ = "mmproj-F16.gguf"
+LOCAL_MMPROJ = "AUTO（自动匹配）"
 LOCAL_THINK = "关闭（推荐，速度优先）"
 LOCAL_UNLOAD = "执行后卸载（推荐）"
 LOCAL_MEMORY = "AUTO（显存不足时释放）"

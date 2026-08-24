@@ -51,10 +51,12 @@ try:
         LocalQwenProvider,
         LocalQwenProviderError,
         build_local_multimodal_parts,
+        is_local_qwen_api_mode,
         local_visual_part_budget,
         settings_from_values as local_qwen_settings,
     )
     from .local_qwen_runtime import (
+        AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
         DEFAULT_MODEL_FILENAME,
         LOCAL_COMFY_MEMORY_POLICIES,
@@ -75,10 +77,12 @@ except ImportError:
         LocalQwenProvider,
         LocalQwenProviderError,
         build_local_multimodal_parts,
+        is_local_qwen_api_mode,
         local_visual_part_budget,
         settings_from_values as local_qwen_settings,
     )
     from local_qwen_runtime import (
+        AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
         DEFAULT_MODEL_FILENAME,
         LOCAL_COMFY_MEMORY_POLICIES,
@@ -475,8 +479,8 @@ def _provider_config(
     openai_base_url: str,
 ) -> tuple[str, str, str, str]:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
-    if api_mode == LOCAL_QWEN_API_MODE:
-        return "", "", "", "Local Qwen3.8-27B"
+    if is_local_qwen_api_mode(api_mode):
+        return "", "", "", "Local llama.cpp GGUF"
     if api_mode == SEEDANCE_API_MODE:
         api_key = api_key or os.environ.get("SEEDANCE_API_KEY", "").strip()
         if not api_key:
@@ -503,8 +507,8 @@ def _provider_config(
 
 def _resolve_llm_model(api_mode: str, ai_workshop_model: str, custom_model: str) -> str:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
-    if api_mode == LOCAL_QWEN_API_MODE:
-        return "qwen3.8-27b"
+    if is_local_qwen_api_mode(api_mode):
+        return "local-gguf"
     if api_mode == OPENAI_API_MODE:
         model = str(custom_model or "").strip()
         if not model:
@@ -1394,11 +1398,11 @@ def enhance_prompt(
         reference_videos,
         official_skill_profile,
         creative_preset,
-        str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE,
+        is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE),
     )
     if progress_callback:
         progress_callback("input_validated", asset_count=len(media_plan))
-    if str(api_mode or SEEDANCE_API_MODE) == LOCAL_QWEN_API_MODE:
+    if is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE):
         try:
             settings = local_qwen_settings(
                 local_model=local_model,
@@ -1545,7 +1549,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
     def define_schema(cls):
         return io.Schema(
             node_id="MiniMaxH3PromptEnhancerT8",
-            display_name="MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)",
+            display_name="MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)",
             category="T8/MiniMax H3",
             description=(
                 "Uses one selected cloud or local visual LLM channel to rewrite a prompt into the official MiniMax-H3 "
@@ -1718,21 +1722,21 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 ),
                 io.Combo.Input(
                     "local_model",
-                    display_name="本地 Qwen GGUF",
+                    display_name="本地 GGUF 主模型",
                     options=list_gguf_models(),
                     default=DEFAULT_MODEL_FILENAME,
                     optional=True,
                     advanced=True,
-                    tooltip="仅本地模式使用。模型目录：ComfyUI/models/LLM/Qwen3.8。",
+                    tooltip="仅本地模式使用。递归扫描 ComfyUI/models/LLM 及其任意子目录。",
                 ),
                 io.Combo.Input(
                     "local_mmproj",
                     display_name="本地视觉投影器",
                     options=list_mmproj_models(),
-                    default=DEFAULT_MMPROJ_FILENAME,
+                    default=AUTO_MMPROJ,
                     optional=True,
                     advanced=True,
-                    tooltip="仅本地模式的图片/视频采样帧分析使用。",
+                    tooltip="仅本地图片/视频采样帧分析使用；AUTO 会按 GGUF 元数据匹配主模型。",
                 ),
                 io.Int.Input(
                     "local_context_size",

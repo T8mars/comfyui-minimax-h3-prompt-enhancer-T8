@@ -2,6 +2,7 @@ import importlib.util
 import hashlib
 import io
 import json
+import struct
 import sys
 import tempfile
 import threading
@@ -31,6 +32,7 @@ music3 = sys.modules[f"{SPEC.name}.music3"]
 media = sys.modules[f"{SPEC.name}.local_qwen_media"]
 provider = sys.modules[f"{SPEC.name}.local_qwen_provider"]
 runtime = sys.modules[f"{SPEC.name}.local_qwen_runtime"]
+catalog = sys.modules[f"{SPEC.name}.local_gguf_catalog"]
 INSTALLER_SPEC = importlib.util.spec_from_file_location("t8_local_qwen_installer_test", PROJECT_ROOT / "install_local_qwen.py")
 installer = importlib.util.module_from_spec(INSTALLER_SPEC)
 sys.modules[INSTALLER_SPEC.name] = installer
@@ -117,6 +119,92 @@ class LocalQwenUnitTests(unittest.TestCase):
             provider.settings_from_values(local_context_size=8192, local_max_tokens=8192)
         with self.assertRaises(runtime.LocalQwenRuntimeError):
             runtime.resolve_model_path("../escape.gguf", label="model", required=False)
+
+    def test_legacy_local_mode_remains_executable_after_generic_label_upgrade(self):
+        key, chat_url, upload_url, provider_name = nodes._provider_config(
+            provider.LEGACY_LOCAL_QWEN_API_MODE,
+            "",
+            "",
+        )
+        self.assertEqual((key, chat_url, upload_url), ("", "", ""))
+        self.assertIn("llama.cpp", provider_name)
+        self.assertNotEqual(provider.LOCAL_QWEN_API_MODE, provider.LEGACY_LOCAL_QWEN_API_MODE)
+
+    def test_runtime_auto_falls_back_to_existing_llama_cpp_python(self):
+        python_spec = runtime.PythonRuntimeSpec(version="test-version")
+        with (
+            patch.object(runtime, "RUNTIME_CONFIG_PATH", PROJECT_ROOT / "missing-runtime.json"),
+            patch.object(runtime, "_path_runtime_spec", return_value=None),
+            patch.object(runtime, "load_python_runtime_spec", return_value=python_spec),
+        ):
+            specs, warnings = runtime.available_runtime_specs()
+            selected = runtime.select_runtime_spec()
+        self.assertEqual(specs, [python_spec])
+        self.assertEqual(warnings, [])
+        self.assertEqual(selected.backend, "llama-cpp-python")
+
+    def test_recursive_catalog_reads_metadata_and_auto_pairs_projector(self):
+        def gguf_string(value):
+            encoded = value.encode("utf-8")
+            return struct.pack("<Q", len(encoded)) + encoded
+
+        def write_gguf(path, metadata):
+            payload = bytearray(b"GGUF" + struct.pack("<IQQ", 3, 0, len(metadata)))
+            for key, value in metadata.items():
+                payload.extend(gguf_string(key))
+                if isinstance(value, bool):
+                    payload.extend(struct.pack("<I?", 7, value))
+                elif isinstance(value, int):
+                    payload.extend(struct.pack("<IQ", 10, value))
+                else:
+                    payload.extend(struct.pack("<I", 8))
+                    payload.extend(gguf_string(str(value)))
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(payload)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            model_path = root / "Qwen3" / "Qwen3-4B-Q4_K_M.gguf"
+            projector_path = root / "Qwen3" / "mmproj-Qwen3-4B-F16.gguf"
+            write_gguf(
+                model_path,
+                {
+                    "general.architecture": "qwen3vl",
+                    "general.type": "model",
+                    "general.name": "Qwen3 4B",
+                    "qwen3vl.context_length": 32768,
+                    "tokenizer.chat_template": "{{ messages }}",
+                },
+            )
+            write_gguf(
+                projector_path,
+                {
+                    "general.architecture": "clip",
+                    "general.type": "mmproj",
+                    "general.name": "Qwen3 4B",
+                    "clip.projector_type": "qwen3vl_merger",
+                    "clip.has_vision_encoder": True,
+                },
+            )
+            with (
+                patch.object(catalog, "_registered_model_roots", return_value=(root,)),
+                patch.object(catalog, "llm_model_directory", return_value=root),
+                patch.object(catalog, "legacy_qwen_model_directory", return_value=root / "Qwen3.8"),
+            ):
+                catalog._CATALOG_CACHE = None
+                payload = catalog.catalog_public_payload(refresh=True)
+                model = payload["models"][0]
+                resolved = catalog.resolve_gguf_path(model["identifier"], label="model")
+                projector = catalog.resolve_projector_path(
+                    catalog.AUTO_MMPROJ,
+                    model_identifier=model["identifier"],
+                )
+            catalog._CATALOG_CACHE = None
+        self.assertEqual(model["architecture"], "qwen3vl")
+        self.assertTrue(model["has_chat_template"])
+        self.assertEqual(model["recommended_projector"], "Qwen3/mmproj-Qwen3-4B-F16.gguf")
+        self.assertEqual(resolved, model_path)
+        self.assertEqual(projector, projector_path)
 
     def test_thinking_payload_uses_qwen_official_sampling_contract(self):
         class RunningProcess:
@@ -356,7 +444,14 @@ class LocalQwenUnitTests(unittest.TestCase):
         ):
             source = (PROJECT_ROOT / "web" / "js" / filename).read_text(encoding="utf-8")
             self.assertIn("本地 Qwen3.8-27B", source)
+            self.assertIn("本地 GGUF（llama.cpp / Qwen，离线）", source)
             self.assertIn("检查本地 Qwen 安装", source)
+            self.assertIn("ComfyUI/models/LLM", source)
+
+        status_source = (PROJECT_ROOT / "web" / "js" / "local_qwen_status.js").read_text(encoding="utf-8")
+        self.assertIn("llama-cpp-python", status_source)
+        self.assertIn("verification_tier", status_source)
+        self.assertIn("projector_options", status_source)
 
         music_source = (PROJECT_ROOT / "web" / "js" / "music3_prompt_enhancer.js").read_text(encoding="utf-8")
         self.assertIn("values.length === SERIALIZED_WIDGET_NAMES.length", music_source)

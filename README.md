@@ -9,7 +9,7 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 Prompt Enhancer T8
 
-一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 `Qwen3.8-27B-Q4_K_M.gguf`。
+一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 llama.cpp 兼容 GGUF。
 
 三个节点共享已经验证的 API、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法；Music 3 严格执行官方 `music-caption-rewriter` 的三段描述合同。Music 3 是独立音乐模型，不是 H3 视频模型。
 
@@ -29,8 +29,8 @@
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
-| `MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
-| `Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
+| `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
+| `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | 生成 Music 3 歌词与音乐描述 | AUTO、生成歌词、严格保留、局部润色、纯器乐 |
 
 本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频或音乐生成、轮询、试听或下载接口。
@@ -38,7 +38,7 @@
 ## 功能特点
 
 - 平价小屋固定视觉模型 `bytedance/doubao-seed-evolving`；AI 工坊默认 `gemini-3.5-flash` 并支持 Custom；OpenAI 兼容模式支持填写供应商自己的视觉模型 ID。
-- 云端视觉渠道分析文字、图片和完整视频；本地 Qwen 明确使用真实时间戳抽样帧与有序联系表，只推断可见时序，不读取音轨，也不冒充完整视频字节理解。
+- 云端视觉渠道分析文字、图片和完整视频；本地 GGUF 明确使用真实时间戳抽样帧与有序联系表，只推断可见时序，不读取音轨，也不冒充完整视频字节理解。
 - 支持首帧、尾帧、首尾帧以及多图、多视频参考。
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于经审阅的官方提交 `d21241f0a4b3acbb34c97dae47fa417b7065e438`，并固定全部 4 个文件及归一化内容树哈希。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
@@ -50,7 +50,7 @@
 - 支持用户参考模板融合，主提示词与可观察媒体事实优先。
 - 提供随机种子以及 `fixed / randomize / increment / decrement` 状态。
 - 提供节点内 API Key 输入、遮罩显示、保存、清空和注册链接。
-- 支持贞贞平价小屋、贞贞的 AI 工坊、显式配置的 OpenAI 兼容接口，以及免 API Key 的本地 Qwen3.8-27B GGUF。
+- 支持贞贞平价小屋、贞贞的 AI 工坊、显式配置的 OpenAI 兼容接口，以及免 API Key 的本地 llama.cpp GGUF；Qwen3.8 两个固定型号继续实测支持，同时开放其他 llama.cpp 兼容文字模型与带匹配 mmproj 的视觉模型。
 - H3/Seedance 输出单一提示词 `STRING`；Music 3 分别输出歌词、Structured Caption、payload JSON 和安全增强报告四个 `STRING`。
 - 新增独立 Seedance 2.0 节点：简单/复杂双路径、AUTO/固定 1–20 镜头、官方/Seedance.nz 引用语法、字幕与稳定性策略。
 - 新增独立 Music 3 节点：完整内置官方 `music-caption-rewriter`、18 个流派索引和 1000 个模板，并严格按 router → 最多 2 个索引 → 最多 3 个模板逐级披露，绝不会把全库塞进一次 LLM 请求。
@@ -72,10 +72,10 @@
 绿色的“共享 LLM 渠道配置（可选）”不是 `STRING`，不能连接普通文本或 API Key 节点。请搜索并添加 `T8 LLM 共享渠道配置`，把它右侧的“渠道配置”输出接到 H3、Seedance 2.0 或 Music 3 节点同名输入：
 
 1. “共享渠道”选择 `Local Qwen`、平价小屋、AI 工坊或 OpenAI Compatible。
-2. 本地模式选择 `Qwen3.8-27B-Q4_K_M.gguf`；H3/Seedance 分析图片或视频采样帧时还要选择 `mmproj-F16.gguf`，Music 3 会忽略视觉投影器。
+2. 本地模式从 `ComfyUI/models/LLM` 递归发现主模型；H3/Seedance 分析图片或视频采样帧时把视觉投影器设为 `AUTO（自动匹配）` 或显式选择对应 mmproj，Music 3 会忽略视觉投影器。
 3. 本地模式不填 API Key；云端可继续把普通 `STRING` Key 直接接到原节点，或在共享配置中使用本地凭据别名。
 4. 连接共享配置后，以共享节点中的渠道、模型和本地参数为准；断开连接会立即恢复原节点自身设置。
-5. 不想使用共享节点时，也可以直接在任一核心节点的 API 模式中选择“本地 Qwen3.8-27B”。
+5. 不想使用共享节点时，也可以直接在任一核心节点的 API 模式中选择“本地 GGUF（llama.cpp / Qwen，离线）”。旧工作流保存的“本地 Qwen3.8-27B”值仍会正常执行。
 
 共享配置的凭据优先级为：原节点执行时收到的 `api_key`（包括外部 STRING 接线或已保存值）→ 本地凭据别名 → 原节点既有环境变量后备。凭据管理器可列出、保存、更新、删除和显式测试云端连接；测试连接会先提示并只发送一次最小请求，界面不显示 Key、URL 或上游正文。
 
@@ -130,14 +130,14 @@ ComfyUI/
 在节点菜单中搜索任一节点：
 
 ```text
-MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)
-Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)
+MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)
+Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)
 MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 ```
 
 ## 快速使用
 
-1. 添加 `MiniMax H3 Prompt Enhancer (Cloud / Local Qwen)`。
+1. 添加 `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
 3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和 MiniMax 官方创意预设；需要时再选择一个非官方案例或社区 Skill 模板。
 4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
@@ -161,7 +161,7 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 
 ## Seedance 2.0 快速使用
 
-1. 添加 `Seedance 2.0 Prompt Enhancer (Cloud / Local Qwen)`。
+1. 添加 `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)`。
 2. 填写“视频创意 / 提示词”。任务意图、组织方式、时长和镜头数都可先保持 `AUTO`。
 3. 按任务连接首帧、尾帧、参考图片或完整参考视频。
 4. 选择官方中文 `@图片N/@视频N` 或 Seedance.nz 英文 `@Image N/@Video N` 引用格式。
@@ -603,9 +603,11 @@ MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：
 
 OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `video_url` 并不是所有兼容供应商都支持的统一能力。这里的视频格式面向声明支持视频理解的兼容网关；用户填写的模型和网关必须同时支持视频内容部件，节点不会降级到纯文字或抽帧请求。
 
-### 本地 Qwen3.8-27B（GGUF，离线推理）
+### 本地 GGUF（llama.cpp / Qwen，离线推理）
 
-本地渠道是三个现有节点的第 4 个互斥 provider，不会新增或替换节点，也不会改变 H3、Seedance 2.0、Music 3 各自的提示词合同。运行时不需要 API Key、Base URL 或模型 ID。
+本地渠道是三个现有节点的第 4 个互斥 provider，不会新增或替换节点，也不会改变 H3、Seedance 2.0、Music 3 各自的提示词合同。运行时不需要 API Key、Base URL 或云端模型 ID。节点不再把可用范围锁死为两个文件名：会递归扫描 `ComfyUI/models/LLM`，读取轻量 GGUF 元数据，区分主模型与 mmproj，并为视觉模型推荐同名/同目录投影器。
+
+运行时采用自动回退顺序：本节点固定安装器生成的 `llama-server` → 系统 `PATH` 中的 `llama-server` → 当前 ComfyUI Python 环境已经安装的 `llama-cpp-python`。因此其他 llama.cpp 节点能工作的环境，不会再仅因缺少本节点私有 `runtime_config.json` 就误报“运行时未安装”。状态窗口会显示实际命中的后端、来源和版本。
 
 模型和运行时体积很大，不会随 Git 仓库分发，也不会在执行节点时静默下载。请在节点目录显式运行：
 
@@ -629,7 +631,7 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --offline
 ```
 
-`official` 是默认模型；`uncensored` 是用户可选的第三方 FP8 衍生 Q4_K_M 量化；`all` 同时安装两种文字模型并共用一个视觉投影器。安装后重启 ComfyUI，三个节点的“本地模型”下拉会自动列出已下载的 GGUF。第三方模型不会替换默认模型，也不会绕过本项目的提示词合同、输入验证或输出保护。
+`official` 是默认模型；`uncensored` 是用户可选的第三方 FP8 衍生 Q4_K_M 量化；`all` 同时安装两种文字模型并共用一个视觉投影器。安装后重启 ComfyUI，或点击节点的“检查本地 Qwen 安装 / 扫描 GGUF”，下拉会重新列出 `models/LLM` 及任意子目录内的 GGUF。第三方模型不会替换默认模型，也不会绕过本项目的提示词合同、输入验证或输出保护。
 
 安装器固定并核验以下资产，支持 `.part` 断点续传、磁盘空间预检和原子改名：
 
@@ -640,20 +642,22 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 | 视觉投影器 | `mmproj-F16.gguf`，固定 SHA-256 | 约 0.86 GiB |
 | 推理运行时 | llama.cpp `b10436`，固定安装器提交与 SHA-256 | 依平台/后端而定 |
 
-GGUF 与 mmproj 放入 ComfyUI 的 `models/LLM/Qwen3.8/`；llama.cpp 放在本节点已忽略的 `runtime/local_qwen/`。默认模型来自 `unsloth/Qwen3.8-27B-GGUF`；可选模型来自 `theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF`，其模型卡声明 Apache-2.0、基于 `orcarouter/Qwen3.8-27B-Uncensored-FP8` 的量化。参考安装器、参考插件和 llama.cpp 为 MIT。具体固定提交、哈希及归属见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
+GGUF 与 mmproj 统一放入 ComfyUI 的 `models/LLM/` 或任意子目录；历史目录 `models/LLM/Qwen3.8/` 和只保存文件名的旧工作流继续兼容。固定安装器的 llama.cpp 仍放在本节点已忽略的 `runtime/local_qwen/`，但也会复用当前 ComfyUI 已安装的 `llama-cpp-python`。默认模型来自 `unsloth/Qwen3.8-27B-GGUF`；可选模型来自 `theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF`，其模型卡声明 Apache-2.0、基于 `orcarouter/Qwen3.8-27B-Uncensored-FP8` 的量化。参考安装器、参考插件和 llama.cpp 为 MIT。具体固定提交、哈希及归属见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
+
+任意被扫描到的文字 GGUF 都可交给当前 llama.cpp 运行时加载；“被发现”不等于“本项目已验收”。H3/Seedance 有图片或视频输入时必须有匹配 mmproj；AUTO 优先按 `general.name`、架构、同目录和文件名相似度匹配。当前 `llama-cpp-python` 回退路径会自动选择 Qwen2.5-VL、Qwen3-VL、Qwen3.5、Gemma 3/4 或 MTMD 处理器（取决于已安装版本实际提供的类）；不具备对应处理器的视觉架构会明确报兼容性错误，文字模式不受影响。
 
 可选模型已用本项目固定的 `mmproj-F16.gguf` 和 llama.cpp 本地运行时完成真实兼容验收：文字精确 token、图片 OCR/颜色/形状、视频采样帧的双阶段 OCR、早晚运动方向与时间顺序共 12/12 项通过。它支持节点现有的“图片 + 按时间戳采样视频画面”路径；这仍不等于读取完整视频字节或分析音轨。脱敏证据见 [`tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json`](./tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json)。
 
 2026-08-21 又对可选第三方模型执行了完整发布质量验收，确定性总分 `100/100`、`passed=true`，5 个用例全部通过：同 seed 三次逐字一致、H3 T2VA、Music 3 中文歌词与官方完整 Skill、H3 图像+视频证据、Seedance 2.0 图像+视频证据。视频用例同时核验早晚阶段代码、运动方向、硬切和首次出现顺序；全套耗时 476.938 秒，峰值显存 15971 MiB，卸载后回到 2007 MiB（基线 1613 MiB）。脱敏报告见 [`tests/fixtures/local_qwen_uncensored_quality_2026-08-21.json`](./tests/fixtures/local_qwen_uncensored_quality_2026-08-21.json)，仅保存分数、布尔检查、哈希、字符数和资源采样，不保存提示词、歌词、媒体、API Key 或临时令牌。
 
-建议 24GB 以上显存获得较好的交互体验；16GB 显存会由 `--fit` 自动部分卸载到系统内存，建议至少 32GB RAM，速度会明显下降。CPU-only 功能上可运行，但本项目不承诺交互速度。首次使用前可点击三个节点中的“检查本地 Qwen 安装”查看 GGUF、mmproj、运行时、后端和实际模型目录。
+建议 24GB 以上显存获得较好的交互体验；16GB 显存会由独立 `llama-server` 的 `--fit` 自动部分卸载到系统内存，建议至少 32GB RAM，速度会明显下降。CPU-only 功能上可运行，但本项目不承诺交互速度。首次使用前可点击三个节点中的“检查本地 Qwen 安装 / 扫描 GGUF”查看模型数量、mmproj 配对、运行时后端和实际模型目录；旁边的路径按钮可直接复制 `ComfyUI/models/LLM` 绝对路径。
 
 本地选项说明：
 
 - H3/Seedance 的图片编码为 Base64 JPEG；原生 `VIDEO` 按真实时间戳采样，默认 2 fps，每 6–9 帧组成一个有时间标签的联系表，并按上下文预算最多发送 16 个视觉部件。
 - 本地视频只分析可见画面顺序，不读取、转写或声称理解原声音轨。云端完整视频行为不变。
 - Music 3 只发送文字，整个多阶段任务复用同一模型进程，并且绝不加载 `mmproj`。
-- 三个节点共享互斥运行锁，避免同时抢占显存；等待期间支持 ComfyUI 取消。
+- 三个节点共享互斥运行锁，避免同时抢占显存；独立 `llama-server` 等待与请求期间支持 ComfyUI 取消。`llama-cpp-python` 是兼容回退路径，其底层同步推理的中途取消能力取决于已安装绑定版本。
 - 默认关闭思考以降低延迟；可在高级选项开启思考、选择推理强度、上下文、最大输出、视频采样率、显存释放及执行后卸载/驻留/10 分钟 TTL。
 - 运行时只监听 `127.0.0.1` 随机端口，使用随机临时令牌并关闭 Web UI；成功、异常、取消和 ComfyUI 退出都会执行相应清理。
 - 本地输出继续遵守既有 content-first 规则：H3 仅在完整命中字段时重排，Seedance 非空放行，Music 3 保留歌词保护和官方 Caption 阶段合同。

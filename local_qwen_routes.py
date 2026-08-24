@@ -27,11 +27,12 @@ def register_local_qwen_routes() -> None:
     if prompt_server is None:
         return
 
-    async def status_route(_request: Any) -> Any:
+    async def status_route(request: Any) -> Any:
+        refresh = str(request.query.get("refresh", "")).casefold() in {"1", "true", "yes"}
         return web.json_response(
             {
-                **runtime_status(),
-                "provider": "local_qwen3.8_27b_gguf",
+                **runtime_status(refresh=refresh),
+                "provider": "local_llama_cpp_gguf",
                 "vision_mode": "timestamped_sampled_frames_no_audio",
                 "music_mode": "text_only_no_mmproj",
                 "install_command": "python install_local_qwen.py",

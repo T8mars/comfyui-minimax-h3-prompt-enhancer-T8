@@ -54,7 +54,7 @@ class P0P1FeatureTests(unittest.TestCase):
         config_values = dict(zip(config_names, by_type["T8LLMProviderConfig"]["widgets_values"], strict=True))
         self.assertEqual(config_values["provider"], provider_config.PROVIDER_LOCAL)
         self.assertEqual(config_values["local_model"], core_nodes.DEFAULT_MODEL_FILENAME)
-        self.assertEqual(config_values["local_mmproj"], core_nodes.DEFAULT_MMPROJ_FILENAME)
+        self.assertEqual(config_values["local_mmproj"], core_nodes.AUTO_MMPROJ)
 
         inspector_schema = inspector.T8PromptInspector.define_schema()
         inspector_info = inspector_schema.get_v1_info(inspector.T8PromptInspector)

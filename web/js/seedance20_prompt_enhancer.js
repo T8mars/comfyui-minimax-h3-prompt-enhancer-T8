@@ -1,6 +1,6 @@
 import { app } from "../../scripts/app.js";
 import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
-import { showLocalQwenStatus } from "./local_qwen_status.js";
+import { copyLocalModelDirectory, showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import {
@@ -22,13 +22,15 @@ const LOCAL_SKILL_BUNDLE_URL = "https://github.com/T8mars/minimax-h3-prompt-skil
 const SEEDANCE_API_MODE = "贞贞平价小屋（推荐）";
 const AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）";
 const OPENAI_API_MODE = "OpenAI兼容接口（备用）";
-const LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
+const LOCAL_QWEN_API_MODE = "本地 GGUF（llama.cpp / Qwen，离线）";
+const LEGACY_LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
+const isLocalApiMode = (value) => [LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE].includes(value);
 const AI_WORKSHOP_DEFAULT_MODEL = "gemini-3.5-flash";
 const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const AUTO_DURATION = "AUTO（模型智能选择）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
-const SEEDANCE_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE];
+const SEEDANCE_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE];
 const TASK_LABELS = {
     AUTO: "AUTO（根据意图与素材判断）",
     T2V: "T2V（文生视频）",
@@ -278,7 +280,7 @@ function addApiModeBehavior(node, modeWidget, baseUrlWidget, videoUrlsWidget, mo
     };
     const update = (mode = modeWidget.value) => {
         const compatible = mode === OPENAI_API_MODE;
-        const local = mode === LOCAL_QWEN_API_MODE;
+        const local = isLocalApiMode(mode);
         baseUrlWidget.label = "OpenAI Base URL";
         videoUrlsWidget.label = "视频素材 URL（可选，每行一个）";
         setWidgetVisible(baseUrlWidget, compatible);
@@ -336,7 +338,7 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
             input.placeholder = "提示词增强 LLM 的 OpenAI 兼容 API Key";
         } else if (apiModeWidget?.value === AI_WORKSHOP_API_MODE) {
             input.placeholder = "AI 工坊 API Key（可保存到工作流）";
-        } else if (apiModeWidget?.value === LOCAL_QWEN_API_MODE) {
+        } else if (isLocalApiMode(apiModeWidget?.value)) {
             input.placeholder = "本地模式不需要 API Key";
         } else {
             input.placeholder = "贞贞提示词增强 LLM API Key（可保存到工作流）";
@@ -586,13 +588,22 @@ app.registerExtension({
 
             const localStatusWidget = this.addWidget(
                 "button",
-                "🧩 检查本地 Qwen 安装",
-                "查看 GGUF、mmproj 与 llama.cpp 运行时状态",
-                showLocalQwenStatus,
+                "🧩 检查本地 Qwen 安装 / 扫描 GGUF",
+                "重新扫描 models/LLM，刷新模型列表并检查 llama.cpp 运行时",
+                () => showLocalQwenStatus(this),
                 { serialize: false },
             );
             localStatusWidget.serializeValue = () => undefined;
             this.s20LocalQwenStatusWidget = localStatusWidget;
+
+            const localPathWidget = this.addWidget(
+                "button",
+                "📁 模型路径：ComfyUI/models/LLM（点击复制）",
+                "主模型与 mmproj 可放在 LLM 的任意子目录",
+                copyLocalModelDirectory,
+                { serialize: false },
+            );
+            localPathWidget.serializeValue = () => undefined;
 
             const localSkillBundleWidget = this.addWidget(
                 "button",

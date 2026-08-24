@@ -382,7 +382,7 @@ class PromptEnhancerTests(unittest.TestCase):
         )
         self.assertEqual(node["widgets_values"][20:22], [0, "fixed"])
         self.assertEqual(node["widgets_values"][22], "Qwen3.8-27B-Q4_K_M.gguf")
-        self.assertEqual(node["widgets_values"][23], "mmproj-F16.gguf")
+        self.assertEqual(node["widgets_values"][23], nodes.AUTO_MMPROJ)
         self.assertEqual(node["widgets_values"][24:26], [32768, 4096])
         self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
 

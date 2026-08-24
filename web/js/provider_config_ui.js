@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import { copyLocalModelDirectory, showLocalQwenStatus } from "./local_qwen_status.js";
 
 
 const NODE_ID = "T8LLMProviderConfig";
@@ -167,6 +168,24 @@ app.registerExtension({
                 { serialize: false },
             );
             manager.serializeValue = () => undefined;
+
+            const localStatus = this.addWidget(
+                "button",
+                "🧩 扫描本地 GGUF / 检查运行时",
+                "刷新共享配置节点的本地模型列表",
+                () => showLocalQwenStatus(this),
+                { serialize: false },
+            );
+            localStatus.serializeValue = () => undefined;
+
+            const localPath = this.addWidget(
+                "button",
+                "📁 模型路径：ComfyUI/models/LLM（点击复制）",
+                "主模型与 mmproj 可放在 LLM 的任意子目录",
+                copyLocalModelDirectory,
+                { serialize: false },
+            );
+            localPath.serializeValue = () => undefined;
         };
     },
 });

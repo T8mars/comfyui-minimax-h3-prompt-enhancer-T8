@@ -5,6 +5,26 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.5.0] - 2026-08-24
+
+### Added
+
+- Discover text models and vision projectors recursively below
+  `ComfyUI/models/LLM`, classify lightweight GGUF metadata, preserve legacy
+  Qwen3.8 filenames, and auto-pair compatible mmproj files.
+- Reuse an existing `llama-cpp-python` installation when the private bundled
+  `llama-server` runtime is absent; also recognize `llama-server` on `PATH`.
+- Show the actual model directory, discovered model/projector counts, runtime
+  source/version, selected-model capability, and verification tier in all local
+  status controls, with one-click directory copy and live dropdown refresh.
+
+### Changed
+
+- Generalize the local provider label beyond the two pinned Qwen3.8 files while
+  keeping the former label as a workflow-compatible execution alias.
+- New visual selections default to metadata-based mmproj AUTO matching; saved
+  explicit projectors and all existing widget layouts remain valid.
+
 ## [1.4.3] - 2026-08-24
 
 ### Fixed
