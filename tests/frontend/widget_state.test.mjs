@@ -4,6 +4,8 @@ import test from "node:test";
 import {
     expandNamedWidgetValues,
     namedWidgetValueMap,
+    namedWidgetValueMapByDiscriminator,
+    remapNamedWidgetValues,
     restoreNamedWidgetValues,
     serializeNamedWidgetValues,
 } from "../../web/js/widget_state.mjs";
@@ -56,4 +58,21 @@ test("excluded legacy field is not restored", () => {
     );
     assert.equal(node.widgets[0].value, "safe");
     assert.equal(node.widgets[1].value, "model-id");
+});
+
+
+test("Seedance published order remaps custom length before ComfyUI INT validation", () => {
+    const published = ["prompt", "custom_length_target", "api_mode", "seed", "control_after_generate"];
+    const runtime = ["prompt", "api_mode", "custom_length_target", "seed", "control_after_generate"];
+    const saved = ["idea", 0, "本地 Qwen3.8-27B（GGUF，离线）", 42, "randomize"];
+    const mapped = namedWidgetValueMapByDiscriminator(
+        saved,
+        [runtime, published],
+        "api_mode",
+        ["本地 Qwen3.8-27B（GGUF，离线）"],
+    );
+    const remapped = remapNamedWidgetValues(runtime, mapped, {}, saved);
+    assert.equal(remapped[1], "本地 Qwen3.8-27B（GGUF，离线）");
+    assert.equal(remapped[2], 0);
+    assert.equal(remapped[4], "randomize");
 });

@@ -5,6 +5,35 @@ export function namedWidgetValueMap(names, values, acceptedLengths = [names.leng
 }
 
 
+export function namedWidgetValueMapByDiscriminator(
+    values,
+    layouts,
+    discriminatorName,
+    acceptedValues,
+) {
+    if (!Array.isArray(values) || !Array.isArray(layouts)) return null;
+    const accepted = acceptedValues instanceof Set ? acceptedValues : new Set(acceptedValues || []);
+    for (const names of layouts) {
+        if (!Array.isArray(names) || names.length !== values.length) continue;
+        const index = names.indexOf(discriminatorName);
+        if (index >= 0 && accepted.has(String(values[index] ?? ""))) {
+            return new Map(names.map((name, valueIndex) => [name, values[valueIndex]]));
+        }
+    }
+    return null;
+}
+
+
+export function remapNamedWidgetValues(names, values, defaults = {}, fallback = null) {
+    if (!(values instanceof Map)) return fallback;
+    return names.map((name) => {
+        const value = values.get(name);
+        if (value !== undefined && value !== null) return value;
+        return Object.hasOwn(defaults, name) ? defaults[name] : null;
+    });
+}
+
+
 export function expandNamedWidgetValues(
     names,
     values,

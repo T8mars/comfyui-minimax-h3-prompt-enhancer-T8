@@ -550,7 +550,10 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             'find("custom_length_target")',
             'const NO_CASE_TEMPLATE = "无（不使用 T8 案例）"',
             "widgets_values.splice(9, 0, NO_CASE_TEMPLATE)",
-            "expandNamedWidgetValues",
+            "PUBLISHED_V1_WIDGET_NAMES",
+            "RUNTIME_V1_WIDGET_NAMES",
+            "serializedWidgetValueMap",
+            "remapSerializedWidgetValues",
             'local_model: "Qwen3.8-27B-Q4_K_M.gguf"',
             '"control_after_generate"',
         ):
@@ -564,8 +567,9 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(len(node["widgets_values"]), 35)
         self.assertEqual(node["widgets_values"][1], seedance20.TASK_INTENT_LABELS["AUTO"])
         self.assertEqual(node["widgets_values"][9], seedance20.NO_CASE_TEMPLATE)
-        self.assertEqual(node["widgets_values"][19], seedance20.SEEDANCE_API_MODE)
-        self.assertEqual(node["widgets_values"][20:22], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, ""])
+        self.assertEqual(node["widgets_values"][13], seedance20.SEEDANCE_API_MODE)
+        self.assertEqual(node["widgets_values"][14:16], [seedance20.AI_WORKSHOP_DEFAULT_MODEL, 0])
+        self.assertEqual(node["widgets_values"][21], "")
         self.assertEqual(
             [item["name"] for item in node["inputs"]],
             [

@@ -4,8 +4,8 @@ import { showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import {
-    expandNamedWidgetValues,
-    namedWidgetValueMap,
+    namedWidgetValueMapByDiscriminator,
+    remapNamedWidgetValues,
     restoreNamedWidgetValues,
     serializeNamedWidgetValues,
 } from "./widget_state.mjs";
@@ -24,6 +24,7 @@ const CUSTOM_MODEL_OPTION = "Custom（自定义）";
 const AUTO_DURATION = "AUTO（模型智能选择）";
 const AUTO_SHOT_COUNT = "AUTO（系统自动判断）";
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
+const SEEDANCE_API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE];
 const TASK_LABELS = {
     AUTO: "AUTO（根据意图与素材判断）",
     T2V: "T2V（文生视频）",
@@ -35,7 +36,10 @@ const TASK_LABELS = {
     TrackFill: "轨道补齐（多视频衔接）",
     Combined: "组合任务（参考+编辑）",
 };
-const SERIALIZED_WIDGET_NAMES = [
+// 1.4.0 and earlier wrote widgets in declaration order. ComfyUI V3 actually
+// creates every required widget before optional widgets, so loading that array
+// positionally can assign seed/control values to custom_length_target.
+const PUBLISHED_V1_WIDGET_NAMES = [
     "prompt",
     "task_intent",
     "complexity_mode",
@@ -62,6 +66,74 @@ const SERIALIZED_WIDGET_NAMES = [
     "openai_video_urls",
     "seed",
     "control_after_generate",
+];
+const RUNTIME_V1_WIDGET_NAMES = [
+    "prompt",
+    "task_intent",
+    "complexity_mode",
+    "duration_seconds",
+    "shot_count",
+    "rewrite_mode",
+    "output_detail",
+    "output_language",
+    "prompt_mode",
+    "case_template",
+    "reference_syntax",
+    "subtitle_policy",
+    "stability_constraints",
+    "api_mode",
+    "ai_workshop_model",
+    "custom_length_target",
+    "reference_roles",
+    "reference_context",
+    "constraints",
+    "api_key",
+    "reference_template",
+    "custom_model",
+    "openai_base_url",
+    "openai_video_urls",
+    "seed",
+    "control_after_generate",
+];
+const LOCAL_WIDGET_NAMES = [
+    "local_model",
+    "local_mmproj",
+    "local_context_size",
+    "local_max_tokens",
+    "local_think_mode",
+    "local_reasoning_effort",
+    "local_video_sample_fps",
+    "local_unload_policy",
+    "local_comfy_memory_policy",
+];
+const PUBLISHED_WIDGET_NAMES = [...PUBLISHED_V1_WIDGET_NAMES, ...LOCAL_WIDGET_NAMES];
+const SERIALIZED_WIDGET_NAMES = [
+    "prompt",
+    "task_intent",
+    "complexity_mode",
+    "duration_seconds",
+    "shot_count",
+    "rewrite_mode",
+    "output_detail",
+    "output_language",
+    "prompt_mode",
+    "case_template",
+    "reference_syntax",
+    "subtitle_policy",
+    "stability_constraints",
+    "api_mode",
+    "ai_workshop_model",
+    "custom_length_target",
+    "reference_roles",
+    "reference_context",
+    "constraints",
+    "api_key",
+    "reference_template",
+    "custom_model",
+    "openai_base_url",
+    "openai_video_urls",
+    "seed",
+    "control_after_generate",
     "local_model",
     "local_mmproj",
     "local_context_size",
@@ -83,6 +155,23 @@ const LOCAL_WIDGET_DEFAULTS = {
     local_unload_policy: "执行后卸载（推荐）",
     local_comfy_memory_policy: "AUTO（显存不足时释放）",
 };
+
+
+function serializedWidgetValueMap(values) {
+    if (!Array.isArray(values)) return null;
+    const layouts = values.length === SERIALIZED_WIDGET_NAMES.length
+        ? [SERIALIZED_WIDGET_NAMES, PUBLISHED_WIDGET_NAMES]
+        : values.length === RUNTIME_V1_WIDGET_NAMES.length
+            ? [RUNTIME_V1_WIDGET_NAMES, PUBLISHED_V1_WIDGET_NAMES]
+            : [];
+    return namedWidgetValueMapByDiscriminator(values, layouts, "api_mode", SEEDANCE_API_MODES);
+}
+
+
+function remapSerializedWidgetValues(values) {
+    const source = serializedWidgetValueMap(values);
+    return remapNamedWidgetValues(SERIALIZED_WIDGET_NAMES, source, LOCAL_WIDGET_DEFAULTS, values);
+}
 
 
 function setWidgetVisible(widget, visible) {
@@ -523,25 +612,15 @@ app.registerExtension({
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 25) {
                 args[0].widgets_values.splice(9, 0, NO_CASE_TEMPLATE);
             }
-            const restoredValues = namedWidgetValueMap(
-                SERIALIZED_WIDGET_NAMES,
-                args[0]?.widgets_values,
-                [26, SERIALIZED_WIDGET_NAMES.length],
-            );
-            if (restoredValues) {
+            const restoredValues = serializedWidgetValueMap(args[0]?.widgets_values);
+            if (Array.isArray(args[0]?.widgets_values)) {
                 args[0] = {
                     ...args[0],
-                    widgets_values: expandNamedWidgetValues(
-                        SERIALIZED_WIDGET_NAMES,
-                        args[0].widgets_values,
-                        LOCAL_WIDGET_DEFAULTS,
-                        [26, SERIALIZED_WIDGET_NAMES.length],
-                    ),
+                    widgets_values: remapSerializedWidgetValues(args[0].widgets_values),
                 };
             }
-            if (Array.isArray(args[0]?.widgets_values)) {
-                this.t8PendingCaseTemplateValue = args[0].widgets_values[9];
-            }
+            this.t8PendingCaseTemplateValue = restoredValues?.get("case_template")
+                ?? args[0]?.widgets_values?.[9];
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => {
                 const excluded = new Set(["case_template"]);

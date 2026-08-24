@@ -71,7 +71,7 @@ def _seedance_widgets(prompt: str, api_mode: str = LOCAL_API_MODE) -> list[Any]:
         prompt, "AUTO（根据意图与素材判断）", "AUTO（自动判断）", "15", "5", "balanced",
         "AUTO（按内容判断）", "中文", "官方优化", "无（不使用 T8 案例）",
         "火山官方（@图片N/@视频N/@音频N）", "AUTO（按用户意图）", "AUTO（按场景添加）",
-        0, "", "", "", "", "", api_mode, "gemini-3.5-flash", "", "", "", 0, "fixed",
+        api_mode, "gemini-3.5-flash", 0, "", "", "", "", "", "", "", "", 0, "fixed",
         *SEEDANCE_LOCAL_DEFAULTS,
     ]
 
@@ -530,6 +530,13 @@ def check() -> None:
                 local_index = {"MiniMaxH3PromptEnhancerT8": 22, "Seedance20PromptEnhancerT8": 26, "MiniMaxMusic3PromptEnhancerT8": 31}[node["type"]]
                 if values[local_index] in (None, "", "randomize"):
                     raise RuntimeError(f"{path.name}: invalid local model widget value")
+                if node["type"] == "Seedance20PromptEnhancerT8":
+                    if values[13] not in (SEEDANCE_API_MODE, LOCAL_API_MODE):
+                        raise RuntimeError(f"{path.name}: Seedance API mode is positionally misaligned")
+                    if values[14] != "gemini-3.5-flash" or not isinstance(values[15], int):
+                        raise RuntimeError(f"{path.name}: Seedance custom length is positionally misaligned")
+                    if values[25] not in ("fixed", "increment", "decrement", "randomize"):
+                        raise RuntimeError(f"{path.name}: Seedance seed control is positionally misaligned")
         for link in workflow.get("links", []):
             if link[1] not in nodes or link[3] not in nodes:
                 raise RuntimeError(f"{path.name}: dangling link {link[0]}")

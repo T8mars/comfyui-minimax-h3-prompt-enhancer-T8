@@ -5,6 +5,15 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.4.1] - 2026-08-24
+
+### Fixed
+
+- Corrected Seedance 2.0 widget serialization to follow ComfyUI V3's
+  required-before-optional runtime order, so bundled workflows no longer send
+  `randomize` to the integer `custom_length_target` input. Existing 1.4.0
+  workflows are migrated by stable widget name when reopened.
+
 ## [1.4.0] - 2026-08-24
 
 ### Fixed
