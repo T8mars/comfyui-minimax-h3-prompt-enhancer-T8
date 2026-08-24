@@ -83,6 +83,11 @@ export function renderTemplateDetail(
         policyText = "仅供人类本地预览，不会作为图像、视频或 LLM 参考素材",
     } = {},
 ) {
+    for (const image of root.querySelectorAll("img")) {
+        image.onload = null;
+        image.onerror = null;
+        image.removeAttribute("src");
+    }
     root.replaceChildren();
 
     const title = document.createElement("div");
@@ -141,15 +146,23 @@ export function renderTemplateDetail(
     root.append(buttonRow);
 
     const previewWrap = document.createElement("div");
-    previewWrap.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px";
-    for (const preview of template.previews) {
+    previewWrap.style.cssText = "display:flex;flex-direction:column;gap:8px";
+    const previewChoices = Array.isArray(template.previews) ? template.previews : [];
+    const renderPreview = (preview) => {
+        for (const image of previewWrap.querySelectorAll("img")) {
+            image.onload = null;
+            image.onerror = null;
+            image.removeAttribute("src");
+        }
+        previewWrap.replaceChildren();
+        if (!preview) return;
         const figure = document.createElement("div");
         figure.style.cssText = "display:flex;flex-direction:column;gap:5px;min-width:0";
         const caption = document.createElement("div");
         caption.textContent = preview.label;
         caption.style.fontWeight = "600";
         figure.append(caption);
-        if (template.previews.length > 1) {
+        if (previewChoices.length > 1) {
             figure.append(textRow("此证据用途", preview.short_summary));
             figure.append(textRow("此 GIF 推荐示例", preview.recommended_input));
         }
@@ -185,7 +198,21 @@ export function renderTemplateDetail(
         policy.style.opacity = ".65";
         figure.append(policy);
         previewWrap.append(figure);
+        refreshSize?.();
+    };
+    if (previewChoices.length > 1) {
+        const selector = document.createElement("select");
+        selector.style.cssText = "height:28px;max-width:100%;background:#1b1b1b;color:#ddd;border:1px solid #555;border-radius:5px";
+        previewChoices.forEach((preview, index) => {
+            const option = document.createElement("option");
+            option.value = String(index);
+            option.textContent = preview.label || `证据 ${index + 1}`;
+            selector.append(option);
+        });
+        selector.addEventListener("change", () => renderPreview(previewChoices[Number(selector.value)]));
+        root.append(selector);
     }
+    renderPreview(previewChoices[0]);
     root.append(previewWrap);
     requestAnimationFrame(() => refreshSize?.());
 }
@@ -306,11 +333,43 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         { serialize: false },
     );
     browserWidget.serializeValue = () => undefined;
+    const recommendWidget = node.addWidget(
+        "button",
+        "本地推荐 Top-3 / 对比",
+        "只在本地根据关键词、任务类型、素材类型和结构锚点排序，不发送用户输入",
+        () => {
+            const linkedInputs = (node.inputs || []).filter((input) => input.link != null).map((input) => input.name).join(" ");
+            const taskWidget = node.widgets?.find((widget) => ["task_type", "task_intent"].includes(widget.name));
+            openTemplateBrowser({
+                catalog,
+                selectedValue: caseWidget.value,
+                recommendationContext: {
+                    prompt: String(promptWidget.value || ""),
+                    task: String(taskWidget?.value || ""),
+                    media: linkedInputs,
+                },
+                initialCategory: "推荐 Top-3",
+                onSelect: (template) => {
+                    caseWidget.value = template.label;
+                    caseWidget.callback?.(template.label);
+                    node.graph?.change?.();
+                    node.setDirtyCanvas(true, true);
+                },
+            });
+        },
+        { serialize: false },
+    );
+    recommendWidget.serializeValue = () => undefined;
     const browserIndex = node.widgets?.indexOf(browserWidget) ?? -1;
     const detailIndex = node.widgets?.indexOf(domWidget) ?? -1;
     if (browserIndex > detailIndex && detailIndex >= 0) {
         node.widgets.splice(browserIndex, 1);
         node.widgets.splice(detailIndex, 0, browserWidget);
+        const recommendIndex = node.widgets.indexOf(recommendWidget);
+        if (recommendIndex >= 0) {
+            node.widgets.splice(recommendIndex, 1);
+            node.widgets.splice(detailIndex + 1, 0, recommendWidget);
+        }
     }
     update();
     return domWidget;

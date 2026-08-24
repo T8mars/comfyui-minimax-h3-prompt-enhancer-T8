@@ -1,5 +1,7 @@
 import { app } from "../../scripts/app.js";
 import { showLocalQwenStatus } from "./local_qwen_status.js";
+import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
+import { showProviderCapability } from "./provider_capability_ui.mjs";
 
 
 const NODE_ID = "MiniMaxMusic3PromptEnhancerT8";
@@ -623,6 +625,24 @@ app.registerExtension({
             }
             addApiModeBehavior(this, apiModeWidget, aiWorkshopModelWidget, customModelWidget, baseUrlWidget);
             if (apiKeyWidget) addApiKeyWidget(this, apiKeyWidget, apiModeWidget);
+
+            const capabilityWidget = this.addWidget(
+                "button",
+                "🧭 渠道能力预检",
+                "Music 3 节点仅使用供应商文字能力；同时显示可选参数边界",
+                () => showProviderCapability(apiModeWidget?.value, baseUrlWidget?.value, { textOnly: true }),
+                { serialize: false },
+            );
+            capabilityWidget.serializeValue = () => undefined;
+
+            const diagnosticsWidget = this.addWidget(
+                "button",
+                "🩺 查看/复制脱敏诊断",
+                "只显示安全字段，不包含 Key、歌词、模板、素材或响应正文",
+                () => showRedactedDiagnostics(NODE_ID),
+                { serialize: false },
+            );
+            diagnosticsWidget.serializeValue = () => undefined;
 
             let queuing = false;
             const runWidget = this.addWidget(

@@ -46,5 +46,34 @@
       "2": {"name": "Music 3 请求 JSON"},
       "3": {"name": "增强报告 JSON"}
     }
+  },
+  "T8LLMProviderConfig": {
+    "display_name": "T8 LLM 共享渠道配置",
+    "inputs": {
+      "provider": {"name": "共享渠道"},
+      "credential_alias": {"name": "本地凭据别名（可选）"},
+      "openai_base_url": {"name": "OpenAI Base URL"},
+      "custom_model": {"name": "自定义模型 ID"},
+      "temperature_policy": {"name": "temperature 策略"},
+      "extra_parameters_json": {"name": "附加请求参数 JSON（白名单）"}
+    },
+    "outputs": {"0": {"name": "渠道配置"}}
+  },
+  "T8PromptInspector": {
+    "display_name": "T8 提示词检查器（本地、不拦截）",
+    "inputs": {
+      "prompt": {"name": "待检查提示词"},
+      "prompt_family": {"name": "提示词家族"},
+      "expected_shot_count": {"name": "期望镜头数"},
+      "expected_language": {"name": "期望语言"},
+      "instrumental": {"name": "纯器乐"},
+      "task_intent": {"name": "任务意图（可选）"},
+      "duration_seconds": {"name": "目标时长（0=自动）"}
+    },
+    "outputs": {
+      "0": {"name": "原提示词"},
+      "1": {"name": "提示 JSON"},
+      "2": {"name": "检查摘要"}
+    }
   }
 }

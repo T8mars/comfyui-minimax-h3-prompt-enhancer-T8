@@ -3,6 +3,36 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.3.0] - 2026-08-24
+
+### Added
+
+- Added optional shared LLM provider configuration for all three enhancer nodes,
+  including explicit/automatic temperature handling, allowlisted request options,
+  local Qwen settings, and workflow-safe local credential aliases.
+- Added deterministic provider capability preflight, copyable redacted diagnostics,
+  a local non-blocking Prompt Inspector, and local Top-3 template recommendation
+  with two-to-three-template comparison.
+- Added real-browser layout/performance contracts and a standard case-library
+  delivery gate with immutable manifest checks, stable-ID diffs, preview staging,
+  budget confirmation, rollback, tests, and machine-readable reports.
+
+### Changed
+
+- Preview bundles now use content-addressed GIF assets so multiple evidence
+  variants may safely share identical encoded bytes. New previews have a 2 MiB
+  per-file cap and the package uses 150/165/180 MiB warning/confirmation/hard gates.
+- Hidden OpenAI model and Base URL values are restored and serialized by stable
+  widget name across mode switches and workflow reloads.
+
+### Compatibility
+
+- The original three node IDs remain first in registration order, their output
+  names/order remain unchanged, and their 31/35/38 serialized widget contracts
+  are frozen. The shared provider socket is optional and adds no widget value.
+- With no shared config connected, provider, model, temperature, retry, media,
+  prompt, cache, and non-empty-output behavior follow the 1.2.0 path.
+
 ## [1.2.0] - 2026-08-24
 
 ### Added

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>T8 frontend browser contracts</title>
+<style>
+  body { margin: 0; background: #111; color: #eee; font: 14px sans-serif; }
+  .node { position: relative; width: 620px; min-height: 240px; box-sizing: border-box; padding: 12px; }
+  .advanced[hidden] { display: none; }
+  .actions { display: flex; flex-direction: column; gap: 4px; }
+  button { height: 28px; }
+</style>
+<body><pre id="result">RUNNING</pre></body>
+<script type="module">
+const result = document.querySelector("#result");
+const failures = [];
+const check = (value, message) => { if (!value) failures.push(message); };
+try {
+  const state = await import("../../web/js/widget_state.mjs");
+  const diagnostics = await import("../../web/js/diagnostics_viewer.mjs");
+  const capability = await import("../../web/js/provider_capability_ui.mjs");
+  const recommendation = await import("../../web/js/template_recommendation.mjs");
+  const menu = await import("../../web/js/template_menu_preview.js");
+
+  const widgets = ["prompt", "custom_model", "openai_base_url"].map((name) => ({ name, value: "" }));
+  state.restoreNamedWidgetValues({ widgets }, new Map([
+    ["prompt", "旧提示"], ["custom_model", "vendor/model"], ["openai_base_url", "https://provider.test/v1"],
+  ]));
+  check(widgets[1].value === "vendor/model", "hidden custom model persistence");
+  check(widgets[2].value.endsWith("/v1"), "hidden Base URL persistence");
+
+  const renderedNodes = [];
+  for (const nodeId of ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]) {
+    const node = document.createElement("section");
+    node.className = "node";
+    node.dataset.nodeId = nodeId;
+    const advanced = document.createElement("div");
+    advanced.className = "advanced";
+    advanced.hidden = true;
+    advanced.textContent = "advanced";
+    const actions = document.createElement("div");
+    actions.className = "actions";
+    const run = document.createElement("button");
+    run.textContent = "运行";
+    const diagnosticsButton = document.createElement("button");
+    diagnosticsButton.textContent = "诊断";
+    actions.append(run, diagnosticsButton);
+    node.append(advanced, actions);
+    document.body.append(node);
+    advanced.hidden = false;
+    node.style.width = "780px";
+    const nodeRect = node.getBoundingClientRect();
+    const runRect = run.getBoundingClientRect();
+    check(runRect.bottom <= nodeRect.bottom + 0.5, `${nodeId} run button visible after resize`);
+    check(runRect.height > 0, `${nodeId} run button has layout`);
+    advanced.hidden = true;
+    renderedNodes.push(node);
+  }
+  for (let index = 0; index < 600; index += 1) {
+    const node = renderedNodes[index % renderedNodes.length];
+    node.style.transform = `translate(${index % 41}px, ${index % 29}px)`;
+    void node.offsetWidth;
+  }
+
+  const panel = document.createElement("aside");
+  document.body.append(panel);
+  const gif = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  menu.renderPreview(panel, {
+    title: "two variants",
+    previews: [{ label: "A", available: true, url: gif }, { label: "B", available: true, url: gif }],
+  }, () => {});
+  check(panel.querySelectorAll("img").length === 1, "only one GIF is decoded at a time");
+  const selector = panel.querySelector("select");
+  selector.value = "1";
+  selector.dispatchEvent(new Event("change"));
+  check(panel.querySelectorAll("img").length === 1, "switching preview releases previous image");
+
+  const safe = diagnostics.sanitizeDiagnosticRecord({
+    component: "node", provider: "provider", outcome: "success", stages: [], prompt: "secret-body",
+  });
+  check(!JSON.stringify(safe).includes("secret-body"), "diagnostics browser allowlist");
+  check(capability.providerCapabilitySummary("OpenAI兼容接口（备用）", "https://unknown.test/v1").profile === "openai-compatible-unknown", "unknown provider boundary");
+  check(recommendation.rankTemplates([{ id: "one", label: "产品广告", required_anchors: [] }], { prompt: "产品" })[0].template.id === "one", "local recommendation");
+} catch (error) {
+  failures.push(error?.stack || String(error));
+}
+result.textContent = failures.length ? `FAIL\n${failures.join("\n")}` : "PASS";
+result.dataset.status = failures.length ? "fail" : "pass";
+</script>
+</html>

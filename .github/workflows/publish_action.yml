@@ -43,6 +43,10 @@ jobs:
           cache-dependency-path: |
             _source/pyproject.toml
             ComfyUI/requirements.txt
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install test dependencies
         shell: bash
         run: |
@@ -61,6 +65,9 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}/ComfyUI
         run: python -m unittest discover -s tests
+      - name: Run real-browser frontend contracts
+        working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+        run: python tools/run_frontend_browser_tests.py
 
   publish-node:
     name: Publish custom node to Registry

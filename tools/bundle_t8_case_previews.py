@@ -13,6 +13,10 @@ BUNDLE_SCHEMA = "t8-bundled-case-previews/v1"
 CASE_LIBRARY_SCHEMA = "t8-unofficial-case-library/v2"
 COMMUNITY_LIBRARY_SCHEMA = "t8-standalone-community-skill-handoff/v1"
 CATALOG_SCHEMA = "t8-case-template-catalog/v2"
+PREVIEW_WARNING_BYTES = 150 * 1024 * 1024
+PREVIEW_CONFIRM_BYTES = 165 * 1024 * 1024
+PREVIEW_HARD_LIMIT_BYTES = 180 * 1024 * 1024
+NEW_PREVIEW_FILE_LIMIT_BYTES = 2 * 1024 * 1024
 
 
 class PreviewBundleError(RuntimeError):
@@ -120,6 +124,8 @@ def bundle_previews(
     )
 
     entries: list[dict[str, Any]] = []
+    bundled_by_hash: dict[str, Path] = {}
+    dedup_references = 0
     for index, preview in enumerate(previews, 1):
         case_id = str(preview["case_id"])
         source = Path(sources[case_id]["path"])
@@ -149,8 +155,21 @@ def bundle_previews(
         filename = f"{bundled_hash}.gif"
         final_path = output_dir / filename
         if final_path.exists():
-            raise PreviewBundleError(f"Unexpected duplicate bundled GIF: {case_id}: {filename}")
-        temporary.replace(final_path)
+            # Distinct evidence variants may intentionally encode to identical
+            # preview bytes.  Reuse the content-addressed asset while retaining
+            # one manifest entry per selector identity.
+            if bundled_hash not in bundled_by_hash or _sha256(final_path) != bundled_hash:
+                raise PreviewBundleError(f"Conflicting duplicate bundled GIF: {case_id}: {filename}")
+            temporary.unlink()
+            dedup_references += 1
+        else:
+            if temporary.stat().st_size > NEW_PREVIEW_FILE_LIMIT_BYTES:
+                raise PreviewBundleError(
+                    f"Bundled preview exceeds {NEW_PREVIEW_FILE_LIMIT_BYTES} bytes: "
+                    f"{case_id}: {temporary.stat().st_size}"
+                )
+            temporary.replace(final_path)
+            bundled_by_hash[bundled_hash] = final_path
         entries.append({
             "case_id": case_id,
             "file": filename,
@@ -161,10 +180,17 @@ def bundle_previews(
         })
         print(f"[{index:02d}/{len(previews)}] {case_id} -> {filename} ({final_path.stat().st_size} bytes)")
 
+    assets = list(output_dir.glob("*.gif"))
+    total_bytes = sum(path.stat().st_size for path in assets)
+    largest_bytes = max((path.stat().st_size for path in assets), default=0)
     manifest = {
         "schema_version": BUNDLE_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
         "preview_count": len(entries),
+        "asset_count": len(assets),
+        "dedup_references": dedup_references,
+        "total_bytes": total_bytes,
+        "largest_bytes": largest_bytes,
         "encoding": {
             "format": "gif",
             "fps": fps,
@@ -204,8 +230,33 @@ def main() -> int:
         max_width=args.max_width,
         colors=args.colors,
     )
-    total_bytes = sum(int(item["bytes"]) for item in manifest["previews"])
-    print(f"Bundled {manifest['preview_count']} GIFs ({total_bytes} bytes) into {args.output_dir.resolve()}")
+    total_bytes = int(manifest["total_bytes"])
+    if total_bytes > PREVIEW_HARD_LIMIT_BYTES:
+        raise PreviewBundleError(
+            f"Bundled previews use {total_bytes} bytes, above hard limit {PREVIEW_HARD_LIMIT_BYTES}"
+        )
+    if total_bytes >= PREVIEW_CONFIRM_BYTES:
+        status = "confirm"
+    elif total_bytes >= PREVIEW_WARNING_BYTES:
+        status = "warning"
+    else:
+        status = "ok"
+    report = {
+        "new_references": manifest["preview_count"],
+        "unique_assets": manifest["asset_count"],
+        "dedup_hits": manifest["dedup_references"],
+        "largest_bytes": manifest["largest_bytes"],
+        "total_bytes": total_bytes,
+        "budget_status": status,
+        "thresholds": {
+            "warning": PREVIEW_WARNING_BYTES,
+            "confirm": PREVIEW_CONFIRM_BYTES,
+            "hard": PREVIEW_HARD_LIMIT_BYTES,
+            "single_file": NEW_PREVIEW_FILE_LIMIT_BYTES,
+        },
+        "output_dir": str(args.output_dir.resolve()),
+    }
+    print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0
 
 

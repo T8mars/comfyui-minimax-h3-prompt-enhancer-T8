@@ -315,7 +315,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("normalizeChoice(officialSkillProfileWidget", source)
         self.assertIn("normalizeChoice(creativePresetWidget", source)
         self.assertIn("LEGACY_UI_VALUES.has(String(templateWidget.value", source)
-        self.assertIn("SERIALIZED_WIDGET_NAMES.map", source)
+        self.assertIn("serializeNamedWidgetValues", source)
+        self.assertIn("restoreNamedWidgetValues", source)
         self.assertIn("nodeType.prototype.onSerialize", source)
         self.assertIn("beforeResize()", source)
         self.assertIn("afterResize(resizedNode)", source)
@@ -1625,6 +1626,24 @@ class PromptEnhancerTests(unittest.TestCase):
             )
         self.assertEqual(len(session.chat_requests), 1)
         self.assertNotIn("proxies", session.chat_requests[0])
+
+    def test_issue_8_kimi_coding_auto_omits_temperature_without_altering_core_payload(self):
+        session = FakeSession(basic_output())
+        result = nodes._request_completion(
+            session,
+            "secret-key",
+            [{"role": "user", "content": "hello"}],
+            "balanced",
+            chat_url="https://api.kimi.com/coding/v1/chat/completions",
+            provider_name="OpenAI-compatible",
+            model_id="kimi-for-coding",
+            provider_request_options={"temperature_policy": "auto"},
+        )
+        payload = session.chat_requests[0]["json"]
+        self.assertEqual(result, basic_output())
+        self.assertEqual(payload["model"], "kimi-for-coding")
+        self.assertNotIn("temperature", payload)
+        self.assertEqual(payload["messages"][0]["content"], "hello")
 
     def test_http_error_redacts_api_keys(self):
         leaked_key = "sk-" + "leaked-value-1234567890"

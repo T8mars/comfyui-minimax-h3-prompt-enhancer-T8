@@ -4,6 +4,15 @@ from typing import Any
 import requests
 from comfy_api.latest import io
 from .execution_diagnostics import DiagnosticsRun
+from .provider_config import (
+    PROVIDER_LOCAL,
+    PROVIDER_OPENAI,
+    PROVIDER_SEEDANCE,
+    PROVIDER_WORKSHOP,
+    ProviderConfigError,
+    T8ProviderConfigIO,
+    merge_provider_config,
+)
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,
@@ -683,6 +692,7 @@ def enhance_seedance20_prompt(
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
     progress_callback: Any = None,
+    provider_request_options: Any = None,
 ) -> str:
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
@@ -896,6 +906,7 @@ def enhance_seedance20_prompt(
                 if progress_callback
                 else None
             ),
+            provider_request_options=provider_request_options,
         )
         if progress_callback:
             progress_callback("output_finalized")
@@ -1187,6 +1198,12 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                T8ProviderConfigIO.Input(
+                    "provider_config",
+                    display_name="共享 LLM 渠道配置（可选）",
+                    optional=True,
+                    tooltip="不连接时完全使用本节点原有字段；连接后使用共享配置，断开即恢复。",
+                ),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1232,7 +1249,51 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        provider_config=None,
     ) -> io.NodeOutput:
+        try:
+            merged = merge_provider_config(
+                {
+                    "api_key": api_key,
+                    "api_mode": api_mode,
+                    "openai_base_url": openai_base_url,
+                    "ai_workshop_model": ai_workshop_model,
+                    "custom_model": custom_model,
+                    "local_model": local_model,
+                    "local_mmproj": local_mmproj,
+                    "local_context_size": local_context_size,
+                    "local_max_tokens": local_max_tokens,
+                    "local_think_mode": local_think_mode,
+                    "local_reasoning_effort": local_reasoning_effort,
+                    "local_video_sample_fps": local_video_sample_fps,
+                    "local_unload_policy": local_unload_policy,
+                    "local_comfy_memory_policy": local_comfy_memory_policy,
+                },
+                provider_config,
+                api_mode_map={
+                    PROVIDER_SEEDANCE: SEEDANCE_API_MODE,
+                    PROVIDER_WORKSHOP: AI_WORKSHOP_API_MODE,
+                    PROVIDER_OPENAI: OPENAI_API_MODE,
+                    PROVIDER_LOCAL: LOCAL_QWEN_API_MODE,
+                },
+            )
+        except ProviderConfigError as error:
+            raise Seedance20PromptEnhancerError(str(error)) from error
+        api_key = merged["api_key"]
+        api_mode = merged["api_mode"]
+        openai_base_url = merged["openai_base_url"]
+        ai_workshop_model = merged["ai_workshop_model"]
+        custom_model = merged["custom_model"]
+        local_model = merged["local_model"]
+        local_mmproj = merged["local_mmproj"]
+        local_context_size = merged["local_context_size"]
+        local_max_tokens = merged["local_max_tokens"]
+        local_think_mode = merged["local_think_mode"]
+        local_reasoning_effort = merged["local_reasoning_effort"]
+        local_video_sample_fps = merged["local_video_sample_fps"]
+        local_unload_policy = merged["local_unload_policy"]
+        local_comfy_memory_policy = merged["local_comfy_memory_policy"]
+        provider_request_options = merged["provider_request_options"]
         diagnostic = DiagnosticsRun("Seedance20PromptEnhancerT8", api_mode, 4)
         try:
             result = enhance_seedance20_prompt(
@@ -1274,6 +1335,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 local_video_sample_fps=local_video_sample_fps,
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
+                provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
             )
         except Exception as error:

@@ -130,15 +130,17 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         values.update(kwargs)
         return music3.enhance_music3_prompt(**values)
 
-    def test_package_registers_three_nodes(self):
+    def test_package_keeps_three_public_nodes_and_appends_utilities(self):
         async def ids():
             extension = await package.comfy_entrypoint()
             return [node.define_schema().node_id for node in await extension.get_node_list()]
 
+        registered = asyncio.run(ids())
         self.assertEqual(
-            asyncio.run(ids()),
+            registered[:3],
             ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"],
         )
+        self.assertEqual(registered[3:], ["T8LLMProviderConfig", "T8PromptInspector"])
 
     def test_schema_is_text_only_and_appends_safe_report_output(self):
         schema = music3.MiniMaxMusic3PromptEnhancer.define_schema()
@@ -556,6 +558,19 @@ class Music3PromptEnhancerTests(unittest.TestCase):
             custom_model="provider/text-model",
         )
         self.assertEqual(session.urls, ["https://ark.example/api/v3/chat/completions"])
+
+    def test_kimi_coding_auto_omits_temperature_from_every_music_stage(self):
+        session = AdaptiveSession()
+        self.run_enhancer(
+            session,
+            api_mode=music3.OPENAI_API_MODE,
+            openai_base_url="https://api.kimi.com/coding/v1",
+            custom_model="kimi-for-coding",
+            provider_request_options={"temperature_policy": "auto"},
+        )
+        self.assertTrue(session.requests)
+        self.assertTrue(all("temperature" not in request["json"] for request in session.requests))
+        self.assertTrue(all(request["json"]["model"] == "kimi-for-coding" for request in session.requests))
 
     def test_ai_workshop_uses_default_model(self):
         session = AdaptiveSession()

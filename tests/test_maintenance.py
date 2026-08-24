@@ -98,6 +98,8 @@ class MaintenanceTests(unittest.TestCase):
             "MiniMaxH3PromptEnhancerT8",
             "Seedance20PromptEnhancerT8",
             "MiniMaxMusic3PromptEnhancerT8",
+            "T8LLMProviderConfig",
+            "T8PromptInspector",
         }
         for locale in ("en", "zh"):
             data = json.loads((ROOT / "locales" / locale / "nodeDefs.json").read_text(encoding="utf-8"))

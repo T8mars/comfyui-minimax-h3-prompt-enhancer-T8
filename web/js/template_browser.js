@@ -1,4 +1,5 @@
 import { api } from "../../scripts/api.js";
+import { rankTemplates } from "./template_recommendation.mjs";
 
 
 const FAVORITES_KEY = "t8.prompt-enhancer.template-favorites.v1";
@@ -63,7 +64,16 @@ function templateSearchText(template) {
 }
 
 
-export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
+function releaseImages(root) {
+    for (const image of root?.querySelectorAll?.("img") || []) {
+        image.onload = null;
+        image.onerror = null;
+        image.removeAttribute("src");
+    }
+}
+
+
+export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommendationContext = {}, initialCategory = "全部" }) {
     activeBrowser?.dismiss?.();
     const overlay = document.createElement("div");
     overlay.className = "t8-template-browser-overlay";
@@ -89,8 +99,9 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
     search.type = "search";
     search.placeholder = "搜索名称、用途、锚点或推荐输入";
     search.style.cssText = "flex:1;min-width:120px;height:32px;padding:0 9px;border:1px solid #555;border-radius:6px;background:#171717;color:#eee";
+    const compare = button("对比（0/3）", "选择 2–3 个模板并排对比");
     const close = button("关闭", "Esc");
-    header.append(title, search, close);
+    header.append(title, search, compare, close);
 
     const body = document.createElement("div");
     body.style.cssText = "display:grid;min-height:0";
@@ -120,13 +131,17 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
 
     const templates = [...(catalog.templates || [])];
     const byId = new Map(templates.map((item) => [item.id, item]));
+    const recommendations = rankTemplates(templates, recommendationContext, 3);
+    const recommendationReasons = new Map(recommendations.map((item) => [item.template.id, item.reasons]));
     let favorites = readIds(FAVORITES_KEY).filter((id) => byId.has(id));
     let recents = readIds(RECENTS_KEY).filter((id) => byId.has(id));
-    const categories = ["全部", "收藏", "最近", ...new Set(templates.map(categoryFor))];
-    let category = "全部";
+    const categories = ["全部", "推荐 Top-3", "收藏", "最近", ...new Set(templates.map(categoryFor))];
+    let category = categories.includes(initialCategory) ? initialCategory : "全部";
     let activeTemplate = templates.find((item) => item.label === selectedValue || item.id === selectedValue) || templates[0];
+    const comparison = new Set();
 
     const dismiss = () => {
+        releaseImages(dialog);
         overlay.remove();
         if (activeBrowser?.overlay === overlay) activeBrowser = null;
         document.removeEventListener("keydown", onKey);
@@ -142,8 +157,60 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
     document.addEventListener("keydown", onKey);
     activeBrowser = { overlay, dismiss };
 
+    const updateCompareLabel = () => {
+        compare.textContent = `对比（${comparison.size}/3）`;
+        compare.disabled = comparison.size < 2;
+        compare.style.opacity = comparison.size < 2 ? ".55" : "1";
+    };
+
+    function appendOnePreview(container, template, maxHeight = 250) {
+        const preview = (template.previews || []).find((item) => item.available && item.preview_url);
+        if (!preview) return;
+        const image = document.createElement("img");
+        image.loading = "lazy";
+        image.decoding = "async";
+        image.alt = `${preview.label || template.label} GIF 预览`;
+        image.style.cssText = `display:block;width:100%;max-height:${maxHeight}px;object-fit:contain;border-radius:7px;background:#111`;
+        image.src = api.apiURL(preview.preview_url);
+        container.append(image);
+    }
+
+    function renderComparison() {
+        releaseImages(detail);
+        detail.replaceChildren();
+        const selected = [...comparison].map((id) => byId.get(id)).filter(Boolean).slice(0, 3);
+        const grid = document.createElement("div");
+        grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px";
+        for (const template of selected) {
+            const card = document.createElement("section");
+            card.style.cssText = "display:flex;flex-direction:column;gap:7px;padding:10px;border:1px solid #555;border-radius:8px;min-width:0";
+            const heading = document.createElement("strong");
+            heading.textContent = template.label;
+            const summary = document.createElement("div");
+            summary.textContent = template.summary || "";
+            const recommended = document.createElement("div");
+            recommended.textContent = `推荐输入：${template.recommended_input || ""}`;
+            const anchors = document.createElement("ol");
+            anchors.style.margin = "0 0 0 18px";
+            for (const value of template.required_anchors || []) {
+                const item = document.createElement("li");
+                item.textContent = value;
+                anchors.append(item);
+            }
+            const use = button("使用此模板");
+            use.onclick = () => { onSelect(template); dismiss(); };
+            card.append(heading, summary, recommended, anchors, use);
+            appendOnePreview(card, template, 210);
+            grid.append(card);
+        }
+        detail.append(grid);
+    }
+    compare.onclick = renderComparison;
+    updateCompareLabel();
+
     function renderDetail(template) {
         activeTemplate = template;
+        releaseImages(detail);
         detail.replaceChildren();
         if (!template) return;
         const heading = document.createElement("h3");
@@ -154,6 +221,10 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
         authority.style.opacity = ".7";
         const summary = document.createElement("div");
         summary.textContent = template.summary || "";
+        const reasons = recommendationReasons.get(template.id);
+        const why = document.createElement("div");
+        why.textContent = reasons?.length ? `为什么推荐：${reasons.join("；")}` : "";
+        why.style.cssText = "color:#b9d5ff;font-size:12px";
         const recommended = document.createElement("div");
         recommended.textContent = `简约推荐输入：${template.recommended_input || ""}`;
         recommended.style.cssText = "padding:9px;border-radius:6px;background:rgba(255,255,255,.05);line-height:1.5";
@@ -184,17 +255,10 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
             renderDetail(template);
         };
         actions.append(use, favorite);
-        detail.append(heading, authority, summary, recommended, anchors, actions);
-        for (const preview of template.previews || []) {
-            if (!preview.available || !preview.preview_url) continue;
-            const image = document.createElement("img");
-            image.loading = "lazy";
-            image.decoding = "async";
-            image.alt = `${preview.label || template.label} GIF 预览`;
-            image.style.cssText = "display:block;width:100%;max-height:330px;object-fit:contain;border-radius:7px;background:#111";
-            image.src = api.apiURL(preview.preview_url);
-            detail.append(image);
-        }
+        detail.append(heading, authority, summary);
+        if (reasons?.length) detail.append(why);
+        detail.append(recommended, anchors, actions);
+        appendOnePreview(detail, template, 330);
         if (!(template.previews || []).some((item) => item.available && item.preview_url)) {
             const empty = document.createElement("div");
             empty.textContent = "本机未配置此模板 GIF；不影响提示词增强。";
@@ -210,7 +274,8 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
     function visibleTemplates() {
         const query = search.value.trim().toLocaleLowerCase();
         let values = templates;
-        if (category === "收藏") values = favorites.map((id) => byId.get(id)).filter(Boolean);
+        if (category === "推荐 Top-3") values = recommendations.map((item) => item.template);
+        else if (category === "收藏") values = favorites.map((id) => byId.get(id)).filter(Boolean);
         else if (category === "最近") values = recents.map((id) => byId.get(id)).filter(Boolean);
         else if (category !== "全部") values = values.filter((item) => categoryFor(item) === category);
         if (query) values = values.filter((item) => templateSearchText(item).includes(query));
@@ -221,12 +286,14 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
         list.replaceChildren();
         const values = visibleTemplates();
         for (const template of values) {
+            const wrapper = document.createElement("div");
+            wrapper.style.cssText = "display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.07)";
             const row = document.createElement("button");
             row.type = "button";
             row.setAttribute("aria-label", `查看模板：${template.label}`);
             row.style.cssText = [
                 "display:flex", "width:100%", "align-items:center", "gap:7px", "padding:8px",
-                "border:0", "border-bottom:1px solid rgba(255,255,255,.07)", "text-align:left",
+                "border:0", "text-align:left",
                 "background:transparent", "color:inherit", "cursor:pointer",
             ].join(";");
             row.textContent = `${favorites.includes(template.id) ? "★ " : ""}${template.label}`;
@@ -238,7 +305,16 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect }) {
                 renderDetail(template);
                 renderList();
             };
-            list.append(row);
+            const pick = button(comparison.has(template.id) ? "✓" : "+", "加入/移出对比");
+            pick.style.width = "32px";
+            pick.onclick = () => {
+                if (comparison.has(template.id)) comparison.delete(template.id);
+                else if (comparison.size < 3) comparison.add(template.id);
+                updateCompareLabel();
+                renderList();
+            };
+            wrapper.append(row, pick);
+            list.append(wrapper);
         }
         if (!values.length) {
             const empty = document.createElement("div");

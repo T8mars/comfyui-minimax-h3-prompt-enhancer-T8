@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -21,12 +23,21 @@ FORBIDDEN_TRACKED = (
     re.compile(r"(^|/)runtime(?:/|$)", re.IGNORECASE),
     re.compile(r"\.gguf(?:\.part)?$", re.IGNORECASE),
     re.compile(r"(^|/)runtime_config\.json$", re.IGNORECASE),
+    re.compile(r"(^|/)\.user(?:/|$)", re.IGNORECASE),
+    re.compile(r"(^|/)credentials\.json$", re.IGNORECASE),
 )
 SECRET_RE = re.compile(rb"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{24,}")
 TEXT_SUFFIXES = {
     ".css", ".html", ".ini", ".js", ".json", ".md", ".py", ".toml", ".txt", ".yaml", ".yml",
 }
+PREVIEW_WARNING_BYTES = 150 * 1024 * 1024
+PREVIEW_CONFIRM_BYTES = 165 * 1024 * 1024
 MAX_BUNDLED_PREVIEW_BYTES = 180 * 1024 * 1024
+# The current library contains two reviewed historical files above 2 MiB.  New
+# bundles are capped separately by bundle_t8_case_previews.py; the repository
+# gate uses 4 MiB so old releases continue to verify without rewriting assets.
+MAX_BUNDLED_PREVIEW_FILE_BYTES = 4 * 1024 * 1024
+T8_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
 
 
 class VerificationError(RuntimeError):
@@ -97,7 +108,81 @@ def verify_toml_and_yaml(files: list[Path]) -> None:
         raise VerificationError(f"Invalid TOML/YAML: {invalid}")
 
 
-def verify_preview_budget() -> dict[str, int]:
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _verify_t8_preview_manifest() -> dict[str, int]:
+    preview_root = ROOT / "web" / "js" / "assets" / "t8-case-previews"
+    manifest_path = preview_root / "manifest.json"
+    if not manifest_path.is_file():
+        raise VerificationError("Missing T8 preview manifest")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != T8_PREVIEW_SCHEMA:
+        raise VerificationError("Unsupported T8 preview manifest schema")
+    entries = manifest.get("previews")
+    if not isinstance(entries, list) or int(manifest.get("preview_count", -1)) != len(entries):
+        raise VerificationError("T8 preview manifest count mismatch")
+
+    case_ids: set[str] = set()
+    referenced_files: dict[str, int] = {}
+    declared_hashes: dict[str, str] = {}
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise VerificationError("T8 preview manifest contains a non-object entry")
+        case_id = str(entry.get("case_id", "")).strip()
+        filename = str(entry.get("file", "")).strip()
+        declared_hash = str(entry.get("sha256", "")).strip().lower()
+        if not case_id or case_id in case_ids:
+            raise VerificationError(f"Missing or duplicate T8 preview case_id: {case_id!r}")
+        if not re.fullmatch(r"[0-9a-f]{64}\.gif", filename):
+            raise VerificationError(f"Unsafe T8 preview filename: {filename!r}")
+        if declared_hash != filename[:-4]:
+            raise VerificationError(f"T8 preview filename/hash mismatch: {case_id}")
+        previous_hash = declared_hashes.setdefault(filename, declared_hash)
+        if previous_hash != declared_hash:
+            raise VerificationError(f"Conflicting hashes for shared preview: {filename}")
+        case_ids.add(case_id)
+        referenced_files[filename] = referenced_files.get(filename, 0) + 1
+
+    gif_files = {path.name: path for path in preview_root.glob("*.gif")}
+    missing = sorted(set(referenced_files) - set(gif_files))
+    orphaned = sorted(set(gif_files) - set(referenced_files))
+    if missing or orphaned:
+        raise VerificationError(f"T8 preview manifest/files differ; missing={missing}, orphaned={orphaned}")
+
+    for filename, path in gif_files.items():
+        size = path.stat().st_size
+        if size > MAX_BUNDLED_PREVIEW_FILE_BYTES:
+            raise VerificationError(
+                f"Bundled preview {filename} uses {size} bytes, above per-file limit "
+                f"{MAX_BUNDLED_PREVIEW_FILE_BYTES}"
+            )
+        with path.open("rb") as handle:
+            if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
+                raise VerificationError(f"Bundled preview is not a GIF: {filename}")
+        if _sha256(path) != declared_hashes[filename]:
+            raise VerificationError(f"Bundled preview hash mismatch: {filename}")
+        declared_sizes = {
+            int(entry.get("bytes", -1))
+            for entry in entries
+            if isinstance(entry, dict) and entry.get("file") == filename
+        }
+        if declared_sizes != {size}:
+            raise VerificationError(f"Bundled preview byte count mismatch: {filename}")
+
+    return {
+        "t8_preview_references": len(entries),
+        "t8_preview_assets": len(gif_files),
+        "t8_preview_dedup_references": len(entries) - len(gif_files),
+    }
+
+
+def verify_preview_budget() -> dict[str, int | str]:
     preview_root = ROOT / "web" / "js" / "assets"
     gifs = list(preview_root.rglob("*.gif"))
     total = sum(path.stat().st_size for path in gifs)
@@ -105,7 +190,28 @@ def verify_preview_budget() -> dict[str, int]:
         raise VerificationError(
             f"Bundled GIFs use {total} bytes, above budget {MAX_BUNDLED_PREVIEW_BYTES}"
         )
-    return {"gif_count": len(gifs), "gif_bytes": total, "gif_budget": MAX_BUNDLED_PREVIEW_BYTES}
+    if total >= PREVIEW_CONFIRM_BYTES and os.environ.get("T8_CONFIRM_PREVIEW_BUDGET") != "1":
+        raise VerificationError(
+            f"Bundled GIFs use {total} bytes (>= {PREVIEW_CONFIRM_BYTES}); reviewed releases must set "
+            "T8_CONFIRM_PREVIEW_BUDGET=1"
+        )
+    if total >= PREVIEW_CONFIRM_BYTES:
+        status = "confirm"
+    elif total >= PREVIEW_WARNING_BYTES:
+        status = "warning"
+    else:
+        status = "ok"
+    largest = max((path.stat().st_size for path in gifs), default=0)
+    return {
+        "gif_count": len(gifs),
+        "gif_bytes": total,
+        "gif_largest_bytes": largest,
+        "gif_budget_status": status,
+        "gif_warning_bytes": PREVIEW_WARNING_BYTES,
+        "gif_confirm_bytes": PREVIEW_CONFIRM_BYTES,
+        "gif_budget": MAX_BUNDLED_PREVIEW_BYTES,
+        **_verify_t8_preview_manifest(),
+    }
 
 
 def verify_required_release_files() -> None:
@@ -137,8 +243,12 @@ def run_optional_checks() -> None:
     subprocess.run([sys.executable, "-m", "compileall", "-q", "."], cwd=ROOT, check=True)
     node = subprocess.run(["node", "--version"], capture_output=True, check=False)
     if node.returncode == 0:
-        for path in sorted((ROOT / "web" / "js").glob("*.js")):
+        scripts = sorted((ROOT / "web" / "js").glob("*.js")) + sorted((ROOT / "web" / "js").glob("*.mjs"))
+        for path in scripts:
             subprocess.run(["node", "--check", str(path)], cwd=ROOT, check=True)
+        frontend_tests = sorted((ROOT / "tests" / "frontend").glob("*.test.mjs"))
+        if frontend_tests:
+            subprocess.run(["node", "--test", *map(str, frontend_tests)], cwd=ROOT, check=True)
 
 
 def main() -> int:

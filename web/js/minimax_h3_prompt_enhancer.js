@@ -2,6 +2,9 @@ import { app } from "../../scripts/app.js";
 import { addCaseTemplateUI, serializedCaseTemplateValue } from "./case_template_ui.js";
 import { addOfficialPresetUI } from "./official_preset_previews.js";
 import { showLocalQwenStatus } from "./local_qwen_status.js";
+import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
+import { showProviderCapability } from "./provider_capability_ui.mjs";
+import { namedWidgetValueMap, restoreNamedWidgetValues, serializeNamedWidgetValues } from "./widget_state.mjs";
 
 
 const NODE_ID = "MiniMaxH3PromptEnhancerT8";
@@ -578,6 +581,24 @@ app.registerExtension({
 
             if (apiKeyWidget) addApiKeyWidget(this, apiKeyWidget, apiModeWidget);
 
+            const capabilityWidget = this.addWidget(
+                "button",
+                "🧭 渠道能力预检",
+                "查看图片、视频、URL 与可选参数的已知/未知支持边界",
+                () => showProviderCapability(apiModeWidget?.value, openaiBaseUrlWidget?.value),
+                { serialize: false },
+            );
+            capabilityWidget.serializeValue = () => undefined;
+
+            const diagnosticsWidget = this.addWidget(
+                "button",
+                "🩺 查看/复制脱敏诊断",
+                "只显示安全字段，不包含 Key、提示词、模板、素材或响应正文",
+                () => showRedactedDiagnostics(NODE_ID),
+                { serialize: false },
+            );
+            diagnosticsWidget.serializeValue = () => undefined;
+
             let queuing = false;
             const runWidget = this.addWidget(
                 "button",
@@ -652,11 +673,19 @@ app.registerExtension({
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 21) {
                 args[0].widgets_values.splice(10, 0, NO_CASE_TEMPLATE);
             }
+            const restoredValues = namedWidgetValueMap(
+                SERIALIZED_WIDGET_NAMES,
+                args[0]?.widgets_values,
+                [22, SERIALIZED_WIDGET_NAMES.length],
+            );
             if (Array.isArray(args[0]?.widgets_values)) {
                 this.t8PendingCaseTemplateValue = args[0].widgets_values[10];
             }
             originalOnConfigure?.apply(this, args);
             requestAnimationFrame(() => {
+                const excluded = new Set(["case_template"]);
+                if (hadLegacyUploadUrl) excluded.add("openai_video_urls");
+                restoreNamedWidgetValues(this, restoredValues, excluded);
                 if (hadLegacyUploadUrl) {
                     setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
                 }
@@ -672,12 +701,13 @@ app.registerExtension({
         };
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
-            serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => {
-                const widget = this.widgets?.find((item) => item.name === name);
-                return name === "case_template"
+            serialized.widgets_values = serializeNamedWidgetValues(
+                this,
+                SERIALIZED_WIDGET_NAMES,
+                (name, value, widget) => name === "case_template"
                     ? serializedCaseTemplateValue(this, widget)
-                    : (widget?.value ?? null);
-            });
+                    : value,
+            );
         };
     },
 });

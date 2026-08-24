@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>T8 frontend performance baseline</title>
+<style>
+  body { margin: 0; background: #111; color: #eee; font: 13px sans-serif; }
+  .node { position: relative; width: 620px; box-sizing: border-box; padding: 8px; }
+  .widget { height: 22px; margin: 2px; border: 1px solid #555; }
+</style>
+<body><pre id="result">RUNNING</pre>
+<script>
+const result = document.querySelector("#result");
+const failures = [];
+const metrics = {};
+const nodes = [];
+const layoutStarted = performance.now();
+for (let nodeIndex = 0; nodeIndex < 3; nodeIndex += 1) {
+  const node = document.createElement("section");
+  node.className = "node";
+  for (let widgetIndex = 0; widgetIndex < 45; widgetIndex += 1) {
+    const widget = document.createElement("div");
+    widget.className = "widget";
+    widget.textContent = `widget ${widgetIndex}`;
+    node.append(widget);
+  }
+  document.body.append(node);
+  void node.getBoundingClientRect();
+  nodes.push(node);
+}
+metrics.threeNodeLayoutMs = +(performance.now() - layoutStarted).toFixed(2);
+
+const dragStarted = performance.now();
+for (let index = 0; index < 1200; index += 1) {
+  const node = nodes[index % nodes.length];
+  node.style.transform = `translate(${index % 61}px,${index % 43}px)`;
+  void node.getBoundingClientRect();
+}
+metrics.twelveHundredDragFramesMs = +(performance.now() - dragStarted).toFixed(2);
+
+const previewHost = document.createElement("div");
+document.body.append(previewHost);
+const gif = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+const previewStarted = performance.now();
+for (let index = 0; index < 300; index += 1) {
+  for (const old of previewHost.querySelectorAll("img")) old.removeAttribute("src");
+  previewHost.replaceChildren();
+  const image = document.createElement("img");
+  image.loading = "lazy";
+  image.src = gif;
+  previewHost.append(image);
+}
+metrics.threeHundredPreviewSwitchesMs = +(performance.now() - previewStarted).toFixed(2);
+
+if (metrics.threeNodeLayoutMs > 1000) failures.push("three-node layout regression");
+if (metrics.twelveHundredDragFramesMs > 1500) failures.push("drag/resize regression");
+if (metrics.threeHundredPreviewSwitchesMs > 750) failures.push("preview lifecycle regression");
+result.textContent = `${failures.length ? "FAIL" : "PASS"}\n${JSON.stringify(metrics)}`;
+result.dataset.status = failures.length ? "fail" : "pass";
+</script>
+</body></html>

@@ -46,5 +46,34 @@
       "2": {"name": "Music 3 payload JSON"},
       "3": {"name": "Enhancement report JSON"}
     }
+  },
+  "T8LLMProviderConfig": {
+    "display_name": "T8 Shared LLM Provider Config",
+    "inputs": {
+      "provider": {"name": "Shared provider"},
+      "credential_alias": {"name": "Local credential alias (optional)"},
+      "openai_base_url": {"name": "OpenAI Base URL"},
+      "custom_model": {"name": "Custom model ID"},
+      "temperature_policy": {"name": "Temperature policy"},
+      "extra_parameters_json": {"name": "Allowlisted extra request JSON"}
+    },
+    "outputs": {"0": {"name": "Provider config"}}
+  },
+  "T8PromptInspector": {
+    "display_name": "T8 Prompt Inspector (Local, Non-blocking)",
+    "inputs": {
+      "prompt": {"name": "Prompt to inspect"},
+      "prompt_family": {"name": "Prompt family"},
+      "expected_shot_count": {"name": "Expected shot count"},
+      "expected_language": {"name": "Expected language"},
+      "instrumental": {"name": "Instrumental"},
+      "task_intent": {"name": "Task intent (optional)"},
+      "duration_seconds": {"name": "Target duration (0=auto)"}
+    },
+    "outputs": {
+      "0": {"name": "Original prompt"},
+      "1": {"name": "Warnings JSON"},
+      "2": {"name": "Inspection summary"}
+    }
   }
 }

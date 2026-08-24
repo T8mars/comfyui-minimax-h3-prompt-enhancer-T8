@@ -1,6 +1,6 @@
 # Workflow compatibility matrix
 
-Version 1.1 keeps all three public node IDs and output names stable. Frontend
+The current compatibility contract keeps all three public node IDs and output names stable. Frontend
 migrations run only while an existing workflow is configured; newly saved
 workflows use the current deterministic widget order.
 
@@ -19,6 +19,13 @@ Compatibility invariants:
   upload endpoint into `openai_video_urls`.
 - A workflow saved by 1.1 is not promised to load in older 1.0.x code because
   older code does not know the new local-provider controls.
+- The optional `provider_config` socket is appended after every existing input.
+  It has no serialized widget and defaults to `None`, so 1.0.x/1.1.x/1.2.0
+  workflows keep their 31/35/38 widget arrays and original execution path.
+- `T8LLMProviderConfig` and `T8PromptInspector` are additional utility node IDs;
+  they do not replace, rename, or reorder the original three node registrations.
+- A connected provider config does not mutate the original node widgets.
+  Disconnecting it restores the saved per-node provider values immediately.
 
 The migration contracts are covered by `tests/test_nodes.py`,
 `tests/test_seedance20.py`, `tests/test_music3.py`, and

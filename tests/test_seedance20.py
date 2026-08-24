@@ -108,15 +108,17 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
     def messages(self, session):
         return session.chat_requests[-1]["json"]["messages"]
 
-    def test_package_registers_h3_seedance20_and_music3_as_separate_nodes(self):
+    def test_package_keeps_three_public_nodes_and_appends_utilities(self):
         async def registered_ids():
             extension = await package.comfy_entrypoint()
             return [node.define_schema().node_id for node in await extension.get_node_list()]
 
+        registered = asyncio.run(registered_ids())
         self.assertEqual(
-            asyncio.run(registered_ids()),
+            registered[:3],
             ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"],
         )
+        self.assertEqual(registered[3:], ["T8LLMProviderConfig", "T8PromptInspector"])
 
     def test_schema_has_seedance20_options_and_no_audio_port_or_h3_fields(self):
         schema = seedance20.Seedance20PromptEnhancer.define_schema()

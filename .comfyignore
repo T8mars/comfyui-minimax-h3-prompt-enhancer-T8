@@ -21,6 +21,8 @@ roadmap.md
 .env.*
 runtime/
 runtime_config.json
+.user/
+credentials.json
 *.gguf
 *.part
 __pycache__/

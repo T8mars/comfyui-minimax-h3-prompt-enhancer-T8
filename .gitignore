@@ -8,6 +8,7 @@ __pycache__/
 *.log
 runtime/
 runtime_config.json
+.user/
 *.gguf
 *.gguf.part
 .idea/

@@ -14,8 +14,21 @@ from typing import Any
 
 import requests
 from comfy_api.latest import io
-from comfy.utils import ProgressBar
+try:
+    from comfy.utils import ProgressBar
+except (ImportError, RuntimeError):  # Static tooling must not initialize ComfyUI GPU modules.
+    ProgressBar = None
 from .execution_diagnostics import DiagnosticsRun
+from .provider_capabilities import apply_chat_request_options
+from .provider_config import (
+    PROVIDER_LOCAL,
+    PROVIDER_OPENAI,
+    PROVIDER_SEEDANCE,
+    PROVIDER_WORKSHOP,
+    ProviderConfigError,
+    T8ProviderConfigIO,
+    merge_provider_config,
+)
 from .provider_transport import request_chat_completion
 
 
@@ -393,6 +406,7 @@ class Music3RequestRunner:
         report: Music3RunReport,
         progress: ProgressBar | None = None,
         local_provider: LocalQwenProvider | None = None,
+        provider_request_options: Any = None,
     ):
         self.session = session
         self.api_key = api_key
@@ -404,6 +418,7 @@ class Music3RequestRunner:
         self.report = report
         self.progress = progress
         self.local_provider = local_provider
+        self.provider_request_options = provider_request_options
 
     def complete(self, messages: list[dict[str, Any]], temperature: float, stage: str) -> str:
         _throw_if_processing_interrupted()
@@ -416,6 +431,7 @@ class Music3RequestRunner:
             stage=stage,
             temperature=temperature,
             messages=messages,
+            provider_request_options=self.provider_request_options,
         )
         if self.cache_enabled:
             cached = _stage_cache_get(cache_key)
@@ -447,6 +463,7 @@ class Music3RequestRunner:
                 self.provider_name,
                 self.model_id,
                 stage,
+                provider_request_options=self.provider_request_options,
             )
         _throw_if_processing_interrupted()
         if self.cache_enabled:
@@ -565,6 +582,7 @@ def _stage_cache_key(
     stage: str,
     temperature: float,
     messages: list[dict[str, Any]],
+    provider_request_options: Any = None,
 ) -> str:
     credential = hashlib.sha256(_STAGE_CACHE_SALT + api_key.encode("utf-8")).hexdigest()
     material = {
@@ -688,13 +706,13 @@ def _request_music_completion(
     provider_name: str,
     model_id: str,
     stage: str,
+    provider_request_options: Any = None,
 ) -> str:
-    payload = {
+    payload = apply_chat_request_options({
         "model": model_id,
         "messages": messages,
-        "temperature": temperature,
         "stream": False,
-    }
+    }, chat_url=chat_url, temperature=temperature, options=provider_request_options)
     retry_delays: tuple[float, ...] = ()
     if _is_seedance_chat_endpoint(chat_url):
         retry_delays = (
@@ -1762,6 +1780,7 @@ def enhance_music3_prompt(
     local_reasoning_effort: str = "medium",
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
+    provider_request_options: Any = None,
 ) -> tuple[str, str, str, str]:
     music_idea = str(music_idea or "").strip()
     if not music_idea:
@@ -1923,7 +1942,7 @@ def enhance_music3_prompt(
         estimated_stages += 2
     if semantic_profile_mode == SEMANTIC_LLM_MODE and effective_mode == PRESERVE_LYRICS_MODE:
         estimated_stages += 1
-    progress = ProgressBar(estimated_stages) if enable_progress else None
+    progress = ProgressBar(estimated_stages) if enable_progress and ProgressBar is not None else None
     owns_session = session is None
     active_session = session or requests.Session()
     runner = Music3RequestRunner(
@@ -1937,6 +1956,7 @@ def enhance_music3_prompt(
         report=report,
         progress=progress,
         local_provider=local_provider,
+        provider_request_options=provider_request_options,
     )
     succeeded = False
     try:
@@ -2308,6 +2328,12 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                T8ProviderConfigIO.Input(
+                    "provider_config",
+                    display_name="共享 LLM 渠道配置（可选）",
+                    optional=True,
+                    tooltip="不连接时完全使用本节点原有字段；连接后使用共享配置，断开即恢复。",
+                ),
             ],
             outputs=[
                 io.String.Output(display_name="lyrics"),
@@ -2357,7 +2383,47 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         local_reasoning_effort="medium",
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        provider_config=None,
     ) -> io.NodeOutput:
+        try:
+            merged = merge_provider_config(
+                {
+                    "api_key": api_key,
+                    "api_mode": api_mode,
+                    "openai_base_url": openai_base_url,
+                    "ai_workshop_model": ai_workshop_model,
+                    "custom_model": custom_model,
+                    "local_model": local_model,
+                    "local_context_size": local_context_size,
+                    "local_max_tokens": local_max_tokens,
+                    "local_think_mode": local_think_mode,
+                    "local_reasoning_effort": local_reasoning_effort,
+                    "local_unload_policy": local_unload_policy,
+                    "local_comfy_memory_policy": local_comfy_memory_policy,
+                },
+                provider_config,
+                api_mode_map={
+                    PROVIDER_SEEDANCE: SEEDANCE_API_MODE,
+                    PROVIDER_WORKSHOP: MUSIC_AI_WORKSHOP_API_MODE,
+                    PROVIDER_OPENAI: OPENAI_API_MODE,
+                    PROVIDER_LOCAL: LOCAL_QWEN_API_MODE,
+                },
+            )
+        except ProviderConfigError as error:
+            raise Music3PromptEnhancerError(str(error)) from error
+        api_key = merged["api_key"]
+        api_mode = merged["api_mode"]
+        openai_base_url = merged["openai_base_url"]
+        ai_workshop_model = merged["ai_workshop_model"]
+        custom_model = merged["custom_model"]
+        local_model = merged["local_model"]
+        local_context_size = merged["local_context_size"]
+        local_max_tokens = merged["local_max_tokens"]
+        local_think_mode = merged["local_think_mode"]
+        local_reasoning_effort = merged["local_reasoning_effort"]
+        local_unload_policy = merged["local_unload_policy"]
+        local_comfy_memory_policy = merged["local_comfy_memory_policy"]
+        provider_request_options = merged["provider_request_options"]
         diagnostic = DiagnosticsRun("MiniMaxMusic3PromptEnhancerT8", api_mode, 1, emit_progress=False)
         try:
             result = enhance_music3_prompt(
@@ -2399,6 +2465,7 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                 local_reasoning_effort=local_reasoning_effort,
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
+                provider_request_options=provider_request_options,
             )
         except Exception as error:
             diagnostic.complete("failed", error)

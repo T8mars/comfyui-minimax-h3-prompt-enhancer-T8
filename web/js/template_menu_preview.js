@@ -45,7 +45,12 @@ function textBlock(className, value, style = "") {
 }
 
 
-function renderPreview(panel, model, reposition) {
+export function renderPreview(panel, model, reposition) {
+    for (const image of panel.querySelectorAll("img")) {
+        image.onload = null;
+        image.onerror = null;
+        image.removeAttribute("src");
+    }
     panel.replaceChildren();
     panel.append(textBlock(
         "t8-template-preview-authority",
@@ -88,7 +93,16 @@ function renderPreview(panel, model, reposition) {
         ));
     }
 
-    for (const preview of previews) {
+    const previewHost = document.createElement("div");
+    previewHost.style.cssText = "display:flex;flex-direction:column;gap:6px;min-width:0";
+    const renderOne = (preview) => {
+        for (const image of previewHost.querySelectorAll("img")) {
+            image.onload = null;
+            image.onerror = null;
+            image.removeAttribute("src");
+        }
+        previewHost.replaceChildren();
+        if (!preview) return;
         const figure = document.createElement("div");
         figure.style.cssText = "display:flex;flex-direction:column;gap:6px;min-width:0";
         if (preview.label) {
@@ -142,8 +156,23 @@ function renderPreview(panel, model, reposition) {
             source.style.cssText = "font-size:12px;color:var(--link-color,#7ab7ff);width:max-content";
             figure.append(source);
         }
-        panel.append(figure);
+        previewHost.append(figure);
+        reposition();
+    };
+    if (previews.length > 1) {
+        const selector = document.createElement("select");
+        selector.style.cssText = "height:28px;background:#171717;color:#eee;border:1px solid #555;border-radius:5px";
+        previews.forEach((preview, index) => {
+            const option = document.createElement("option");
+            option.value = String(index);
+            option.textContent = preview.label || `证据 ${index + 1}`;
+            selector.append(option);
+        });
+        selector.addEventListener("change", () => renderOne(previews[Number(selector.value)]));
+        panel.append(selector);
     }
+    renderOne(previews[0]);
+    panel.append(previewHost);
 
     panel.append(textBlock(
         "t8-template-preview-policy",
@@ -214,6 +243,7 @@ function attachPreview(contextMenu, registration) {
         entry.addEventListener("focus", () => showValue(value));
     }
     let movedEntry = null;
+    let keyboardTimer = null;
     root.addEventListener("mousemove", (event) => {
         const entry = event.target?.closest?.(".litemenu-entry:not(.separator)");
         if (!entry || entry === movedEntry) return;
@@ -221,11 +251,15 @@ function attachPreview(contextMenu, registration) {
         showValue(entry.dataset.value || entry.textContent || "");
     });
 
-    const showKeyboardSelection = () => setTimeout(() => {
+    const showKeyboardSelection = () => {
+        if (keyboardTimer) clearTimeout(keyboardTimer);
+        keyboardTimer = setTimeout(() => {
+        keyboardTimer = null;
         const selected = entries.find((entry) => entry.style.display !== "none" && entry.style.backgroundColor)
             || entries.find((entry) => entry.style.display !== "none");
         if (selected) showValue(selected.dataset.value || selected.textContent || "");
-    }, 0);
+        }, 0);
+    };
     const filter = root.querySelector(".comfy-context-menu-filter");
     filter?.addEventListener("keydown", (event) => {
         if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) showKeyboardSelection();
@@ -238,8 +272,15 @@ function attachPreview(contextMenu, registration) {
         cleaned = true;
         if (activeRenderTimer) clearTimeout(activeRenderTimer);
         activeRenderTimer = null;
+        if (keyboardTimer) clearTimeout(keyboardTimer);
+        keyboardTimer = null;
         activeRenderEpoch += 1;
         window.removeEventListener("resize", reposition);
+        for (const image of panel.querySelectorAll("img")) {
+            image.onload = null;
+            image.onerror = null;
+            image.removeAttribute("src");
+        }
         panel.remove();
         if (activePanel === panel) activePanel = null;
         if (activeCleanup === cleanup) activeCleanup = null;
