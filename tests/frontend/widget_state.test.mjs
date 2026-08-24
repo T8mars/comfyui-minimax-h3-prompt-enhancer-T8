@@ -2,6 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+    OPENAI_PROVIDER_STATE_PROPERTY,
+    bindOpenAIProviderPersistence,
+    restoreOpenAIProviderState,
+    serializeOpenAIProviderState,
+    serializedOpenAIProviderState,
     expandNamedWidgetValues,
     namedWidgetValueMap,
     namedWidgetValueMapByDiscriminator,
@@ -9,6 +14,20 @@ import {
     restoreNamedWidgetValues,
     serializeNamedWidgetValues,
 } from "../../web/js/widget_state.mjs";
+
+
+function fakeInput(value = "") {
+    const listeners = new Map();
+    return {
+        value,
+        addEventListener(name, callback) {
+            listeners.set(name, callback);
+        },
+        emit(name) {
+            listeners.get(name)?.();
+        },
+    };
+}
 
 
 test("hidden custom model and base URL survive configure/serialize cycles", () => {
@@ -21,6 +40,48 @@ test("hidden custom model and base URL survive configure/serialize cycles", () =
     restoreNamedWidgetValues(node, restored);
     assert.equal(node.widgets.find((widget) => widget.name === "custom_model").value, "k3");
     assert.deepEqual(serializeNamedWidgetValues(node, names), saved);
+});
+
+
+test("unblurred OpenAI fields are committed from the live DOM before run and reload", () => {
+    const baseInput = fakeInput(" https://provider.test/v1 ");
+    const modelInput = fakeInput(" vendor/vision-model ");
+    const base = { name: "openai_base_url", value: "", inputEl: baseInput };
+    const model = { name: "custom_model", value: "", inputEl: modelInput };
+    const node = { widgets: [base, model], properties: {} };
+
+    bindOpenAIProviderPersistence(node, base, model);
+    node.t8CommitOpenAIProviderState();
+    assert.equal(base.value, "https://provider.test/v1");
+    assert.equal(model.value, "vendor/vision-model");
+
+    const serialized = {};
+    serializeOpenAIProviderState(node, serialized, base, model);
+    assert.deepEqual(serialized.properties[OPENAI_PROVIDER_STATE_PROPERTY], {
+        base_url: "https://provider.test/v1",
+        model_id: "vendor/vision-model",
+    });
+
+    const restoredBase = { name: "openai_base_url", value: "", inputEl: fakeInput() };
+    const restoredModel = { name: "custom_model", value: "", inputEl: fakeInput() };
+    const restoredNode = { widgets: [restoredBase, restoredModel], properties: {} };
+    restoreOpenAIProviderState(restoredNode, serializedOpenAIProviderState(serialized));
+    assert.equal(restoredBase.value, "https://provider.test/v1");
+    assert.equal(restoredBase.inputEl.value, "https://provider.test/v1");
+    assert.equal(restoredModel.value, "vendor/vision-model");
+    assert.equal(restoredModel.inputEl.value, "vendor/vision-model");
+});
+
+
+test("clearing a live OpenAI field replaces stale saved state", () => {
+    const base = { name: "openai_base_url", value: "https://old.test/v1", inputEl: fakeInput("https://old.test/v1") };
+    const model = { name: "custom_model", value: "old/model", inputEl: fakeInput("old/model") };
+    const node = { widgets: [base, model], properties: {} };
+    bindOpenAIProviderPersistence(node, base, model);
+    model.inputEl.value = "";
+    model.inputEl.emit("input");
+    assert.equal(model.value, "");
+    assert.equal(node.properties[OPENAI_PROVIDER_STATE_PROPERTY].model_id, "");
 });
 
 

@@ -5,6 +5,14 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.4.3] - 2026-08-24
+
+### Fixed
+
+- Persist OpenAI-compatible Base URL and model ID across runs, API-mode
+  switches, and workflow reloads for all three core nodes, including the
+  unblurred DOM-input edge case; API keys remain excluded from this state.
+
 ## [1.4.2] - 2026-08-24
 
 ### Fixed

@@ -579,6 +579,8 @@ AI 工坊模式不需要上传 URL。图片和完整视频以 Base64 Data URL �
 
 备用模式只需一个 API Base URL 和模型 ID。Base URL 支持服务根地址、以 `/vN` 版本段结尾的地址（例如 `/v1` 或火山方舟的 `/api/v3`），或完整 `/chat/completions` 地址。节点 Key 留空时读取 `OPENAI_API_KEY`，Base URL 留空时读取 `OPENAI_BASE_URL`；H3/Seedance 需要供应商实际支持的视觉模型，Music 3 只需要文本模型。
 
+三个核心节点会自动把 `OpenAI Base URL` 和 `OpenAI 模型 ID` 保存到当前工作流：输入时即时同步，点击节点运行按钮时还会在提交前再次读取尚未失焦的输入框；重新打开工作流或切换 API 模式后会自动恢复，无需每次重填。该兼容状态不包含 API Key，Key 仍按下方安全规则单独处理。旧工作流无需重连，首次保存后会补充这份兼容状态。
+
 #### 修复后的节点配置
 
 MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：

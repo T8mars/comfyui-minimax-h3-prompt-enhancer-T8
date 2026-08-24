@@ -28,6 +28,30 @@ try {
   check(widgets[1].value === "vendor/model", "hidden custom model persistence");
   check(widgets[2].value.endsWith("/v1"), "hidden Base URL persistence");
 
+  const liveBase = document.createElement("input");
+  const liveModel = document.createElement("input");
+  liveBase.value = "https://live-provider.test/v1";
+  liveModel.value = "vendor/live-model";
+  const liveWidgets = [
+    { name: "openai_base_url", value: "", inputEl: liveBase },
+    { name: "custom_model", value: "", inputEl: liveModel },
+  ];
+  const liveNode = { widgets: liveWidgets, properties: {} };
+  state.bindOpenAIProviderPersistence(liveNode, liveWidgets[0], liveWidgets[1]);
+  liveNode.t8CommitOpenAIProviderState();
+  const serializedProvider = {};
+  state.serializeOpenAIProviderState(liveNode, serializedProvider);
+  const reloadedWidgets = [
+    { name: "openai_base_url", value: "", inputEl: document.createElement("input") },
+    { name: "custom_model", value: "", inputEl: document.createElement("input") },
+  ];
+  state.restoreOpenAIProviderState(
+    { widgets: reloadedWidgets, properties: {} },
+    state.serializedOpenAIProviderState(serializedProvider),
+  );
+  check(reloadedWidgets[0].value === liveBase.value, "live Base URL saved before blur");
+  check(reloadedWidgets[1].value === liveModel.value, "live model ID saved before blur");
+
   const renderedNodes = [];
   for (const nodeId of ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]) {
     const node = document.createElement("section");

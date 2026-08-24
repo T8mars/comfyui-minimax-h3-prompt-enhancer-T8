@@ -4,9 +4,13 @@ import { showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import {
+    bindOpenAIProviderPersistence,
     namedWidgetValueMapByDiscriminator,
     remapNamedWidgetValues,
+    restoreOpenAIProviderState,
     restoreNamedWidgetValues,
+    serializedOpenAIProviderState,
+    serializeOpenAIProviderState,
     serializeNamedWidgetValues,
 } from "./widget_state.mjs";
 
@@ -478,6 +482,7 @@ app.registerExtension({
                 "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
                 "local_unload_policy", "local_comfy_memory_policy",
             ].map(find).filter(Boolean);
+            bindOpenAIProviderPersistence(this, baseUrlWidget, customModelWidget);
             const seedControlWidget = seedWidget?.linkedWidgets?.[0] || find("control_after_generate");
 
             if (seedControlWidget) {
@@ -554,6 +559,7 @@ app.registerExtension({
                     if (queuing) return;
                     queuing = true;
                     try {
+                        this.t8CommitOpenAIProviderState?.();
                         this.s20CommitApiKey?.();
                         await app.queuePrompt(0, 1, [String(this.id)]);
                     } finally {
@@ -602,6 +608,7 @@ app.registerExtension({
 
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
+            const openAIProviderState = serializedOpenAIProviderState(args[0]);
             const hadLegacyUploadUrl = args[0]?.inputs?.some((input) => input.name === "openai_upload_url");
             if (Array.isArray(args[0]?.widgets_values) && [23, 25].includes(args[0].widgets_values.length)) {
                 args[0] = { ...args[0], widgets_values: [...args[0].widgets_values] };
@@ -622,10 +629,12 @@ app.registerExtension({
             this.t8PendingCaseTemplateValue = restoredValues?.get("case_template")
                 ?? args[0]?.widgets_values?.[9];
             originalOnConfigure?.apply(this, args);
+            restoreOpenAIProviderState(this, openAIProviderState);
             requestAnimationFrame(() => {
                 const excluded = new Set(["case_template"]);
                 if (hadLegacyUploadUrl) excluded.add("openai_video_urls");
                 restoreNamedWidgetValues(this, restoredValues, excluded);
+                restoreOpenAIProviderState(this, openAIProviderState);
                 if (hadLegacyUploadUrl) {
                     setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
                 }
@@ -643,6 +652,7 @@ app.registerExtension({
 
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
+            serializeOpenAIProviderState(this, serialized);
             serialized.widgets_values = serializeNamedWidgetValues(
                 this,
                 SERIALIZED_WIDGET_NAMES,

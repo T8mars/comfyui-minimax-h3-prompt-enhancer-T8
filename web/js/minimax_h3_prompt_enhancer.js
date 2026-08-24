@@ -5,9 +5,13 @@ import { showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import {
+    bindOpenAIProviderPersistence,
     expandNamedWidgetValues,
     namedWidgetValueMap,
+    restoreOpenAIProviderState,
     restoreNamedWidgetValues,
+    serializedOpenAIProviderState,
+    serializeOpenAIProviderState,
     serializeNamedWidgetValues,
 } from "./widget_state.mjs";
 
@@ -522,6 +526,7 @@ app.registerExtension({
                 "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
                 "local_unload_policy", "local_comfy_memory_policy",
             ].map((name) => this.widgets?.find((widget) => widget.name === name)).filter(Boolean);
+            bindOpenAIProviderPersistence(this, openaiBaseUrlWidget, customModelWidget);
             const seedControlWidget = seedWidget?.linkedWidgets?.[0]
                 || this.widgets?.find((widget) => widget.name === "control_after_generate");
             if (seedControlWidget) {
@@ -642,6 +647,7 @@ app.registerExtension({
                     if (queuing) return;
                     queuing = true;
                     try {
+                        this.t8CommitOpenAIProviderState?.();
                         this.t8CommitApiKey?.();
                         await app.queuePrompt(0, 1, [String(this.id)]);
                     } finally {
@@ -690,6 +696,7 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
             const serialized = args[0];
+            const openAIProviderState = serializedOpenAIProviderState(serialized);
             const hadLegacyUploadUrl = serialized?.inputs?.some((input) => input.name === "openai_upload_url");
             if (Array.isArray(serialized?.widgets_values)
                 && [16, 17, 19, 21].includes(serialized.widgets_values.length)) {
@@ -727,10 +734,12 @@ app.registerExtension({
                 this.t8PendingCaseTemplateValue = args[0].widgets_values[10];
             }
             originalOnConfigure?.apply(this, args);
+            restoreOpenAIProviderState(this, openAIProviderState);
             requestAnimationFrame(() => {
                 const excluded = new Set(["case_template"]);
                 if (hadLegacyUploadUrl) excluded.add("openai_video_urls");
                 restoreNamedWidgetValues(this, restoredValues, excluded);
+                restoreOpenAIProviderState(this, openAIProviderState);
                 if (hadLegacyUploadUrl) {
                     setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
                 }
@@ -746,6 +755,7 @@ app.registerExtension({
         };
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
+            serializeOpenAIProviderState(this, serialized);
             serialized.widgets_values = serializeNamedWidgetValues(
                 this,
                 SERIALIZED_WIDGET_NAMES,

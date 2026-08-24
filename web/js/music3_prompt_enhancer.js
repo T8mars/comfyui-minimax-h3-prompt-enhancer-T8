@@ -2,6 +2,12 @@ import { app } from "../../scripts/app.js";
 import { showLocalQwenStatus } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
+import {
+    bindOpenAIProviderPersistence,
+    restoreOpenAIProviderState,
+    serializedOpenAIProviderState,
+    serializeOpenAIProviderState,
+} from "./widget_state.mjs";
 
 
 const NODE_ID = "MiniMaxMusic3PromptEnhancerT8";
@@ -567,6 +573,7 @@ app.registerExtension({
                 "local_model", "local_context_size", "local_max_tokens", "local_think_mode",
                 "local_reasoning_effort", "local_unload_policy", "local_comfy_memory_policy",
             ].map(find).filter(Boolean);
+            bindOpenAIProviderPersistence(this, baseUrlWidget, customModelWidget);
             const seedControlWidget = seedWidget?.linkedWidgets?.[0] || find("control_after_generate");
             if (lyricsModeWidget) {
                 lyricsModeWidget.tooltip = "这里控制歌词工作流；生成/润色是 T8 非官方扩展，官方 Skill 的正式能力是下方 music_caption 结构化改写。";
@@ -666,6 +673,7 @@ app.registerExtension({
                     if (queuing) return;
                     queuing = true;
                     try {
+                        this.t8CommitOpenAIProviderState?.();
                         this.music3CommitApiKey?.();
                         await app.queuePrompt(0, 1, [String(this.id)]);
                     } finally {
@@ -725,6 +733,7 @@ app.registerExtension({
 
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
+            const openAIProviderState = serializedOpenAIProviderState(args[0]);
             const restoredValues = serializedWidgetValueMap(args[0]?.widgets_values);
             if (Array.isArray(args[0]?.widgets_values)) {
                 args[0] = {
@@ -733,6 +742,7 @@ app.registerExtension({
                 };
             }
             originalOnConfigure?.apply(this, args);
+            restoreOpenAIProviderState(this, openAIProviderState);
             requestAnimationFrame(() => {
                 // Restore by stable field name as a second compatibility layer.
                 // Several ComfyUI versions calculate hidden/optional DOM widget
@@ -744,6 +754,7 @@ app.registerExtension({
                         if (widget) widget.value = value;
                     }
                 }
+                restoreOpenAIProviderState(this, openAIProviderState);
                 this.music3UpdateConditional?.();
                 this.music3UpdateApiMode?.();
                 this.music3UpdateEstimate?.();
@@ -759,6 +770,7 @@ app.registerExtension({
 
         nodeType.prototype.onSerialize = function (serialized) {
             originalOnSerialize?.apply(this, arguments);
+            serializeOpenAIProviderState(this, serialized);
             serialized.widgets_values = SERIALIZED_WIDGET_NAMES.map((name) => {
                 const widget = this.widgets?.find((item) => item.name === name);
                 return widget?.value ?? null;
