@@ -314,6 +314,7 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
     caseWidget.callback = function (value) {
         originalCallback?.apply(this, arguments);
         update(value);
+        node.t8UpdateSkillPriority?.();
     };
     node.t8UpdateCaseTemplate = update;
     const browserWidget = node.addWidget(
@@ -372,6 +373,7 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         }
     }
     update();
+    node.t8UpdateSkillPriority?.();
     return domWidget;
 }
 

@@ -301,6 +301,8 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 
 这些选项只把官方场景 Skill 中适合“单次 H3 提示词改写”的规则传给 LLM。节点不会安装远程 Skill、生成角色卡或锚点图、研究官网、分析音频文件、调用 H3 视频生成、拼接片段或执行交付流程。
 
+如果同时选择了一个 `非官方模板（案例 / 社区 Skill）`，则 **T8 非官方模板优先**：本次请求不会再应用或 AUTO 推断这 8 个可选官方场景 Skill。界面会把官方场景 Skill 标为“当前停用”并隐藏其详情卡；取消 T8 模板后，工作流中原先保存的官方场景 Skill 会自动恢复。该优先级不影响始终启用的 H3 核心写作 Skill，也不会改变旧工作流的节点 ID、输入或保存值。
+
 ## 非官方模板（案例 / 社区 Skill）
 
 该列表与节点已有的 MiniMax 官方 9 个 Skill 完全分开，绝不修改或重复导入官方模板。下拉框显示中文名称，工作流内部保存稳定模板 ID；旧名称会自动迁移。MiniMax H3 会把机制写进 H3 原生字段、`[Shot N]` 时间线和声音合同；Seedance 2.0 只使用它自己的任务意图、自然段或连续 `镜头N` 语法，不会混入 H3 字段或逐镜头绝对时间码。
@@ -497,8 +499,8 @@ MV 规则按以下方式工作：
 | `output_language` | `中文 / English`，默认中文 |
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | 界面显示为“H3 核心写作 Skill（始终启用）”；`现有兼容 / 官方 Skill 严格`，默认兼容，严格档位强制英文说明正文 |
-| `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF |
-| `case_template` | `无 / 188 个非官方模板`：186 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则 |
+| `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF；与 T8 非官方模板同时选择时暂不生效 |
+| `case_template` | `无 / 188 个非官方模板`：186 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则；H3 中与官方场景 Skill 同选时优先生效 |
 | `reference_template` | 仅参考模板融合使用 |
 | `first_frame` | I2VA / FL2VA 首帧 |
 | `last_frame` | FL2VA / L2VA 尾帧 |

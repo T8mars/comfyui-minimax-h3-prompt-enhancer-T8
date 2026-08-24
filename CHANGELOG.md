@@ -5,6 +5,18 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.4.2] - 2026-08-24
+
+### Fixed
+
+- Made a selected T8 non-official case/community template take precedence over
+  all eight optional MiniMax official scene Skills, including `AUTO`, while
+  keeping the always-on H3 core writing Skill active.
+- Preserved the saved official scene-Skill value so existing workflows require
+  no reconnection and automatically restore it after the T8 template is cleared.
+- Added an explicit inactive label and hid the official preset detail card while
+  a T8 template is active, avoiding conflicting UI guidance.
+
 ## [1.4.1] - 2026-08-24
 
 ### Fixed

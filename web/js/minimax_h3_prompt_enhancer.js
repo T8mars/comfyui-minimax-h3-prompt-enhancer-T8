@@ -537,8 +537,25 @@ app.registerExtension({
             }
             if (creativePresetWidget) {
                 creativePresetWidget.label = "MiniMax 官方场景 Skill（8 个可选）";
-                creativePresetWidget.tooltip = "选择一个官方场景 Skill 后，节点下方会显示用途、推荐输入、结构锚点、官方 GIF 与来源；GIF 不会发送给 LLM。";
+                creativePresetWidget.tooltip = "选择一个官方场景 Skill 后，节点下方会显示用途、推荐输入、结构锚点、官方 GIF 与来源；GIF 不会发送给 LLM。选择 T8 非官方模板时，T8 模板优先，本项暂不生效。";
             }
+
+            this.t8IsT8CaseTemplateActive = () => {
+                const value = String(caseTemplateWidget?.value || "").trim();
+                return Boolean(value && value !== NO_CASE_TEMPLATE);
+            };
+            this.t8UpdateSkillPriority = () => {
+                if (!creativePresetWidget) return;
+                const t8Active = this.t8IsT8CaseTemplateActive();
+                creativePresetWidget.label = t8Active
+                    ? "MiniMax 官方场景 Skill（T8 优先，当前停用）"
+                    : "MiniMax 官方场景 Skill（8 个可选）";
+                creativePresetWidget.tooltip = t8Active
+                    ? "已选择 T8 非官方模板：本次只应用 T8 模板，8 个可选官方场景 Skill（包括 AUTO）暂不生效；H3 核心写作 Skill 仍始终启用。取消 T8 模板后，本项自动恢复。"
+                    : "选择一个官方场景 Skill 后，节点下方会显示用途、推荐输入、结构锚点、官方 GIF 与来源；GIF 不会发送给 LLM。选择 T8 非官方模板时，T8 模板优先，本项暂不生效。";
+                this.t8UpdateOfficialPreset?.();
+                this.setDirtyCanvas?.(true, true);
+            };
 
             if (promptModeWidget && referenceTemplateWidget) {
                 addReferenceTemplateBehavior(this, promptModeWidget, referenceTemplateWidget);
@@ -586,6 +603,7 @@ app.registerExtension({
                 this.t8UpdateApiMode?.();
                 this.t8UpdateMvPreset?.();
                 this.t8UpdateOfficialPreset?.();
+                this.t8UpdateSkillPriority?.();
             };
             this.t8NormalizePromptOptions();
 

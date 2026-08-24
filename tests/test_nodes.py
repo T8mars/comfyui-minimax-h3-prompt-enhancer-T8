@@ -680,8 +680,13 @@ class PromptEnhancerTests(unittest.TestCase):
             reference_template=manual,
         )
         messages = combined_session.chat_requests[0]["json"]["messages"]
-        self.assertIn("brand promotional video", messages[0]["content"])
+        self.assertNotIn("brand promotional video", messages[0]["content"])
+        self.assertIn("T8 non-official template precedence", messages[0]["content"])
+        self.assertIn("Creative preset: none", messages[0]["content"])
+        self.assertIn("H3 core writing Skill", messages[0]["content"])
         self.assertIn("Selected T8 original case template", messages[0]["content"])
+        self.assertIn(f"Creative preset: {nodes.NO_CREATIVE_PRESET}", messages[1]["content"])
+        self.assertNotIn("品牌宣传短片", messages[1]["content"])
         self.assertIn(manual, messages[1]["content"])
 
     def test_subject_only_case_intent_is_preserved_and_completed_by_all_115_selectors(self):
@@ -1026,6 +1031,11 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("addOfficialPresetUI(this, creativePresetWidget, promptWidget", h3_ui)
         self.assertIn('officialSkillProfileWidget.label = "H3 核心写作 Skill（始终启用）"', h3_ui)
         self.assertIn('creativePresetWidget.label = "MiniMax 官方场景 Skill（8 个可选）"', h3_ui)
+        self.assertIn("t8IsT8CaseTemplateActive", h3_ui)
+        self.assertIn("MiniMax 官方场景 Skill（T8 优先，当前停用）", h3_ui)
+        self.assertIn("H3 核心写作 Skill 仍始终启用", h3_ui)
+        self.assertIn("node.t8UpdateSkillPriority?.()", shared)
+        self.assertIn("node.t8IsT8CaseTemplateActive?.()", official)
         self.assertIn("MiniMax 官方示例 GIF", official)
         self.assertIn("t8_official_preset_details", official)
         self.assertIn("renderTemplateDetail", official)

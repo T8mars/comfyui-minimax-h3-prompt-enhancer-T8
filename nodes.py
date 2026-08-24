@@ -250,6 +250,7 @@ SKILL_PROFILE_RULES = {
 }
 
 PRESET_BOUNDARY_RULE = f"""Creative preset boundary: each preset is a prompt-writing profile only. The eight official creative Skills are reviewed at MiniMax-AI/MiniMax-H3 commit {OFFICIAL_CREATIVE_SKILLS_SOURCE_SHA}. Their upstream compatibility declarations require MiniMax Hub agent, canvas, and hub tools for the complete native workflows. This ComfyUI node adapts only their prompt-writing constraints into one H3 prompt; it never claims to execute or port the complete Hub workflow. Apply a preset only where it matches the user's request and observable media. Never turn it into a production checklist, asset-generation sequence, approval gate, external research task, Hub/tool call, API call, multi-clip stitching job, or claim that unsupported analysis occurred. Explicit user facts, media evidence, duration, fixed shot count, H3 fields, and hard constraints always win."""
+T8_CASE_PRECEDENCE_RULE = """T8 non-official template precedence: a T8 case/community template is selected, so it is the only optional scene template active for this request. Do not infer or apply any of the eight optional MiniMax official scene Skills, including AUTO. Keep the always-on H3 core writing Skill and its native output contract active. User intent, media evidence, hard constraints, duration and fixed shot count still outrank the T8 template."""
 
 MV_OFFICIAL_SCOPE_RULES = f"""Official MiniMax music-video-subtitle-generator Skill v{OFFICIAL_MV_SKILL_VERSION}, frozen from MiniMax-AI/MiniMax-H3 at commit {OFFICIAL_MV_SKILL_SOURCE_SHA}:
 - Use this profile for AI music videos or emotional music shorts in which music intent, locked lyrics, spatial typography, reference roles, rhythm, performance, and camera language must be designed together. It is not ordinary subtitle cleanup, generic editing, a non-music product ad, licensed-IP copying, or a simple request with no MV structure.
@@ -1160,6 +1161,8 @@ def _build_messages(
     case_template: str,
 ) -> list[dict[str, Any]]:
     effective_language = _effective_output_language(output_language, official_skill_profile)
+    case_instruction = resolve_case_template(case_template, "h3", prompt)
+    effective_creative_preset = NO_CREATIVE_PRESET if case_instruction else creative_preset
     system_rules = [
         COMMON_SYSTEM_RULES,
         OFFICIAL_CORE_ADDENDUM,
@@ -1172,7 +1175,7 @@ def _build_messages(
         _shot_count_instruction(shot_count),
         PRESET_BOUNDARY_RULE,
         _creative_preset_instruction(
-            creative_preset,
+            effective_creative_preset,
             task_type,
             duration_seconds,
             shot_count,
@@ -1183,8 +1186,8 @@ def _build_messages(
             constraints,
         ),
     ]
-    case_instruction = resolve_case_template(case_template, "h3", prompt)
     if case_instruction:
+        system_rules.append(T8_CASE_PRECEDENCE_RULE)
         system_rules.append(case_instruction)
     system_content = "\n\n".join(system_rules)
     user_text = _build_user_instruction(
@@ -1202,7 +1205,7 @@ def _build_messages(
         seed,
         shot_count,
         official_skill_profile,
-        creative_preset,
+        effective_creative_preset,
     )
     user_content: str | list[dict[str, Any]]
     if media_parts:

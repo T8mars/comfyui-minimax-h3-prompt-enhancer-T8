@@ -171,7 +171,7 @@ export function addOfficialPresetUI(node, widget, promptWidget, refreshSize) {
 
     const update = (value = widget.value) => {
         const preset = PRESETS[value];
-        if (!preset) {
+        if (!preset || node.t8IsT8CaseTemplateActive?.()) {
             root.replaceChildren();
             setDomWidgetVisible(domWidget, false);
         } else {
@@ -195,6 +195,7 @@ export function addOfficialPresetUI(node, widget, promptWidget, refreshSize) {
     widget.callback = function (value) {
         originalCallback?.apply(this, arguments);
         update(value);
+        node.t8UpdateSkillPriority?.();
     };
     node.t8UpdateOfficialPreset = update;
     update();
