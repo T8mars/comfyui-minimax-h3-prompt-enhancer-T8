@@ -5,6 +5,20 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.5.2] - 2026-08-25
+
+### Added
+
+- Add the non-official `时尚密度复位｜身份锁定、拼贴回顾与英雄主标` and
+  `手势边界换媒｜局部窗口、多形态验真与回归` selectors for MiniMax H3 and
+  Seedance 2.0, including bundled human-only GIF previews and editable examples.
+
+### Changed
+
+- Validate case-library and community-Skill inventory against each immutable
+  delivery's declared counts instead of requiring a source-code count edit for
+  every daily cumulative handoff.
+
 ## [1.5.1] - 2026-08-24
 
 ### Fixed

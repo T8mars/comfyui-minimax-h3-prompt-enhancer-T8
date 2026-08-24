@@ -1,0 +1,18 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-25-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "user-video-c60dc5cf8a4d200086e60498c10bbc49",
+      "template_id": "t8-case-identity-locked-density-reset-recap-hero-v1",
+      "label": "时尚密度复位｜身份锁定、拼贴回顾与英雄主标",
+      "summary": "锁定同一名明确成年角色，用前景载体轮转多个协调造型模块；密度升至峰值后切入白场减负，再把旧造型拼贴回顾并收束到简洁英雄主标。",
+      "case_sha256": "b9da705b460feb390574ad913d6d4bd28d381d42adbd4dec4920c7100e7514b3",
+      "creative_dna_sha256": "b3367d0df444a3cc1ca4c66c49b80185da0d66b2c17d0e274bad21096f61ca18",
+      "h3_adapter_sha256": "ac0aa6b397ac0dddc18c68b0a4630e46768cb232e5434e03c03db70d30bdfed2",
+      "seedance20_adapter_sha256": "9e79979d6380b625b6f15dafa288b99b17d8c0343bafab17278301b47840a21c",
+      "mechanism_fingerprint": "891c7ba2f759dcd6a6e9ad8d1ecd6cddaac248b903fa6b0b6fca6bf267d135e3"
+    }
+  ]
+}

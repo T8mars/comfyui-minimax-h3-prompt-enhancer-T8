@@ -11,7 +11,7 @@
       "template_id": "t8-case-visible-four-axis-controller-same-beat-response-v1",
       "label": "指尖控制｜四向同拍全身响应",
       "summary": "前景控制器用固定上下左右屏幕映射逐拍驱动同框响应者做清楚全身动作；纵横轴重复验证后才允许一次短收尾。",
-      "case_sha256": "2b676b6bffe2b67dc25c87233d431460528b81b814871d1821beb195203217d3",
+      "case_sha256": "cf1a7c0890c36235ae1658dba9d4ce6960c41f168f483c99a29eb2efcea0a344",
       "creative_dna_sha256": "2d1fe774b234eb6dbc2ce18b1261a1ff9cc2d7821ab778d7360a651375f7293f",
       "h3_adapter_sha256": "57d113ab8a8cc01cf3c2c7ad6c030ead15d11052bf0e90e0e771caf3419bbd1d",
       "seedance20_adapter_sha256": "3716982204b67c058d7c355e1a5715efe2aa112dfefa8cef8a7ca8609b937df0"

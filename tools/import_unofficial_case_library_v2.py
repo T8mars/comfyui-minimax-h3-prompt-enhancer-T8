@@ -18,12 +18,6 @@ SECRET_RE = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 URL_RE = re.compile(r"https?://", re.IGNORECASE)
 DEPRECATED_SORAN_ID = "t8-case-audio-cause-lead-ladder-v1"
 DEPRECATED_SORAN_LABEL = "声画错位递进"
-EXPECTED_RECORD_COUNT = 216
-EXPECTED_SELECTOR_COUNT = 186
-EXPECTED_EVIDENCE_COUNT = 30
-EXPECTED_PENDING_COUNT = 0
-EXPECTED_COMMUNITY_SKILL_COUNT = 2
-EXPECTED_TOTAL_SELECTOR_COUNT = 188
 EXPECTED_CONTRACT = {
     "stable_template_id_is_machine_key": True,
     "dropdown_label_is_human_ui_name": True,
@@ -295,13 +289,16 @@ def _build_community_templates(community_library_path: Path) -> list[dict[str, A
     if manifest.get("official") is not False or manifest.get("authority") != "t8_user_contributed_skill":
         raise LibraryImportError("Standalone community-Skill authority is invalid")
     records = manifest.get("records")
+    declared_skill_count = manifest.get("skill_count")
+    declared_selector_count = manifest.get("selector_count")
     if (
         not isinstance(records, list)
-        or manifest.get("skill_count") != EXPECTED_COMMUNITY_SKILL_COUNT
-        or manifest.get("selector_count") != EXPECTED_COMMUNITY_SKILL_COUNT
-        or len(records) != EXPECTED_COMMUNITY_SKILL_COUNT
+        or not isinstance(declared_skill_count, int)
+        or declared_skill_count < 0
+        or declared_selector_count != declared_skill_count
+        or len(records) != declared_skill_count
     ):
-        raise LibraryImportError("Expected two standalone community Skill selectors")
+        raise LibraryImportError("Standalone community Skill inventory does not match its declared counts")
     source_index_path = Path(str(manifest.get("source_index", ""))).resolve()
     source_index = _read_json(source_index_path)
     indexed_skills = source_index.get("skills")
@@ -313,7 +310,7 @@ def _build_community_templates(community_library_path: Path) -> list[dict[str, A
     if (
         source_index.get("schema_version") != "public-community-skill-index/v1"
         or source_index.get("official") is not False
-        or source_index.get("skill_count") != EXPECTED_COMMUNITY_SKILL_COUNT
+        or source_index.get("skill_count") != declared_skill_count
         or indexed_ids != {str(record.get("skill_id")) for record in records}
     ):
         raise LibraryImportError("Standalone community Skill source index does not close over the handoff records")
@@ -431,15 +428,9 @@ def build_catalog(
         library.get("pending_completion_count"),
     )
     actual_counts = (len(records), len(selectors), len(evidence), len(pending))
-    expected_counts = (
-        EXPECTED_RECORD_COUNT,
-        EXPECTED_SELECTOR_COUNT,
-        EXPECTED_EVIDENCE_COUNT,
-        EXPECTED_PENDING_COUNT,
-    )
-    if declared_counts != expected_counts or actual_counts != expected_counts:
+    if declared_counts != actual_counts:
         raise LibraryImportError(
-            "Expected 216 records: 186 selectors, 30 evidence variants, and no pending cases"
+            f"Case-library inventory mismatch: declared={declared_counts}, actual={actual_counts}"
         )
     by_template: dict[str, list[dict[str, Any]]] = {}
     validated_recipes: dict[str, tuple[str, dict[str, str]]] = {}
@@ -594,8 +585,11 @@ def build_catalog(
         templates.append(template)
         existing_ids.add(template["id"])
         existing_labels.add(template["label"])
-    if len(templates) != EXPECTED_TOTAL_SELECTOR_COUNT:
-        raise LibraryImportError("Expected 188 total non-official selectors")
+    expected_total_selectors = len(selectors) + len(community_templates)
+    if len(templates) != expected_total_selectors:
+        raise LibraryImportError(
+            f"Non-official selector inventory mismatch: expected={expected_total_selectors}, actual={len(templates)}"
+        )
     return {
         "schema_version": CATALOG_SCHEMA,
         "catalog_id": "t8-unofficial-case-library-v2",
@@ -653,11 +647,13 @@ def build_source_batch(
     expected_closure = {
         "scope": "increment",
         "increment_records": len(records),
-        "cumulative_case_records": EXPECTED_RECORD_COUNT,
-        "cumulative_case_selectors": EXPECTED_SELECTOR_COUNT,
-        "cumulative_evidence_variants": EXPECTED_EVIDENCE_COUNT,
-        "standalone_community_skills": EXPECTED_COMMUNITY_SKILL_COUNT,
-        "total_nonofficial_selectors": EXPECTED_TOTAL_SELECTOR_COUNT,
+        "cumulative_case_records": library.get("case_count"),
+        "cumulative_case_selectors": library.get("selector_template_count"),
+        "cumulative_evidence_variants": library.get("evidence_variant_count"),
+        "standalone_community_skills": catalog.get("community_skill_count"),
+        "total_nonofficial_selectors": (
+            int(library.get("selector_template_count", -1)) + int(catalog.get("community_skill_count", -1))
+        ),
         "official_minimax_skills_excluded": 9,
     }
     if not isinstance(closure, dict) or any(closure.get(key) != value for key, value in expected_closure.items()):
@@ -766,8 +762,8 @@ def sync_source_batches(catalog: dict[str, Any], source_batch_dir: Path) -> None
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Import the 216-record case handoff: 186 selectors, 30 evidence variants, "
-            "no pending cases, plus two standalone community Skills."
+            "Import a versioned cumulative case handoff plus standalone community Skills, "
+            "validating declared inventory, assets, adapters, and preview boundaries."
         )
     )
     parser.add_argument("--library", required=True, type=Path)

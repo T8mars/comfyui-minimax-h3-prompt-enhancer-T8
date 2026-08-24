@@ -1,10 +1,10 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 218,
-  "asset_count": 218,
+  "preview_count": 220,
+  "asset_count": 220,
   "dedup_references": 0,
-  "total_bytes": 138803745,
+  "total_bytes": 140773881,
   "largest_bytes": 3357018,
   "encoding": {
     "format": "gif",
@@ -1741,6 +1741,22 @@
       "source_sha256": "54bad2db02f8cce0a1c76c71e2e8b9119ea1f521756dff78444e084af793b2dd",
       "sha256": "c6eb23568e5a6977bb009251681acd7215218ca436cfe96a73f6b2f699739b02",
       "bytes": 468421,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-c60dc5cf8a4d200086e60498c10bbc49",
+      "file": "0590eb1cee37414a42c7e5f0793381f1c904d6f0e2039762a6ee237529d983f7.gif",
+      "source_sha256": "e60c43e444acb499a657cc3c35d413c264a4d9861e9e97a2be6d0dfe8b6ba9e1",
+      "sha256": "0590eb1cee37414a42c7e5f0793381f1c904d6f0e2039762a6ee237529d983f7",
+      "bytes": 250387,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "user-video-715b76cd11b1098f170d41a9b71208ba",
+      "file": "92055734f338b78f6ab063b81af77cb0b8a338084c5c27adb7f83dee50332338.gif",
+      "source_sha256": "62d067c724bd5b31faaeb93fa749be899c6d008fc2ff4cdd39e44c1c79d6b785",
+      "sha256": "92055734f338b78f6ab063b81af77cb0b8a338084c5c27adb7f83dee50332338",
+      "bytes": 1719749,
       "human_preview_only": true
     },
     {

@@ -1,0 +1,18 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-25-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "user-video-715b76cd11b1098f170d41a9b71208ba",
+      "template_id": "t8-case-hand-bounded-local-medium-window-v1",
+      "label": "手势边界换媒｜局部窗口、多形态验真与回归",
+      "summary": "双手先画出可控边界，只让框内区域切换媒介；多种几何反复证明注册规则，后段扩大覆盖后主动收回并回到原状态。",
+      "case_sha256": "f78ac1a773fae046e216985900ab2e3e99a4c2a1e9165cdc43cfd3f4bab602a9",
+      "creative_dna_sha256": "03a711d19cd9936d352ebc644b3bf57e04ec8a3f473e738e35949ba5dd2057a6",
+      "h3_adapter_sha256": "d395010b4a23695fa026b2c9119d90988f158d51f6d791722626e2a8cbafa4be",
+      "seedance20_adapter_sha256": "9f92098783e1869292fa31ea849f5955fea597ec078102d0a82a8a0ef8621eaa",
+      "mechanism_fingerprint": "28520a2e1ec1471e048cc244ac2886b3db9959a07fbf8e73316d7d7cc0ef3714"
+    }
+  ]
+}

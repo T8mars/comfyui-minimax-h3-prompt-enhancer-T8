@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 216,
-  "case_selector_template_count": 186,
+  "source_case_count": 218,
+  "case_selector_template_count": 188,
   "community_skill_count": 2,
-  "selector_template_count": 188,
+  "selector_template_count": 190,
   "evidence_variant_count": 30,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -10792,7 +10792,7 @@
       "template_kind": "case",
       "source": {
         "case_id": "user-video-094e45c4f44a2cb1b9170c0689af8327",
-        "case_sha256": "2b676b6bffe2b67dc25c87233d431460528b81b814871d1821beb195203217d3",
+        "case_sha256": "cf1a7c0890c36235ae1658dba9d4ce6960c41f168f483c99a29eb2efcea0a344",
         "release_score": 4.673,
         "creative_dna_sha256": "2d1fe774b234eb6dbc2ce18b1261a1ff9cc2d7821ab778d7360a651375f7293f",
         "h3_adapter_sha256": "57d113ab8a8cc01cf3c2c7ad6c030ead15d11052bf0e90e0e771caf3419bbd1d",
@@ -10818,6 +10818,116 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only)\nAuthority: T8 original case template (non-official).\n\nMECHANISM:\nA visible foreground controller establishes a fixed four-direction screen-space language; a co-visible responder begins one matching full-body movement within the same beat for every cue, and repeated axis alternation lets the audience learn and verify the causal rule inside one continuous frame.\n\nINVARIANTS:\n1. The visible controller and full responder must be co-visible before the first command and remain jointly readable throughout.\n2. Use one fixed screen-coordinate mapping: up means rise, down means lower, left means shift left and right means shift right.\n3. Each deliberate cue receives one immediate beat-level response; the responder does not freestyle between commands.\n4. Horizontal commands produce whole-body displacement and vertical commands change center of gravity, keeping response amplitude unmistakable.\n5. Alternate and repeat both axes in one continuous take, then end with a brief release only after the rule has been proven.\n\nTRANSFERABLE SLOTS:\n- responder: Adult performer, original robot, puppet or other clearly readable full-body responder.\n- controller: Finger, stylus, baton, wand or other small foreground directional instrument.\n- setting: Room, studio, lab, stage or miniature theatre with a stable spatial baseline.\n- command_sequence: A beat-aligned order containing vertical and horizontal commands with at least one repeated axis test.\n- response_vocabulary: Rise/lower center-of-gravity changes plus visible full-body left/right shifts.\n- camera: One continuous view that preserves both cue and response; angle and lens may change by instantiation.\n- sound_family: Original beat or diegetic cue family that clearly marks each command without copying source audio.\n- release: A brief final flourish after the mapping has been proven.\n\nFAILURE REPAIRS:\n- The controller crosses the center or covers the responder. -> Keep the controller inside a reserved foreground quadrant and cap its apparent area before rendering.\n- The responder uses tiny ambiguous twitches. -> Require visible center-of-gravity change for vertical cues and whole-body displacement for horizontal cues.\n- The responder anticipates, lags or freestyles. -> Use one cue per beat, start cue and response together, and prohibit unrelated movement between commands.\n- The camera or responder scale drifts until one party becomes unreadable. -> Lock a continuous framing corridor and keep both controller and responder legible for all commands.\n- Left/right mapping flips across the take. -> Define screen coordinates once and restate them as a hard continuity constraint.\n- Complex choreography obscures causality. -> Reduce the vocabulary to rise, lower and full-body side shifts; reserve one flourish for the final release.\n\nDo not copy from the source:\nChange subject identity, wardrobe, setting, props, palette, sound and performance surface for every new instance. Preserve only the abstract causal mechanism and ordered anchors.",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-identity-locked-density-reset-recap-hero-v1",
+      "label": "时尚密度复位｜身份锁定、拼贴回顾与英雄主标",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "锁定同一名明确成年角色，用前景载体轮转多个协调造型模块；密度升至峰值后切入白场减负，再把旧造型拼贴回顾并收束到简洁英雄主标。",
+      "input_format": "成年原创角色三项身份锚点 + 至少四个双通道造型模块 + 可见转场载体 + 一个密度峰值 + 一个白场/低密度完整人物复位 + 至少三项旧状态回顾 + 简洁英雄主标",
+      "recommended_input": "一名剃光头、右脸有细铜色标记的成年男性时尚表演者，依次经过矿物剪裁、交通图、档案纸和工业信号四个模块；黑铜红密度峰值后进入象牙白两步秀场，再穿过三张旧造型接触表，最终停在原创 AXIS NOIR 主标。",
+      "required_anchors": [
+        "第一轮切换前先锁定一名明确成年原创角色的至少三项身份锚点，并在全部模块中保持一致。",
+        "每个造型模块至少同时改变服装、版式、道具、色彩或镜头职责中的两个通道；纯换色不算新模块。",
+        "所有模块切换都由前景物、图形边、布料或角色手势完成可见交接，并在一个峰值后插入显著低密度的完整人物段落。",
+        "复位后必须回顾至少三个此前已经出现的状态，再清场到人物、原创名称和一句主张都清楚的英雄主标。"
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-c60dc5cf8a4d200086e60498c10bbc49",
+        "case_sha256": "b9da705b460feb390574ad913d6d4bd28d381d42adbd4dec4920c7100e7514b3",
+        "release_score": 4.773,
+        "creative_dna_sha256": "b3367d0df444a3cc1ca4c66c49b80185da0d66b2c17d0e274bad21096f61ca18",
+        "h3_adapter_sha256": "ac0aa6b397ac0dddc18c68b0a4630e46768cb232e5434e03c03db70d30bdfed2",
+        "seedance20_adapter_sha256": "9e79979d6380b625b6f15dafa288b99b17d8c0343bafab17278301b47840a21c"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-c60dc5cf8a4d200086e60498c10bbc49",
+          "label": "时尚密度复位｜身份锁定、拼贴回顾与英雄主标",
+          "short_summary": "锁定同一名明确成年角色，用前景载体轮转多个协调造型模块；密度升至峰值后切入白场减负，再把旧造型拼贴回顾并收束到简洁英雄主标。",
+          "recommended_input": "一名剃光头、右脸有细铜色标记的成年男性时尚表演者，依次经过矿物剪裁、交通图、档案纸和工业信号四个模块；黑铜红密度峰值后进入象牙白两步秀场，再穿过三张旧造型接触表，最终停在原创 AXIS NOIR 主标。",
+          "required_anchors": [
+            "第一轮切换前先锁定一名明确成年原创角色的至少三项身份锚点，并在全部模块中保持一致。",
+            "每个造型模块至少同时改变服装、版式、道具、色彩或镜头职责中的两个通道；纯换色不算新模块。",
+            "所有模块切换都由前景物、图形边、布料或角色手势完成可见交接，并在一个峰值后插入显著低密度的完整人物段落。",
+            "复位后必须回顾至少三个此前已经出现的状态，再清场到人物、原创名称和一句主张都清楚的英雄主标。"
+          ],
+          "sha256": "e60c43e444acb499a657cc3c35d413c264a4d9861e9e97a2be6d0dfe8b6ba9e1",
+          "width": 640,
+          "height": 372,
+          "duration_seconds": 10.17,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA clearly adult identity remains locked while action-led foreground carriers rotate through multiple coordinated fashion-and-graphic worlds; visual density climbs to overload, abruptly resets to a sparse full-character interval, then prior states return as a compact collage recap before one simple hero wordmark closes the campaign.\nInvariants:\n- inv-01: Lock one clearly adult original character with at least three stable identity anchors before the first style switch, and preserve those anchors through every wardrobe and layout module.\n- inv-02: Every style module must change at least two coordinated channels among wardrobe, palette, layout, prop system and camera duty; a palette swap alone does not count.\n- inv-03: Use visible foreground objects, graphic edges or character gestures as motivated handoffs between modules so action, camera and graphic transition occur in the same beat.\n- inv-04: Escalate visual and typographic density to one peak, then insert a substantially sparser full-character interval before the recap.\n- inv-05: After the reset, visibly recap at least three earlier states as image fragments or registered panels before resolving to one simple hero lockup.\n- inv-06: Limit each module to one short original copy unit and preserve a clear subject-copy hierarchy, especially in the held final frame.\nVariable slots:\n- adult_identity: One original clearly adult subject with at least three stable face, hair, silhouette or accessory anchors.\n- style_modules: At least four worlds that each change two or more coordinated channels, not palette alone.\n- transition_carriers: Foreground props, graphic edges, fabric, gestures or registered panels that motivate each handoff.\n- density_peak: The highest-load module where movement, copy and graphic layers converge without hiding identity.\n- sparse_reset: A full-character low-density interval with restrained camera and effects.\n- recap_system: Contact sheets, specimen cards, panels or fragments that visibly quote at least three earlier states.\n- copy_units: One original short word or phrase per module, plus one simple final name hierarchy.\n- hero_lockup: A held final frame that resolves the stable subject, campaign name and one concise proposition.\n- sound_arc: Original modular beat families, a restrained reset texture and a decisive return cue; complete silence is optional, not required.\nFailure prevention:\n- Character identity drifts between style modules.: Declare three identity anchors, restate them in every module and include one explicit multi-panel verification before the density peak.\n- Modules differ only by color.: Require at least two coordinated changes among wardrobe, layout, prop system, medium and camera duty for each switch.\n- Random hard cuts break momentum.: Assign a visible carrier to every handoff and make its movement cross the cut boundary.\n- Every moment stays equally dense.: Reserve one full-character low-density interval with fewer effects and calmer camera before the recap.\n- Recap and hero frame feel unrelated.: Populate recap panels from previously shown states, then let those panels physically clear toward the final name field.\n- Typography becomes unreadable or malformed.: Use one declared short copy unit per module, large simple letterforms and a held final lockup with no extra text.\nDo not copy from the source: Do not use SOLVÉRA, KAWAII IS POWER, any source Japanese/Chinese slogans, Ima Studio or confusingly similar wording.; Do not reproduce the source heroine's face, hairstyle, body proportions, anime design or exact outfit sequence.; Do not reuse the Harajuku kawaii accessory inventory, exact pink/cyan/lavender/black/white/hot-pink order or exact source typography layouts.; Do not reproduce the exact source timing, triptych design, collage geometry, poses, camera path or soundtrack.; Do not treat the user prompt's self-evaluation sentences as generation instructions or observed evidence.",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-hand-bounded-local-medium-window-v1",
+      "label": "手势边界换媒｜局部窗口、多形态验真与回归",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "双手先画出可控边界，只让框内区域切换媒介；多种几何反复证明注册规则，后段扩大覆盖后主动收回并回到原状态。",
+      "input_format": "明确成年原创控制者 + 稳定环境锚点 + 可见双手边界 + 替代媒介 + 至少三种几何/覆盖区 + 晚段大覆盖峰值 + 回归确认",
+      "recommended_input": "一名成年温室研究员在固定机位中用双手拉出琥珀色窗口；只有窗口内部变成青色植物剖面线稿，窗口依次变成横框、竖框和斜框，后段覆盖半张脸与叶片，再收成一条细线消失，真实白花张开一片花瓣。",
+      "required_anchors": [
+        "激活前先建立一名明确成年原创控制者、稳定环境和可见的空闲双手。",
+        "双手几何必须先于换媒形成，活动边缘始终绑定指尖或手部边线。",
+        "替代媒介严格限制在移动边界内部，边界两侧空间精确注册，外部保持基线状态。",
+        "至少用三种几何或覆盖区证明同一规则；最大覆盖留到后段，再主动收回并以原媒介反应或残留确认结束。"
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "user-video-715b76cd11b1098f170d41a9b71208ba",
+        "case_sha256": "f78ac1a773fae046e216985900ab2e3e99a4c2a1e9165cdc43cfd3f4bab602a9",
+        "release_score": 4.831,
+        "creative_dna_sha256": "03a711d19cd9936d352ebc644b3bf57e04ec8a3f473e738e35949ba5dd2057a6",
+        "h3_adapter_sha256": "d395010b4a23695fa026b2c9119d90988f158d51f6d791722626e2a8cbafa4be",
+        "seedance20_adapter_sha256": "9f92098783e1869292fa31ea849f5955fea597ec078102d0a82a8a0ef8621eaa"
+      },
+      "previews": [
+        {
+          "case_id": "user-video-715b76cd11b1098f170d41a9b71208ba",
+          "label": "手势边界换媒｜局部窗口、多形态验真与回归",
+          "short_summary": "双手先画出可控边界，只让框内区域切换媒介；多种几何反复证明注册规则，后段扩大覆盖后主动收回并回到原状态。",
+          "recommended_input": "一名成年温室研究员在固定机位中用双手拉出琥珀色窗口；只有窗口内部变成青色植物剖面线稿，窗口依次变成横框、竖框和斜框，后段覆盖半张脸与叶片，再收成一条细线消失，真实白花张开一片花瓣。",
+          "required_anchors": [
+            "激活前先建立一名明确成年原创控制者、稳定环境和可见的空闲双手。",
+            "双手几何必须先于换媒形成，活动边缘始终绑定指尖或手部边线。",
+            "替代媒介严格限制在移动边界内部，边界两侧空间精确注册，外部保持基线状态。",
+            "至少用三种几何或覆盖区证明同一规则；最大覆盖留到后段，再主动收回并以原媒介反应或残留确认结束。"
+          ],
+          "sha256": "62d067c724bd5b31faaeb93fa749be899c6d008fc2ff4cdd39e44c1c79d6b785",
+          "width": 320,
+          "height": 582,
+          "duration_seconds": 15.17,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nA stable live-action baseline becomes an interactive proof surface: two visible hands first define a bounded aperture, only the registered area inside that moving geometry switches medium, repeated size and orientation changes prove the rule, a late large-coverage state supplies the apex, and a controlled dismissal restores the baseline for one confirming reaction or residue.\nInvariants:\n- inv-01: Establish one clearly adult original subject, one stable environment and visibly empty or inactive hands before the boundary activates.\n- inv-02: Make the two-hand geometry visibly form before the medium switch, and keep the luminous or material boundary attached to the controlling fingertips or hand edges.\n- inv-03: Confine the alternate medium strictly inside the moving boundary while preserving continuous registration across the edge and leaving the exterior in its baseline state.\n- inv-04: Use at least three materially different aperture geometries or orientations, with each state revealing a new region while obeying the same clipping rule.\n- inv-05: Reserve the largest or most identity-sensitive coverage for a late apex, then visibly contract or dismiss the boundary instead of allowing an uncontrolled full-scene takeover.\n- inv-06: End in the original medium and spatial registration with one short subject reaction or physical residue that confirms the effect has ended.\nVariable slots:\n- adult_subject: One clearly adult original controller with three stable appearance anchors and readable hands.\n- base_environment: A stable, simply registered space whose lines and lighting make local conversion easy to verify.\n- boundary_material: A luminous, drawn, mechanical or material edge visibly attached to both hands.\n- alternate_medium: A medium with clearly different rendering physics, such as scientific linework, paper blueprint, stained glass or clay relief.\n- proof_regions: At least three differently shaped or oriented local regions that all obey the same clipping and registration rule.\n- apex_region: The largest late-stage coverage, ideally crossing an identity-sensitive or information-rich area.\n- ending_confirmation: One restrained reaction or physical residue after the boundary is dismissed.\n- sound_family: Original edge-drawing, stretch, lock, medium-shift and release cues; semantic source audio is not reused.\nFailure prevention:\n- The alternate medium spreads beyond the aperture.: State hard clipping at the hand-defined edge and restate that every exterior pixel remains in the baseline medium.\n- The effect floats away from the fingers.: Bind each corner or active edge to a visible fingertip and make geometry changes follow the hand trajectory.\n- Inside and outside no longer register to the same subject or space.: Lock camera, pose, silhouette and background lines; change rendering only, not geometry or identity.\n- Repeated shapes feel like arbitrary filters.: Give every geometry a distinct proof region and preserve the same boundary physics across all states.\n- The apex arrives too early or never resolves.: Delay the largest coverage until late, hold it briefly, then show a visible contraction before baseline confirmation.\nDo not copy from the source: Do not reproduce any source-specific performer identity, appearance, wardrobe or proportions.; Do not reuse the source environment, boundary styling, alternate-medium character design or exact transformation surface.; Do not copy the precise hand poses, geometry order, timing, reactions, framing or soundtrack.; Do not claim any source prompt, creator identity or generating model; those facts were not supplied.",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
