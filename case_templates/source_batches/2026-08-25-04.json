@@ -1,0 +1,161 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-25-04",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-doctorwasif-2091388398153994395-browser-2091388398153994395-video-1",
+      "template_id": "t8-case-contact-triggered-transient-energy-feedback-v1",
+      "label": "接触后放电｜真实格斗先成立、短促能量只做结果反馈",
+      "summary": "先用清楚成年格斗动作建立质量、轨迹和接触，再让白蓝能量、尘屑、头发与灯光只在真实命中后短促响应；效果不得提前替动作制造命中。由单次接触逐级升级到多人围攻，最终回到同一人物稳定站立。",
+      "case_sha256": "a25b2dd0f8518d841e376c832ab0e0ee01dcc399075c5ec26d21d572699b57bc",
+      "creative_dna_sha256": "9f474239c53cb8ba95a5a5b8eb8a90c0ceba5451f1dded3b584465c567a63308",
+      "h3_adapter_sha256": "8151890f973d3511368c2954138a8fa5dec5ff247ce59ee3c9af5a9acbb8e949",
+      "seedance20_adapter_sha256": "6eb46f86229970e28f88c4be77032240286934171e32ca497263430c25a786b8",
+      "mechanism_fingerprint": "71fbbd533c5b6f9fc222d76f11622b3f6b631bc942f66a840755b166e93670a2"
+    },
+    {
+      "case_id": "x-pyona-ai-2091862645720879213-browser-2091862645720879213-video-1",
+      "template_id": "t8-case-disadvantage-recovery-ability-escalation-ring-clear-v1",
+      "label": "弱势反攻清场｜贴地恢复、水盾承压到环形冲击",
+      "summary": "先让明确成年主体处于多人包围的可读弱势，随后用贴地低扫争取站位、近身水盾承受一次冲击，再把同一水体升级为定向水炮与环形冲击；每一级都由前一级状态留下连续水迹，终局以对手倒地和主体平静站立证明清场。",
+      "case_sha256": "98bc5988612f2a8efc5cf867f897163c7dbda357bfb276e3f70c6fdf8376d12d",
+      "creative_dna_sha256": "5fec91bbb851cc0ca3b7567ca625e958172bbf84180dd45548d7ccbdb3a3b4ce",
+      "h3_adapter_sha256": "0a889f3cb7e840f0603d0fc915762f72afb1f9ec88894567ad26d59ab0cd3397",
+      "seedance20_adapter_sha256": "ea1c9aa6842b2d12212a5dfde0f944bb577324f2608e47168daf7b89d7536cba",
+      "mechanism_fingerprint": "bcc69673c3815bae61f837b0e707828c351aa54394ec265b2cc4125656665fe6"
+    },
+    {
+      "case_id": "x-aimikoda-2091893350748025010-browser-2091893350748025010-video-1",
+      "template_id": "t8-case-single-thread-material-world-construction-wordmark-resolution-v1",
+      "label": "单线织世｜一根材料分叉建景再回收到原创标记",
+      "summary": "先把一根材料线和承载面锁定，再让它连续分叉、染色并把沿途结构建成可读地貌；所有新元素必须从仍可追踪的同一线束生长，不能凭空换景。密度达到峰值后，让支线按相反顺序回收并组成全新原创名称或徽记。",
+      "case_sha256": "525ae9132e9f54acc568008aa38b3ba4df86baafc5f140dbcc3b6f9288a5776a",
+      "creative_dna_sha256": "90f2dd64bbe1b91e53bd7cf1b6445b62ae296746d3a83bcf0e6f1b1317322b17",
+      "h3_adapter_sha256": "443f72124472a9c6f163243c17bf558143cb2c43bd0fa134b311ceb8a982b996",
+      "seedance20_adapter_sha256": "f8ee1f5709f78ade5d9f4125768970fa85e95927b27146188659c42f2b4ececc",
+      "mechanism_fingerprint": "1919a79771c6554f33f165502c83c3db7044080503330a0c2122e29d7256cd5a"
+    },
+    {
+      "case_id": "x-nvtdanh-2091114406839251020-browser-2091114406839251020-video-1",
+      "template_id": "t8-case-multi-medium-character-module-ensemble-convergence-v1",
+      "label": "跨媒介角色集结｜五个独立风格模块最终共享同一舞台",
+      "summary": "每章用一个原创角色、一个明确媒介规则和一个短动作证明该风格，避免仅靠滤镜换色；固定构图位置、徽记或运动方向在章节间接力。所有角色最后必须以各自材质完整进入同一中性舞台，而不是被统一成同一种风格。",
+      "case_sha256": "d9e45fd052ab0c490feec34f60674f5e9137882850c8238d07012f63c5da53a2",
+      "creative_dna_sha256": "8fd68c365d0c6c6f8bab91739b75f6b6a60a01177b6808eb8d014245da612038",
+      "h3_adapter_sha256": "87ae8027117bb20be02658a0fe9e88b74503ff261ebf2548733fb329daa0c929",
+      "seedance20_adapter_sha256": "910281062a645d26715923d8bde45df7d11b17252e762b025a8f5593d9e1ff81",
+      "mechanism_fingerprint": "defccc8fd3b262d1815b1bcf30059500e862368cddd887bc158e7240cacfb217"
+    },
+    {
+      "case_id": "x-simplyannisa-2091095890144395358-browser-2091095890144395358-video-1",
+      "template_id": "t8-case-input-screen-result-reaction-causal-loop-v1",
+      "label": "输入—屏幕—结果—反应｜实体操作与虚拟反馈逐拍闭环",
+      "summary": "先建立成年玩家、实体控制器和屏幕同框关系；每个虚拟动作前必须先看见一次具体输入，屏幕反馈随后发生，玩家再给出可读反应。用选角、移动、反击和胜负四级闭环升级，终局只确认结果与人物，不补写来源中未出现的再开一局。",
+      "case_sha256": "9f70f121db633f8ac5c8c74af898f1e91f7f9247cf83860333a0b06f06724b11",
+      "creative_dna_sha256": "fe50f118eb363a43cf80d372cc3feb62a9a6bdbf3b3589684def012632f3a51c",
+      "h3_adapter_sha256": "19b3a74ad0c1506258012eb2dfda80d4738a804cb1caf34c8cadb5a144ce9fba",
+      "seedance20_adapter_sha256": "3d262c55baab0ade9caf877f70241713efc0eae116eaeed6e13ecb039a38da5e",
+      "mechanism_fingerprint": "04453482f4911066d2ea503fb2150579378ae7f90d7bbd0f0e936201b8937b9a"
+    },
+    {
+      "case_id": "x-bianca-aiart-mu-2091125813085118882-browser-2091125813085118882-video-1",
+      "template_id": "t8-case-continuous-locomotion-carrier-escalation-sky-payoff-v1",
+      "label": "连续载具升级｜滑行、冲浪、生物接力到高空释放",
+      "summary": "同一明确成年主体沿一个前进方向连续移动，每次只在速度、表面或高度达到阈值后，把运动完整交给下一种原创载具或伙伴；身份、方向和动量不重置。由地面、浪面、生物背部逐级升高，最后用高空释放兑现升级。",
+      "case_sha256": "23d40f4c358dc20f47dada3642ea1feb59488c8d6d5d8d50d263bdedfd068b8f",
+      "creative_dna_sha256": "ab5f9378c5f197f32da91195975b773223b0c210f2657a7a8a7b6a16d8ffdc19",
+      "h3_adapter_sha256": "9b67d6118ddc429a5627be364c12cca28c953073083d6aca4017d65c4f10d08b",
+      "seedance20_adapter_sha256": "d5006ef99ac3076a44bdd3516d1ab467f1472efb210051ed99e275c266c22a6e",
+      "mechanism_fingerprint": "ed635fc957f966ab176101d3eaba24b4666a79daa321b75cfaae5bdf01297b6e"
+    },
+    {
+      "case_id": "x-techhalla-2091231627653288150-browser-2091231627653288150-video-1",
+      "template_id": "t8-case-action-buildup-censored-ellipse-aftermath-reveal-v1",
+      "label": "刻意遮断省略｜动作升级后以审查卡跳到余波结果",
+      "summary": "先用明确成年角色和原创对手完成可读动作升级；到最大冲突前主动切入可辨识的原创遮断卡，让缺失成为叙事省略而不是伪造动作。遮断期间只保留克制声画提示，随后回到同一空间、同一人物与可验证余波，不推断被遮内容。",
+      "case_sha256": "ff20f17f33074c5aa684431aa9047f39c8b7066de9483c6ea3ff5a31ad1ccfe4",
+      "creative_dna_sha256": "feb4e145f9c7714887503877aed2fd6efd61a7fbcdf048df6476c8f470dbb937",
+      "h3_adapter_sha256": "fd5f600d8b81611952465fa72983fc1f258680c5b6c7ce5eba5c1cd0d5d1913e",
+      "seedance20_adapter_sha256": "41ec1d418fc8a07e4dfcee0947980d5fe2764a094734faaecd2aac1378b62876",
+      "mechanism_fingerprint": "8ace8497a0820fb56ee55c0af4795ee6680c61c469a6fe3e0fbbf1a3936b63b7"
+    },
+    {
+      "case_id": "x-tokyo-valentine-2092093848130617686-browser-2092093848130617686-video-1",
+      "template_id": "t8-case-celebration-word-prop-action-materialization-v1",
+      "label": "庆典词语实体化｜一词一动作一材质结果的逐章升级",
+      "summary": "同一明确成年主持人贯穿多个庆典模块，每章只引入一个原创短词、一件道具和一次动作；动作必须让文字发生对应的物理变化，如吹灭、膨胀、展开或点亮。通过重复舞台轴与配色保持身份，最后把所有庆典状态汇入一个原创祝福主标。",
+      "case_sha256": "120e9f5d80b7d4d8425b9f3472f90bf6c08f3a37635d5497c2e9e534019f9b3d",
+      "creative_dna_sha256": "7b40e4b69c3d295af38be7de20c0977e32f5f439be483c88b15d7beb1decb7cc",
+      "h3_adapter_sha256": "cba232256224c65634f0c31ac4fba1691fef0354bae3c4bc315e152a15c429d9",
+      "seedance20_adapter_sha256": "0b116f522b0d6e47c9513383f768f1ebde96945cf29fa2848e45c97756a62b94",
+      "mechanism_fingerprint": "3ccd88d62d608122d50b2982a6cb3ac4209ad1ab7678f970fa73e5a206590865"
+    },
+    {
+      "case_id": "x-aiwithjessica-2091081481707802813-browser-2091081481707802813-video-1",
+      "template_id": "t8-case-accessory-detail-material-motif-fashion-relay-v1",
+      "label": "配饰材质接力｜细节证据、全身回连与原创品牌收束",
+      "summary": "同一明确成年模特与一种原创材质高光贯穿四类配饰证据；每章先用一次触觉动作证明结构，再让同一高光或纹理从当前物件匹配到下一物件。终局回到全身步态和所有配饰关系，并只显示全新原创名称，彻底移除来源品牌。",
+      "case_sha256": "5de81144c2892b40afdd8d9fe4a7eea08fed20fec165b587f20fdceca8b84e62",
+      "creative_dna_sha256": "bf75921e924e0ee7d213ebdd08003af66d4fe03b7ed043dc8c49b0aeaad721c6",
+      "h3_adapter_sha256": "feea69fa1f642153435c6ab254e3eee39e9ac625f3c1e1df4f4e319ddb490a11",
+      "seedance20_adapter_sha256": "a5f6d582327fc458ab159a30ef3012605c69605ef2d3cee1fd3dcd6a8ba3bb9e",
+      "mechanism_fingerprint": "fb8a91520b2de0f8d1883d0c062a00915d7abb2d6b574dbf875a0ba81b0f33c5"
+    },
+    {
+      "case_id": "x-elsasofia-ai-2091483398972080172-browser-2091483398972080172-video-1",
+      "template_id": "t8-case-irreversible-cooking-state-chain-serving-proof-v1",
+      "label": "不可逆烹饪状态链｜食材、工具、锅体、成品与品尝连续证明",
+      "summary": "同一明确成年厨师、厨房、主食材与关键工具持续锁定，每镜只推动一次不可逆食品状态变化，并让上一状态残留成为下一步原料；用颜色、容器和手部锚点防止食材跳变。成品装盘后必须由同一人物完成一次克制品尝。",
+      "case_sha256": "8af27d6f65843cfcd3b890f5a9e72c26accf4fc42d5ac12d48f287620c7794c6",
+      "creative_dna_sha256": "5e2c39a1dade9409c3ddafcceee0a3c22a5dbbe3a5c26eacb36e5ba3b32012a5",
+      "h3_adapter_sha256": "b47b8a8b1ec9dfa503ceb54164354d6d2d2ed50bcab02008d14a9469cf09cc14",
+      "seedance20_adapter_sha256": "1c22b35a746a3ce2f5beb4c38c2b83e29cfec8baa719743169be6b6d57dddb2e",
+      "mechanism_fingerprint": "ff2642bebe529bf3297791906ee4af90bf5463b994b66eeecdcead950d4ba721"
+    },
+    {
+      "case_id": "x-harboriis-2092131570908065852-browser-2092131570908065852-video-1",
+      "template_id": "t8-case-object-handoff-festival-vlog-escalation-v1",
+      "label": "节庆物件接力｜品尝、游戏、奖品到高空景观逐级升级",
+      "summary": "同一明确成年自拍视频主体沿一个节庆路线前进，每章用上一章获得或使用的物件触发下一活动：食物证明到场，游戏动作产生奖品，奖品抬起引导视线到高空终景，最后人物带着累积物件告别。由近物触觉逐级扩展到群体与天空。",
+      "case_sha256": "74eb918511a1aefb34c8cbc52d7ac1ad1519a92f0048f89467e7995d9f98bb98",
+      "creative_dna_sha256": "c380e681a7c34c45f29d538ad07a82bca951ae2cbbae473926d7292d869dc260",
+      "h3_adapter_sha256": "882b2016454536d41af27867e47ed5b919664f4c0058a4fb6d6db09e9d09bd49",
+      "seedance20_adapter_sha256": "6a171bd73db14d63d7f5bf2670bb5f173cb3521a5b669161e3640221a726a329",
+      "mechanism_fingerprint": "5a51da95ec1e80734cd7fee9c2bc315384ccd7c9c0d2b3b4980e4219cd526a99"
+    },
+    {
+      "case_id": "x-aqib-786ai-2092122339463090626-browser-2092122339463090626-video-1",
+      "template_id": "t8-case-observer-imperfection-route-discovery-closure-v1",
+      "label": "被拍到的一天｜观察者瑕疵伴随路线，人物最终发现镜头",
+      "summary": "同一明确成年人沿一条普通日常路线完成至少四件小事，摄影保持可控的迟跟、遮挡、构图偏差与呼吸式晃动，让观察者存在但不抢叙事；人物早期不看镜头，终局才通过一次清楚视线与靠近动作发现仍在拍摄。",
+      "case_sha256": "5d915c97b522f0a9774d6da141a9689a092a35e069dd064d797465b2bf0121cb",
+      "creative_dna_sha256": "cc1ecd8f9835d1aefdefe82c8a83638befc9b9ca78f41f6f869cb081dfd03a63",
+      "h3_adapter_sha256": "eb0a55ce58f002123fa99eedd2c15049d1d9985a8527acbbe421f9b8ad5040b8",
+      "seedance20_adapter_sha256": "72c236376bc00f3457473f815e4c064239bf3be525b2020b6137ca2d96ccab0a",
+      "mechanism_fingerprint": "d1d9810691ac3d5f9e596b8dee912e9cb0ba2376f9972713f81553ad763d07dd"
+    },
+    {
+      "case_id": "x-viniai-2092137445051744285-browser-2092137445051744285-video-1",
+      "template_id": "t8-case-showy-effort-quiet-skill-social-status-reversal-v1",
+      "label": "炫技预期反转｜高调费力铺垫、安静难动作与社交重排",
+      "summary": "先让明确成年炫技者通过准备仪式、巨大努力与主动索取目光建立社会预期；安静对手不争抢镜头，只完整完成一次更难且更干净的动作。围观者的眼线、站位与表情随后从前者转向后者，终局用双方克制反应证明地位重排。",
+      "case_sha256": "5db8cb711d3b929e7633b278b46e014e86942a171edc4c30eac5a6d90853126e",
+      "creative_dna_sha256": "cb3c61105e08ec6e9b1f24e93abcf48897f81f38f4d6d4ba704b55ab356ff0de",
+      "h3_adapter_sha256": "a498a080ba8a5e32e354464e877edf0b21d96ac9b9bfce4a9c79565a56b16dc6",
+      "seedance20_adapter_sha256": "d82f5a47a3975e7fc983159303d7791cc0b5d3db667f6ddb3ff873e5a6570b72",
+      "mechanism_fingerprint": "262f513ce46bfa3e5c980673b94ec0debb99104e84d612fdd0b9b93f809ff7d8"
+    },
+    {
+      "case_id": "x-caliraval-2092124735081738349-browser-2092124735081738349-video-1",
+      "template_id": "t8-case-ordinary-task-to-breathing-reset-exit-v1",
+      "label": "日常任务到呼吸复位｜前景过渡、静坐微动与继续离场",
+      "summary": "同一明确成年人先完成一个普通触觉任务，再由前景物或建筑边界把动作段过渡到静坐段；人物只做一次慢呼吸、微笑与细微头发衣料变化，摄影克制推进。复位完成后，人物沿既定方向重新起身离场，证明静默不是终点。",
+      "case_sha256": "cd3a4ccbc40e8198824f6d6e9dfe9e20f5a97f35bd36044dbc6fd468c4948519",
+      "creative_dna_sha256": "24af1110e341d05f842ee1f73c78be26485180419d536dfb49c5ad6d8d96eff1",
+      "h3_adapter_sha256": "b45df35ff94b1ccec33533d8a70f84860f5dfea41eb532e5636278d3af2d2b82",
+      "seedance20_adapter_sha256": "737f014dbf13810974069dbb21775e2bc0c7db978a1c9081b5b4832de16ef9fc",
+      "mechanism_fingerprint": "080135c102cc521eae6a89647985f7e4fe064adf1f1116d81d6342ee8644b165"
+    }
+  ]
+}

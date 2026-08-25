@@ -5,6 +5,15 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.5.5] - 2026-08-25
+
+### Changed
+
+- Import `batch-2026-08-25-04`: add 14 stable T8 case selectors and merge
+  six evidence variants without creating duplicate dropdown entries; the
+  non-official library now contains 239 source cases, 202 case selectors,
+  37 evidence variants, and two standalone community Skills.
+
 ## [1.5.4] - 2026-08-25
 
 ### Changed
