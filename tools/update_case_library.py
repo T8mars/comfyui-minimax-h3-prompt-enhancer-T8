@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -147,6 +148,32 @@ def _atomic_write_json(path: Path, value: dict[str, Any]) -> None:
             temporary.unlink()
 
 
+def _replace_with_retry(source: Path, destination: Path, *, attempts: int = 8) -> None:
+    """Retry transient Windows locks while preserving the same-volume atomic rename."""
+    for attempt in range(attempts):
+        try:
+            os.replace(source, destination)
+            return
+        except PermissionError:
+            if attempt + 1 >= attempts:
+                raise
+            time.sleep(min(0.1 * (2**attempt), 1.0))
+
+
+def _rmtree_with_retry(path: Path, *, attempts: int = 8) -> None:
+    """Remove a private staging tree after transient encoder/scanner handles close."""
+    if not path.exists():
+        return
+    for attempt in range(attempts):
+        try:
+            shutil.rmtree(path)
+            return
+        except PermissionError:
+            if attempt + 1 >= attempts:
+                raise
+            time.sleep(min(0.1 * (2**attempt), 1.0))
+
+
 def _compatibility_alias_summary(catalog: dict[str, Any]) -> dict[str, int]:
     templates = catalog.get("templates", [])
     return {
@@ -245,7 +272,7 @@ def main() -> int:
             if total >= bundler.PREVIEW_CONFIRM_BYTES and not args.confirm_preview_budget:
                 raise CaseLibraryUpdateError("Staged preview package at or above 165 MiB requires --confirm-preview-budget")
         except Exception:
-            shutil.rmtree(staged_root)
+            _rmtree_with_retry(staged_root)
             raise
 
     if args.apply:
@@ -255,8 +282,8 @@ def main() -> int:
             if staged_bundle is not None:
                 if backup_bundle.exists():
                     raise CaseLibraryUpdateError("A stale preview rollback directory already exists")
-                os.replace(PREVIEW_ROOT, backup_bundle)
-                os.replace(staged_bundle, PREVIEW_ROOT)
+                _replace_with_retry(PREVIEW_ROOT, backup_bundle)
+                _replace_with_retry(staged_bundle, PREVIEW_ROOT)
                 installed_new_bundle = True
             _atomic_write_json(CATALOG, new_catalog)
             _run_post_apply_gates()
@@ -265,17 +292,17 @@ def main() -> int:
             if installed_new_bundle:
                 failed_bundle = PREVIEW_ROOT.with_name(f".{PREVIEW_ROOT.name}-failed")
                 if failed_bundle.exists():
-                    shutil.rmtree(failed_bundle)
-                os.replace(PREVIEW_ROOT, failed_bundle)
-                os.replace(backup_bundle, PREVIEW_ROOT)
-                shutil.rmtree(failed_bundle)
+                    _rmtree_with_retry(failed_bundle)
+                _replace_with_retry(PREVIEW_ROOT, failed_bundle)
+                _replace_with_retry(backup_bundle, PREVIEW_ROOT)
+                _rmtree_with_retry(failed_bundle)
             raise
         else:
             if backup_bundle.exists():
-                shutil.rmtree(backup_bundle)
+                _rmtree_with_retry(backup_bundle)
         finally:
             if staged_root is not None and staged_root.exists():
-                shutil.rmtree(staged_root)
+                _rmtree_with_retry(staged_root)
 
     preview_files = list(PREVIEW_ROOT.glob("*.gif"))
     report = {

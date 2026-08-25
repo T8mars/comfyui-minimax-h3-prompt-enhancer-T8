@@ -5,6 +5,15 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.5.4] - 2026-08-25
+
+### Changed
+
+- Add one author-approved human-only GIF evidence variant to
+  `t8-case-hand-bounded-local-medium-window-v1` without creating a duplicate
+  selector; the non-official library now contains 219 source cases, 188 case
+  selectors, 31 evidence variants, and two standalone community Skills.
+
 ## [1.5.3] - 2026-08-25
 
 ### Added

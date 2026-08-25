@@ -36,7 +36,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - Supports first frame, last frame, first-and-last-frame, multiple reference images, and multiple reference videos.
 - Includes the pinned official MiniMax H3 core prompt-writing Skill and all eight optional official scene Skills.
 - Includes the complete pinned MiniMax Music 3 `music-caption-rewriter` snapshot: 18 family indexes and 1,000 templates with progressive disclosure.
-- Includes 218 released T8 case records consolidated into 188 stable selectors, including 30 evidence variants, plus two independent community Skills. All 190 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and bundled lightweight GIF previews.
+- Includes 219 released T8 case records consolidated into 188 stable selectors, including 31 evidence variants, plus two independent community Skills. All 190 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and bundled lightweight GIF previews.
 - Chinese and English prompt output.
 - `strict`, `balanced`, and `creative` rewrite levels.
 - `AUTO` or fixed 1–20 shot control.

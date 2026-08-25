@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 218,
+  "source_case_count": 219,
   "case_selector_template_count": 188,
   "community_skill_count": 2,
   "selector_template_count": 190,
-  "evidence_variant_count": 30,
+  "evidence_variant_count": 31,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
   "templates": [
@@ -10924,6 +10924,23 @@
           "width": 320,
           "height": 582,
           "duration_seconds": 15.17,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "user-video-c317cd9648205026eef7ad47e61b5bc4",
+          "label": "四角框域｜手势扩场、箭头峰值与收束",
+          "short_summary": "双手先定义四个受控角点，让注册框域从掌间逐级扩展到房间尺度；最大状态才加入方向图形与地面响应，随后由同一双手收束并恢复普通环境。",
+          "recommended_input": "成年博物馆修复师在胡桃木地图桌前用四枚黄铜磷光角点拉出框域；只有框内纸张变成象牙色黏土等高线浮雕，框域从地图扩到档案柜，后段路线向量达到峰值，再收回掌心并让真实标本标签翻动一次。",
+          "required_anchors": [
+            "激活前先建立一名明确成年原创控制者、稳定注册环境和未激活的双手。",
+            "手部几何必须先于活动角点形成，每个角或边始终绑定清楚可见的指尖或手部轨迹。",
+            "变化严格限制在注册框域内，人物身份、空间锚点和边界两侧位置不得漂移。",
+            "至少用三种框域尺寸证明同一规则；最大信息密度留到后段，再主动收束并完整回到基线。"
+          ],
+          "sha256": "b0cda70642daf03c4ddfc5f2c2904f62a8d6428c840e3ecdb229533fd1e1b420",
+          "width": 640,
+          "height": 352,
+          "duration_seconds": 15.13,
           "human_preview_only": true
         }
       ],
