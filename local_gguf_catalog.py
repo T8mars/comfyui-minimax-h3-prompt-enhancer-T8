@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import os
+import re
 import struct
 import threading
 import time
@@ -368,6 +369,17 @@ def _filename_tokens(value: str) -> set[str]:
     return {token for token in normalized.split() if token and token not in ignored}
 
 
+def _parameter_scale(*values: str) -> str:
+    for value in values:
+        match = re.search(r"(?<![a-z0-9])(\d+(?:\.\d+)?)\s*b(?![a-z0-9])", value.casefold())
+        if match:
+            token = match.group(1)
+            if "." in token:
+                token = token.rstrip("0").rstrip(".")
+            return token + "b"
+    return ""
+
+
 def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
     model = model_info_for(model_identifier)
     if model is None or model.is_projector:
@@ -377,6 +389,7 @@ def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
         return None
     model_name = _normalized_name(model.name)
     model_parent = Path(model.path).parent
+    model_scale = _parameter_scale(model.name, model.filename)
 
     def score(projector: GGUFModelInfo) -> tuple[int, str]:
         value = 0
@@ -385,6 +398,12 @@ def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
             value += 100
         if Path(projector.path).parent == model_parent:
             value += 40
+        projector_scale = _parameter_scale(projector.name, projector.filename)
+        if model_scale and projector_scale:
+            # A same-directory projector is not enough: a 27B projector must
+            # never be auto-selected for a 9B model. Matching parameter scale
+            # is a much stronger compatibility signal than folder placement.
+            value += 60 if model_scale == projector_scale else -120
         if model.architecture.casefold() == "qwen35" and "qwen3vl" in projector.projector_type.casefold():
             value += 25
         if projector.has_vision_encoder:

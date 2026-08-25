@@ -236,6 +236,47 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(captured["reasoning_effort"], "xhigh")
         self.assertEqual(runtime.LOCAL_REASONING_OPTIONS, ["low", "medium", "xhigh"])
 
+    def test_projector_auto_match_rejects_parameter_scale_mismatch(self):
+        model = catalog.GGUFModelInfo(
+            identifier="Qwen3.8/new-9b.gguf",
+            path=str(PROJECT_ROOT / "Qwen3.8" / "new-9b.gguf"),
+            filename="Qwen3.8-9B-heretic-Q6_K.gguf",
+            size=1,
+            architecture="qwen35",
+            name="Qwen3.8 9B Heretic",
+            metadata_readable=True,
+        )
+        wrong = catalog.GGUFModelInfo(
+            identifier="Qwen3.8/mmproj-27b.gguf",
+            path=str(PROJECT_ROOT / "Qwen3.8" / "mmproj-27b.gguf"),
+            filename="mmproj-Qwen3.8-27B-F16.gguf",
+            size=1,
+            architecture="clip",
+            model_type="mmproj",
+            name="Qwen3.8 27B",
+            projector_type="qwen3vl_merger",
+            has_vision_encoder=True,
+            metadata_readable=True,
+        )
+        correct = catalog.GGUFModelInfo(
+            identifier="mmproj-Qwen3.5-9B-BF16.gguf",
+            path=str(PROJECT_ROOT / "mmproj-Qwen3.5-9B-BF16.gguf"),
+            filename="mmproj-Qwen3.5-9B-BF16.gguf",
+            size=1,
+            architecture="clip",
+            model_type="mmproj",
+            name="Qwen3.5 9B",
+            projector_type="qwen3vl_merger",
+            has_vision_encoder=True,
+            metadata_readable=True,
+        )
+        with (
+            patch.object(catalog, "model_info_for", return_value=model),
+            patch.object(catalog, "scan_gguf_catalog", return_value=(model, wrong, correct)),
+        ):
+            selected = catalog.recommended_projector(model.identifier)
+        self.assertEqual(selected, correct)
+
     def test_local_http_error_hides_response_and_token(self):
         class Response:
             status_code = 500
@@ -520,9 +561,10 @@ class LocalQwenUnitTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 installer._download_with_resume(item, target, offline=True)
 
-    def test_installer_exposes_pinned_official_uncensored_and_all_variants(self):
+    def test_installer_exposes_all_pinned_model_variants(self):
         official = installer.model_files_for_variant(installer.MODEL_VARIANT_OFFICIAL)
         uncensored = installer.model_files_for_variant(installer.MODEL_VARIANT_UNCENSORED)
+        heretic_9b = installer.model_files_for_variant(installer.MODEL_VARIANT_HERETIC_9B)
         combined = installer.model_files_for_variant(installer.MODEL_VARIANT_ALL)
         self.assertEqual(
             [item.filename for item in official],
@@ -532,13 +574,25 @@ class LocalQwenUnitTests(unittest.TestCase):
             [item.filename for item in uncensored],
             ["qwen3.8-27b-uncensored-fp8-q4_k_m.gguf", "mmproj-F16.gguf"],
         )
-        self.assertEqual(len({item.filename for item in combined}), 3)
+        self.assertEqual(
+            [item.filename for item in heretic_9b],
+            ["Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf"],
+        )
+        self.assertEqual(len({item.filename for item in combined}), 4)
         alternate = uncensored[0]
         self.assertIn("theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF", alternate.url)
         self.assertIn("5bdf224e6f9b1e18c7598fea63e238e014ee8e3e", alternate.url)
         self.assertEqual(
             alternate.sha256,
             "66bb238d41de38b11dd406d932d8fb97433d529022cef60f2f422b9221cae743",
+        )
+        compact = heretic_9b[0]
+        self.assertIn("mradermacher/Qwen3.8-9B-heretic-uncensored-i1-GGUF", compact.url)
+        self.assertIn("e3ab55e2befeb35fcf5bfebd0874afcbb8372593", compact.url)
+        self.assertEqual(compact.size, 7_359_260_416)
+        self.assertEqual(
+            compact.sha256,
+            "dfedf8412ee4a7f1200916783d224ebedb87044784434b75f4068b4b5e25f780",
         )
         with self.assertRaises(ValueError):
             installer.model_files_for_variant("unknown")
@@ -574,6 +628,42 @@ class LocalQwenUnitTests(unittest.TestCase):
             status["available_verified_models"],
             [runtime.UNCENSORED_MODEL_FILENAME],
         )
+
+    def test_runtime_status_recognizes_pinned_heretic_9b_model(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            compact = root / runtime.HERETIC_9B_MODEL_FILENAME
+            compact.write_bytes(b"compact")
+            known = {
+                runtime.DEFAULT_MODEL_FILENAME: (999, "unused"),
+                runtime.UNCENSORED_MODEL_FILENAME: (998, "unused"),
+                runtime.HERETIC_9B_MODEL_FILENAME: (len(b"compact"), "unused"),
+            }
+            fake_spec = runtime.RuntimeSpec(
+                executable=PROJECT_ROOT / "fake-llama-server",
+                library_dirs=(),
+                backend="test",
+            )
+            with (
+                patch.object(runtime, "qwen_model_directory", return_value=root),
+                patch.object(runtime, "KNOWN_MODEL_FILES", known),
+                patch.object(runtime, "available_runtime_specs", return_value=([fake_spec], [])),
+            ):
+                status = runtime.runtime_status()
+        self.assertTrue(status["heretic_9b_model_installed"])
+        self.assertTrue(status["text_ready"])
+        self.assertEqual(status["available_verified_models"], [runtime.HERETIC_9B_MODEL_FILENAME])
+
+    def test_heretic_9b_live_compatibility_evidence_is_redacted_and_passing(self):
+        path = PROJECT_ROOT / "tests" / "fixtures" / "local_qwen_heretic_9b_compatibility_2026-08-25.json"
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        self.assertTrue(payload["passed"])
+        self.assertTrue(all(payload["checks"].values()))
+        self.assertEqual(payload["model"]["filename"], runtime.HERETIC_9B_MODEL_FILENAME)
+        self.assertEqual(payload["model"]["size"], runtime.HERETIC_9B_MODEL_SIZE)
+        self.assertEqual(payload["model"]["sha256"], runtime.HERETIC_9B_MODEL_SHA256)
+        self.assertNotIn("diagnostic_outputs", payload)
+        self.assertNotIn("data:image", json.dumps(payload).casefold())
 
 
 if __name__ == "__main__":

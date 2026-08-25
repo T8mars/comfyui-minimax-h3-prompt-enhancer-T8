@@ -36,6 +36,16 @@ included in this Git repository:
   The repository declares Apache License 2.0 and identifies
   `orcarouter/Qwen3.8-27B-Uncensored-FP8` as the quantized source model. This
   third-party variant remains opt-in and does not replace the default model.
+- The optional `Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf` is downloaded from
+  `mradermacher/Qwen3.8-9B-heretic-uncensored-i1-GGUF` at pinned revision
+  `e3ab55e2befeb35fcf5bfebd0874afcbb8372593`. Its LFS SHA256 is
+  `dfedf8412ee4a7f1200916783d224ebedb87044784434b75f4068b4b5e25f780`.
+  The repository identifies `rohit267/Qwen3.8-9B-heretic-uncensored` as the
+  source model and does not declare a license in its model card. The T8 project
+  therefore provides an opt-in pinned download definition only; it does not
+  bundle, redistribute, or relicense the model. The repository publishes no
+  matching mmproj, so this installer variant is text-only unless the user
+  separately supplies and selects a compatible 9B projector.
 - `llama.cpp` is installed from the pinned `b10436` release and is licensed under
   the MIT License by the llama.cpp contributors.
 - Runtime installation is delegated to a SHA256-pinned copy of

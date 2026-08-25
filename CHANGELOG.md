@@ -5,6 +5,16 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.6.0] - 2026-08-25
+
+### Added
+
+- Add a pinned `heretic-9b` installer variant and verified-model recognition
+  for `Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf`, while retaining the
+  existing 27B default and all saved workflow values.
+- Prefer parameter-scale-compatible visual projectors during AUTO matching so
+  a same-folder 27B mmproj is never silently selected for a 9B model.
+
 ## [1.5.5] - 2026-08-25
 
 ### Changed

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "model": {
+    "filename": "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+    "size": 7359260416,
+    "sha256": "dfedf8412ee4a7f1200916783d224ebedb87044784434b75f4068b4b5e25f780"
+  },
+  "mmproj": {
+    "filename": "mmproj-Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-BF16.gguf",
+    "size": 921704448,
+    "sha256": "05f662501f8bd45607b079723a3e238a4e888fd085a10a53f4057a0e250f6934"
+  },
+  "runtime": "llama.cpp local provider",
+  "checks": {
+    "text_exact_token": true,
+    "vision_exact_ocr": true,
+    "vision_left_magenta_triangle": true,
+    "vision_right_yellow_circle": true,
+    "video_early_exact_ocr": true,
+    "video_late_exact_ocr": true,
+    "video_early_blue_square_left_to_right": true,
+    "video_late_green_circle_downward": true,
+    "video_temporal_order": true,
+    "single_image_sent": true,
+    "single_video_sent": true,
+    "audio_not_analyzed": true
+  },
+  "passed": true,
+  "elapsed_seconds": 22.078,
+  "text_output_sha256": "c48dd72bdd6156c51e577379b24bf6fdb98cc0081ec197991557918c284758f7",
+  "vision_output_sha256": "8dfcfa89f60046f1bc95113ef5dcc2abc6b14a7be172504ad45d33c04caebb21",
+  "privacy": "Outputs and Base64 image bytes are not stored in this report."
+}

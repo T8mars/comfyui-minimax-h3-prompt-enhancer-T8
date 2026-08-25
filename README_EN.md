@@ -275,6 +275,7 @@ The node does not download large models during execution. From the node director
 & "path\to\ComfyUI\python.exe" install_local_qwen.py --runtime
 & "path\to\ComfyUI\python.exe" install_local_qwen.py --model --model-variant official
 & "path\to\ComfyUI\python.exe" install_local_qwen.py --model --model-variant uncensored
+& "path\to\ComfyUI\python.exe" install_local_qwen.py --model --model-variant heretic-9b
 & "path\to\ComfyUI\python.exe" install_local_qwen.py --model --model-variant all
 ```
 
@@ -284,10 +285,13 @@ Pinned installer assets:
 | --- | --- | ---: |
 | Default model | `Qwen3.8-27B-Q4_K_M.gguf` | 15.93 GiB |
 | Optional third-party model | `qwen3.8-27b-uncensored-fp8-q4_k_m.gguf` | 15.66 GiB |
+| Optional compact third-party model | `Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf` | 6.85 GiB |
 | Visual projector | `mmproj-F16.gguf` | 0.86 GiB |
 | Runtime | llama.cpp `b10436` | Platform-dependent |
 
-H3 and Seedance require a compatible `mmproj` when images or sampled video frames are connected. Music 3 is text-only and never loads a visual projector. Local video analysis uses timestamped sampled frames in an ordered contact sheet; it analyzes visible sequence only and never claims to read or transcribe the original audio track.
+`heretic-9b` installs only the pinned text model because its upstream repository does not publish a matching mmproj. It works directly for Music 3 and text-only H3/Seedance requests; image or sampled-video use requires a separately supplied compatible 9B projector, selected through AUTO matching or explicitly by the user. The existing 27B default remains unchanged for workflow compatibility. More generally, H3 and Seedance require a compatible `mmproj` whenever images or sampled video frames are connected. Music 3 is text-only and never loads a visual projector. Local video analysis uses timestamped sampled frames in an ordered contact sheet; it analyzes visible sequence only and never claims to read or transcribe the original audio track.
+
+The compact 9B Q6_K model passed a real llama.cpp compatibility run with 12/12 deterministic checks: exact text token, image OCR/shapes/colors, early/late sampled-video codes, motion directions, temporal order, media counts, and the no-audio-analysis boundary. The visual run used a separately supplied `mmproj-Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-BF16.gguf`; this installer does not download or distribute that projector. The redacted report is [`tests/fixtures/local_qwen_heretic_9b_compatibility_2026-08-25.json`](./tests/fixtures/local_qwen_heretic_9b_compatibility_2026-08-25.json).
 
 For responsive use, 24 GB or more VRAM is recommended. A 16 GB GPU can partially offload to system memory with the standalone server's fit strategy; at least 32 GB RAM is recommended in that configuration. CPU-only execution may work but is not expected to be interactive.
 

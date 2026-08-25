@@ -631,11 +631,12 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --runtime
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant official
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant uncensored
+& "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant heretic-9b
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --model --model-variant all
 & "你的 ComfyUI Python 路径\python.exe" install_local_qwen.py --offline
 ```
 
-`official` 是默认模型；`uncensored` 是用户可选的第三方 FP8 衍生 Q4_K_M 量化；`all` 同时安装两种文字模型并共用一个视觉投影器。安装后重启 ComfyUI，或点击节点的“检查本地 Qwen 安装 / 扫描 GGUF”，下拉会重新列出 `models/LLM` 及任意子目录内的 GGUF。第三方模型不会替换默认模型，也不会绕过本项目的提示词合同、输入验证或输出保护。
+`official` 是默认模型；`uncensored` 是用户可选的第三方 27B FP8 衍生 Q4_K_M 量化；`heretic-9b` 是体积更小的第三方 9B i1-Q6_K 量化；`all` 安装三种文字模型及默认 27B 视觉投影器。9B 上游仓库没有发布匹配的 mmproj，因此固定安装器只安装其文字模型；纯文字 H3/Seedance、Music 3 可直接使用，图片/视频必须由用户另行提供兼容的 9B mmproj，交给 AUTO 匹配或手动选择。安装后重启 ComfyUI，或点击节点的“检查本地 Qwen 安装 / 扫描 GGUF”，下拉会重新列出 `models/LLM` 及任意子目录内的 GGUF。第三方模型不会替换现有 27B 默认值，也不会破坏旧工作流或绕过本项目的提示词合同、输入验证与输出保护。
 
 安装器固定并核验以下资产，支持 `.part` 断点续传、磁盘空间预检和原子改名：
 
@@ -643,14 +644,17 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 | --- | --- | --- |
 | 默认 Qwen 模型 | `Qwen3.8-27B-Q4_K_M.gguf`，固定 HF revision 与 SHA-256 | 约 15.93 GiB |
 | 可选第三方模型 | `qwen3.8-27b-uncensored-fp8-q4_k_m.gguf`，固定 `theresa00l/...` revision 与 SHA-256 | 约 15.66 GiB |
+| 可选轻量第三方模型 | `Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf`，固定 `mradermacher/...` revision 与 SHA-256 | 约 6.85 GiB |
 | 视觉投影器 | `mmproj-F16.gguf`，固定 SHA-256 | 约 0.86 GiB |
 | 推理运行时 | llama.cpp `b10436`，固定安装器提交与 SHA-256 | 依平台/后端而定 |
 
-GGUF 与 mmproj 统一放入 ComfyUI 的 `models/LLM/` 或任意子目录；历史目录 `models/LLM/Qwen3.8/` 和只保存文件名的旧工作流继续兼容。固定安装器的 llama.cpp 仍放在本节点已忽略的 `runtime/local_qwen/`，但也会复用当前 ComfyUI 已安装的 `llama-cpp-python`。默认模型来自 `unsloth/Qwen3.8-27B-GGUF`；可选模型来自 `theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF`，其模型卡声明 Apache-2.0、基于 `orcarouter/Qwen3.8-27B-Uncensored-FP8` 的量化。参考安装器、参考插件和 llama.cpp 为 MIT。具体固定提交、哈希及归属见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
+GGUF 与 mmproj 统一放入 ComfyUI 的 `models/LLM/` 或任意子目录；历史目录 `models/LLM/Qwen3.8/` 和只保存文件名的旧工作流继续兼容。固定安装器的 llama.cpp 仍放在本节点已忽略的 `runtime/local_qwen/`，但也会复用当前 ComfyUI 已安装的 `llama-cpp-python`。默认模型来自 `unsloth/Qwen3.8-27B-GGUF`；27B 可选模型来自 `theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF`；轻量 9B 可选模型来自 `mradermacher/Qwen3.8-9B-heretic-uncensored-i1-GGUF`。9B 量化仓库标注其来源为 `rohit267/Qwen3.8-9B-heretic-uncensored`、语言为英语，但没有声明许可证；本项目只提供固定下载入口，不分发或重新授权模型文件。参考安装器、参考插件和 llama.cpp 为 MIT。具体固定提交、哈希及归属见 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。
 
 任意被扫描到的文字 GGUF 都可交给当前 llama.cpp 运行时加载；“被发现”不等于“本项目已验收”。H3/Seedance 有图片或视频输入时必须有匹配 mmproj；AUTO 优先按 `general.name`、架构、同目录和文件名相似度匹配。当前 `llama-cpp-python` 回退路径会自动选择 Qwen2.5-VL、Qwen3-VL、Qwen3.5、Gemma 3/4 或 MTMD 处理器（取决于已安装版本实际提供的类）；不具备对应处理器的视觉架构会明确报兼容性错误，文字模式不受影响。
 
 可选模型已用本项目固定的 `mmproj-F16.gguf` 和 llama.cpp 本地运行时完成真实兼容验收：文字精确 token、图片 OCR/颜色/形状、视频采样帧的双阶段 OCR、早晚运动方向与时间顺序共 12/12 项通过。它支持节点现有的“图片 + 按时间戳采样视频画面”路径；这仍不等于读取完整视频字节或分析音轨。脱敏证据见 [`tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json`](./tests/fixtures/local_qwen_uncensored_compatibility_2026-08-20.json)。
+
+轻量 9B Q6_K 模型也完成了真实 llama.cpp 兼容验收：文字精确 token、图片 OCR/颜色/形状、视频早晚代码、运动方向、时间顺序、单图单视频计数和“不分析音轨”共 12/12 项通过，耗时 22.078 秒。视觉测试使用用户另行放置的 `mmproj-Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-BF16.gguf`；该投影器不由本安装器下载或分发。脱敏证据见 [`tests/fixtures/local_qwen_heretic_9b_compatibility_2026-08-25.json`](./tests/fixtures/local_qwen_heretic_9b_compatibility_2026-08-25.json)。
 
 2026-08-21 又对可选第三方模型执行了完整发布质量验收，确定性总分 `100/100`、`passed=true`，5 个用例全部通过：同 seed 三次逐字一致、H3 T2VA、Music 3 中文歌词与官方完整 Skill、H3 图像+视频证据、Seedance 2.0 图像+视频证据。视频用例同时核验早晚阶段代码、运动方向、硬切和首次出现顺序；全套耗时 476.938 秒，峰值显存 15971 MiB，卸载后回到 2007 MiB（基线 1613 MiB）。脱敏报告见 [`tests/fixtures/local_qwen_uncensored_quality_2026-08-21.json`](./tests/fixtures/local_qwen_uncensored_quality_2026-08-21.json)，仅保存分数、布尔检查、哈希、字符数和资源采样，不保存提示词、歌词、媒体、API Key 或临时令牌。
 

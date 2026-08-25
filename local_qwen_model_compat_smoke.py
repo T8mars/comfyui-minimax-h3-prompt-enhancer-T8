@@ -49,11 +49,16 @@ def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def run(model_filename: str, *, include_diagnostic_outputs: bool = False) -> dict:
+def run(
+    model_filename: str,
+    *,
+    mmproj_filename: str = runtime_module.AUTO_MMPROJ,
+    include_diagnostic_outputs: bool = False,
+) -> dict:
     model_path = runtime_module.resolve_model_path(model_filename, label="local Qwen model")
-    mmproj_path = runtime_module.resolve_model_path(
-        runtime_module.DEFAULT_MMPROJ_FILENAME,
-        label="local Qwen vision projector",
+    mmproj_path = runtime_module.resolve_mmproj_path(
+        mmproj_filename,
+        model_filename=model_filename,
     )
     expected_model = runtime_module.KNOWN_MODEL_FILES.get(model_filename)
     model_sha256 = sha256_file(model_path)
@@ -62,15 +67,15 @@ def run(model_filename: str, *, include_diagnostic_outputs: bool = False) -> dic
         model_path.stat().st_size != expected_model[0] or model_sha256 != expected_model[1]
     ):
         raise RuntimeError("Selected model failed pinned size/SHA256 verification.")
-    if (
+    if mmproj_path.name == runtime_module.DEFAULT_MMPROJ_FILENAME and (
         mmproj_path.stat().st_size != runtime_module.DEFAULT_MMPROJ_SIZE
         or mmproj_sha256 != runtime_module.DEFAULT_MMPROJ_SHA256
     ):
-        raise RuntimeError("Vision projector failed pinned size/SHA256 verification.")
+        raise RuntimeError("Pinned default vision projector failed size/SHA256 verification.")
 
     settings = provider_module.settings_from_values(
         local_model=model_filename,
-        local_mmproj=runtime_module.DEFAULT_MMPROJ_FILENAME,
+        local_mmproj=mmproj_filename,
         local_context_size=32768,
         local_max_tokens=1024,
         local_think_mode=runtime_module.LOCAL_THINK_OFF,
@@ -185,11 +190,16 @@ def main(argv: list[str] | None = None) -> int:
         description="Verify one installed local Qwen GGUF with the pinned text and vision paths."
     )
     parser.add_argument("--model", required=True, help="Installed GGUF filename.")
+    parser.add_argument(
+        "--mmproj",
+        default=runtime_module.AUTO_MMPROJ,
+        help="Installed mmproj filename or AUTO (default) for metadata-based matching.",
+    )
     parser.add_argument("--output", type=Path)
     parser.add_argument(
         "--confirm-local-large-model",
         action="store_true",
-        help="Acknowledge loading the local 27B model for real inference.",
+        help="Acknowledge loading the selected local GGUF for real inference.",
     )
     parser.add_argument(
         "--diagnostic-output",
@@ -201,6 +211,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("Refusing the real inference run without --confirm-local-large-model.")
     report = run(
         str(args.model),
+        mmproj_filename=str(args.mmproj),
         include_diagnostic_outputs=bool(args.diagnostic_output),
     )
     if args.output:

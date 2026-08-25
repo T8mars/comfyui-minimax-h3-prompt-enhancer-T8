@@ -30,12 +30,16 @@ UNCENSORED_MODEL_REVISION = "5bdf224e6f9b1e18c7598fea63e238e014ee8e3e"
 UNCENSORED_MODEL_REPOSITORY = (
     "theresa00l/Qwen3.8-27B-Uncensored-FP8-Q4_K_M-GGUF"
 )
+HERETIC_9B_MODEL_REVISION = "e3ab55e2befeb35fcf5bfebd0874afcbb8372593"
+HERETIC_9B_MODEL_REPOSITORY = "mradermacher/Qwen3.8-9B-heretic-uncensored-i1-GGUF"
 MODEL_VARIANT_OFFICIAL = "official"
 MODEL_VARIANT_UNCENSORED = "uncensored"
+MODEL_VARIANT_HERETIC_9B = "heretic-9b"
 MODEL_VARIANT_ALL = "all"
 MODEL_VARIANTS = (
     MODEL_VARIANT_OFFICIAL,
     MODEL_VARIANT_UNCENSORED,
+    MODEL_VARIANT_HERETIC_9B,
     MODEL_VARIANT_ALL,
 )
 USER_AGENT = "comfyui-minimax-h3-prompt-enhancer-T8-local-qwen-installer/1.0"
@@ -69,6 +73,13 @@ UNCENSORED_MODEL_FILE = Download(
     repository=UNCENSORED_MODEL_REPOSITORY,
     revision=UNCENSORED_MODEL_REVISION,
 )
+HERETIC_9B_MODEL_FILE = Download(
+    "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+    7_359_260_416,
+    "dfedf8412ee4a7f1200916783d224ebedb87044784434b75f4068b4b5e25f780",
+    repository=HERETIC_9B_MODEL_REPOSITORY,
+    revision=HERETIC_9B_MODEL_REVISION,
+)
 VISION_PROJECTOR_FILE = Download(
     "mmproj-F16.gguf",
     927_607_488,
@@ -83,8 +94,18 @@ def model_files_for_variant(variant: str) -> tuple[Download, ...]:
         return OFFICIAL_MODEL_FILE, VISION_PROJECTOR_FILE
     if normalized == MODEL_VARIANT_UNCENSORED:
         return UNCENSORED_MODEL_FILE, VISION_PROJECTOR_FILE
+    if normalized == MODEL_VARIANT_HERETIC_9B:
+        # The selected upstream repository publishes no matching mmproj. Keep
+        # this pinned 9B option text-only unless the user supplies a compatible
+        # Qwen 3.5/3.8 9B projector separately and selects it in the node.
+        return (HERETIC_9B_MODEL_FILE,)
     if normalized == MODEL_VARIANT_ALL:
-        return OFFICIAL_MODEL_FILE, UNCENSORED_MODEL_FILE, VISION_PROJECTOR_FILE
+        return (
+            OFFICIAL_MODEL_FILE,
+            UNCENSORED_MODEL_FILE,
+            HERETIC_9B_MODEL_FILE,
+            VISION_PROJECTOR_FILE,
+        )
     raise ValueError(
         f"Unsupported model variant {variant!r}; choose one of {', '.join(MODEL_VARIANTS)}."
     )
@@ -342,7 +363,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=MODEL_VARIANT_OFFICIAL,
         help=(
             "Model set to install: official (default), uncensored (third-party FP8-derived Q4_K_M), "
-            "or all. Both vision-capable variants reuse the pinned mmproj after compatibility testing."
+            "heretic-9b (third-party Q6_K, text-only unless a matching 9B mmproj is supplied), or all."
         ),
     )
     parser.add_argument("--runtime", action="store_true", help="Install/verify llama.cpp runtime only.")
