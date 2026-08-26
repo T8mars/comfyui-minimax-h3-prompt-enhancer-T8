@@ -1213,6 +1213,13 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         )
 
     @classmethod
+    def validate_inputs(cls, local_model=None, local_mmproj=None) -> bool:
+        # Preserve old workflows even when their local model files are absent.
+        # Local mode performs the authoritative path validation at execution.
+        del local_model, local_mmproj
+        return True
+
+    @classmethod
     def execute(
         cls,
         prompt,

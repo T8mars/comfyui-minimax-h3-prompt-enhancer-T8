@@ -5,6 +5,19 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.4] - 2026-08-26
+
+### Fixed
+
+- Allow saved local GGUF model and projector selections to survive ComfyUI's
+  schema validation when files differ between machines, so cloud and
+  OpenAI-compatible modes are no longer blocked by unused stale local values.
+- Enforce the local non-thinking setting at llama-server startup when the
+  runtime supports it, pass the matching template setting, and remove leaked
+  `<think>` traces from returned text as a defensive fallback for third-party
+  Qwen chat templates. The llama-cpp-python fallback also applies supported
+  load-time template settings.
+
 ## [1.7.3] - 2026-08-26
 
 ### Changed

@@ -193,6 +193,13 @@ class T8LLMProviderConfig(io.ComfyNode):
         )
 
     @classmethod
+    def validate_inputs(cls, local_model=None, local_mmproj=None) -> bool:
+        # Shared configs must remain loadable on machines with a different
+        # local GGUF catalog; actual local paths are checked only when used.
+        del local_model, local_mmproj
+        return True
+
+    @classmethod
     def execute(cls, **kwargs: Any) -> io.NodeOutput:
         return io.NodeOutput(build_provider_config(**kwargs))
 

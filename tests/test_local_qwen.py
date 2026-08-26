@@ -1,5 +1,6 @@
 import importlib.util
 import hashlib
+import inspect
 import io
 import json
 import struct
@@ -33,6 +34,7 @@ media = sys.modules[f"{SPEC.name}.local_qwen_media"]
 provider = sys.modules[f"{SPEC.name}.local_qwen_provider"]
 runtime = sys.modules[f"{SPEC.name}.local_qwen_runtime"]
 catalog = sys.modules[f"{SPEC.name}.local_gguf_catalog"]
+shared_config = sys.modules[f"{SPEC.name}.provider_config"]
 INSTALLER_SPEC = importlib.util.spec_from_file_location("t8_local_qwen_installer_test", PROJECT_ROOT / "install_local_qwen.py")
 installer = importlib.util.module_from_spec(INSTALLER_SPEC)
 sys.modules[INSTALLER_SPEC.name] = installer
@@ -129,6 +131,20 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual((key, chat_url, upload_url), ("", "", ""))
         self.assertIn("llama.cpp", provider_name)
         self.assertNotEqual(provider.LOCAL_QWEN_API_MODE, provider.LEGACY_LOCAL_QWEN_API_MODE)
+
+    def test_stale_local_catalog_values_do_not_block_cloud_workflows(self):
+        cases = (
+            (nodes.MiniMaxH3PromptEnhancer, ("local_model", "local_mmproj")),
+            (seedance20.Seedance20PromptEnhancer, ("local_model", "local_mmproj")),
+            (music3.MiniMaxMusic3PromptEnhancer, ("local_model",)),
+            (shared_config.T8LLMProviderConfig, ("local_model", "local_mmproj")),
+        )
+        for node_class, names in cases:
+            with self.subTest(node=node_class.__name__):
+                parameters = inspect.signature(node_class.validate_inputs).parameters
+                self.assertEqual(tuple(parameters), names)
+                stale = {name: f"missing/{name}.gguf" for name in names}
+                self.assertTrue(node_class.validate_inputs(**stale))
 
     def test_runtime_auto_falls_back_to_existing_llama_cpp_python(self):
         python_spec = runtime.PythonRuntimeSpec(version="test-version")
@@ -234,6 +250,72 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(captured["presence_penalty"], 0.0)
         self.assertEqual(captured["repeat_penalty"], 1.0)
         self.assertEqual(captured["reasoning_effort"], "xhigh")
+
+    def test_nonthinking_server_starts_reasoning_off_and_removes_leaked_trace(self):
+        spec = runtime.RuntimeSpec(
+            executable=PROJECT_ROOT / "fake-llama-server",
+            library_dirs=(),
+            backend="test",
+            fit=False,
+        )
+        server = object.__new__(runtime.LlamaServer)
+        server.spec = spec
+        server.model = PROJECT_ROOT / "fake-model.gguf"
+        server.mmproj = None
+        server.context_size = 32768
+        server.think_mode = False
+        server.token = "test-token"
+        server.port = 12345
+        with patch.object(runtime, "_supports_server_reasoning_switch", return_value=True):
+            arguments = server._start_arguments()
+        reasoning_index = arguments.index("--reasoning")
+        self.assertEqual(arguments[reasoning_index + 1], "off")
+
+        class RunningProcess:
+            @staticmethod
+            def poll():
+                return None
+
+        server.process = RunningProcess()
+        captured = {}
+
+        def fake_chat(payload):
+            captured.update(payload)
+            return {
+                "choices": [
+                    {
+                        "message": {
+                            "reasoning_content": "private server-side reasoning",
+                            "content": "<think>private inline reasoning</think>\n\n最终提示词",
+                        }
+                    }
+                ]
+            }
+
+        server._chat_sync = fake_chat
+        content, _usage = server.chat(
+            [{"role": "user", "content": "test"}],
+            seed=1,
+            max_tokens=256,
+            temperature=0.2,
+            think_mode=False,
+            reasoning_effort="medium",
+        )
+        self.assertEqual(content, "最终提示词")
+        self.assertNotIn("reasoning", content)
+        self.assertFalse(captured["chat_template_kwargs"]["enable_thinking"])
+        self.assertFalse(captured["chat_template_kwargs"]["preserve_thinking"])
+
+    def test_thinking_output_is_preserved_only_when_explicitly_enabled(self):
+        value = "<think>private trace</think>\n\nfinal answer"
+        self.assertEqual(
+            runtime._finalize_local_content(value, think_mode=True),
+            value,
+        )
+        self.assertEqual(
+            runtime._finalize_local_content("</think>\nfinal answer", think_mode=False),
+            "final answer",
+        )
         self.assertEqual(runtime.LOCAL_REASONING_OPTIONS, ["low", "medium", "xhigh"])
 
     def test_projector_auto_match_rejects_parameter_scale_mismatch(self):

@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import atexit
 import gc
+import inspect
 import importlib.util
 import json
 import os
+import re
 import secrets
 import shutil
 import socket
@@ -89,8 +91,71 @@ class LocalQwenRuntimeError(RuntimeError):
     pass
 
 
+_THINK_BLOCK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>.*?</think\s*>", re.IGNORECASE | re.DOTALL)
+_LEADING_THINK_END_PATTERN = re.compile(r"^\s*</think\s*>\s*", re.IGNORECASE)
+_UNCLOSED_THINK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>", re.IGNORECASE)
+_REASONING_SWITCH_CACHE: dict[tuple[str, int], bool] = {}
+
+
 def normalize_llama_seed(seed: int) -> int:
     return int(seed) % LLAMA_SEED_MODULUS
+
+
+def _finalize_local_content(content: Any, *, think_mode: bool) -> str:
+    if isinstance(content, list):
+        content = "".join(
+            str(part.get("text") or "")
+            for part in content
+            if isinstance(part, dict) and part.get("type") in (None, "text")
+        )
+    if not isinstance(content, str):
+        return ""
+    text = content.strip()
+    if think_mode:
+        return text
+
+    # Some third-party Qwen chat templates ignore enable_thinking=false and
+    # leak their private reasoning into message.content. Keep non-thinking
+    # mode deterministic at the provider boundary even with those templates.
+    text = _THINK_BLOCK_PATTERN.sub("", text)
+    text = _LEADING_THINK_END_PATTERN.sub("", text)
+    unclosed = _UNCLOSED_THINK_PATTERN.search(text)
+    if unclosed is not None:
+        text = text[: unclosed.start()]
+    return text.strip()
+
+
+def _supports_server_reasoning_switch(spec: "RuntimeSpec") -> bool:
+    try:
+        executable = spec.executable.resolve()
+        cache_key = (str(executable), executable.stat().st_mtime_ns)
+    except OSError:
+        return False
+    cached = _REASONING_SWITCH_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+    options: dict[str, Any] = {}
+    if os.name == "nt":
+        options["creationflags"] = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    try:
+        completed = subprocess.run(
+            [str(executable), "--help"],
+            cwd=executable.parent,
+            env=_runtime_environment(spec),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=20,
+            check=False,
+            **options,
+        )
+        help_text = completed.stdout.decode("utf-8", errors="replace")
+        supported = "--reasoning [on|off|auto]" in help_text
+    except (OSError, subprocess.SubprocessError):
+        supported = False
+    _REASONING_SWITCH_CACHE.clear()
+    _REASONING_SWITCH_CACHE[cache_key] = supported
+    return supported
 
 
 def qwen_model_directory() -> Path:
@@ -364,11 +429,13 @@ class LlamaServer:
         mmproj: Path | None,
         context_size: int,
         spec: RuntimeSpec,
+        think_mode: bool,
     ):
         self.model = model
         self.mmproj = mmproj
         self.context_size = int(context_size)
         self.spec = spec
+        self.think_mode = bool(think_mode)
         self.port = self._find_free_port()
         self.token = secrets.token_urlsafe(32)
         self.process: subprocess.Popen[bytes] | None = None
@@ -396,7 +463,7 @@ class LlamaServer:
         self.log.seek(0)
         return self.log.read().decode("utf-8", errors="replace")[-4000:]
 
-    def start(self, timeout: float = 240.0) -> None:
+    def _start_arguments(self) -> list[str]:
         arguments = [
             str(self.spec.executable),
             "--model",
@@ -424,12 +491,18 @@ class LlamaServer:
             "--jinja",
             "--no-webui",
         ]
+        if _supports_server_reasoning_switch(self.spec):
+            arguments.extend(["--reasoning", "on" if self.think_mode else "off"])
         if self.mmproj is not None:
             arguments.extend(
                 ["--mmproj", str(self.mmproj), "--image-min-tokens", "1024", "--image-max-tokens", "1024"]
             )
         if self.spec.fit:
             arguments.extend(["--fit", "on", "--fit-target", str(self.spec.fit_target_mib)])
+        return arguments
+
+    def start(self, timeout: float = 240.0) -> None:
+        arguments = self._start_arguments()
         options: dict[str, Any] = {}
         if os.name == "nt":
             options["creationflags"] = getattr(subprocess, "CREATE_NO_WINDOW", 0)
@@ -577,17 +650,12 @@ class LlamaServer:
             raise LocalQwenRuntimeError(
                 "Local llama-server response is missing choices[0].message.content."
             ) from error
-        if isinstance(content, list):
-            content = "".join(
-                str(part.get("text") or "")
-                for part in content
-                if isinstance(part, dict) and part.get("type") in (None, "text")
-            )
-        if not isinstance(content, str) or not content.strip():
+        content = _finalize_local_content(content, think_mode=think_mode)
+        if not content:
             raise LocalQwenRuntimeError(
                 "Qwen returned no final answer. Disable thinking or increase the local output token limit."
             )
-        return content.strip(), result.get("usage") or {}
+        return content, result.get("usage") or {}
 
 
 class LlamaPythonRuntime:
@@ -671,13 +739,23 @@ class LlamaPythonRuntime:
                 ) from error
         try:
             self.chat_handler = handler
-            self.llm = Llama(
-                model_path=str(self.model),
-                chat_handler=handler,
-                n_gpu_layers=-1,
-                n_ctx=self.context_size,
-                verbose=False,
-            )
+            llama_options: dict[str, Any] = {
+                "model_path": str(self.model),
+                "chat_handler": handler,
+                "n_gpu_layers": -1,
+                "n_ctx": self.context_size,
+                "verbose": False,
+            }
+            try:
+                llama_parameters = inspect.signature(Llama).parameters
+            except (TypeError, ValueError):
+                llama_parameters = {}
+            if "chat_template_kwargs" in llama_parameters:
+                llama_options["chat_template_kwargs"] = {
+                    "enable_thinking": self.think_mode,
+                    "preserve_thinking": False,
+                }
+            self.llm = Llama(**llama_options)
         except (TypeError, ValueError, RuntimeError, OSError) as error:
             self.stop()
             raise LocalQwenRuntimeError(
@@ -746,17 +824,12 @@ class LlamaPythonRuntime:
             raise LocalQwenRuntimeError(
                 "llama-cpp-python response is missing choices[0].message.content."
             ) from error
-        if isinstance(content, list):
-            content = "".join(
-                str(part.get("text") or "")
-                for part in content
-                if isinstance(part, dict) and part.get("type") in (None, "text")
-            )
-        if not isinstance(content, str) or not content.strip():
+        content = _finalize_local_content(content, think_mode=think_mode)
+        if not content:
             raise LocalQwenRuntimeError(
                 "The local GGUF returned no final answer. Disable thinking or increase max output tokens."
             )
-        return content.strip(), result.get("usage") or {}
+        return content, result.get("usage") or {}
 
 
 class LocalQwenManager:
@@ -838,7 +911,11 @@ class LocalQwenManager:
             _release_comfy_models_if_needed(comfy_memory_policy)
             if isinstance(spec, RuntimeSpec):
                 server: LlamaServer | LlamaPythonRuntime = LlamaServer(
-                    model=model, mmproj=mmproj, context_size=context_size, spec=spec
+                    model=model,
+                    mmproj=mmproj,
+                    context_size=context_size,
+                    spec=spec,
+                    think_mode=think_mode,
                 )
             else:
                 server = LlamaPythonRuntime(

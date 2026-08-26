@@ -2345,6 +2345,13 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         )
 
     @classmethod
+    def validate_inputs(cls, local_model=None) -> bool:
+        # The available GGUF list differs per installation. Do not let a stale
+        # saved value block cloud modes before this node can select its provider.
+        del local_model
+        return True
+
+    @classmethod
     def execute(
         cls,
         music_idea,

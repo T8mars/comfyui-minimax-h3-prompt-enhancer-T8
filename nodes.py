@@ -1823,6 +1823,14 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         )
 
     @classmethod
+    def validate_inputs(cls, local_model=None, local_mmproj=None) -> bool:
+        # These values are installation-dependent dropdowns. Accept stale
+        # workflow values during ComfyUI's schema pass; local execution still
+        # resolves and validates the paths when local mode is actually used.
+        del local_model, local_mmproj
+        return True
+
+    @classmethod
     def execute(
         cls,
         prompt,
