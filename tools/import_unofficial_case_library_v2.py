@@ -26,6 +26,8 @@ EXPECTED_CONTRACT = {
     "preview_gif_is_required": True,
     "preview_gif_is_model_reference": False,
     "source_video_is_model_reference": False,
+    "released_approved_media_is_redistributable": True,
+    "non_redistributable_released_cases_forbidden": True,
     "official_minimax_skills_included": False,
 }
 
@@ -491,9 +493,11 @@ def build_catalog(
         if (
             not isinstance(rights, dict)
             or any(rights.get(key) is not value for key, value in required_preview_boundary.items())
-            or not isinstance(rights.get("redistribute"), bool)
+            or rights.get("redistribute") is not True
+            or not isinstance(rights.get("redistribution_policy_id"), str)
+            or not rights["redistribution_policy_id"].strip()
         ):
-            raise LibraryImportError(f"Preview/model-reference rights mismatch: {case_id}")
+            raise LibraryImportError(f"Released media distribution/model-reference boundary mismatch: {case_id}")
         _validate_preview(record)
         validated_recipes[case_id] = _load_creative_dna(record)
         seen_cases.add(case_id)

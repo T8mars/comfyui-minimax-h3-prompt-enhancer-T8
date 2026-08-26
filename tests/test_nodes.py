@@ -1938,6 +1938,14 @@ class PromptEnhancerTests(unittest.TestCase):
         real_response = (NODES_PATH.parent / "tests" / "fixtures" / "live_smoke_2026-08-04.txt").read_text(encoding="utf-8")
         self.assertEqual(live_smoke.evaluate_result(real_response), [])
 
+    def test_template_browser_category_filters_wrap_without_horizontal_overflow(self):
+        script = (NODES_PATH.parent / "web" / "js" / "template_browser.js").read_text(encoding="utf-8")
+        self.assertIn("grid-template-columns:repeat(auto-fit,minmax(70px,1fr))", script)
+        self.assertIn('"overflow-x:hidden"', script)
+        self.assertIn("white-space:normal", script)
+        self.assertIn("overflow-wrap:anywhere", script)
+        self.assertNotIn('filters.style.cssText = "display:flex;gap:6px;overflow:auto;padding:8px"', script)
+
 
 if __name__ == "__main__":
     unittest.main()

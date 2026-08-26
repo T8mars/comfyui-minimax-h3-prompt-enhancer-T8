@@ -5,6 +5,17 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.1] - 2026-08-26
+
+### Fixed
+
+- Wrap the template-browser category controls into a responsive grid so
+  Chinese labels remain inside the panel instead of overflowing or requiring
+  a horizontal scrollbar.
+- Refresh the non-official case library with the owner-confirmed distribution
+  contract: all 239 released cases include handoff media, while source media
+  remains disconnected from model reference inputs by default.
+
 ## [1.7.0] - 2026-08-26
 
 ### Changed

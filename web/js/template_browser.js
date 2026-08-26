@@ -108,7 +108,10 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
     const left = document.createElement("div");
     left.style.cssText = "display:grid;grid-template-rows:auto 1fr;min-height:0;border-right:1px solid #555";
     const filters = document.createElement("div");
-    filters.style.cssText = "display:flex;gap:6px;overflow:auto;padding:8px";
+    filters.style.cssText = [
+        "display:grid", "grid-template-columns:repeat(auto-fit,minmax(70px,1fr))", "gap:6px",
+        "overflow-x:hidden", "overflow-y:auto", "padding:8px", "min-width:0", "box-sizing:border-box",
+    ].join(";");
     const list = document.createElement("div");
     list.style.cssText = "overflow:auto;padding:0 8px 8px";
     const detail = document.createElement("div");
@@ -328,6 +331,7 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
         filters.replaceChildren();
         for (const value of categories) {
             const item = button(value);
+            item.style.cssText += ";width:100%;min-width:0;height:auto;min-height:30px;padding:5px 7px;white-space:normal;overflow-wrap:anywhere;line-height:1.2;box-sizing:border-box";
             if (value === category) item.style.background = "rgba(90,150,255,.25)";
             item.onclick = () => {
                 category = value;
