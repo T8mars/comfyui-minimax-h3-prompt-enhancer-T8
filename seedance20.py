@@ -110,7 +110,6 @@ TASK_INTENT_ALIASES = {label: key for key, label in TASK_INTENT_LABELS.items()}
 
 COMPLEXITY_OPTIONS = ["AUTO（自动判断）", "简单一段式", "复杂分镜式"]
 AUTO_DURATION = "AUTO（模型智能选择）"
-DURATION_OPTIONS = [AUTO_DURATION] + [str(value) for value in range(4, 31)]
 AUTO_SHOT_COUNT = "AUTO（系统自动判断）"
 SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT] + [str(value) for value in range(1, 21)]
 REWRITE_MODES = ["strict", "balanced", "creative"]
@@ -233,9 +232,9 @@ def _normalize_duration(duration_seconds: Any) -> int:
     try:
         duration = int(value)
     except (TypeError, ValueError) as error:
-        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or an integer from 4 to 30.") from error
-    if not 4 <= duration <= 30:
-        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or an integer from 4 to 30.")
+        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or a positive integer.") from error
+    if duration < 1:
+        raise Seedance20PromptEnhancerError("duration_seconds must be AUTO or a positive integer.")
     return duration
 
 
@@ -593,7 +592,7 @@ def _build_messages(
         )
     )
     duration_rule = (
-        "Total duration: AUTO. Let Seedance 2.0 choose a feasible 4-30 second length from the content."
+        "Total duration: AUTO. Let Seedance 2.0 choose a feasible duration from the content and downstream generation context."
         if duration_seconds == 0
         else (
             f"Total duration: {duration_seconds} seconds. Fit all requested events within this total without assigning "
@@ -952,12 +951,13 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     options=COMPLEXITY_OPTIONS,
                     default=COMPLEXITY_OPTIONS[0],
                 ),
-                io.Combo.Input(
+                io.String.Input(
                     "duration_seconds",
-                    display_name="目标时长",
-                    options=DURATION_OPTIONS,
+                    display_name="目标时长（秒）",
                     default=AUTO_DURATION,
-                    tooltip="AUTO 或 4-30 秒。只控制整体信息密度，不强制逐镜头秒数。",
+                    multiline=False,
+                    placeholder="AUTO 或任意正整数",
+                    tooltip="输入 AUTO 或任意正整数时长；节点不设上限。只控制提示词整体信息密度，不强制逐镜头秒数；实际生成时长取决于下游模型。",
                 ),
                 io.Combo.Input(
                     "shot_count",

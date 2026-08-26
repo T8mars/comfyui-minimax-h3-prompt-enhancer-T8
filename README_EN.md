@@ -87,7 +87,7 @@ Restart ComfyUI after installation. If the frontend still shows an older node la
 
 1. Add `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)`.
 2. Enter a basic idea in the video concept/prompt field.
-3. Select the generation type, duration, shot count, rewrite mode, output language, core Skill protocol, and optional official or T8 template.
+3. Select the generation type, duration, shot count, rewrite mode, output language, core Skill protocol, and optional official or T8 template. The H3 duration field accepts any positive whole number of seconds; the node imposes no maximum, although downstream generators may still do so.
 4. Connect the images or videos required by I2VA, FL2VA, L2VA, or Ref2VA.
 5. Supply the selected cloud provider's API key, or choose local GGUF mode without a key.
 6. Click the run button at the bottom of the node.
@@ -108,7 +108,7 @@ Import [`example_workflows/minimax_h3_prompt_enhancer_example.json`](./example_w
 ## Quick start: Seedance 2.0
 
 1. Add `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)`.
-2. Enter the video concept. Task intent, organization, duration, and shot count can remain `AUTO` initially.
+2. Enter the video concept. Task intent, organization, duration, and shot count can remain `AUTO` initially. Seedance duration also accepts any positive whole number of seconds, with no node-imposed maximum; downstream generator limits still apply.
 3. Connect the required first frame, last frame, reference images, or reference videos.
 4. Choose official Chinese references such as `@图片N/@视频N` or Seedance.nz English references such as `@Image N/@Video N`.
 5. Optionally select a T8 case or community Skill to transfer causal structure, rhythm, camera grammar, and transitions without copying its subject matter.

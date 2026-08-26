@@ -220,6 +220,19 @@ function normalizeChoice(widget, choices, fallback) {
 }
 
 
+function normalizeDurationInput(widget) {
+    if (!widget) return;
+    const value = String(widget.value ?? "").trim();
+    if (!value || value === "-1" || value.toUpperCase() === "AUTO") {
+        setTextWidgetValue(widget, AUTO_DURATION);
+        return;
+    }
+    // Keep every other value exactly as user input. The backend reports invalid
+    // text, while valid positive integers have no node-imposed upper bound.
+    setTextWidgetValue(widget, value);
+}
+
+
 function setTextWidgetValue(widget, value) {
     if (!widget) return;
     widget.value = value;
@@ -507,7 +520,7 @@ app.registerExtension({
                 if (TASK_LABELS[taskWidget?.value]) taskWidget.value = TASK_LABELS[taskWidget.value];
                 normalizeChoice(taskWidget, Object.values(TASK_LABELS), TASK_LABELS.AUTO);
                 normalizeChoice(complexityWidget, ["AUTO（自动判断）", "简单一段式", "复杂分镜式"], "AUTO（自动判断）");
-                normalizeChoice(durationWidget, [AUTO_DURATION, ...Array.from({ length: 12 }, (_, index) => String(index + 4))], AUTO_DURATION);
+                normalizeDurationInput(durationWidget);
                 normalizeChoice(shotCountWidget, [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))], AUTO_SHOT_COUNT);
                 normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
                 normalizeChoice(promptModeWidget, ["官方优化", "参考模板融合"], "官方优化");

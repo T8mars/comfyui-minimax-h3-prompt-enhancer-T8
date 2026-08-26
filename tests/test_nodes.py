@@ -276,7 +276,8 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(shot_count.default, nodes.AUTO_SHOT_COUNT)
         self.assertEqual(shot_count.options, nodes.SHOT_COUNT_OPTIONS)
         self.assertEqual(shot_count.options[1:], [str(count) for count in range(1, 21)])
-        self.assertEqual((duration_seconds.min, duration_seconds.max), (4, 30))
+        self.assertEqual((duration_seconds.min, duration_seconds.max), (1, None))
+        self.assertIn("节点不设上限", duration_seconds.tooltip)
         self.assertEqual(input_names.index("shot_count"), input_names.index("duration_seconds") + 1)
         self.assertFalse(any(item.id.lower().startswith("audio") for item in schema.inputs))
 
@@ -549,7 +550,7 @@ class PromptEnhancerTests(unittest.TestCase):
             "Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description",
             "a 15-second MV often needs only 2-4 readable shots",
             "Do not output asset cards",
-            "This node adapts only the rules that can be expressed in one 4-30 second H3 prompt",
+            "This node adapts only the rules that can be expressed in one H3 prompt matching the user-requested positive duration",
             "MV rewrite scope: balanced",
             "MV request context: H3 task=T2VA; duration=15.00s; AUTO",
         ):
@@ -1522,17 +1523,24 @@ class PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(session.uploads, [])
                 self.assertEqual(session.chat_requests, [])
 
-    def test_duration_word_target_and_shot_count_boundaries(self):
-        four_second = FakeSession(basic_output(shots=2))
-        self.run_enhancer(four_second, duration_seconds=4)
+    def test_duration_has_no_upper_bound_but_must_be_positive(self):
+        one_second = FakeSession(basic_output(shots=2))
+        self.run_enhancer(one_second, duration_seconds=1)
         thirty_second_output = basic_output(shots=2).replace("00:03.000", "00:29.999")
         thirty_second = FakeSession(thirty_second_output)
         self.run_enhancer(thirty_second, duration_seconds=30)
         self.assertIn("Target duration: 30.00 seconds", thirty_second.chat_requests[0]["json"]["messages"][1]["content"])
 
+        long_duration = FakeSession(basic_output(shots=2))
+        self.run_enhancer(long_duration, duration_seconds=3600)
+        self.assertIn(
+            "Target duration: 3600.00 seconds",
+            long_duration.chat_requests[0]["json"]["messages"][1]["content"],
+        )
+
         for kwargs in (
-            {"duration_seconds": 3},
-            {"duration_seconds": 31},
+            {"duration_seconds": 0},
+            {"duration_seconds": -1},
             {"description_word_target": 79},
             {"description_word_target": 1001},
             {"shot_count": -1},

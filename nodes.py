@@ -259,7 +259,7 @@ T8_CASE_PRECEDENCE_RULE = """T8 non-official template precedence: a T8 case/comm
 MV_OFFICIAL_SCOPE_RULES = f"""Official MiniMax music-video-subtitle-generator Skill v{OFFICIAL_MV_SKILL_VERSION}, frozen from MiniMax-AI/MiniMax-H3 at commit {OFFICIAL_MV_SKILL_SOURCE_SHA}:
 - Use this profile for AI music videos or emotional music shorts in which music intent, locked lyrics, spatial typography, reference roles, rhythm, performance, and camera language must be designed together. It is not ordinary subtitle cleanup, generic editing, a non-music product ad, licensed-IP copying, or a simple request with no MV structure.
 - Respect any user-supplied target platform, aspect ratio, music genre, instrumentation, tempo feel, vocal mode, emotional temperature, camera language, edit density, and exclusions. Never silently replace them with a preset default.
-- The complete official Skill can plan character, scene, and typography cards, multi-clip generation, Master Audio alignment, canvas delivery, editing, and finishing. This node adapts only the rules that can be expressed in one 4-30 second H3 prompt; it does not claim to create cards, analyze an audio file, generate clips, stitch footage, or deliver a finished MV.
+- The complete official Skill can plan character, scene, and typography cards, multi-clip generation, Master Audio alignment, canvas delivery, editing, and finishing. This node adapts only the rules that can be expressed in one H3 prompt matching the user-requested positive duration; it does not claim to create cards, analyze an audio file, generate clips, stitch footage, or deliver a finished MV.
 - Omit irrelevant MV dimensions. Do not mechanically add a performer, lyrics, typography, a transition, or a preset visual treatment when the request does not need it."""
 
 MV_LYRIC_AND_PERFORMANCE_RULES = """MV Skill — locked lyrics and conditional performance:
@@ -286,7 +286,7 @@ MV_REFERENCE_ROLE_RULES = """MV Skill — reference-role isolation:
 
 MV_OUTPUT_FOLDING_RULES = """MV Skill — H3 folding and single-clip boundary:
 - Use Global Aesthetic & Character Lock, Vocal Line, Typography, Visual & Action, Camera & Motion, and Transition Out only as internal planning dimensions. Fold them naturally into integrated_multimodal_description or Ref2VA detailed_description; never emit them as extra top-level fields.
-- This request produces one 4-30 second H3 prompt. AUTO shot count should consider duration, complete lyric phrases, textual rhythm evidence, and visual density; a 15-second MV often needs only 2-4 readable shots, but that is guidance, not a hard limit. A fixed 1-20 shot selection still wins as the requested generation constraint.
+- This request produces one H3 prompt for the user-requested positive duration. AUTO shot count should consider duration, complete lyric phrases, textual rhythm evidence, and visual density; a 15-second MV often needs only 2-4 readable shots, but that is guidance, not a hard limit. A fixed 1-20 shot selection still wins as the requested generation constraint.
 - Diegetic singing, instruments, and music audible to the depicted performers stay in the shot timeline. overall_soundscape contains only ambience, physical sounds, and nonverbal vocal sounds. Audience-only score belongs in non_diegetic_music.
 - Do not output asset cards, a shot-list document outside H3 fields, production approvals, Master Audio instructions, long-form segmentation, stitching, editing, grading, or delivery steps."""
 
@@ -378,7 +378,7 @@ CREATIVE_PRESET_RULES = {
     NO_CREATIVE_PRESET: """Creative preset: none. Apply only the H3 core contract and the user's own requested style.""",
     AUTO_CREATIVE_PRESET: """Creative preset: AUTO. Infer at most one of the eight available prompt-writing profiles only when the user's intent or media clearly matches it; otherwise apply none. Do not print a preset name. Do not invent a workflow, asset, brand fact, lyric timing, audio analysis, or game function merely to force a match.""",
     "极简产品广告": """Creative preset: minimalist product advertisement. Lock the product's identity, silhouette, main colors, materials, and requested features. Favor negative space, a clean composition, one principal visual action per beat, and a stable full-frame product-led closing. Avoid grids, split panels, anchor-sheet layouts, crowded props, and unnecessary copy. When copy is requested, show at most one concise single-line text event at a time, keep it out of the lower-subtitle position, preserve supplied wording exactly, and never invent a logo, claim, metric, feature, or endorsement.""",
-    "3D 动画短片": """Creative preset: 3D animation short. Anchor each important character with two or three stable visual traits, and preserve scene landmarks, light direction, scale, and prop continuity. Keep no more than three important active characters in one shot unless the user explicitly requires more. Favor readable silhouettes and physically legible anticipation, squash-and-stretch, overshoot, rebound, and follow-through only when compatible with the requested animation style. Produce one 4-30 second H3 timeline, not a long-film production plan.""",
+    "3D 动画短片": """Creative preset: 3D animation short. Anchor each important character with two or three stable visual traits, and preserve scene landmarks, light direction, scale, and prop continuity. Keep no more than three important active characters in one shot unless the user explicitly requires more. Favor readable silhouettes and physically legible anticipation, squash-and-stretch, overshoot, rebound, and follow-through only when compatible with the requested animation style. Produce one H3 timeline matching the user-requested positive duration, not a long-film production plan.""",
     "品牌宣传短片": """Creative preset: brand promotional video. Use only brand names, logos, product facts, functions, metrics, slogans, and calls to action supplied by the user or visibly verified in attached media. Preserve exact names and copy; never fabricate a capability or claim. Keep brand/product assets readable with safe space, and make each beat demonstrate a concrete requested benefit or proof rather than generic spectacle.""",
     MV_CREATIVE_PRESET: f"""Creative preset: official music-video-subtitle-generator v{OFFICIAL_MV_SKILL_VERSION}. Apply the official MiniMax MV Skill as a conditional single-prompt writing profile: locked or explicitly authorized original lyrics, conditional performance, spatial typography, evidence-based rhythm, isolated character/scene/typography reference roles, and H3-correct sound classification.""",
     "双人合作游戏开场": """Creative preset: two-player cooperative game intro. Lock exactly two player identities when the user supplies them, along with consistent left/right placement, exact player names, game title, UI labels, and button copy. Use a clear single-line hierarchy for actionable UI, a coherent palette of no more than about five main colors, and reduce decorative text when readability suffers. Do not invent gameplay mechanics, working interactions, scores, online services, or UI functionality.""",
@@ -735,8 +735,12 @@ def _validate_inputs(
         raise PromptEnhancerError(f"Unsupported creative_preset: {creative_preset}")
     if prompt_mode == "参考模板融合" and not str(reference_template or "").strip():
         raise PromptEnhancerError("reference_template is required when prompt_mode is 参考模板融合.")
-    if not 4 <= int(duration_seconds) <= 30:
-        raise PromptEnhancerError("duration_seconds must be between 4 and 30.")
+    try:
+        normalized_duration = int(duration_seconds)
+    except (TypeError, ValueError) as error:
+        raise PromptEnhancerError("duration_seconds must be a positive integer.") from error
+    if normalized_duration < 1:
+        raise PromptEnhancerError("duration_seconds must be a positive integer.")
     if description_word_target != 0 and not 80 <= int(description_word_target) <= 1000:
         raise PromptEnhancerError("description_word_target must be 0 (auto) or between 80 and 1000.")
 
@@ -1571,7 +1575,14 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     options=list(TASK_TYPE_LABELS.values()),
                     default=TASK_TYPE_LABELS["T2VA"],
                 ),
-                io.Int.Input("duration_seconds", display_name="目标时长（秒）", default=5, min=4, max=30, step=1),
+                io.Int.Input(
+                    "duration_seconds",
+                    display_name="目标时长（秒）",
+                    default=5,
+                    min=1,
+                    step=1,
+                    tooltip="输入任意正整数时长；节点不设上限。实际生成时长仍取决于下游视频模型或工作流。",
+                ),
                 io.Combo.Input(
                     "shot_count",
                     display_name="镜头数量",

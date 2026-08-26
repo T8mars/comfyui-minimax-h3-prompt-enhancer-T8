@@ -144,7 +144,10 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         api_key = next(item for item in schema.inputs if item.id == "api_key")
         case_template = next(item for item in schema.inputs if item.id == "case_template")
         self.assertEqual(shot_count.options[1:], [str(value) for value in range(1, 21)])
-        self.assertEqual(duration.options[1:], [str(value) for value in range(4, 31)])
+        self.assertEqual(duration.default, seedance20.AUTO_DURATION)
+        self.assertFalse(duration.multiline)
+        self.assertEqual(duration.placeholder, "AUTO 或任意正整数")
+        self.assertIn("节点不设上限", duration.tooltip)
         self.assertTrue(api_key.force_input)
         self.assertIsNone(api_key.socketless)
         self.assertEqual(case_template.default, seedance20.NO_CASE_TEMPLATE)
@@ -185,15 +188,23 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("12 seconds", combined)
         self.assertIn("without assigning absolute per-shot timestamps", combined)
 
-    def test_duration_accepts_thirty_and_rejects_out_of_range_before_network(self):
+    def test_duration_accepts_auto_and_any_positive_integer(self):
+        auto = FakeSession()
+        self.run_enhancer(auto, task_intent="T2V", duration_seconds=seedance20.AUTO_DURATION)
+        self.assertIn("Total duration: AUTO", json.dumps(self.messages(auto), ensure_ascii=False))
+
         thirty_second = FakeSession()
         self.run_enhancer(thirty_second, task_intent="T2V", duration_seconds="30")
         combined = json.dumps(self.messages(thirty_second), ensure_ascii=False)
         self.assertIn("Total duration: 30 seconds", combined)
 
-        for duration in ("3", "31"):
+        long_duration = FakeSession()
+        self.run_enhancer(long_duration, task_intent="T2V", duration_seconds="3600")
+        self.assertIn("Total duration: 3600 seconds", json.dumps(self.messages(long_duration), ensure_ascii=False))
+
+        for duration in ("0", "-2", "not-a-duration"):
             rejected = FakeSession()
-            with self.assertRaisesRegex(seedance20.Seedance20PromptEnhancerError, "4 to 30"):
+            with self.assertRaisesRegex(seedance20.Seedance20PromptEnhancerError, "positive integer"):
                 self.run_enhancer(rejected, task_intent="T2V", duration_seconds=duration)
             self.assertEqual(rejected.chat_requests, [])
 
@@ -544,6 +555,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             "https://api.seedance.nz/sign-up?aff=5f4w",
             "https://ai.t8star.org/register?aff=dP7j",
             "MiniMax & Seedance本地Skill和整合包",
+            "function normalizeDurationInput(widget)",
+            "Keep every other value exactly as user input",
             "https://github.com/T8mars/minimax-h3-prompt-skill-T8",
             'value === "参考模板融合"',
             'mode === OPENAI_API_MODE',

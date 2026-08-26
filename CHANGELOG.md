@@ -5,6 +5,16 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.0] - 2026-08-26
+
+### Changed
+
+- Remove the 30-second prompt-duration ceiling from the MiniMax H3 and
+  Seedance 2.0 enhancers. H3 now accepts any positive integer duration;
+  Seedance accepts `AUTO` or a user-entered positive integer while preserving
+  existing saved workflow values. Downstream video-model limits remain
+  independent of this prompt-planning setting.
+
 ## [1.6.0] - 2026-08-25
 
 ### Added

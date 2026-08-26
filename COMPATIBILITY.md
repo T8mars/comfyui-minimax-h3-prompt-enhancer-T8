@@ -39,6 +39,11 @@ Compatibility invariants:
 - Existing explicit `mmproj-F16.gguf` values remain valid. New nodes default to
   metadata-based `AUTO（自动匹配）` without adding or reordering serialized
   widgets.
+- The H3 `duration_seconds` widget keeps its existing integer value and
+  serialized position while dropping only the old upper bound. Seedance keeps
+  the same widget name and serialized position; its former combo value is now
+  restored into an editable text field, so saved `AUTO` and `4`–`30` values
+  remain valid while new positive integers above 30 are preserved unchanged.
 - Bundled workflows use the repository's own `T8PromptText` and `T8ShowText`
   STRING utilities, so text entry and result display do not require Comfyroll or
   EasyUse.
