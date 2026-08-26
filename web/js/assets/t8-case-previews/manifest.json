@@ -1,10 +1,10 @@
 {
   "schema_version": "t8-bundled-case-previews/v1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "preview_count": 261,
-  "asset_count": 261,
+  "preview_count": 262,
+  "asset_count": 262,
   "dedup_references": 0,
-  "total_bytes": 167649724,
+  "total_bytes": 168149575,
   "largest_bytes": 3357018,
   "encoding": {
     "format": "gif",
@@ -2085,6 +2085,14 @@
       "source_sha256": "bcd5434205c121f7c3cea31f3f086a078717b93e1e5cbbfb7e5a3bbcd143b469",
       "sha256": "0db8800ef7e1e3af1488a11a85819a88b01fa15720231c83d0a48922bfa1153c",
       "bytes": 664635,
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-akemiwork-2092242385141219589-browser-2092242385141219589-video-1",
+      "file": "18b18c8748eafb892366a4862714a15ef9b73c279f58b40de6a9b43086fb38fc.gif",
+      "source_sha256": "f38dbd77056d41e03d37c9477723aeaa61b59a8fc0512f8e4059c5cdef0770c8",
+      "sha256": "18b18c8748eafb892366a4862714a15ef9b73c279f58b40de6a9b43086fb38fc",
+      "bytes": 499851,
       "human_preview_only": true
     },
     {

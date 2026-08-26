@@ -5,6 +5,16 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.3] - 2026-08-26
+
+### Changed
+
+- Import `batch-2026-08-26-02`: add one stable dual-model T8 case selector
+  with one bundled human-only GIF preview. The non-official library now
+  contains 260 source cases, 213 case selectors, 47 evidence variants, and
+  two standalone community Skills (215 selectors total). Official MiniMax
+  Skills and model-reference media boundaries remain unchanged.
+
 ## [1.7.2] - 2026-08-26
 
 ### Changed

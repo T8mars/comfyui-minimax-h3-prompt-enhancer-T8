@@ -3,10 +3,10 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 259,
-  "case_selector_template_count": 212,
+  "source_case_count": 260,
+  "case_selector_template_count": 213,
   "community_skill_count": 2,
-  "selector_template_count": 214,
+  "selector_template_count": 215,
   "evidence_variant_count": 47,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
@@ -12537,6 +12537,61 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one clearly adult original luxury subject in an impossible but readable pose against measurable vast scale. Use one continuous approach or coherent lens ladder to verify the same body, outfit and environment. Allow one restrained hand action to create a small controlled accent without disturbing the pose. Give face and one primary accessory separate readable material-proof intervals. Finish on a lower-body or product macro that retains the same light and environment rather than cutting to an unrelated packshot. The reusable mechanism is the ordered baseline, trigger, continuity, controlled escalation and terminal proof—not the source identities, brands, wording, locations, props, exact styling, choreography, camera path, creator identity or timing.\nInvariants:\n- inv-01: Establish one clearly adult original luxury subject in an impossible but readable pose against measurable vast scale.\n- inv-02: Use one continuous approach or coherent lens ladder to verify the same body, outfit and environment.\n- inv-03: Allow one restrained hand action to create a small controlled accent without disturbing the pose.\n- inv-04: Give face and one primary accessory separate readable material-proof intervals.\n- inv-05: Finish on a lower-body or product macro that retains the same light and environment rather than cutting to an unrelated packshot.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without the baseline, later change has no trustworthy reference state.: Establish one clearly adult original luxury subject in an impossible but readable pose against measurable vast scale.\n- Without a visible trigger, the transition reads as an arbitrary edit.: Use one continuous approach or coherent lens ladder to verify the same body, outfit and environment.\n- Without continuity, the sequence becomes unrelated montage or identity drift.: Allow one restrained hand action to create a small controlled accent without disturbing the pose.\n- Without controlled escalation, the middle either plateaus or turns into noise.: Give face and one primary accessory separate readable material-proof intervals.\n- Without terminal proof, the promised result or reversal remains unverified.: Finish on a lower-body or product macro that retains the same light and environment rather than cutting to an unrelated packshot.\nDo not copy from the source: source woman, face, black bodysuit, sunglasses and pose; source branded handbag, jewelry, boots and drink; source cloud sea, pink-gold sunset and floating-seat illusion; source exact push-in, splash, detail order and timing; source creator identity, Seedance 2.0 claim, platform marks and prompt wording",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-flow-carried-style-escalation-split-convergence-v1",
+      "label": "墨烟试装升级｜日常基线、遮挡换装与黑白合流",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先以日常全身造型建立一名明确成年人物，再让同一条可追踪流体载体反复遮挡并揭示受控造型变化；服装密度从休闲逐级升至礼服，中段用面部近景重新核验身份，结尾让两种载体分支合流为一套清楚的双色英雄造型。",
+      "input_format": "Establish one clearly adult original subject, a readable everyday full-body baseline and one continuously traceable transformation carrier before the first style change. + Use each carrier crossing as the visible cause of exactly one declared styling change while preserving face, age, body proportions, pose axis and studio geography. + Escalate styling in ordered density levels from practical clothing to tailored and sculptural looks without changing every visual channel at once. + Insert one bounded portrait checkpoint that re-verifies stable identity anchors before the terminal full-body phase. + Split the carrier into two visibly distinct branches, then recombine them into one stable two-part hero design and hold the completed result.",
+      "recommended_input": "象牙色无影棚内，一名明确成年栗发展览设计师穿沙色工具连体服正面站立；椭圆脸、齐肩卷发与修长比例稳定，一条宽钴蓝织物带从画面左侧进入，并始终作为唯一换装载体。；同一织物带只增加一条铜色边缘，并在人物后方扩成清楚空间层；依次揭示原创钴蓝雕塑晚装与铜色点缀礼服，只提升轮廓体积，不改变成年身份和影棚轴线。；载体分成钴蓝与铜色两支，两支都必须围绕同一成年人连续可追踪；它们在中心合流并形成一套原创非对称钴蓝铜色英雄套装。织物带清场，完整全身结果停留一秒，不出现标志和文字。",
+      "required_anchors": [
+        "Establish one clearly adult original subject, a readable everyday full-body baseline and one continuously traceable transformation carrier before the first style change.",
+        "Use each carrier crossing as the visible cause of exactly one declared styling change while preserving face, age, body proportions, pose axis and studio geography.",
+        "Insert one bounded portrait checkpoint that re-verifies stable identity anchors before the terminal full-body phase.",
+        "Split the carrier into two visibly distinct branches, then recombine them into one stable two-part hero design and hold the completed result."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-akemiwork-2092242385141219589-browser-2092242385141219589-video-1",
+        "case_sha256": "e3e60d952f67e74b6328416fe5a2c487237c643e17e4631d42965788cd866118",
+        "release_score": 4.958,
+        "creative_dna_sha256": "248d71ecb33789f24d10d16cfc53c654b9e5c65449bbc49a2946e35dfd4bad5f",
+        "h3_adapter_sha256": "cdbb2bc5b6ba2499ef36de194cb4b45c772f7f4f4102e7f5f99c80b0f85cf4c9",
+        "seedance20_adapter_sha256": "15f9f063fd803561630226112147337c5d874f2fceffb578a5f735a100b14700"
+      },
+      "previews": [
+        {
+          "case_id": "x-akemiwork-2092242385141219589-browser-2092242385141219589-video-1",
+          "label": "墨烟试装升级｜日常基线、遮挡换装与黑白合流",
+          "short_summary": "先以日常全身造型建立一名明确成年人物，再让同一条可追踪流体载体反复遮挡并揭示受控造型变化；服装密度从休闲逐级升至礼服，中段用面部近景重新核验身份，结尾让两种载体分支合流为一套清楚的双色英雄造型。",
+          "recommended_input": "象牙色无影棚内，一名明确成年栗发展览设计师穿沙色工具连体服正面站立；椭圆脸、齐肩卷发与修长比例稳定，一条宽钴蓝织物带从画面左侧进入，并始终作为唯一换装载体。；同一织物带只增加一条铜色边缘，并在人物后方扩成清楚空间层；依次揭示原创钴蓝雕塑晚装与铜色点缀礼服，只提升轮廓体积，不改变成年身份和影棚轴线。；载体分成钴蓝与铜色两支，两支都必须围绕同一成年人连续可追踪；它们在中心合流并形成一套原创非对称钴蓝铜色英雄套装。织物带清场，完整全身结果停留一秒，不出现标志和文字。",
+          "required_anchors": [
+            "Establish one clearly adult original subject, a readable everyday full-body baseline and one continuously traceable transformation carrier before the first style change.",
+            "Use each carrier crossing as the visible cause of exactly one declared styling change while preserving face, age, body proportions, pose axis and studio geography.",
+            "Insert one bounded portrait checkpoint that re-verifies stable identity anchors before the terminal full-body phase.",
+            "Split the carrier into two visibly distinct branches, then recombine them into one stable two-part hero design and hold the completed result."
+          ],
+          "sha256": "f38dbd77056d41e03d37c9477723aeaa61b59a8fc0512f8e4059c5cdef0770c8",
+          "width": 640,
+          "height": 366,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one clearly adult original subject, a readable everyday full-body baseline and one continuously traceable transformation carrier before the first style change. Use each carrier crossing as the visible cause of exactly one declared styling change while preserving face, age, body proportions, pose axis and studio geography. Escalate styling in ordered density levels from practical clothing to tailored and sculptural looks without changing every visual channel at once. Insert one bounded portrait checkpoint that re-verifies stable identity anchors before the terminal full-body phase. Split the carrier into two visibly distinct branches, then recombine them into one stable two-part hero design and hold the completed result. The reusable mechanism is the ordered baseline, trigger, continuity, controlled escalation and terminal proof—not the source identities, brands, wording, locations, props, exact styling, choreography, camera path, creator identity or timing.\nInvariants:\n- inv-01: Establish one clearly adult original subject, a readable everyday full-body baseline and one continuously traceable transformation carrier before the first style change.\n- inv-02: Use each carrier crossing as the visible cause of exactly one declared styling change while preserving face, age, body proportions, pose axis and studio geography.\n- inv-03: Escalate styling in ordered density levels from practical clothing to tailored and sculptural looks without changing every visual channel at once.\n- inv-04: Insert one bounded portrait checkpoint that re-verifies stable identity anchors before the terminal full-body phase.\n- inv-05: Split the carrier into two visibly distinct branches, then recombine them into one stable two-part hero design and hold the completed result.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without the baseline, later change has no trustworthy reference state.: Establish one clearly adult original subject, a readable everyday full-body baseline and one continuously traceable transformation carrier before the first style change.\n- Without a visible trigger, the transition reads as an arbitrary edit.: Use each carrier crossing as the visible cause of exactly one declared styling change while preserving face, age, body proportions, pose axis and studio geography.\n- Without continuity, the sequence becomes unrelated montage or identity drift.: Escalate styling in ordered density levels from practical clothing to tailored and sculptural looks without changing every visual channel at once.\n- Without controlled escalation, the middle either plateaus or turns into noise.: Insert one bounded portrait checkpoint that re-verifies stable identity anchors before the terminal full-body phase.\n- Without terminal proof, the promised result or reversal remains unverified.: Split the carrier into two visibly distinct branches, then recombine them into one stable two-part hero design and hold the completed result.\nDo not copy from the source: the source adult woman's face, body, hair changes, poses and all casual or couture garments; the source black and gray ink-smoke appearance, plume shapes, pools, wing silhouettes and exact morph transitions; the source white studio, rocks, transparent blocks, lighting pattern and black-white-silver palette; the source T-shirt lettering, CapCut AI watermark and any other visible marks or wording; the source exact shot order, face crops, shoulder turn, dress designs, timing, creator identity and quoted prompt context",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
