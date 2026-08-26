@@ -1,0 +1,117 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-26-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-imastudio-ai-2091734655993291051-browser-2091734655993291051-video-1",
+      "template_id": "t8-case-identity-locked-fashion-world-rhythm-carousel-v1",
+      "label": "时装世界节拍轮转｜同一成年角色跨风格、静默与英雄收束",
+      "summary": "同一明确成年时装角色以稳定脸、发型和比例贯穿多种风格世界；每段只改变服装、配饰、文字或舞台系统，并用一次静默留白后恢复全节拍，最终回到成熟英雄造型。",
+      "case_sha256": "32872d944770e5a4ef9902ebe8c9172e81d0f1ed88e7aa6ba65eb50051a567c2",
+      "creative_dna_sha256": "4fdd799ff9ef1fa7ad29f105efb396a2892c9258f3eece954b8c548b0776e7a0",
+      "h3_adapter_sha256": "fe98578b8258c678cd2b33e544a4d5d7f8c165b1ed46ec6f1f1e25aa1dc79a90",
+      "seedance20_adapter_sha256": "53c6c9f52a539e6b59983b3864debdb1a2a741910fe8ffd296e3dd87b4004bf1",
+      "mechanism_fingerprint": "c71f806935c71bb62b62e165b70ce14a2cb5c635673398acbbc79f20203143ae"
+    },
+    {
+      "case_id": "x-imastudio-ai-2092457346526241208-browser-2092457346526241208-video-1",
+      "template_id": "t8-case-material-typography-world-pass-through-v1",
+      "label": "材质字构穿行｜同一成年人物跨九类物质语义空间",
+      "summary": "让同一明确成年人物穿过由烟、铬、植物、电流、阴影、纸张与丝带构成的语义空间；每种材质只承担一个短词和一个物理行为，最终汇入单一身份结论。",
+      "case_sha256": "af9bc5e1832804e2c5f0da240c60ce12d932a3a80e72637bef18f2126383ef47",
+      "creative_dna_sha256": "92e7b29416f1a4559aae16c90ed1be5518a904c691d6aa8bbedca1d4e825f92d",
+      "h3_adapter_sha256": "6ef73ebeb5e72ee9f796ba94211eaab4155922bef220b7d70c19494c090bfc31",
+      "seedance20_adapter_sha256": "36ba0e433ad0099a1f223c8d7258c8daefd0f41dd38467760b032e434e56f91b",
+      "mechanism_fingerprint": "37397b35225fa3446028f4a664a403bd3615f582f67a46a238813cc95a37a848"
+    },
+    {
+      "case_id": "x-studio-oneroom-2092220604309205341-browser-2092220604309205341-video-1",
+      "template_id": "t8-case-letterform-structure-motion-system-lockup-v1",
+      "label": "字形结构运动系统｜组件组字、分栏、物理碰撞与双行锁定",
+      "summary": "用首个标题的字形组件生成分栏与运动骨架，后续短词分别承担冲击、网格、卡片与碰撞动作；限定调色和文字集合，最终所有层同时停止在双行锁定。",
+      "case_sha256": "b5775959ecef1d0e87e50dd9c318eb78f4647c3e61436356ce602d1b62330dfd",
+      "creative_dna_sha256": "1cb5d657998960883fb12a9ef787966914da54412ad4aa58970e6c7e90dca7fb",
+      "h3_adapter_sha256": "0cbfd48fede28114bebf40d44c8fe56b1cef2d6e4390162e6b764f4aac7c1556",
+      "seedance20_adapter_sha256": "0c98a6793f8ee2761648965f73f94a52d1cc551c107d9cb739f9e4f799821092",
+      "mechanism_fingerprint": "52ee400f1b0d2bb04731f042a2e6e9e3e8960eba77e51f543577ad9b08704fa3"
+    },
+    {
+      "case_id": "x-tokyo-valentine-2091449476242440387-browser-2091449476242440387-video-1",
+      "template_id": "t8-case-semantic-typography-world-action-relay-v1",
+      "label": "语义字场动作接力｜成年角色每次行动生成一个空间短词",
+      "summary": "同一明确成年角色在连续空间里完成动作，每个动作只生成一个与行为或心理相关的巨大短词；文字成为可穿越、遮挡或反射的环境结构，最终回到同一身份终局。",
+      "case_sha256": "161256c0a8d9eb8450c0364d3cb37426cf86c71c83bed939c0c6fd885d04d4b5",
+      "creative_dna_sha256": "3c75aaeb01893e238dc97ab58474be762f5b8c63d4bf362b04929d0c68721c3f",
+      "h3_adapter_sha256": "7fee5d17ab4329c8d635819bb45901acd876ac158b19545f5768cb5329dcc20a",
+      "seedance20_adapter_sha256": "6fe786337aa2fc6346b89da2054c8182e7223bd16e6568af6f2f8bf296c59446",
+      "mechanism_fingerprint": "d080ad15f53296b7a6d05927a0584c99bbbf1a98c19f052b66f782b112f11347"
+    },
+    {
+      "case_id": "x-ruzainameer-2092195435385630983-browser-2092195435385630983-video-1",
+      "template_id": "t8-case-contact-triggered-toy-scale-creature-reveal-v1",
+      "label": "接触触发尺度生长｜小型陪伴物入介质后长成巨体",
+      "summary": "先建立明确成年人、小型非人陪伴物和可测量环境尺度；陪伴物接触介质后，涟漪、体积和水体位移连续升级，原身份特征保留，最终由同框巨体完成尺度证明。",
+      "case_sha256": "90885862ff3e6b746df3ed8073cbd21ab735c73cfa23c0293b64052874f0c2d8",
+      "creative_dna_sha256": "107b47b61c3931800c57d8776481b31dcafaf0fd750b030f71444f762c43b509",
+      "h3_adapter_sha256": "5e81045a51e7c08c1227c23d94bcc892f37fd86c755eae2535bbb2e735e237eb",
+      "seedance20_adapter_sha256": "6882ba6d60fe083a2e761409b5acfde41d0a79ab32d2ca8f9827c353f27b447f",
+      "mechanism_fingerprint": "f418cb257fcaadeaf918851a432eb49a2139ed3fec47bff31b0c40a85b5bbb6b"
+    },
+    {
+      "case_id": "x-hbcoop-2091616500440572217-browser-2091616500440572217-video-1",
+      "template_id": "t8-case-flip-cell-word-assembly-extrusion-lockup-v1",
+      "label": "翻片矩阵字标组装｜像素激活、平面组字、厚度长出与卡片收束",
+      "summary": "固定翻片矩阵从局部激活扩散成完整单词，平面字形随后长出厚度、分层和少量点色，所有组件保持注册并回弹落稳，最后缩入简洁品牌卡。",
+      "case_sha256": "230f9b2c2ad3f6abb6f8f5b33e0b6cb868738828c1ed6427914ba07d5d3dffa1",
+      "creative_dna_sha256": "0f7a847ea9f61d9d2644fc151edfefc7930167d1e4224a8f6f2f133c714fbc83",
+      "h3_adapter_sha256": "f02847e4a25e7e22946a5922a9155f81e422cfb4a072642f0431ce47992d567f",
+      "seedance20_adapter_sha256": "387ca352fa71552624edfecb78b0ddebbc62e77814017be84d0e6518e5c8d63e",
+      "mechanism_fingerprint": "9524bb938a66a624d003d0d85a187156e1bef729d887c4f6b4ad602121a2f47b"
+    },
+    {
+      "case_id": "x-yourplugai-2092269036167934445-browser-2092269036167934445-video-1",
+      "template_id": "t8-case-heavy-attack-light-swarm-binding-reversal-v1",
+      "label": "重击对轻群体反制｜诱饵让位、群体绕行与武器缠束",
+      "summary": "先建立明确成年重型攻击者和轻量群体控制者；重击完整承诺后，轻群体避让并从攻击轨迹背后重组，逐步把进攻武器和身体缠束，最终由被反制姿态证明战术翻转。",
+      "case_sha256": "b64e50955e59dd4778eaf9942c4d9ce0a5ef82f4a5ea7dc53ff03b48b5551399",
+      "creative_dna_sha256": "16fb42a4d1815876228505e8671913a42a00815ac4e7cfebe3ee024982a0ada6",
+      "h3_adapter_sha256": "2bed8d628745386cbee3fe47669cb8d0b39ba5becfb9982033765ce29c935c31",
+      "seedance20_adapter_sha256": "20aa7f4fbfece54965ef1a0ae388bfc887a82ecfdbcaf19514db468bc2283b34",
+      "mechanism_fingerprint": "6b9e9c7f46e2b62db5357579e79afefec2814602324c31b21e398532ad743699"
+    },
+    {
+      "case_id": "x-zyrellix-2091760321866186908-browser-2091760321866186908-video-1",
+      "template_id": "t8-case-product-macro-environment-extraction-sphere-return-v1",
+      "label": "产品环境提取回环｜材质微距、原料世界、喷雾门户与透明球归返",
+      "summary": "从产品材质极近景建立身份，沿核心原料进入环境世界，再由功能动作打开空间门户；环境被压缩进透明体并回到同一产品英雄镜，形成产品—世界—产品闭环。",
+      "case_sha256": "1518e3ed32a2f937818adfae64cc1b0f3174c2e77e2e1dc2c1bfea47e5708d26",
+      "creative_dna_sha256": "a60f5271f134d05b4bdb8373da7433044b813e44c9f1690511d2ffd040bc4c81",
+      "h3_adapter_sha256": "fbccbda6cad9d96ce6905b44e421f2d403bab485db2147698b5ed754659ab6a8",
+      "seedance20_adapter_sha256": "986383abecc63ac36babdf2e86053d80dd05a04cafc8599629953be69826cebd",
+      "mechanism_fingerprint": "faa961976e611d4d97361520de1079a42c3551ac292deb241539ba278443c8ca"
+    },
+    {
+      "case_id": "x-weeleey6-2092237693849575494-browser-2092237693849575494-video-1",
+      "template_id": "t8-case-personal-device-state-switch-ordinary-world-performance-v1",
+      "label": "个人设备状态开关｜普通环境在佩戴后进入表演模式再归稳",
+      "summary": "先建立明确成年人、个人设备和普通公共环境；一次清楚佩戴或启动动作改变人物步态、环境节奏和摄影能量，但地理与身份不变，最终通过关闭或静止证明状态切换。",
+      "case_sha256": "f2f3e54fe406ff2bb1ce52a60dbba087a24c7b20c8ead4894fe6fd87be362402",
+      "creative_dna_sha256": "8045a19c0a3f08a06f708c1bf8918e545dd9988fc73dcad2a82b404805edea9b",
+      "h3_adapter_sha256": "737fea45ddfc1ce2b1eb9c738569780d9ac1a601303d7267adf626507b4dc5bf",
+      "seedance20_adapter_sha256": "4c1f87e93263061b4f1a65b4ab8306fa2b46a0438e2fef47281973650c02574f",
+      "mechanism_fingerprint": "ffca3e8d3923cf8ffdaaaf9c80098e87dfeab1eef8734d30507b75cf23c1bbb8"
+    },
+    {
+      "case_id": "x-laviniavelle-2091812173391790374-browser-2091812173391790374-video-1",
+      "template_id": "t8-case-impossible-luxury-pose-detail-ladder-v1",
+      "label": "不可能奢华姿态｜极远尺度钩子、连续推进与配饰细节阶梯",
+      "summary": "以不可能但静稳的成年时装姿态作为远景钩子，持续推进依次验证脸、手中动作、主配饰与鞋履细节；环境和姿态保持连续，最终以材质特写完成奢华证明。",
+      "case_sha256": "832ce69387c579c836e52caaab589cf5828474b36d31e1e074bd6096227edacd",
+      "creative_dna_sha256": "b313312fb53e530acf4e6008fee5b250071d4108b6cadc033e1c491224cb496f",
+      "h3_adapter_sha256": "2f7cf8e75cac66d078fc078eeee6dbe14cc8d4679f758f6bb6cc5cb2df186e26",
+      "seedance20_adapter_sha256": "80b0a2a2b65a90e3ab9f5112647db13325d606807a61aa0de8ccb327674a9f73",
+      "mechanism_fingerprint": "713226f435a9eb0fe498c8c4ec77c546b7b11d1e69dcb7cd846e240bca57e689"
+    }
+  ]
+}

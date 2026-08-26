@@ -5,6 +5,17 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.2] - 2026-08-26
+
+### Changed
+
+- Import `batch-2026-08-26-01`: add 10 stable T8 case selectors and merge 10
+  same-mechanism evidence variants without duplicate dropdown entries. The
+  non-official library now contains 259 source cases, 212 case selectors, 47
+  evidence variants, and two standalone community Skills (214 selectors total),
+  with 261 bundled human-only GIF previews. The official nine MiniMax Skills
+  remain unchanged and preview/source media stays disconnected from LLM inputs.
+
 ## [1.7.1] - 2026-08-26
 
 ### Fixed
