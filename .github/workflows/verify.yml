@@ -63,6 +63,8 @@ jobs:
           python -m pip install pyyaml
       - name: Verify release contents
         working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
+        env:
+          T8_CONFIRM_PREVIEW_BUDGET: "1"
         run: python tools/verify_repository.py
       - name: Run unit and compatibility tests
         working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8

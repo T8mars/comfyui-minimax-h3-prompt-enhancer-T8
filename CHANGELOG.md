@@ -5,6 +5,14 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.8] - 2026-08-27
+
+### Fixed
+
+- Apply the reviewed bundled-preview budget acknowledgement to both ComfyUI
+  compatibility jobs, keeping the independent verification workflow aligned
+  with the Registry release workflow.
+
 ## [1.7.7] - 2026-08-27
 
 ### Fixed
