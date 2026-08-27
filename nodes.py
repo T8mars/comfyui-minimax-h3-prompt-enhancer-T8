@@ -1823,11 +1823,19 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         )
 
     @classmethod
-    def validate_inputs(cls, local_model=None, local_mmproj=None) -> bool:
+    def validate_inputs(
+        cls,
+        local_model=None,
+        local_mmproj=None,
+        reference_images=None,
+        reference_videos=None,
+    ) -> bool:
         # These values are installation-dependent dropdowns. Accept stale
         # workflow values during ComfyUI's schema pass; local execution still
         # resolves and validates the paths when local mode is actually used.
-        del local_model, local_mmproj
+        # Newer ComfyUI builds also forward Autogrow groups to this validator;
+        # accepting them prevents Ref2VA media from failing before execution.
+        del local_model, local_mmproj, reference_images, reference_videos
         return True
 
     @classmethod

@@ -1,6 +1,6 @@
 [project]
 name = "minimax-h3-seedance-music3-prompt-enhancer-t8"
-version = "1.7.6"
+version = "1.7.7"
 description = "Enhance MiniMax H3 and Seedance 2.0 video prompts and MiniMax Music 3 captions and lyrics with cloud or local Qwen LLM providers."
 authors = [
     { name = "T8mars", email = "20331866@qq.com" },

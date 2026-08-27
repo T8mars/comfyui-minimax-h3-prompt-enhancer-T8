@@ -134,8 +134,14 @@ class LocalQwenUnitTests(unittest.TestCase):
 
     def test_stale_local_catalog_values_do_not_block_cloud_workflows(self):
         cases = (
-            (nodes.MiniMaxH3PromptEnhancer, ("local_model", "local_mmproj")),
-            (seedance20.Seedance20PromptEnhancer, ("local_model", "local_mmproj")),
+            (
+                nodes.MiniMaxH3PromptEnhancer,
+                ("local_model", "local_mmproj", "reference_images", "reference_videos"),
+            ),
+            (
+                seedance20.Seedance20PromptEnhancer,
+                ("local_model", "local_mmproj", "reference_images", "reference_videos"),
+            ),
             (music3.MiniMaxMusic3PromptEnhancer, ("local_model",)),
             (shared_config.T8LLMProviderConfig, ("local_model", "local_mmproj")),
         )
@@ -144,6 +150,9 @@ class LocalQwenUnitTests(unittest.TestCase):
                 parameters = inspect.signature(node_class.validate_inputs).parameters
                 self.assertEqual(tuple(parameters), names)
                 stale = {name: f"missing/{name}.gguf" for name in names}
+                if "reference_images" in stale:
+                    stale["reference_images"] = {"reference_image_0": object()}
+                    stale["reference_videos"] = {"reference_video_0": object()}
                 self.assertTrue(node_class.validate_inputs(**stale))
 
     def test_runtime_auto_falls_back_to_existing_llama_cpp_python(self):

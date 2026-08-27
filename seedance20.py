@@ -1213,10 +1213,17 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         )
 
     @classmethod
-    def validate_inputs(cls, local_model=None, local_mmproj=None) -> bool:
+    def validate_inputs(
+        cls,
+        local_model=None,
+        local_mmproj=None,
+        reference_images=None,
+        reference_videos=None,
+    ) -> bool:
         # Preserve old workflows even when their local model files are absent.
         # Local mode performs the authoritative path validation at execution.
-        del local_model, local_mmproj
+        # Newer ComfyUI builds also forward Autogrow groups to this validator.
+        del local_model, local_mmproj, reference_images, reference_videos
         return True
 
     @classmethod

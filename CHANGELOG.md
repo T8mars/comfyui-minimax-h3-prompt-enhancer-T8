@@ -5,6 +5,15 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.7] - 2026-08-27
+
+### Fixed
+
+- Accept the `reference_images` and `reference_videos` Autogrow groups in the
+  MiniMax H3 and Seedance 2.0 custom validators, preventing recent ComfyUI
+  development builds from rejecting Ref2VA/reference-media workflows before
+  node execution.
+
 ## [1.7.6] - 2026-08-27
 
 ### Fixed
