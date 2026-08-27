@@ -168,7 +168,7 @@ MiniMax H3 / Seedance 2.0 / Music 3 Prompt Enhancer (T8)
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-Registry 发布包会包含节点运行所需的官方 Skill、非官方案例库与轻量 GIF 预览，不包含测试、来源批次、API Key、本地运行时或 GGUF 模型。
+Registry 发布包会包含节点运行代码、官方 Skill、非官方案例库与轻量 GIF 预览，不包含测试、来源批次、API Key、独立 `llama-server` 运行时、安装/下载脚本或 GGUF 模型。Manager 安装的本地 GGUF 模式使用当前 ComfyUI Python 中的 `llama-cpp-python`；如果需要固定 `llama-server`、PATH 自动回退、环境变量默认值或显式连接探测，请按上面的推荐方式从 GitHub 完整安装。
 
 云端模式不增加额外 Python 依赖，使用 ComfyUI 已安装的 `requests`、NumPy、Pillow 和原生媒体类型；本地视频抽样复用 ComfyUI 自带的 PyAV。安装后重启 ComfyUI；如果节点或前端界面没有更新，请对浏览器执行一次 `Ctrl+F5`。
 
@@ -656,7 +656,7 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 
 本地渠道是三个现有节点的第 4 个互斥 provider，不会新增或替换节点，也不会改变 H3、Seedance 2.0、Music 3 各自的提示词合同。运行时不需要 API Key、Base URL 或云端模型 ID。节点不再把可用范围锁死为两个文件名：会递归扫描 `ComfyUI/models/LLM`，读取轻量 GGUF 元数据，区分主模型与 mmproj，并为视觉模型推荐同名/同目录投影器。
 
-运行时采用自动回退顺序：本节点固定安装器生成的 `llama-server` → 系统 `PATH` 中的 `llama-server` → 当前 ComfyUI Python 环境已经安装的 `llama-cpp-python`。因此其他 llama.cpp 节点能工作的环境，不会再仅因缺少本节点私有 `runtime_config.json` 就误报“运行时未安装”。状态窗口会显示实际命中的后端、来源和版本。
+GitHub 完整安装采用自动回退顺序：本节点固定安装器生成的 `llama-server` → 系统 `PATH` 中的 `llama-server` → 当前 ComfyUI Python 环境已经安装的 `llama-cpp-python`。Manager/Registry 安装为通过 Registry 自动安全审查，仅使用进程内 `llama-cpp-python`，不随包分发外部进程启动器。两种安装都会递归扫描同一个 `models/LLM`，状态窗口会显示实际命中的后端、来源和版本。
 
 如果当前 ComfyUI Python 没有可用的 `llama-cpp-python`，三个核心节点都提供“获取 llama-cpp-python 预编译 Wheel”按钮，跳转到 [JamePeng 预编译 Releases](https://github.com/JamePeng/llama-cpp-python/releases)。必须选择与 **ComfyUI 实际 Python 版本、操作系统和 CUDA 版本**匹配的 Wheel，并用 ComfyUI 自己的 Python 安装，而不是系统 Python：
 
@@ -664,7 +664,7 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 & "你的 ComfyUI Python 路径\python.exe" -m pip install "下载到本地的 llama_cpp_python-....whl"
 ```
 
-这是可选的第三方预编译来源，本节点不会静默下载或自动安装 Wheel。安装后请完整重启 ComfyUI，再点击“检查本地 Qwen 安装 / 扫描 GGUF”确认实际运行时；如果 Wheel 与 Python/CUDA 不匹配，状态窗口会明确显示导入或原生库加载错误。也可以直接运行本仓库的 `install_local_qwen.py --runtime` 安装固定 `llama-server`，无需 Python Wheel。
+这是可选的第三方预编译来源，本节点不会静默下载或自动安装 Wheel。安装后请完整重启 ComfyUI，再点击“检查本地 Qwen 安装 / 扫描 GGUF”确认实际运行时；如果 Wheel 与 Python/CUDA 不匹配，状态窗口会明确显示导入或原生库加载错误。GitHub 完整安装还可以直接运行本仓库的 `install_local_qwen.py --runtime` 安装固定 `llama-server`，无需 Python Wheel；Manager 包不包含该下载/启动脚本。
 
 模型和运行时体积很大，不会随 Git 仓库分发，也不会在执行节点时静默下载。请在节点目录显式运行：
 
@@ -798,7 +798,7 @@ Music 3 的 `official_reference_selection` 是“官方完整”模式必经阶�
 
 单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏和云端 provider 重试合同；`tests/test_local_qwen.py` 核验第四渠道免 Key、模型路径安全、seed 映射、图片 Base64、真实时间戳视频抽样、按首次出现顺序描述视频阶段、无音轨声明、三节点接线以及 Music 不加载视觉能力。`tests/test_platform_11.py` 独立验证共享传输重试、诊断字段白名单与 URL/Key/错误正文脱敏，以及三节点旧工作流迁移矩阵。
 
-维护者发布前还应运行确定性仓库门禁；它会检查禁入文件、疑似密钥、全部已跟踪 JSON、官方 Skill 快照、Python/JavaScript 语法和 90 MiB GIF 总预算。该上限专门为 Comfy Registry 的 100 MB ZIP 扫描保留余量，避免 Action 发布成功但版本随后被标记为 `Flagged`：
+维护者发布前还应运行确定性仓库门禁；它会检查禁入文件、疑似密钥、全部已跟踪 JSON、官方 Skill 快照、Python/JavaScript 语法、`.comfyignore` 实际发布面、Registry YARA 触发模式和 90 MiB GIF 总预算。该上限专门为 Comfy Registry 的 100 MB ZIP 扫描保留余量，避免 Action 发布成功但版本随后被标记为 `Flagged`：
 
 ```powershell
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\verify_repository.py

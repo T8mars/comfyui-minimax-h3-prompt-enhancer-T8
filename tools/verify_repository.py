@@ -37,6 +37,14 @@ PREVIEW_CONFIRM_BYTES = 85 * 1024 * 1024
 MAX_BUNDLED_PREVIEW_BYTES = 90 * 1024 * 1024
 MAX_BUNDLED_PREVIEW_FILE_BYTES = 2 * 1024 * 1024
 T8_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
+REGISTRY_SCANNER_TRIPWIRES = {
+    "environment_read": b"os.environ",
+    "direct_requests_post": b"requests.post(",
+    "direct_urllib": b"urllib.request",
+    "direct_socket": b"socket.socket(",
+    "direct_subprocess_run": b"subprocess.run(",
+    "direct_subprocess_popen": b"subprocess.Popen(",
+}
 
 
 class VerificationError(RuntimeError):
@@ -225,12 +233,78 @@ def verify_required_release_files() -> None:
         ROOT / "LICENSE.txt",
         ROOT / "pyproject.toml",
         ROOT / "THIRD_PARTY_NOTICES.md",
+        ROOT / ".comfyignore",
         ROOT / "assets" / "t8-prompt-enhancer-icon.svg",
         ROOT / "assets" / "t8-prompt-enhancer-banner.svg",
     )
     missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
     if missing:
         raise VerificationError(f"Missing release files: {missing}")
+
+
+def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
+    relative = [path.relative_to(ROOT).as_posix() for path in files]
+    completed = subprocess.run(
+        [
+            "git",
+            "-c",
+            "core.excludesFile=.comfyignore",
+            "check-ignore",
+            "--no-index",
+            "--stdin",
+            "-z",
+        ],
+        cwd=ROOT,
+        input=b"\0".join(value.encode("utf-8") for value in relative) + b"\0",
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode not in {0, 1}:
+        raise VerificationError("git could not evaluate .comfyignore")
+    ignored = {
+        item.decode("utf-8") for item in completed.stdout.split(b"\0") if item
+    }
+    shipped = [path for path in files if path.relative_to(ROOT).as_posix() not in ignored]
+    shipped_relative = {path.relative_to(ROOT).as_posix() for path in shipped}
+    required = {
+        "__init__.py",
+        "nodes.py",
+        "seedance20.py",
+        "music3.py",
+        "creative_suite.py",
+        "local_qwen_runtime.py",
+        "local_qwen_python_runtime.py",
+        "official_skills/h3-prompt-writing/SKILL.md",
+        "official_skills/music-caption-rewriter/SKILL.md",
+    }
+    missing = sorted(required - shipped_relative)
+    if missing:
+        raise VerificationError(f"Registry archive is missing runtime files: {missing}")
+    forbidden = {
+        "install_local_qwen.py",
+        "local_qwen_standalone_runtime.py",
+        "environment_defaults.py",
+        "credential_connection_probe.py",
+        "creative_suite_live_smoke.py",
+    }
+    leaked = sorted(forbidden & shipped_relative)
+    if leaked:
+        raise VerificationError(f"Registry archive exposes GitHub-only helpers: {leaked}")
+
+    findings: list[str] = []
+    python_files = [path for path in shipped if path.suffix.casefold() == ".py"]
+    for path in python_files:
+        payload = path.read_bytes()
+        for label, pattern in REGISTRY_SCANNER_TRIPWIRES.items():
+            if pattern in payload:
+                findings.append(f"{path.relative_to(ROOT).as_posix()}:{label}")
+    if findings:
+        raise VerificationError(f"Registry scanner tripwires remain in shipped Python: {findings}")
+    return {
+        "registry_files": len(shipped),
+        "registry_python_files": len(python_files),
+        "registry_uncompressed_bytes": sum(path.stat().st_size for path in shipped),
+    }
 
 
 def run_optional_checks() -> None:
@@ -271,12 +345,18 @@ def main() -> int:
         verify_json(files)
         verify_toml_and_yaml(files)
         verify_required_release_files()
+        registry = verify_registry_package_hygiene(files)
         preview = verify_preview_budget()
         if not args.skip_tool_checks:
             run_optional_checks()
     except (VerificationError, subprocess.CalledProcessError) as exc:
         parser.error(str(exc))
-    print(json.dumps({"tracked_files": len(files), **preview, "passed": True}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {"tracked_files": len(files), **registry, **preview, "passed": True},
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

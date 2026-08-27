@@ -4,8 +4,6 @@ import asyncio
 import sys
 from urllib.parse import urlsplit
 
-import requests
-
 from .credential_store import (
     CredentialStoreError,
     delete_credential,
@@ -13,6 +11,14 @@ from .credential_store import (
     list_credential_aliases,
     save_credential,
 )
+
+try:
+    from . import credential_connection_probe as _credential_connection_probe
+    test_cloud_connection = _credential_connection_probe.test_cloud_connection
+    requests = _credential_connection_probe.requests
+except ImportError:
+    requests = None
+    test_cloud_connection = None
 
 
 _REGISTERED = False
@@ -44,33 +50,9 @@ def _connection_target(provider: str, base_url: str, model: str) -> tuple[str, s
 def _test_cloud_connection(alias, provider, base_url="", model="") -> dict[str, object]:
     secret = get_credential(alias)
     chat_url, model_id = _connection_target(str(provider or ""), str(base_url or ""), str(model or ""))
-    try:
-        response = requests.post(
-            chat_url,
-            headers={"Authorization": f"Bearer {secret}", "Content-Type": "application/json"},
-            json={
-                "model": model_id,
-                "messages": [{"role": "user", "content": "Reply with OK."}],
-                "max_tokens": 2,
-                "stream": False,
-            },
-            timeout=(10, 45),
-        )
-    except requests.RequestException:
-        return {"connected": False, "category": "network"}
-    if 200 <= response.status_code < 300:
-        return {"connected": True, "category": "ok"}
-    if response.status_code in {401, 403}:
-        category = "authentication"
-    elif response.status_code == 402:
-        category = "billing"
-    elif response.status_code == 429:
-        category = "rate_limit"
-    elif response.status_code >= 500:
-        category = "upstream_temporarily_unavailable"
-    else:
-        category = "request_rejected"
-    return {"connected": False, "category": category}
+    if test_cloud_connection is None:
+        return {"connected": False, "category": "github_full_install_required"}
+    return test_cloud_connection(secret, chat_url, model_id)
 
 
 def _same_origin_request(request) -> bool:

@@ -24,6 +24,12 @@ class ReleaseToolTests(unittest.TestCase):
         self.assertEqual(verify.MAX_BUNDLED_PREVIEW_BYTES, 90 * 1024 * 1024)
         self.assertIn(ROOT / "COMPATIBILITY.md", verify.tracked_files())
 
+    def test_registry_archive_excludes_scanner_hostile_github_helpers(self):
+        result = verify.verify_registry_package_hygiene(verify.tracked_files())
+        self.assertGreater(result["registry_files"], 1000)
+        self.assertGreater(result["registry_python_files"], 10)
+        self.assertLess(result["registry_uncompressed_bytes"], 100 * 1024 * 1024)
+
     def test_repository_gate_parses_toml_and_yaml(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

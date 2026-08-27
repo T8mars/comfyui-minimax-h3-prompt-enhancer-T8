@@ -2,13 +2,21 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import sys
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 from .case_templates import CASE_TEMPLATES, public_case_catalog
+
+try:
+    from .environment_defaults import optional_environment_value
+except ImportError:
+    try:
+        from environment_defaults import optional_environment_value
+    except ImportError:
+        def optional_environment_value(_name: str) -> str:
+            return ""
 
 
 LOCAL_CONFIG_PATH = Path(__file__).resolve().parent / ".t8-case-library.local.json"
@@ -47,7 +55,7 @@ def _local_config() -> dict[str, Any]:
 
 
 def configured_manifest_path() -> Path | None:
-    env_path = str(os.environ.get(MANIFEST_ENV, "")).strip()
+    env_path = optional_environment_value(MANIFEST_ENV)
     if env_path:
         return Path(env_path).expanduser().resolve()
     manifest_path = str(_local_config().get("manifest_path", "")).strip()
@@ -55,7 +63,7 @@ def configured_manifest_path() -> Path | None:
 
 
 def configured_community_manifest_path() -> Path | None:
-    env_path = str(os.environ.get(COMMUNITY_MANIFEST_ENV, "")).strip()
+    env_path = optional_environment_value(COMMUNITY_MANIFEST_ENV)
     if env_path:
         return Path(env_path).expanduser().resolve()
     config_path = str(_local_config().get("community_skills_manifest_path", "")).strip()

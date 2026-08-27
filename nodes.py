@@ -16,6 +16,15 @@ from PIL import Image
 from comfy_api.latest import ComfyExtension, io
 
 try:
+    from .environment_defaults import optional_environment_value
+except ImportError:
+    try:
+        from environment_defaults import optional_environment_value
+    except ImportError:
+        def optional_environment_value(_name: str) -> str:
+            return ""
+
+try:
     from .execution_diagnostics import DiagnosticsRun
     from .provider_capabilities import apply_chat_request_options
     from .provider_config import (
@@ -482,12 +491,12 @@ def _provider_config(
     if is_local_qwen_api_mode(api_mode):
         return "", "", "", "Local llama.cpp GGUF"
     if api_mode == SEEDANCE_API_MODE:
-        api_key = api_key or os.environ.get("SEEDANCE_API_KEY", "").strip()
+        api_key = api_key or optional_environment_value("SEEDANCE_API_KEY")
         if not api_key:
             raise PromptEnhancerError("Enter api_key in the node or set SEEDANCE_API_KEY in the ComfyUI environment.")
         return api_key, CHAT_COMPLETIONS_URL, UPLOAD_URL, "Seedance"
     if api_mode == AI_WORKSHOP_API_MODE:
-        api_key = api_key or os.environ.get("T8STAR_API_KEY", "").strip()
+        api_key = api_key or optional_environment_value("T8STAR_API_KEY")
         if not api_key:
             raise PromptEnhancerError(
                 "Enter api_key in the node or set T8STAR_API_KEY for 贞贞的AI工坊."
@@ -496,10 +505,10 @@ def _provider_config(
     if api_mode != OPENAI_API_MODE:
         raise PromptEnhancerError(f"Unsupported api_mode: {api_mode}")
 
-    api_key = api_key or os.environ.get("OPENAI_API_KEY", "").strip()
+    api_key = api_key or optional_environment_value("OPENAI_API_KEY")
     if not api_key:
         raise PromptEnhancerError("Enter api_key in the node or set OPENAI_API_KEY for the OpenAI-compatible provider.")
-    base_url = str(openai_base_url or "").strip() or os.environ.get("OPENAI_BASE_URL", "").strip()
+    base_url = str(openai_base_url or "").strip() or optional_environment_value("OPENAI_BASE_URL")
     if not base_url:
         raise PromptEnhancerError("OpenAI-compatible mode requires openai_base_url or OPENAI_BASE_URL.")
     return api_key, _openai_chat_url(base_url), "", "OpenAI-compatible provider"

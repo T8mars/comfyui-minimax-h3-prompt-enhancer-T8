@@ -5,6 +5,22 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.8.1] - 2026-08-28
+
+### Fixed
+
+- Split the Registry-safe in-process `llama-cpp-python` runtime from the full
+  GitHub standalone `llama-server` launcher. Manager installs retain local
+  text/vision GGUF inference when a matching Wheel is installed, while full
+  GitHub clones preserve the original pinned-runtime and PATH fallback order.
+- Add `.comfyignore` packaging and a deterministic scanner-tripwire gate so
+  development smoke tests, download/bootstrap tools, direct connection probes,
+  environment-default helpers, and external-process launchers cannot make a
+  future Registry version `Flagged`.
+- Preserve optional environment defaults and credential connection testing in
+  full GitHub installs while keeping the Registry package's cloud prompt
+  execution, credential storage, official Skills, cases, and previews intact.
+
 ## [1.8.0] - 2026-08-28
 
 ### Added

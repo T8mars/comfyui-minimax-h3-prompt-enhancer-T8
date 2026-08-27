@@ -114,7 +114,7 @@ Or install with Comfy CLI:
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-The Registry package contains the runtime code, pinned official Skills, non-official case library, and lightweight preview GIFs. It does not contain API keys, tests, source delivery batches, local runtimes, or GGUF weights.
+The Registry package contains the node runtime code, pinned official Skills, non-official case library, and lightweight preview GIFs. It does not contain API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, or GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
 
 All 285 official/T8 GIF previews remain bundled, using the Registry-safe 2 fps, 180 px, 32-color profile. The repository gate caps total preview bytes at 90 MiB so the complete node ZIP stays below the Comfy Registry 100 MB scanner limit.
 
@@ -303,11 +303,13 @@ ComfyUI/models/LLM/
 
 Subdirectories are supported. The scanner reads lightweight GGUF metadata, separates main models from `mmproj` projectors, preserves legacy filenames, and recommends a compatible visual projector. Discovery means the file can be offered to llama.cpp; it does not mean every third-party model has passed this project's quality suite.
 
-Runtime fallback order:
+Full GitHub-install runtime fallback order:
 
 1. The pinned `llama-server` installed by this repository.
 2. A `llama-server` available on system `PATH`.
 3. `llama-cpp-python` already installed in the active ComfyUI Python environment.
+
+Manager/Registry installs use only the in-process `llama-cpp-python` backend so the archive can pass the Registry's automated security review without shipping an external-process launcher. Both install forms scan the same `ComfyUI/models/LLM/` tree and preserve the same workflow inputs.
 
 If the active ComfyUI Python environment has no usable `llama-cpp-python`, all three core nodes now include a **Get prebuilt llama-cpp-python Wheel** button linking to [JamePeng releases](https://github.com/JamePeng/llama-cpp-python/releases). Choose a wheel that matches the actual ComfyUI Python ABI, operating system, and CUDA version, then install it with ComfyUI's Python rather than the system Python:
 
@@ -315,7 +317,7 @@ If the active ComfyUI Python environment has no usable `llama-cpp-python`, all t
 & "path\to\ComfyUI\python.exe" -m pip install "path\to\llama_cpp_python-....whl"
 ```
 
-This is an optional third-party binary source. The node never downloads or installs a wheel silently. Fully restart ComfyUI after installation and use **Check local Qwen installation / rescan GGUF** to verify the imported native runtime. The pinned `install_local_qwen.py --runtime` llama-server path remains available and does not require a Python wheel.
+This is an optional third-party binary source. The node never downloads or installs a wheel silently. Fully restart ComfyUI after installation and use **Check local Qwen installation / rescan GGUF** to verify the imported native runtime. Full GitHub installs retain the pinned `install_local_qwen.py --runtime` llama-server path; Manager archives intentionally omit that downloader/launcher.
 
 The node does not download large models during execution. From the node directory, run:
 
@@ -394,7 +396,7 @@ Release verification:
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\release.py --check-prepush
 ```
 
-The deterministic suite uses mocked providers, local media fixtures, and pinned Skill resources. It does not upload assets, call paid APIs, or incur charges. Live smoke scripts require an explicit confirmation flag and may incur provider costs. Large local-model quality tests load approximately 18 GB of weights and should only be run when that resource use is intentional.
+The deterministic suite uses mocked providers, local media fixtures, and pinned Skill resources. Release verification also evaluates the effective `.comfyignore` archive, rejects known Registry YARA tripwires in shipped Python, and enforces the 90 MiB GIF budget that leaves room below the Registry 100 MB ZIP ceiling. It does not upload assets, call paid APIs, or incur charges. Live smoke scripts require an explicit confirmation flag and may incur provider costs. Large local-model quality tests load approximately 18 GB of weights and should only be run when that resource use is intentional.
 
 ## Community and resources
 

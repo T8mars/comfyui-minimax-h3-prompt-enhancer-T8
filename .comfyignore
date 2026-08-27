@@ -1,22 +1,25 @@
-# Repository and CI metadata are not needed at runtime.
+# Development and release tooling never belongs in the Manager archive.
 .github/
 .gitattributes
 .gitignore
 .comfyignore
-
-# Development and release-validation material.
 tests/
 tools/
 case_templates/source_batches/
-live_smoke.py
-music3_live_smoke.py
-seedance20_live_smoke.py
-workshop_live_smoke.py
-local_qwen_live_smoke.py
-local_qwen_model_compat_smoke.py
+*_smoke.py
 
-# Local-only state and large model/runtime payloads are never published.
-roadmap.md
+# Full GitHub installs keep the standalone llama-server bootstrap and optional
+# environment/network compatibility helpers.  Registry installs use the
+# in-process llama-cpp-python runtime and audited provider transport instead.
+install_local_qwen.py
+local_qwen_standalone_runtime.py
+environment_defaults.py
+credential_connection_probe.py
+
+# Local/private state and repository-only maintenance files.
+/AGENTS.md
+/SKILL.md
+/roadmap.md
 .env
 .env.*
 runtime/
@@ -24,6 +27,7 @@ runtime_config.json
 .user/
 credentials.json
 *.gguf
+*.gguf.part
 *.part
 __pycache__/
 *.py[cod]

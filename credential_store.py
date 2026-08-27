@@ -8,6 +8,15 @@ import threading
 from pathlib import Path
 from typing import Any
 
+try:
+    from .environment_defaults import optional_environment_value
+except ImportError:
+    try:
+        from environment_defaults import optional_environment_value
+    except ImportError:
+        def optional_environment_value(_name: str) -> str:
+            return ""
+
 
 ALIAS_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 MAX_SECRET_LENGTH = 4096
@@ -20,7 +29,7 @@ class CredentialStoreError(RuntimeError):
 
 
 def _user_root() -> Path:
-    override = os.environ.get("T8_PROMPT_ENHANCER_USER_DIR", "").strip()
+    override = optional_environment_value("T8_PROMPT_ENHANCER_USER_DIR")
     if override:
         return Path(override).expanduser().resolve()
     try:
