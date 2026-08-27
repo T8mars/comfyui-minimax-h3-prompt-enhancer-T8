@@ -5,6 +5,14 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.6] - 2026-08-27
+
+### Fixed
+
+- Pass the reviewed T8 GIF budget acknowledgement into the GitHub release
+  verification step now that the complete 277-preview package is above the
+  confirmation threshold but remains below the hard repository limit.
+
 ## [1.7.5] - 2026-08-27
 
 ### Changed
