@@ -29,6 +29,8 @@ class ReleaseToolTests(unittest.TestCase):
         self.assertGreater(result["registry_files"], 1000)
         self.assertGreater(result["registry_python_files"], 10)
         self.assertLess(result["registry_uncompressed_bytes"], 100 * 1024 * 1024)
+        runtime_shim = (ROOT / "local_qwen_runtime.py").read_text(encoding="utf-8")
+        self.assertNotIn("importlib.import_module(", runtime_shim)
 
     def test_repository_gate_parses_toml_and_yaml(self):
         with tempfile.TemporaryDirectory() as temporary:

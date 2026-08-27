@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import importlib
 import sys
 
 """Select the richest local GGUF runtime shipped by the current install.
@@ -15,24 +14,26 @@ back to the in-process llama-cpp-python implementation.
 
 if __package__:
     try:
-        _implementation = importlib.import_module(
-            ".local_qwen_standalone_runtime",
-            package=__package__,
-        )
+        from .local_qwen_standalone_runtime import *  # noqa: F403
+
+        _implementation = sys.modules[f"{__package__}.local_qwen_standalone_runtime"]
     except ModuleNotFoundError as error:
         expected = f"{__package__}.local_qwen_standalone_runtime"
         if error.name not in {"local_qwen_standalone_runtime", expected}:
             raise
-        _implementation = importlib.import_module(
-            ".local_qwen_python_runtime",
-            package=__package__,
-        )
+        from .local_qwen_python_runtime import *  # noqa: F403
+
+        _implementation = sys.modules[f"{__package__}.local_qwen_python_runtime"]
 else:
     try:
-        _implementation = importlib.import_module("local_qwen_standalone_runtime")
+        from local_qwen_standalone_runtime import *  # noqa: F403
+
+        _implementation = sys.modules["local_qwen_standalone_runtime"]
     except ModuleNotFoundError as error:
         if error.name != "local_qwen_standalone_runtime":
             raise
-        _implementation = importlib.import_module("local_qwen_python_runtime")
+        from local_qwen_python_runtime import *  # noqa: F403
+
+        _implementation = sys.modules["local_qwen_python_runtime"]
 
 sys.modules[__name__] = _implementation

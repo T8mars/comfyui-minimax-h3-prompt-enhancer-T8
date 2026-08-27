@@ -39,6 +39,7 @@ MAX_BUNDLED_PREVIEW_FILE_BYTES = 2 * 1024 * 1024
 T8_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
 REGISTRY_SCANNER_TRIPWIRES = {
     "environment_read": b"os.environ",
+    "dynamic_import": b"importlib.import_module(",
     "direct_requests_post": b"requests.post(",
     "direct_urllib": b"urllib.request",
     "direct_socket": b"socket.socket(",

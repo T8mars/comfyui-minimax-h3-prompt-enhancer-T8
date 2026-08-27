@@ -5,6 +5,17 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.8.2] - 2026-08-28
+
+### Fixed
+
+- Replace the Registry runtime shim's dynamic `importlib.import_module()` calls
+  with ordinary static imports. This preserves the GitHub standalone-runtime
+  preference and Registry `llama-cpp-python` fallback without triggering the
+  Registry scanner's import-evasion rule.
+- Extend the deterministic Registry-package gate to reject future dynamic
+  import regressions before publication.
+
 ## [1.8.1] - 2026-08-28
 
 ### Fixed
