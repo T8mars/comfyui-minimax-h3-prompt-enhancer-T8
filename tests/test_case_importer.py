@@ -22,6 +22,37 @@ def _sha256(path: Path) -> str:
 
 
 class CaseImporterTests(unittest.TestCase):
+    def test_evidence_variant_can_bind_to_stable_template_id(self):
+        primary = {
+            "case_id": "case-primary",
+            "template_id": "t8-case-stable-template-v1",
+            "template_action": "selector",
+        }
+        evidence = {
+            "case_id": "case-evidence",
+            "template_id": "t8-case-stable-template-v1",
+            "template_action": "evidence_variant",
+            "duplicate_of": "t8-case-stable-template-v1",
+        }
+
+        importer._validate_evidence_binding(evidence, primary, {"case-evidence": evidence})
+
+    def test_evidence_variant_rejects_another_template_binding(self):
+        primary = {
+            "case_id": "case-primary",
+            "template_id": "t8-case-stable-template-v1",
+            "template_action": "selector",
+        }
+        evidence = {
+            "case_id": "case-evidence",
+            "template_id": "t8-case-stable-template-v1",
+            "template_action": "evidence_variant",
+            "duplicate_of": "t8-case-other-template-v1",
+        }
+
+        with self.assertRaises(importer.LibraryImportError):
+            importer._validate_evidence_binding(evidence, primary, {"case-evidence": evidence})
+
     def test_direct_final_adapters_import_only_reusable_creative_dna(self):
         with tempfile.TemporaryDirectory() as temporary:
             case_root = Path(temporary)

@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 260,
+  "source_case_count": 275,
   "case_selector_template_count": 213,
   "community_skill_count": 2,
   "selector_template_count": 215,
-  "evidence_variant_count": 47,
+  "evidence_variant_count": 62,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
   "templates": [
@@ -122,6 +122,23 @@
           "sha256": "851de45539288258dac25caf86ffccca58dbc16295caebc4fb4f1b4e89aa45fa",
           "width": 640,
           "height": 1120,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-navi-ai2-2092612115970342970-browser-2092612115970342970-video-1",
+          "label": "单物微距英雄片｜材质证据、轮廓确认与静态收束",
+          "short_summary": "围绕单一产品做由近到远的材质证明：先展示操作件与高光，再逐步扩展到完整轮廓、底座反射和稳定英雄构图，全程不引入无关人物。",
+          "recommended_input": "极近特写原创台灯的黄铜调光钮与斜切玻璃环。；在炭黑到琥珀渐变背景中居中展示完整台灯。；完整原创台灯进入对称英雄构图，以一圈暖边光停留，不出现文字。",
+          "required_anchors": [
+            "One product remains the only hero object.",
+            "Evidence expands from control detail to full silhouette.",
+            "The reflective base confirms shape and finish.",
+            "The final centered frame holds long enough for recognition."
+          ],
+          "sha256": "7d10ffbab6ef49cd0ab21b3a2944131f35ddbc6cdbd1f0cd59c9bef6e15d03e1",
+          "width": 640,
+          "height": 360,
           "duration_seconds": 15.13,
           "human_preview_only": true
         }
@@ -2148,6 +2165,23 @@
           "height": 360,
           "duration_seconds": 15.13,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-onofumi-ai-2092528740475785520-browser-2092528740475785520-video-1",
+          "label": "触屏造型切换｜固定界面、手势触发与人物实装",
+          "short_summary": "把固定手机界面作为连续舞台，每次真实手势只改变一个明确槽位；文字、颜色与装饰先在界面响应，再由同一人物完成对应造型实装。",
+          "recommended_input": "打开原创室内设计应用，固定房间卡片中站着同一成年建筑师。；第一次滑动只切换浅木材质，房间同步更新。；最终切换为钴蓝方案，同一人物与固定控件共同完成对照。",
+          "required_anchors": [
+            "A persistent interface frame survives every transition.",
+            "Each gesture changes only one named slot.",
+            "The same adult subject remains identity-locked.",
+            "The final state retains controls for direct comparison."
+          ],
+          "sha256": "bac4d517a19c3ca2bacd6de5aeae8c470a88e0b60621e8cb866a4274bc70fdc5",
+          "width": 640,
+          "height": 1138,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nKeep one information interface and spatial grid fixed while a visible selector chooses one item at a time. Each selection must update the title, concise attributes and one large live viewport together; the selected subject then performs one short behavior that proves the new state before the next choice.\nInvariants:\n- inv-01: Keep one selector grid, one data zone and one live viewport fixed.\n- inv-02: Show one visible selector action before every content change.\n- inv-03: Update title, attributes and live subject as one synchronized state.\n- inv-04: Give each selected subject one short defining behavior.\n- inv-05: End on a held complete state with selector and selected subject both visible.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Moving interface regions make updates difficult to compare.: Keep one selector grid, one data zone and one live viewport fixed.\n- Unmotivated swaps become a montage.: Show one visible selector action before every content change.\n- Partial updates make the catalog feel broken.: Update title, attributes and live subject as one synchronized state.\n- Idle subjects do not justify a live viewport.: Give each selected subject one short defining behavior.\n- Cutting away immediately removes the proof relation.: End on a held complete state with selector and selected subject both visible.\nDo not copy from the source: CREATURE ENCYCLOPEDIA title; source creature designs; source names and statistics; the exact source grid and cursor path",
@@ -2262,6 +2296,40 @@
           "height": 270,
           "duration_seconds": 6.0,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-itspixieverse-2092439841564995765-browser-2092439841564995765-video-1",
+          "label": "体型差格斗｜身份插页、反应镜头与力量反制",
+          "short_summary": "先通过稳定设定插页锁定两名原创对手，再用反应特写、交叉冲锋、低机位碰撞和终局停顿证明体型差与力量反制。",
+          "recommended_input": "用两张原创身份卡锁定纤细成年玻璃决斗者与巨大陶瓷守卫。；双方行动前各给一次反应特写。；完整决斗者站在倒地守卫旁，再回到双身份卡收束。",
+          "required_anchors": [
+            "Both opponents receive stable identity anchors.",
+            "One shared fight axis is established before contact.",
+            "The smaller body wins through visible leverage, not unexplained force.",
+            "The ending proves both identities and the final power relation."
+          ],
+          "sha256": "868c82d17dd1ea71b5b116b7982a3bbdd98a2bd9fe256942147b846f301b11ad",
+          "width": 640,
+          "height": 720,
+          "duration_seconds": 15.01,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-wiliam-web3-2092314524808335772-browser-2092314524808335772-video-1",
+          "label": "双材质舞斗｜水冰攻防、尺度升级与镜像终局",
+          "short_summary": "让两名原创成年对手分别绑定两种可区分材质；攻防从小尺度投射升级到全场结构，始终保持双方方位，最后用对称材质状态完成终局证明。",
+          "recommended_input": "成年铜材舞者与成年玻璃舞者站在暗色铸造大厅两侧。；铜材舞者从碎片扇下滑过，玻璃舞者用一次转掌改变铜带方向。；两名舞者停在对立材质场内，最后用无害白色蒸汽封闭画面。",
+          "required_anchors": [
+            "Two adult opponents have distinct material identities.",
+            "A shared axis remains readable through every exchange.",
+            "Attack scale grows from handheld to environmental.",
+            "The ending shows both material fields and both subjects together."
+          ],
+          "sha256": "3b88a538c50c64035a15c02f0848faf1233885fc34c8c33e3d46a3bc2dc5f713",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 29.01,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nMake a large mass advantage visually undeniable, then let the smaller subject survive by reading commitment, moving inside the heavy subject's turning radius and using one environmental fulcrum. The reversal must come from timing and leverage, not a sudden power increase; end in clear nonlethal control with both scale relations still visible.\nInvariants:\n- inv-01: Prove the mass difference and one usable environmental fulcrum early.\n- inv-02: Let the heavy subject fully commit before the smaller subject moves inside its recovery path.\n- inv-03: Use at least one impact to reveal momentum and recovery cost.\n- inv-04: Make the decisive reversal depend on leverage or redirection, never sudden strength.\n- inv-05: End in nonlethal visible control with the fulcrum still readable.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A surprise prop or hidden scale difference makes the reversal arbitrary.: Prove the mass difference and one usable environmental fulcrum early.\n- Early dodging removes the near-miss tension and strategic read.: Let the heavy subject fully commit before the smaller subject moves inside its recovery path.\n- Weight without visible consequence is only character design.: Use at least one impact to reveal momentum and recovery cost.\n- A power-up breaks the causal strategy.: Make the decisive reversal depend on leverage or redirection, never sudden strength.\n- A cut to victory hides the mechanism.: End in nonlethal visible control with the fulcrum still readable.\nDo not copy from the source: source fantasy fighters; source tavern; source green heavy character; source costume and finishing pose",
@@ -2334,6 +2402,23 @@
           "sha256": "22927639307e8cf3394c857bc4ab9a5283fcf9a1b2a70960a704680fcc8ebf76",
           "width": 480,
           "height": 270,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-hbcoop-2091889307200172438-browser-2091889307200172438-video-1",
+          "label": "功能材质成字｜丝束交叉、编织字标与实物铭牌落位",
+          "short_summary": "让产品功能材质先以散线出现，沿两条正交方向交织成可读短词，再把同一结构压实为实物铭牌并落到最终产品表面。",
+          "recommended_input": "细钴蓝陶瓷带从水平和垂直方向进入象牙色画面。；同一编织结构形成准确原创短词【LINK】，周围仍保留载体线束。；LINK 铭牌落到炭黑旅行箱上，只点亮一枚克制蓝色指示灯完成证明。",
+          "required_anchors": [
+            "The functional material appears before the word.",
+            "Two directional families visibly interlace.",
+            "The word compresses into a product-ready badge without a reset.",
+            "The badge lands on one final product surface and receives a small activation proof."
+          ],
+          "sha256": "f3a26cce622353443a02b3ce94f0d4416b5d8cf2d14ce7adb5f100a41ebd5b9f",
+          "width": 640,
+          "height": 360,
           "duration_seconds": 15.13,
           "human_preview_only": true
         }
@@ -7435,6 +7520,23 @@
           "height": 360,
           "duration_seconds": 15.13,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-mimu-ai1-2092302901842682213-browser-2092302901842682213-video-1",
+          "label": "善意载体接力｜小动作跨人物传递到情绪兑现",
+          "short_summary": "用一个可辨识帮助动作作为载体，让不同人物在同一城市路线中接力；每次帮助同时解决眼前问题并引出下一位，最终回到明确的情绪结果。",
+          "recommended_input": "成年面包师在市场外把干毛巾递给淋雨的自行车递送员。；顾客截住滚动水果箱，避免撞到推婴儿车的家长。；清洁工把捡到的手套还给最初面包师，完成实用善意闭环。",
+          "required_anchors": [
+            "One practical helping action is visible in every beat.",
+            "The recipient becomes the next helper.",
+            "A shared route preserves spatial continuity.",
+            "The last help returns value to the opening participant."
+          ],
+          "sha256": "ea211331a607920c6c5baaac67c2e4bfb97c9dea82704fc7524e5c0b3132384d",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 10.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nCompress a long routine into short, causally ordered duties. Give each beat one visible action and one persistent carrier—body direction, hand path, prop, wardrobe state or destination cue—that enters the next cut. Preserve a stable subject identity and monotonic progress toward one goal; the ending must show both arrival and a concrete completion action. The reusable mechanism is carrier-bound routine compression, not the source person, luxury apartment, office, taxi or exact fifteen-action list.\nInvariants:\n- inv-01: Introduce one stable subject, starting state and destination goal before the compression accelerates.\n- inv-02: Assign every beat one distinct routine duty and one visible carrier that survives into the following transition.\n- inv-03: Keep identity and the accumulated preparation state traceable through all wardrobe, prop and location changes.\n- inv-04: Make progress spatially monotonic from origin through transit to the stated destination.\n- inv-05: End with the same subject at the destination completing one observable result action.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A montage of attractive actions without a declared goal becomes an unrelated lifestyle reel.: Introduce one stable subject, starting state and destination goal before the compression accelerates.\n- Hard cuts with no shared hand, prop, direction or state feel arbitrary.: Assign every beat one distinct routine duty and one visible carrier that survives into the following transition.\n- Face, wardrobe or prop drift breaks the journey.: Keep identity and the accumulated preparation state traceable through all wardrobe, prop and location changes.\n- Unmotivated backtracking or repeated origin shots erase forward movement.: Make progress spatially monotonic from origin through transit to the stated destination.\n- Stopping at an exterior or smile does not prove the routine succeeded.: End with the same subject at the destination completing one observable result action.\nDo not copy from the source: the source young woman, facial identity, hairstyle, white sleepwear and black office outfit; the source luxury apartment, cosmetics, heels, watch, black handbag, tumbler and laptop; the source yellow taxi, city storefronts, glass office tower and access-gate design; the source exact fifteen-action GRWM list, ordering, match cuts, reflections and final desk smile; the source creator prompt wording, reference image identity and any visible brands or signage",
@@ -7600,6 +7702,23 @@
           "height": 360,
           "duration_seconds": 30.13,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-ou-zhen599-2091899796554715250-browser-2091899796554715250-video-1",
+          "label": "围攻伪弱势反转｜静立诱近、近身爆发与路线继续",
+          "short_summary": "让单一成年主体在废墟中先保持静止并允许多名对手逼近；用微小准备信号触发高速近身反制，清场后回到原站位与冷静状态。",
+          "recommended_input": "成年应急递送员站在被水淹的交通广场中心，三名掠夺者从两侧逼近。；递送员用一次落地转体把对手引向固定检票栏。；水雾沉降，递送员回到原中心线并继续送达路线。",
+          "required_anchors": [
+            "The protagonist appears vulnerable and remains centered.",
+            "Attackers visibly enter close range.",
+            "Fast displacements preserve one geographic axis.",
+            "The subject returns to the baseline and resumes the original goal."
+          ],
+          "sha256": "d5b41adf619c478c642a782cecb9a46fdbdb440ae4ff2b05f715c2d97bcce7e7",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nPresent one stable subject in an ordinary, externally legible setback that invites another party to approach under a false assumption of vulnerability. Before the decisive response, show two or three small preparation proofs that visibly change readiness without revealing the full capability. Resolve the pressure through one coherent, attributable ability chain, then return the same subject to the interrupted vehicle, tool or route and visibly resume the original goal. The mechanism is apparent vulnerability, readiness microproof, competence reversal and route resumption—not the source woman, roadside styling, attackers, leather costume, fight choreography or car.\nInvariants:\n- inv-01: Establish one stable subject, interrupted goal and readable setback before external pressure enters.\n- inv-02: Let the external party approach because of the visible setback rather than appearing at random.\n- inv-03: Show at least two restrained readiness microproofs before the decisive response.\n- inv-04: Use one coherent capability chain with attributable causes and visible consequences.\n- inv-05: Return the same subject to the original goal carrier and visibly resume the route.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A threat without a prior goal becomes generic conflict.: Establish one stable subject, interrupted goal and readable setback before external pressure enters.\n- An unrelated arrival breaks causality.: Let the external party approach because of the visible setback rather than appearing at random.\n- An instant counterattack removes the reversal setup.: Show at least two restrained readiness microproofs before the decisive response.\n- Unrelated powers or cuts make success unearned.: Use one coherent capability chain with attributable causes and visible consequences.\n- Ending on defeated pressure leaves the original goal unresolved.: Return the same subject to the original goal carrier and visibly resume the route.\nDo not copy from the source: the source woman's face, red-black hair, leather jacket, burgundy top, jeans, glasses and exact styling; the source late-1990s coupe, black van, golden highway, dry hills and exact roadside composition; the source male attackers, implied intentions, weapons if any, physical strikes, throws and exact fight choreography; the source hair-tying performance, facial expressions, camera angles, vehicle return and departure timing; the source creator caption wording, visible plate marks, brands, logos and watermark",
@@ -7708,6 +7827,23 @@
           "sha256": "afe64bb7835f9c0e72a7eb33b874923835f45689d906c2dc8ad3c86f3725c1b7",
           "width": 640,
           "height": 368,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-sakhil-ai-2092197944846151794-browser-2092197944846151794-video-1",
+          "label": "三人群舞锁步｜中心领舞、队形推进与同步手势收束",
+          "short_summary": "用中心领舞和两名后排建立三角队形，动作从躯干波动扩展到同步前进与手势；镜头只做缓慢逼近，最终三人同时定格证明节奏一致。",
+          "recommended_input": "三名成年博物馆技术员在空置装卸展厅组成浅三角队形，领舞最靠近镜头。；三人沿同一地面缝线同步前进，三角间距不变。；三人回到紧凑三角形，同时锁定最终手肩姿势，镜头完成缓慢逼近。",
+          "required_anchors": [
+            "A lead and rear pair establish one stable triangle.",
+            "Rear performers echo one beat after the lead before synchronization.",
+            "The camera uses one slow push rather than competing movement.",
+            "All performers finish one identical gesture on the same beat."
+          ],
+          "sha256": "9496fa4aff5e0513cbe1582bdfe49c2eb91f26da6f937877f44cf6420fec378c",
+          "width": 640,
+          "height": 1134,
           "duration_seconds": 15.13,
           "human_preview_only": true
         }
@@ -7819,6 +7955,23 @@
           "width": 640,
           "height": 1138,
           "duration_seconds": 10.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-minuitia-2092285935056568787-browser-2092285935056568787-video-1",
+          "label": "全域冻结回溯｜唯一行动者触发环境复流",
+          "short_summary": "先让整个环境在一次灾变中同时悬停，只保留一个行动者继续移动；行动者接触一个可辨识微物后，所有碎片沿原轨迹逆行并恢复为完整终态。",
+          "recommended_input": "建立成年修复师与正在进水的玻璃档案馆。；修复师找到并触碰一枚悬浮黄铜目录牌。；档案馆恢复干燥完整，人物与空间锚点保持一致并停留。",
+          "required_anchors": [
+            "One readable disaster state precedes the freeze.",
+            "Exactly one subject remains mobile.",
+            "Every displaced element retraces rather than respawns.",
+            "The ending proves a restored coherent environment."
+          ],
+          "sha256": "fe5906501c585303348ea2813b57144d1b8b778f405d50008fa53835d8fdd56f",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 21.13,
           "human_preview_only": true
         }
       ],
@@ -8039,6 +8192,23 @@
           "width": 640,
           "height": 360,
           "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-ciri-ai-2091842148970996054-browser-2091842148970996054-video-1",
+          "label": "旧DV美食漫游｜自拍锚点、摊位试吃与群体回应",
+          "short_summary": "用同一自拍或跟随载体锁定人物，把食物制作、试吃反应和陌生人群体回应压缩成快速旅行记忆，最后回到人物继续前行。",
+          "recommended_input": "用小型DV跟随成年电台主持人进入室内花市。；附近年长摊主短暂挥手加入画面，但主角不丢失。；继续从后方跟随主持人穿过通道，花束始终可见，人物回头看镜头。",
+          "required_anchors": [
+            "One handheld carrier keeps the adult host recognizable.",
+            "Every location adds one concrete sensory interaction.",
+            "Repeated market lights and steam connect fast cuts.",
+            "The ending resumes the original forward route with a retained object."
+          ],
+          "sha256": "f63bb0b725ca287937884ba5b9b4ec1c11ac218d57ec6a3df58618f74b6ade4a",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 30.13,
           "human_preview_only": true
         }
       ],
@@ -8550,6 +8720,23 @@
           "sha256": "b48f9c2d5fbb56e40119a038cd8622a3113f6e9d777b5c6b7bf25ba3f8bd65da",
           "width": 640,
           "height": 360,
+          "duration_seconds": 30.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-simplyannisa-2092107287355875538-browser-2092107287355875538-video-1",
+          "label": "生活触点旅行｜屋顶出发、街巷互动与私密纪念",
+          "short_summary": "用同一人物与手持跟拍连接多个日常触点；每章都通过一次可触摸互动进入下一地点，最后把途中小物变成私密纪念。",
+          "recommended_input": "手持跟随一名成年陶艺学生从工作室阳台出发。；摊主递来一只温热纸杯，人物边走边品尝。；回到工作室，同伴把丝带系在成品杯柄上，人物回头微笑。",
+          "required_anchors": [
+            "One identity-locked adult carries the full route.",
+            "Each chapter begins with one tactile interaction.",
+            "Locations progress along one plausible journey.",
+            "A small encountered object becomes the closing keepsake."
+          ],
+          "sha256": "3c879408147589bd69698a134a147e380f8a269d75020013fad045db5aa3b8fd",
+          "width": 640,
+          "height": 362,
           "duration_seconds": 30.13,
           "human_preview_only": true
         }
@@ -10177,6 +10364,23 @@
           "height": 406,
           "duration_seconds": 12.01,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-zyrellix-2092121112746287527-browser-2092121112746287527-video-1",
+          "label": "祭坛唤醒巨物｜目标先现、路径点亮与尺度兑现",
+          "short_summary": "先展示不可忽视的天穹目标，再让单一人物沿发光路径接近祭坛；小物激活同心结构并逐级放大环境响应，最终巨物与天空同时兑现。",
+          "recommended_input": "先展示洪水采石场上方巨大悬浮种荚与一名成年护林员。；小型音叉触碰平台，同心沟槽向外逐级点亮。；护林员抬手，种荚打开成天光，广角同时证明人物与巨物尺度。",
+          "required_anchors": [
+            "The enormous destination is shown before the approach.",
+            "One small traveler follows a readable route.",
+            "Environmental responses grow in concentric scale.",
+            "The final wide frame proves traveler, giant entity and opened sky together."
+          ],
+          "sha256": "1eb25260bf445a419075b1eb5ff42e4c91a719edcc85f6a0ac219a55d828aceb",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 30.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nReveal one original monumental destination in full at the opening together with a clearly readable approach route and at least three clearly adult travelers or carriers in the foreground. Preserve one objective direction and one stable destination identity for the entire shot. Use repeated group anchors such as flags, garments, lights or carrier forms to turn ordinary forward movement into a processional rhythm. Combine traveler motion with one restrained camera push and slight elevation change so the destination gains architectural or environmental scale layers monotonically while foreground figures reduce. End on a held destination-dominant wide that retains at least two small traveler or route anchors, proving continued relationship rather than replacing the journey with a disconnected postcard. The reusable mechanism is destination-first promise, processional repetition, continuous approach, monotonic landmark scale gain and traveler-retaining terminal grandeur—not the source Camelot premise, knights, horses, heraldry, castle, valley, flags, route, sunset palette, exact composition, creator identity or timing.\nInvariants:\n- inv-01: Show one monumental destination, one readable route and at least three clearly adult travelers or carriers together in the opening.\n- inv-02: Preserve one objective direction and one stable destination identity throughout.\n- inv-03: Use one repeated group anchor to create processional rhythm across the moving foreground.\n- inv-04: Combine forward travel with a restrained push and slight elevation change so destination scale layers increase monotonically.\n- inv-05: Hold a destination-dominant final view while retaining at least two traveler or route anchors.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Hiding the destination changes the mechanism into a reveal.: Show one monumental destination, one readable route and at least three clearly adult travelers or carriers together in the opening.\n- Direction reversals or landmark substitution break journey continuity.: Preserve one objective direction and one stable destination identity throughout.\n- Unrelated travelers read as traffic rather than a procession.: Use one repeated group anchor to create processional rhythm across the moving foreground.\n- Aggressive orbiting or scale regression makes the geography unstable.: Combine forward travel with a restrained push and slight elevation change so destination scale layers increase monotonically.\n- Removing every traveler turns the ending into a disconnected landscape image.: Hold a destination-dominant final view while retaining at least two traveler or route anchors.\nDo not copy from the source: the source mounted knights, faces, blue garments, armor, horses and formation; the source heraldic lion flags, banners, medieval weapon associations and royal procession; the source fantasy walled city, central castle, river valley, bridges and mountain geography; the source exact descending route, rear rider arrangement, sunset light, camera push and framing; the source creator identity, Seedance 2.0 wording, Camelot premise and 12-second timing",
@@ -11180,6 +11384,57 @@
             "Stop all effects and hold the same adult in the established space after the final exchange."
           ],
           "sha256": "fbeb3a220ac6f0ec994ae82b2f9e6390d1b17dd22e8a524ad2eabac75d192cae",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 30.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-aiwithelisia-2092119695201837059-browser-2092119695201837059-video-1",
+          "label": "接触能量反击｜受压触发、连续清场与余波复位",
+          "short_summary": "先让现实冲突与身体接触成立，再把短促能量限制为动作结果；能量沿接触方向连续传递并清出空间，最终人物回到稳定行走状态。",
+          "recommended_input": "成年交通巡查员在拥挤地下通道被两名走私者拦住。；巡查员转体，让一道定向脉冲沿最近对手释放。；粒子沉降，同一巡查员恢复平静行走并穿过已清空通道。",
+          "required_anchors": [
+            "The ordinary physical conflict reads before any VFX.",
+            "Energy begins at a visible contact point.",
+            "One corridor axis preserves geography through escalation.",
+            "Particles settle before the subject resumes the original route."
+          ],
+          "sha256": "2826879bf8b60f4fe0798dd6d4ff3d7b4410f139442a7bab15b8cb4f9a78b74f",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 30.01,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-techhalla-2092026849077371380-browser-2092026849077371380-video-1",
+          "label": "车库写实格斗｜工具接触、车辆遮挡与近身反制",
+          "short_summary": "先以写实伤势、工具与停车位建立实体冲突，再让车辆、烟雾和近身遮挡承担转场；每次反击都从清楚接触开始，终局以短促异常材质作为结果反馈。",
+          "recommended_input": "成年打捞工站在叉车旁，握一只重型钩具并显出疲态。；双方回到同一条标线通道，完成一次落地踢击与格挡。；最终手套接触只释放短促磁性铁屑，随后回到真实身体姿态。",
+          "required_anchors": [
+            "Physical injury, tools and geography read before stylization.",
+            "Vehicle occlusion motivates the location change.",
+            "One tool struggle proves leverage at close range.",
+            "The abnormal effect is brief feedback after contact, not a substitute for action."
+          ],
+          "sha256": "5feeac0ba6166fd8d51bc314191a0272cc115ffe22a9e2590bec65499baaa3c4",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 25.51,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-strength04-x-2092427591814906005-browser-2092427591814906005-video-1",
+          "label": "蓄能清场回稳｜手部微光、通道突进与人物复位",
+          "short_summary": "在拥挤通道中先用手部微光提示准备，再让每次能量爆发绑定一个清楚身体动作；逐步扩大清场尺度后，人物回到正面步行基线。",
+          "recommended_input": "成年夜班技术员正面穿过拥挤维护通道。；低位支撑与肩部接触触发第一次短磁脉冲。；障碍清除后，同一人物恢复原正面步行，青光完全消退。",
+          "required_anchors": [
+            "The baseline walk and crowd geography are established first.",
+            "A small hand signal previews the capability.",
+            "Escalation moves along one corridor direction.",
+            "The final state returns to the original walk with no residual glow."
+          ],
+          "sha256": "353967fb69dae47d24432b3d7f9ea704d7d3a89b2f8ad943a9697f0db7aa3588",
           "width": 640,
           "height": 360,
           "duration_seconds": 30.13,

@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 
@@ -19,6 +20,7 @@ def load_tool(name: str, filename: str):
 
 
 drift = load_tool("t8_check_upstream_skills", "check_upstream_skills.py")
+case_update = load_tool("t8_update_case_library", "update_case_library.py")
 
 
 class FakeResponse:
@@ -45,6 +47,14 @@ class FakeSession:
 
 
 class MaintenanceTests(unittest.TestCase):
+    def test_case_update_budget_confirmation_reaches_repository_gate(self):
+        with patch.object(case_update.subprocess, "run", return_value=SimpleNamespace(returncode=0)) as run:
+            case_update._run_post_apply_gates(confirm_preview_budget=True)
+
+        self.assertEqual(run.call_count, 2)
+        for call in run.call_args_list:
+            self.assertEqual(call.kwargs["env"]["T8_CONFIRM_PREVIEW_BUDGET"], "1")
+
     def test_upstream_drift_uses_path_scoped_commits(self):
         with tempfile.TemporaryDirectory() as temporary:
             sources = drift.SOURCES[:2]

@@ -406,6 +406,41 @@ def _build_community_templates(community_library_path: Path) -> list[dict[str, A
     return templates
 
 
+def _validate_evidence_binding(
+    evidence_record: dict[str, Any],
+    primary: dict[str, Any],
+    record_by_case: dict[str, dict[str, Any]],
+) -> None:
+    """Validate an evidence chain ending at either stable selector identity.
+
+    Older handoffs bind ``duplicate_of`` to the selector's source ``case_id``.
+    Newer handoffs may bind directly to its stable ``template_id`` so evidence
+    stays attached when the selector's source case changes.  Both forms are
+    unambiguous after the evidence and primary records agree on template_id.
+    """
+    template_id = str(evidence_record["template_id"])
+    primary_case_id = str(primary["case_id"])
+    cursor = evidence_record
+    visited = {str(evidence_record["case_id"])}
+    while True:
+        parent_id = str(cursor.get("duplicate_of", ""))
+        if parent_id in {primary_case_id, template_id}:
+            return
+        parent = record_by_case.get(parent_id)
+        if (
+            not parent_id
+            or parent_id in visited
+            or parent is None
+            or parent.get("template_action") != "evidence_variant"
+            or str(parent.get("template_id")) != template_id
+        ):
+            raise LibraryImportError(
+                "Evidence variant chain must stay inside one template and resolve to its primary case or template"
+            )
+        visited.add(parent_id)
+        cursor = parent
+
+
 def build_catalog(
     library_path: Path,
     community_library_path: Path,
@@ -509,23 +544,7 @@ def build_catalog(
         primary = selector_by_template.get(template_id)
         if primary is None:
             raise LibraryImportError("Evidence variant must bind to an existing selector template")
-        cursor = evidence_record
-        visited = {str(evidence_record["case_id"])}
-        while cursor.get("duplicate_of") != primary.get("case_id"):
-            parent_id = str(cursor.get("duplicate_of", ""))
-            parent = record_by_case.get(parent_id)
-            if (
-                not parent_id
-                or parent_id in visited
-                or parent is None
-                or parent.get("template_action") != "evidence_variant"
-                or str(parent.get("template_id")) != template_id
-            ):
-                raise LibraryImportError(
-                    "Evidence variant chain must stay inside one template and resolve to its primary case"
-                )
-            visited.add(parent_id)
-            cursor = parent
+        _validate_evidence_binding(evidence_record, primary, record_by_case)
 
     existing: dict[str, dict[str, Any]] = {}
     if existing_catalog_path and existing_catalog_path.is_file():

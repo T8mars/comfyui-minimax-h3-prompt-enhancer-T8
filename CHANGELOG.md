@@ -5,6 +5,19 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.7.5] - 2026-08-27
+
+### Changed
+
+- Import `batch-2026-08-27-01` as 15 human-only evidence variants attached to
+  nine existing T8 selectors, without creating duplicate dropdown entries. The
+  non-official library now contains 275 source cases, 213 case selectors, 62
+  evidence variants, and two standalone community Skills (215 selectors total),
+  with 277 bundled preview GIFs.
+- Accept evidence handoffs that bind `duplicate_of` directly to the stable
+  `template_id`, while retaining strict same-template validation and backwards
+  compatibility with source-case and evidence-chain bindings.
+
 ## [1.7.4] - 2026-08-26
 
 ### Fixed

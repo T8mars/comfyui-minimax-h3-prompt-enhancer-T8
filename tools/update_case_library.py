@@ -194,13 +194,16 @@ def _readme_count_gate(catalog: dict[str, Any]) -> bool:
     return all(value in source for value in expected)
 
 
-def _run_post_apply_gates() -> None:
+def _run_post_apply_gates(*, confirm_preview_budget: bool = False) -> None:
     commands = [
         [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
         [sys.executable, "tools/verify_repository.py"],
     ]
+    environment = os.environ.copy()
+    if confirm_preview_budget:
+        environment["T8_CONFIRM_PREVIEW_BUDGET"] = "1"
     for command in commands:
-        completed = subprocess.run(command, cwd=ROOT, check=False)
+        completed = subprocess.run(command, cwd=ROOT, check=False, env=environment)
         if completed.returncode != 0:
             raise CaseLibraryUpdateError(f"Post-apply gate failed: {' '.join(command[1:])}")
 
@@ -286,7 +289,7 @@ def main() -> int:
                 _replace_with_retry(staged_bundle, PREVIEW_ROOT)
                 installed_new_bundle = True
             _atomic_write_json(CATALOG, new_catalog)
-            _run_post_apply_gates()
+            _run_post_apply_gates(confirm_preview_budget=args.confirm_preview_budget)
         except Exception:
             _atomic_write_json(CATALOG, old_catalog)
             if installed_new_bundle:
