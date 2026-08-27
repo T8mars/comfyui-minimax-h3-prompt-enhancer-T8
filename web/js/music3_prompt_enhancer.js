@@ -1,5 +1,9 @@
 import { app } from "../../scripts/app.js";
-import { copyLocalModelDirectory, showLocalQwenStatus } from "./local_qwen_status.js";
+import {
+    copyLocalModelDirectory,
+    openLlamaCppPythonWheels,
+    showLocalQwenStatus,
+} from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import {
@@ -709,6 +713,15 @@ app.registerExtension({
             );
             localStatusWidget.serializeValue = () => undefined;
             this.music3LocalQwenStatusWidget = localStatusWidget;
+
+            const localWheelWidget = this.addWidget(
+                "button",
+                "🛞 获取 llama-cpp-python 预编译 Wheel",
+                "打开 JamePeng Releases；请选择匹配 ComfyUI Python、系统与 CUDA 的 Wheel",
+                openLlamaCppPythonWheels,
+                { serialize: false },
+            );
+            localWheelWidget.serializeValue = () => undefined;
 
             const localPathWidget = this.addWidget(
                 "button",

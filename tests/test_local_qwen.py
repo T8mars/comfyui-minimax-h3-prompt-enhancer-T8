@@ -148,12 +148,21 @@ class LocalQwenUnitTests(unittest.TestCase):
         for node_class, names in cases:
             with self.subTest(node=node_class.__name__):
                 parameters = inspect.signature(node_class.validate_inputs).parameters
-                self.assertEqual(tuple(parameters), names)
+                self.assertEqual(tuple(parameters)[: len(names)], names)
                 stale = {name: f"missing/{name}.gguf" for name in names}
                 if "reference_images" in stale:
+                    self.assertEqual(parameters["extra_inputs"].kind, inspect.Parameter.VAR_KEYWORD)
                     stale["reference_images"] = {"reference_image_0": object()}
                     stale["reference_videos"] = {"reference_video_0": object()}
-                self.assertTrue(node_class.validate_inputs(**stale))
+                    self.assertTrue(
+                        node_class.validate_inputs(
+                            **stale,
+                            future_reference_group={"reference_image_99": object()},
+                        )
+                    )
+                else:
+                    self.assertEqual(tuple(parameters), names)
+                    self.assertTrue(node_class.validate_inputs(**stale))
 
     def test_runtime_auto_falls_back_to_existing_llama_cpp_python(self):
         python_spec = runtime.PythonRuntimeSpec(version="test-version")
@@ -578,12 +587,19 @@ class LocalQwenUnitTests(unittest.TestCase):
             self.assertIn("本地 Qwen3.8-27B", source)
             self.assertIn("本地 GGUF（llama.cpp / Qwen，离线）", source)
             self.assertIn("检查本地 Qwen 安装", source)
+            self.assertIn("获取 llama-cpp-python 预编译 Wheel", source)
             self.assertIn("ComfyUI/models/LLM", source)
 
         status_source = (PROJECT_ROOT / "web" / "js" / "local_qwen_status.js").read_text(encoding="utf-8")
         self.assertIn("llama-cpp-python", status_source)
+        self.assertIn("https://github.com/JamePeng/llama-cpp-python/releases", status_source)
         self.assertIn("verification_tier", status_source)
         self.assertIn("projector_options", status_source)
+
+        self.assertEqual(
+            runtime.LLAMA_CPP_PYTHON_WHEELS_URL,
+            "https://github.com/JamePeng/llama-cpp-python/releases",
+        )
 
         music_source = (PROJECT_ROOT / "web" / "js" / "music3_prompt_enhancer.js").read_text(encoding="utf-8")
         self.assertIn("values.length === SERIALIZED_WIDGET_NAMES.length", music_source)

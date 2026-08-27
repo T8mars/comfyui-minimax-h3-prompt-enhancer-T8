@@ -1,0 +1,380 @@
+{
+  "id": "7f24a902-7f33-533c-a42a-7d2d6ec0abca",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8LLMProviderConfig",
+      "pos": [
+        40,
+        420
+      ],
+      "size": [
+        440,
+        520
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8LLMProviderConfig"
+      },
+      "widgets_values": [
+        "Local Qwen",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
+        ""
+      ]
+    },
+    {
+      "id": 2,
+      "type": "T8ReferenceRoleMapper",
+      "pos": [
+        520,
+        20
+      ],
+      "size": [
+        580,
+        620
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "creative_brief",
+          "shape": 7,
+          "type": "T8_CREATIVE_BRIEF",
+          "link": null
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "reference_role_map",
+          "type": "T8_REFERENCE_ROLE_MAP",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "reference_role_map_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "coverage_conflict_report",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "reference_context_for_enhancer",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ReferenceRoleMapper"
+      },
+      "widgets_values": [
+        "产品短片：同一台复古相机从桌面进入户外拍摄",
+        "balanced",
+        "中文",
+        0,
+        "fixed",
+        "图片负责产品身份；视频负责手持动作。可连接自己的 IMAGE/VIDEO。"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "T8CreativeDNAMixer",
+      "pos": [
+        1180,
+        20
+      ],
+      "size": [
+        560,
+        420
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "creative_dna_mix",
+          "type": "T8_CREATIVE_DNA_MIX",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "creative_dna_instruction",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "creative_dna_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CreativeDNAMixer"
+      },
+      "widgets_values": [
+        "复古相机从静物陈列进入真实拍摄",
+        "产品广告｜功能证据递进",
+        "机械同行｜启动后稳定伴行",
+        "平面重组｜几何节奏品牌片",
+        "MiniMax H3 + Seedance 2.0"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "T8PersonalCreativePreset",
+      "pos": [
+        1180,
+        500
+      ],
+      "size": [
+        560,
+        520
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "personal_preset",
+          "type": "T8_PERSONAL_CREATIVE_PRESET",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "preset_instruction",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "preset_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PersonalCreativePreset"
+      },
+      "widgets_values": [
+        "我的复古产品片",
+        "产品身份稳定、功能证据可见",
+        "产品+操作+可见结果",
+        "静物建立\n手部启动\n结果收束",
+        "暖褐色、克制推镜",
+        "仅保存文字规则，不包含第三方媒体",
+        "不出现错误品牌文字"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "T8CreativeContextAssembler",
+      "pos": [
+        1820,
+        160
+      ],
+      "size": [
+        520,
+        400
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "creative_brief",
+          "shape": 7,
+          "type": "T8_CREATIVE_BRIEF",
+          "link": null
+        },
+        {
+          "name": "reference_role_map",
+          "shape": 7,
+          "type": "T8_REFERENCE_ROLE_MAP",
+          "link": 2
+        },
+        {
+          "name": "creative_dna_mix",
+          "shape": 7,
+          "type": "T8_CREATIVE_DNA_MIX",
+          "link": 3
+        },
+        {
+          "name": "personal_preset",
+          "shape": 7,
+          "type": "T8_PERSONAL_CREATIVE_PRESET",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhancer_context",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "assembled_context_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CreativeContextAssembler"
+      },
+      "widgets_values": [
+        "人物和品牌文字不得从案例中复制"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "T8ShowText",
+      "pos": [
+        2420,
+        220
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 5,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      4,
+      "T8_LLM_PROVIDER_CONFIG"
+    ],
+    [
+      2,
+      2,
+      0,
+      5,
+      1,
+      "T8_REFERENCE_ROLE_MAP"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      2,
+      "T8_CREATIVE_DNA_MIX"
+    ],
+    [
+      4,
+      4,
+      0,
+      5,
+      3,
+      "T8_PERSONAL_CREATIVE_PRESET"
+    ],
+    [
+      5,
+      5,
+      0,
+      6,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

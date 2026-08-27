@@ -89,5 +89,70 @@
       "text": {"name": "待显示文本"}
     },
     "outputs": {"0": {"name": "文本"}}
+  },
+  "T8CreativeDirector": {
+    "display_name": "T8 创作总控",
+    "inputs": {"premise": {"name": "创作核心（必填）"}},
+    "outputs": {"0": {"name": "创作总纲"}, "1": {"name": "总纲文本"}, "2": {"name": "总纲 JSON"}}
+  },
+  "T8CreativeContextAssembler": {
+    "display_name": "T8 创作上下文组装",
+    "inputs": {"creative_brief": {"name": "创作总纲（可选）"}, "reference_role_map": {"name": "素材角色表（可选）"}, "creative_dna_mix": {"name": "Creative DNA 融合（可选）"}, "personal_preset": {"name": "个人预设（可选）"}, "extra_constraints": {"name": "补充硬性要求"}},
+    "outputs": {"0": {"name": "增强器上下文"}, "1": {"name": "组装结果 JSON"}}
+  },
+  "T8DirectedRevision": {
+    "display_name": "T8 定向修改",
+    "inputs": {"original_prompt": {"name": "原提示词（必填）"}, "revision_request": {"name": "修改要求（必填）"}, "locked_anchors": {"name": "必须保留"}},
+    "outputs": {"0": {"name": "修改后提示词"}, "1": {"name": "修改报告 JSON"}, "2": {"name": "差异对比"}}
+  },
+  "T8LongFormPlanner": {
+    "display_name": "T8 长视频分段导演",
+    "inputs": {"concept": {"name": "全片创意 / 剧本（必填）"}, "total_duration_seconds": {"name": "全片总时长（秒）"}, "segment_duration_seconds": {"name": "目标单段时长（秒）"}},
+    "outputs": {"0": {"name": "全局连续性总纲"}, "1": {"name": "H3 分段 JSON"}, "2": {"name": "Seedance 2.0 分段 JSON"}, "3": {"name": "段间交接表 JSON"}}
+  },
+  "T8ReferenceRoleMapper": {
+    "display_name": "T8 多素材角色导演",
+    "inputs": {"project_intent": {"name": "创作意图（必填）"}, "asset_notes": {"name": "素材说明 / 禁止借用项"}},
+    "outputs": {"0": {"name": "素材角色表"}, "1": {"name": "角色表 JSON"}, "2": {"name": "覆盖与冲突报告"}, "3": {"name": "增强器参考上下文"}}
+  },
+  "T8CreativeCandidateLab": {
+    "display_name": "T8 多方案实验室",
+    "inputs": {"concept": {"name": "创作需求（必填）"}, "candidate_count": {"name": "候选数量（一次请求）"}, "divergence": {"name": "方向差异"}},
+    "outputs": {"0": {"name": "候选 JSON"}, "1": {"name": "方案对比报告"}, "2": {"name": "候选 1"}, "3": {"name": "候选 2"}, "4": {"name": "候选 3"}, "5": {"name": "候选 4"}}
+  },
+  "T8CreativeCandidateSelector": {
+    "display_name": "T8 候选选择器",
+    "inputs": {"candidates_json": {"name": "候选 JSON"}, "candidate_index": {"name": "候选序号"}},
+    "outputs": {"0": {"name": "已选候选"}}
+  },
+  "T8StoryboardPack": {
+    "display_name": "T8 分镜创作包",
+    "inputs": {"concept": {"name": "创意 / 已选方案（必填）"}, "duration_seconds": {"name": "目标时长（秒）"}, "shot_count": {"name": "镜头数量"}},
+    "outputs": {"0": {"name": "全局提示词"}, "1": {"name": "镜头表 JSON"}, "2": {"name": "关键帧提示词 JSON"}, "3": {"name": "转场与声音 JSON"}}
+  },
+  "T8CreativeDNAMixer": {
+    "display_name": "T8 Creative DNA 案例机制融合",
+    "inputs": {"instance_intent": {"name": "你的创作内容（必填）"}, "structure_case": {"name": "结构来源"}, "camera_case": {"name": "镜头来源"}, "payoff_case": {"name": "高潮 / 收尾来源"}},
+    "outputs": {"0": {"name": "Creative DNA 融合"}, "1": {"name": "融合指令"}, "2": {"name": "融合 JSON"}}
+  },
+  "T8PersonalCreativePreset": {
+    "display_name": "T8 工作流内个人创意预设",
+    "inputs": {"preset_name": {"name": "预设名称（必填）"}, "purpose": {"name": "用途（必填）"}, "rights_confirmation": {"name": "素材与规则权利确认"}},
+    "outputs": {"0": {"name": "个人预设"}, "1": {"name": "预设指令"}, "2": {"name": "预设 JSON"}}
+  },
+  "T8MusicCreativeLab": {
+    "display_name": "T8 音乐创作实验室",
+    "inputs": {"operation": {"name": "操作"}, "music_idea": {"name": "音乐创意（必填）"}, "lyrics_language": {"name": "歌词语言"}, "candidate_count": {"name": "候选数量"}},
+    "outputs": {"0": {"name": "已选结果"}, "1": {"name": "候选 JSON"}, "2": {"name": "歌名 JSON"}, "3": {"name": "软性 QA 报告"}, "4": {"name": "版本差异"}}
+  },
+  "T8CreativeVersionStack": {
+    "display_name": "T8 创意版本栈",
+    "inputs": {"base_version": {"name": "版本 1（必填）"}, "selected_version": {"name": "选择版本（1–8）"}, "version_notes": {"name": "版本说明"}},
+    "outputs": {"0": {"name": "已选文本"}, "1": {"name": "版本历史 JSON"}, "2": {"name": "与上一版差异"}}
+  },
+  "T8MusicVideoBeatSheet": {
+    "display_name": "T8 音乐视频节拍导演",
+    "inputs": {"video_intent": {"name": "MV / 视频意图（必填）"}, "lyrics": {"name": "歌词（可选）"}, "music_caption": {"name": "Music Caption（可选）"}, "known_bpm": {"name": "已知 BPM（0=未知）"}},
+    "outputs": {"0": {"name": "节拍表"}, "1": {"name": "节拍表 JSON"}, "2": {"name": "H3 导演方案"}, "3": {"name": "Seedance 2.0 导演方案"}}
   }
 }

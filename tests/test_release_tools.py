@@ -21,7 +21,7 @@ class ReleaseToolTests(unittest.TestCase):
     def test_repository_gate_scans_untracked_release_candidates(self):
         source = (ROOT / "tools" / "verify_repository.py").read_text(encoding="utf-8")
         self.assertIn('"-c", "-o", "--exclude-standard"', source)
-        self.assertEqual(verify.MAX_BUNDLED_PREVIEW_BYTES, 180 * 1024 * 1024)
+        self.assertEqual(verify.MAX_BUNDLED_PREVIEW_BYTES, 90 * 1024 * 1024)
         self.assertIn(ROOT / "COMPATIBILITY.md", verify.tracked_files())
 
     def test_repository_gate_parses_toml_and_yaml(self):

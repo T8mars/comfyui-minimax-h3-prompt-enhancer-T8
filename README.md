@@ -85,19 +85,76 @@
 
 OpenAI 兼容默认继续发送 `temperature`，保持 1.2.0 行为。只有已知 Kimi Coding Plan 地址的 `AUTO` 策略会省略该字段，也可在共享配置中显式选择发送或省略。附加参数只接受白名单，不能覆盖模型、消息、鉴权、媒体或流式控制等核心字段。
 
+## T8 创作导演套件（独立辅助节点）
+
+创作导演套件扩展的是“策划、探索、修改和交付”链路，不替代三个核心 enhancer。三个核心 Node ID、既有 widget 顺序、默认值和输出保持不变；不使用这些新节点的旧工作流不需要迁移。
+
+| 节点 | 是否调用 LLM | 用途 |
+| --- | --- | --- |
+| `T8 Creative Director` | 否 | 建立人物、世界、视觉、动作、声音等统一创作总纲，维度支持 `LOCK / EVOLVE / AUTO` |
+| `T8 Creative Context Assembler` | 否 | 把总纲、素材角色、DNA 和个人预设组装成可接现有核心节点的 `STRING` |
+| `T8 Directed Revision` | 1 次 | 只修改点名范围，输出修订结果、报告与本地 diff |
+| `T8 Long-form Planner` | 1 次 | 任意正整数总时长拆段，分别输出 H3、Seedance 2.0 和段间交接 JSON |
+| `T8 Reference Role Mapper` | 1 次 | 分析用户实际连接的图片/视频，分配身份、服装、场景、动作、镜头、风格和禁止借用角色 |
+| `T8 Creative Candidate Lab` | 1 次 | 一次生成 2–4 个创作机制不同的候选及软比较 |
+| `T8 Candidate Selector` | 否 | 从候选 JSON 本地选择一个方向 |
+| `T8 Storyboard Pack` | 1 次 | 输出全局提示词、分镜、关键帧图像提示词、转场/声音与素材绑定 |
+| `T8 Creative DNA Mixer` | 否 | 最多融合三个 T8 非官方案例的结构、镜头和高潮/收尾机制，不发送案例媒体 |
+| `T8 Personal Creative Preset` | 否 | 在工作流内保存用户自己的文字型创作规则，不修改内置库或写外部文件 |
+| `T8 Music Creative Lab` | 1 次 | 歌词/Caption 候选、定向歌词修改、歌曲标题和中日韩文字层软 QA |
+| `T8 Creative Version Stack` | 否 | 保存、选择和回退最多 8 个提示词、歌词或 Caption 版本 |
+| `T8 Music-to-Video Beat Sheet` | 1 次 | 根据歌词、Caption 和用户已知 BPM/时间点生成 H3/Seedance 视频节拍表 |
+
+需要 LLM 的节点默认使用 Seedance NZ；推荐连接 `T8 LLM Provider Config`，统一选择平价小屋、AI 工坊、OpenAI Compatible 或本地 GGUF。每次执行只有一次逻辑生成请求；Seedance NZ 遇到已确认安全重试的 500/502/503/504/520–530 网关状态时最多进行 6 次有界传输尝试，401/402/429 和可能已完成计费的读超时不会盲目重复。上游返回非空但没有命中 JSON 时，节点保留原文并在报告中标记 `structured_response=false`，不会因为创意评分或格式偏差丢弃内容。
+
+候选的七维软分数由节点对最终文本做确定性的本地启发式计算，不要求模型额外“自评分”，不冒充客观艺术质量，也不阻塞非空候选。分镜包只让模型返回一次逐镜合同，关键帧表与转场/声音表在本地从逐镜字段派生，避免付费响应重复同一内容。2026-08-28 使用真实 `bytedance/doubao-seed-evolving` 完成 7 类脱敏验收：候选、定向修改、长片分段、4 镜头分镜、多模态角色映射、中文歌词候选和 5 镜头音乐节拍表均通过二值合同检查；该验收分数不等于主观艺术评分。
+
+素材边界：Reference Role Mapper 只会读取用户直接连接到该节点的媒体。官方/T8 案例 GIF、来源视频和人类预览永远不会作为模型参考素材。本地 GGUF 的视频理解仍只基于带真实时间戳的采样画面，不分析音轨；Music-to-Video Beat Sheet 没有 AUDIO 输入，不会声称听歌、检测 BPM 或转写歌词。
+
+推荐连接方式：
+
+1. `T8 Creative Director` → `T8 Creative Candidate Lab` / `T8 Long-form Planner` / `T8 Storyboard Pack`。
+2. 有素材时先运行 `T8 Reference Role Mapper`，把 `reference_context_for_enhancer` 接到现有 H3 的“参考素材补充”，或把角色表接到 `T8 Creative Context Assembler`。
+3. `Candidate Lab` → `Candidate Selector` → 现有 H3/Seedance 的主提示词，或继续进入 `Storyboard Pack`。
+4. `Music Creative Lab` 的候选可进入 `Creative Version Stack`；选定歌词与 Music Caption 再进入 `Music-to-Video Beat Sheet`。
+
 ## 1.1.0 更新
 
 - 新增免 API Key 的本地 Qwen3.8-27B GGUF 渠道，并支持官方与第三方 Uncensored Q4_K_M 变体、视觉投影器、显存释放、执行后卸载策略和真实时间戳视频联系表。
 - MiniMax H3 核心 Skill 更新为固定官方快照；维护工具可核验内容树，并由每周工作流只读检查 H3 核心、8 个官方创意 Skill 和 Music 3 官方 Skill 的上游路径是否发生变化。
-- 225 个官方/T8 GIF 全部保留；T8 预览统一压缩为 3 fps、最大宽度 224 px、40 色，总资源继续控制在 180 MiB 内，菜单快速移动时取消过期预览请求。
-- 提供 9 个 ComfyUI 原生 `example_workflows` 与同名缩略图，覆盖三个云端基础示例、多任务接线、三个本地 Qwen 示例、Prompt Inspector 接线以及仓库自带的文本输入/显示节点；全部示例不依赖 Comfyroll、EasyUse 等第三方节点。
+- 285 个官方/T8 GIF 全部保留；预览统一采用 2 fps、最大宽度 180 px、32 色的轻量发布配置，总资源强制控制在 90 MiB 内，为 Comfy Registry 的 100 MB ZIP 限制保留安全空间；菜单快速移动时仍会取消过期预览请求。
+- 提供 13 个 ComfyUI 原生 `example_workflows` 与同名缩略图：原有 9 个基础/本地工作流保持不变，另增 4 个创作导演套件组合案例；全部示例不依赖 Comfyroll、EasyUse 等第三方节点。
 - 三种云端渠道统一使用一个经过测试的传输层，同时保留各自既有付费重试、HTTP 分类和错误文案；不记录请求或响应正文。
 - 新增版本门禁、密钥/大文件/JSON/GIF 预算检查、Changelog、License、Registry 元数据与发布前 CI。
 - 旧工作流迁移规则和稳定接口见 [`COMPATIBILITY.md`](./COMPATIBILITY.md)。
 
 ## 安装
 
-### ComfyUI-Manager / Registry（推荐）
+> **更新建议：优先从 GitHub 更新。** 当 Registry 的新版本处于审核、`Pending` 或 `Flagged` 状态时，ComfyUI-Manager 可能自动回退安装较旧的 `Active` 版本；界面虽然会显示“安装/重装成功”，但新节点、新功能和紧急修复仍然不可用。更新后必须完整重启 ComfyUI，并对浏览器执行一次 `Ctrl+F5`。不要在 `custom_nodes` 中保留本插件的多个副本。
+
+### GitHub 安装 / 更新（推荐）
+
+首次安装时，在 ComfyUI 的 `custom_nodes` 目录执行：
+
+```bash
+git clone https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8.git
+```
+
+已经通过 Git clone 安装时，在插件目录执行：
+
+```bash
+git pull --ff-only
+```
+
+如果原来通过 Manager 或 ZIP 安装，更新前请先关闭 ComfyUI，把旧插件目录移出 `custom_nodes`，再克隆到唯一的标准目录；不要让旧目录与新目录同时存在。目录结构应为：
+
+```text
+ComfyUI/
+└─ custom_nodes/
+   └─ comfyui-minimax-h3-prompt-enhancer-T8/
+```
+
+### ComfyUI-Manager / Registry
 
 在 ComfyUI-Manager 的节点管理器中搜索：
 
@@ -112,22 +169,6 @@ comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
 Registry 发布包会包含节点运行所需的官方 Skill、非官方案例库与轻量 GIF 预览，不包含测试、来源批次、API Key、本地运行时或 GGUF 模型。
-
-### Git 安装
-
-在 ComfyUI 的 `custom_nodes` 目录执行：
-
-```bash
-git clone https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8.git
-```
-
-目录结构应为：
-
-```text
-ComfyUI/
-└─ custom_nodes/
-   └─ comfyui-minimax-h3-prompt-enhancer-T8/
-```
 
 云端模式不增加额外 Python 依赖，使用 ComfyUI 已安装的 `requests`、NumPy、Pillow 和原生媒体类型；本地视频抽样复用 ComfyUI 自带的 PyAV。安装后重启 ComfyUI；如果节点或前端界面没有更新，请对浏览器执行一次 `Ctrl+F5`。
 
@@ -188,8 +229,12 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 | [`music3_local_qwen_example.json`](./example_workflows/music3_local_qwen_example.json) | Music 3 + 共享配置 + 本地 Qwen3.8-27B，不加载 mmproj |
 | [`prompt_inspector_local_qwen_example.json`](./example_workflows/prompt_inspector_local_qwen_example.json) | H3 本地增强后接 T8 Prompt Inspector 本地结构检查 |
 | [`text_utilities_example.json`](./example_workflows/text_utilities_example.json) | 仓库自带 T8 Prompt Text → T8 Show Text，演示标准 STRING 输入、显示与透传 |
+| [`creative_direction_revision_example.json`](./example_workflows/creative_direction_revision_example.json) | 创作总控 → 多方案实验室 → 候选选择 → 定向修改 |
+| [`creative_longform_storyboard_example.json`](./example_workflows/creative_longform_storyboard_example.json) | 共享创作总纲驱动长视频分段与分镜创作包 |
+| [`creative_music_video_suite_example.json`](./example_workflows/creative_music_video_suite_example.json) | 音乐候选、版本选择与 H3/Seedance 2.0 音乐视频节拍导演 |
+| [`creative_reference_dna_preset_example.json`](./example_workflows/creative_reference_dna_preset_example.json) | 素材角色、T8 Creative DNA、个人预设组装为旧增强节点可接收的 STRING 上下文 |
 
-所有内置工作流均保存当前完整的 31/35/38 项核心节点控件数组，不包含 API Key。旧版 21/22、25/26、31 项工作流会在下拉值校验前自动补齐本地 Qwen 默认值，避免把 `randomize` 错读为 GGUF 模型。
+所有内置工作流均不包含 API Key。涉及三个原有核心节点的工作流继续保存完整的 31/35/38 项控件数组；旧版 21/22、25/26、31 项工作流会在下拉值校验前自动补齐本地 Qwen 默认值，避免把 `randomize` 错读为 GGUF 模型。
 
 ### Seedance 2.0 任务意图
 
@@ -613,6 +658,14 @@ OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `
 
 运行时采用自动回退顺序：本节点固定安装器生成的 `llama-server` → 系统 `PATH` 中的 `llama-server` → 当前 ComfyUI Python 环境已经安装的 `llama-cpp-python`。因此其他 llama.cpp 节点能工作的环境，不会再仅因缺少本节点私有 `runtime_config.json` 就误报“运行时未安装”。状态窗口会显示实际命中的后端、来源和版本。
 
+如果当前 ComfyUI Python 没有可用的 `llama-cpp-python`，三个核心节点都提供“获取 llama-cpp-python 预编译 Wheel”按钮，跳转到 [JamePeng 预编译 Releases](https://github.com/JamePeng/llama-cpp-python/releases)。必须选择与 **ComfyUI 实际 Python 版本、操作系统和 CUDA 版本**匹配的 Wheel，并用 ComfyUI 自己的 Python 安装，而不是系统 Python：
+
+```powershell
+& "你的 ComfyUI Python 路径\python.exe" -m pip install "下载到本地的 llama_cpp_python-....whl"
+```
+
+这是可选的第三方预编译来源，本节点不会静默下载或自动安装 Wheel。安装后请完整重启 ComfyUI，再点击“检查本地 Qwen 安装 / 扫描 GGUF”确认实际运行时；如果 Wheel 与 Python/CUDA 不匹配，状态窗口会明确显示导入或原生库加载错误。也可以直接运行本仓库的 `install_local_qwen.py --runtime` 安装固定 `llama-server`，无需 Python Wheel。
+
 模型和运行时体积很大，不会随 Git 仓库分发，也不会在执行节点时静默下载。请在节点目录显式运行：
 
 ```powershell
@@ -745,7 +798,7 @@ Music 3 的 `official_reference_selection` 是“官方完整”模式必经阶�
 
 单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏和云端 provider 重试合同；`tests/test_local_qwen.py` 核验第四渠道免 Key、模型路径安全、seed 映射、图片 Base64、真实时间戳视频抽样、按首次出现顺序描述视频阶段、无音轨声明、三节点接线以及 Music 不加载视觉能力。`tests/test_platform_11.py` 独立验证共享传输重试、诊断字段白名单与 URL/Key/错误正文脱敏，以及三节点旧工作流迁移矩阵。
 
-维护者发布前还应运行确定性仓库门禁；它会检查禁入文件、疑似密钥、全部已跟踪 JSON、官方 Skill 快照、Python/JavaScript 语法和 180 MiB GIF 总预算：
+维护者发布前还应运行确定性仓库门禁；它会检查禁入文件、疑似密钥、全部已跟踪 JSON、官方 Skill 快照、Python/JavaScript 语法和 90 MiB GIF 总预算。该上限专门为 Comfy Registry 的 100 MB ZIP 扫描保留余量，避免 Action 发布成功但版本随后被标记为 `Flagged`：
 
 ```powershell
 .\python\python.exe ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tools\verify_repository.py

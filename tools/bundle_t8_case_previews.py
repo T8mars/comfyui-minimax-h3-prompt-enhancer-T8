@@ -14,9 +14,11 @@ BUNDLE_SCHEMA = "t8-bundled-case-previews/v1"
 CASE_LIBRARY_SCHEMA = "t8-unofficial-case-library/v2"
 COMMUNITY_LIBRARY_SCHEMA = "t8-standalone-community-skill-handoff/v1"
 CATALOG_SCHEMA = "t8-case-template-catalog/v2"
-PREVIEW_WARNING_BYTES = 150 * 1024 * 1024
-PREVIEW_CONFIRM_BYTES = 165 * 1024 * 1024
-PREVIEW_HARD_LIMIT_BYTES = 180 * 1024 * 1024
+PREVIEW_WARNING_BYTES = 80 * 1024 * 1024
+PREVIEW_CONFIRM_BYTES = 85 * 1024 * 1024
+# Comfy Registry flags node ZIPs above 100 MB.  Keep raw previews below
+# 90 MiB so ZIP metadata and the rest of the node pack retain safe headroom.
+PREVIEW_HARD_LIMIT_BYTES = 90 * 1024 * 1024
 NEW_PREVIEW_FILE_LIMIT_BYTES = 2 * 1024 * 1024
 
 
@@ -295,9 +297,9 @@ def main() -> int:
     parser.add_argument("--catalog", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--ffmpeg", default="ffmpeg")
-    parser.add_argument("--fps", type=int, default=4)
-    parser.add_argument("--max-width", type=int, default=256)
-    parser.add_argument("--colors", type=int, default=48)
+    parser.add_argument("--fps", type=int, default=2)
+    parser.add_argument("--max-width", type=int, default=180)
+    parser.add_argument("--colors", type=int, default=32)
     parser.add_argument(
         "--existing-bundle",
         type=Path,

@@ -30,13 +30,12 @@ SECRET_RE = re.compile(rb"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{24,}")
 TEXT_SUFFIXES = {
     ".css", ".html", ".ini", ".js", ".json", ".md", ".py", ".toml", ".txt", ".yaml", ".yml",
 }
-PREVIEW_WARNING_BYTES = 150 * 1024 * 1024
-PREVIEW_CONFIRM_BYTES = 165 * 1024 * 1024
-MAX_BUNDLED_PREVIEW_BYTES = 180 * 1024 * 1024
-# The current library contains two reviewed historical files above 2 MiB.  New
-# bundles are capped separately by bundle_t8_case_previews.py; the repository
-# gate uses 4 MiB so old releases continue to verify without rewriting assets.
-MAX_BUNDLED_PREVIEW_FILE_BYTES = 4 * 1024 * 1024
+PREVIEW_WARNING_BYTES = 80 * 1024 * 1024
+PREVIEW_CONFIRM_BYTES = 85 * 1024 * 1024
+# Comfy Registry flags node ZIPs above 100 MB.  The raw preview ceiling leaves
+# room for Python, documentation, catalogs, manifests, and ZIP metadata.
+MAX_BUNDLED_PREVIEW_BYTES = 90 * 1024 * 1024
+MAX_BUNDLED_PREVIEW_FILE_BYTES = 2 * 1024 * 1024
 T8_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
 
 

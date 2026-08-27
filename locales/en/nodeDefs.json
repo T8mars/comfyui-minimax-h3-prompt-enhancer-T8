@@ -89,5 +89,70 @@
       "text": {"name": "Text to display"}
     },
     "outputs": {"0": {"name": "Text"}}
+  },
+  "T8CreativeDirector": {
+    "display_name": "T8 Creative Director",
+    "inputs": {"premise": {"name": "Creative premise (required)"}},
+    "outputs": {"0": {"name": "Creative brief"}, "1": {"name": "Brief text"}, "2": {"name": "Brief JSON"}}
+  },
+  "T8CreativeContextAssembler": {
+    "display_name": "T8 Creative Context Assembler",
+    "inputs": {"creative_brief": {"name": "Creative brief (optional)"}, "reference_role_map": {"name": "Reference role map (optional)"}, "creative_dna_mix": {"name": "Creative DNA mix (optional)"}, "personal_preset": {"name": "Personal preset (optional)"}, "extra_constraints": {"name": "Extra hard constraints"}},
+    "outputs": {"0": {"name": "Enhancer context"}, "1": {"name": "Assembled context JSON"}}
+  },
+  "T8DirectedRevision": {
+    "display_name": "T8 Directed Revision",
+    "inputs": {"original_prompt": {"name": "Original prompt (required)"}, "revision_request": {"name": "Revision request (required)"}, "locked_anchors": {"name": "Locked anchors"}},
+    "outputs": {"0": {"name": "Revised prompt"}, "1": {"name": "Revision report JSON"}, "2": {"name": "Unified diff"}}
+  },
+  "T8LongFormPlanner": {
+    "display_name": "T8 Long-form Planner",
+    "inputs": {"concept": {"name": "Full-film concept / script (required)"}, "total_duration_seconds": {"name": "Total duration (seconds)"}, "segment_duration_seconds": {"name": "Target segment duration (seconds)"}},
+    "outputs": {"0": {"name": "Global continuity brief"}, "1": {"name": "H3 segments JSON"}, "2": {"name": "Seedance 2.0 segments JSON"}, "3": {"name": "Handoff table JSON"}}
+  },
+  "T8ReferenceRoleMapper": {
+    "display_name": "T8 Reference Role Mapper",
+    "inputs": {"project_intent": {"name": "Creative intent (required)"}, "asset_notes": {"name": "Asset notes / forbidden borrowing"}},
+    "outputs": {"0": {"name": "Reference role map"}, "1": {"name": "Role map JSON"}, "2": {"name": "Coverage & conflict report"}, "3": {"name": "Enhancer reference context"}}
+  },
+  "T8CreativeCandidateLab": {
+    "display_name": "T8 Creative Candidate Lab",
+    "inputs": {"concept": {"name": "Creative request (required)"}, "candidate_count": {"name": "Candidate count (one request)"}, "divergence": {"name": "Direction divergence"}},
+    "outputs": {"0": {"name": "Candidates JSON"}, "1": {"name": "Comparison report"}, "2": {"name": "Candidate 1"}, "3": {"name": "Candidate 2"}, "4": {"name": "Candidate 3"}, "5": {"name": "Candidate 4"}}
+  },
+  "T8CreativeCandidateSelector": {
+    "display_name": "T8 Candidate Selector",
+    "inputs": {"candidates_json": {"name": "Candidates JSON"}, "candidate_index": {"name": "Candidate index"}},
+    "outputs": {"0": {"name": "Selected candidate"}}
+  },
+  "T8StoryboardPack": {
+    "display_name": "T8 Storyboard Pack",
+    "inputs": {"concept": {"name": "Concept / selected direction (required)"}, "duration_seconds": {"name": "Target duration (seconds)"}, "shot_count": {"name": "Shot count"}},
+    "outputs": {"0": {"name": "Global prompt"}, "1": {"name": "Shot list JSON"}, "2": {"name": "Keyframe prompts JSON"}, "3": {"name": "Transitions & sound JSON"}}
+  },
+  "T8CreativeDNAMixer": {
+    "display_name": "T8 Creative DNA Mixer",
+    "inputs": {"instance_intent": {"name": "Your creative content (required)"}, "structure_case": {"name": "Structure source"}, "camera_case": {"name": "Camera source"}, "payoff_case": {"name": "Payoff / ending source"}},
+    "outputs": {"0": {"name": "Creative DNA mix"}, "1": {"name": "Mix instruction"}, "2": {"name": "Mix JSON"}}
+  },
+  "T8PersonalCreativePreset": {
+    "display_name": "T8 In-workflow Personal Creative Preset",
+    "inputs": {"preset_name": {"name": "Preset name (required)"}, "purpose": {"name": "Purpose (required)"}, "rights_confirmation": {"name": "Media and rules rights confirmation"}},
+    "outputs": {"0": {"name": "Personal preset"}, "1": {"name": "Preset instruction"}, "2": {"name": "Preset JSON"}}
+  },
+  "T8MusicCreativeLab": {
+    "display_name": "T8 Music Creative Lab",
+    "inputs": {"operation": {"name": "Operation"}, "music_idea": {"name": "Music idea (required)"}, "lyrics_language": {"name": "Lyrics language"}, "candidate_count": {"name": "Candidate count"}},
+    "outputs": {"0": {"name": "Selected result"}, "1": {"name": "Candidates JSON"}, "2": {"name": "Song titles JSON"}, "3": {"name": "Soft QA report"}, "4": {"name": "Version diff"}}
+  },
+  "T8CreativeVersionStack": {
+    "display_name": "T8 Creative Version Stack",
+    "inputs": {"base_version": {"name": "Version 1 (required)"}, "selected_version": {"name": "Select version (1–8)"}, "version_notes": {"name": "Version notes"}},
+    "outputs": {"0": {"name": "Selected text"}, "1": {"name": "Version history JSON"}, "2": {"name": "Diff from previous"}}
+  },
+  "T8MusicVideoBeatSheet": {
+    "display_name": "T8 Music-to-Video Beat Sheet",
+    "inputs": {"video_intent": {"name": "MV / video intent (required)"}, "lyrics": {"name": "Lyrics (optional)"}, "music_caption": {"name": "Music Caption (optional)"}, "known_bpm": {"name": "Known BPM (0=unknown)"}},
+    "outputs": {"0": {"name": "Beat sheet"}, "1": {"name": "Beat sheet JSON"}, "2": {"name": "H3 direction"}, "3": {"name": "Seedance 2.0 direction"}}
   }
 }

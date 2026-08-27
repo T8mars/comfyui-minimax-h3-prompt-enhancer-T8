@@ -48,6 +48,11 @@ included in this Git repository:
   separately supplies and selects a compatible 9B projector.
 - `llama.cpp` is installed from the pinned `b10436` release and is licensed under
   the MIT License by the llama.cpp contributors.
+- Users without a compatible Python binding may optionally open
+  `https://github.com/JamePeng/llama-cpp-python/releases` and manually select a
+  prebuilt wheel matching their ComfyUI Python, operating system, and CUDA
+  runtime. The T8 project links to this third-party binary source but does not
+  bundle, mirror, silently install, or attest every wheel asset.
 - Runtime installation is delegated to a SHA256-pinned copy of
   `chflame163/ComfyUI_Qwen_H3_Prompt/install_runtime.py` at commit
   `f8ea17991ea39111ef2b2ebdf6ccb631e21e0300`. That project is licensed under the

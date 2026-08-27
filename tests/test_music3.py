@@ -141,8 +141,26 @@ class Music3PromptEnhancerTests(unittest.TestCase):
             ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"],
         )
         self.assertEqual(
-            registered[3:],
+            registered[3:7],
             ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
+        )
+        self.assertEqual(
+            registered[7:],
+            [
+                "T8CreativeDirector",
+                "T8CreativeContextAssembler",
+                "T8DirectedRevision",
+                "T8LongFormPlanner",
+                "T8ReferenceRoleMapper",
+                "T8CreativeCandidateLab",
+                "T8CreativeCandidateSelector",
+                "T8StoryboardPack",
+                "T8CreativeDNAMixer",
+                "T8PersonalCreativePreset",
+                "T8MusicCreativeLab",
+                "T8CreativeVersionStack",
+                "T8MusicVideoBeatSheet",
+            ],
         )
 
     def test_schema_is_text_only_and_appends_safe_report_output(self):

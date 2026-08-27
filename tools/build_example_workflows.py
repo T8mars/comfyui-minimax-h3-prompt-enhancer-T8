@@ -256,6 +256,35 @@ def _show_text_node(node_id: int, input_link: int, pos: list[float], *, order: i
     }
 
 
+def _suite_node(
+    node_id: int,
+    node_type: str,
+    pos: list[float],
+    *,
+    inputs: list[dict[str, Any]],
+    outputs: list[tuple[str, str, list[int] | None]],
+    widgets: list[Any],
+    size: list[float] | None = None,
+    order: int = 1,
+) -> dict[str, Any]:
+    return {
+        "id": node_id,
+        "type": node_type,
+        "pos": pos,
+        "size": size or [520, 520],
+        "flags": {},
+        "order": order,
+        "mode": 0,
+        "inputs": inputs,
+        "outputs": [
+            {"name": name, "type": socket_type, "links": links}
+            for name, socket_type, links in outputs
+        ],
+        "properties": {"Node name for S&R": node_type},
+        "widgets_values": widgets,
+    }
+
+
 def _workflow(name: str, nodes: list[dict[str, Any]], links: list[list[Any]]) -> dict[str, Any]:
     return {
         "id": _workflow_id(name),
@@ -412,6 +441,200 @@ def _generated_workflows() -> dict[str, dict[str, Any]]:
             ],
             [[1, 1, 0, 2, 0, "STRING"]],
         ),
+        "creative_direction_revision_example": _workflow(
+            "creative_direction_revision_example",
+            [
+                _provider_node(1, [2, 3], [40, 420]),
+                _suite_node(
+                    2, "T8CreativeDirector", [520, 40], inputs=[],
+                    outputs=[
+                        ("creative_brief", "T8_CREATIVE_BRIEF", [1, 4]),
+                        ("creative_brief_text", "STRING", None),
+                        ("creative_brief_json", "STRING", None),
+                    ],
+                    widgets=[
+                        "雨夜霓虹街区，一名红衣女性穿过人群寻找驶离的电车。",
+                        "AUTO（下游判断）", "AUTO（下游判断）", "LOCK（锁定）",
+                        "AUTO（下游判断）", "EVOLVE（允许演化）", "EVOLVE（允许演化）",
+                        "AUTO（下游判断）", "短视频观众 / 电影感追逐", "从克制观察到快速冲刺",
+                        "同一名成年女性，红色长风衣，短黑发", "雨夜街区和同一行进方向",
+                        "冷蓝霓虹与红衣对比", "前慢后快，动作因果清楚", "雨声、脚步、电车铃",
+                        "不改变身份、服装和结尾目标", "允许改变中段障碍与镜头角度",
+                    ], size=[560, 760],
+                ),
+                _suite_node(
+                    3, "T8CreativeCandidateLab", [1140, 40],
+                    inputs=[
+                        _socket("creative_brief", "T8_CREATIVE_BRIEF", 1),
+                        _socket("api_key", "STRING", None),
+                        _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 2),
+                    ],
+                    outputs=[
+                        ("candidates_json", "STRING", [5]), ("comparison_report_json", "STRING", None),
+                        ("candidate_1", "STRING", None), ("candidate_2", "STRING", None),
+                        ("candidate_3", "STRING", None), ("candidate_4", "STRING", None),
+                    ],
+                    widgets=[
+                        "设计三个不同的追逐机制", "MiniMax H3 + Seedance 2.0", "3",
+                        "中（不同创作机制）", "creative", "中文", 0, "fixed",
+                        "保持红衣人物、电车目标与雨夜空间",
+                    ], size=[560, 620],
+                ),
+                _suite_node(
+                    4, "T8CreativeCandidateSelector", [1760, 80],
+                    inputs=[_socket("candidates_json", "STRING", 5)],
+                    outputs=[("selected_candidate", "STRING", [6])],
+                    widgets=["", 1], size=[380, 180], order=2,
+                ),
+                _suite_node(
+                    5, "T8DirectedRevision", [2200, 40],
+                    inputs=[
+                        _socket("original_prompt", "STRING", 6),
+                        _socket("creative_brief", "T8_CREATIVE_BRIEF", 4),
+                        _socket("api_key", "STRING", None),
+                        _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 3),
+                    ],
+                    outputs=[
+                        ("revised_prompt", "STRING", [7]),
+                        ("revision_report_json", "STRING", None),
+                        ("unified_diff", "STRING", None),
+                    ],
+                    widgets=["", "只提高后半段速度，其他设定不变", "balanced", "中文", 0, "fixed", "红衣\n雨夜\n电车目标"],
+                    size=[560, 500], order=3,
+                ),
+                _show_text_node(6, 7, [2820, 120], order=4),
+            ],
+            [
+                [1, 2, 0, 3, 0, "T8_CREATIVE_BRIEF"],
+                [2, 1, 0, 3, 2, "T8_LLM_PROVIDER_CONFIG"],
+                [3, 1, 0, 5, 3, "T8_LLM_PROVIDER_CONFIG"],
+                [4, 2, 0, 5, 1, "T8_CREATIVE_BRIEF"],
+                [5, 3, 0, 4, 0, "STRING"],
+                [6, 4, 0, 5, 0, "STRING"],
+                [7, 5, 0, 6, 0, "STRING"],
+            ],
+        ),
+        "creative_longform_storyboard_example": _workflow(
+            "creative_longform_storyboard_example",
+            [
+                _provider_node(1, [3, 4], [40, 420]),
+                _suite_node(
+                    2, "T8CreativeDirector", [520, 40], inputs=[],
+                    outputs=[("creative_brief", "T8_CREATIVE_BRIEF", [1, 2]), ("creative_brief_text", "STRING", None), ("creative_brief_json", "STRING", None)],
+                    widgets=[
+                        "90秒近未来短片：维修机器人护送一株植物穿越停电城市。",
+                        "AUTO（下游判断）", "LOCK（锁定）", "LOCK（锁定）", "LOCK（锁定）",
+                        "EVOLVE（允许演化）", "EVOLVE（允许演化）", "AUTO（下游判断）",
+                        "科幻短片观众", "孤独出发—风险升级—晨光抵达", "同一台旧维修机器人和同一盆植物",
+                        "断电城市，始终朝东方移动", "暗青工业空间逐步进入暖光", "每段有明确状态交接",
+                        "机械声、风声，配乐逐步明亮", "不瞬移，不更换植物", "允许障碍和机位演化",
+                    ], size=[560, 760],
+                ),
+                _suite_node(
+                    3, "T8LongFormPlanner", [1140, 20],
+                    inputs=[_socket("creative_brief", "T8_CREATIVE_BRIEF", 1), _socket("api_key", "STRING", None), _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 3)],
+                    outputs=[("global_continuity_brief", "STRING", None), ("h3_segments_json", "STRING", [5]), ("seedance20_segments_json", "STRING", [6]), ("handoff_table_json", "STRING", None)],
+                    widgets=["维修机器人护送植物抵达城市东侧温室", "MiniMax H3 + Seedance 2.0", 90, 15, "状态连续（推荐）", "balanced", "中文", 0, "fixed", "机器人划痕、植物叶片数量、东方移动方向保持一致"],
+                    size=[580, 620],
+                ),
+                _suite_node(
+                    4, "T8StoryboardPack", [1800, 20],
+                    inputs=[_socket("creative_brief", "T8_CREATIVE_BRIEF", 2), _socket("reference_role_map", "T8_REFERENCE_ROLE_MAP", None), _socket("api_key", "STRING", None), _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 4)],
+                    outputs=[("global_prompt", "STRING", [7]), ("shot_list_json", "STRING", None), ("keyframe_prompts_json", "STRING", None), ("transition_sound_json", "STRING", None)],
+                    widgets=["为第一段设计可执行分镜", "MiniMax H3 + Seedance 2.0", 15, "5", "balanced", "中文", 0, "fixed"],
+                    size=[580, 560],
+                ),
+                _show_text_node(5, 5, [2460, 20], order=3),
+                _show_text_node(6, 6, [2460, 360], order=3),
+                _show_text_node(7, 7, [2920, 180], order=3),
+            ],
+            [
+                [1, 2, 0, 3, 0, "T8_CREATIVE_BRIEF"], [2, 2, 0, 4, 0, "T8_CREATIVE_BRIEF"],
+                [3, 1, 0, 3, 2, "T8_LLM_PROVIDER_CONFIG"], [4, 1, 0, 4, 3, "T8_LLM_PROVIDER_CONFIG"],
+                [5, 3, 1, 5, 0, "STRING"], [6, 3, 2, 6, 0, "STRING"], [7, 4, 0, 7, 0, "STRING"],
+            ],
+        ),
+        "creative_music_video_suite_example": _workflow(
+            "creative_music_video_suite_example",
+            [
+                _provider_node(1, [1, 4], [40, 320]),
+                _suite_node(
+                    2, "T8MusicCreativeLab", [540, 20],
+                    inputs=[_socket("api_key", "STRING", None), _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 1)],
+                    outputs=[("selected_result", "STRING", [2]), ("candidates_json", "STRING", None), ("song_titles_json", "STRING", None), ("soft_qa_report_json", "STRING", None), ("version_diff", "STRING", None)],
+                    widgets=["歌词候选（T8非官方）", "温暖中文公路流行歌，女声，副歌明亮", "中文", "3", "balanced", 0, "fixed", "", "", "", "", "不要模仿现有歌曲"],
+                    size=[580, 620],
+                ),
+                _suite_node(
+                    3, "T8CreativeVersionStack", [1200, 80],
+                    inputs=[_socket("base_version", "STRING", 2), _socket("versions.version_0", "STRING", None, label="version_0")],
+                    outputs=[("selected_text", "STRING", [3]), ("version_history_json", "STRING", None), ("diff_from_previous", "STRING", None)],
+                    widgets=["", 1, "AI候选\n人工修改版"], size=[480, 320], order=2,
+                ),
+                _suite_node(
+                    4, "T8MusicVideoBeatSheet", [1760, 20],
+                    inputs=[_socket("lyrics", "STRING", 3), _socket("api_key", "STRING", None), _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 4)],
+                    outputs=[("beat_sheet", "T8_MUSIC_VIDEO_BEAT_SHEET", None), ("beat_sheet_json", "STRING", None), ("h3_direction", "STRING", [5]), ("seedance20_direction", "STRING", [6])],
+                    widgets=["公路旅行MV，从清晨独行到傍晚抵达", 30, 0, "AUTO（根据时长与内容）", "中文", "balanced", 0, "fixed", "", "", "副歌进入时提高剪辑密度"],
+                    size=[580, 600], order=3,
+                ),
+                _show_text_node(5, 5, [2420, 40], order=4),
+                _show_text_node(6, 6, [2420, 400], order=4),
+            ],
+            [
+                [1, 1, 0, 2, 1, "T8_LLM_PROVIDER_CONFIG"], [2, 2, 0, 3, 0, "STRING"],
+                [3, 3, 0, 4, 0, "STRING"], [4, 1, 0, 4, 2, "T8_LLM_PROVIDER_CONFIG"],
+                [5, 4, 2, 5, 0, "STRING"], [6, 4, 3, 6, 0, "STRING"],
+            ],
+        ),
+        "creative_reference_dna_preset_example": _workflow(
+            "creative_reference_dna_preset_example",
+            [
+                _provider_node(1, [1], [40, 420]),
+                _suite_node(
+                    2, "T8ReferenceRoleMapper", [520, 20],
+                    inputs=[
+                        _socket("reference_images.reference_image_0", "IMAGE", None, label="reference_image_0"),
+                        _socket("reference_videos.reference_video_0", "VIDEO", None, label="reference_video_0"),
+                        _socket("creative_brief", "T8_CREATIVE_BRIEF", None),
+                        _socket("api_key", "STRING", None),
+                        _socket("provider_config", "T8_LLM_PROVIDER_CONFIG", 1),
+                    ],
+                    outputs=[("reference_role_map", "T8_REFERENCE_ROLE_MAP", [2]), ("reference_role_map_json", "STRING", None), ("coverage_conflict_report", "STRING", None), ("reference_context_for_enhancer", "STRING", None)],
+                    widgets=["产品短片：同一台复古相机从桌面进入户外拍摄", "balanced", "中文", 0, "fixed", "图片负责产品身份；视频负责手持动作。可连接自己的 IMAGE/VIDEO。"],
+                    size=[580, 620],
+                ),
+                _suite_node(
+                    3, "T8CreativeDNAMixer", [1180, 20], inputs=[],
+                    outputs=[("creative_dna_mix", "T8_CREATIVE_DNA_MIX", [3]), ("creative_dna_instruction", "STRING", None), ("creative_dna_json", "STRING", None)],
+                    widgets=["复古相机从静物陈列进入真实拍摄", "产品广告｜功能证据递进", "机械同行｜启动后稳定伴行", "平面重组｜几何节奏品牌片", "MiniMax H3 + Seedance 2.0"],
+                    size=[560, 420],
+                ),
+                _suite_node(
+                    4, "T8PersonalCreativePreset", [1180, 500], inputs=[],
+                    outputs=[("personal_preset", "T8_PERSONAL_CREATIVE_PRESET", [4]), ("preset_instruction", "STRING", None), ("preset_json", "STRING", None)],
+                    widgets=["我的复古产品片", "产品身份稳定、功能证据可见", "产品+操作+可见结果", "静物建立\n手部启动\n结果收束", "暖褐色、克制推镜", "仅保存文字规则，不包含第三方媒体", "不出现错误品牌文字"],
+                    size=[560, 520],
+                ),
+                _suite_node(
+                    5, "T8CreativeContextAssembler", [1820, 160],
+                    inputs=[
+                        _socket("creative_brief", "T8_CREATIVE_BRIEF", None),
+                        _socket("reference_role_map", "T8_REFERENCE_ROLE_MAP", 2),
+                        _socket("creative_dna_mix", "T8_CREATIVE_DNA_MIX", 3),
+                        _socket("personal_preset", "T8_PERSONAL_CREATIVE_PRESET", 4),
+                    ],
+                    outputs=[("enhancer_context", "STRING", [5]), ("assembled_context_json", "STRING", None)],
+                    widgets=["人物和品牌文字不得从案例中复制"], size=[520, 400], order=2,
+                ),
+                _show_text_node(6, 5, [2420, 220], order=3),
+            ],
+            [
+                [1, 1, 0, 2, 4, "T8_LLM_PROVIDER_CONFIG"], [2, 2, 0, 5, 1, "T8_REFERENCE_ROLE_MAP"],
+                [3, 3, 0, 5, 2, "T8_CREATIVE_DNA_MIX"], [4, 4, 0, 5, 3, "T8_PERSONAL_CREATIVE_PRESET"],
+                [5, 5, 0, 6, 0, "STRING"],
+            ],
+        ),
     }
 
 
@@ -474,6 +697,10 @@ def build() -> None:
         "music3_local_qwen_example": ("Music 3 - Local Qwen", "Local Qwen 27B", "lyrics + caption", "No API key; text-only mode"),
         "prompt_inspector_local_qwen_example": ("Local Qwen + Prompt Inspector", "Local Qwen 27B", "local QA", "Enhance, inspect, then display"),
         "text_utilities_example": ("T8 STRING Utilities", "T8 Prompt Text", "T8 Show Text", "No third-party nodes required"),
+        "creative_direction_revision_example": ("Creative Direction + Revision", "Director + Candidates", "Surgical revision", "One request per LLM node"),
+        "creative_longform_storyboard_example": ("Long-form + Storyboard", "Shared creative brief", "H3 + Seedance plans", "Continuity-aware planning"),
+        "creative_music_video_suite_example": ("Music Creative Suite", "Lyrics + versions", "H3 + Seedance beat sheet", "Text evidence only"),
+        "creative_reference_dna_preset_example": ("Reference + Creative DNA", "User media roles", "Reusable context STRING", "Preview media is never sent"),
     }
     for stem, workflow in _generated_workflows().items():
         (EXAMPLES / f"{stem}.json").write_text(
@@ -491,8 +718,8 @@ def check() -> None:
         "MiniMaxMusic3PromptEnhancerT8": 38,
     }
     workflows = sorted(EXAMPLES.glob("*.json"))
-    if len(workflows) != 9:
-        raise RuntimeError(f"Expected 9 example workflows, found {len(workflows)}")
+    if len(workflows) != 13:
+        raise RuntimeError(f"Expected 13 example workflows, found {len(workflows)}")
     expected_inputs = {
         "MiniMaxH3PromptEnhancerT8": [
             "first_frame", "last_frame", "reference_images.reference_image_0",
@@ -507,6 +734,22 @@ def check() -> None:
         "T8PromptInspector": ["prompt"],
         "T8PromptText": [],
         "T8ShowText": ["text"],
+        "T8CreativeDirector": [],
+        "T8CreativeCandidateLab": ["creative_brief", "api_key", "provider_config"],
+        "T8CreativeCandidateSelector": ["candidates_json"],
+        "T8DirectedRevision": ["original_prompt", "creative_brief", "api_key", "provider_config"],
+        "T8LongFormPlanner": ["creative_brief", "api_key", "provider_config"],
+        "T8StoryboardPack": ["creative_brief", "reference_role_map", "api_key", "provider_config"],
+        "T8MusicCreativeLab": ["api_key", "provider_config"],
+        "T8CreativeVersionStack": ["base_version", "versions.version_0"],
+        "T8MusicVideoBeatSheet": ["lyrics", "api_key", "provider_config"],
+        "T8ReferenceRoleMapper": [
+            "reference_images.reference_image_0", "reference_videos.reference_video_0",
+            "creative_brief", "api_key", "provider_config",
+        ],
+        "T8CreativeDNAMixer": [],
+        "T8PersonalCreativePreset": [],
+        "T8CreativeContextAssembler": ["creative_brief", "reference_role_map", "creative_dna_mix", "personal_preset"],
     }
     allowed_types = set(expected_inputs)
     seen_types: set[str] = set()
@@ -559,6 +802,11 @@ def check() -> None:
     required = {
         "MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8",
         "T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText",
+        "T8CreativeDirector", "T8CreativeContextAssembler", "T8DirectedRevision",
+        "T8LongFormPlanner", "T8ReferenceRoleMapper", "T8CreativeCandidateLab",
+        "T8CreativeCandidateSelector", "T8StoryboardPack", "T8CreativeDNAMixer",
+        "T8PersonalCreativePreset", "T8MusicCreativeLab", "T8CreativeVersionStack",
+        "T8MusicVideoBeatSheet",
     }
     if not required.issubset(seen_types):
         raise RuntimeError(f"Missing node examples: {sorted(required - seen_types)}")

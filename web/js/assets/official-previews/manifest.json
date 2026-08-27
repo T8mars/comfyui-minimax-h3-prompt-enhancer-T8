@@ -5,60 +5,60 @@
   "preview_count": 8,
   "encoding": {
     "format": "gif",
-    "fps": 4,
-    "max_width": 256,
-    "max_colors": 48,
+    "fps": 2,
+    "max_width": 180,
+    "max_colors": 32,
     "loop": true
   },
   "policy": "Official GIFs are human UI previews only and are never sent to an LLM.",
   "previews": [
     {
       "file": "3d-animation-short-generator.gif",
-      "source_sha256": "1bf1ad020c4d8548a23902133c4704b2c2503efef1de40889cf0eb3a92467285",
-      "sha256": "a6194647f3d263128b95f8aa41b5c1d697ae39abd57a4159bd94efcd6e2e58d8",
-      "bytes": 534497
+      "source_sha256": "ec8a8de2d9ab76b814b730bafed50601c72ac84b13be482f3f046d75a340411e",
+      "sha256": "f76e0fcb8c942bc86d41ee7aa34416dacf66c0ccc66b454b348ccadc75eb7402",
+      "bytes": 130333
     },
     {
       "file": "brand-promo-video-generator.gif",
-      "source_sha256": "1346688e90749b42ca15f94fc80078ebb7d98a9bf23f409f6a2f11d6f55c5ba5",
-      "sha256": "d2c79d65a113e70bd6385e8ab0d7c4aeb1a7cb7ece3d6b8b5dc7ec9d01c0b8b8",
-      "bytes": 248305
+      "source_sha256": "b780de3e480de22cd8ae05b718a10eed04b4dd8d19d753dda2ed1ba76173e550",
+      "sha256": "4ecd5aa9c2ab9ce709010c8b359ff15e945d466ac44bec05e28150a769598168",
+      "bytes": 64409
     },
     {
       "file": "co-op-game-intro-generator.gif",
-      "source_sha256": "b6c12f7ac0e476645b8228e4b6b6cb9650c3b92d7e773b3d68c1dadac733cdde",
-      "sha256": "1fdd9eae459b9ccd5e81913233d7df5c6f68a62b2c68a6484d57a49f71cfad73",
-      "bytes": 525958
+      "source_sha256": "50b8ce7df25e7b433ca53e9de4ab756c72f775d567942bbaa6fe53aa747ee745",
+      "sha256": "bdc04ff29ca95fc7b445b33b8bb04515a7d5f37f5abb450fc391f9e3ea891dcc",
+      "bytes": 130983
     },
     {
       "file": "handdrawn-live-video-generator.gif",
-      "source_sha256": "4bbc23442baedd2463e3c111221946fce59bd55d498e2c522d3da9b295083e55",
-      "sha256": "bca3fff2acf60428ab34d791b415efe6d166e26c4bc35318c2d279ae2d84c67e",
-      "bytes": 471322
+      "source_sha256": "19d6b365aab2b8bf97bff40a8eb6992eea5a7b2376b40fd68e00f3031b15f3d5",
+      "sha256": "0accb0632434643a80ac467ce2d4bfd776b699c09c529293e595151e4ae0413a",
+      "bytes": 114028
     },
     {
       "file": "minimalist-product-ad-generator.gif",
-      "source_sha256": "f25d9b4f9c2a8d881d8bbefdb3076a4d79fd46246d11b75d1a5ee278b5cc38f7",
-      "sha256": "78e4ad374cf2e77c5e347fc5aa04ef015d108f2758a38c7e2c0ba3347bb15e70",
-      "bytes": 260764
+      "source_sha256": "9d1da3baecd76d1cb940bff5fc1524d659000f73a1ccd4be22e5ae1a135f15e3",
+      "sha256": "2002832258a0291d94476b5d5b7f3dd6779e605f7becb43443bac9a4bf9c52b3",
+      "bytes": 60736
     },
     {
       "file": "music-video-subtitle-generator.gif",
-      "source_sha256": "e266707a77965622d175d012370a638cb2bef660532950634c28434fd87697e2",
-      "sha256": "c9b5cdff323166d79f4fd64222a35788a222af2c4051b16068ba35f43499d554",
-      "bytes": 488530
+      "source_sha256": "8d69f926ac9f3a1a5c62225392c7fa5d90f59ae663c9e6b336298460fb710f5a",
+      "sha256": "c57511d307a11a4b410f10ca0b94aa2e17c01dc97df3ff75599fa8d9baf9caa2",
+      "bytes": 120773
     },
     {
       "file": "paper-collage-explainer-generator.gif",
-      "source_sha256": "f89d8c00943dbe02fae0b709ebb5705fc80a75bfd13bbb0cefdb01eb31b4a8f3",
-      "sha256": "673a66d1cc0788478fe5e311de84c213edfefb637efd71ac7276a9e363cf22f5",
-      "bytes": 380785
+      "source_sha256": "c66938388b28ada033a332be61134d6f9914a29c75a8b11b74690d626d92ffd6",
+      "sha256": "b1c49f84c12008988597740ce7d91dacae7b43b64689fc0d855b58e13e33bbeb",
+      "bytes": 101969
     },
     {
       "file": "papercraft-stop-motion-explainer.gif",
-      "source_sha256": "6bc26e1724e6dbe250fe10b22924fa914602d98f1634b3410bf208dfc05ec59f",
-      "sha256": "a85e9cf366954db5a23539757b9a53641bbc698574d25168fb90ad9f979fff78",
-      "bytes": 586499
+      "source_sha256": "bcb8330b0a1233395f2e3b6365f5d91c82a5810aca17efa381e505226516481d",
+      "sha256": "522acfbc760673bc2f09b56c53181dba6933ff221a88c452176b3f17b140d22a",
+      "bytes": 142550
     }
   ]
 }

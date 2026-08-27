@@ -1,0 +1,57 @@
+{
+  "schema_version": "t8-creative-suite-paid-acceptance/v1",
+  "date": "2026-08-28",
+  "provider": "Seedance NZ",
+  "model": "bytedance/doubao-seed-evolving",
+  "response_text_stored": false,
+  "credentials_stored": false,
+  "score_semantics": "Binary contract acceptance only; not subjective artistic quality.",
+  "endpoint_probe": {
+    "status": 200,
+    "structured_json": true,
+    "passed": true
+  },
+  "successful_feature_cases": [
+    {
+      "id": "creative_candidates",
+      "score": 100,
+      "evidence": {"structured": true, "candidate_count": 2, "all_nonempty": true, "local_score_dimensions": 7}
+    },
+    {
+      "id": "directed_revision",
+      "score": 100,
+      "evidence": {"structured": true, "locked_identity_preserved": true, "goal_preserved": true, "local_diff": true}
+    },
+    {
+      "id": "long_form_planner",
+      "score": 100,
+      "evidence": {"structured": true, "gapless_segments": 2, "h3_prompts": 2, "seedance20_prompts": 2, "handoff_output": true}
+    },
+    {
+      "id": "storyboard_pack",
+      "score": 100,
+      "evidence": {"structured": true, "shots": 4, "derived_keyframes": 4, "derived_transition_sound_rows": 4}
+    },
+    {
+      "id": "reference_role_mapper",
+      "score": 100,
+      "evidence": {"structured": true, "connected_labels": ["<Picture 1>"], "assets": 1, "visible_code_read": true, "preview_media_absent": true}
+    },
+    {
+      "id": "music_creative_lab",
+      "score": 100,
+      "evidence": {"structured": true, "candidate_count": 2, "chinese_characters_in_selected": 124, "verse_tag": true, "chorus_tag": true, "locked_phrase": true, "language_warning": false}
+    },
+    {
+      "id": "music_video_beat_sheet",
+      "score": 100,
+      "evidence": {"structured": true, "beat_events": 5, "known_bpm": 96, "h3_direction": true, "seedance20_direction": true, "false_audio_claim": false}
+    }
+  ],
+  "overall_contract_score": 100,
+  "passed": true,
+  "notes": [
+    "Transient HTTP 524 responses were observed during development and were classified as gateway timeouts, not content moderation failures.",
+    "No raw model response, user prompt, uploaded image, API key, provider URL, or retry request body is stored in this fixture."
+  ]
+}

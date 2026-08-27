@@ -214,7 +214,7 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="Atomically replace catalog.json after all gates pass.")
     parser.add_argument("--confirm-breaking", action="store_true", help="Acknowledge selector removal/rename/semantic drift.")
     parser.add_argument("--rebuild-previews", action="store_true", help="Stage and atomically install changed preview assets.")
-    parser.add_argument("--confirm-preview-budget", action="store_true", help="Acknowledge a staged preview package at or above 165 MiB.")
+    parser.add_argument("--confirm-preview-budget", action="store_true", help="Acknowledge a staged preview package at or above 85 MiB.")
     parser.add_argument("--ffmpeg", default="ffmpeg")
     parser.add_argument("--report", type=Path, help="Optional machine-readable report outside the repository.")
     args = parser.parse_args()
@@ -271,9 +271,9 @@ def main() -> int:
             )
             total = int(staged_manifest["total_bytes"])
             if total > bundler.PREVIEW_HARD_LIMIT_BYTES:
-                raise CaseLibraryUpdateError("Staged preview package exceeds the 180 MiB hard limit")
+                raise CaseLibraryUpdateError("Staged preview package exceeds the 90 MiB Registry-safe hard limit")
             if total >= bundler.PREVIEW_CONFIRM_BYTES and not args.confirm_preview_budget:
-                raise CaseLibraryUpdateError("Staged preview package at or above 165 MiB requires --confirm-preview-budget")
+                raise CaseLibraryUpdateError("Staged preview package at or above 85 MiB requires --confirm-preview-budget")
         except Exception:
             _rmtree_with_retry(staged_root)
             raise

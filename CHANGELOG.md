@@ -5,6 +5,44 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.8.0] - 2026-08-28
+
+### Added
+
+- Add a backward-compatible T8 Creative Director suite with 13 independent
+  helper nodes for creative briefs, LOCK/EVOLVE/AUTO policy, directed revision,
+  long-form H3/Seedance planning, reference-role mapping, multi-direction
+  ideation, storyboard delivery, T8 Creative DNA mixing, workflow-local user
+  presets, music ideation, version selection, and text-evidence MV beat sheets.
+- Add four native example workflows with matching thumbnails, bilingual node
+  documentation/localization, and a paid live quality smoke test whose reports
+  contain only redacted contract metrics.
+- Add a non-serialized prebuilt `llama-cpp-python` Wheel link to all three core
+  nodes, plus bilingual installation guidance for users without a local
+  llama.cpp runtime.
+
+### Changed
+
+- Add bounded creative-suite output budgets and six-attempt retry handling for
+  safe Seedance gateway statuses. Candidate scores are deterministic local text
+  heuristics, while storyboard keyframe and transition tables are derived
+  locally from the shot contract to avoid duplicate paid generation.
+- Re-encode all 285 bundled official/T8 human-preview GIFs at 2 fps, 180 px,
+  and 32 colors without removing any preview, and enforce a 90 MiB raw-preview
+  ceiling so the complete release remains below the Registry 100 MB ZIP limit.
+
+### Fixed
+
+- Hide all upstream 5xx response bodies from ComfyUI error reports while still
+  reporting provider, operation, status, and retry exhaustion.
+- Keep MiniMax H3 and Seedance validators open to future ComfyUI Autogrow
+  group-level keyword fields in addition to the explicit `reference_images`
+  and `reference_videos` compatibility fix. This prevents validation-time
+  crashes before execution while leaving declared execution inputs unchanged.
+- Align release gates with the actual Comfy Registry package-size scanner;
+  versions 1.7.0 through 1.7.8 passed GitHub Actions but were later flagged for
+  exceeding 100 MB, which caused Manager reinstalls to fall back to 1.6.0.
+
 ## [1.7.8] - 2026-08-27
 
 ### Fixed

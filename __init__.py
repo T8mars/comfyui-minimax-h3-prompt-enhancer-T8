@@ -10,6 +10,7 @@ from .provider_config import T8LLMProviderConfig
 from .credential_routes import register_credential_routes
 from .prompt_inspector import T8PromptInspector
 from .text_utilities import T8PromptText, T8ShowText
+from .creative_suite import CREATIVE_SUITE_NODES
 
 
 WEB_DIRECTORY = "./web/js"
@@ -29,6 +30,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8PromptInspector,
             T8PromptText,
             T8ShowText,
+            *CREATIVE_SUITE_NODES,
         ]
 
 

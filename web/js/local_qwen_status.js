@@ -1,4 +1,5 @@
 const STATUS_URL = "/t8-prompt-enhancer/local-qwen/status";
+export const LLAMA_CPP_PYTHON_WHEELS_URL = "https://github.com/JamePeng/llama-cpp-python/releases";
 
 
 async function fetchLocalStatus(refresh = false) {
@@ -103,4 +104,9 @@ export async function copyLocalModelDirectory() {
     } catch (error) {
         window.alert(`无法读取模型目录：${error?.message || error}`);
     }
+}
+
+
+export function openLlamaCppPythonWheels() {
+    window.open(LLAMA_CPP_PYTHON_WHEELS_URL, "_blank", "noopener,noreferrer");
 }

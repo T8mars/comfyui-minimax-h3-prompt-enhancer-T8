@@ -1219,11 +1219,15 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_mmproj=None,
         reference_images=None,
         reference_videos=None,
+        **extra_inputs,
     ) -> bool:
         # Preserve old workflows even when their local model files are absent.
         # Local mode performs the authoritative path validation at execution.
         # Newer ComfyUI builds also forward Autogrow groups to this validator.
-        del local_model, local_mmproj, reference_images, reference_videos
+        # Autogrow containers are validated before execution and ComfyUI may
+        # forward new group-level fields here.  Ignore those compatibility
+        # fields while retaining execution-time schema/path validation.
+        del local_model, local_mmproj, reference_images, reference_videos, extra_inputs
         return True
 
     @classmethod

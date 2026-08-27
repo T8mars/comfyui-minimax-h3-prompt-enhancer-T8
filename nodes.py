@@ -846,7 +846,14 @@ def _raise_http_error(
     attempts: int = 1,
 ):
     status = int(getattr(response, "status_code", 0))
-    detail = _safe_response_message(response, api_key)
+    # Gateway and server pages can contain proxy HTML, request identifiers, or
+    # provider internals. They are not actionable creative feedback and must not
+    # be surfaced in ComfyUI error reports.
+    detail = (
+        "Upstream response text was hidden for privacy."
+        if status >= 500
+        else _safe_response_message(response, api_key)
+    )
     gateway_suffix = (
         f" after {attempts} automatic attempts"
         if attempts > 1
@@ -1236,13 +1243,18 @@ def _request_completion(
     model_id: str = MODEL_ID,
     attempts_callback: Any = None,
     provider_request_options: Any = None,
+    retry_delays: tuple[float, ...] | None = None,
 ) -> str:
     payload = apply_chat_request_options({
         "model": model_id,
         "messages": messages,
         "stream": False,
     }, chat_url=chat_url, temperature=MODE_TEMPERATURES[rewrite_mode], options=provider_request_options)
-    retry_delays = SEEDANCE_CHAT_RETRY_DELAYS if _is_seedance_chat_endpoint(chat_url) else ()
+    retry_delays = (
+        tuple(retry_delays)
+        if retry_delays is not None and _is_seedance_chat_endpoint(chat_url)
+        else SEEDANCE_CHAT_RETRY_DELAYS if _is_seedance_chat_endpoint(chat_url) else ()
+    )
 
     def network_error(error: requests.RequestException, attempt: int, delays: tuple[float, ...]) -> Exception:
         if _is_retryable_seedance_network_error(error) and delays:
@@ -1829,13 +1841,18 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         local_mmproj=None,
         reference_images=None,
         reference_videos=None,
+        **extra_inputs,
     ) -> bool:
         # These values are installation-dependent dropdowns. Accept stale
         # workflow values during ComfyUI's schema pass; local execution still
         # resolves and validates the paths when local mode is actually used.
         # Newer ComfyUI builds also forward Autogrow groups to this validator;
         # accepting them prevents Ref2VA media from failing before execution.
-        del local_model, local_mmproj, reference_images, reference_videos
+        # Keep this validator deliberately open-ended.  Autogrow group names
+        # are supplied by ComfyUI at validation time and may gain additional
+        # group-level fields in newer frontend/backend releases.  Execution
+        # still receives only fields declared by this node's schema.
+        del local_model, local_mmproj, reference_images, reference_videos, extra_inputs
         return True
 
     @classmethod

@@ -13,9 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 T8_ROOT = ROOT / "web" / "js" / "assets" / "t8-case-previews"
 OFFICIAL_ROOT = ROOT / "web" / "js" / "assets" / "official-previews"
 OFFICIAL_COMMIT = "743d51e83329cbae6c7694f1c7b89576e7c25e07"
-DEFAULT_FPS = 4
-DEFAULT_MAX_WIDTH = 256
-DEFAULT_COLORS = 48
+DEFAULT_FPS = 2
+DEFAULT_MAX_WIDTH = 180
+DEFAULT_COLORS = 32
 
 
 class GifOptimizationError(RuntimeError):
@@ -88,12 +88,33 @@ def optimize_t8(ffmpeg: str, *, fps: int, width: int, colors: int) -> dict[str, 
         }
         manifest["previews"] = updated
         manifest["preview_count"] = len(updated)
+        assets = list(temporary.glob("*.gif"))
+        manifest["asset_count"] = len(assets)
+        manifest["dedup_references"] = len(updated) - len(assets)
+        manifest["total_bytes"] = sum(path.stat().st_size for path in assets)
+        manifest["largest_bytes"] = max((path.stat().st_size for path in assets), default=0)
         (temporary / "manifest.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
-        notice = T8_ROOT / "NOTICE.md"
-        if notice.is_file():
-            shutil.copy2(notice, temporary / notice.name)
+        community_count = sum(
+            str(item.get("case_id", "")).startswith("community-skill--") for item in updated
+        )
+        case_count = len(updated) - community_count
+        (temporary / "NOTICE.md").write_text(
+            "# T8 case preview GIFs\n\n"
+            "This directory contains lightweight GIF previews bundled for the non-official T8 template library.\n\n"
+            f"- {len(updated)} preview references are included: {case_count} released case previews and "
+            f"{community_count} standalone community-Skill previews.\n"
+            "- They are human UI previews only. The node never connects or sends them as image, video, model, or "
+            "LLM reference material.\n"
+            "- Files are indexed by `manifest.json`; both source and bundled SHA-256 values are pinned.\n"
+            f"- The distributable encoding profile is {fps} fps, maximum width {width} px, and a "
+            f"{colors}-color palette.\n"
+            "- Source videos are not included.\n\n"
+            "Regenerate this directory whenever the selector catalog changes, then validate the manifest and "
+            "repository release gates before publishing.\n",
+            encoding="utf-8",
+        )
         backup = T8_ROOT.with_name(T8_ROOT.name + ".before-optimization")
         if backup.exists():
             shutil.rmtree(backup)
@@ -161,8 +182,8 @@ def main() -> int:
     parser.add_argument("--max-width", type=int, default=DEFAULT_MAX_WIDTH)
     parser.add_argument("--colors", type=int, default=DEFAULT_COLORS)
     args = parser.parse_args()
-    if not 2 <= args.fps <= 8 or not 200 <= args.max_width <= 400 or not 32 <= args.colors <= 96:
-        parser.error("limits: fps 2-8, max-width 200-400, colors 32-96")
+    if not 1 <= args.fps <= 8 or not 160 <= args.max_width <= 400 or not 24 <= args.colors <= 96:
+        parser.error("limits: fps 1-8, max-width 160-400, colors 24-96")
     ffmpeg = encoder(args.ffmpeg)
     t8 = optimize_t8(ffmpeg, fps=args.fps, width=args.max_width, colors=args.colors)
     official = optimize_official(ffmpeg, fps=args.fps, width=args.max_width, colors=args.colors)

@@ -1099,7 +1099,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(manifest["schema_version"], "t8-bundled-official-h3-previews/v1")
         self.assertEqual(manifest["source_commit"], "743d51e83329cbae6c7694f1c7b89576e7c25e07")
         self.assertEqual(manifest["encoding"], {
-            "format": "gif", "fps": 4, "max_width": 256, "max_colors": 48, "loop": True,
+            "format": "gif", "fps": 2, "max_width": 180, "max_colors": 32, "loop": True,
         })
         records = {item["file"]: item for item in manifest["previews"]}
         self.assertEqual({path.name for path in asset_root.glob("*.gif")}, set(labels.values()))

@@ -96,7 +96,7 @@ class MaintenanceTests(unittest.TestCase):
 
     def test_native_workflows_have_same_name_thumbnails(self):
         workflows = sorted((ROOT / "example_workflows").glob("*.json"))
-        self.assertEqual(len(workflows), 9)
+        self.assertEqual(len(workflows), 13)
         seen_types = set()
         for workflow in workflows:
             with self.subTest(workflow=workflow.name):
@@ -123,6 +123,19 @@ class MaintenanceTests(unittest.TestCase):
             "T8PromptInspector",
             "T8PromptText",
             "T8ShowText",
+            "T8CreativeDirector",
+            "T8CreativeContextAssembler",
+            "T8DirectedRevision",
+            "T8LongFormPlanner",
+            "T8ReferenceRoleMapper",
+            "T8CreativeCandidateLab",
+            "T8CreativeCandidateSelector",
+            "T8StoryboardPack",
+            "T8CreativeDNAMixer",
+            "T8PersonalCreativePreset",
+            "T8MusicCreativeLab",
+            "T8CreativeVersionStack",
+            "T8MusicVideoBeatSheet",
         }.issubset(seen_types))
         self.assertFalse({"CR Prompt Text", "easy showAnything"}.intersection(seen_types))
 
@@ -135,6 +148,19 @@ class MaintenanceTests(unittest.TestCase):
             "T8PromptInspector",
             "T8PromptText",
             "T8ShowText",
+            "T8CreativeDirector",
+            "T8CreativeContextAssembler",
+            "T8DirectedRevision",
+            "T8LongFormPlanner",
+            "T8ReferenceRoleMapper",
+            "T8CreativeCandidateLab",
+            "T8CreativeCandidateSelector",
+            "T8StoryboardPack",
+            "T8CreativeDNAMixer",
+            "T8PersonalCreativePreset",
+            "T8MusicCreativeLab",
+            "T8CreativeVersionStack",
+            "T8MusicVideoBeatSheet",
         }
         for locale in ("en", "zh"):
             data = json.loads((ROOT / "locales" / locale / "nodeDefs.json").read_text(encoding="utf-8"))

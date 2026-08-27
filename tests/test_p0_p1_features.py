@@ -83,8 +83,26 @@ class P0P1FeatureTests(unittest.TestCase):
             ["lyrics", "music_caption", "music3_payload_json", "enhancement_report_json"],
         )
         self.assertEqual(
-            [schema.node_id for schema in schemas[3:]],
+            [schema.node_id for schema in schemas[3:7]],
             ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
+        )
+        self.assertEqual(
+            [schema.node_id for schema in schemas[7:]],
+            [
+                "T8CreativeDirector",
+                "T8CreativeContextAssembler",
+                "T8DirectedRevision",
+                "T8LongFormPlanner",
+                "T8ReferenceRoleMapper",
+                "T8CreativeCandidateLab",
+                "T8CreativeCandidateSelector",
+                "T8StoryboardPack",
+                "T8CreativeDNAMixer",
+                "T8PersonalCreativePreset",
+                "T8MusicCreativeLab",
+                "T8CreativeVersionStack",
+                "T8MusicVideoBeatSheet",
+            ],
         )
         for schema in schemas[:3]:
             self.assertEqual(schema.inputs[-1].id, "provider_config")

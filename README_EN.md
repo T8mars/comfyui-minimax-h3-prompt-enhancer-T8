@@ -47,7 +47,58 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - Native progress reporting, memory-only redacted diagnostics, provider capability preflight, and local prompt inspection.
 - A searchable T8 template browser with categories, search, favorites, recent items, lazy GIF previews, deterministic Top-3 recommendations, and comparison.
 
+## T8 Creative Director suite
+
+The suite adds planning, exploration, revision, and delivery helpers without replacing the three core enhancers. Existing core node IDs, serialized widget order, defaults, and outputs remain unchanged.
+
+| Node | LLM calls | Purpose |
+| --- | ---: | --- |
+| `T8 Creative Director` | 0 | Shared story, identity, world, visual, motion, and sound brief with `LOCK / EVOLVE / AUTO` policies |
+| `T8 Creative Context Assembler` | 0 | Compile the brief, reference map, Creative DNA, and personal preset into a `STRING` for existing nodes |
+| `T8 Directed Revision` | 1 | Apply only the requested delta and return a local diff |
+| `T8 Long-form Planner` | 1 | Split any positive duration into continuity-aware H3 and Seedance 2.0 segments |
+| `T8 Reference Role Mapper` | 1 | Analyze only directly connected user images/videos and assign identity, costume, scene, motion, camera, style, and exclusion roles |
+| `T8 Creative Candidate Lab` / `T8 Candidate Selector` | 1 / 0 | Generate 2–4 structurally distinct directions and select one locally |
+| `T8 Storyboard Pack` | 1 | Global prompt, shot JSON, still-keyframe prompts, transitions, sound, and media bindings |
+| `T8 Creative DNA Mixer` | 0 | Blend structure/camera/payoff mechanics from up to three non-official T8 cases without using preview media |
+| `T8 Personal Creative Preset` | 0 | Store user-owned text rules inside the workflow only |
+| `T8 Music Creative Lab` | 1 | Lyrics/caption candidates, scoped lyric revision, titles, and soft CJK singability text checks |
+| `T8 Creative Version Stack` | 0 | Select or roll back among up to eight prompt, lyric, or caption versions |
+| `T8 Music-to-Video Beat Sheet` | 1 | Convert text lyrics/captions and user-known timing facts into H3/Seedance directing constraints |
+
+LLM-backed helpers default to Seedance NZ. Connect `T8 LLM Provider Config` to use AI Workshop, an OpenAI-compatible endpoint, or local GGUF instead. Each execution represents one logical generation request. Seedance NZ may make up to six bounded transport attempts only for the safe gateway set 500/502/503/504/520–530; authentication, balance, rate-limit, and ambiguous read-timeout failures are not blindly repeated. A non-empty unstructured provider response is preserved and reported with `structured_response=false` instead of being rejected.
+
+The seven candidate scores are deterministic local text heuristics, not model self-scores or objective artistic judgments, and they never reject a non-empty candidate. Storyboard keyframe and transition/sound tables are derived locally from the returned shot contract to avoid duplicated paid output. On 2026-08-28 the real `bytedance/doubao-seed-evolving` endpoint passed redacted binary-contract checks for candidates, directed revision, long-form planning, a four-shot storyboard, image role mapping, Chinese lyric candidates, and a five-event MV beat sheet. That acceptance score is not a subjective art-quality score.
+
+Only media connected directly to Reference Role Mapper is analyzed. Bundled official/T8 GIFs and case-source videos are never model references. Local video mode uses timestamped visual samples and does not analyze audio. The Beat Sheet node has no AUDIO input and never claims to hear a song or detect BPM.
+
 ## Installation
+
+> **Update recommendation: prefer GitHub.** When a new Registry version is under review, `Pending`, or `Flagged`, ComfyUI-Manager may silently fall back to an older `Active` release. Installation can appear successful while new nodes, features, and urgent fixes remain unavailable. Fully restart ComfyUI after updating, refresh the browser with `Ctrl+F5`, and never keep duplicate copies of this node pack under `custom_nodes`.
+
+### GitHub installation / update (recommended)
+
+For a first installation, run this inside the ComfyUI `custom_nodes` directory:
+
+```bash
+git clone https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8.git
+```
+
+For an existing Git clone, run this inside the plug-in directory:
+
+```bash
+git pull --ff-only
+```
+
+If the previous copy came from Manager or a ZIP, close ComfyUI, move the old plug-in directory out of `custom_nodes`, and then clone into the single canonical directory. Do not keep the old and new directories together.
+
+Expected layout:
+
+```text
+ComfyUI/
+└─ custom_nodes/
+   └─ comfyui-minimax-h3-prompt-enhancer-T8/
+```
 
 ### ComfyUI-Manager / Registry
 
@@ -65,21 +116,7 @@ comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 
 The Registry package contains the runtime code, pinned official Skills, non-official case library, and lightweight preview GIFs. It does not contain API keys, tests, source delivery batches, local runtimes, or GGUF weights.
 
-### Git installation
-
-Run this inside the ComfyUI `custom_nodes` directory:
-
-```bash
-git clone https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8.git
-```
-
-Expected layout:
-
-```text
-ComfyUI/
-└─ custom_nodes/
-   └─ comfyui-minimax-h3-prompt-enhancer-T8/
-```
+All 285 official/T8 GIF previews remain bundled, using the Registry-safe 2 fps, 180 px, 32-color profile. The repository gate caps total preview bytes at 90 MiB so the complete node ZIP stays below the Comfy Registry 100 MB scanner limit.
 
 Restart ComfyUI after installation. If the frontend still shows an older node layout, refresh the browser with `Ctrl+F5`.
 
@@ -176,8 +213,12 @@ Import [`example_workflows/music3_prompt_lyrics_enhancer_example.json`](./exampl
 | [`music3_local_qwen_example.json`](./example_workflows/music3_local_qwen_example.json) | Music 3 with local Qwen and no visual projector |
 | [`prompt_inspector_local_qwen_example.json`](./example_workflows/prompt_inspector_local_qwen_example.json) | Local H3 enhancement followed by local structural inspection |
 | [`text_utilities_example.json`](./example_workflows/text_utilities_example.json) | Built-in `T8 Prompt Text` to `T8 Show Text` STRING workflow |
+| [`creative_direction_revision_example.json`](./example_workflows/creative_direction_revision_example.json) | Creative Director → Candidate Lab → selection → directed revision |
+| [`creative_longform_storyboard_example.json`](./example_workflows/creative_longform_storyboard_example.json) | One creative brief drives long-form segmentation and storyboard packaging |
+| [`creative_music_video_suite_example.json`](./example_workflows/creative_music_video_suite_example.json) | Music candidates, version selection, and H3/Seedance 2.0 beat-sheet direction |
+| [`creative_reference_dna_preset_example.json`](./example_workflows/creative_reference_dna_preset_example.json) | Reference roles, T8 Creative DNA, and a personal preset assembled into a legacy-compatible STRING context |
 
-All bundled workflows omit API keys and use only nodes included in this repository where practical.
+All 13 bundled workflows omit API keys and use only nodes included in this repository.
 
 ## Official Skills and T8 templates
 
@@ -267,6 +308,14 @@ Runtime fallback order:
 1. The pinned `llama-server` installed by this repository.
 2. A `llama-server` available on system `PATH`.
 3. `llama-cpp-python` already installed in the active ComfyUI Python environment.
+
+If the active ComfyUI Python environment has no usable `llama-cpp-python`, all three core nodes now include a **Get prebuilt llama-cpp-python Wheel** button linking to [JamePeng releases](https://github.com/JamePeng/llama-cpp-python/releases). Choose a wheel that matches the actual ComfyUI Python ABI, operating system, and CUDA version, then install it with ComfyUI's Python rather than the system Python:
+
+```powershell
+& "path\to\ComfyUI\python.exe" -m pip install "path\to\llama_cpp_python-....whl"
+```
+
+This is an optional third-party binary source. The node never downloads or installs a wheel silently. Fully restart ComfyUI after installation and use **Check local Qwen installation / rescan GGUF** to verify the imported native runtime. The pinned `install_local_qwen.py --runtime` llama-server path remains available and does not require a Python wheel.
 
 The node does not download large models during execution. From the node directory, run:
 

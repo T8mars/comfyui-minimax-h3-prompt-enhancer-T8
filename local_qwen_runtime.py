@@ -51,6 +51,7 @@ except ImportError:
 NODE_ROOT = Path(__file__).resolve().parent
 RUNTIME_ROOT = NODE_ROOT / "runtime" / "local_qwen"
 RUNTIME_CONFIG_PATH = RUNTIME_ROOT / "runtime_config.json"
+LLAMA_CPP_PYTHON_WHEELS_URL = "https://github.com/JamePeng/llama-cpp-python/releases"
 DEFAULT_MODEL_FILENAME = "Qwen3.8-27B-Q4_K_M.gguf"
 UNCENSORED_MODEL_FILENAME = "qwen3.8-27b-uncensored-fp8-q4_k_m.gguf"
 HERETIC_9B_MODEL_FILENAME = "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf"
@@ -309,6 +310,7 @@ def select_runtime_spec() -> RuntimeSpec | PythonRuntimeSpec:
     raise LocalQwenRuntimeError(
         "No usable local llama.cpp runtime was found. Install llama-cpp-python in the active ComfyUI "
         "Python environment, place llama-server on PATH, or run install_local_qwen.py --runtime. "
+        f"Optional prebuilt wheels: {LLAMA_CPP_PYTHON_WHEELS_URL}. "
         + details
     )
 
@@ -352,6 +354,7 @@ def runtime_status(*, refresh: bool = False) -> dict[str, Any]:
         "mmproj_installed": mmproj_installed,
         **catalog,
         "legacy_model_directory": str(qwen_model_directory()),
+        "llama_cpp_python_wheels_url": LLAMA_CPP_PYTHON_WHEELS_URL,
     }
     specs, warnings = available_runtime_specs()
     if specs:
