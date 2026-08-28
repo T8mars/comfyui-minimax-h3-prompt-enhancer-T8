@@ -40,6 +40,7 @@ T8_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
 REGISTRY_SCANNER_TRIPWIRES = {
     "environment_read": b"os.environ",
     "dynamic_import": b"importlib.import_module(",
+    "aiohttp_client_session": b"aiohttp.ClientSession(",
     "direct_requests_post": b"requests.post(",
     "direct_urllib": b"urllib.request",
     "direct_socket": b"socket.socket(",

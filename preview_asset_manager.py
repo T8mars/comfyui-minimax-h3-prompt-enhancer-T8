@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
 
+import requests
+
 
 CHANNEL_SCHEMA = "t8-remote-preview-channel/v1"
 CATALOG_ID = "t8-unofficial-case-library-v2"
@@ -295,6 +297,61 @@ class PreviewAssetManager:
             "policy": "Human UI previews only; never sent to the LLM or used as model reference media.",
         }
 
+    def _download_once(
+        self,
+        url: str,
+        expected_bytes: int | None,
+        expected_sha256: str | None,
+        *,
+        max_bytes: int,
+    ) -> bytes:
+        parsed_url = urlsplit(url)
+        if (
+            parsed_url.scheme != "https"
+            or (parsed_url.hostname or "").casefold() not in ALLOWED_DOWNLOAD_HOSTS
+        ):
+            raise PreviewAssetError("Preview download URL is not an approved HTTPS host")
+        session = requests.Session()
+        response = None
+        try:
+            response = session.request(
+                method="GET",
+                url=url,
+                allow_redirects=True,
+                stream=True,
+                timeout=(30, 60),
+                headers={
+                    "User-Agent": "T8-ComfyUI-Preview-Assets/1",
+                    "Cache-Control": "no-cache, no-store, max-age=0",
+                    "Pragma": "no-cache",
+                },
+            )
+            host = (urlsplit(str(response.url)).hostname or "").casefold()
+            if response.status_code != 200:
+                raise PreviewAssetError(f"Preview download returned HTTP {response.status_code}")
+            if host not in ALLOWED_DOWNLOAD_HOSTS:
+                raise PreviewAssetError("Preview download redirected to an unapproved host")
+            declared_length = str(response.headers.get("Content-Length") or "").strip()
+            if declared_length.isdigit() and int(declared_length) > max_bytes:
+                raise PreviewAssetError("Preview download exceeds its maximum size")
+            buffer = bytearray()
+            for chunk in response.iter_content(chunk_size=1024 * 1024):
+                if not chunk:
+                    continue
+                buffer.extend(chunk)
+                if len(buffer) > max_bytes:
+                    raise PreviewAssetError("Preview download exceeds its maximum size")
+            payload = bytes(buffer)
+        finally:
+            if response is not None:
+                response.close()
+            session.close()
+        if len(payload) > max_bytes or (expected_bytes is not None and len(payload) != expected_bytes):
+            raise PreviewAssetError("Preview shard size does not match its channel metadata")
+        if expected_sha256 is not None and _sha256_bytes(payload) != expected_sha256:
+            raise PreviewAssetError("Preview shard SHA-256 verification failed")
+        return payload
+
     async def _download(
         self,
         url: str,
@@ -303,33 +360,17 @@ class PreviewAssetManager:
         *,
         max_bytes: int,
     ) -> bytes:
-        try:
-            import aiohttp
-        except ImportError as exc:
-            raise PreviewAssetError("ComfyUI's aiohttp runtime is unavailable") from exc
-        timeout = aiohttp.ClientTimeout(total=180, connect=30, sock_read=60)
         last_error: Exception | None = None
         for attempt in range(DOWNLOAD_ATTEMPTS):
             try:
-                async with aiohttp.ClientSession(timeout=timeout) as session:
-                    async with session.get(url, allow_redirects=True) as response:
-                        host = (response.url.host or "").casefold()
-                        if response.status != 200:
-                            raise PreviewAssetError(f"Preview download returned HTTP {response.status}")
-                        if host not in ALLOWED_DOWNLOAD_HOSTS:
-                            raise PreviewAssetError("Preview download redirected to an unapproved host")
-                        buffer = bytearray()
-                        async for chunk in response.content.iter_chunked(1024 * 1024):
-                            buffer.extend(chunk)
-                            if len(buffer) > max_bytes:
-                                raise PreviewAssetError("Preview download exceeds its maximum size")
-                        payload = bytes(buffer)
-                if len(payload) > max_bytes or (expected_bytes is not None and len(payload) != expected_bytes):
-                    raise PreviewAssetError("Preview shard size does not match its channel metadata")
-                if expected_sha256 is not None and _sha256_bytes(payload) != expected_sha256:
-                    raise PreviewAssetError("Preview shard SHA-256 verification failed")
-                return payload
-            except (aiohttp.ClientError, asyncio.TimeoutError, PreviewAssetError) as exc:
+                return await asyncio.to_thread(
+                    self._download_once,
+                    url,
+                    expected_bytes,
+                    expected_sha256,
+                    max_bytes=max_bytes,
+                )
+            except (requests.RequestException, asyncio.TimeoutError, PreviewAssetError) as exc:
                 last_error = exc
                 if attempt + 1 < DOWNLOAD_ATTEMPTS:
                     await asyncio.sleep(min(1.5 * (2**attempt), 8.0))

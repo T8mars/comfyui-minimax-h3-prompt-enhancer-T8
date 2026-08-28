@@ -7,6 +7,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +29,65 @@ def installed_contract():
 
 
 class PreviewAssetManagerTests(unittest.TestCase):
+    def test_download_transport_is_bounded_and_hash_verified(self):
+        payload = b"preview-payload"
+
+        class FakeResponse:
+            status_code = 200
+            url = "https://release-assets.githubusercontent.com/preview.bin"
+            headers = {"Content-Length": str(len(payload))}
+
+            @staticmethod
+            def iter_content(chunk_size):
+                self.assertEqual(chunk_size, 1024 * 1024)
+                return iter((payload[:4], payload[4:]))
+
+            @staticmethod
+            def close():
+                return None
+
+        class FakeSession:
+            def request(self, **kwargs):
+                self.kwargs = kwargs
+                return FakeResponse()
+
+            @staticmethod
+            def close():
+                return None
+
+        fake_session = FakeSession()
+        with (
+            tempfile.TemporaryDirectory() as temporary,
+            patch.object(manager_module.requests, "Session", return_value=fake_session),
+        ):
+            manager = manager_module.PreviewAssetManager(Path(temporary))
+            result = manager._download_once(
+                "https://github.com/T8mars/assets/releases/download/v1/preview.bin",
+                len(payload),
+                manager_module._sha256_bytes(payload),
+                max_bytes=len(payload),
+            )
+        self.assertEqual(result, payload)
+        self.assertEqual(fake_session.kwargs["method"], "GET")
+        self.assertTrue(fake_session.kwargs["stream"])
+        self.assertTrue(fake_session.kwargs["allow_redirects"])
+        self.assertEqual(fake_session.kwargs["headers"]["Cache-Control"], "no-cache, no-store, max-age=0")
+
+    def test_download_transport_rejects_unapproved_hosts_before_request(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            manager = manager_module.PreviewAssetManager(Path(temporary))
+            with (
+                patch.object(manager_module.requests, "Session") as session,
+                self.assertRaises(manager_module.PreviewAssetError),
+            ):
+                manager._download_once(
+                    "https://example.invalid/preview.zip",
+                    None,
+                    None,
+                    max_bytes=1024,
+                )
+            session.assert_not_called()
+
     def test_bootstrap_channel_exactly_matches_installed_catalog_contract(self):
         channel, allowed = installed_contract()
         with tempfile.TemporaryDirectory() as temporary:
