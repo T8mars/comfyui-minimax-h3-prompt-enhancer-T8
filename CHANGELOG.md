@@ -5,6 +5,18 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.9.5] - 2026-08-29
+
+### Fixed
+
+- Make the selected local-GGUF output language authoritative for MiniMax H3,
+  Seedance 2.0, and Music 3 Structured Captions. A final language lock now
+  follows embedded Skills/examples, and an obvious dominant-language mismatch
+  receives one low-temperature local correction without rejecting non-empty
+  output or altering protected dialogue, lyrics, labels, and protocol tokens.
+- Describe Chinese Music 3 Caption length targets as Chinese characters (or an
+  automatic Chinese-appropriate length) instead of English words.
+
 ## [1.9.4] - 2026-08-29
 
 ### Changed

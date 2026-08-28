@@ -53,7 +53,10 @@ from .local_qwen_provider import (
     LOCAL_QWEN_API_MODE,
     LocalQwenProvider,
     LocalQwenProviderError,
+    apply_local_language_lock,
     is_local_qwen_api_mode,
+    local_language_repair_messages,
+    needs_local_language_repair,
     settings_from_values as local_qwen_settings,
 )
 from .local_qwen_runtime import (
@@ -306,6 +309,18 @@ class MusicBrief:
     semantic_profile_source: str = "unspecified"
 
     def as_prompt_data(self) -> dict[str, Any]:
+        if self.caption_target_words:
+            caption_target: int | str = (
+                f"approximately {self.caption_target_words} Chinese characters"
+                if self.caption_language == "Chinese"
+                else f"approximately {self.caption_target_words} English words"
+            )
+        else:
+            caption_target = (
+                "automatic length appropriate for a Chinese Structured Caption"
+                if self.caption_language == "Chinese"
+                else "official default 250-450 English words"
+            )
         return {
             "caption": {"value": self.music_idea, "source": "explicit"},
             "constraints_and_exclusions": {
@@ -339,7 +354,7 @@ class MusicBrief:
                 "source": self.semantic_profile_source,
             },
             "output_language": self.caption_language,
-            "caption_word_target": self.caption_target_words or "official default 250-450 English words",
+            "caption_word_target": caption_target,
             "rewrite_mode": self.rewrite_mode,
         }
 
@@ -1616,14 +1631,25 @@ def _compile_caption(
         "Music_Brief": brief.as_prompt_data(),
         "variation_seed": int(seed),
     }
-    response = runner.complete(
-        [
+    messages = [
             {"role": "system", "content": _caption_system(selected)},
             {"role": "user", "content": json.dumps(user_data, ensure_ascii=False)},
-        ],
+        ]
+    if runner.local_provider is not None:
+        messages = apply_local_language_lock(messages, brief.caption_language)
+    response = runner.complete(
+        messages,
         CAPTION_TEMPERATURES[brief.rewrite_mode],
         "official_caption_compilation",
     )
+    if runner.local_provider is not None and needs_local_language_repair(
+        response, brief.caption_language
+    ):
+        response = runner.complete(
+            local_language_repair_messages(response, brief.caption_language),
+            0.1,
+            "caption_language_repair",
+        )
     caption = _reorder_caption_headings(response)
     if not caption:
         raise Music3PromptEnhancerError("The official caption stage returned no usable content.")

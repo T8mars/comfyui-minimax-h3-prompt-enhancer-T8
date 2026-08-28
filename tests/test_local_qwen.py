@@ -88,6 +88,7 @@ class FakeLocalProvider:
         self.settings = settings
         self.vision = vision
         self.messages = []
+        self.calls = []
         self.closed = []
         self.__class__.instances.append(self)
 
@@ -97,8 +98,9 @@ class FakeLocalProvider:
     def __exit__(self, exc_type, exc_value, traceback):
         self.close(force=exc_type is not None)
 
-    def complete(self, messages, **_kwargs):
+    def complete(self, messages, **kwargs):
         self.messages.append(messages)
+        self.calls.append({"messages": messages, "kwargs": kwargs})
         if callable(self.__class__.response):
             return self.__class__.response(messages)
         return self.__class__.response
@@ -121,6 +123,22 @@ class LocalQwenUnitTests(unittest.TestCase):
             provider.settings_from_values(local_context_size=8192, local_max_tokens=8192)
         with self.assertRaises(runtime.LocalQwenRuntimeError):
             runtime.resolve_model_path("../escape.gguf", label="model", required=False)
+
+    def test_language_mismatch_detection_ignores_mixed_protocol_output(self):
+        self.assertTrue(
+            provider.needs_local_language_repair(
+                "A dancer moves gracefully through a long cinematic sequence while the camera follows her across "
+                "the stage and warm lights reveal every gesture before the performance ends in a confident pose.",
+                "中文",
+            )
+        )
+        self.assertFalse(
+            provider.needs_local_language_repair(
+                "integrated_multimodal_description: [Shot 1] 舞者在暖色灯光中转身，镜头平稳跟随。\n\n"
+                "overall_soundscape: 轻柔脚步声与空间混响。\n\nnon_diegetic_music: N/A",
+                "中文",
+            )
+        )
 
     def test_legacy_local_mode_remains_executable_after_generic_label_upgrade(self):
         key, chat_url, upload_url, provider_name = nodes._provider_config(
@@ -494,6 +512,93 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(len(FakeLocalProvider.instances), 1)
         self.assertFalse(FakeLocalProvider.instances[0].vision)
 
+    def test_h3_local_parameters_and_chinese_language_lock_reach_provider(self):
+        FakeLocalProvider.response = (
+            "integrated_multimodal_description: [Shot 1] 一名舞者在柔和舞台灯光中缓慢转身。\n\n"
+            "overall_soundscape: 轻微脚步声与空间混响。\n\nnon_diegetic_music: N/A"
+        )
+        with patch.object(nodes, "LocalQwenProvider", FakeLocalProvider):
+            nodes.enhance_prompt(
+                "女人在跳舞",
+                api_mode=nodes.LOCAL_QWEN_API_MODE,
+                output_language="中文",
+                official_skill_profile=nodes.COMPAT_SKILL_PROFILE,
+                rewrite_mode="creative",
+                seed=987654321,
+                local_model="custom/Qwen3.8-test.gguf",
+                local_mmproj="custom/mmproj-test.gguf",
+                local_context_size=49152,
+                local_max_tokens=6144,
+                local_think_mode=runtime.LOCAL_THINK_ON,
+                local_reasoning_effort="xhigh",
+                local_video_sample_fps=3.25,
+                local_unload_policy=runtime.LOCAL_IDLE_TTL,
+                local_comfy_memory_policy=runtime.LOCAL_COMFY_MEMORY_POLICIES[-1],
+            )
+        instance = FakeLocalProvider.instances[0]
+        settings = instance.settings
+        self.assertEqual(settings.model_filename, "custom/Qwen3.8-test.gguf")
+        self.assertEqual(settings.mmproj_filename, "custom/mmproj-test.gguf")
+        self.assertEqual(settings.context_size, 49152)
+        self.assertEqual(settings.max_tokens, 6144)
+        self.assertEqual(settings.think_mode, runtime.LOCAL_THINK_ON)
+        self.assertEqual(settings.reasoning_effort, "xhigh")
+        self.assertEqual(settings.video_sample_fps, 3.25)
+        self.assertEqual(settings.unload_policy, runtime.LOCAL_IDLE_TTL)
+        self.assertEqual(settings.comfy_memory_policy, runtime.LOCAL_COMFY_MEMORY_POLICIES[-1])
+        self.assertEqual(instance.calls[0]["kwargs"], {"temperature": 1.2, "seed": 987654321})
+        system = instance.messages[0][0]["content"]
+        user = instance.messages[0][1]["content"]
+        self.assertIn("FINAL LOCAL OUTPUT LANGUAGE LOCK", system)
+        self.assertIn("说明正文必须使用简体中文", system)
+        self.assertIn("FINAL LOCAL OUTPUT LANGUAGE LOCK", user)
+
+    def test_h3_local_obvious_english_miss_is_repaired_without_rejecting_output(self):
+        responses = iter(
+            [
+                (
+                    "integrated_multimodal_description: [Shot 1] A smiling dancer turns slowly under warm stage "
+                    "lights while the camera moves closer and follows her graceful motion across the dark performance "
+                    "space with soft highlights and a calm ending pose.\n\noverall_soundscape: Gentle footsteps and room "
+                    "reverb remain audible throughout the shot.\n\nnon_diegetic_music: A restrained ambient rhythm."
+                ),
+                (
+                    "integrated_multimodal_description: [Shot 1] 微笑的舞者在暖色舞台灯光下缓慢转身，镜头平稳推进并跟随她的动作，最后停在从容的定格姿态。\n\n"
+                    "overall_soundscape: 轻柔脚步声与空间混响贯穿镜头。\n\nnon_diegetic_music: 克制的氛围节奏。"
+                ),
+            ]
+        )
+        FakeLocalProvider.response = lambda _messages: next(responses)
+        with patch.object(nodes, "LocalQwenProvider", FakeLocalProvider):
+            result = nodes.enhance_prompt(
+                "女人在跳舞",
+                api_mode=nodes.LOCAL_QWEN_API_MODE,
+                output_language="中文",
+            )
+        instance = FakeLocalProvider.instances[0]
+        self.assertEqual(len(instance.calls), 2)
+        self.assertEqual(instance.calls[1]["kwargs"]["temperature"], 0.1)
+        self.assertIn("target_descriptive_language", instance.messages[1][1]["content"])
+        self.assertIn("微笑的舞者", result)
+
+    def test_h3_local_strict_official_profile_keeps_english_authoritative(self):
+        FakeLocalProvider.response = (
+            "integrated_multimodal_description: [Shot 1] A dancer turns beneath warm stage lights while the camera "
+            "moves closer and follows her calm performance through a clear beginning, middle, and ending pose.\n\n"
+            "overall_soundscape: Gentle footsteps and natural room ambience.\n\nnon_diegetic_music: N/A"
+        )
+        with patch.object(nodes, "LocalQwenProvider", FakeLocalProvider):
+            result = nodes.enhance_prompt(
+                "女人在跳舞",
+                api_mode=nodes.LOCAL_QWEN_API_MODE,
+                output_language="中文",
+                official_skill_profile=nodes.STRICT_SKILL_PROFILE,
+            )
+        instance = FakeLocalProvider.instances[0]
+        self.assertEqual(len(instance.calls), 1)
+        self.assertIn("selected descriptive language is English", instance.messages[0][0]["content"])
+        self.assertIn("A dancer turns", result)
+
     def test_seedance_local_provider_accepts_nonempty_content(self):
         FakeLocalProvider.response = "镜头从静止全景缓慢推进，主体抬头后沿光线方向前行。"
         with patch.object(seedance20, "LocalQwenProvider", FakeLocalProvider):
@@ -504,6 +609,45 @@ class LocalQwenUnitTests(unittest.TestCase):
             )
         self.assertIn("主体", result)
         self.assertFalse(FakeLocalProvider.instances[0].vision)
+
+    def test_seedance_local_language_lock_and_repair_are_applied(self):
+        responses = iter(
+            [
+                (
+                    "A graceful dancer performs a slow turn beneath warm stage lights while the camera moves forward "
+                    "and follows her balanced motion. The dark background stays stable, her identity remains consistent, "
+                    "and the shot ends on a confident smiling pose with subtle room ambience."
+                ),
+                "暖色舞台灯光下，舞者缓慢转身，镜头平稳前移并跟随她连贯的动作，最终定格在自信的微笑姿态。",
+            ]
+        )
+        FakeLocalProvider.response = lambda _messages: next(responses)
+        with patch.object(seedance20, "LocalQwenProvider", FakeLocalProvider):
+            result = seedance20.enhance_seedance20_prompt(
+                "女人在跳舞",
+                api_mode=seedance20.LOCAL_QWEN_API_MODE,
+                output_language="中文",
+                seed=42,
+                local_model="custom/seedance-model.gguf",
+                local_mmproj="custom/seedance-mmproj.gguf",
+                local_context_size=40960,
+                local_max_tokens=5120,
+                local_think_mode=runtime.LOCAL_THINK_OFF,
+                local_reasoning_effort="low",
+                local_video_sample_fps=1.5,
+                local_unload_policy=runtime.LOCAL_IDLE_TTL,
+                local_comfy_memory_policy=runtime.LOCAL_COMFY_MEMORY_POLICIES[-1],
+            )
+        instance = FakeLocalProvider.instances[0]
+        self.assertEqual(instance.settings.model_filename, "custom/seedance-model.gguf")
+        self.assertEqual(instance.settings.mmproj_filename, "custom/seedance-mmproj.gguf")
+        self.assertEqual(instance.settings.context_size, 40960)
+        self.assertEqual(instance.settings.max_tokens, 5120)
+        self.assertEqual(instance.settings.reasoning_effort, "low")
+        self.assertEqual(instance.settings.video_sample_fps, 1.5)
+        self.assertEqual(len(instance.calls), 2)
+        self.assertIn("FINAL LOCAL OUTPUT LANGUAGE LOCK", instance.messages[0][0]["content"])
+        self.assertIn("暖色舞台灯光", result)
 
     def test_trimmed_native_video_is_allowed_only_for_local_sampling(self):
         data = encoded_video_bytes(frame_count=96, fps=24)
@@ -573,6 +717,60 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(report_data["stages"][0]["source"], "local_model")
         self.assertEqual(len(FakeLocalProvider.instances), 1)
         self.assertFalse(FakeLocalProvider.instances[0].vision)
+
+    def test_music_local_chinese_caption_parameter_is_locked_and_repaired(self):
+        responses = iter(
+            [
+                (
+                    "### Global Metadata\nA warm cinematic Mandarin pop ballad develops from a restrained opening "
+                    "toward a bright road-trip chorus with steady tempo, acoustic guitar, piano, and broad drums.\n\n"
+                    "### Vocal Details\nA clear female lead vocal begins intimately and grows more open through the "
+                    "chorus while keeping a natural emotional delivery.\n\n### Arrangement\nThe verse stays sparse before "
+                    "the chorus expands with drums, strings, and luminous harmonic support."
+                ),
+                (
+                    "### Global Metadata\n温暖的华语电影感流行民谣，从克制的开篇逐渐走向明亮开阔的公路副歌，钢琴与原声吉他为核心。\n\n"
+                    "### Vocal Details\n清澈的女声主唱从亲密克制逐步转为开放明亮，保持自然真挚的情绪表达。\n\n"
+                    "### Arrangement\n主歌维持稀疏编配，副歌加入鼓组、弦乐与明亮的和声支撑，形成清晰的能量抬升。"
+                ),
+            ]
+        )
+        FakeLocalProvider.response = lambda _messages: next(responses)
+        fake_model = SimpleNamespace(stat=lambda: SimpleNamespace(st_size=1, st_mtime_ns=1))
+        with (
+            patch.object(music3, "LocalQwenProvider", FakeLocalProvider),
+            patch.object(music3, "resolve_model_path", return_value=fake_model),
+        ):
+            _lyrics, caption, _payload, report = music3.enhance_music3_prompt(
+                "温暖的中文公路民谣",
+                lyrics_mode=music3.PRESERVE_LYRICS_MODE,
+                lyrics="[Verse]\n沿着微光继续走",
+                lyrics_language="中文",
+                caption_language="中文",
+                quality_mode=music3.FAST_QUALITY_MODE,
+                api_mode=music3.LOCAL_QWEN_API_MODE,
+                local_model="custom/music-model.gguf",
+                local_context_size=49152,
+                local_max_tokens=6144,
+                local_think_mode=runtime.LOCAL_THINK_ON,
+                local_reasoning_effort="xhigh",
+                local_unload_policy=runtime.LOCAL_IDLE_TTL,
+                local_comfy_memory_policy=runtime.LOCAL_COMFY_MEMORY_POLICIES[-1],
+            )
+        instance = FakeLocalProvider.instances[0]
+        self.assertEqual(instance.settings.model_filename, "custom/music-model.gguf")
+        self.assertEqual(instance.settings.context_size, 49152)
+        self.assertEqual(instance.settings.max_tokens, 6144)
+        self.assertEqual(instance.settings.think_mode, runtime.LOCAL_THINK_ON)
+        self.assertEqual(instance.settings.reasoning_effort, "xhigh")
+        self.assertEqual(instance.settings.unload_policy, runtime.LOCAL_IDLE_TTL)
+        self.assertEqual(instance.settings.comfy_memory_policy, runtime.LOCAL_COMFY_MEMORY_POLICIES[-1])
+        self.assertEqual(len(instance.calls), 2)
+        first_user = json.loads(instance.messages[0][1]["content"].split("\n\nFINAL LOCAL", 1)[0])
+        self.assertEqual(first_user["Music_Brief"]["output_language"], "Chinese")
+        self.assertIn("automatic length appropriate for a Chinese", first_user["Music_Brief"]["caption_word_target"])
+        self.assertIn("caption_language_repair", [item["stage"] for item in json.loads(report)["stages"]])
+        self.assertIn("温暖的华语", caption)
 
     def test_local_options_are_in_all_three_schemas_and_frontends(self):
         self.assertIn(nodes.LOCAL_QWEN_API_MODE, nodes.API_MODES)

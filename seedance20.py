@@ -21,9 +21,12 @@ from .local_qwen_provider import (
     LOCAL_QWEN_API_MODE,
     LocalQwenProvider,
     LocalQwenProviderError,
+    apply_local_language_lock,
     build_local_multimodal_parts,
     is_local_qwen_api_mode,
+    local_language_repair_messages,
     local_visual_part_budget,
+    needs_local_language_repair,
     settings_from_values as local_qwen_settings,
 )
 from .local_qwen_runtime import (
@@ -770,7 +773,7 @@ def enhance_seedance20_prompt(
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
             )
-            messages = _build_messages(
+            messages = apply_local_language_lock(_build_messages(
                 prompt,
                 task_intent,
                 complexity_mode,
@@ -792,7 +795,7 @@ def enhance_seedance20_prompt(
                 media_plan,
                 [],
                 case_template,
-            )
+            ), output_language)
             visual_budget = local_visual_part_budget(messages, settings)
             media_parts, _media_report = build_local_multimodal_parts(
                 media_plan,
@@ -801,7 +804,7 @@ def enhance_seedance20_prompt(
             )
             if progress_callback:
                 progress_callback("media_prepared", asset_count=len(media_plan))
-            messages = _build_messages(
+            messages = apply_local_language_lock(_build_messages(
                 prompt,
                 task_intent,
                 complexity_mode,
@@ -823,7 +826,7 @@ def enhance_seedance20_prompt(
                 media_plan,
                 media_parts,
                 case_template,
-            )
+            ), output_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
                     "\n\nLOCAL_QWEN_VIDEO_EVIDENCE_BOUNDARY: Connected videos are represented only by ordered "
@@ -833,14 +836,22 @@ def enhance_seedance20_prompt(
                     "earlier visible phases, codes, and actions before later ones; do not reorder phases by salience, and "
                     "do not mention a later-phase identifier before its earlier-phase identifier has appeared."
                 )
+            local_attempts = 1
             with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
                 result = provider.complete(
                     messages,
                     temperature={"strict": 0.2, "balanced": 0.7, "creative": 1.2}[rewrite_mode],
                     seed=int(seed),
                 )
+                if needs_local_language_repair(result, output_language):
+                    result = provider.complete(
+                        local_language_repair_messages(result, output_language),
+                        temperature=0.1,
+                        seed=int(seed),
+                    )
+                    local_attempts += 1
             if progress_callback:
-                progress_callback("llm_completed", attempts=1)
+                progress_callback("llm_completed", attempts=local_attempts)
                 progress_callback("output_finalized")
             return result
         except LocalQwenProviderError as error:

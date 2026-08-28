@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -56,6 +58,126 @@ DEFAULT_MAX_TOKENS = 4096
 DEFAULT_VIDEO_SAMPLE_FPS = 2.0
 MAX_VISUAL_PARTS = 16
 CONTEXT_SAFETY_TOKENS = 1024
+
+
+_CJK_CHARACTER_RE = re.compile(r"[\u3400-\u9fff]")
+_LATIN_WORD_RE = re.compile(r"[A-Za-z]+(?:['’-][A-Za-z]+)*")
+
+
+def _language_family(value: Any) -> str | None:
+    normalized = str(value or "").strip().casefold()
+    if normalized in {"中文", "chinese", "simplified chinese", "zh", "zh-cn"}:
+        return "zh"
+    if normalized in {"english", "英文", "en"} or normalized.startswith("english（"):
+        return "en"
+    return None
+
+
+def needs_local_language_repair(text: str, target_language: Any) -> bool:
+    """Return True only for an obvious descriptive-language miss.
+
+    H3 field names, Music 3 headings, labels, timestamps, and protected source
+    text legitimately use another language, so this deliberately ignores mixed
+    outputs and only catches strongly one-sided results such as an all-English
+    response after the user selected Chinese.
+    """
+
+    family = _language_family(target_language)
+    if family is None:
+        return False
+    value = str(text or "")
+    cjk_characters = len(_CJK_CHARACTER_RE.findall(value))
+    latin_words = len(_LATIN_WORD_RE.findall(value))
+    if family == "zh":
+        return latin_words >= 24 and cjk_characters <= max(6, latin_words // 5)
+    return cjk_characters >= 24 and latin_words <= max(6, cjk_characters // 5)
+
+
+def local_language_lock(target_language: Any) -> str:
+    family = _language_family(target_language)
+    if family == "zh":
+        return (
+            "FINAL LOCAL OUTPUT LANGUAGE LOCK / 本地输出语言最终锁定：说明正文必须使用简体中文。"
+            "返回前静默检查，所有描述性句子和字段值都必须写成自然、准确的简体中文。"
+            "仅协议要求的字段名、段落标题、镜头/时间码语法、参考标签、技术标记，以及用户原始对白、"
+            "歌词、品牌/UI 文案或画面可见文字按协议或原文保留。前面内嵌的英文 Skill 和示例只定义"
+            "结构，绝不能把说明正文切换回英文。"
+        )
+    if family == "en":
+        return (
+            "FINAL LOCAL OUTPUT LANGUAGE LOCK: The selected descriptive language is English. Before returning, "
+            "silently verify that every descriptive sentence and field value is written in natural English. Keep "
+            "only required protocol tokens and exact user-provided dialogue, lyrics, brand copy, UI copy, or visible "
+            "text in their required/original form. Embedded examples define structure only."
+        )
+    return ""
+
+
+def local_language_repair_messages(text: str, target_language: Any) -> list[dict[str, str]]:
+    family = _language_family(target_language)
+    target = "简体中文" if family == "zh" else "English"
+    if family == "zh":
+        system = (
+            "你是严格的语言纠正编辑器。只返回修正后的最终成品。保持全部事实、顺序、结构、协议要求的"
+            "字段/段落名、镜头标签、时间码、参考标签、技术标记，以及用户原始对白、歌词、品牌/UI 文案"
+            "和画面可见文字不变。只把描述性正文和字段值改为自然、准确的简体中文；不要解释、删减、"
+            "扩写或重新设计内容。"
+        )
+    else:
+        system = (
+            "You are a strict language-correction editor. Return only the corrected final artifact. Preserve all "
+            "facts, ordering, structure, required field/section names, shot labels, timestamps, reference labels, "
+            "technical tokens, and exact quoted dialogue, lyrics, brand/UI copy, and visible text. Translate only "
+            "descriptive prose and field values into English. Do not explain, shorten, expand, or redesign it."
+        )
+    return [
+        {
+            "role": "system",
+            "content": system,
+        },
+        {
+            "role": "user",
+            "content": json.dumps(
+                {"target_descriptive_language": target, "draft_to_correct": str(text or "")},
+                ensure_ascii=False,
+            ),
+        },
+    ]
+
+
+def apply_local_language_lock(
+    messages: list[dict[str, Any]], target_language: Any
+) -> list[dict[str, Any]]:
+    """Append the selected language as the final instruction in both roles.
+
+    Local GGUF models can overweight long embedded English Skills/examples.
+    Keeping this instruction last in both the system and user text makes the
+    serialized UI value unambiguous without removing any official source.
+    """
+
+    lock = local_language_lock(target_language)
+    if not lock:
+        return messages
+    prepared: list[dict[str, Any]] = []
+    for message in messages:
+        updated = dict(message)
+        content = updated.get("content")
+        if isinstance(content, str):
+            updated["content"] = content.rstrip() + "\n\n" + lock
+        elif isinstance(content, list):
+            parts: list[dict[str, Any]] = []
+            appended = False
+            for part in content:
+                item = dict(part)
+                if not appended and item.get("type") == "text":
+                    item["text"] = str(item.get("text") or "").rstrip() + "\n\n" + lock
+                    appended = True
+                parts.append(item)
+            if not appended:
+                parts.insert(0, {"type": "text", "text": lock})
+            updated["content"] = parts
+        prepared.append(updated)
+    return prepared
 
 
 class LocalQwenProviderError(RuntimeError):
@@ -276,7 +398,11 @@ __all__ = [
     "LocalQwenProviderError",
     "LocalQwenSettings",
     "build_local_multimodal_parts",
+    "apply_local_language_lock",
     "local_visual_part_budget",
+    "local_language_lock",
+    "local_language_repair_messages",
     "is_local_qwen_api_mode",
+    "needs_local_language_repair",
     "settings_from_values",
 ]

@@ -59,9 +59,12 @@ try:
         LOCAL_QWEN_API_MODE,
         LocalQwenProvider,
         LocalQwenProviderError,
+        apply_local_language_lock,
         build_local_multimodal_parts,
         is_local_qwen_api_mode,
+        local_language_repair_messages,
         local_visual_part_budget,
+        needs_local_language_repair,
         settings_from_values as local_qwen_settings,
     )
     from .local_qwen_runtime import (
@@ -85,9 +88,12 @@ except ImportError:
         LOCAL_QWEN_API_MODE,
         LocalQwenProvider,
         LocalQwenProviderError,
+        apply_local_language_lock,
         build_local_multimodal_parts,
         is_local_qwen_api_mode,
+        local_language_repair_messages,
         local_visual_part_budget,
+        needs_local_language_repair,
         settings_from_values as local_qwen_settings,
     )
     from local_qwen_runtime import (
@@ -1440,7 +1446,10 @@ def enhance_prompt(
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
             )
-            messages = _build_messages(
+            effective_local_language = _effective_output_language(
+                output_language, official_skill_profile
+            )
+            messages = apply_local_language_lock(_build_messages(
                 prompt,
                 task_type,
                 duration_seconds,
@@ -1458,7 +1467,7 @@ def enhance_prompt(
                 official_skill_profile,
                 creative_preset,
                 case_template,
-            )
+            ), effective_local_language)
             visual_budget = local_visual_part_budget(messages, settings)
             media_parts, _media_report = build_local_multimodal_parts(
                 media_plan,
@@ -1467,7 +1476,7 @@ def enhance_prompt(
             )
             if progress_callback:
                 progress_callback("media_prepared", asset_count=len(media_plan))
-            messages = _build_messages(
+            messages = apply_local_language_lock(_build_messages(
                 prompt,
                 task_type,
                 duration_seconds,
@@ -1485,21 +1494,29 @@ def enhance_prompt(
                 official_skill_profile,
                 creative_preset,
                 case_template,
-            )
+            ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
                     "\n\nLOCAL_QWEN_VIDEO_EVIDENCE_BOUNDARY: Connected videos are represented only by ordered "
                     "timestamped visual samples. State only changes supported by those samples; do not claim exhaustive "
                     "frame coverage, complete-video access, heard audio, speech transcription, or soundtrack analysis."
                 )
+            local_attempts = 1
             with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
                 response_text = provider.complete(
                     messages,
                     temperature=MODE_TEMPERATURES[rewrite_mode],
                     seed=int(seed),
                 )
+                if needs_local_language_repair(response_text, effective_local_language):
+                    response_text = provider.complete(
+                        local_language_repair_messages(response_text, effective_local_language),
+                        temperature=0.1,
+                        seed=int(seed),
+                    )
+                    local_attempts += 1
             if progress_callback:
-                progress_callback("llm_completed", attempts=1)
+                progress_callback("llm_completed", attempts=local_attempts)
             result = _reorder_complete_fields(response_text, task_type)
             if progress_callback:
                 progress_callback("output_finalized")
