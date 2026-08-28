@@ -40,12 +40,14 @@ T8_PREVIEW_SCHEMA = "t8-bundled-case-previews/v1"
 REGISTRY_SCANNER_TRIPWIRES = {
     "environment_read": b"os.environ",
     "dynamic_import": b"importlib.import_module(",
-    "aiohttp_client_session": b"aiohttp.ClientSession(",
     "direct_requests_post": b"requests.post(",
     "direct_urllib": b"urllib.request",
     "direct_socket": b"socket.socket(",
     "direct_subprocess_run": b"subprocess.run(",
     "direct_subprocess_popen": b"subprocess.Popen(",
+}
+REGISTRY_ALL_TEXT_TRIPWIRES = {
+    "async_http_client_session": b"aiohttp.ClientSession",
 }
 
 
@@ -311,6 +313,13 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
     for path in python_files:
         payload = path.read_bytes()
         for label, pattern in REGISTRY_SCANNER_TRIPWIRES.items():
+            if pattern in payload:
+                findings.append(f"{path.relative_to(ROOT).as_posix()}:{label}")
+    for path in shipped:
+        if path.suffix.casefold() not in TEXT_SUFFIXES:
+            continue
+        payload = path.read_bytes()
+        for label, pattern in REGISTRY_ALL_TEXT_TRIPWIRES.items():
             if pattern in payload:
                 findings.append(f"{path.relative_to(ROOT).as_posix()}:{label}")
     if findings:

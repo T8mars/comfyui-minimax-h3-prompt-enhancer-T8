@@ -5,11 +5,21 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.9.3] - 2026-08-28
+
+### Fixed
+
+- Remove a Registry network-rule signature literal from the packaged release
+  notes after the 1.9.2 status evidence showed that only the Markdown wording,
+  not executable code, triggered the scan.
+- Extend the deterministic Registry gate to inspect every packaged text file
+  for that signature so documentation cannot reintroduce the false positive.
+
 ## [1.9.2] - 2026-08-28
 
 ### Fixed
 
-- Replace the preview downloader's dedicated `aiohttp.ClientSession` with the
+- Replace the preview downloader's dedicated asynchronous HTTP client with the
   repository's existing audited Requests transport, executed off the ComfyUI
   event loop. This preserves HTTPS host allowlisting, redirect validation,
   streaming size limits, SHA-256 verification, and bounded retries while
