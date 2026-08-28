@@ -8,6 +8,10 @@ tools/
 case_templates/source_batches/
 *_smoke.py
 
+# T8 case GIFs remain in the GitHub repository for legacy/full-clone users.
+# Registry installs use the signed, catalog-pinned preview asset channel instead.
+/web/js/assets/t8-case-previews/*.gif
+
 # Full GitHub installs keep the standalone llama-server bootstrap and optional
 # environment/network compatibility helpers.  Registry installs use the
 # in-process llama-cpp-python runtime and audited provider transport instead.

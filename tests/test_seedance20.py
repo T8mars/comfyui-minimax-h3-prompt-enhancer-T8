@@ -7,6 +7,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -442,6 +443,33 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 path, record = case_library_routes.resolve_preview(preview["case_id"], verify_hash=True)
                 self.assertEqual(record["_template_kind"], "bundled")
                 self.assertTrue(path.is_relative_to(case_library_routes.BUNDLED_PREVIEW_ROOT))
+
+    def test_registry_install_without_bundled_t8_gifs_exposes_downloadable_previews(self):
+        preview_manager_module = sys.modules[f"{SPEC.name}.preview_asset_manager"]
+        with tempfile.TemporaryDirectory() as temporary:
+            empty_root = Path(temporary) / "bundled"
+            empty_root.mkdir()
+            manifest = empty_root / "manifest.json"
+            manifest.write_bytes(case_library_routes.BUNDLED_PREVIEW_MANIFEST.read_bytes())
+            manager = preview_manager_module.PreviewAssetManager(
+                Path(temporary) / "cache", preview_manager_module.BOOTSTRAP_CHANNEL
+            )
+            with (
+                patch.object(case_library_routes, "configured_manifest_path", return_value=None),
+                patch.object(case_library_routes, "configured_community_manifest_path", return_value=None),
+                patch.object(case_library_routes, "BUNDLED_PREVIEW_ROOT", empty_root),
+                patch.object(case_library_routes, "BUNDLED_PREVIEW_MANIFEST", manifest),
+                patch.object(case_library_routes, "preview_asset_manager", return_value=manager),
+            ):
+                case_library_routes._bundled_preview_records.cache_clear()
+                catalog = case_library_routes.runtime_public_catalog()
+                previews = [preview for template in catalog["templates"] for preview in template["previews"]]
+                self.assertEqual(len(previews), 277)
+                self.assertFalse(catalog["bundled_previews_included"])
+                self.assertEqual(catalog["bundled_preview_count"], 0)
+                self.assertTrue(all(preview["downloadable"] for preview in previews))
+                self.assertFalse(any(preview["available"] for preview in previews))
+            case_library_routes._bundled_preview_records.cache_clear()
 
     def test_bundled_gif_manifest_is_complete_hash_pinned_and_reasonably_sized(self):
         manifest = json.loads(case_library_routes.BUNDLED_PREVIEW_MANIFEST.read_text(encoding="utf-8"))

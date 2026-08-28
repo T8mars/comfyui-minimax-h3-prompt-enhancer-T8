@@ -28,7 +28,8 @@ class ReleaseToolTests(unittest.TestCase):
         result = verify.verify_registry_package_hygiene(verify.tracked_files())
         self.assertGreater(result["registry_files"], 1000)
         self.assertGreater(result["registry_python_files"], 10)
-        self.assertLess(result["registry_uncompressed_bytes"], 100 * 1024 * 1024)
+        self.assertLess(result["registry_uncompressed_bytes"], 40 * 1024 * 1024)
+        self.assertTrue((ROOT / "preview_assets" / "channel.json").is_file())
         runtime_shim = (ROOT / "local_qwen_runtime.py").read_text(encoding="utf-8")
         self.assertNotIn("importlib.import_module(", runtime_shim)
 

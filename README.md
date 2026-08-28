@@ -122,7 +122,7 @@ OpenAI 兼容默认继续发送 `temperature`，保持 1.2.0 行为。只有已�
 
 - 新增免 API Key 的本地 Qwen3.8-27B GGUF 渠道，并支持官方与第三方 Uncensored Q4_K_M 变体、视觉投影器、显存释放、执行后卸载策略和真实时间戳视频联系表。
 - MiniMax H3 核心 Skill 更新为固定官方快照；维护工具可核验内容树，并由每周工作流只读检查 H3 核心、8 个官方创意 Skill 和 Music 3 官方 Skill 的上游路径是否发生变化。
-- 285 个官方/T8 GIF 全部保留；预览统一采用 2 fps、最大宽度 180 px、32 色的轻量发布配置，总资源强制控制在 90 MiB 内，为 Comfy Registry 的 100 MB ZIP 限制保留安全空间；菜单快速移动时仍会取消过期预览请求。
+- 285 个官方/T8 GIF 全部保留；GitHub 完整克隆继续内置全部预览，Registry 包仅内置 8 个官方 GIF，277 个 T8 GIF 改由独立版本化资源通道按需获取，避免案例增长再次触发 Registry 体积限制。
 - 提供 13 个 ComfyUI 原生 `example_workflows` 与同名缩略图：原有 9 个基础/本地工作流保持不变，另增 4 个创作导演套件组合案例；全部示例不依赖 Comfyroll、EasyUse 等第三方节点。
 - 三种云端渠道统一使用一个经过测试的传输层，同时保留各自既有付费重试、HTTP 分类和错误文案；不记录请求或响应正文。
 - 新增版本门禁、密钥/大文件/JSON/GIF 预算检查、Changelog、License、Registry 元数据与发布前 CI。
@@ -168,7 +168,7 @@ MiniMax H3 / Seedance 2.0 / Music 3 Prompt Enhancer (T8)
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-Registry 发布包会包含节点运行代码、官方 Skill、非官方案例库与轻量 GIF 预览，不包含测试、来源批次、API Key、独立 `llama-server` 运行时、安装/下载脚本或 GGUF 模型。Manager 安装的本地 GGUF 模式使用当前 ComfyUI Python 中的 `llama-cpp-python`；如果需要固定 `llama-server`、PATH 自动回退、环境变量默认值或显式连接探测，请按上面的推荐方式从 GitHub 完整安装。
+Registry 发布包会包含节点运行代码、官方 Skill、非官方案例库、8 个官方 GIF 和一份轻量资源通道清单；277 个 T8 GIF 不再塞入 Registry ZIP。用户查看某个 T8 案例时，节点默认只下载该案例所在的小分片并缓存到 `ComfyUI/user/t8_prompt_enhancer/preview_assets`。发布包仍不包含测试、来源批次、API Key、独立 `llama-server` 运行时、安装/下载脚本或 GGUF 模型。Manager 安装的本地 GGUF 模式使用当前 ComfyUI Python 中的 `llama-cpp-python`；如果需要固定 `llama-server`、PATH 自动回退、环境变量默认值或显式连接探测，请按上面的推荐方式从 GitHub 完整安装。
 
 云端模式不增加额外 Python 依赖，使用 ComfyUI 已安装的 `requests`、NumPy、Pillow 和原生媒体类型；本地视频抽样复用 ComfyUI 自带的 PyAV。安装后重启 ComfyUI；如果节点或前端界面没有更新，请对浏览器执行一次 `Ctrl+F5`。
 
@@ -451,7 +451,9 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 
 打开 `MiniMax 官方场景 Skill（8 个可选）` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择任一具体官方场景 Skill 或非官方模板后，节点内都会显示用途、适用/推荐输入格式、必须实现的结构锚点、推荐示例、GIF 和来源链接。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
-GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 277 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 仓库直接分发；全新下载不需要额外清单或本地案例目录。T8 GIF 由内置 manifest 按案例 ID、来源 SHA-256、分发文件 SHA-256 和 GIF 文件头完整校验。
+GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 277 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 完整仓库直接分发；Registry/Manager 安装则默认在用户实际查看某个案例时，从独立的 [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) Release 下载对应分片。节点会校验安装目录对应的案例全集、来源 SHA-256、分片 SHA-256、每个 GIF 的大小/哈希/文件头和安全解包路径；不兼容或损坏的资源不会显示，也不会影响提示词增强。
+
+H3 与 Seedance 2.0 节点都提供非序列化按钮 `管理 / 更新 T8 动态预览`：可选择“智能按需（推荐）”“自动补齐全部”或“仅手动下载”，并可检查更新、下载缺失、校验修复或清空缓存。这些设置保存在 ComfyUI 用户目录，不写入工作流，所以旧工作流结构、节点输入输出和 API Key 均不会改变。离线时已缓存/内置 GIF 继续显示；未缓存 GIF 只显示提示，提示词生成仍正常运行。
 
 维护者仍可选用本地原始案例清单，以显示来源链接或在开发环境优先检查原始预览；普通用户不需要此配置：
 
@@ -476,7 +478,7 @@ python tools/import_unofficial_case_library_v2.py `
   --output case_templates/catalog.json
 ```
 
-每次案例目录发生变化，都必须同步生成并提交完整的内置预览包，不能只提交 selector 元数据。生成器要求输出目录不存在或为空；建议先生成到待审目录，核对后再整体替换正式目录：
+每次案例目录发生变化，都必须同步生成并提交完整的 GitHub 内置预览包，不能只提交 selector 元数据；同时必须用资产仓库工具生成新的、不可变的 Release 分片和匹配的 `channel.json`，再把该通道快照带入节点版本。Registry 只分发通道清单，不分发 T8 GIF。原生成器要求输出目录不存在或为空；建议先生成到待审目录，核对后再整体替换正式目录：
 
 ```powershell
 python tools/bundle_t8_case_previews.py `

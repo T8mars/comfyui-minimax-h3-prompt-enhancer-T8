@@ -95,7 +95,9 @@ export function renderPreview(panel, model, reposition) {
 
     const previewHost = document.createElement("div");
     previewHost.style.cssText = "display:flex;flex-direction:column;gap:6px;min-width:0";
+    let renderedPreview = null;
     const renderOne = (preview) => {
+        renderedPreview = preview;
         for (const image of previewHost.querySelectorAll("img")) {
             image.onload = null;
             image.onerror = null;
@@ -140,11 +142,36 @@ export function renderPreview(panel, model, reposition) {
             image.src = preview.url;
             figure.append(image);
         } else {
-            figure.append(textBlock(
+            const unavailable = textBlock(
                 "t8-template-preview-unavailable",
-                preview.unavailable_message || "本机未配置此 GIF；不影响提示词增强。",
+                preview.downloadable ? "正在准备 GIF 预览…" : (preview.unavailable_message || "本机未配置此 GIF；不影响提示词增强。"),
                 "padding:22px 12px;border:1px dashed #666;border-radius:7px;text-align:center;opacity:.72",
-            ));
+            );
+            figure.append(unavailable);
+            if (preview.downloadable && typeof preview.ensure === "function") {
+                const download = document.createElement("button");
+                download.type = "button";
+                download.textContent = "下载此预览";
+                download.style.cssText = "height:28px;border:1px solid #555;border-radius:5px;background:#292929;color:#eee;cursor:pointer";
+                const load = async (force) => {
+                    try {
+                        const url = await preview.ensure(force);
+                        if (url && renderedPreview === preview && previewHost.isConnected) {
+                            preview.url = url;
+                            preview.available = true;
+                            renderOne(preview);
+                        } else if (!url) {
+                            unavailable.textContent = "当前为仅手动下载模式；提示词增强可正常使用。";
+                        }
+                    } catch (error) {
+                        unavailable.textContent = `GIF 获取失败：${error.message}；不影响提示词增强。`;
+                        reposition();
+                    }
+                };
+                download.onclick = () => load(true);
+                figure.append(download);
+                load(false);
+            }
         }
         if (preview.source_url) {
             const source = document.createElement("a");

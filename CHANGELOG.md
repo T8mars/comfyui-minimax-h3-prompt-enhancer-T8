@@ -5,6 +5,31 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.9.0] - 2026-08-28
+
+### Added
+
+- Add a separate, versioned T8 preview asset channel with 16 deterministic
+  GitHub Release shards, catalog/source identity pinning, SHA-256 verification,
+  safe ZIP extraction, atomic content-addressed caching, and bounded retries.
+- Add non-serialized preview management controls to the H3 and Seedance nodes:
+  smart on-demand, full-auto, and manual modes plus check, install, repair, and
+  clear actions. Preview state is stored only under the ComfyUI user directory.
+
+### Changed
+
+- Keep all 277 T8 GIFs in full GitHub clones for existing users while excluding
+  them from the Registry archive. Registry installs retain the selector manifest
+  and bootstrap channel, then download only the requested preview shard.
+- Reduce the expected Registry archive surface to about 8.5 MiB uncompressed,
+  leaving substantial room for future nodes, Skills, cases, and code updates.
+
+### Compatibility
+
+- Preserve all public node IDs, inputs, outputs, widget serialization order,
+  selector values, workflows, and prompt behavior. Preview download failures are
+  isolated from LLM execution, and preview media can never become model input.
+
 ## [1.8.2] - 2026-08-28
 
 ### Fixed

@@ -1,6 +1,7 @@
 import { api } from "../../scripts/api.js";
 import { registerTemplateMenuPreview } from "./template_menu_preview.js";
 import { openTemplateBrowser } from "./template_browser.js";
+import { ensurePreview, openPreviewAssetManager } from "./preview_asset_ui.js";
 
 
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
@@ -180,9 +181,30 @@ export function renderTemplateDetail(
             figure.append(img);
         } else {
             const unavailable = document.createElement("div");
-            unavailable.textContent = "本机未配置此模板的 GIF 预览；不影响提示词增强。";
+            unavailable.textContent = preview.downloadable
+                ? "正在准备 GIF 预览…"
+                : "本机未配置此模板的 GIF 预览；不影响提示词增强。";
             unavailable.style.cssText = "padding:12px;border:1px dashed #666;border-radius:5px;opacity:.75";
             figure.append(unavailable);
+            if (preview.downloadable) {
+                const download = document.createElement("button");
+                download.type = "button";
+                download.textContent = "下载此预览";
+                download.style.cssText = "height:28px;border:1px solid #555;border-radius:5px;background:#292929;color:#eee;cursor:pointer";
+                const load = async (force) => {
+                    try {
+                        const url = await ensurePreview(preview, { force });
+                        if (url && root.isConnected) renderPreview(preview);
+                        else unavailable.textContent = "当前为仅手动下载模式；提示词增强可正常使用。";
+                    } catch (error) {
+                        unavailable.textContent = `GIF 获取失败：${error.message}；不影响提示词增强。`;
+                        refreshSize?.();
+                    }
+                };
+                download.onclick = () => load(true);
+                figure.append(download);
+                load(false);
+            }
         }
         if (preview.source_url) {
             const source = document.createElement("a");
@@ -293,6 +315,8 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
                 unavailable_message: "本机未配置此模板 GIF；不影响提示词增强。",
                 source_url: preview.source_url || "",
                 source_label: "查看案例来源",
+                downloadable: Boolean(preview.downloadable),
+                ensure: (force = false) => ensurePreview(preview, { force }),
             })),
             policy: "GIF 仅供人类本地预览，不会作为图像、视频或 LLM 参考素材",
         };
@@ -361,6 +385,14 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         { serialize: false },
     );
     recommendWidget.serializeValue = () => undefined;
+    const assetsWidget = node.addWidget(
+        "button",
+        "管理 / 更新 T8 动态预览",
+        null,
+        () => openPreviewAssetManager(catalog),
+        { serialize: false },
+    );
+    assetsWidget.serializeValue = () => undefined;
     const browserIndex = node.widgets?.indexOf(browserWidget) ?? -1;
     const detailIndex = node.widgets?.indexOf(domWidget) ?? -1;
     if (browserIndex > detailIndex && detailIndex >= 0) {
@@ -370,6 +402,11 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         if (recommendIndex >= 0) {
             node.widgets.splice(recommendIndex, 1);
             node.widgets.splice(detailIndex + 1, 0, recommendWidget);
+        }
+        const assetsIndex = node.widgets.indexOf(assetsWidget);
+        if (assetsIndex >= 0) {
+            node.widgets.splice(assetsIndex, 1);
+            node.widgets.splice(detailIndex + 2, 0, assetsWidget);
         }
     }
     update();

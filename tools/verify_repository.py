@@ -275,6 +275,9 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "creative_suite.py",
         "local_qwen_runtime.py",
         "local_qwen_python_runtime.py",
+        "preview_asset_manager.py",
+        "preview_assets/channel.json",
+        "web/js/preview_asset_ui.js",
         "official_skills/h3-prompt-writing/SKILL.md",
         "official_skills/music-caption-rewriter/SKILL.md",
     }
@@ -291,6 +294,16 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
     leaked = sorted(forbidden & shipped_relative)
     if leaked:
         raise VerificationError(f"Registry archive exposes GitHub-only helpers: {leaked}")
+    leaked_t8_gifs = sorted(
+        path for path in shipped_relative
+        if path.startswith("web/js/assets/t8-case-previews/") and path.endswith(".gif")
+    )
+    if leaked_t8_gifs:
+        raise VerificationError(
+            f"Registry archive still contains externalized T8 GIF previews: {leaked_t8_gifs[:3]}"
+        )
+    if "web/js/assets/t8-case-previews/manifest.json" not in shipped_relative:
+        raise VerificationError("Registry archive is missing the T8 preview identity manifest")
 
     findings: list[str] = []
     python_files = [path for path in shipped if path.suffix.casefold() == ".py"]

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from .case_templates import CASE_TEMPLATES, public_case_catalog
+from .preview_asset_manager import PreviewAssetError, preview_asset_manager
 
 try:
     from .environment_defaults import optional_environment_value
@@ -197,8 +198,10 @@ def _bundled_preview_records() -> dict[str, dict[str, Any]]:
             path.relative_to(BUNDLED_PREVIEW_ROOT.resolve())
         except ValueError as exc:
             raise CasePreviewError("Bundled T8 preview path escapes its asset directory") from exc
-        if not path.is_file() or path.stat().st_size != int(entry.get("bytes", -1)):
-            raise CasePreviewError(f"Bundled T8 preview file is missing or truncated: {case_id}")
+        if not path.is_file():
+            continue
+        if path.stat().st_size != int(entry.get("bytes", -1)):
+            raise CasePreviewError(f"Bundled T8 preview file is truncated: {case_id}")
         with path.open("rb") as handle:
             if handle.read(6) not in {b"GIF87a", b"GIF89a"}:
                 raise CasePreviewError(f"Bundled T8 preview is not a GIF: {case_id}")
@@ -209,8 +212,6 @@ def _bundled_preview_records() -> dict[str, dict[str, Any]]:
             "_template_kind": "bundled",
             "_path": path,
         }
-    if set(records) != set(allowed):
-        raise CasePreviewError("Bundled T8 preview manifest does not cover the installed selector catalog")
     return records
 
 
@@ -277,6 +278,11 @@ def resolve_preview(case_id: str, *, verify_hash: bool = True) -> tuple[Path, di
     bundled = _bundled_preview_records().get(preview_id)
     if bundled is not None:
         return Path(bundled["_path"]), bundled
+    cached = preview_asset_manager().cached_path(
+        preview_id, _allowed_previews(), verify_hash=verify_hash
+    )
+    if cached is not None:
+        return cached
     if local_error is not None:
         raise local_error
     raise CasePreviewError("T8 preview is neither bundled nor configured locally")
@@ -286,12 +292,17 @@ def runtime_public_catalog() -> dict[str, Any]:
     catalog = public_case_catalog()
     runtime = _runtime_records()
     bundled = _bundled_preview_records()
+    allowed = _allowed_previews()
+    manager = preview_asset_manager()
+    preview_settings = manager.settings()
     for template in catalog["templates"]:
         for preview in template["previews"]:
             record = runtime.get(preview["case_id"])
             preview["available"] = False
             preview["preview_url"] = ""
             preview["source_url"] = ""
+            preview.update(manager.availability(preview["case_id"], allowed))
+            preview["auto_download"] = preview_settings["mode"] != "manual"
             try:
                 resolve_preview(preview["case_id"], verify_hash=False)
             except CasePreviewError:
@@ -308,7 +319,10 @@ def runtime_public_catalog() -> dict[str, Any]:
     catalog["bundled_previews_included"] = len(bundled) == sum(
         len(template["previews"]) for template in catalog["templates"]
     )
-    catalog["preview_policy"] = "GIF is a bundled/local human UI preview only and is never sent to the LLM."
+    catalog["preview_asset_status"] = manager.status(allowed)
+    catalog["preview_policy"] = (
+        "GIF is a bundled/local/cached human UI preview only and is never sent to the LLM."
+    )
     return catalog
 
 
@@ -332,7 +346,9 @@ def register_routes() -> None:
 
     async def catalog_route(_request: Any) -> Any:
         try:
-            return web.json_response(runtime_public_catalog(), headers={"Cache-Control": "no-store"})
+            catalog = runtime_public_catalog()
+            preview_asset_manager().schedule_full_install(_allowed_previews())
+            return web.json_response(catalog, headers={"Cache-Control": "no-store"})
         except CasePreviewError as exc:
             return web.json_response({"error": str(exc)}, status=500)
 
@@ -341,7 +357,7 @@ def register_routes() -> None:
             path, record = resolve_preview(request.match_info["case_id"], verify_hash=True)
             cache_control = (
                 "public, max-age=31536000, immutable"
-                if record.get("_template_kind") == "bundled"
+                if record.get("_template_kind") in {"bundled", "cache"}
                 else "private, max-age=300"
             )
             return web.FileResponse(
@@ -351,9 +367,75 @@ def register_routes() -> None:
         except CasePreviewError as exc:
             return web.json_response({"error": str(exc)}, status=404)
 
+    async def asset_status_route(_request: Any) -> Any:
+        return web.json_response(
+            preview_asset_manager().status(_allowed_previews()),
+            headers={"Cache-Control": "no-store"},
+        )
+
+    async def asset_check_route(_request: Any) -> Any:
+        try:
+            await preview_asset_manager().check_remote(_allowed_previews())
+            return web.json_response(preview_asset_manager().status(_allowed_previews()))
+        except PreviewAssetError as exc:
+            return web.json_response({"error": str(exc)}, status=502)
+
+    async def asset_ensure_route(request: Any) -> Any:
+        case_id = str(request.match_info.get("case_id") or "")
+        try:
+            await preview_asset_manager().ensure(case_id, _allowed_previews())
+            return web.json_response({
+                "case_id": case_id,
+                "available": True,
+                "preview_url": f"/t8-prompt-enhancer/case-preview/{case_id}",
+            })
+        except PreviewAssetError as exc:
+            return web.json_response({"error": str(exc)}, status=502)
+
+    async def asset_install_all_route(_request: Any) -> Any:
+        try:
+            result = await preview_asset_manager().install_all(_allowed_previews())
+            return web.json_response(result)
+        except PreviewAssetError as exc:
+            return web.json_response({"error": str(exc)}, status=502)
+
+    async def asset_repair_route(_request: Any) -> Any:
+        try:
+            result = await preview_asset_manager().install_all(
+                _allowed_previews(), verify_existing=True
+            )
+            return web.json_response(result)
+        except PreviewAssetError as exc:
+            return web.json_response({"error": str(exc)}, status=502)
+
+    async def asset_clear_route(_request: Any) -> Any:
+        try:
+            preview_asset_manager().clear()
+            return web.json_response(preview_asset_manager().status(_allowed_previews()))
+        except PreviewAssetError as exc:
+            return web.json_response({"error": str(exc)}, status=500)
+
+    async def asset_settings_route(request: Any) -> Any:
+        try:
+            payload = await request.json()
+            result = preview_asset_manager().set_mode(
+                str(payload.get("mode") or "") if isinstance(payload, dict) else ""
+            )
+            preview_asset_manager().schedule_full_install(_allowed_previews())
+            return web.json_response(result)
+        except (PreviewAssetError, ValueError) as exc:
+            return web.json_response({"error": str(exc)}, status=400)
+
     try:
         prompt_server.routes.get("/t8-prompt-enhancer/case-library")(catalog_route)
         prompt_server.routes.get("/t8-prompt-enhancer/case-preview/{case_id}")(preview_route)
+        prompt_server.routes.get("/t8-prompt-enhancer/preview-assets/status")(asset_status_route)
+        prompt_server.routes.post("/t8-prompt-enhancer/preview-assets/check")(asset_check_route)
+        prompt_server.routes.post("/t8-prompt-enhancer/preview-assets/ensure/{case_id}")(asset_ensure_route)
+        prompt_server.routes.post("/t8-prompt-enhancer/preview-assets/install-all")(asset_install_all_route)
+        prompt_server.routes.post("/t8-prompt-enhancer/preview-assets/repair")(asset_repair_route)
+        prompt_server.routes.delete("/t8-prompt-enhancer/preview-assets/cache")(asset_clear_route)
+        prompt_server.routes.put("/t8-prompt-enhancer/preview-assets/settings")(asset_settings_route)
     except RuntimeError as exc:
         if "already registered" not in str(exc).lower():
             raise

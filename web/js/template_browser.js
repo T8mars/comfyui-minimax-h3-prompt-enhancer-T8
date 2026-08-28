@@ -1,5 +1,6 @@
 import { api } from "../../scripts/api.js";
 import { rankTemplates } from "./template_recommendation.mjs";
+import { ensurePreview } from "./preview_asset_ui.js";
 
 
 const FAVORITES_KEY = "t8.prompt-enhancer.template-favorites.v1";
@@ -167,15 +168,41 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
     };
 
     function appendOnePreview(container, template, maxHeight = 250) {
-        const preview = (template.previews || []).find((item) => item.available && item.preview_url);
+        const preview = (template.previews || []).find((item) => (item.available && item.preview_url) || item.downloadable);
         if (!preview) return;
-        const image = document.createElement("img");
-        image.loading = "lazy";
-        image.decoding = "async";
-        image.alt = `${preview.label || template.label} GIF 预览`;
-        image.style.cssText = `display:block;width:100%;max-height:${maxHeight}px;object-fit:contain;border-radius:7px;background:#111`;
-        image.src = api.apiURL(preview.preview_url);
-        container.append(image);
+        const host = document.createElement("div");
+        host.style.cssText = "display:flex;flex-direction:column;gap:7px";
+        container.append(host);
+        const renderImage = (url) => {
+            host.replaceChildren();
+            const image = document.createElement("img");
+            image.loading = "lazy";
+            image.decoding = "async";
+            image.alt = `${preview.label || template.label} GIF 预览`;
+            image.style.cssText = `display:block;width:100%;max-height:${maxHeight}px;object-fit:contain;border-radius:7px;background:#111`;
+            image.src = url;
+            host.append(image);
+        };
+        if (preview.available && preview.preview_url) {
+            renderImage(api.apiURL(preview.preview_url));
+            return;
+        }
+        const message = document.createElement("div");
+        message.textContent = "正在准备 GIF 预览…";
+        message.style.cssText = "padding:22px 12px;border:1px dashed #666;border-radius:7px;text-align:center;opacity:.72";
+        const download = button("下载此预览");
+        host.append(message, download);
+        const load = async (force) => {
+            try {
+                const url = await ensurePreview(preview, { force });
+                if (url && host.isConnected) renderImage(url);
+                else message.textContent = "当前为仅手动下载模式；提示词增强可正常使用。";
+            } catch (error) {
+                message.textContent = `GIF 获取失败：${error.message}；不影响提示词增强。`;
+            }
+        };
+        download.onclick = () => load(true);
+        load(false);
     }
 
     function renderComparison() {
@@ -262,7 +289,7 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
         if (reasons?.length) detail.append(why);
         detail.append(recommended, anchors, actions);
         appendOnePreview(detail, template, 330);
-        if (!(template.previews || []).some((item) => item.available && item.preview_url)) {
+        if (!(template.previews || []).some((item) => (item.available && item.preview_url) || item.downloadable)) {
             const empty = document.createElement("div");
             empty.textContent = "本机未配置此模板 GIF；不影响提示词增强。";
             empty.style.cssText = "padding:28px;border:1px dashed #666;border-radius:7px;text-align:center;opacity:.7";

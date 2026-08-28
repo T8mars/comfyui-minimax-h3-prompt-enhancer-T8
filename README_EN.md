@@ -36,7 +36,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - Supports first frame, last frame, first-and-last-frame, multiple reference images, and multiple reference videos.
 - Includes the pinned official MiniMax H3 core prompt-writing Skill and all eight optional official scene Skills.
 - Includes the complete pinned MiniMax Music 3 `music-caption-rewriter` snapshot: 18 family indexes and 1,000 templates with progressive disclosure.
-- Includes 275 released T8 case records consolidated into 213 stable selectors, including 62 evidence variants, plus two independent community Skills. All 215 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and bundled lightweight GIF previews.
+- Includes 275 released T8 case records consolidated into 213 stable selectors, including 62 evidence variants, plus two independent community Skills. All 215 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and lightweight GIF previews (bundled in full GitHub clones; safely fetched on demand in Registry installs).
 - Chinese and English prompt output.
 - `strict`, `balanced`, and `creative` rewrite levels.
 - `AUTO` or fixed 1–20 shot control.
@@ -114,9 +114,9 @@ Or install with Comfy CLI:
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-The Registry package contains the node runtime code, pinned official Skills, non-official case library, and lightweight preview GIFs. It does not contain API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, or GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
+The Registry package contains the node runtime code, pinned official Skills, the non-official case library, eight official GIFs, and a small preview-channel manifest. The 277 T8 GIFs are no longer embedded in the Registry ZIP. When a user opens a T8 case, the node downloads only its small release shard and caches it under `ComfyUI/user/t8_prompt_enhancer/preview_assets`. The package still excludes API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, and GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
 
-All 285 official/T8 GIF previews remain bundled, using the Registry-safe 2 fps, 180 px, 32-color profile. The repository gate caps total preview bytes at 90 MiB so the complete node ZIP stays below the Comfy Registry 100 MB scanner limit.
+All 285 official/T8 previews remain available. A full GitHub clone keeps every GIF bundled for backward compatibility; Registry installs keep the eight official GIFs and obtain the 277 T8 previews through the versioned [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) release channel. Shards, individual GIFs, catalog identities, and source hashes are verified before cache installation. Offline or failed preview downloads never stop prompt enhancement.
 
 Restart ComfyUI after installation. If the frontend still shows an older node layout, refresh the browser with `Ctrl+F5`.
 
@@ -228,7 +228,7 @@ The eight optional scene Skills cover minimalist product ads, 3D animation short
 
 T8 non-official cases and community Skills are maintained separately from all official Skills. When a T8 non-official selector and an optional official scene Skill are both selected, the T8 selector takes precedence and the optional official scene Skill is temporarily inactive. The always-on H3 core Skill remains active. Clearing the T8 selector restores the saved official scene selection without changing workflow wiring.
 
-Preview GIFs are human-interface previews only. They are never attached to or sent as model reference material.
+Preview GIFs are human-interface previews only. They are never attached to or sent as model reference material. Both video nodes expose a non-serialized **Manage / update T8 dynamic previews** button with smart on-demand (default), full auto, and manual modes, plus check, install, repair, and clear actions. Settings live in the ComfyUI user directory and do not alter workflow JSON, node IDs, inputs, outputs, API keys, or prompt execution.
 
 ## Rewrite modes
 
