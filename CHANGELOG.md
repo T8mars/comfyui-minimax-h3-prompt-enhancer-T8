@@ -5,6 +5,21 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.9.4] - 2026-08-29
+
+### Changed
+
+- Import `batch-2026-08-28-02` as 20 human-only evidence variants attached to
+  19 existing T8 selectors, without creating duplicate dropdown entries. The
+  non-official library now contains 315 source cases, 213 case selectors, 102
+  evidence variants, and two standalone community Skills (215 selectors total),
+  with 317 T8 preview GIFs.
+- Advance the external preview channel to `2026.08.29.1` with 16 verified
+  release shards. Re-encode all 317 T8 previews at 2 fps, 160 px, and 32 colors,
+  reducing the full GitHub preview bundle to 72.28 MB while keeping every GIF.
+- Make preview-profile changes explicit in the case updater and prevent encoded
+  GIF reuse when the requested profile differs from the existing manifest.
+
 ## [1.9.3] - 2026-08-28
 
 ### Fixed

@@ -95,6 +95,13 @@ class PreviewBudgetToolTests(unittest.TestCase):
             (existing / filename).write_bytes(bundled)
             (existing / "manifest.json").write_text(json.dumps({
                 "schema_version": bundler.BUNDLE_SCHEMA,
+                "encoding": {
+                    "format": "gif",
+                    "fps": 3,
+                    "max_width": 224,
+                    "max_colors": 40,
+                    "loop": True,
+                },
                 "previews": [{
                     "case_id": "case-a",
                     "file": filename,
@@ -144,6 +151,81 @@ class PreviewBudgetToolTests(unittest.TestCase):
             self.assertEqual(manifest["asset_count"], 1)
             self.assertEqual((output / filename).read_bytes(), bundled)
             self.assertTrue((output / "NOTICE.md").is_file())
+
+    def test_changed_encoding_reencodes_instead_of_reusing_existing_bundle(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            case_root = root / "case"
+            case_root.mkdir()
+            source = case_root / "preview.gif"
+            source.write_bytes(GIF)
+            source_hash = hashlib.sha256(GIF).hexdigest()
+            existing = root / "existing"
+            existing.mkdir()
+            bundled = GIF + b"old-encoding"
+            bundled_hash = hashlib.sha256(bundled).hexdigest()
+            filename = f"{bundled_hash}.gif"
+            (existing / filename).write_bytes(bundled)
+            (existing / "manifest.json").write_text(json.dumps({
+                "schema_version": bundler.BUNDLE_SCHEMA,
+                "encoding": {
+                    "format": "gif",
+                    "fps": 3,
+                    "max_width": 224,
+                    "max_colors": 40,
+                    "loop": True,
+                },
+                "previews": [{
+                    "case_id": "case-a",
+                    "file": filename,
+                    "source_sha256": source_hash,
+                    "sha256": bundled_hash,
+                    "bytes": len(bundled),
+                    "human_preview_only": True,
+                }],
+            }), encoding="utf-8")
+            library = root / "library.json"
+            community = root / "community.json"
+            catalog = root / "catalog.json"
+            output = root / "output"
+            library.write_text(json.dumps({
+                "schema_version": bundler.CASE_LIBRARY_SCHEMA,
+                "records": [{
+                    "case_id": "case-a",
+                    "case_path": str(case_root),
+                    "preview": {"path": "preview.gif", "sha256": source_hash},
+                }],
+            }), encoding="utf-8")
+            community.write_text(json.dumps({
+                "schema_version": bundler.COMMUNITY_LIBRARY_SCHEMA,
+                "records": [],
+            }), encoding="utf-8")
+            catalog.write_text(json.dumps({
+                "schema_version": bundler.CATALOG_SCHEMA,
+                "templates": [{"previews": [{"case_id": "case-a", "sha256": source_hash}]}],
+            }), encoding="utf-8")
+
+            def fake_ffmpeg(command, **_kwargs):
+                Path(command[-1]).write_bytes(GIF)
+                return FakeCompleted()
+
+            with patch.object(bundler, "_resolve_executable", return_value="ffmpeg"), patch.object(
+                bundler.subprocess, "run", side_effect=fake_ffmpeg,
+            ) as ffmpeg:
+                manifest = bundler.bundle_previews(
+                    library,
+                    community,
+                    catalog,
+                    output,
+                    "ffmpeg",
+                    fps=2,
+                    max_width=160,
+                    colors=32,
+                    existing_bundle=existing,
+                )
+            ffmpeg.assert_called_once()
+            self.assertEqual(manifest["encoding"]["max_width"], 160)
+            self.assertEqual({item["file"] for item in manifest["previews"]}, {f"{source_hash}.gif"})
 
 
 if __name__ == "__main__":

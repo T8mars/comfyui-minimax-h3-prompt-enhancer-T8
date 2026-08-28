@@ -47,7 +47,7 @@
 - 集成 MiniMax-H3 官方核心 Skill，规则冻结于经审阅的官方提交 `d21241f0a4b3acbb34c97dae47fa417b7065e438`，并固定全部 4 个文件及归一化内容树哈希。
 - 支持现有中英文兼容协议，以及官方所有说明字段强制英文的严格协议。
 - 官方共 9 个 Skill：1 个 H3 核心写作 Skill 始终启用，另有 `无 / AUTO` 和全部 8 个可选场景写作 Skill；其中“音乐 MV 动态字幕（官方）”已同步 MiniMax `music-video-subtitle-generator` v0.6.6。选择具体场景 Skill 后，节点内会显示用途、适用范围、推荐输入、结构锚点、可安全填入的示例、MiniMax 官方 GIF 与来源链接。8 个场景 Skill 的完整原生流程依赖 MiniMax Hub agent/canvas/hub 工具；本节点只适配其中可落入单条 H3 提示词的写作约束，不运行或声称移植资产生成、审批、剪辑、画布或外部工作流。
-- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：295 条已发布案例事实归并为 213 个稳定案例 selector（含 82 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 215 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
+- 两个节点共享独立的 `非官方模板（案例 / 社区 Skill）` 列表：315 条已发布案例事实归并为 213 个稳定案例 selector（含 102 个同机制证据变体），另有 2 个独立用户贡献社区 Skill，共 215 个非官方下拉项；全部提供中文名称、用途、简约推荐输入、2–5 个结构锚点和随 GitHub 直接分发的轻量 GIF 预览。
 - 支持中文 / English 输出。
 - 支持 `strict / balanced / creative` 三档改写。
 - 支持 `AUTO` 或固定 1–20 个镜头的下拉控制。
@@ -122,7 +122,7 @@ OpenAI 兼容默认继续发送 `temperature`，保持 1.2.0 行为。只有已�
 
 - 新增免 API Key 的本地 Qwen3.8-27B GGUF 渠道，并支持官方与第三方 Uncensored Q4_K_M 变体、视觉投影器、显存释放、执行后卸载策略和真实时间戳视频联系表。
 - MiniMax H3 核心 Skill 更新为固定官方快照；维护工具可核验内容树，并由每周工作流只读检查 H3 核心、8 个官方创意 Skill 和 Music 3 官方 Skill 的上游路径是否发生变化。
-- 305 个官方/T8 GIF 全部保留；GitHub 完整克隆继续内置全部预览，Registry 包仅内置 8 个官方 GIF，297 个 T8 GIF 改由独立版本化资源通道按需获取，避免案例增长再次触发 Registry 体积限制。
+- 325 个官方/T8 GIF 全部保留；GitHub 完整克隆继续内置全部预览，Registry 包仅内置 8 个官方 GIF，317 个 T8 GIF 改由独立版本化资源通道按需获取，避免案例增长再次触发 Registry 体积限制。
 - 提供 13 个 ComfyUI 原生 `example_workflows` 与同名缩略图：原有 9 个基础/本地工作流保持不变，另增 4 个创作导演套件组合案例；全部示例不依赖 Comfyroll、EasyUse 等第三方节点。
 - 三种云端渠道统一使用一个经过测试的传输层，同时保留各自既有付费重试、HTTP 分类和错误文案；不记录请求或响应正文。
 - 新增版本门禁、密钥/大文件/JSON/GIF 预算检查、Changelog、License、Registry 元数据与发布前 CI。
@@ -168,7 +168,7 @@ MiniMax H3 / Seedance 2.0 / Music 3 Prompt Enhancer (T8)
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-Registry 发布包会包含节点运行代码、官方 Skill、非官方案例库、8 个官方 GIF 和一份轻量资源通道清单；297 个 T8 GIF 不再塞入 Registry ZIP。用户查看某个 T8 案例时，节点默认只下载该案例所在的小分片并缓存到 `ComfyUI/user/t8_prompt_enhancer/preview_assets`。发布包仍不包含测试、来源批次、API Key、独立 `llama-server` 运行时、安装/下载脚本或 GGUF 模型。Manager 安装的本地 GGUF 模式使用当前 ComfyUI Python 中的 `llama-cpp-python`；如果需要固定 `llama-server`、PATH 自动回退、环境变量默认值或显式连接探测，请按上面的推荐方式从 GitHub 完整安装。
+Registry 发布包会包含节点运行代码、官方 Skill、非官方案例库、8 个官方 GIF 和一份轻量资源通道清单；317 个 T8 GIF 不再塞入 Registry ZIP。用户查看某个 T8 案例时，节点默认只下载该案例所在的小分片并缓存到 `ComfyUI/user/t8_prompt_enhancer/preview_assets`。发布包仍不包含测试、来源批次、API Key、独立 `llama-server` 运行时、安装/下载脚本或 GGUF 模型。Manager 安装的本地 GGUF 模式使用当前 ComfyUI Python 中的 `llama-cpp-python`；如果需要固定 `llama-server`、PATH 自动回退、环境变量默认值或显式连接探测，请按上面的推荐方式从 GitHub 完整安装。
 
 云端模式不增加额外 Python 依赖，使用 ComfyUI 已安装的 `requests`、NumPy、Pillow 和原生媒体类型；本地视频抽样复用 ComfyUI 自带的 PyAV。安装后重启 ComfyUI；如果节点或前端界面没有更新，请对浏览器执行一次 `Ctrl+F5`。
 
@@ -440,7 +440,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 | `画内涂鸦｜现实互动逐步绘出隐藏世界` | 让现实互动逐次生成锚定在表面的同族线稿，从局部符号、路线与新图形升级到环境范围的连通绘制世界 |
 | `造型轮播｜身份锁定跨风格世界` | 固定主体身份与镜头关系，让背景、材质、配色和配件成套切换并逐步增密，最后回到可读身份终态 |
 
-295 条来源案例中有 213 个案例 selector 和 82 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-17-01` 新增 `身份机体跃迁`、`独演成敌`、`样本倍增` 3 个稳定 selector，并为 `固定机位｜从线稿生成成品` 增加 2 个 evidence variant、为 `造型轮播｜身份锁定跨风格世界` 增加 1 个 evidence variant；`batch-2026-08-17-02` 新增 `规则闯关｜吸收能力后从平面赛道升维`；`batch-2026-08-20-01` 新增 `单次决策兑现｜准备—执行—后果—回归`、`延迟载体释放｜进入—静置—开启—扩散`、`画外定位悬念｜反应递进但不揭示来源`；`batch-2026-08-21-01` 新增 `关系重排｜群体建立—双人收紧—前后站位`、`见证释放｜封闭近景—外部尺度—双视图证明`、`信息接力｜稳定载体穿越多种实体媒介`；`batch-2026-08-22-01` 新增 `价值阶梯｜原料—转化—装配—使用回报`、`能力见证｜装备特写—连贯表演—人群反应—挑战交接`、`公共兑现｜席间期待—揭晓—群体释放—登台锁定`；`errata-2026-08-24-01` 以一份累计快照补齐 8 月 23 日已批准成果：新增 66 个稳定 selector，并为 8 个既有 selector 补充 10 个 evidence variant；`errata-2026-08-24-02` 新增作者明确授权分发的 `指尖控制｜四向同拍全身响应` selector；`batch-2026-08-25-01` 新增 `时尚密度复位｜身份锁定、拼贴回顾与英雄主标`；`batch-2026-08-25-02` 新增 `手势边界换媒｜局部窗口、多形态验真与回归`；`batch-2026-08-25-03` 为该模板补充 1 个同机制 evidence variant，不新增 selector；`batch-2026-08-25-04` 新增 14 个稳定 selector，并把 6 个同机制证据变体归并到既有/同批模板，不创建重复下拉；`batch-2026-08-26-01` 新增 10 个稳定 selector，并把 10 个同机制证据变体归并到既有/同批模板；`batch-2026-08-26-02` 新增 1 个稳定 selector，不新增 evidence variant；`batch-2026-08-27-01` 为 9 个既有模板补充 15 个同机制 evidence variant，不增加重复下拉；`batch-2026-08-28-01` 再为 16 个既有模板补充 20 个 evidence variant，仍不增加重复下拉。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
+315 条来源案例中有 213 个案例 selector 和 102 个 evidence variant，当前没有 pending case；证据变体只增加同一机制的 GIF 与证据，不重复增加下拉。`batch-2026-08-17-01` 新增 `身份机体跃迁`、`独演成敌`、`样本倍增` 3 个稳定 selector，并为 `固定机位｜从线稿生成成品` 增加 2 个 evidence variant、为 `造型轮播｜身份锁定跨风格世界` 增加 1 个 evidence variant；`batch-2026-08-17-02` 新增 `规则闯关｜吸收能力后从平面赛道升维`；`batch-2026-08-20-01` 新增 `单次决策兑现｜准备—执行—后果—回归`、`延迟载体释放｜进入—静置—开启—扩散`、`画外定位悬念｜反应递进但不揭示来源`；`batch-2026-08-21-01` 新增 `关系重排｜群体建立—双人收紧—前后站位`、`见证释放｜封闭近景—外部尺度—双视图证明`、`信息接力｜稳定载体穿越多种实体媒介`；`batch-2026-08-22-01` 新增 `价值阶梯｜原料—转化—装配—使用回报`、`能力见证｜装备特写—连贯表演—人群反应—挑战交接`、`公共兑现｜席间期待—揭晓—群体释放—登台锁定`；`errata-2026-08-24-01` 以一份累计快照补齐 8 月 23 日已批准成果：新增 66 个稳定 selector，并为 8 个既有 selector 补充 10 个 evidence variant；`errata-2026-08-24-02` 新增作者明确授权分发的 `指尖控制｜四向同拍全身响应` selector；`batch-2026-08-25-01` 新增 `时尚密度复位｜身份锁定、拼贴回顾与英雄主标`；`batch-2026-08-25-02` 新增 `手势边界换媒｜局部窗口、多形态验真与回归`；`batch-2026-08-25-03` 为该模板补充 1 个同机制 evidence variant，不新增 selector；`batch-2026-08-25-04` 新增 14 个稳定 selector，并把 6 个同机制证据变体归并到既有/同批模板，不创建重复下拉；`batch-2026-08-26-01` 新增 10 个稳定 selector，并把 10 个同机制证据变体归并到既有/同批模板；`batch-2026-08-26-02` 新增 1 个稳定 selector，不新增 evidence variant；`batch-2026-08-27-01` 为 9 个既有模板补充 15 个同机制 evidence variant，不增加重复下拉；`batch-2026-08-28-01` 再为 16 个既有模板补充 20 个 evidence variant；`batch-2026-08-28-02` 又为 19 个既有模板补充 20 个 evidence variant，均不增加重复下拉。旧工作流中的 `声画错位递进` / `t8-case-audio-cause-lead-ladder-v1` 会迁移到证据支持的 `景别收紧｜从世界到眼神`。
 
 另外两个独立的用户贡献社区 Skill 不合并进案例 registry，也不冒充官方 Skill：
 
@@ -451,7 +451,7 @@ MiniMax 官方 9 个 Skill 的组成是“1 个核心写作 Skill + 8 个场景 
 
 打开 `MiniMax 官方场景 Skill（8 个可选）` 或 `非官方模板（案例 / 社区 Skill）` 下拉时，鼠标悬停任一具体选项会在菜单右侧即时显示对应 GIF、用途和简约推荐输入；菜单靠近窗口右边时预览会自动移到左侧。键盘上下选择和搜索过滤也会同步预览。选择任一具体官方场景 Skill 或非官方模板后，节点内都会显示用途、适用/推荐输入格式、必须实现的结构锚点、推荐示例、GIF 和来源链接。`填入推荐示例` 只有在主提示词为空时才写入；已有输入会显示“已有输入，未覆盖”。推荐示例只是可编辑的实例意图，不是最终提示词。即使只输入“美丽的女人”，节点也会保留这个主体，并要求 LLM 原创建立模板需要的场景、触发、事件链和可见结果，不能退化成普通人像运镜。
 
-GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 297 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 完整仓库直接分发；Registry/Manager 安装则默认在用户实际查看某个案例时，从独立的 [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) Release 下载对应分片。节点会校验安装目录对应的案例全集、来源 SHA-256、分片 SHA-256、每个 GIF 的大小/哈希/文件头和安全解包路径；不兼容或损坏的资源不会显示，也不会影响提示词增强。
+GIF 只供浏览器中的人类界面预览，绝不会连接到首帧、尾帧、参考图片、参考视频，也不会发送给 LLM。8 个官方预设 GIF 和 317 个 T8 案例/社区 Skill 轻量 GIF 均随 GitHub 完整仓库直接分发；Registry/Manager 安装则默认在用户实际查看某个案例时，从独立的 [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) Release 下载对应分片。节点会校验安装目录对应的案例全集、来源 SHA-256、分片 SHA-256、每个 GIF 的大小/哈希/文件头和安全解包路径；不兼容或损坏的资源不会显示，也不会影响提示词增强。
 
 H3 与 Seedance 2.0 节点都提供非序列化按钮 `管理 / 更新 T8 动态预览`：可选择“智能按需（推荐）”“自动补齐全部”或“仅手动下载”，并可检查更新、下载缺失、校验修复或清空缓存。这些设置保存在 ComfyUI 用户目录，不写入工作流，所以旧工作流结构、节点输入输出和 API Key 均不会改变。离线时已缓存/内置 GIF 继续显示；未缓存 GIF 只显示提示，提示词生成仍正常运行。
 
@@ -489,7 +489,7 @@ python tools/bundle_t8_case_previews.py `
   --ffmpeg <ffmpeg-dir>\bin\ffmpeg.exe
 ```
 
-导入器按每次累计库声明的库存做严格闭合校验；本次为 295 条案例记录、213 个 selector、82 个 evidence variant、0 个 pending case，并另验 2 个独立社区 Skill，最终生成 215 个非官方下拉项。已发布案例必须 `released/approved`；H3 与 Seedance 2.0 适配器必须同为可执行的无媒体 recipe，或同为已验证的 disconnected direct-final 交接，两种格式都必须通过哈希、`media_connections=[]` 与 secret 边界检查。可执行 recipe 的 provider/secret 字段必须为空、不得含旧 `openai_upload_url`，双模型 Creative DNA 必须一致；direct-final 的成品提示词只用于验证，节点目录仅从已校验的 `creative-dna.json` 提取可复用机制、结构锚点、可替换槽位和失败修复，不导入成品提示词。若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存作者授权的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
+导入器按每次累计库声明的库存做严格闭合校验；本次为 315 条案例记录、213 个 selector、102 个 evidence variant、0 个 pending case，并另验 2 个独立社区 Skill，最终生成 215 个非官方下拉项。已发布案例必须 `released/approved`；H3 与 Seedance 2.0 适配器必须同为可执行的无媒体 recipe，或同为已验证的 disconnected direct-final 交接，两种格式都必须通过哈希、`media_connections=[]` 与 secret 边界检查。可执行 recipe 的 provider/secret 字段必须为空、不得含旧 `openai_upload_url`，双模型 Creative DNA 必须一致；direct-final 的成品提示词只用于验证，节点目录仅从已校验的 `creative-dna.json` 提取可复用机制、结构锚点、可替换槽位和失败修复，不导入成品提示词。若以后再次出现 pending case，必须保持未发布、未复审、有明确 blocker、无 adapter，并且不能进入下拉或预览分发。社区 Skill 必须保持非官方/用户贡献、不得合并进案例 registry，并现场重算 Skill、摘要、双模型 guidance 与 GIF 哈希。提示词目录不会写入本地路径、来源 URL、来源视频或成品提示词；分发包只保存作者授权的轻量 GIF、不可逆哈希与编码参数。Markdown 报告只是说明，不能代替机器 JSON、实时 recipe、内置预览覆盖率与哈希核验。
 
 ### 音乐 MV 动态字幕（官方）填写方式
 

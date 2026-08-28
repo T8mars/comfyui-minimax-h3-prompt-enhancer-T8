@@ -216,6 +216,14 @@ def main() -> int:
     parser.add_argument("--rebuild-previews", action="store_true", help="Stage and atomically install changed preview assets.")
     parser.add_argument("--confirm-preview-budget", action="store_true", help="Acknowledge a staged preview package at or above 85 MiB.")
     parser.add_argument("--ffmpeg", default="ffmpeg")
+    parser.add_argument("--preview-fps", type=int, help="Re-encode all previews at this frame rate.")
+    parser.add_argument("--preview-max-width", type=int, help="Re-encode all previews at this maximum width.")
+    parser.add_argument("--preview-colors", type=int, help="Re-encode all previews with this palette size.")
+    parser.add_argument(
+        "--reuse-preview-bundle",
+        type=Path,
+        help="Reuse a previously validated bundle with the requested encoding instead of re-encoding unchanged GIFs.",
+    )
     parser.add_argument("--report", type=Path, help="Optional machine-readable report outside the repository.")
     args = parser.parse_args()
     manifest, files = _verify_delivery(args.delivery_dir)
@@ -229,6 +237,27 @@ def main() -> int:
     diff = _catalog_diff(old_catalog, new_catalog)
     expected_previews = _preview_index(new_catalog)
     installed_previews = _current_preview_sources()
+    current_encoding = _json(PREVIEW_ROOT / "manifest.json").get("encoding", {})
+    target_encoding = {
+        "fps": args.preview_fps if args.preview_fps is not None else int(current_encoding.get("fps", 3)),
+        "max_width": (
+            args.preview_max_width
+            if args.preview_max_width is not None
+            else int(current_encoding.get("max_width", 224))
+        ),
+        "colors": args.preview_colors if args.preview_colors is not None else int(current_encoding.get("max_colors", 40)),
+    }
+    if not 1 <= target_encoding["fps"] <= 15:
+        raise CaseLibraryUpdateError("Preview FPS must be between 1 and 15")
+    if not 160 <= target_encoding["max_width"] <= 640:
+        raise CaseLibraryUpdateError("Preview maximum width must be between 160 and 640")
+    if not 32 <= target_encoding["colors"] <= 128:
+        raise CaseLibraryUpdateError("Preview palette size must be between 32 and 128")
+    encoding_changed = (
+        target_encoding["fps"] != int(current_encoding.get("fps", 3))
+        or target_encoding["max_width"] != int(current_encoding.get("max_width", 224))
+        or target_encoding["colors"] != int(current_encoding.get("max_colors", 40))
+    )
     missing_or_changed_previews = sorted(
         case_id for case_id, digest in expected_previews.items() if installed_previews.get(case_id) != digest
     )
@@ -236,7 +265,7 @@ def main() -> int:
     breaking = bool(diff["removed_ids"] or diff["renamed_ids"] or diff["semantic_change_ids"])
     if breaking and not args.confirm_breaking:
         raise CaseLibraryUpdateError("Selector removal, rename, or Creative DNA drift requires --confirm-breaking")
-    preview_rebuild_required = bool(missing_or_changed_previews or orphaned_previews)
+    preview_rebuild_required = bool(missing_or_changed_previews or orphaned_previews or encoding_changed)
     if args.apply and preview_rebuild_required and not args.rebuild_previews:
         raise CaseLibraryUpdateError(
             "Preview package must be rebuilt with --rebuild-previews before --apply; "
@@ -257,17 +286,20 @@ def main() -> int:
             staged_catalog = staged_root / "catalog.json"
             staged_bundle = staged_root / "bundle"
             _atomic_write_json(staged_catalog, new_catalog)
-            current_encoding = _json(PREVIEW_ROOT / "manifest.json").get("encoding", {})
             staged_manifest = bundler.bundle_previews(
                 files["unofficial-case-library-v2.json"],
                 files["standalone-community-skills-v1.json"],
                 staged_catalog,
                 staged_bundle,
                 args.ffmpeg,
-                fps=int(current_encoding.get("fps", 3)),
-                max_width=int(current_encoding.get("max_width", 224)),
-                colors=int(current_encoding.get("max_colors", 40)),
-                existing_bundle=PREVIEW_ROOT,
+                fps=target_encoding["fps"],
+                max_width=target_encoding["max_width"],
+                colors=target_encoding["colors"],
+                existing_bundle=(
+                    args.reuse_preview_bundle.resolve()
+                    if args.reuse_preview_bundle is not None
+                    else PREVIEW_ROOT
+                ),
             )
             total = int(staged_manifest["total_bytes"])
             if total > bundler.PREVIEW_HARD_LIMIT_BYTES:
@@ -326,6 +358,8 @@ def main() -> int:
         "preview_rebuild": {
             "required": preview_rebuild_required,
             "rebuilt": staged_manifest is not None,
+            "encoding_changed": encoding_changed,
+            "target_encoding": target_encoding,
             "missing_or_changed_count": len(missing_or_changed_previews),
             "orphaned_count": len(orphaned_previews),
             "total_bytes": sum(path.stat().st_size for path in preview_files),

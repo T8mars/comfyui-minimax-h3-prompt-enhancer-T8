@@ -98,7 +98,13 @@ def _resolve_executable(value: str) -> str:
     raise PreviewBundleError(f"Executable not found: {value}")
 
 
-def _existing_preview_index(bundle_dir: Path | None) -> dict[str, dict[str, Any]]:
+def _existing_preview_index(
+    bundle_dir: Path | None,
+    *,
+    fps: int,
+    max_width: int,
+    colors: int,
+) -> dict[str, dict[str, Any]]:
     if bundle_dir is None:
         return {}
     bundle_dir = bundle_dir.resolve()
@@ -108,6 +114,16 @@ def _existing_preview_index(bundle_dir: Path | None) -> dict[str, dict[str, Any]
     manifest = _read_json(manifest_path)
     if manifest.get("schema_version") != BUNDLE_SCHEMA:
         raise PreviewBundleError(f"Unsupported reusable preview manifest: {manifest_path}")
+    encoding = manifest.get("encoding") if isinstance(manifest.get("encoding"), dict) else {}
+    expected_encoding = {
+        "format": "gif",
+        "fps": fps,
+        "max_width": max_width,
+        "max_colors": colors,
+        "loop": True,
+    }
+    if any(encoding.get(key) != value for key, value in expected_encoding.items()):
+        return {}
     result: dict[str, dict[str, Any]] = {}
     for item in manifest.get("previews", []):
         if not isinstance(item, dict):
@@ -150,7 +166,12 @@ def bundle_previews(
         raise PreviewBundleError(f"Output directory must be absent or empty: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
     ffmpeg_path = _resolve_executable(ffmpeg)
-    reusable = _existing_preview_index(existing_bundle)
+    reusable = _existing_preview_index(
+        existing_bundle,
+        fps=fps,
+        max_width=max_width,
+        colors=colors,
+    )
     reusable_root = existing_bundle.resolve() if existing_bundle is not None else None
     filter_graph = (
         f"fps={fps},scale='min({max_width},iw)':-2:flags=lanczos,split[s0][s1];"
