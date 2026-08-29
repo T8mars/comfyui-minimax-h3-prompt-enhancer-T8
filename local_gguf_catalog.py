@@ -257,11 +257,11 @@ def scan_gguf_catalog(*, refresh: bool = False) -> tuple[GGUFModelInfo, ...]:
                     if not path.is_file() or path.suffix.casefold() != GGUF_SUFFIX:
                         continue
                     resolved = path.resolve()
-                    try:
-                        resolved.relative_to(root)
-                    except ValueError:
-                        continue
-                    identifier = _identifier_for(resolved, root)
+                    # Keep the user-facing identifier anchored to the lexical
+                    # models/LLM path, while allowing the file itself to be a
+                    # symlink into a mounted model store.  Path traversal is
+                    # still blocked when identifiers are resolved for use.
+                    identifier = _identifier_for(path, root)
                     # The first registered root wins on identifier collisions,
                     # matching ComfyUI's model folder resolution behavior.
                     if identifier in entries:
@@ -380,6 +380,24 @@ def _parameter_scale(*values: str) -> str:
     return ""
 
 
+def _vision_family(*values: str) -> str:
+    # Values are ordered from strongest metadata to weakest filename hints.
+    # Return on the first recognized source so a descriptive filename cannot
+    # override an authoritative architecture or projector type.
+    for value in values:
+        normalized = str(value or "").casefold()
+        compact = "".join(character for character in normalized if character.isalnum())
+        if "gemma4" in compact:
+            return "gemma4"
+        if "gemma3" in compact:
+            return "gemma3"
+        if "qwen3" in compact:
+            return "qwen3"
+        if "qwen2" in compact:
+            return "qwen2"
+    return ""
+
+
 def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
     model = model_info_for(model_identifier)
     if model is None or model.is_projector:
@@ -390,6 +408,23 @@ def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
     model_name = _normalized_name(model.name)
     model_parent = Path(model.path).parent
     model_scale = _parameter_scale(model.name, model.filename)
+    model_family = _vision_family(model.architecture, model.name, model.filename)
+    compatible_projectors: list[GGUFModelInfo] = []
+    for projector in projectors:
+        projector_family = _vision_family(
+            projector.projector_type,
+            projector.name,
+            projector.filename,
+        )
+        if model_family and projector_family and model_family != projector_family:
+            continue
+        projector_scale = _parameter_scale(projector.name, projector.filename)
+        if model_scale and projector_scale and model_scale != projector_scale:
+            continue
+        compatible_projectors.append(projector)
+    projectors = compatible_projectors
+    if not projectors:
+        return None
 
     def score(projector: GGUFModelInfo) -> tuple[int, str]:
         value = 0
@@ -406,6 +441,13 @@ def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
             value += 60 if model_scale == projector_scale else -120
         if model.architecture.casefold() == "qwen35" and "qwen3vl" in projector.projector_type.casefold():
             value += 25
+        projector_family = _vision_family(
+            projector.projector_type,
+            projector.name,
+            projector.filename,
+        )
+        if model_family and projector_family == model_family:
+            value += 80
         if projector.has_vision_encoder:
             value += 5
         model_tokens = _filename_tokens(model.filename)

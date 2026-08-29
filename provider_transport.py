@@ -1,15 +1,40 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any, Callable
 
 import requests
 
 
+_THINK_BLOCK_PATTERN = re.compile(
+    r"<think(?:\s[^>]*)?>.*?</think\s*>",
+    re.IGNORECASE | re.DOTALL,
+)
+_LEADING_THINK_END_PATTERN = re.compile(r"^\s*</think\s*>\s*", re.IGNORECASE)
+_UNCLOSED_THINK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>", re.IGNORECASE)
+
+
 @dataclass(frozen=True)
 class ChatTransportResult:
     text: str
     attempts: int
+
+
+def strip_inline_reasoning(content: str) -> str:
+    """Remove reasoning traces embedded in OpenAI-compatible message content.
+
+    Some reasoning providers do not use ``reasoning_content`` and instead put
+    private reasoning in ``content``. Preserve byte-for-byte compatibility when
+    no think marker is present; when one is present, return only the final text.
+    """
+    text = str(content)
+    cleaned = _THINK_BLOCK_PATTERN.sub("", text)
+    cleaned = _LEADING_THINK_END_PATTERN.sub("", cleaned)
+    unclosed = _UNCLOSED_THINK_PATTERN.search(cleaned)
+    if unclosed is not None:
+        cleaned = cleaned[: unclosed.start()]
+    return cleaned.strip() if cleaned != text else text
 
 
 def request_chat_completion(
@@ -82,6 +107,8 @@ def request_chat_completion(
             for part in content
             if isinstance(part, dict) and part.get("type") in (None, "text")
         )
+    if isinstance(content, str):
+        content = strip_inline_reasoning(content)
     if not isinstance(content, str) or not content.strip():
         raise empty_content_error()
     on_attempt and on_attempt(attempt, "success")

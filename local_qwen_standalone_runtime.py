@@ -893,49 +893,73 @@ class LocalQwenManager:
         comfy_memory_policy: str,
         think_mode: bool = False,
     ) -> LlamaServer | LlamaPythonRuntime:
-        spec = select_runtime_spec()
-        runtime_identity: tuple[Any, ...]
-        if isinstance(spec, RuntimeSpec):
-            runtime_identity = ("server", spec.executable.resolve(), spec.backend)
-        else:
-            runtime_identity = ("python", spec.version, spec.backend)
-        key = (
-            model.resolve(),
-            mmproj.resolve() if mmproj else None,
-            int(context_size),
-            bool(think_mode),
-            *runtime_identity,
-        )
+        specs, warnings = available_runtime_specs()
+        if not specs:
+            # Preserve the existing actionable installation error contract.
+            select_runtime_spec()
+
+        def runtime_key(spec: RuntimeSpec | PythonRuntimeSpec) -> tuple[Any, ...]:
+            if isinstance(spec, RuntimeSpec):
+                identity: tuple[Any, ...] = ("server", spec.executable.resolve(), spec.backend)
+            else:
+                identity = ("python", spec.version, spec.backend)
+            return (
+                model.resolve(),
+                mmproj.resolve() if mmproj else None,
+                int(context_size),
+                bool(think_mode),
+                *identity,
+            )
+
         with self._lifecycle_lock:
             self._cancel_timer()
-            if self._server is not None and self._key == key and self._server.is_running:
-                return self._server
+            for spec in specs:
+                if (
+                    self._server is not None
+                    and self._key == runtime_key(spec)
+                    and self._server.is_running
+                ):
+                    return self._server
             self.release()
             _release_comfy_models_if_needed(comfy_memory_policy)
-            if isinstance(spec, RuntimeSpec):
-                server: LlamaServer | LlamaPythonRuntime = LlamaServer(
-                    model=model,
-                    mmproj=mmproj,
-                    context_size=context_size,
-                    spec=spec,
-                    think_mode=think_mode,
-                )
-            else:
-                server = LlamaPythonRuntime(
-                    model=model,
-                    mmproj=mmproj,
-                    context_size=context_size,
-                    spec=spec,
-                    think_mode=think_mode,
-                )
-            try:
-                server.start()
-            except BaseException:
-                server.stop()
-                raise
-            self._server = server
-            self._key = key
-            return server
+            failures: list[str] = []
+            for spec in specs:
+                server: LlamaServer | LlamaPythonRuntime | None = None
+                try:
+                    if isinstance(spec, RuntimeSpec):
+                        server = LlamaServer(
+                            model=model,
+                            mmproj=mmproj,
+                            context_size=context_size,
+                            spec=spec,
+                            think_mode=think_mode,
+                        )
+                    else:
+                        server = LlamaPythonRuntime(
+                            model=model,
+                            mmproj=mmproj,
+                            context_size=context_size,
+                            spec=spec,
+                            think_mode=think_mode,
+                        )
+                    server.start()
+                except (LocalQwenRuntimeError, OSError) as error:
+                    if server is not None:
+                        server.stop()
+                    message = " ".join(str(error).split())[:500]
+                    failures.append(f"{spec.backend}: {type(error).__name__}: {message}")
+                    continue
+                except BaseException:
+                    if server is not None:
+                        server.stop()
+                    raise
+                self._server = server
+                self._key = runtime_key(spec)
+                return server
+            details = " ".join([*warnings, *failures]).strip()
+            raise LocalQwenRuntimeError(
+                "All discovered local llama.cpp runtimes failed to start. " + details
+            )
 
     def complete(
         self, server: LlamaServer | LlamaPythonRuntime, **kwargs: Any

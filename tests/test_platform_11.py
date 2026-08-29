@@ -75,6 +75,58 @@ class Platform11Tests(unittest.TestCase):
         self.assertIn((1, "retry_http_503"), events)
         self.assertIn((2, "success"), events)
 
+    def test_shared_transport_removes_inline_reasoning_from_cloud_content(self):
+        session = Session([
+            Response(200, {"choices": [{"message": {
+                "reasoning_content": "separate private trace",
+                "content": "<think source=\"provider\">inline private trace</think>\nFINAL PROMPT",
+            }}]}),
+        ])
+        result = transport.request_chat_completion(
+            session=session,
+            url="https://provider.invalid/v1/chat/completions",
+            api_key="placeholder-not-a-live-secret",
+            payload={"messages": []},
+            timeout=(1, 2),
+            retry_delays=(),
+            retryable_status_codes=frozenset(),
+            route_kwargs=lambda _attempt, _has_retry: {},
+            is_retryable_network_error=lambda _error: False,
+            sleep=lambda _delay: None,
+            network_error=lambda *_args: RuntimeError("network"),
+            http_error=lambda *_args: None,
+            invalid_json_error=lambda: RuntimeError("json"),
+            missing_content_error=lambda: RuntimeError("missing"),
+            empty_content_error=lambda: RuntimeError("empty"),
+        )
+        self.assertEqual(result.text, "FINAL PROMPT")
+        self.assertNotIn("private trace", result.text)
+
+    def test_shared_transport_rejects_reasoning_only_cloud_content(self):
+        session = Session([
+            Response(200, {"choices": [{"message": {
+                "content": "<think>private trace without a final answer</think>",
+            }}]}),
+        ])
+        with self.assertRaisesRegex(RuntimeError, "empty"):
+            transport.request_chat_completion(
+                session=session,
+                url="https://provider.invalid/v1/chat/completions",
+                api_key="placeholder-not-a-live-secret",
+                payload={"messages": []},
+                timeout=(1, 2),
+                retry_delays=(),
+                retryable_status_codes=frozenset(),
+                route_kwargs=lambda _attempt, _has_retry: {},
+                is_retryable_network_error=lambda _error: False,
+                sleep=lambda _delay: None,
+                network_error=lambda *_args: RuntimeError("network"),
+                http_error=lambda *_args: None,
+                invalid_json_error=lambda: RuntimeError("json"),
+                missing_content_error=lambda: RuntimeError("missing"),
+                empty_content_error=lambda: RuntimeError("empty"),
+            )
+
     def test_diagnostics_are_allowlisted_and_redact_urls_keys_and_error_text(self):
         secret = "sk-" + "x" * 32
         run = diagnostics.DiagnosticsRun(

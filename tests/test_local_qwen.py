@@ -197,6 +197,51 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(warnings, [])
         self.assertEqual(selected.backend, "llama-cpp-python")
 
+    def test_runtime_start_failure_falls_back_to_next_discovered_runtime(self):
+        broken_server = runtime.RuntimeSpec(
+            executable=PROJECT_ROOT / "missing-llama-server",
+            library_dirs=(),
+            backend="broken standalone",
+        )
+        working_python = runtime.PythonRuntimeSpec(version="test-version")
+        manager = runtime.LocalQwenManager()
+
+        class FakeLlama:
+            def close(self):
+                pass
+
+        def start_python(instance, timeout=240.0):
+            del timeout
+            instance.llm = FakeLlama()
+
+        with tempfile.TemporaryDirectory() as directory:
+            model = Path(directory).resolve() / "model.gguf"
+            model.write_bytes(b"model")
+            with (
+                patch.object(
+                    runtime,
+                    "available_runtime_specs",
+                    return_value=([broken_server, working_python], []),
+                ),
+                patch.object(runtime, "_release_comfy_models_if_needed"),
+                patch.object(
+                    runtime.LlamaServer,
+                    "start",
+                    side_effect=runtime.LocalQwenRuntimeError("broken server"),
+                ),
+                patch.object(runtime.LlamaServer, "stop"),
+                patch.object(runtime.LlamaPythonRuntime, "start", new=start_python),
+            ):
+                selected = manager.acquire(
+                    model=model,
+                    mmproj=None,
+                    context_size=4096,
+                    comfy_memory_policy=runtime.LOCAL_KEEP_COMFY_MODELS,
+                )
+        self.assertIsInstance(selected, runtime.LlamaPythonRuntime)
+        self.assertTrue(selected.is_running)
+        manager.release()
+
     def test_python_runtimes_use_the_llama_cpp_presence_penalty_keyword(self):
         for implementation in (python_runtime, runtime):
             with self.subTest(implementation=implementation.__name__):
@@ -305,6 +350,32 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(model["recommended_projector"], "Qwen3/mmproj-Qwen3-4B-F16.gguf")
         self.assertEqual(resolved, model_path)
         self.assertEqual(projector, projector_path)
+
+    def test_catalog_accepts_model_file_symlinks_into_external_storage(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory).resolve()
+            root = base / "LLM"
+            storage = base / "mounted-model-store"
+            root.mkdir()
+            storage.mkdir()
+            target = storage / "physical-model.gguf"
+            target.write_bytes(b"GGUF")
+            link = root / "linked-model.gguf"
+            try:
+                link.symlink_to(target)
+            except OSError as error:
+                self.skipTest(f"symlink creation is unavailable: {error}")
+            with (
+                patch.object(catalog, "_registered_model_roots", return_value=(root,)),
+                patch.object(catalog, "llm_model_directory", return_value=root),
+                patch.object(catalog, "legacy_qwen_model_directory", return_value=root / "Qwen3.8"),
+            ):
+                catalog._CATALOG_CACHE = None
+                items = catalog.scan_gguf_catalog(refresh=True)
+                resolved = catalog.resolve_gguf_path("linked-model.gguf", label="model")
+            catalog._CATALOG_CACHE = None
+        self.assertEqual([item.identifier for item in items], ["linked-model.gguf"])
+        self.assertEqual(resolved, target)
 
     def test_thinking_payload_uses_qwen_official_sampling_contract(self):
         class RunningProcess:
@@ -449,6 +520,63 @@ class LocalQwenUnitTests(unittest.TestCase):
         ):
             selected = catalog.recommended_projector(model.identifier)
         self.assertIsNone(selected)
+
+    def test_projector_auto_match_rejects_known_architecture_conflict(self):
+        model = catalog.GGUFModelInfo(
+            identifier="gemma/model.gguf",
+            path=str(PROJECT_ROOT / "gemma" / "model.gguf"),
+            filename="model.gguf",
+            size=1,
+            architecture="gemma3",
+            name="Gemma 3",
+            metadata_readable=True,
+        )
+        qwen_projector = catalog.GGUFModelInfo(
+            identifier="mmproj-qwen.gguf",
+            path=str(PROJECT_ROOT / "mmproj-qwen.gguf"),
+            filename="mmproj-qwen.gguf",
+            size=1,
+            architecture="clip",
+            model_type="mmproj",
+            name="Qwen projector",
+            projector_type="qwen3vl_merger",
+            has_vision_encoder=True,
+            metadata_readable=True,
+        )
+        with (
+            patch.object(catalog, "model_info_for", return_value=model),
+            patch.object(catalog, "scan_gguf_catalog", return_value=(qwen_projector,)),
+        ):
+            selected = catalog.recommended_projector(model.identifier)
+        self.assertIsNone(selected)
+
+    def test_projector_auto_match_keeps_matching_family_without_projector_type(self):
+        model = catalog.GGUFModelInfo(
+            identifier="gemma-4/model.gguf",
+            path=str(PROJECT_ROOT / "gemma-4" / "model.gguf"),
+            filename="gemma-4-model.gguf",
+            size=1,
+            architecture="gemma4",
+            name="Gemma 4 Model",
+            metadata_readable=True,
+        )
+        projector = catalog.GGUFModelInfo(
+            identifier="gemma-4/mmproj.gguf",
+            path=str(PROJECT_ROOT / "gemma-4" / "mmproj.gguf"),
+            filename="gemma-4-mmproj.gguf",
+            size=1,
+            architecture="clip",
+            model_type="mmproj",
+            name="Gemma 4 Model",
+            has_vision_encoder=True,
+            metadata_readable=True,
+        )
+        with (
+            patch.object(catalog, "model_info_for", return_value=model),
+            patch.object(catalog, "scan_gguf_catalog", return_value=(projector,)),
+        ):
+            selected = catalog.recommended_projector(model.identifier)
+        self.assertEqual(selected, projector)
 
     def test_shared_provider_config_preserves_deep_local_paths_without_truncation(self):
         deep_model = "nested/" + "m" * 300 + "/model.gguf"

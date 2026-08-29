@@ -5,6 +5,21 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.9.8] - 2026-08-29
+
+### Fixed
+
+- Remove inline `<think>...</think>` reasoning traces from shared cloud chat
+  responses before they reach H3, Seedance, Music 3, or Creative Suite outputs;
+  reasoning-only responses now fail as empty instead of leaking private traces.
+- Discover GGUF files that are symlinked from `models/LLM` into external or
+  mounted model storage while retaining safe relative workflow identifiers.
+- Fall back through every discovered local runtime when a preferred
+  `llama-server` cannot start, including an existing `llama-cpp-python`
+  installation in the active ComfyUI environment.
+- Reject AUTO model/mmproj matches when their known visual families conflict,
+  while retaining family-compatible Gemma and Qwen projectors.
+
 ## [1.9.7] - 2026-08-29
 
 ### Fixed
