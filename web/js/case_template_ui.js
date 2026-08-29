@@ -288,6 +288,12 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
         node.t8RestoreCaseTemplate(node.t8PendingCaseTemplateValue);
         node.t8PendingCaseTemplateValue = "";
     }
+    const previewManagerAction = () => ({
+        label: "管理 / 更新动态预览",
+        title: "检查、下载或修复 T8 模板 GIF 预览资源",
+        hint: "首次使用或 GIF 未显示时，请先检查并更新动态预览。",
+        onClick: () => openPreviewAssetManager(catalog),
+    });
 
     registerTemplateMenuPreview(node, caseWidget, (value) => {
         const template = byLabel.get(value) || byId.get(value);
@@ -298,6 +304,7 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
                 summary: "悬停一个具体模板即可在右侧查看对应 GIF、用途与简约推荐输入。",
                 empty_message: "当前未启用非官方模板。",
                 previews: [],
+                preview_manager: previewManagerAction(),
             };
         }
         return {
@@ -319,6 +326,7 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
                 ensure: (force = false) => ensurePreview(preview, { force }),
             })),
             policy: "GIF 仅供人类本地预览，不会作为图像、视频或 LLM 参考素材",
+            preview_manager: previewManagerAction(),
         };
     });
 

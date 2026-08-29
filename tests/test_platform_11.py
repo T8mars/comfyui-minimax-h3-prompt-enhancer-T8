@@ -177,9 +177,17 @@ class Platform11Tests(unittest.TestCase):
             self.assertIn(contract, source)
         case_ui = (ROOT / "web/js/case_template_ui.js").read_text(encoding="utf-8")
         self.assertIn("node.widgets.splice(detailIndex, 0, browserWidget)", case_ui)
+        self.assertIn("preview_manager: previewManagerAction()", case_ui)
+        browser = (ROOT / "web/js/template_browser.js").read_text(encoding="utf-8")
+        self.assertIn('managePreviews.dataset.t8PreviewManagerAction = "true"', browser)
+        self.assertIn("首次使用或 GIF 未显示？请先检查并更新动态预览。", browser)
+        self.assertIn("openPreviewAssetManager(catalog)", browser)
         menu_preview = (ROOT / "web/js/template_menu_preview.js").read_text(encoding="utf-8")
         self.assertIn("activeCleanup?.()", menu_preview)
         self.assertIn("if (cleaned) return", menu_preview)
+        self.assertIn('manage.dataset.t8PreviewManagerAction = "true"', menu_preview)
+        preview_manager = (ROOT / "web/js/preview_asset_ui.js").read_text(encoding="utf-8")
+        self.assertIn("activeManager?.dismiss?.()", preview_manager)
 
     def test_h3_secure_api_key_draw_does_not_schedule_a_redraw_loop(self):
         source = (ROOT / "web/js/minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")

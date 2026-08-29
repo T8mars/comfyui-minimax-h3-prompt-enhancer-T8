@@ -83,6 +83,40 @@ export function renderPreview(panel, model, reposition) {
             "font-size:11px;line-height:1.45;padding:7px;border-radius:5px;background:rgba(255,255,255,.045)",
         ));
     }
+    if (model?.preview_manager && typeof model.preview_manager.onClick === "function") {
+        const callout = document.createElement("div");
+        callout.className = "t8-preview-manager-callout";
+        callout.style.cssText = [
+            "display:flex", "flex-direction:column", "gap:7px", "padding:9px",
+            "border:1px solid rgba(255,190,74,.82)", "border-radius:7px",
+            "background:rgba(255,166,35,.13)", "box-shadow:inset 0 0 0 1px rgba(255,220,150,.05)",
+        ].join(";");
+        callout.append(textBlock(
+            "t8-preview-manager-reminder",
+            model.preview_manager.hint || "首次使用或 GIF 未显示时，请先检查并更新动态预览。",
+            "font-size:11px;line-height:1.45;color:#ffd99a;font-weight:600",
+        ));
+        const manage = document.createElement("button");
+        manage.type = "button";
+        manage.dataset.t8PreviewManagerAction = "true";
+        manage.textContent = model.preview_manager.label || "管理 / 更新动态预览";
+        manage.title = model.preview_manager.title || "检查、下载或修复 T8 模板 GIF 预览资源";
+        manage.style.cssText = [
+            "min-height:34px", "padding:5px 11px", "border:1px solid #ffbe4a", "border-radius:6px",
+            "background:#8a5312", "color:#fff4dc", "font-weight:700", "cursor:pointer",
+        ].join(";");
+        manage.addEventListener("pointerdown", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+        });
+        manage.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            model.preview_manager.onClick();
+        });
+        callout.append(manage);
+        panel.append(callout);
+    }
 
     const previews = Array.isArray(model?.previews) ? model.previews : [];
     if (!previews.length) {

@@ -1,6 +1,6 @@
 import { api } from "../../scripts/api.js";
 import { rankTemplates } from "./template_recommendation.mjs";
-import { ensurePreview } from "./preview_asset_ui.js";
+import { ensurePreview, openPreviewAssetManager } from "./preview_asset_ui.js";
 
 
 const FAVORITES_KEY = "t8.prompt-enhancer.template-favorites.v1";
@@ -87,7 +87,7 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
     dialog.setAttribute("aria-modal", "true");
     dialog.setAttribute("aria-label", "T8 非官方模板浏览器");
     dialog.style.cssText = [
-        "display:grid", "grid-template-rows:auto 1fr", "width:min(1080px,96vw)", "height:min(760px,92vh)",
+        "display:grid", "grid-template-rows:auto auto 1fr", "width:min(1080px,96vw)", "height:min(760px,92vh)",
         "overflow:hidden", "border:1px solid var(--border-color,#555)", "border-radius:10px",
         "background:var(--comfy-menu-bg,#202020)", "color:var(--input-text,#eee)",
         "box-shadow:0 18px 60px rgba(0,0,0,.65)",
@@ -104,6 +104,21 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
     const close = button("关闭", "Esc");
     header.append(title, search, compare, close);
 
+    const previewNotice = document.createElement("div");
+    previewNotice.dataset.t8PreviewManagerCallout = "true";
+    previewNotice.style.cssText = [
+        "display:flex", "align-items:center", "justify-content:space-between", "gap:10px", "flex-wrap:wrap",
+        "padding:8px 10px", "border-bottom:1px solid rgba(255,190,74,.5)", "background:rgba(255,166,35,.12)",
+    ].join(";");
+    const previewReminder = document.createElement("strong");
+    previewReminder.textContent = "首次使用或 GIF 未显示？请先检查并更新动态预览。";
+    previewReminder.style.cssText = "font-size:12px;line-height:1.4;color:#ffd99a";
+    const managePreviews = button("管理 / 更新动态预览", "检查、下载或修复 T8 模板 GIF 预览资源");
+    managePreviews.dataset.t8PreviewManagerAction = "true";
+    managePreviews.style.cssText += ";min-width:190px;border-color:#ffbe4a;background:#8a5312;color:#fff4dc;font-weight:700";
+    managePreviews.onclick = () => openPreviewAssetManager(catalog);
+    previewNotice.append(previewReminder, managePreviews);
+
     const body = document.createElement("div");
     body.style.cssText = "display:grid;min-height:0";
     const left = document.createElement("div");
@@ -119,7 +134,7 @@ export function openTemplateBrowser({ catalog, selectedValue, onSelect, recommen
     detail.style.cssText = "overflow:auto;padding:14px;display:flex;flex-direction:column;gap:9px";
     left.append(filters, list);
     body.append(left, detail);
-    dialog.append(header, body);
+    dialog.append(header, previewNotice, body);
     overlay.append(dialog);
     document.body.append(overlay);
 

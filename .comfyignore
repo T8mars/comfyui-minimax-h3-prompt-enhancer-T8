@@ -25,6 +25,7 @@ credential_connection_probe.py
 /AGENTS.md
 /SKILL.md
 /roadmap.md
+/design-qa.md
 .env
 .env.*
 runtime/

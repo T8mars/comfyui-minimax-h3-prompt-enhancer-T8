@@ -2,6 +2,7 @@ import { api } from "../../scripts/api.js";
 
 
 const STATUS_ENDPOINT = "/t8-prompt-enhancer/preview-assets/status";
+let activeManager = null;
 
 
 async function requestJson(path, options = {}) {
@@ -43,7 +44,9 @@ function modalButton(label) {
 
 
 export async function openPreviewAssetManager(catalog) {
+    activeManager?.dismiss?.();
     const overlay = document.createElement("div");
+    overlay.className = "t8-preview-asset-manager-overlay";
     overlay.style.cssText = [
         "position:fixed", "inset:0", "z-index:100004", "display:flex", "align-items:center",
         "justify-content:center", "padding:18px", "background:rgba(0,0,0,.65)", "box-sizing:border-box",
@@ -97,7 +100,11 @@ export async function openPreviewAssetManager(catalog) {
     overlay.append(dialog);
     document.body.append(overlay);
 
-    const dismiss = () => overlay.remove();
+    const dismiss = () => {
+        overlay.remove();
+        if (activeManager?.overlay === overlay) activeManager = null;
+    };
+    activeManager = { overlay, dismiss };
     close.onclick = dismiss;
     overlay.addEventListener("pointerdown", (event) => { if (event.target === overlay) dismiss(); });
 

@@ -20,6 +20,7 @@ try {
   const capability = await import("../../web/js/provider_capability_ui.mjs");
   const recommendation = await import("../../web/js/template_recommendation.mjs");
   const menu = await import("../../web/js/template_menu_preview.js");
+  const templateBrowser = await import("../../web/js/template_browser.js");
 
   const widgets = ["prompt", "custom_model", "openai_base_url"].map((name) => ({ name, value: "" }));
   state.restoreNamedWidgetValues({ widgets }, new Map([
@@ -86,17 +87,68 @@ try {
   }
 
   const panel = document.createElement("aside");
+  panel.style.cssText = [
+    "position:fixed", "right:18px", "top:60px", "z-index:10", "display:flex", "flex-direction:column", "gap:8px",
+    "box-sizing:border-box", "width:360px", "max-height:820px", "padding:12px", "overflow:auto",
+    "border:1px solid #555", "border-radius:8px", "background:#202020", "color:#eee",
+  ].join(";");
   document.body.append(panel);
   const gif = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   menu.renderPreview(panel, {
     title: "two variants",
     previews: [{ label: "A", available: true, url: gif }, { label: "B", available: true, url: gif }],
+    preview_manager: {
+      label: "管理 / 更新动态预览",
+      hint: "首次使用或 GIF 未显示时，请先检查并更新动态预览。",
+      onClick: () => { panel.dataset.previewManagerClicks = String(Number(panel.dataset.previewManagerClicks || 0) + 1); },
+    },
   }, () => {});
   check(panel.querySelectorAll("img").length === 1, "only one GIF is decoded at a time");
   const selector = panel.querySelector("select");
   selector.value = "1";
   selector.dispatchEvent(new Event("change"));
   check(panel.querySelectorAll("img").length === 1, "switching preview releases previous image");
+  const previewManagerAction = panel.querySelector('[data-t8-preview-manager-action="true"]');
+  check(Boolean(previewManagerAction), "template dropdown preview exposes preview manager action");
+  previewManagerAction?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  check(panel.dataset.previewManagerClicks === "1", "preview manager action remains clickable inside dropdown preview");
+
+  if (new URLSearchParams(location.search).get("state") !== "menu") {
+    templateBrowser.openTemplateBrowser({
+      catalog: {
+        templates: [{
+          id: "browser-case",
+          label: "浏览器案例",
+          authority: "T8 非官方模板",
+          summary: "浏览器契约测试",
+          input_format: "主体 + 动作",
+          recommended_input: "角色穿过发光走廊",
+          required_anchors: ["起点", "变化", "收束"],
+          previews: [{ label: "案例 GIF", available: true, preview_url: gif }],
+        }],
+      },
+      selectedValue: "浏览器案例",
+      onSelect: () => {},
+    });
+    const browserManagerAction = document.querySelector(
+      '.t8-template-browser-overlay [data-t8-preview-manager-action="true"]',
+    );
+    check(Boolean(browserManagerAction), "T8 template browser exposes conspicuous preview manager action");
+    check(Boolean(document.querySelector('[data-t8-preview-manager-callout="true"]')), "template browser shows preview update reminder");
+    browserManagerAction?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    check(
+      [...document.querySelectorAll('section[role="dialog"]')].some((dialog) => dialog.textContent.includes("T8 动态预览资源管理")),
+      "template browser preview manager action opens the resource manager",
+    );
+    browserManagerAction?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    check(
+      document.querySelectorAll(".t8-preview-asset-manager-overlay").length === 1,
+      "reopening preview manager replaces the previous modal instead of stacking overlays",
+    );
+    document.querySelector(".t8-preview-asset-manager-overlay")?.remove();
+  }
 
   const safe = diagnostics.sanitizeDiagnosticRecord({
     component: "node", provider: "provider", outcome: "success", stages: [], prompt: "secret-body",

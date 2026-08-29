@@ -3,7 +3,17 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
-## Unreleased
+## [1.9.9] - 2026-08-30
+
+### Added
+
+- Show a high-visibility `管理 / 更新动态预览` reminder and action inside both
+  the non-official template dropdown preview and the full T8 template browser.
+
+### Fixed
+
+- Keep only one dynamic-preview resource manager open when users activate the
+  update action repeatedly, instead of stacking modal overlays.
 
 ## [1.9.8] - 2026-08-29
 
