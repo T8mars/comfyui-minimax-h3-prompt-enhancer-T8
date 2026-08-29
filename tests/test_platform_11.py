@@ -129,6 +129,15 @@ class Platform11Tests(unittest.TestCase):
         self.assertIn("activeCleanup?.()", menu_preview)
         self.assertIn("if (cleaned) return", menu_preview)
 
+    def test_h3_secure_api_key_draw_does_not_schedule_a_redraw_loop(self):
+        source = (ROOT / "web/js/minimax_h3_prompt_enhancer.js").read_text(encoding="utf-8")
+        secure_widget = source.split("const secureWidget = node.addDOMWidget", 1)[1].split(
+            "node.t8ApiKeySecureWidget", 1
+        )[0]
+        on_draw = secure_widget.split("onDraw(widget)", 1)[1].split("},", 1)[0]
+        self.assertIn("delete widget.width", on_draw)
+        self.assertNotIn("setDirtyCanvas", on_draw)
+
     def test_release_tools_and_routes_remain_importable_without_initialized_comfy_server(self):
         verifier = (ROOT / "tools/verify_repository.py").read_text(encoding="utf-8")
         self.assertIn("except ModuleNotFoundError", verifier)

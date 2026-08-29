@@ -5,6 +5,28 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## Unreleased
 
+## [1.9.7] - 2026-08-29
+
+### Fixed
+
+- Restore Registry and GitHub-clone in-process `llama-cpp-python` inference by
+  sending the supported `presence_penalty` argument, with a strict-signature
+  regression test for both runtime implementations.
+- Stop the H3 secure API-key DOM widget from scheduling a new canvas redraw
+  during every draw, preventing severe canvas lag on affected ComfyUI builds.
+- Include effective provider request options in Music 3 stage-cache keys so
+  changes such as `top_p` or temperature policy cannot reuse stale output.
+- Reject known model/mmproj parameter-scale mismatches even when only one
+  projector is installed, instead of auto-selecting an incompatible projector.
+- Reject IMAGE batches on first-frame and last-frame ports with an actionable
+  error instead of silently discarding every image after the first.
+- Keep the Seedance upload route's documented 50 MB limit while allowing local
+  GGUF, T8 AI Workshop, and OpenAI-compatible inline video paths to use their
+  provider-specific limits.
+- Normalize string-form H3 duration and word-target values before prompt
+  formatting, and preserve deep local GGUF paths in shared provider configs
+  without silent 256-character truncation.
+
 ## [1.9.6] - 2026-08-29
 
 ### Changed

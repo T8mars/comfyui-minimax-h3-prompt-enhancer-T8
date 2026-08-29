@@ -662,7 +662,12 @@ def _validate_video_trim(video: Any):
         )
 
 
-def _validate_video_source(video: Any, *, allow_trim: bool = False):
+def _validate_video_source(
+    video: Any,
+    *,
+    allow_trim: bool = False,
+    max_file_bytes: int | None = MAX_FILE_BYTES,
+):
     if not hasattr(video, "get_stream_source"):
         raise PromptEnhancerError("VIDEO input must come from a native ComfyUI video node.")
     if not allow_trim:
@@ -676,13 +681,17 @@ def _validate_video_source(video: Any, *, allow_trim: bool = False):
         path = os.fspath(source)
         if not os.path.isfile(path):
             raise PromptEnhancerError("VIDEO stream source no longer exists.")
-        if os.path.getsize(path) > MAX_FILE_BYTES:
+        if max_file_bytes is not None and os.path.getsize(path) > max_file_bytes:
             raise PromptEnhancerError("VIDEO exceeds the Seedance 50 MB upload limit.")
     elif not hasattr(source, "read"):
         raise PromptEnhancerError("VIDEO stream source is not readable.")
 
 
-def _video_to_bytes(video: Any) -> tuple[bytes, str, str]:
+def _video_to_bytes(
+    video: Any,
+    *,
+    max_file_bytes: int | None = MAX_FILE_BYTES,
+) -> tuple[bytes, str, str]:
     if not hasattr(video, "get_stream_source"):
         raise PromptEnhancerError("VIDEO input must come from a native ComfyUI video node.")
     try:
@@ -695,14 +704,14 @@ def _video_to_bytes(video: Any) -> tuple[bytes, str, str]:
         path = os.fspath(source)
         if not os.path.isfile(path):
             raise PromptEnhancerError("VIDEO stream source no longer exists.")
-        if os.path.getsize(path) > MAX_FILE_BYTES:
+        if max_file_bytes is not None and os.path.getsize(path) > max_file_bytes:
             raise PromptEnhancerError("VIDEO exceeds the Seedance 50 MB upload limit.")
         with open(path, "rb") as file:
             data = file.read()
     elif hasattr(source, "read"):
         if hasattr(source, "seek"):
             source.seek(0)
-        data = source.read(MAX_FILE_BYTES + 1)
+        data = source.read(max_file_bytes + 1) if max_file_bytes is not None else source.read()
         if hasattr(source, "seek"):
             source.seek(0)
     else:
@@ -712,7 +721,7 @@ def _video_to_bytes(video: Any) -> tuple[bytes, str, str]:
         raise PromptEnhancerError("VIDEO stream did not return binary data.")
     if not data:
         raise PromptEnhancerError("VIDEO is empty.")
-    if len(data) > MAX_FILE_BYTES:
+    if max_file_bytes is not None and len(data) > max_file_bytes:
         raise PromptEnhancerError("VIDEO exceeds the Seedance 50 MB upload limit.")
     return bytes(data), extension, mime_type
 
@@ -733,6 +742,7 @@ def _validate_inputs(
     official_skill_profile: str,
     creative_preset: str,
     allow_trimmed_video: bool = False,
+    max_video_bytes: int | None = MAX_FILE_BYTES,
 ) -> list[dict[str, Any]]:
     if not str(prompt or "").strip():
         raise PromptEnhancerError("prompt cannot be empty.")
@@ -774,7 +784,8 @@ def _validate_inputs(
             raise PromptEnhancerError("I2VA requires first_frame.")
         if last_frame is not None or reference_image_values or reference_video_values:
             raise PromptEnhancerError("I2VA accepts only first_frame.")
-        _image_count(first_frame)
+        if _image_count(first_frame) != 1:
+            raise PromptEnhancerError("I2VA first_frame must contain exactly one image, not an IMAGE batch.")
         return [{"kind": "image", "label": "<Picture 1>", "value": _image_at(first_frame, 0)}]
 
     if task_type == "FL2VA":
@@ -782,8 +793,10 @@ def _validate_inputs(
             raise PromptEnhancerError("FL2VA requires both first_frame and last_frame.")
         if reference_image_values or reference_video_values:
             raise PromptEnhancerError("FL2VA accepts first_frame and last_frame, not Ref2VA media inputs.")
-        _image_count(first_frame)
-        _image_count(last_frame)
+        if _image_count(first_frame) != 1:
+            raise PromptEnhancerError("FL2VA first_frame must contain exactly one image, not an IMAGE batch.")
+        if _image_count(last_frame) != 1:
+            raise PromptEnhancerError("FL2VA last_frame must contain exactly one image, not an IMAGE batch.")
         return [
             {"kind": "image", "label": "<Picture 1>", "value": _image_at(first_frame, 0)},
             {"kind": "image", "label": "<Picture 2>", "value": _image_at(last_frame, 0)},
@@ -794,7 +807,8 @@ def _validate_inputs(
             raise PromptEnhancerError("L2VA requires last_frame.")
         if first_frame is not None or reference_image_values or reference_video_values:
             raise PromptEnhancerError("L2VA accepts only last_frame.")
-        _image_count(last_frame)
+        if _image_count(last_frame) != 1:
+            raise PromptEnhancerError("L2VA last_frame must contain exactly one image, not an IMAGE batch.")
         return [{"kind": "image", "label": "<Picture 1>", "value": _image_at(last_frame, 0)}]
 
     if first_frame is not None or last_frame is not None:
@@ -807,7 +821,11 @@ def _validate_inputs(
 
     video_durations = []
     for video in reference_video_values:
-        _validate_video_source(video, allow_trim=allow_trimmed_video)
+        _validate_video_source(
+            video,
+            allow_trim=allow_trimmed_video,
+            max_file_bytes=max_video_bytes,
+        )
         video_durations.append(_video_duration(video, use_active_trim=allow_trimmed_video))
     for index, duration in enumerate(video_durations, start=1):
         if not 2 <= duration <= 15:
@@ -1032,7 +1050,7 @@ def _inline_media_plan(media_plan: list[dict[str, Any]]) -> list[dict[str, Any]]
             content_parts.append({"type": "text", "text": f"The next attached image is {label}."})
             content_parts.append({"type": "image_url", "image_url": {"url": data_url}})
         else:
-            data, _extension, mime_type = _video_to_bytes(asset["value"])
+            data, _extension, mime_type = _video_to_bytes(asset["value"], max_file_bytes=None)
             data_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
             content_parts.append({
                 "type": "text",
@@ -1075,7 +1093,7 @@ def _openai_media_plan(media_plan: list[dict[str, Any]], video_urls_text: str) -
         if video_index < len(video_urls):
             video_url = video_urls[video_index]
         else:
-            data, _extension, mime_type = _video_to_bytes(asset["value"])
+            data, _extension, mime_type = _video_to_bytes(asset["value"], max_file_bytes=None)
             video_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
         video_index += 1
         content_parts.append({
@@ -1376,6 +1394,16 @@ def enhance_prompt(
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
+    try:
+        duration_seconds = int(duration_seconds)
+    except (TypeError, ValueError) as error:
+        raise PromptEnhancerError("duration_seconds must be a positive integer.") from error
+    try:
+        description_word_target = int(description_word_target or 0)
+    except (TypeError, ValueError) as error:
+        raise PromptEnhancerError(
+            "description_word_target must be 0 (auto) or between 80 and 1000."
+        ) from error
     output_language = str(output_language or "中文")
     prompt_mode = str(prompt_mode or "官方增强")
     official_skill_profile = str(official_skill_profile or COMPAT_SKILL_PROFILE)
@@ -1414,6 +1442,7 @@ def enhance_prompt(
     custom_model = optional_texts["custom_model"]
     if API_KEY_PATTERN.search(str(prompt or "")):
         raise PromptEnhancerError("Remove the API-key-like secret from prompt before running this node.")
+    effective_api_mode = str(api_mode or SEEDANCE_API_MODE)
     media_plan = _validate_inputs(
         prompt,
         task_type,
@@ -1429,11 +1458,12 @@ def enhance_prompt(
         reference_videos,
         official_skill_profile,
         creative_preset,
-        is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE),
+        is_local_qwen_api_mode(effective_api_mode),
+        MAX_FILE_BYTES if effective_api_mode == SEEDANCE_API_MODE else None,
     )
     if progress_callback:
         progress_callback("input_validated", asset_count=len(media_plan))
-    if is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE):
+    if is_local_qwen_api_mode(effective_api_mode):
         try:
             settings = local_qwen_settings(
                 local_model=local_model,
@@ -1535,9 +1565,9 @@ def enhance_prompt(
     if session is None:
         session = requests.Session()
     try:
-        if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE:
+        if effective_api_mode == AI_WORKSHOP_API_MODE:
             media_parts = _inline_media_plan(media_plan)
-        elif str(api_mode or SEEDANCE_API_MODE) == OPENAI_API_MODE:
+        elif effective_api_mode == OPENAI_API_MODE:
             media_parts = _openai_media_plan(media_plan, openai_video_urls)
         else:
             media_parts = _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)

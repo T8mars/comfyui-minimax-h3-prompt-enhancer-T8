@@ -812,7 +812,7 @@ class LlamaPythonRuntime:
             "top_k": 20,
             "min_p": 0.0,
             "repeat_penalty": 1.0,
-            "present_penalty": 0.0 if think_mode else 1.5,
+            "presence_penalty": 0.0 if think_mode else 1.5,
         }
         try:
             result = self.llm.create_chat_completion(**options)

@@ -1535,6 +1535,28 @@ class PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(session.uploads, [])
                 self.assertEqual(session.chat_requests, [])
 
+    def test_first_and_last_frame_ports_reject_image_batches(self):
+        cases = (
+            {"task_type": "I2VA", "first_frame": torch.zeros((2, 1, 1, 3))},
+            {"task_type": "L2VA", "last_frame": torch.zeros((2, 1, 1, 3))},
+            {
+                "task_type": "FL2VA",
+                "first_frame": torch.zeros((2, 1, 1, 3)),
+                "last_frame": torch.zeros((1, 1, 1, 3)),
+            },
+            {
+                "task_type": "FL2VA",
+                "first_frame": torch.zeros((1, 1, 1, 3)),
+                "last_frame": torch.zeros((2, 1, 1, 3)),
+            },
+        )
+        for case in cases:
+            with self.subTest(case=case["task_type"]):
+                session = FakeSession(basic_output())
+                with self.assertRaisesRegex(nodes.PromptEnhancerError, "exactly one image"):
+                    self.run_enhancer(session, **case)
+                self.assertEqual(session.chat_requests, [])
+
     def test_duration_has_no_upper_bound_but_must_be_positive(self):
         one_second = FakeSession(basic_output(shots=2))
         self.run_enhancer(one_second, duration_seconds=1)
@@ -1548,6 +1570,17 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn(
             "Target duration: 3600.00 seconds",
             long_duration.chat_requests[0]["json"]["messages"][1]["content"],
+        )
+
+        numeric_strings = FakeSession(basic_output())
+        self.run_enhancer(
+            numeric_strings,
+            duration_seconds="30",
+            description_word_target="0",
+        )
+        self.assertIn(
+            "Target duration: 30.00 seconds",
+            numeric_strings.chat_requests[0]["json"]["messages"][1]["content"],
         )
 
         for kwargs in (
@@ -1565,6 +1598,25 @@ class PromptEnhancerTests(unittest.TestCase):
                     self.run_enhancer(session, **kwargs)
                 self.assertEqual(session.uploads, [])
                 self.assertEqual(session.chat_requests, [])
+
+    def test_video_size_limit_is_applied_only_to_seedance_uploads(self):
+        class PathVideo:
+            @staticmethod
+            def get_stream_source():
+                return "oversized-reference.mp4"
+
+            @staticmethod
+            def get_container_format():
+                return "mp4"
+
+        video = PathVideo()
+        with (
+            patch.object(nodes.os.path, "isfile", return_value=True),
+            patch.object(nodes.os.path, "getsize", return_value=nodes.MAX_FILE_BYTES + 1),
+        ):
+            with self.assertRaisesRegex(nodes.PromptEnhancerError, "50 MB"):
+                nodes._validate_video_source(video)
+            nodes._validate_video_source(video, max_file_bytes=None)
 
     def test_ref2va_limits_are_checked_before_upload(self):
         cases = [

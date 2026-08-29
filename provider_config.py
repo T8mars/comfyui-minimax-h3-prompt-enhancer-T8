@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from typing import Any, Mapping
 
 from comfy_api.latest import io
@@ -75,6 +74,13 @@ def _clean_text(value: Any, *, limit: int = 4096) -> str:
     return str(value or "").strip()[:limit]
 
 
+def _clean_local_identifier(value: Any, *, label: str) -> str:
+    text = str(value or "").strip()
+    if len(text) > 4096:
+        raise ProviderConfigError(f"{label} exceeds the 4096-character safety limit.")
+    return text
+
+
 def build_provider_config(**values: Any) -> dict[str, Any]:
     provider = _clean_text(values.get("provider"), limit=64)
     if provider not in PROVIDER_OPTIONS:
@@ -98,8 +104,10 @@ def build_provider_config(**values: Any) -> dict[str, Any]:
             "temperature_policy": TEMPERATURE_LABELS[policy_label],
             "extra_parameters": extra,
         },
-        "local_model": _clean_text(values.get("local_model"), limit=256) or DEFAULT_MODEL_FILENAME,
-        "local_mmproj": _clean_text(values.get("local_mmproj"), limit=256) or DEFAULT_MMPROJ_FILENAME,
+        "local_model": _clean_local_identifier(values.get("local_model"), label="local_model")
+        or DEFAULT_MODEL_FILENAME,
+        "local_mmproj": _clean_local_identifier(values.get("local_mmproj"), label="local_mmproj")
+        or DEFAULT_MMPROJ_FILENAME,
         "local_context_size": int(values.get("local_context_size") or DEFAULT_CONTEXT_SIZE),
         "local_max_tokens": int(values.get("local_max_tokens") or DEFAULT_MAX_TOKENS),
         "local_think_mode": _clean_text(values.get("local_think_mode"), limit=64) or LOCAL_THINK_OFF,

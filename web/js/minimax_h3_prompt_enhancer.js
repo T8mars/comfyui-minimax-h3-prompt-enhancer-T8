@@ -486,7 +486,6 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
         onDraw(widget) {
             if (!("width" in widget)) return;
             delete widget.width;
-            node.setDirtyCanvas(true, true);
         },
     });
     delete secureWidget.width;

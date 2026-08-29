@@ -493,6 +493,32 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(json.loads(second_report)["cache_hits"], 1)
         self.assertEqual(len(third.requests), 1)
 
+    def test_stage_cache_key_includes_effective_provider_request_options(self):
+        common = {
+            "api_key": "test-secret-key",
+            "chat_url": "https://provider.example/v1/chat/completions",
+            "provider_name": "OpenAI Compatible",
+            "model_id": "provider/text-model",
+            "seed": 7,
+            "stage": "caption",
+            "temperature": 0.2,
+            "messages": [{"role": "user", "content": "test"}],
+        }
+        low_top_p = music3._stage_cache_key(
+            **common,
+            provider_request_options={"extra_parameters": {"top_p": 0.1}},
+        )
+        high_top_p = music3._stage_cache_key(
+            **common,
+            provider_request_options={"extra_parameters": {"top_p": 0.9}},
+        )
+        omitted_temperature = music3._stage_cache_key(
+            **common,
+            provider_request_options={"temperature_policy": "omit"},
+        )
+        self.assertNotEqual(low_top_p, high_top_p)
+        self.assertNotEqual(low_top_p, omitted_temperature)
+
     def test_http_error_hides_upstream_body_and_sensitive_inputs(self):
         response = FakeResponse(
             500,

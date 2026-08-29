@@ -67,6 +67,7 @@ from .nodes import (
     API_MODES,
     CUSTOM_MODEL_OPTION as CUSTOM_MODEL_OPTION,
     LEGACY_UI_VALUES,
+    MAX_FILE_BYTES,
     OPENAI_API_MODE,
     OUTPUT_LANGUAGES,
     SEEDANCE_API_MODE,
@@ -296,6 +297,7 @@ def _validate_media(
     reference_videos: dict[str, Any] | None,
     reference_syntax: str,
     allow_trimmed_video: bool = False,
+    max_video_bytes: int | None = MAX_FILE_BYTES,
 ) -> list[dict[str, Any]]:
     if not str(prompt or "").strip():
         raise Seedance20PromptEnhancerError("prompt cannot be empty.")
@@ -313,10 +315,16 @@ def _validate_media(
 
     image_assets: list[tuple[str, Any]] = []
     if first_frame is not None:
-        _image_count(first_frame)
+        if _image_count(first_frame) != 1:
+            raise Seedance20PromptEnhancerError(
+                "first_frame must contain exactly one image, not an IMAGE batch."
+            )
         image_assets.append(("first frame", _image_at(first_frame, 0)))
     if last_frame is not None:
-        _image_count(last_frame)
+        if _image_count(last_frame) != 1:
+            raise Seedance20PromptEnhancerError(
+                "last_frame must contain exactly one image, not an IMAGE batch."
+            )
         image_assets.append(("last frame", _image_at(last_frame, 0)))
     for image in reference_image_values:
         for batch_index in range(_image_count(image)):
@@ -326,7 +334,11 @@ def _validate_media(
         raise Seedance20PromptEnhancerError("Seedance 2.0 supports at most 9 images including first and last frames.")
 
     for video in reference_video_values:
-        _validate_video_source(video, allow_trim=allow_trimmed_video)
+        _validate_video_source(
+            video,
+            allow_trim=allow_trimmed_video,
+            max_file_bytes=max_video_bytes,
+        )
     video_durations = [
         _video_duration(video, use_active_trim=allow_trimmed_video)
         for video in reference_video_values
@@ -748,6 +760,7 @@ def enhance_seedance20_prompt(
             "reference_template is required when prompt_mode is 参考模板融合."
         )
 
+    effective_api_mode = str(api_mode or SEEDANCE_API_MODE)
     media_plan = _validate_media(
         prompt,
         task_intent,
@@ -756,11 +769,12 @@ def enhance_seedance20_prompt(
         reference_images,
         reference_videos,
         reference_syntax,
-        is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE),
+        is_local_qwen_api_mode(effective_api_mode),
+        MAX_FILE_BYTES if effective_api_mode == SEEDANCE_API_MODE else None,
     )
     if progress_callback:
         progress_callback("input_validated", asset_count=len(media_plan))
-    if is_local_qwen_api_mode(api_mode or SEEDANCE_API_MODE):
+    if is_local_qwen_api_mode(effective_api_mode):
         try:
             settings = local_qwen_settings(
                 local_model=local_model,
@@ -868,9 +882,9 @@ def enhance_seedance20_prompt(
     if session is None:
         session = requests.Session()
     try:
-        if str(api_mode or SEEDANCE_API_MODE) == AI_WORKSHOP_API_MODE:
+        if effective_api_mode == AI_WORKSHOP_API_MODE:
             media_parts = _inline_media_plan(media_plan)
-        elif str(api_mode or SEEDANCE_API_MODE) == OPENAI_API_MODE:
+        elif effective_api_mode == OPENAI_API_MODE:
             media_parts = _openai_media_plan(media_plan, cleaned["openai_video_urls"])
         else:
             media_parts = _upload_seedance20_media_plan(

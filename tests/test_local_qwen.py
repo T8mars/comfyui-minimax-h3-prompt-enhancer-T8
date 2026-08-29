@@ -1,3 +1,4 @@
+import importlib
 import importlib.util
 import hashlib
 import inspect
@@ -33,6 +34,7 @@ music3 = sys.modules[f"{SPEC.name}.music3"]
 media = sys.modules[f"{SPEC.name}.local_qwen_media"]
 provider = sys.modules[f"{SPEC.name}.local_qwen_provider"]
 runtime = sys.modules[f"{SPEC.name}.local_qwen_runtime"]
+python_runtime = importlib.import_module(f"{SPEC.name}.local_qwen_python_runtime")
 catalog = sys.modules[f"{SPEC.name}.local_gguf_catalog"]
 shared_config = sys.modules[f"{SPEC.name}.provider_config"]
 INSTALLER_SPEC = importlib.util.spec_from_file_location("t8_local_qwen_installer_test", PROJECT_ROOT / "install_local_qwen.py")
@@ -194,6 +196,52 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(specs, [python_spec])
         self.assertEqual(warnings, [])
         self.assertEqual(selected.backend, "llama-cpp-python")
+
+    def test_python_runtimes_use_the_llama_cpp_presence_penalty_keyword(self):
+        for implementation in (python_runtime, runtime):
+            with self.subTest(implementation=implementation.__name__):
+                captured = {}
+
+                class StrictLlama:
+                    def create_chat_completion(
+                        self,
+                        *,
+                        messages,
+                        seed,
+                        max_tokens,
+                        temperature,
+                        stream,
+                        top_p,
+                        top_k,
+                        min_p,
+                        repeat_penalty,
+                        presence_penalty,
+                    ):
+                        captured.update(locals())
+                        return {
+                            "choices": [{"message": {"content": "final answer"}}],
+                            "usage": {"completion_tokens": 2},
+                        }
+
+                local_runtime = implementation.LlamaPythonRuntime(
+                    model=PROJECT_ROOT / "test.gguf",
+                    mmproj=None,
+                    context_size=8192,
+                    spec=implementation.PythonRuntimeSpec(version="test-version"),
+                    think_mode=False,
+                )
+                local_runtime.llm = StrictLlama()
+                content, usage = local_runtime.chat(
+                    [{"role": "user", "content": "test"}],
+                    seed=1,
+                    max_tokens=256,
+                    temperature=0.2,
+                    think_mode=False,
+                    reasoning_effort="medium",
+                )
+                self.assertEqual(content, "final answer")
+                self.assertEqual(usage["completion_tokens"], 2)
+                self.assertEqual(captured["presence_penalty"], 1.5)
 
     def test_recursive_catalog_reads_metadata_and_auto_pairs_projector(self):
         def gguf_string(value):
@@ -394,6 +442,29 @@ class LocalQwenUnitTests(unittest.TestCase):
         ):
             selected = catalog.recommended_projector(model.identifier)
         self.assertEqual(selected, correct)
+
+        with (
+            patch.object(catalog, "model_info_for", return_value=model),
+            patch.object(catalog, "scan_gguf_catalog", return_value=(model, wrong)),
+        ):
+            selected = catalog.recommended_projector(model.identifier)
+        self.assertIsNone(selected)
+
+    def test_shared_provider_config_preserves_deep_local_paths_without_truncation(self):
+        deep_model = "nested/" + "m" * 300 + "/model.gguf"
+        deep_mmproj = "nested/" + "p" * 300 + "/mmproj.gguf"
+        result = shared_config.build_provider_config(
+            provider=shared_config.PROVIDER_LOCAL,
+            local_model=deep_model,
+            local_mmproj=deep_mmproj,
+        )
+        self.assertEqual(result["local_model"], deep_model)
+        self.assertEqual(result["local_mmproj"], deep_mmproj)
+        with self.assertRaisesRegex(shared_config.ProviderConfigError, "4096-character"):
+            shared_config.build_provider_config(
+                provider=shared_config.PROVIDER_LOCAL,
+                local_model="m" * 4097,
+            )
 
     def test_local_http_error_hides_response_and_token(self):
         class Response:

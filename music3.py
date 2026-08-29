@@ -601,6 +601,12 @@ def _stage_cache_key(
     provider_request_options: Any = None,
 ) -> str:
     credential = hashlib.sha256(_STAGE_CACHE_SALT + api_key.encode("utf-8")).hexdigest()
+    effective_request_options = apply_chat_request_options(
+        {},
+        chat_url=chat_url,
+        temperature=temperature,
+        options=provider_request_options,
+    )
     material = {
         "credential": credential,
         "chat_url_hash": hashlib.sha256(chat_url.encode("utf-8")).hexdigest(),
@@ -608,7 +614,7 @@ def _stage_cache_key(
         "model": model_id,
         "seed": int(seed),
         "stage": stage,
-        "temperature": temperature,
+        "request_options": effective_request_options,
         "messages": messages,
         "official_tree": OFFICIAL_NORMALIZED_TREE_SHA256,
     }

@@ -421,6 +421,9 @@ def recommended_projector(model_identifier: str) -> GGUFModelInfo | None:
     if best_score >= 40:
         return best
     if len(projectors) == 1:
+        projector_scale = _parameter_scale(best.name, best.filename)
+        if model_scale and projector_scale and model_scale != projector_scale:
+            return None
         return best
     return None
 

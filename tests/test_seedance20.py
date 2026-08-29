@@ -253,6 +253,21 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(session.uploads[1][1], b"whole-stream")
         self.assertIn("complete action, cuts, camera", user_content[3]["text"])
 
+    def test_first_and_last_frame_ports_reject_image_batches(self):
+        cases = (
+            {"first_frame": torch.zeros((2, 1, 1, 3))},
+            {
+                "first_frame": torch.zeros((1, 1, 1, 3)),
+                "last_frame": torch.zeros((2, 1, 1, 3)),
+            },
+        )
+        for case in cases:
+            with self.subTest(case=tuple(case)):
+                session = FakeSession()
+                with self.assertRaisesRegex(seedance20.Seedance20PromptEnhancerError, "exactly one image"):
+                    self.run_enhancer(session, task_intent="AUTO", **case)
+                self.assertEqual(session.chat_requests, [])
+
     def test_official_chinese_syntax_uses_no_space_before_number(self):
         image = torch.zeros((1, 8, 8, 3), dtype=torch.float32)
         session = FakeSession()
