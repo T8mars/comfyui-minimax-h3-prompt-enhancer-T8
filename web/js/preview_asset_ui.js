@@ -100,13 +100,21 @@ export async function openPreviewAssetManager(catalog) {
     overlay.append(dialog);
     document.body.append(overlay);
 
+    const onKey = (event) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        dismiss();
+    };
     const dismiss = () => {
+        document.removeEventListener("keydown", onKey, true);
         overlay.remove();
         if (activeManager?.overlay === overlay) activeManager = null;
     };
     activeManager = { overlay, dismiss };
     close.onclick = dismiss;
     overlay.addEventListener("pointerdown", (event) => { if (event.target === overlay) dismiss(); });
+    document.addEventListener("keydown", onKey, true);
 
     const renderStatus = (value) => {
         mode.value = value.mode || "on_demand";

@@ -3,6 +3,15 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.9.11] - 2026-08-30
+
+### Fixed
+
+- Close only the topmost dynamic-preview asset manager when users press
+  `Escape` over the T8 template browser. The manager now intercepts the key at
+  the modal boundary, removes its listener on dismissal, and leaves the
+  underlying template browser available until a subsequent `Escape`.
+
 ## [1.9.10] - 2026-08-30
 
 ### Fixed

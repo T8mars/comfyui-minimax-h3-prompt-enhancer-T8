@@ -147,7 +147,22 @@ try {
       document.querySelectorAll(".t8-preview-asset-manager-overlay").length === 1,
       "reopening preview manager replaces the previous modal instead of stacking overlays",
     );
-    document.querySelector(".t8-preview-asset-manager-overlay")?.remove();
+    document.querySelector(".t8-preview-asset-manager-overlay")?.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }),
+    );
+    check(
+      document.querySelectorAll(".t8-preview-asset-manager-overlay").length === 0,
+      "Escape closes the topmost preview manager",
+    );
+    check(
+      document.querySelectorAll(".t8-template-browser-overlay").length === 1,
+      "Escape on the preview manager does not close the underlying template browser",
+    );
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }));
+    check(
+      document.querySelectorAll(".t8-template-browser-overlay").length === 0,
+      "after the preview manager closes, Escape still closes the template browser",
+    );
   }
 
   const safe = diagnostics.sanitizeDiagnosticRecord({
