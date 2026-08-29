@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.9.10] - 2026-08-30
+
+### Fixed
+
+- Keep the configured `presence_penalty` when the active
+  `llama-cpp-python` chat-completion signature supports it, while omitting the
+  optional keyword for older or patched strict signatures that reject it.
+  Both the Registry in-process runtime and the GitHub standalone fallback now
+  preserve local H3, Seedance, and Music 3 inference across those Wheel APIs.
+
 ## [1.9.9] - 2026-08-30
 
 ### Added

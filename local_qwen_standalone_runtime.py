@@ -102,6 +102,27 @@ def normalize_llama_seed(seed: int) -> int:
     return int(seed) % LLAMA_SEED_MODULUS
 
 
+def _supports_keyword_argument(callback: Any, name: str) -> bool:
+    """Return whether an inspectable callable accepts one keyword argument.
+
+    Some third-party llama-cpp-python wheels expose an older or patched
+    ``create_chat_completion`` signature.  Preserve the upstream option when
+    it is supported, while avoiding a hard failure for strict signatures that
+    omit it.  If the callable cannot be inspected, keep the upstream behavior.
+    """
+    try:
+        parameters = inspect.signature(callback).parameters
+    except (TypeError, ValueError):
+        return True
+    parameter = parameters.get(name)
+    if parameter is not None:
+        return parameter.kind is not inspect.Parameter.POSITIONAL_ONLY
+    return any(
+        item.kind is inspect.Parameter.VAR_KEYWORD
+        for item in parameters.values()
+    )
+
+
 def _finalize_local_content(content: Any, *, think_mode: bool) -> str:
     if isinstance(content, list):
         content = "".join(
@@ -814,6 +835,8 @@ class LlamaPythonRuntime:
             "repeat_penalty": 1.0,
             "presence_penalty": 0.0 if think_mode else 1.5,
         }
+        if not _supports_keyword_argument(self.llm.create_chat_completion, "presence_penalty"):
+            options.pop("presence_penalty")
         try:
             result = self.llm.create_chat_completion(**options)
         except (TypeError, ValueError, RuntimeError, OSError) as error:

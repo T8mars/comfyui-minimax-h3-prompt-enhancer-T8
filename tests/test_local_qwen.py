@@ -242,7 +242,7 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertTrue(selected.is_running)
         manager.release()
 
-    def test_python_runtimes_use_the_llama_cpp_presence_penalty_keyword(self):
+    def test_python_runtimes_use_the_supported_llama_cpp_presence_penalty_keyword(self):
         for implementation in (python_runtime, runtime):
             with self.subTest(implementation=implementation.__name__):
                 captured = {}
@@ -287,6 +287,51 @@ class LocalQwenUnitTests(unittest.TestCase):
                 self.assertEqual(content, "final answer")
                 self.assertEqual(usage["completion_tokens"], 2)
                 self.assertEqual(captured["presence_penalty"], 1.5)
+
+    def test_python_runtimes_omit_unsupported_llama_cpp_presence_penalty_keyword(self):
+        for implementation in (python_runtime, runtime):
+            with self.subTest(implementation=implementation.__name__):
+                captured = {}
+
+                class StrictLlamaWithoutPresencePenalty:
+                    def create_chat_completion(
+                        self,
+                        *,
+                        messages,
+                        seed,
+                        max_tokens,
+                        temperature,
+                        stream,
+                        top_p,
+                        top_k,
+                        min_p,
+                        repeat_penalty,
+                    ):
+                        captured.update(locals())
+                        return {
+                            "choices": [{"message": {"content": "compatible answer"}}],
+                            "usage": {"completion_tokens": 3},
+                        }
+
+                local_runtime = implementation.LlamaPythonRuntime(
+                    model=PROJECT_ROOT / "test.gguf",
+                    mmproj=None,
+                    context_size=8192,
+                    spec=implementation.PythonRuntimeSpec(version="strict-without-presence"),
+                    think_mode=False,
+                )
+                local_runtime.llm = StrictLlamaWithoutPresencePenalty()
+                content, usage = local_runtime.chat(
+                    [{"role": "user", "content": "test"}],
+                    seed=1,
+                    max_tokens=256,
+                    temperature=0.2,
+                    think_mode=False,
+                    reasoning_effort="medium",
+                )
+                self.assertEqual(content, "compatible answer")
+                self.assertEqual(usage["completion_tokens"], 3)
+                self.assertNotIn("presence_penalty", captured)
 
     def test_recursive_catalog_reads_metadata_and_auto_pairs_projector(self):
         def gguf_string(value):
