@@ -60,7 +60,7 @@ class P0P1FeatureTests(unittest.TestCase):
         inspector_info = inspector_schema.get_v1_info(inspector.T8PromptInspector)
         inspector_names = [
             name for name in inspector_info.input_order["required"] + inspector_info.input_order["optional"]
-            if name != "prompt"
+            if name not in {"prompt", "source_prompt"}
         ]
         inspector_values = dict(zip(inspector_names, by_type["T8PromptInspector"]["widgets_values"], strict=True))
         self.assertEqual(inspector_values["duration_seconds"], 15)
@@ -86,8 +86,9 @@ class P0P1FeatureTests(unittest.TestCase):
             [schema.node_id for schema in schemas[3:7]],
             ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
         )
+        self.assertEqual(schemas[7].node_id, "T8PerformanceDirectorConfig")
         self.assertEqual(
-            [schema.node_id for schema in schemas[7:]],
+            [schema.node_id for schema in schemas[8:]],
             [
                 "T8CreativeDirector",
                 "T8CreativeContextAssembler",

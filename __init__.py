@@ -9,6 +9,7 @@ from .diagnostics_routes import register_diagnostics_routes
 from .provider_config import T8LLMProviderConfig
 from .credential_routes import register_credential_routes
 from .prompt_inspector import T8PromptInspector
+from .performance_director import T8PerformanceDirectorConfig
 from .text_utilities import T8PromptText, T8ShowText
 from .creative_suite import CREATIVE_SUITE_NODES
 
@@ -30,6 +31,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8PromptInspector,
             T8PromptText,
             T8ShowText,
+            T8PerformanceDirectorConfig,
             *CREATIVE_SUITE_NODES,
         ]
 
@@ -44,6 +46,7 @@ __all__ = [
     "MiniMaxMusic3PromptEnhancer",
     "T8LLMProviderConfig",
     "T8PromptInspector",
+    "T8PerformanceDirectorConfig",
     "T8PromptText",
     "T8ShowText",
     "comfy_entrypoint",

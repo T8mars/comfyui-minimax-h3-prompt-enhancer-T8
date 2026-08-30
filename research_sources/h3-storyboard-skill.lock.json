@@ -1,0 +1,82 @@
+{
+  "schema_version": "t8-research-source-lock/v1",
+  "source": {
+    "repository": "https://github.com/phileiny/h3-storyboard-skill",
+    "commit": "ab65851f599435a1ff94ea4931949bd7bcaf069b",
+    "license": "MIT",
+    "accessed_at": "2026-08-30",
+    "relationship": "independent community research; not a MiniMax official Skill"
+  },
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 10,
+      "sha256": "cf237c7aff44efbe6e502e645c3e06da03a69d7bdeb43392108ef3348143417e"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1060,
+      "sha256": "61e2ad90a3b30a5d48d12438c79a2a1d585a4ef60f5317cdb6470d10b59405dd"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6868,
+      "sha256": "25af801384c990b17dfe6a7dfd8756d8081cafe07d6631d46880f30612473f31"
+    },
+    {
+      "path": "skills/h3-storyboard/SKILL.md",
+      "bytes": 30152,
+      "sha256": "21580ba97556b91ad073f05055eb5f1b3e77e8962b95c13336e783d99d2df1f7"
+    },
+    {
+      "path": "skills/h3-storyboard/SOURCES.md",
+      "bytes": 7654,
+      "sha256": "cf5cc014e7edd54ced041aaf21e2c817b48c931c26026e39508432c288015697"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "Reduce competing emotional beats inside one shot and split a dense performance across shots when the contract permits.",
+      "level": "single-source author observation",
+      "observed_scope": "MiniMax H3 Ref2VA, 9:16, short serial-drama examples",
+      "adoption": "soft conditional guidance only"
+    },
+    {
+      "claim": "Establish camera side and a concrete gaze target before specifying facial direction and micro-expression.",
+      "level": "community directing heuristic",
+      "observed_scope": "character performance",
+      "adoption": "portable directing guidance"
+    },
+    {
+      "claim": "Translate abstract emotion into observable gaze, eyelid, breath, shoulder, hand, or posture cues.",
+      "level": "community directing heuristic",
+      "observed_scope": "character performance",
+      "adoption": "portable directing guidance"
+    },
+    {
+      "claim": "Hide large state changes behind eye closure, head movement, foreground occlusion, action occlusion, or a cut.",
+      "level": "single-source author observation",
+      "observed_scope": "MiniMax H3 character transformation",
+      "adoption": "soft conditional guidance and experiment treatment"
+    },
+    {
+      "claim": "Spoken dialogue consumes shot time and may conflict with simultaneous mouth or swallowing beats.",
+      "level": "community directing heuristic",
+      "observed_scope": "dialogue scenes",
+      "adoption": "portable contract-preservation guidance"
+    }
+  ],
+  "limitations": [
+    "The source repository contains documentation but no runnable experiment code, raw prompts, raw videos, seeds, model build identifiers, or numeric result tables.",
+    "The observations do not establish a universal two-or-three-beat threshold.",
+    "Seedance 2.0 was not evaluated by the source.",
+    "Raw full-frame PSNR is not accepted as a proxy for facial acting quality.",
+    "Collision, liquid, exact crop, and transformation behavior remain content-, reference-, and model-dependent."
+  ],
+  "prohibited_overclaims": [
+    "Do not describe this source as an official MiniMax Skill.",
+    "Do not claim the source findings are proven across models, aspect ratios, subjects, or providers.",
+    "Do not hard-ban collision, liquid, dialogue, transformation, or user-fixed shot density.",
+    "Do not report an experiment as completed unless paired artifacts, model metadata, hashes, and observations are present."
+  ]
+}

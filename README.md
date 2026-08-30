@@ -63,13 +63,14 @@
 - 三个节点提供 ComfyUI 原生进度和仅驻留内存的脱敏执行诊断；诊断不保存 API Key、URL、提示词、歌词、模板正文、媒体或模型推理。
 - 三个节点新增“渠道能力预检”和“查看/复制脱敏诊断”入口；OpenAI 兼容未知渠道不会被标记为已验证视觉模型。
 - 可选 `T8 LLM Provider Config` 辅助节点可统一渠道、模型、Base URL、本地 Qwen 设置、`temperature` 策略和白名单参数；断开后立即恢复三个原节点自己的值。
+- 可选 `T8 Performance Director Config` 为人物/角色/情绪/对白请求增加可观察的表演结构，支持 `AUTO / 强化 / 关闭`；不新增 LLM 请求，不属于 MiniMax 官方 Skill。
 - 可选本地凭据别名让工作流只保存别名、真实 Key 留在 ComfyUI 用户目录；原有 API Key `STRING` 接线和工作流保存方式继续可用并具有更高优先级。
-- 可选 `T8 Prompt Inspector` 只在本地检查 H3、Seedance 2.0 与 Music 3 的可复算结构，原文逐字直出、只给非阻塞警告，不调用 LLM 或判断创意质量。
+- 可选 `T8 Prompt Inspector` 只在本地检查 H3、Seedance 2.0 与 Music 3 的可复算结构，并给出不计分的表演风险 advisory；原文逐字直出、不调用 LLM 或判断创意质量。
 - T8 模板浏览器支持确定性的本地 Top-3 推荐与 2–3 项并排对比；推荐不会自动改动当前模板，也不会把用户输入或 GIF 发到外部服务。
 
-## 可选的 P0/P1 辅助节点
+## 可选的 P0–P2 辅助节点
 
-`T8 LLM Provider Config`、`T8 Prompt Inspector`、`T8 Prompt Text` 和 `T8 Show Text` 是仓库自带的辅助节点，不替代三个核心 enhancer，也不改变它们的既有输出。`T8 Prompt Text` 可替代第三方多行文本输入节点，`T8 Show Text` 可在节点内只读显示并原样透传 `STRING`。三个核心节点末尾只追加一个无 widget 的可选 `provider_config` socket，因此旧工作流的 31/35/38 个序列化 widget、API Key `STRING` 接线、默认渠道和输出顺序保持不变。
+`T8 LLM Provider Config`、`T8 Performance Director Config`、`T8 Prompt Inspector`、`T8 Prompt Text` 和 `T8 Show Text` 是仓库自带的辅助节点，不替代三个核心 enhancer，也不改变它们的既有输出。`T8 Prompt Text` 可替代第三方多行文本输入节点，`T8 Show Text` 可在节点内只读显示并原样透传 `STRING`。H3/Seedance 只追加无 widget 的可选 `performance_director_config` 与 `provider_config` socket，Music 3 只追加 `provider_config`；旧工作流的 31/35/38 个序列化 widget、API Key `STRING` 接线、默认渠道和输出顺序保持不变。
 
 ### “共享 LLM 渠道配置”怎么连接
 
@@ -85,6 +86,33 @@
 
 OpenAI 兼容默认继续发送 `temperature`，保持 1.2.0 行为。只有已知 Kimi Coding Plan 地址的 `AUTO` 策略会省略该字段，也可在共享配置中显式选择发送或省略。附加参数只接受白名单，不能覆盖模型、消息、鉴权、媒体或流式控制等核心字段。
 
+### “表演导演配置”怎么用
+
+`T8 Performance Director Config（表演导演）` 的紫色 Custom Type 输出可以连接到 H3、Seedance 2.0 或 `T8 Storyboard Pack` 的同名可选输入。它不调用 LLM，只改变下一次增强请求中的短系统规则：
+
+1. `AUTO（按人物 / 表演意图）`：默认模式。只有文本或素材确实包含人物、角色、情绪、对白、反应或表演意图时才应用；纯风景、产品、文字动效和音乐请求跳过。
+2. `强化（明确表演结构）`：要求按“触发 → 接收 → 一个主反应 → 收束”显式组织人物表演，适合剧情、微表情和对白镜头。
+3. `关闭（保持原编译）`：完全不加入表演导演规则，恢复原 H3/Seedance 编译路径。
+
+规则会把抽象情绪转换为视线、眼睑、呼吸、肩颈、手部或姿态等可见线索，先确定镜头侧与视线目标，再描述面部方向；每个角色、每个触发/接收/反应/收束节拍最多保留三个高信号线索通道，避免短时长画面堆成动作清单。强状态变化可借闭眼、低头、前景/动作遮挡或切镜隐藏，但用户要求连续可见的变化不会被遮住。它不会发明对白，并要求把吞咽、闭嘴等冲突口部动作放到发声跨度之外。
+
+AUTO/强化还会锁定用户明确写出的身体部位、产品零件、颜色、左右关系和引号文字：例如“瞳孔变金”不能转写成“虹膜变金”。用户固定时长/镜头数、逐字对白、素材角色、官方 Skill、硬性要求和 LOCK 锚点始终优先。需要检查已生成结果时，可把原始提示词接入 `T8 Prompt Inspector` 新增的“原始提示词（可选，用于语义漂移检查）”输入；检查完全本地执行，只报警、不改写、不增加请求。
+
+H3 与 Seedance 使用两套独立规则：Seedance 不会收到 H3 的字段、标签、说话人编号、毫秒时间码或帧网格。Storyboard 会额外返回可选逐镜表演 IR：`dramatic_trigger`、`reception_beat`、`primary_performance_beat`、`observable_cues`、`gaze_target`、`speech_span`、`state_transition_strategy` 和 `performance_risks`；非表演镜头保留空值，不为了填表编造情绪。
+
+这套能力受到社区项目 [`phileiny/h3-storyboard-skill`](https://github.com/phileiny/h3-storyboard-skill) 固定提交 `ab65851f599435a1ff94ea4931949bd7bcaf069b` 的启发，但不是 MiniMax 官方 Skill，也不是已证明的跨模型规律。来源文件哈希、许可证、证据范围和禁止过度外推项见 [`research_sources/h3-storyboard-skill.lock.json`](./research_sources/h3-storyboard-skill.lock.json) 与 [`research_sources/NOTICE.md`](./research_sources/NOTICE.md)。
+
+维护者可创建完全离线、初始全部为 `pending` 的 200 项成对 A/B 基准；工具不会生成视频，也不会把空结果算作成功：
+
+```bash
+python tools/verify_research_source.py
+python tools/performance_benchmark.py init --output performance-benchmark.json
+python tools/performance_benchmark.py validate performance-benchmark.json
+python tools/performance_benchmark.py summarize performance-benchmark.json
+```
+
+只有补齐模型版本、成对视频哈希、注册指标和盲评后，报告才会从 `no_observations` 进入实际观察状态；全画面 PSNR 不会被当作人脸表演质量。
+
 ## T8 创作导演套件（独立辅助节点）
 
 创作导演套件扩展的是“策划、探索、修改和交付”链路，不替代三个核心 enhancer。三个核心 Node ID、既有 widget 顺序、默认值和输出保持不变；不使用这些新节点的旧工作流不需要迁移。
@@ -98,7 +126,7 @@ OpenAI 兼容默认继续发送 `temperature`，保持 1.2.0 行为。只有已�
 | `T8 Reference Role Mapper` | 1 次 | 分析用户实际连接的图片/视频，分配身份、服装、场景、动作、镜头、风格和禁止借用角色 |
 | `T8 Creative Candidate Lab` | 1 次 | 一次生成 2–4 个创作机制不同的候选及软比较 |
 | `T8 Candidate Selector` | 否 | 从候选 JSON 本地选择一个方向 |
-| `T8 Storyboard Pack` | 1 次 | 输出全局提示词、分镜、关键帧图像提示词、转场/声音与素材绑定 |
+| `T8 Storyboard Pack` | 1 次 | 输出全局提示词、分镜、关键帧图像提示词、转场/声音、素材绑定与可选逐镜表演 IR |
 | `T8 Creative DNA Mixer` | 否 | 最多融合三个 T8 非官方案例的结构、镜头和高潮/收尾机制，不发送案例媒体 |
 | `T8 Personal Creative Preset` | 否 | 在工作流内保存用户自己的文字型创作规则，不修改内置库或写外部文件 |
 | `T8 Music Creative Lab` | 1 次 | 歌词/Caption 候选、定向歌词修改、歌曲标题和中日韩文字层软 QA |

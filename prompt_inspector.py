@@ -6,6 +6,11 @@ from typing import Any
 
 from comfy_api.latest import io
 
+try:
+    from .performance_director import performance_risk_warnings, semantic_anchor_warnings
+except ImportError:
+    from performance_director import performance_risk_warnings, semantic_anchor_warnings
+
 
 FAMILY_AUTO = "AUTO（本地识别）"
 FAMILY_H3 = "MiniMax H3"
@@ -46,6 +51,7 @@ def inspect_prompt(
     instrumental: str = "AUTO",
     task_intent: str = "",
     duration_seconds: int = 0,
+    source_prompt: Any = "",
 ) -> tuple[str, str, str]:
     original = str(prompt or "")
     text = original.strip()
@@ -106,7 +112,12 @@ def inspect_prompt(
         if expected_language == "English" and re.search(r"[\u4e00-\u9fff]", text) and not re.search(r"\b(?:the|and|you|love|night)\b", text, re.I):
             warnings.append(_warning("lyrics_language", "期望 English，但正文主要呈现为中文。"))
 
-    penalty = sum(15 if item["severity"] == "error" else 8 if item["severity"] == "warning" else 3 for item in warnings)
+    if family in {FAMILY_H3, FAMILY_SEEDANCE}:
+        warnings.extend(performance_risk_warnings(text, family))
+        warnings.extend(semantic_anchor_warnings(source_prompt, text, family))
+
+    penalty_weights = {"error": 15, "warning": 8, "info": 3, "advisory": 0}
+    penalty = sum(penalty_weights.get(item["severity"], 0) for item in warnings)
     score = max(0, 100 - penalty)
     report = {
         "schema_version": "t8-prompt-inspector/v1",
@@ -127,7 +138,10 @@ class T8PromptInspector(io.ComfyNode):
             node_id="T8PromptInspector",
             display_name="T8 Prompt Inspector (Local, Non-blocking)",
             category="T8/Utilities",
-            description="Local deterministic structure checks only. It returns the original prompt unchanged and never calls an LLM.",
+            description=(
+                "Local deterministic structure checks plus non-scoring community-research-inspired performance advisories. "
+                "It returns the original prompt unchanged and never calls an LLM."
+            ),
             inputs=[
                 io.String.Input("prompt", display_name="待检查提示词", multiline=True, default="", force_input=True),
                 io.Combo.Input("prompt_family", display_name="提示词家族", options=FAMILY_OPTIONS, default=FAMILY_AUTO),
@@ -136,6 +150,14 @@ class T8PromptInspector(io.ComfyNode):
                 io.Combo.Input("instrumental", display_name="纯器乐", options=INSTRUMENTAL_OPTIONS, default="AUTO"),
                 io.String.Input("task_intent", display_name="任务意图（可选）", optional=True, default="", socketless=True),
                 io.Int.Input("duration_seconds", display_name="目标时长（0=AUTO）", default=0, min=0, max=900, step=1),
+                io.String.Input(
+                    "source_prompt",
+                    display_name="原始提示词（可选，用于语义漂移检查）",
+                    optional=True,
+                    multiline=True,
+                    default="",
+                    force_input=True,
+                ),
             ],
             outputs=[
                 io.String.Output(display_name="original_prompt"),
@@ -154,15 +176,17 @@ class T8PromptInspector(io.ComfyNode):
         instrumental="AUTO",
         task_intent="",
         duration_seconds=0,
+        source_prompt="",
     ) -> io.NodeOutput:
         return io.NodeOutput(*inspect_prompt(
-            prompt,
-            prompt_family,
-            expected_shot_count,
-            expected_language,
-            instrumental,
-            task_intent,
-            duration_seconds,
+            prompt=prompt,
+            prompt_family=prompt_family,
+            expected_shot_count=expected_shot_count,
+            expected_language=expected_language,
+            instrumental=instrumental,
+            task_intent=task_intent,
+            duration_seconds=duration_seconds,
+            source_prompt=source_prompt,
         ))
 
 

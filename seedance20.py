@@ -13,6 +13,12 @@ from .provider_config import (
     T8ProviderConfigIO,
     merge_provider_config,
 )
+from .performance_director import (
+    PerformanceDirectorConfigError,
+    T8PerformanceDirectorConfigIO,
+    resolve_performance_mode,
+    seedance_performance_instruction,
+)
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,
@@ -582,6 +588,7 @@ def _build_messages(
     media_plan: list[dict[str, Any]],
     media_parts: list[dict[str, Any]],
     case_template: str,
+    performance_director_config: Any = None,
 ) -> list[dict[str, Any]]:
     complexity_rules = {
         "AUTO（自动判断）": (
@@ -630,6 +637,13 @@ def _build_messages(
         _stability_instruction(stability_constraints),
         prompt_mode_rule,
     ]
+    performance_rule = seedance_performance_instruction(
+        performance_director_config,
+        fixed_shot_count=shot_count,
+        source_prompt=prompt,
+    )
+    if performance_rule:
+        system_rules.append(performance_rule)
     case_instruction = resolve_case_template(case_template, "seedance20", prompt)
     if case_instruction:
         system_rules.append(case_instruction)
@@ -707,6 +721,7 @@ def enhance_seedance20_prompt(
     local_video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
+    performance_director_config: Any = None,
     progress_callback: Any = None,
     provider_request_options: Any = None,
 ) -> str:
@@ -725,6 +740,10 @@ def enhance_seedance20_prompt(
         case_template = canonical_case_template_label(case_template)
     except ValueError as exc:
         raise Seedance20PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
+    try:
+        resolve_performance_mode(performance_director_config)
+    except PerformanceDirectorConfigError as exc:
+        raise Seedance20PromptEnhancerError(str(exc)) from exc
 
     selections = {
         "complexity_mode": (complexity_mode, COMPLEXITY_OPTIONS),
@@ -809,6 +828,7 @@ def enhance_seedance20_prompt(
                 media_plan,
                 [],
                 case_template,
+                performance_director_config,
             ), output_language)
             visual_budget = local_visual_part_budget(messages, settings)
             media_parts, _media_report = build_local_multimodal_parts(
@@ -840,6 +860,7 @@ def enhance_seedance20_prompt(
                 media_plan,
                 media_parts,
                 case_template,
+                performance_director_config,
             ), output_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -918,6 +939,7 @@ def enhance_seedance20_prompt(
             media_plan,
             media_parts,
             case_template,
+            performance_director_config,
         )
         result = _request_completion(
             session,
@@ -1227,6 +1249,12 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                T8PerformanceDirectorConfigIO.Input(
+                    "performance_director_config",
+                    display_name="表演导演配置（可选）",
+                    optional=True,
+                    tooltip="不连接时为条件式 AUTO；可连接 T8 Performance Director Config 选择强化或关闭。不会新增付费请求。",
+                ),
                 T8ProviderConfigIO.Input(
                     "provider_config",
                     display_name="共享 LLM 渠道配置（可选）",
@@ -1296,6 +1324,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        performance_director_config=None,
         provider_config=None,
     ) -> io.NodeOutput:
         try:
@@ -1382,6 +1411,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 local_video_sample_fps=local_video_sample_fps,
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
+                performance_director_config=performance_director_config,
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
             )

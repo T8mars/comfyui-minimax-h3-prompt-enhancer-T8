@@ -37,6 +37,12 @@ try:
         merge_provider_config,
     )
     from .provider_transport import request_chat_completion
+    from .performance_director import (
+        PerformanceDirectorConfigError,
+        T8PerformanceDirectorConfigIO,
+        h3_performance_instruction,
+        resolve_performance_mode,
+    )
 except ImportError:
     from execution_diagnostics import DiagnosticsRun
     from provider_capabilities import apply_chat_request_options
@@ -50,6 +56,12 @@ except ImportError:
         merge_provider_config,
     )
     from provider_transport import request_chat_completion
+    from performance_director import (
+        PerformanceDirectorConfigError,
+        T8PerformanceDirectorConfigIO,
+        h3_performance_instruction,
+        resolve_performance_mode,
+    )
 
 try:
     from .local_qwen_provider import (
@@ -1207,6 +1219,7 @@ def _build_messages(
     official_skill_profile: str,
     creative_preset: str,
     case_template: str,
+    performance_director_config: Any = None,
 ) -> list[dict[str, Any]]:
     effective_language = _effective_output_language(output_language, official_skill_profile)
     case_instruction = resolve_case_template(case_template, "h3", prompt)
@@ -1234,6 +1247,13 @@ def _build_messages(
             constraints,
         ),
     ]
+    performance_rule = h3_performance_instruction(
+        performance_director_config,
+        fixed_shot_count=shot_count,
+        source_prompt=prompt,
+    )
+    if performance_rule:
+        system_rules.append(performance_rule)
     if case_instruction:
         system_rules.append(T8_CASE_PRECEDENCE_RULE)
         system_rules.append(case_instruction)
@@ -1389,6 +1409,7 @@ def enhance_prompt(
     local_video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
+    performance_director_config: Any = None,
     progress_callback: Any = None,
     provider_request_options: Any = None,
 ) -> str:
@@ -1412,6 +1433,10 @@ def enhance_prompt(
         case_template = canonical_case_template_label(case_template)
     except ValueError as exc:
         raise PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
+    try:
+        resolve_performance_mode(performance_director_config)
+    except PerformanceDirectorConfigError as exc:
+        raise PromptEnhancerError(str(exc)) from exc
     api_key = str(api_key or "").strip()
     if api_key in LEGACY_UI_VALUES:
         api_key = ""
@@ -1497,6 +1522,7 @@ def enhance_prompt(
                 official_skill_profile,
                 creative_preset,
                 case_template,
+                performance_director_config,
             ), effective_local_language)
             visual_budget = local_visual_part_budget(messages, settings)
             media_parts, _media_report = build_local_multimodal_parts(
@@ -1524,6 +1550,7 @@ def enhance_prompt(
                 official_skill_profile,
                 creative_preset,
                 case_template,
+                performance_director_config,
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -1591,6 +1618,7 @@ def enhance_prompt(
             official_skill_profile,
             creative_preset,
             case_template,
+            performance_director_config,
         )
         response_text = _request_completion(
             session,
@@ -1880,6 +1908,12 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                T8PerformanceDirectorConfigIO.Input(
+                    "performance_director_config",
+                    display_name="表演导演配置（可选）",
+                    optional=True,
+                    tooltip="不连接时为条件式 AUTO；可连接 T8 Performance Director Config 选择强化或关闭。不会新增付费请求。",
+                ),
                 T8ProviderConfigIO.Input(
                     "provider_config",
                     display_name="共享 LLM 渠道配置（可选）",
@@ -1948,6 +1982,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        performance_director_config=None,
         provider_config=None,
     ) -> io.NodeOutput:
         try:
@@ -2030,6 +2065,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 local_video_sample_fps=local_video_sample_fps,
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
+                performance_director_config=performance_director_config,
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
             )

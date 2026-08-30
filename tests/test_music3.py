@@ -144,8 +144,9 @@ class Music3PromptEnhancerTests(unittest.TestCase):
             registered[3:7],
             ["T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText"],
         )
+        self.assertEqual(registered[7], "T8PerformanceDirectorConfig")
         self.assertEqual(
-            registered[7:],
+            registered[8:],
             [
                 "T8CreativeDirector",
                 "T8CreativeContextAssembler",

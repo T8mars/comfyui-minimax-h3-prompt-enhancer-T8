@@ -45,6 +45,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - In-node API-key entry, masked display, workflow save, clear, and registration links; standard `STRING` API-key connections remain supported.
 - OpenAI-compatible Base URL and model ID persist in the workflow and do not need to be re-entered on every run. API keys remain separate.
 - Native progress reporting, memory-only redacted diagnostics, provider capability preflight, and local prompt inspection.
+- Optional `T8 Performance Director Config` adds observable acting structure for character, emotion, reaction, and dialogue requests with `AUTO / Strong / Off`; it adds no LLM call and is not an official MiniMax Skill.
 - A searchable T8 template browser with categories, search, favorites, recent items, lazy GIF previews, deterministic Top-3 recommendations, and comparison.
 
 ## T8 Creative Director suite
@@ -59,7 +60,7 @@ The suite adds planning, exploration, revision, and delivery helpers without rep
 | `T8 Long-form Planner` | 1 | Split any positive duration into continuity-aware H3 and Seedance 2.0 segments |
 | `T8 Reference Role Mapper` | 1 | Analyze only directly connected user images/videos and assign identity, costume, scene, motion, camera, style, and exclusion roles |
 | `T8 Creative Candidate Lab` / `T8 Candidate Selector` | 1 / 0 | Generate 2–4 structurally distinct directions and select one locally |
-| `T8 Storyboard Pack` | 1 | Global prompt, shot JSON, still-keyframe prompts, transitions, sound, and media bindings |
+| `T8 Storyboard Pack` | 1 | Global prompt, shot JSON, still-keyframe prompts, transitions, sound, media bindings, and optional per-shot performance IR |
 | `T8 Creative DNA Mixer` | 0 | Blend structure/camera/payoff mechanics from up to three non-official T8 cases without using preview media |
 | `T8 Personal Creative Preset` | 0 | Store user-owned text rules inside the workflow only |
 | `T8 Music Creative Lab` | 1 | Lyrics/caption candidates, scoped lyric revision, titles, and soft CJK singability text checks |
@@ -283,6 +284,7 @@ Environment fallbacks are `OPENAI_API_KEY` and `OPENAI_BASE_URL`.
 The repository also includes:
 
 - `T8 LLM Provider Config`
+- `T8 Performance Director Config`
 - `T8 Prompt Inspector`
 - `T8 Prompt Text`
 - `T8 Show Text`
@@ -291,7 +293,34 @@ The green shared-provider socket is not a `STRING` socket. Add `T8 LLM Provider 
 
 When connected, the shared node controls provider, model, Base URL, local GGUF settings, temperature policy, and allowlisted extra parameters. Disconnecting it immediately restores each core node's own saved settings. Local credential aliases can keep real keys in the ComfyUI user directory while workflows store only an alias.
 
-`T8 Prompt Inspector` is local and non-blocking. It preserves the original text, reports reproducible structural warnings, does not call an LLM, and does not judge creative quality.
+`T8 Prompt Inspector` is local and non-blocking. It preserves the original text, reports reproducible structural warnings plus non-scoring performance advisories, does not call an LLM, and does not judge creative quality.
+
+### Performance Director Config
+
+Connect the `T8 Performance Director Config` Custom Type output to H3, Seedance 2.0, or `T8 Storyboard Pack`. The config node itself makes no request; it only controls a compact directing section in the next enhancer request.
+
+- `AUTO` is the default and applies only when the text or connected media actually contains a person/character, emotion, dialogue, reaction, or acting intent. Landscape, product, typography, and music-only requests skip it.
+- `Strong` explicitly organizes acting as trigger → reception → one primary response → settled/end state.
+- `Off` injects no performance-directing rule and restores the original compiler path.
+
+The guidance converts abstract emotion into observable gaze, eyelid, breath, shoulder/neck, hand, or posture cues and establishes camera side plus a concrete gaze target before facial direction. Each trigger, reception, response, or settle beat keeps at most three high-signal cue channels per character instead of stacking an action checklist. A large state change may use a motivated eye/head movement, foreground/action occlusion, or cut, but a transformation the user explicitly requires to remain continuously visible is never hidden. It never invents dialogue and keeps incompatible swallowing or mouth-closing beats outside the speaking span.
+
+AUTO and Strong also lock user-named body parts, product components, colors, left/right relations, and quoted text: for example, “the pupil turns gold” may not become “the iris turns gold.” User-fixed duration/count, verbatim dialogue, media roles, official Skills, hard constraints, and LOCK anchors always win. To audit an enhanced result, connect the original request to Prompt Inspector's optional `source_prompt` socket; the comparison is fully local, warns without rewriting, and adds no request.
+
+H3 and Seedance use separate compilers. Seedance never receives H3 fields, tags, speaker IDs, millisecond timing, or frame-grid notation. Storyboard adds optional per-shot `dramatic_trigger`, `reception_beat`, `primary_performance_beat`, `observable_cues`, `gaze_target`, `speech_span`, `state_transition_strategy`, and `performance_risks`; non-performance shots keep empty values rather than invented emotion.
+
+This feature was informed by the community-maintained [`phileiny/h3-storyboard-skill`](https://github.com/phileiny/h3-storyboard-skill) at pinned commit `ab65851f599435a1ff94ea4931949bd7bcaf069b`. It is not an official MiniMax Skill or a proven cross-model law. Exact source hashes, license, evidence scope, and prohibited overclaims are in [`research_sources/h3-storyboard-skill.lock.json`](./research_sources/h3-storyboard-skill.lock.json) and [`research_sources/NOTICE.md`](./research_sources/NOTICE.md).
+
+Maintainers can create a deterministic offline 200-render paired A/B manifest. Every row starts as `pending`; the tool does not generate video or count missing evidence as success:
+
+```bash
+python tools/verify_research_source.py
+python tools/performance_benchmark.py init --output performance-benchmark.json
+python tools/performance_benchmark.py validate performance-benchmark.json
+python tools/performance_benchmark.py summarize performance-benchmark.json
+```
+
+The report enters an observation state only after immutable model metadata, paired artifact hashes, registered metrics, and blind reviews are supplied. Full-frame PSNR is not accepted as facial acting quality.
 
 ## Local GGUF / llama.cpp
 

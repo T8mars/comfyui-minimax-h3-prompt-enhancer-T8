@@ -19,10 +19,14 @@ Compatibility invariants:
   upload endpoint into `openai_video_urls`.
 - A workflow saved by 1.1 is not promised to load in older 1.0.x code because
   older code does not know the new local-provider controls.
-- The optional `provider_config` socket is appended after every existing input.
-  It has no serialized widget and defaults to `None`, so 1.0.x/1.1.x/1.2.0
-  workflows keep their 31/35/38 widget arrays and original execution path.
-- `T8LLMProviderConfig`, `T8PromptInspector`, `T8PromptText`, and `T8ShowText`
+- The optional `provider_config` socket remains after every existing serialized input. H3 and
+  Seedance additionally expose an optional, connection-only `performance_director_config`
+  immediately before it; Music 3 does not. Neither Custom Type socket adds a serialized widget,
+  so 1.0.x/1.1.x/1.2.0 workflows keep their 31/35/38 widget arrays and original provider path.
+  An unconnected performance config uses conditional `AUTO`: it can improve character/acting
+  requests but explicitly skips non-performance intent. Connecting `Off` restores the former
+  prompt compiler without the performance-directing section.
+- `T8LLMProviderConfig`, `T8PerformanceDirectorConfig`, `T8PromptInspector`, `T8PromptText`, and `T8ShowText`
   are additional utility node IDs;
   they do not replace, rename, or reorder the original three node registrations.
 - A connected provider config does not mutate the original node widgets.

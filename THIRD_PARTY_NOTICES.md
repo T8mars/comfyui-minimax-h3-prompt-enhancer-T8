@@ -61,3 +61,14 @@ included in this Git repository:
 
 The GGUF files, llama.cpp binaries, caches, machine-specific configuration and
 user content are intentionally excluded from this repository.
+
+## Community performance-directing research
+
+The optional performance-directing rules were informed by the independently
+maintained `phileiny/h3-storyboard-skill` repository at commit
+`ab65851f599435a1ff94ea4931949bd7bcaf069b`, licensed under the MIT License.
+No source Skill text, examples, images, or videos are redistributed. The T8
+implementation is independently written and treats the source observations as
+narrow experimental evidence, not as an official MiniMax Skill or a universal
+model guarantee. Exact source hashes, evidence scope, limitations, and
+prohibited overclaims are recorded under `research_sources/`.

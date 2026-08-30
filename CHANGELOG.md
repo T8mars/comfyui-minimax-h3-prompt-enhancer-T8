@@ -3,6 +3,35 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [Unreleased]
+
+## [1.10.0] - 2026-08-30
+
+### Added
+
+- Add `T8 Performance Director Config` with conditional `AUTO`, explicit
+  `Strong`, and exact `Off` modes for H3, Seedance 2.0, and Storyboard Pack.
+- Add additive per-shot performance IR covering trigger, reception, primary
+  performance beat, observable cues, gaze target, speech span, transition
+  strategy, and advisory risks.
+- Add pinned community-research provenance plus a deterministic 200-render
+  offline A/B manifest and evidence summarizer that never counts missing
+  results or full-frame PSNR as facial-acting success.
+
+### Changed
+
+- Give H3 and Seedance separate native performance-directing compilers, with
+  fixed shot counts, exact dialogue, media roles, official contracts, hard
+  constraints, and LOCK anchors taking priority.
+- Preserve detected body-part, product-component, color, direction, and quoted
+  semantic anchors; keep continuously visible transformations visible; and
+  enforce a maximum of three observable cue channels per character per beat.
+- Extend Prompt Inspector with non-scoring performance advisories and a
+  deterministic warning for H3 serialization leaking into Seedance prompts.
+- Add an optional source-prompt socket to Prompt Inspector for deterministic
+  exact-text, protected-term, and neighboring-part drift checks without
+  rewriting the enhanced prompt or making another LLM request.
+
 ## [1.9.12] - 2026-08-30
 
 ### Changed

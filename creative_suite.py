@@ -41,6 +41,12 @@ try:
         T8ProviderConfigIO,
         merge_provider_config,
     )
+    from .performance_director import (
+        PerformanceDirectorConfigError,
+        T8PerformanceDirectorConfigIO,
+        normalize_storyboard_performance_fields,
+        storyboard_performance_instruction,
+    )
 except ImportError:
     import nodes as h3
     from case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, get_case_template
@@ -71,6 +77,12 @@ except ImportError:
         ProviderConfigError,
         T8ProviderConfigIO,
         merge_provider_config,
+    )
+    from performance_director import (
+        PerformanceDirectorConfigError,
+        T8PerformanceDirectorConfigIO,
+        normalize_storyboard_performance_fields,
+        storyboard_performance_instruction,
     )
 
 
@@ -1082,6 +1094,11 @@ class T8StoryboardPack(io.ComfyNode):
                 io.String.Input("concept", display_name="创意 / 已选方案（必填）", multiline=True, dynamic_prompts=True, default=""),
                 T8CreativeBriefIO.Input("creative_brief", display_name="创作总纲（可选）", optional=True),
                 T8ReferenceRoleMapIO.Input("reference_role_map", display_name="素材角色表（可选）", optional=True),
+                T8PerformanceDirectorConfigIO.Input(
+                    "performance_director_config",
+                    display_name="表演导演配置（可选）",
+                    optional=True,
+                ),
                 io.Combo.Input("model_target", display_name="目标模型", options=MODEL_TARGETS, default=MODEL_TARGETS[2]),
                 io.Int.Input("duration_seconds", display_name="目标时长（秒）", default=15, min=1, step=1),
                 io.Combo.Input("shot_count", display_name="镜头数量", options=SHOT_COUNT_OPTIONS, default=SHOT_COUNT_OPTIONS[0]),
@@ -1111,6 +1128,7 @@ class T8StoryboardPack(io.ComfyNode):
         api_key="",
         provider_config=None,
         seed=0,
+        performance_director_config=None,
     ) -> io.NodeOutput:
         concept = _clean_text(concept)
         if not concept:
@@ -1120,9 +1138,20 @@ class T8StoryboardPack(io.ComfyNode):
             raise CreativeSuiteError("目标时长必须是正整数。")
         count = _normalize_shot_count(shot_count)
         reference_map = _coerce_mapping(reference_role_map, REFERENCE_MAP_SCHEMA)
+        try:
+            performance_contract = storyboard_performance_instruction(
+                model_target,
+                performance_director_config,
+                fixed_shot_count=count,
+                source_prompt=concept,
+            )
+        except PerformanceDirectorConfigError as error:
+            raise CreativeSuiteError(str(error)) from error
         system = """You are a storyboard delivery director. Build an executable creative pack, not a production claim. Respect identity locks, reference roles, exact dialogue/lyrics/visible text, and the requested duration.
 Each shot must have index, start_seconds, end_seconds, purpose, composition, subject_action, camera, continuity, media_bindings, dialogue_or_text, sound, keyframe_prompt, transition_in, and transition_out. Keep fields compact and do not repeat the global prompt. Keyframe prompts describe still images and must not include impossible temporal actions. Do not invent @素材 labels absent from the connected role map.
 Return one JSON object with global_prompt and shots only. Do not repeat keyframe or transition tables at the top level; the node derives those outputs locally from each shot. Do not use Markdown fences."""
+        if performance_contract:
+            system += "\n\n" + performance_contract
         user = "\n".join([
             f"Output language: {output_language}", f"Target model: {model_target}",
             f"Duration: {duration} seconds", f"Shot count: {'AUTO' if count == 0 else count}",
@@ -1138,7 +1167,9 @@ Return one JSON object with global_prompt and shots only. Do not repeat keyframe
         parsed = _extract_json(result.text)
         data = dict(parsed) if isinstance(parsed, Mapping) else {}
         global_prompt = str(data.get("global_prompt") or result.text).strip()
-        shots = data.get("shots", []) if isinstance(data.get("shots"), list) else []
+        shots = normalize_storyboard_performance_fields(
+            data.get("shots", []) if isinstance(data.get("shots"), list) else []
+        )
         keyframe_prompts = [
             {
                 "index": item.get("index", index),
