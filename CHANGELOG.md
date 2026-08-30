@@ -3,6 +3,22 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.9.12] - 2026-08-30
+
+### Changed
+
+- Import the `batch-2026-08-30-01` cumulative snapshot as 40 human-only
+  evidence variants attached to existing T8 selectors. Twenty records are the
+  explicit current delivery and twenty close the prior cumulative gap; no
+  selector is added, removed, renamed, duplicated, or semantically changed.
+  The non-official library now contains 375 source cases, 213 case selectors,
+  162 evidence variants, and two standalone community Skills (215 selectors
+  total), with 377 T8 preview GIFs.
+- Advance the external dynamic-preview asset channel to `2026.08.30.1` with 16
+  deterministic, hash-pinned shards covering all 377 T8 previews. Full GitHub
+  clones retain the complete GIF bundle while Registry installs fetch the
+  matching human-only assets on demand.
+
 ## [1.9.11] - 2026-08-30
 
 ### Fixed
