@@ -70,7 +70,7 @@
 
 ## 可选的 P0–P2 辅助节点
 
-`T8 LLM Provider Config`、`T8 Performance Director Config`、`T8 Prompt Inspector`、`T8 Prompt Text` 和 `T8 Show Text` 是仓库自带的辅助节点，不替代三个核心 enhancer，也不改变它们的既有输出。`T8 Prompt Text` 可替代第三方多行文本输入节点，`T8 Show Text` 可在节点内只读显示并原样透传 `STRING`。H3/Seedance 只追加无 widget 的可选 `performance_director_config` 与 `provider_config` socket，Music 3 只追加 `provider_config`；旧工作流的 31/35/38 个序列化 widget、API Key `STRING` 接线、默认渠道和输出顺序保持不变。
+`T8 LLM Provider Config`、`T8 Performance Director Config`、`T8 Prompt Inspector`、`T8 Prompt Text` 和 `T8 Show Text` 是仓库自带的辅助节点，不替代三个核心 enhancer，也不改变它们的既有输出。`T8 Prompt Text` 可替代第三方多行文本输入节点，`T8 Show Text` 可在节点内只读显示并原样透传 `STRING`。H3/Seedance 只追加无 widget 的可选 `character_performance_bible`、`performance_director_config` 与 `provider_config` socket，Music 3 只追加 `provider_config`；旧工作流的 31/35/38 个序列化 widget、API Key `STRING` 接线、默认渠道和输出顺序保持不变。
 
 ### “共享 LLM 渠道配置”怎么连接
 
@@ -119,14 +119,17 @@ python tools/performance_benchmark.py summarize performance-benchmark.json
 
 | 节点 | 是否调用 LLM | 用途 |
 | --- | --- | --- |
+| `T8 Film Project Router` | 否 | 维护阶段、权威输入、版本修订、世界合同与上游修改造成的下游失效状态 |
+| `T8 Character Performance Bible` | 否 | 把角色目标、阻力、策略、身体惯性、声音与倾听反应编译成每节拍最多三个可观察通道的轻量合同 |
+| `T8 Character Performance Bible Stack` | 否 | 汇总 1–8 个独立角色合同，拒绝重复标识，并让多角色分镜逐人保留目标、策略与可观察线索 |
 | `T8 Creative Director` | 否 | 建立人物、世界、视觉、动作、声音等统一创作总纲，维度支持 `LOCK / EVOLVE / AUTO` |
 | `T8 Creative Context Assembler` | 否 | 把总纲、素材角色、DNA 和个人预设组装成可接现有核心节点的 `STRING` |
 | `T8 Directed Revision` | 1 次 | 只修改点名范围，输出修订结果、报告与本地 diff |
-| `T8 Long-form Planner` | 1 次 | 任意正整数总时长拆段，分别输出 H3、Seedance 2.0 和段间交接 JSON |
+| `T8 Long-form Planner` | 1 次 | 任意正整数总时长拆段，分别输出 H3、Seedance 2.0、世界规则/知情差检查和段间交接 JSON |
 | `T8 Reference Role Mapper` | 1 次 | 分析用户实际连接的图片/视频，分配身份、服装、场景、动作、镜头、风格和禁止借用角色 |
 | `T8 Creative Candidate Lab` | 1 次 | 一次生成 2–4 个创作机制不同的候选及软比较 |
 | `T8 Candidate Selector` | 否 | 从候选 JSON 本地选择一个方向 |
-| `T8 Storyboard Pack` | 1 次 | 输出全局提示词、分镜、关键帧图像提示词、转场/声音、素材绑定与可选逐镜表演 IR |
+| `T8 Storyboard Pack` | 1 次 | 输出全局提示词、分镜、关键帧、转场/声音、素材绑定、逐镜表演 IR 与因果/价值/必要性/伏笔审计 |
 | `T8 Creative DNA Mixer` | 否 | 最多融合三个 T8 非官方案例的结构、镜头和高潮/收尾机制，不发送案例媒体 |
 | `T8 Personal Creative Preset` | 否 | 在工作流内保存用户自己的文字型创作规则，不修改内置库或写外部文件 |
 | `T8 Music Creative Lab` | 1 次 | 歌词/Caption 候选、定向歌词修改、歌曲标题和中日韩文字层软 QA |
@@ -137,14 +140,22 @@ python tools/performance_benchmark.py summarize performance-benchmark.json
 
 候选的七维软分数由节点对最终文本做确定性的本地启发式计算，不要求模型额外“自评分”，不冒充客观艺术质量，也不阻塞非空候选。分镜包只让模型返回一次逐镜合同，关键帧表与转场/声音表在本地从逐镜字段派生，避免付费响应重复同一内容。2026-08-28 使用真实 `bytedance/doubao-seed-evolving` 完成 7 类脱敏验收：候选、定向修改、长片分段、4 镜头分镜、多模态角色映射、中文歌词候选和 5 镜头音乐节拍表均通过二值合同检查；该验收分数不等于主观艺术评分。
 
+2026-08-30 又完成 6 组真实成对文本 A/B：因果/价值变化、伏笔回收、策略切换、无对白表演、世界规则/永久代价、知情差/下游失效。平价小屋的 `qwen/qwen3.6-flash` 在同题同 seed 下，旧合同平均 44，新合同最终平均 100，6/6 组均未退步；分数只来自可复现的 JSON 结构、字面锚点、顺序、线索预算和状态字段检查，不是主观艺术评分。最终复测复用了 6 条匹配的真实基线并新发 6 条增强请求；另有 2 次 `bytedance/doubao-seed-evolving` 增强试验返回 HTTP 524，未计入分数且响应正文未保存。脱敏报告见 [`tests/fixtures/film_workflow_paid_ab_2026-08-30.json`](./tests/fixtures/film_workflow_paid_ab_2026-08-30.json)，复现实验工具见 [`film_workflow_ab_benchmark.py`](./film_workflow_ab_benchmark.py)。新报告会记录仓库版本/提交、模型 ID、参数、seed 策略和合同哈希；`--model` 可对不同云端模型分别复测，只有合同与模型完全匹配时才复用基线。本地 Qwen 的参数传递由本地回归集覆盖，但尚未把本地模型结果冒充真实跨模型质量结论。
+
+若要验收最终 H3 / Seedance 成片，可使用 [`film_workflow_render_acceptance.py`](./film_workflow_render_acceptance.py) 读取真实视频清单：它记录文件哈希、ffprobe 时长/视频流证据和具名人工五维评分，不生成视频、不保存视频或密钥，也不会把文本 100 分当成成片质量满分。
+
 素材边界：Reference Role Mapper 只会读取用户直接连接到该节点的媒体。官方/T8 案例 GIF、来源视频和人类预览永远不会作为模型参考素材。本地 GGUF 的视频理解仍只基于带真实时间戳的采样画面，不分析音轨；Music-to-Video Beat Sheet 没有 AUDIO 输入，不会声称听歌、检测 BPM 或转写歌词。
 
 推荐连接方式：
 
-1. `T8 Creative Director` → `T8 Creative Candidate Lab` / `T8 Long-form Planner` / `T8 Storyboard Pack`。
-2. 有素材时先运行 `T8 Reference Role Mapper`，把 `reference_context_for_enhancer` 接到现有 H3 的“参考素材补充”，或把角色表接到 `T8 Creative Context Assembler`。
-3. `Candidate Lab` → `Candidate Selector` → 现有 H3/Seedance 的主提示词，或继续进入 `Storyboard Pack`。
-4. `Music Creative Lab` 的候选可进入 `Creative Version Stack`；选定歌词与 Music Caption 再进入 `Music-to-Video Beat Sheet`。
+1. `T8 Film Project Router` → `T8 Long-form Planner` / `T8 Storyboard Pack`，把权威输入、世界规则、人物知情差和失效状态传给下游；下一版 Router 可直接接上一版紫色状态，空白权威字段自动继承。需要删除某一个旧字段时，在对应输入中填写 `[清空继承]`（或 `[CLEAR_INHERITED]`），其他留空字段仍继续继承。
+2. 单角色：`T8 Character Performance Bible` → H3 / Seedance 2.0 / `T8 Storyboard Pack`；多角色：多个 Bible → `T8 Character Performance Bible Stack` → 下游。两者都不增加 LLM 请求。
+3. `T8 Creative Director` → `T8 Creative Candidate Lab` / `T8 Long-form Planner` / `T8 Storyboard Pack`。
+4. 有素材时先运行 `T8 Reference Role Mapper`，把 `reference_context_for_enhancer` 接到现有 H3 的“参考素材补充”，或把角色表接到 `T8 Creative Context Assembler`。
+5. `Candidate Lab` → `Candidate Selector` → 现有 H3/Seedance 的主提示词，或继续进入 `Storyboard Pack`。
+6. `Music Creative Lab` 的候选可进入 `Creative Version Stack`；选定歌词与 Music Caption 再进入 `Music-to-Video Beat Sheet`。
+
+`T8 Long-form Planner` 与 `T8 Storyboard Pack` 运行后会在节点底部显示结构协议状态：绿色表示合同通过，红色会列出错误数量与部分稳定错误码。状态卡跟随 ComfyUI 中英文界面并按内容自动增高。新增的“协议失败处理”默认保持旧工作流的“警告并保留输出（兼容）”；改为“严格阻止下游（推荐）”后，合同失败会用 ComfyUI 原生阻断器停止下游，同时保留状态卡和 JSON `validation_errors`。这些本地检查不会增加 LLM 调用或付费次数。
 
 ## 1.1.0 更新
 
@@ -258,7 +269,7 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 | [`prompt_inspector_local_qwen_example.json`](./example_workflows/prompt_inspector_local_qwen_example.json) | H3 本地增强后接 T8 Prompt Inspector 本地结构检查 |
 | [`text_utilities_example.json`](./example_workflows/text_utilities_example.json) | 仓库自带 T8 Prompt Text → T8 Show Text，演示标准 STRING 输入、显示与透传 |
 | [`creative_direction_revision_example.json`](./example_workflows/creative_direction_revision_example.json) | 创作总控 → 多方案实验室 → 候选选择 → 定向修改 |
-| [`creative_longform_storyboard_example.json`](./example_workflows/creative_longform_storyboard_example.json) | 共享创作总纲驱动长视频分段与分镜创作包 |
+| [`creative_longform_storyboard_example.json`](./example_workflows/creative_longform_storyboard_example.json) | 项目状态、角色表演圣经与共享创作总纲共同驱动长视频分段和分镜审计 |
 | [`creative_music_video_suite_example.json`](./example_workflows/creative_music_video_suite_example.json) | 音乐候选、版本选择与 H3/Seedance 2.0 音乐视频节拍导演 |
 | [`creative_reference_dna_preset_example.json`](./example_workflows/creative_reference_dna_preset_example.json) | 素材角色、T8 Creative DNA、个人预设组装为旧增强节点可接收的 STRING 上下文 |
 

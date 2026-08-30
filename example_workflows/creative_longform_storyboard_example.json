@@ -1,8 +1,8 @@
 {
   "id": "847f6c86-4172-5bb1-9418-98d4a447669d",
   "revision": 0,
-  "last_node_id": 7,
-  "last_link_id": 7,
+  "last_node_id": 11,
+  "last_link_id": 12,
   "nodes": [
     {
       "id": 1,
@@ -141,6 +141,12 @@
           "shape": 7,
           "type": "T8_LLM_PROVIDER_CONFIG",
           "link": 3
+        },
+        {
+          "name": "film_project_state",
+          "shape": 7,
+          "type": "T8_FILM_PROJECT_STATE",
+          "link": 8
         }
       ],
       "outputs": [
@@ -182,7 +188,8 @@
         "中文",
         0,
         "fixed",
-        "机器人划痕、植物叶片数量、东方移动方向保持一致"
+        "机器人划痕、植物叶片数量、东方移动方向保持一致",
+        "严格阻止下游（推荐）"
       ]
     },
     {
@@ -213,6 +220,12 @@
           "link": null
         },
         {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
           "name": "api_key",
           "shape": 7,
           "type": "STRING",
@@ -223,6 +236,18 @@
           "shape": 7,
           "type": "T8_LLM_PROVIDER_CONFIG",
           "link": 4
+        },
+        {
+          "name": "film_project_state",
+          "shape": 7,
+          "type": "T8_FILM_PROJECT_STATE",
+          "link": 9
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": 12
         }
       ],
       "outputs": [
@@ -260,7 +285,8 @@
         "balanced",
         "中文",
         0,
-        "fixed"
+        "fixed",
+        "严格阻止下游（推荐）"
       ]
     },
     {
@@ -367,6 +393,222 @@
         "Node name for S&R": "T8ShowText"
       },
       "widgets_values": []
+    },
+    {
+      "id": 8,
+      "type": "T8FilmProjectRouter",
+      "pos": [
+        520,
+        840
+      ],
+      "size": [
+        560,
+        650
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "previous_state",
+          "shape": 7,
+          "type": "T8_FILM_PROJECT_STATE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "film_project_state",
+          "type": "T8_FILM_PROJECT_STATE",
+          "links": [
+            8,
+            9
+          ]
+        },
+        {
+          "name": "active_stage_context",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "project_state_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "invalidation_report_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8FilmProjectRouter"
+      },
+      "widgets_values": [
+        "停电城市护送",
+        "修订（保留版本并标记影响）",
+        "08-prompt | 08 H3 / Seedance 提示词",
+        "维修机器人护送一株植物前往温室。",
+        "screenplay-v03\ncharacter-v02",
+        "01 02 03 04 05 06 07",
+        "05-screenplay | 05 剧本",
+        "第三段行动方向发生修订",
+        "城市停电后只有应急机械线路可用",
+        "机器人每次强行供电都会永久损失一组记忆",
+        "机器人不知道温室已经切换为备用门",
+        "机器人划痕、植物叶片数量、东方移动方向保持一致",
+        ""
+      ]
+    },
+    {
+      "id": 9,
+      "type": "T8CharacterPerformanceBible",
+      "pos": [
+        1140,
+        680
+      ],
+      "size": [
+        580,
+        500
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "character_performance_bible",
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "links": [
+            10
+          ]
+        },
+        {
+          "name": "performance_contract_text",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "performance_bible_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CharacterPerformanceBible"
+      },
+      "widgets_values": [
+        "维修机器人",
+        "在电量耗尽前把植物交给温室管理员",
+        "城市断电、路线改变；失败会让植物死亡",
+        "绕行\n请求协助\n牺牲记忆供电",
+        "双臂始终托住花盆；上一段的机体迟滞继续累积",
+        "短促合成音；电量下降时断句变长",
+        "植物叶片枯萎时，机械式镇定被打破",
+        "先检查植物，再看路线标识；接收新信息后才行动"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "T8CharacterPerformanceBible",
+      "pos": [
+        1140,
+        1240
+      ],
+      "size": [
+        580,
+        500
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "character_performance_bible",
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "performance_contract_text",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "performance_bible_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CharacterPerformanceBible"
+      },
+      "widgets_values": [
+        "温室管理员",
+        "确认植物仍可救治并打开备用门",
+        "机器人正在失去记忆；判断错误会错过救治窗口",
+        "观察叶片\n核对路线\n打开备用门",
+        "左手持续按住应急门开关，直到机器人进入",
+        "平稳短句；只在说话时使用",
+        "机器人忘记植物名称时，专业镇定短暂破裂",
+        "先看植物，再看机器人状态灯；确认后才开门"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "T8CharacterPerformanceBibleStack",
+      "pos": [
+        1800,
+        760
+      ],
+      "size": [
+        540,
+        260
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "character_performance_bibles.character_performance_bible_0",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": 10,
+          "label": "character_performance_bible_0"
+        },
+        {
+          "name": "character_performance_bibles.character_performance_bible_1",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": 11,
+          "label": "character_performance_bible_1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "character_performance_bible_set",
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "performance_contract_text",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "performance_bible_set_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CharacterPerformanceBibleStack"
+      },
+      "widgets_values": []
     }
   ],
   "links": [
@@ -399,7 +641,7 @@
       1,
       0,
       4,
-      3,
+      4,
       "T8_LLM_PROVIDER_CONFIG"
     ],
     [
@@ -425,6 +667,46 @@
       7,
       0,
       "STRING"
+    ],
+    [
+      8,
+      8,
+      0,
+      3,
+      3,
+      "T8_FILM_PROJECT_STATE"
+    ],
+    [
+      9,
+      8,
+      0,
+      4,
+      5,
+      "T8_FILM_PROJECT_STATE"
+    ],
+    [
+      10,
+      9,
+      0,
+      11,
+      0,
+      "T8_CHARACTER_PERFORMANCE_BIBLE"
+    ],
+    [
+      11,
+      10,
+      0,
+      11,
+      1,
+      "T8_CHARACTER_PERFORMANCE_BIBLE"
+    ],
+    [
+      12,
+      11,
+      0,
+      4,
+      6,
+      "T8_CHARACTER_PERFORMANCE_BIBLE"
     ]
   ],
   "groups": [],

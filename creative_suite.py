@@ -47,6 +47,15 @@ try:
         normalize_storyboard_performance_fields,
         storyboard_performance_instruction,
     )
+    from .film_workflow import (
+        FilmWorkflowError,
+        T8CharacterPerformanceBibleIO,
+        T8FilmProjectStateIO,
+        character_performance_instruction,
+        coerce_character_performance_bibles,
+        coerce_project_state,
+        project_state_prompt_context,
+    )
 except ImportError:
     import nodes as h3
     from case_templates import CASE_TEMPLATE_OPTIONS, NO_CASE_TEMPLATE, get_case_template
@@ -84,6 +93,15 @@ except ImportError:
         normalize_storyboard_performance_fields,
         storyboard_performance_instruction,
     )
+    from film_workflow import (
+        FilmWorkflowError,
+        T8CharacterPerformanceBibleIO,
+        T8FilmProjectStateIO,
+        character_performance_instruction,
+        coerce_character_performance_bibles,
+        coerce_project_state,
+        project_state_prompt_context,
+    )
 
 
 CREATIVE_SUITE_SCHEMA = "t8-creative-suite/v1"
@@ -106,6 +124,12 @@ AUTO_POLICY = POLICIES[2]
 OUTPUT_LANGUAGES = ["中文", "English"]
 MODEL_TARGETS = ["MiniMax H3", "Seedance 2.0", "MiniMax H3 + Seedance 2.0"]
 REWRITE_MODES = ["strict", "balanced", "creative"]
+CONTRACT_FAILURE_POLICIES = [
+    "警告并保留输出（兼容）",
+    "严格阻止下游（推荐）",
+]
+CONTRACT_FAILURE_WARN = CONTRACT_FAILURE_POLICIES[0]
+CONTRACT_FAILURE_BLOCK = CONTRACT_FAILURE_POLICIES[1]
 CREATIVE_SUITE_SEEDANCE_RETRY_DELAYS = (0.5, 1.0, 2.0, 4.0, 8.0)
 CANDIDATE_COUNTS = ["2", "3", "4"]
 SHOT_COUNT_OPTIONS = ["AUTO（根据时长与内容）"] + [str(value) for value in range(1, 21)]
@@ -602,14 +626,185 @@ def _segment_schedule(total_seconds: int, target_seconds: int) -> list[dict[str,
     return schedule
 
 
+def _contract_error(code: str, **details: Any) -> dict[str, Any]:
+    return {"code": code, **details}
+
+
+def _contract_ui_status(
+    report: Mapping[str, Any],
+    failure_policy: str = CONTRACT_FAILURE_WARN,
+) -> str:
+    """Build a compact, user-visible status without exposing prompt content."""
+    raw_errors = report.get("validation_errors")
+    errors = raw_errors if isinstance(raw_errors, list) else []
+    error_codes = [
+        str(item.get("code") or "unknown_contract_error")
+        for item in errors
+        if isinstance(item, Mapping)
+    ]
+    return json.dumps(
+        {
+            "operation": str(report.get("operation") or ""),
+            "contract_valid": bool(report.get("contract_valid")),
+            "provider": str(report.get("provider") or ""),
+            "validation_error_count": len(errors),
+            "validation_error_codes": error_codes[:6],
+            "expected_item_count": report.get("expected_item_count"),
+            "received_item_count": report.get("received_item_count"),
+            "failure_policy": failure_policy,
+            "downstream_blocked": (
+                not bool(report.get("contract_valid"))
+                and failure_policy == CONTRACT_FAILURE_BLOCK
+            ),
+        },
+        ensure_ascii=False,
+    )
+
+
+def _contract_block_message(
+    report: Mapping[str, Any],
+    failure_policy: str,
+) -> str | None:
+    if bool(report.get("contract_valid")) or failure_policy != CONTRACT_FAILURE_BLOCK:
+        return None
+    operation = str(report.get("operation") or "creative_contract")
+    raw_errors = report.get("validation_errors")
+    errors = raw_errors if isinstance(raw_errors, list) else []
+    codes = [
+        str(item.get("code") or "unknown_contract_error")
+        for item in errors
+        if isinstance(item, Mapping)
+    ]
+    summary = ", ".join(codes[:3]) or "unknown_contract_error"
+    return (
+        f"T8 {operation} contract validation failed: {summary}. "
+        "Downstream execution was blocked by the selected strict policy; "
+        "review validation_errors in this node's JSON outputs."
+    )
+
+
+def _exact_top_level_errors(data: Any, expected_keys: Sequence[str]) -> list[dict[str, Any]]:
+    if not isinstance(data, Mapping):
+        return [_contract_error("response_not_json_object")]
+    expected = set(expected_keys)
+    received = {str(key) for key in data}
+    errors: list[dict[str, Any]] = []
+    missing = sorted(expected - received)
+    unexpected = sorted(received - expected)
+    if missing:
+        errors.append(_contract_error("missing_top_level_keys", keys=missing))
+    if unexpected:
+        errors.append(_contract_error("unexpected_top_level_keys", keys=unexpected))
+    return errors
+
+
+def _required_literal_anchors(
+    project_state: Mapping[str, Any] | None,
+    additional: Any = None,
+) -> list[str]:
+    candidates: list[Any] = []
+    state = dict(project_state or {})
+    candidates.extend(state.get("continuity_anchors", []) if isinstance(state.get("continuity_anchors"), list) else [])
+    if isinstance(additional, list):
+        candidates.extend(additional)
+    elif additional is not None:
+        candidates.extend(re.split(r"[\r\n]+", str(additional)))
+    anchors: list[str] = []
+    for candidate in candidates:
+        text = str(candidate or "").strip()
+        if text and text not in anchors:
+            anchors.append(text)
+    return anchors
+
+
+def _missing_literal_anchors(data: Any, anchors: Sequence[str]) -> list[str]:
+    rendered = json.dumps(data, ensure_ascii=False, sort_keys=True) if isinstance(data, (Mapping, list)) else str(data or "")
+    return [anchor for anchor in anchors if anchor not in rendered]
+
+
+def _longform_contract_errors(
+    data: Any,
+    schedule: Sequence[Mapping[str, Any]],
+    model_target: str,
+    project_state: Mapping[str, Any] | None,
+    required_anchors: Sequence[str],
+) -> list[dict[str, Any]]:
+    errors = _exact_top_level_errors(data, ("global_continuity_brief", "segments", "handoffs"))
+    if not isinstance(data, Mapping):
+        return errors
+    if not str(data.get("global_continuity_brief") or "").strip():
+        errors.append(_contract_error("global_continuity_brief_missing"))
+    segments = data.get("segments")
+    handoffs = data.get("handoffs")
+    if not isinstance(segments, list):
+        errors.append(_contract_error("segments_not_array"))
+        segments = []
+    if not isinstance(handoffs, list):
+        errors.append(_contract_error("handoffs_not_array"))
+    expected_indices = [int(item["segment_index"]) for item in schedule]
+    received_indices: list[int] = []
+    for position, item in enumerate(segments, 1):
+        if not isinstance(item, Mapping):
+            errors.append(_contract_error("segment_not_object", position=position))
+            continue
+        value = item.get("segment_index")
+        if not str(value or "").isdigit():
+            errors.append(_contract_error("segment_index_invalid", position=position, value=value))
+            continue
+        received_indices.append(int(value))
+        for field in ("start_state", "end_state"):
+            if not str(item.get(field) or "").strip():
+                errors.append(_contract_error("segment_field_missing", segment_index=int(value), field=field))
+        for field in ("continuity_anchors", "media_bindings", "world_rule_checks", "downstream_status"):
+            if not isinstance(item.get(field), list):
+                errors.append(_contract_error("segment_field_not_array", segment_index=int(value), field=field))
+        if not isinstance(item.get("knowledge_state"), Mapping):
+            errors.append(_contract_error("segment_knowledge_state_not_object", segment_index=int(value)))
+        if "MiniMax H3" in model_target and not str(item.get("h3_prompt") or "").strip():
+            errors.append(_contract_error("h3_prompt_missing", segment_index=int(value)))
+        if "Seedance 2.0" in model_target and not str(item.get("seedance20_prompt") or "").strip():
+            errors.append(_contract_error("seedance20_prompt_missing", segment_index=int(value)))
+    if received_indices != expected_indices:
+        errors.append(_contract_error(
+            "segment_schedule_mismatch",
+            expected_indices=expected_indices,
+            received_indices=received_indices,
+        ))
+    state = dict(project_state or {})
+    world = state.get("world_contract") if isinstance(state.get("world_contract"), Mapping) else {}
+    if world.get("rules") or world.get("costs_and_limits"):
+        if not any(isinstance(item, Mapping) and item.get("world_rule_checks") for item in segments):
+            errors.append(_contract_error("world_rule_checks_missing"))
+    if world.get("knowledge_gaps"):
+        if not any(isinstance(item, Mapping) and item.get("knowledge_state") for item in segments):
+            errors.append(_contract_error("knowledge_state_missing"))
+    if state.get("invalidated_stages"):
+        if not any(isinstance(item, Mapping) and item.get("downstream_status") for item in segments):
+            errors.append(_contract_error("downstream_status_missing"))
+    missing_anchors = _missing_literal_anchors(data, required_anchors)
+    if missing_anchors:
+        errors.append(_contract_error("required_literal_anchors_missing", anchors=missing_anchors))
+    return errors
+
+
 def _normalize_plan_response(
     text: str,
     schedule: list[dict[str, Any]],
     model_target: str,
     provider: str,
+    project_state: Mapping[str, Any] | None = None,
+    required_anchors: Sequence[str] = (),
 ) -> tuple[str, str, str, str]:
     parsed = _extract_json(text)
     data = dict(parsed) if isinstance(parsed, Mapping) else {}
+    validation_errors = _longform_contract_errors(
+        parsed,
+        schedule,
+        model_target,
+        project_state,
+        required_anchors,
+    )
+    structured = not validation_errors
     raw_segments = data.get("segments") if isinstance(data.get("segments"), list) else []
     by_index = {
         int(item.get("segment_index")): item
@@ -623,21 +818,36 @@ def _normalize_plan_response(
             **timing,
             "start_state": str(source.get("start_state") or ""),
             "end_state": str(source.get("end_state") or ""),
-            "continuity_anchors": source.get("continuity_anchors", []),
-            "media_bindings": source.get("media_bindings", []),
+            "continuity_anchors": source.get("continuity_anchors", []) if isinstance(source.get("continuity_anchors"), list) else [],
+            "media_bindings": source.get("media_bindings", []) if isinstance(source.get("media_bindings"), list) else [],
+            "world_rule_checks": source.get("world_rule_checks", []) if isinstance(source.get("world_rule_checks"), list) else [],
+            "knowledge_state": dict(source.get("knowledge_state")) if isinstance(source.get("knowledge_state"), Mapping) else {},
+            "downstream_status": source.get("downstream_status", []) if isinstance(source.get("downstream_status"), list) else [],
             "h3_prompt": str(source.get("h3_prompt") or ""),
             "seedance20_prompt": str(source.get("seedance20_prompt") or ""),
         })
+    state = dict(project_state or {})
     report = {
         "schema_version": CREATIVE_SUITE_SCHEMA,
         "operation": "long_form_planning",
         "provider": provider,
-        "structured_response": bool(data),
+        "structured_response": structured,
+        "contract_valid": structured,
+        "validation_errors": validation_errors,
+        "response_schema": {
+            "expected_top_level_keys": ["global_continuity_brief", "segments", "handoffs"],
+            "received_top_level_keys": sorted(str(key) for key in data)[:24],
+        },
         "model_target": model_target,
+        "expected_item_count": len(schedule),
+        "received_item_count": len(raw_segments),
         "schedule": schedule,
-        "unparsed_response": "" if data else text,
+        "project_revision": state.get("revision"),
+        "project_target_stage": state.get("target_stage", ""),
+        "known_invalidated_stages": state.get("invalidated_stages", []),
+        "unparsed_response": "" if structured else text,
     }
-    global_brief = str(data.get("global_continuity_brief") or text).strip()
+    global_brief = str(data.get("global_continuity_brief") or (text if not data else "")).strip()
     h3_payload = {
         **report,
         "segments": [
@@ -683,6 +893,19 @@ class T8LongFormPlanner(io.ComfyNode):
                 io.Combo.Input("rewrite_mode", display_name="创作幅度", options=REWRITE_MODES, default="balanced"),
                 io.Combo.Input("output_language", display_name="输出语言", options=OUTPUT_LANGUAGES, default="中文"),
                 *_provider_inputs(),
+                T8FilmProjectStateIO.Input(
+                    "film_project_state",
+                    display_name="影视项目状态（可选）",
+                    optional=True,
+                    tooltip="连接 T8 Film Project Router；只传递权威输入、世界规则、知情差与失效状态，不自动改写其他阶段。",
+                ),
+                io.Combo.Input(
+                    "contract_failure_policy",
+                    display_name="协议失败处理",
+                    options=CONTRACT_FAILURE_POLICIES,
+                    default=CONTRACT_FAILURE_WARN,
+                    tooltip="兼容模式保留诊断输出；严格模式在合同校验失败时使用 ComfyUI 原生阻断器停止下游，且不会追加 LLM 请求。",
+                ),
             ],
             outputs=[
                 io.String.Output(display_name="global_continuity_brief"),
@@ -697,6 +920,7 @@ class T8LongFormPlanner(io.ComfyNode):
         cls,
         concept,
         creative_brief=None,
+        film_project_state=None,
         model_target=MODEL_TARGETS[2],
         total_duration_seconds=60,
         segment_duration_seconds=15,
@@ -707,6 +931,7 @@ class T8LongFormPlanner(io.ComfyNode):
         api_key="",
         provider_config=None,
         seed=0,
+        contract_failure_policy=CONTRACT_FAILURE_WARN,
     ) -> io.NodeOutput:
         concept = _clean_text(concept)
         anchors = _clean_text(continuity_anchors)
@@ -714,11 +939,18 @@ class T8LongFormPlanner(io.ComfyNode):
             raise CreativeSuiteError("全片创意 / 剧本不能为空。")
         if model_target not in MODEL_TARGETS:
             raise CreativeSuiteError(f"Unsupported model_target: {model_target}")
+        try:
+            project_state = coerce_project_state(film_project_state)
+            project_context = project_state_prompt_context(project_state) if project_state else ""
+        except FilmWorkflowError as error:
+            raise CreativeSuiteError(str(error)) from error
         schedule = _segment_schedule(total_duration_seconds, segment_duration_seconds)
         system = """You are a long-form audiovisual continuity director. Plan multiple independently generatable video segments without claiming to render, stitch, edit, or hear media.
 For every segment preserve identity, costume, props, spatial direction, lighting, action state, dialogue/visible text, and sound handoffs. MiniMax H3 and Seedance 2.0 prompts must be separate native variants; never chain one model's final prompt into the other.
 H3 variants use concrete shot timing, visual action, camera, dialogue/sound, overall soundscape and non-diegetic music appropriate to the selected H3 mode. Seedance variants use natural model-ready Chinese or English, @素材N references only when supplied, explicit temporal order, controllable action and continuity without fabricated frame-accurate certainty. Keep every native segment prompt concise (at most 360 Chinese characters or 220 English words) while retaining its full executable event chain.
-Return one JSON object with global_continuity_brief, segments, and handoffs. Each segment must contain segment_index, start_state, end_state, continuity_anchors, media_bindings, h3_prompt, seedance20_prompt. Do not use Markdown fences."""
+When a film-project state is connected, its world rules, costs/limits, knowledge gaps, authoritative inputs, and invalidated-stage list are exact constraints. Missing facts remain unknown. Never silently repair an upstream stage or treat a stale downstream result as confirmed. For every segment, state only the applicable world-rule checks, who knows or does not know the relevant facts, and any downstream status inherited from the connected state.
+Every required_literal_anchor in the connected film-project state must appear at least once verbatim in the returned segment prompts or structural fields. Do not translate, abbreviate, or synonym-substitute those anchors.
+Return exactly one JSON object. These top-level keys cannot be renamed: {"global_continuity_brief":"","segments":[{"segment_index":1,"start_state":"","end_state":"","continuity_anchors":[],"media_bindings":[],"world_rule_checks":[],"knowledge_state":{},"downstream_status":[],"h3_prompt":"","seedance20_prompt":""}],"handoffs":[]}. Every deterministic schedule item gets exactly one matching segment. Keep non-prompt scalar fields within 32 Chinese characters or 20 English words; each array has at most 3 compact items. Do not add commentary or Markdown fences."""
         user = "\n".join([
             f"Output language: {output_language}",
             f"Model target: {model_target}",
@@ -726,6 +958,7 @@ Return one JSON object with global_continuity_brief, segments, and handoffs. Eac
             f"Total duration: {int(total_duration_seconds)} seconds",
             "Authoritative deterministic segment schedule:", _json_text(schedule),
             "Shared creative brief:", _brief_context(creative_brief),
+            "Authoritative film-project state:", project_context or "None.",
             "Additional continuity anchors:", anchors or "None.",
             "Whole-film concept/script:", concept,
         ])
@@ -738,7 +971,23 @@ Return one JSON object with global_continuity_brief, segments, and handoffs. Eac
             seed=seed,
             max_output_tokens=4096,
         )
-        return io.NodeOutput(*_normalize_plan_response(result.text, schedule, model_target, result.provider))
+        outputs = _normalize_plan_response(
+            result.text,
+            schedule,
+            model_target,
+            result.provider,
+            project_state,
+            _required_literal_anchors(project_state, anchors),
+        )
+        report = json.loads(outputs[3])
+        block_message = _contract_block_message(report, contract_failure_policy)
+        return io.NodeOutput(
+            *outputs,
+            ui={"creative_contract_status": [
+                _contract_ui_status(report, contract_failure_policy)
+            ]},
+            block_execution=block_message,
+        )
 
 
 def _build_reference_media(
@@ -1082,6 +1331,214 @@ def _normalize_shot_count(value: Any) -> int:
     return count
 
 
+NARRATIVE_AUDIT_DEFAULTS: dict[str, Any] = {
+    "causal_link": "",
+    "value_before": "",
+    "value_after": "",
+    "scene_necessity": "",
+    "setup_elements": [],
+    "payoff_elements": [],
+}
+
+
+def _compact_string_list(value: Any) -> list[str]:
+    if isinstance(value, list):
+        candidates = value
+    elif value is None:
+        candidates = []
+    else:
+        candidates = re.split(r"[\r\n;；]+", str(value))
+    items: list[str] = []
+    for candidate in candidates:
+        text = str(candidate or "").strip()
+        if text and text not in items:
+            items.append(text)
+    return items
+
+
+def normalize_storyboard_narrative_fields(shots: Any) -> list[dict[str, Any]]:
+    if not isinstance(shots, list):
+        return []
+    normalized: list[dict[str, Any]] = []
+    for item in shots:
+        if not isinstance(item, Mapping):
+            continue
+        shot = dict(item)
+        for field, default in NARRATIVE_AUDIT_DEFAULTS.items():
+            if field not in shot or shot[field] is None:
+                shot[field] = list(default) if isinstance(default, list) else default
+        shot["causal_link"] = str(shot["causal_link"] or "").strip()
+        shot["value_before"] = str(shot["value_before"] or "").strip()
+        shot["value_after"] = str(shot["value_after"] or "").strip()
+        shot["scene_necessity"] = str(shot["scene_necessity"] or "").strip()
+        shot["setup_elements"] = _compact_string_list(shot["setup_elements"])
+        shot["payoff_elements"] = _compact_string_list(shot["payoff_elements"])
+        normalized.append(shot)
+    return normalized
+
+
+def build_storyboard_narrative_audit(shots: Any) -> dict[str, Any]:
+    normalized = normalize_storyboard_narrative_fields(shots)
+    total = len(normalized)
+    causal = sum(bool(item["causal_link"]) for item in normalized)
+    shifted = sum(
+        bool(item["value_before"] and item["value_after"] and item["value_before"] != item["value_after"])
+        for item in normalized
+    )
+    necessary = sum(bool(item["scene_necessity"]) for item in normalized)
+    setups = [value for item in normalized for value in item["setup_elements"]]
+    payoffs = [value for item in normalized for value in item["payoff_elements"]]
+    setup_keys = {value.casefold(): value for value in setups}
+    payoff_keys = {value.casefold(): value for value in payoffs}
+    warnings: list[dict[str, Any]] = []
+    for field, count, code in (
+        ("causal_link", causal, "causality_missing"),
+        ("value_shift", shifted, "value_shift_missing"),
+        ("scene_necessity", necessary, "scene_necessity_missing"),
+    ):
+        if total and count < total:
+            warnings.append({
+                "code": code,
+                "missing_shot_count": total - count,
+                "message": f"{field} is incomplete; review the affected shots instead of treating this as an art score.",
+            })
+    unmatched_setups = [setup_keys[key] for key in setup_keys.keys() - payoff_keys.keys()]
+    unmatched_payoffs = [payoff_keys[key] for key in payoff_keys.keys() - setup_keys.keys()]
+    if unmatched_setups:
+        warnings.append({"code": "setup_without_payoff", "elements": unmatched_setups})
+    if unmatched_payoffs:
+        warnings.append({"code": "payoff_without_setup", "elements": unmatched_payoffs})
+    return {
+        "contract": "deterministic structural coverage only; not an objective creative-quality score",
+        "shot_count": total,
+        "coverage": {
+            "causal_link": {"present": causal, "required": total},
+            "value_shift": {"present": shifted, "required": total},
+            "scene_necessity": {"present": necessary, "required": total},
+        },
+        "setup_elements": setups,
+        "payoff_elements": payoffs,
+        "unmatched_setups": unmatched_setups,
+        "unmatched_payoffs": unmatched_payoffs,
+        "warnings": warnings,
+    }
+
+
+def _storyboard_contract_errors(
+    data: Any,
+    *,
+    duration_seconds: int,
+    requested_shot_count: int,
+    project_state: Mapping[str, Any] | None,
+    performance_bibles: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    errors = _exact_top_level_errors(data, ("global_prompt", "shots"))
+    if not isinstance(data, Mapping):
+        return errors
+    if not str(data.get("global_prompt") or "").strip():
+        errors.append(_contract_error("global_prompt_missing"))
+    shots = data.get("shots")
+    if not isinstance(shots, list):
+        errors.append(_contract_error("shots_not_array"))
+        return errors
+    if not shots:
+        errors.append(_contract_error("shots_empty"))
+    if requested_shot_count and len(shots) != requested_shot_count:
+        errors.append(_contract_error(
+            "shot_count_mismatch",
+            expected=requested_shot_count,
+            received=len(shots),
+        ))
+    expected_indices = list(range(1, len(shots) + 1))
+    received_indices: list[int] = []
+    timings: list[tuple[float, float]] = []
+    seen_characters: set[str] = set()
+    for position, item in enumerate(shots, 1):
+        if not isinstance(item, Mapping):
+            errors.append(_contract_error("shot_not_object", position=position))
+            continue
+        index_value = item.get("index")
+        if not str(index_value or "").isdigit():
+            errors.append(_contract_error("shot_index_invalid", position=position, value=index_value))
+        else:
+            received_indices.append(int(index_value))
+        for field in (
+            "index", "start_seconds", "end_seconds", "purpose", "composition", "subject_action", "camera",
+            "continuity", "media_bindings", "dialogue_or_text", "sound", "keyframe_prompt", "transition_in",
+            "transition_out", "causal_link", "value_before", "value_after", "scene_necessity", "setup_elements",
+            "payoff_elements",
+        ):
+            if field not in item:
+                errors.append(_contract_error("shot_field_missing_key", shot_index=index_value or position, field=field))
+        for field in (
+            "purpose", "composition", "subject_action", "camera", "continuity", "keyframe_prompt", "causal_link",
+            "value_before", "value_after", "scene_necessity",
+        ):
+            if not str(item.get(field) or "").strip():
+                errors.append(_contract_error("shot_field_missing", shot_index=index_value or position, field=field))
+        for field in ("media_bindings", "setup_elements", "payoff_elements", "observable_cues"):
+            if not isinstance(item.get(field), list):
+                errors.append(_contract_error("shot_field_not_array", shot_index=index_value or position, field=field))
+        cues = item.get("observable_cues")
+        if isinstance(cues, list) and len(cues) > 3:
+            errors.append(_contract_error("observable_cue_budget_exceeded", shot_index=index_value or position, received=len(cues), limit=3))
+        try:
+            start = float(item.get("start_seconds"))
+            end = float(item.get("end_seconds"))
+        except (TypeError, ValueError):
+            errors.append(_contract_error("shot_timing_invalid", shot_index=index_value or position))
+        else:
+            if start < 0 or end <= start:
+                errors.append(_contract_error("shot_timing_invalid", shot_index=index_value or position, start=start, end=end))
+            timings.append((start, end))
+        character_beats = item.get("character_performance_beats", [])
+        if character_beats is not None and not isinstance(character_beats, list):
+            errors.append(_contract_error("character_performance_beats_not_array", shot_index=index_value or position))
+            character_beats = []
+        if isinstance(character_beats, list):
+            for beat in character_beats:
+                if not isinstance(beat, Mapping):
+                    errors.append(_contract_error("character_performance_beat_not_object", shot_index=index_value or position))
+                    continue
+                identifier = str(beat.get("character_id") or "").strip()
+                if identifier:
+                    seen_characters.add(identifier)
+                beat_cues = beat.get("observable_cues")
+                if not isinstance(beat_cues, list):
+                    errors.append(_contract_error("character_cues_not_array", shot_index=index_value or position, character_id=identifier))
+                elif len(beat_cues) > 3:
+                    errors.append(_contract_error(
+                        "character_cue_budget_exceeded",
+                        shot_index=index_value or position,
+                        character_id=identifier,
+                        received=len(beat_cues),
+                        limit=3,
+                    ))
+    if received_indices != expected_indices:
+        errors.append(_contract_error("shot_indices_not_sequential", expected=expected_indices, received=received_indices))
+    if timings:
+        tolerance = 0.05
+        if abs(timings[0][0]) > tolerance:
+            errors.append(_contract_error("timeline_does_not_start_at_zero", received=timings[0][0]))
+        for position in range(1, len(timings)):
+            if abs(timings[position][0] - timings[position - 1][1]) > tolerance:
+                errors.append(_contract_error(
+                    "timeline_gap_or_overlap",
+                    previous_end=timings[position - 1][1],
+                    next_start=timings[position][0],
+                ))
+        if abs(timings[-1][1] - float(duration_seconds)) > tolerance:
+            errors.append(_contract_error("timeline_duration_mismatch", expected=duration_seconds, received=timings[-1][1]))
+    required_characters = [str(item.get("character_id") or "").strip() for item in performance_bibles]
+    missing_characters = [item for item in required_characters if item and item not in seen_characters]
+    if len(required_characters) > 1 and missing_characters:
+        errors.append(_contract_error("character_performance_missing", character_ids=missing_characters))
+    missing_anchors = _missing_literal_anchors(data, _required_literal_anchors(project_state))
+    if missing_anchors:
+        errors.append(_contract_error("required_literal_anchors_missing", anchors=missing_anchors))
+    return errors
+
+
 class T8StoryboardPack(io.ComfyNode):
     @classmethod
     def define_schema(cls):
@@ -1105,6 +1562,23 @@ class T8StoryboardPack(io.ComfyNode):
                 io.Combo.Input("rewrite_mode", display_name="创作幅度", options=REWRITE_MODES, default="balanced"),
                 io.Combo.Input("output_language", display_name="输出语言", options=OUTPUT_LANGUAGES, default="中文"),
                 *_provider_inputs(),
+                T8FilmProjectStateIO.Input(
+                    "film_project_state",
+                    display_name="影视项目状态（可选）",
+                    optional=True,
+                ),
+                T8CharacterPerformanceBibleIO.Input(
+                    "character_performance_bible",
+                    display_name="角色表演圣经（可选）",
+                    optional=True,
+                ),
+                io.Combo.Input(
+                    "contract_failure_policy",
+                    display_name="协议失败处理",
+                    options=CONTRACT_FAILURE_POLICIES,
+                    default=CONTRACT_FAILURE_WARN,
+                    tooltip="兼容模式保留诊断输出；严格模式在合同校验失败时使用 ComfyUI 原生阻断器停止下游，且不会追加 LLM 请求。",
+                ),
             ],
             outputs=[
                 io.String.Output(display_name="global_prompt"),
@@ -1120,6 +1594,8 @@ class T8StoryboardPack(io.ComfyNode):
         concept,
         creative_brief=None,
         reference_role_map=None,
+        film_project_state=None,
+        character_performance_bible=None,
         model_target=MODEL_TARGETS[2],
         duration_seconds=15,
         shot_count=SHOT_COUNT_OPTIONS[0],
@@ -1129,6 +1605,7 @@ class T8StoryboardPack(io.ComfyNode):
         provider_config=None,
         seed=0,
         performance_director_config=None,
+        contract_failure_policy=CONTRACT_FAILURE_WARN,
     ) -> io.NodeOutput:
         concept = _clean_text(concept)
         if not concept:
@@ -1139,23 +1616,37 @@ class T8StoryboardPack(io.ComfyNode):
         count = _normalize_shot_count(shot_count)
         reference_map = _coerce_mapping(reference_role_map, REFERENCE_MAP_SCHEMA)
         try:
+            project_state = coerce_project_state(film_project_state)
+            project_context = project_state_prompt_context(
+                project_state,
+                target_stage="08-prompt",
+            ) if project_state else ""
+            performance_bibles = coerce_character_performance_bibles(character_performance_bible)
             performance_contract = storyboard_performance_instruction(
                 model_target,
                 performance_director_config,
                 fixed_shot_count=count,
                 source_prompt=concept,
             )
-        except PerformanceDirectorConfigError as error:
+        except (PerformanceDirectorConfigError, FilmWorkflowError) as error:
             raise CreativeSuiteError(str(error)) from error
         system = """You are a storyboard delivery director. Build an executable creative pack, not a production claim. Respect identity locks, reference roles, exact dialogue/lyrics/visible text, and the requested duration.
-Each shot must have index, start_seconds, end_seconds, purpose, composition, subject_action, camera, continuity, media_bindings, dialogue_or_text, sound, keyframe_prompt, transition_in, and transition_out. Keep fields compact and do not repeat the global prompt. Keyframe prompts describe still images and must not include impossible temporal actions. Do not invent @素材 labels absent from the connected role map.
-Return one JSON object with global_prompt and shots only. Do not repeat keyframe or transition tables at the top level; the node derives those outputs locally from each shot. Do not use Markdown fences."""
+Each shot must have index, start_seconds, end_seconds, purpose, composition, subject_action, camera, continuity, media_bindings, dialogue_or_text, sound, keyframe_prompt, transition_in, transition_out, causal_link, value_before, value_after, scene_necessity, setup_elements, and payoff_elements. For the first shot, causal_link states the user-supplied initial condition; later shots state the concrete preceding cause. value_before/value_after describe the visible dramatic value change. scene_necessity states what user-supplied story function would break if the shot were removed. setup_elements and payoff_elements are arrays and must reuse exact compact names so the node can match them locally. Use empty arrays when none exist. These are structural analysis fields, not permission to add story facts. When multiple character bibles are connected, also return character_performance_beats as a per-character array and never merge one character's tactic or cues into another character.
+When one user-supplied object, action, or fact is introduced and later paid off, select its shortest exact user phrase and copy that identical label into both setup_elements and payoff_elements; do not append different verbs or qualifiers to either label. Keep fields compact and do not repeat the global prompt. Keyframe prompts describe still images and must not include impossible temporal actions. Do not invent @素材 labels absent from the connected role map. A connected film-project state is authoritative: missing material remains unknown, invalidated stages remain stale, and no upstream stage may be silently repaired. Every required_literal_anchor in that state must appear at least once verbatim in returned fields.
+Return exactly one JSON object with global_prompt and shots only. The top-level keys cannot be renamed: {"global_prompt":"","shots":[{"index":1,"start_seconds":0,"end_seconds":0,"purpose":"","composition":"","subject_action":"","camera":"","continuity":"","media_bindings":[],"dialogue_or_text":"","sound":"","keyframe_prompt":"","transition_in":"","transition_out":"","causal_link":"","value_before":"","value_after":"","scene_necessity":"","setup_elements":[],"payoff_elements":[],"dramatic_trigger":"","reception_beat":"","primary_performance_beat":"","observable_cues":[],"gaze_target":"","speech_span":"","state_transition_strategy":"","performance_risks":[],"character_performance_beats":[{"character_id":"","primary_tactic":"","observable_cues":[],"gaze_target":"","state_transition":""}]}]}. Return exactly the requested shot count when fixed. Never use storyboard, shot_list, scenes, or any other alias for shots. Except keyframe_prompt (80 Chinese characters / 50 English words), keep scalar shot fields within 28 Chinese characters / 18 English words and arrays within 3 compact items. Do not repeat keyframe or transition tables at the top level. Do not add commentary or Markdown fences."""
         if performance_contract:
             system += "\n\n" + performance_contract
+        character_contract = character_performance_instruction(
+            character_performance_bible,
+            model_target=f"{model_target} storyboard planning IR",
+        )
+        if character_contract:
+            system += "\n\n" + character_contract
         user = "\n".join([
             f"Output language: {output_language}", f"Target model: {model_target}",
             f"Duration: {duration} seconds", f"Shot count: {'AUTO' if count == 0 else count}",
             "Creative brief:", _brief_context(creative_brief),
+            "Authoritative film-project state:", project_context or "None.",
             "Reference role map:", _json_text(reference_map) if reference_map else "None.",
             "Selected creative direction:", concept,
         ])
@@ -1166,10 +1657,19 @@ Return one JSON object with global_prompt and shots only. Do not repeat keyframe
         )
         parsed = _extract_json(result.text)
         data = dict(parsed) if isinstance(parsed, Mapping) else {}
-        global_prompt = str(data.get("global_prompt") or result.text).strip()
-        shots = normalize_storyboard_performance_fields(
-            data.get("shots", []) if isinstance(data.get("shots"), list) else []
+        validation_errors = _storyboard_contract_errors(
+            parsed,
+            duration_seconds=duration,
+            requested_shot_count=count,
+            project_state=project_state,
+            performance_bibles=performance_bibles,
         )
+        structured = not validation_errors
+        global_prompt = str(data.get("global_prompt") or (result.text if not data else "")).strip()
+        shots = normalize_storyboard_narrative_fields(normalize_storyboard_performance_fields(
+            data.get("shots", []) if isinstance(data.get("shots"), list) else []
+        ))
+        narrative_audit = build_storyboard_narrative_audit(shots)
         keyframe_prompts = [
             {
                 "index": item.get("index", index),
@@ -1194,14 +1694,30 @@ Return one JSON object with global_prompt and shots only. Do not repeat keyframe
             keyframe_prompts = data["keyframe_prompts"]
         if not transition_sound and isinstance(data.get("transition_sound"), list):
             transition_sound = data["transition_sound"]
-        meta = {"schema_version": CREATIVE_SUITE_SCHEMA, "provider": result.provider,
-                "structured_response": bool(data), "duration_seconds": duration,
-                "requested_shot_count": count}
+        meta = {"schema_version": CREATIVE_SUITE_SCHEMA, "operation": "storyboard_planning",
+                "provider": result.provider,
+                "structured_response": structured, "contract_valid": structured,
+                "validation_errors": validation_errors, "duration_seconds": duration,
+                "response_schema": {
+                    "expected_top_level_keys": ["global_prompt", "shots"],
+                    "received_top_level_keys": sorted(str(key) for key in data)[:24],
+                },
+                "requested_shot_count": count,
+                "expected_item_count": count or None,
+                "received_item_count": len(shots),
+                "project_revision": project_state.get("revision"),
+                "known_invalidated_stages": project_state.get("invalidated_stages", [])}
+        block_message = _contract_block_message(meta, contract_failure_policy)
         return io.NodeOutput(
             global_prompt,
-            _json_text({**meta, "shots": shots, "unparsed_response": "" if data else result.text}),
+            _json_text({**meta, "shots": shots, "narrative_audit": narrative_audit,
+                        "unparsed_response": "" if structured else result.text}),
             _json_text({**meta, "keyframe_prompts": keyframe_prompts}),
             _json_text({**meta, "transition_sound": transition_sound}),
+            ui={"creative_contract_status": [
+                _contract_ui_status(meta, contract_failure_policy)
+            ]},
+            block_execution=block_message,
         )
 
 

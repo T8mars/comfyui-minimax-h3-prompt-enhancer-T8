@@ -90,6 +90,56 @@
     },
     "outputs": {"0": {"name": "文本"}}
   },
+  "T8FilmProjectRouter": {
+    "display_name": "T8 影视项目状态路由",
+    "inputs": {
+      "project_title": {"name": "项目名称"},
+      "mode": {"name": "工作模式"},
+      "target_stage": {"name": "本轮目标阶段"},
+      "authoritative_inputs": {"name": "本轮权威输入"},
+      "changed_stage": {"name": "本轮修改的上游阶段"},
+      "world_rules": {"name": "世界硬规则"},
+      "ability_costs_and_limits": {"name": "能力代价与不可做事项"},
+      "knowledge_gaps": {"name": "人物知情差"},
+      "previous_state_json": {"name": "上一版状态 JSON（可选）"},
+      "previous_state": {"name": "上一版项目状态（可选，推荐直连）"}
+    },
+    "outputs": {
+      "0": {"name": "影视项目状态"},
+      "1": {"name": "当前阶段上下文"},
+      "2": {"name": "项目状态 JSON"},
+      "3": {"name": "失效报告 JSON"}
+    }
+  },
+  "T8CharacterPerformanceBible": {
+    "display_name": "T8 角色表演圣经",
+    "inputs": {
+      "character_id": {"name": "角色标识 / 素材标签"},
+      "scene_objective": {"name": "当前场景目标"},
+      "obstacle_and_stakes": {"name": "阻力与失败代价"},
+      "tactics": {"name": "可切换策略"},
+      "physical_task_and_inertia": {"name": "手头动作与身体状态惯性"},
+      "voice_lock": {"name": "声音锁定"},
+      "mask_break_trigger": {"name": "面具破裂触发条件"},
+      "gaze_and_listening": {"name": "视线目标与倾听反应"}
+    },
+    "outputs": {
+      "0": {"name": "角色表演圣经"},
+      "1": {"name": "表演合同文本"},
+      "2": {"name": "表演圣经 JSON"}
+    }
+  },
+  "T8CharacterPerformanceBibleStack": {
+    "display_name": "T8 多角色表演集合",
+    "inputs": {
+      "character_performance_bibles": {"name": "角色表演圣经（1–8 个）"}
+    },
+    "outputs": {
+      "0": {"name": "多角色表演集合"},
+      "1": {"name": "表演合同文本"},
+      "2": {"name": "多角色表演 JSON"}
+    }
+  },
   "T8CreativeDirector": {
     "display_name": "T8 创作总控",
     "inputs": {"premise": {"name": "创作核心（必填）"}},
@@ -107,7 +157,7 @@
   },
   "T8LongFormPlanner": {
     "display_name": "T8 长视频分段导演",
-    "inputs": {"concept": {"name": "全片创意 / 剧本（必填）"}, "total_duration_seconds": {"name": "全片总时长（秒）"}, "segment_duration_seconds": {"name": "目标单段时长（秒）"}},
+    "inputs": {"concept": {"name": "全片创意 / 剧本（必填）"}, "total_duration_seconds": {"name": "全片总时长（秒）"}, "segment_duration_seconds": {"name": "目标单段时长（秒）"}, "contract_failure_policy": {"name": "协议失败处理"}},
     "outputs": {"0": {"name": "全局连续性总纲"}, "1": {"name": "H3 分段 JSON"}, "2": {"name": "Seedance 2.0 分段 JSON"}, "3": {"name": "段间交接表 JSON"}}
   },
   "T8ReferenceRoleMapper": {
@@ -127,7 +177,7 @@
   },
   "T8StoryboardPack": {
     "display_name": "T8 分镜创作包",
-    "inputs": {"concept": {"name": "创意 / 已选方案（必填）"}, "duration_seconds": {"name": "目标时长（秒）"}, "shot_count": {"name": "镜头数量"}},
+    "inputs": {"concept": {"name": "创意 / 已选方案（必填）"}, "duration_seconds": {"name": "目标时长（秒）"}, "shot_count": {"name": "镜头数量"}, "contract_failure_policy": {"name": "协议失败处理"}},
     "outputs": {"0": {"name": "全局提示词"}, "1": {"name": "镜头表 JSON"}, "2": {"name": "关键帧提示词 JSON"}, "3": {"name": "转场与声音 JSON"}}
   },
   "T8CreativeDNAMixer": {

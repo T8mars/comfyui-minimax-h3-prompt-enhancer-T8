@@ -5,6 +5,50 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-08-30
+
+### Added
+
+- Add a local-only Film Project Router for authoritative-input isolation, revision tracking,
+  transitive downstream invalidation, world rules, costs/limits, knowledge gaps, and continuity anchors.
+- Add a local-only Character Performance Bible, a 1–8 character Stack, and connection-only
+  H3/Seedance/Storyboard inputs; each character beat is limited to one primary tactic and at most
+  three observable cue channels.
+- Add deterministic Storyboard causality, before/after value, scene-necessity, and setup/payoff
+  coverage reporting without presenting it as an objective creative-quality score.
+- Add Long-form per-segment world-rule checks, knowledge state, and stale downstream status.
+- Add a resumable, credential-safe six-group paid A/B runner and a redacted evidence fixture;
+  the final enhanced contract scored 100 versus a 44 baseline average on deterministic checks.
+- Add reproducibility metadata/model-specific baseline hashes and an actual-render acceptance
+  harness for MiniMax H3 / Seedance 2.0 video evidence plus named human scoring.
+
+### Changed
+
+- Extend the bundled long-form/storyboard workflow with Film Project Router and Character
+  Performance Bible connections while preserving the original 31/35/38 core widget contracts.
+- Enforce exact Storyboard/Long-form top-level JSON schemas, report received keys when providers
+  rename the contract, preserve required literal anchors, and keep setup/payoff labels identical.
+- Let Film Project Router accept the previous state by direct connection, inherit blank authoritative
+  fields, selectively clear one inherited field with an explicit marker, and display invalidated
+  downstream stages directly on the node.
+- Display Long-form and Storyboard contract validity, item counts, and compact error codes directly
+  on each node without adding an LLM request or changing existing outputs.
+- Make Router, Long-form, and Storyboard status cards follow the ComfyUI locale and grow to fit
+  wrapped diagnostics instead of clipping them at a fixed height.
+- Add an appended, compatibility-safe contract-failure policy to Long-form and Storyboard: warning
+  preserves prior behavior, while strict mode uses ComfyUI's native blocker after local validation.
+
+### Fixed
+
+- Preserve decimal timing facts such as `1.5秒后` instead of stripping them as numbered-list prefixes.
+- Reject incomplete/extra Long-form and Storyboard contracts, wrong shot counts, broken timelines,
+  cue-budget overflow, missing literal anchors, duplicate character IDs, and malformed prior revisions
+  with explicit diagnostic codes instead of reporting structured success.
+- Prevent blank continuation fields from becoming impossible to delete: `[清空继承]` and
+  `[CLEAR_INHERITED]` now clear the selected Router field while other blank fields still inherit.
+- Prevent invalid non-empty Long-form or Storyboard contracts from silently reaching downstream
+  nodes when the user enables strict failure handling; UI and JSON diagnostics remain available.
+
 ## [1.10.0] - 2026-08-30
 
 ### Added

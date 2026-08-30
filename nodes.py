@@ -43,6 +43,12 @@ try:
         h3_performance_instruction,
         resolve_performance_mode,
     )
+    from .film_workflow import (
+        FilmWorkflowError,
+        T8CharacterPerformanceBibleIO,
+        character_performance_instruction,
+        coerce_character_performance_bibles,
+    )
 except ImportError:
     from execution_diagnostics import DiagnosticsRun
     from provider_capabilities import apply_chat_request_options
@@ -61,6 +67,12 @@ except ImportError:
         T8PerformanceDirectorConfigIO,
         h3_performance_instruction,
         resolve_performance_mode,
+    )
+    from film_workflow import (
+        FilmWorkflowError,
+        T8CharacterPerformanceBibleIO,
+        character_performance_instruction,
+        coerce_character_performance_bibles,
     )
 
 try:
@@ -1220,6 +1232,7 @@ def _build_messages(
     creative_preset: str,
     case_template: str,
     performance_director_config: Any = None,
+    character_performance_bible: Any = None,
 ) -> list[dict[str, Any]]:
     effective_language = _effective_output_language(output_language, official_skill_profile)
     case_instruction = resolve_case_template(case_template, "h3", prompt)
@@ -1254,6 +1267,12 @@ def _build_messages(
     )
     if performance_rule:
         system_rules.append(performance_rule)
+    character_rule = character_performance_instruction(
+        character_performance_bible,
+        model_target="MiniMax H3",
+    )
+    if character_rule:
+        system_rules.append(character_rule)
     if case_instruction:
         system_rules.append(T8_CASE_PRECEDENCE_RULE)
         system_rules.append(case_instruction)
@@ -1410,6 +1429,7 @@ def enhance_prompt(
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
     performance_director_config: Any = None,
+    character_performance_bible: Any = None,
     progress_callback: Any = None,
     provider_request_options: Any = None,
 ) -> str:
@@ -1435,7 +1455,10 @@ def enhance_prompt(
         raise PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
     try:
         resolve_performance_mode(performance_director_config)
+        coerce_character_performance_bibles(character_performance_bible)
     except PerformanceDirectorConfigError as exc:
+        raise PromptEnhancerError(str(exc)) from exc
+    except FilmWorkflowError as exc:
         raise PromptEnhancerError(str(exc)) from exc
     api_key = str(api_key or "").strip()
     if api_key in LEGACY_UI_VALUES:
@@ -1523,6 +1546,7 @@ def enhance_prompt(
                 creative_preset,
                 case_template,
                 performance_director_config,
+                character_performance_bible,
             ), effective_local_language)
             visual_budget = local_visual_part_budget(messages, settings)
             media_parts, _media_report = build_local_multimodal_parts(
@@ -1551,6 +1575,7 @@ def enhance_prompt(
                 creative_preset,
                 case_template,
                 performance_director_config,
+                character_performance_bible,
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -1619,6 +1644,7 @@ def enhance_prompt(
             creative_preset,
             case_template,
             performance_director_config,
+            character_performance_bible,
         )
         response_text = _request_completion(
             session,
@@ -1920,6 +1946,12 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     tooltip="不连接时完全使用本节点原有字段；连接后使用共享配置，断开即恢复。",
                 ),
+                T8CharacterPerformanceBibleIO.Input(
+                    "character_performance_bible",
+                    display_name="角色表演圣经（可选）",
+                    optional=True,
+                    tooltip="连接 T8 Character Performance Bible；不新增请求，只向本次人物表演编译提供权威目标、阻力、策略和身体惯性。",
+                ),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1982,6 +2014,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        character_performance_bible=None,
         performance_director_config=None,
         provider_config=None,
     ) -> io.NodeOutput:
@@ -2065,6 +2098,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 local_video_sample_fps=local_video_sample_fps,
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
+                character_performance_bible=character_performance_bible,
                 performance_director_config=performance_director_config,
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,

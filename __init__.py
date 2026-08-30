@@ -10,6 +10,11 @@ from .provider_config import T8LLMProviderConfig
 from .credential_routes import register_credential_routes
 from .prompt_inspector import T8PromptInspector
 from .performance_director import T8PerformanceDirectorConfig
+from .film_workflow import (
+    T8CharacterPerformanceBible,
+    T8CharacterPerformanceBibleStack,
+    T8FilmProjectRouter,
+)
 from .text_utilities import T8PromptText, T8ShowText
 from .creative_suite import CREATIVE_SUITE_NODES
 
@@ -32,6 +37,9 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8PromptText,
             T8ShowText,
             T8PerformanceDirectorConfig,
+            T8FilmProjectRouter,
+            T8CharacterPerformanceBible,
+            T8CharacterPerformanceBibleStack,
             *CREATIVE_SUITE_NODES,
         ]
 
@@ -47,6 +55,9 @@ __all__ = [
     "T8LLMProviderConfig",
     "T8PromptInspector",
     "T8PerformanceDirectorConfig",
+    "T8FilmProjectRouter",
+    "T8CharacterPerformanceBible",
+    "T8CharacterPerformanceBibleStack",
     "T8PromptText",
     "T8ShowText",
     "comfy_entrypoint",

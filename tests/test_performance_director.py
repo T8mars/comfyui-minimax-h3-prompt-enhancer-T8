@@ -292,11 +292,12 @@ class PerformanceDirectorTests(unittest.TestCase):
         off_seedance = seedance._build_messages(**seed_kwargs, performance_director_config=off)[0]["content"]
         self.assertNotIn("PERFORMANCE DIRECTION", off_seedance)
 
-    def test_core_schemas_add_only_optional_connection_before_existing_provider_config(self):
+    def test_core_schemas_preserve_performance_and_provider_order_before_new_character_socket(self):
         for cls in (nodes.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
             schema = cls.define_schema()
-            self.assertEqual(schema.inputs[-2].id, "performance_director_config")
-            self.assertEqual(schema.inputs[-1].id, "provider_config")
+            self.assertEqual(schema.inputs[-3].id, "performance_director_config")
+            self.assertEqual(schema.inputs[-2].id, "provider_config")
+            self.assertEqual(schema.inputs[-1].id, "character_performance_bible")
 
     def test_storyboard_ir_is_additive_and_normalized(self):
         shots = performance.normalize_storyboard_performance_fields([{

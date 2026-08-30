@@ -1,0 +1,397 @@
+{
+  "suite": "T8 film workflow contract A/B",
+  "schema_version": "t8-film-workflow-paid-ab/v1",
+  "contract_sha256": "0c0680e58dfac0042e521ac106a0fc1a6f001ab4e41cb909ffbd56a10daef743",
+  "provider": "Seedance NZ OpenAI-compatible endpoint / qwen/qwen3.6-flash",
+  "run_metadata": {
+    "capture_status": "legacy_report_metadata_not_recorded_at_execution",
+    "generated_at_utc": null,
+    "repository_version": null,
+    "git_commit": null,
+    "git_dirty": null,
+    "model": "qwen/qwen3.6-flash",
+    "base_url": "https://api.seedance.nz/v1",
+    "temperature_policy": "AUTO（兼容策略）",
+    "storyboard_max_tokens": 2600,
+    "longform_max_tokens": 3200,
+    "seed_policy": "2026083000 + one-based case index",
+    "test_scope": "prompt-structure contract only; no video render was requested",
+    "note": "Execution time, repository version, and commit were not captured during the historical paid run and are intentionally not reconstructed. Future runner reports capture them automatically."
+  },
+  "group_count": 6,
+  "paid_request_count": 12,
+  "paid_requests_executed_this_run": 6,
+  "paid_responses_reused_from_matching_report_or_checkpoint": 6,
+  "unscored_transport_observations": [
+    {
+      "model": "bytedance/doubao-seed-evolving",
+      "trial_count": 2,
+      "outcome": "HTTP 524 upstream timeout",
+      "response_text_hidden": true,
+      "included_in_scores": false
+    }
+  ],
+  "baseline_average": 44,
+  "enhanced_average": 100,
+  "average_delta": 56,
+  "all_enhanced_scores_at_least_baseline": true,
+  "response_text_stored": false,
+  "credentials_stored": false,
+  "scoring_note": "Deterministic contract checks only; not an objective score of artistic quality.",
+  "cases": [
+    {
+      "case_id": "storyboard_causality_value_shift",
+      "kind": "storyboard",
+      "seed": 2026083001,
+      "baseline": {
+        "score": 38,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields"
+        ],
+        "failed_checks": [
+          "anchors",
+          "narrative_fields",
+          "causal_chain",
+          "value_shift",
+          "scene_necessity"
+        ],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": false,
+          "narrative_fields": false,
+          "causal_chain": false,
+          "value_shift": false,
+          "scene_necessity": false
+        },
+        "sha256": "242dedfbec5c712f9d2ffa89b0f5f0baa3f890753bacc2cdafd95e7b741d29fb",
+        "character_count": 2603
+      },
+      "enhanced": {
+        "score": 100,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors",
+          "narrative_fields",
+          "causal_chain",
+          "value_shift",
+          "scene_necessity"
+        ],
+        "failed_checks": [],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "narrative_fields": true,
+          "causal_chain": true,
+          "value_shift": true,
+          "scene_necessity": true
+        },
+        "sha256": "9f76c4856ae00f7fd14b132940e2a5b2edd4d1bfa00104ea2d59167279edb806",
+        "character_count": 4145
+      },
+      "score_delta": 62
+    },
+    {
+      "case_id": "storyboard_setup_payoff",
+      "kind": "storyboard",
+      "seed": 2026083002,
+      "baseline": {
+        "score": 50,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors"
+        ],
+        "failed_checks": [
+          "narrative_fields",
+          "causal_chain",
+          "setup_payoff",
+          "scene_necessity"
+        ],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "narrative_fields": false,
+          "causal_chain": false,
+          "setup_payoff": false,
+          "scene_necessity": false
+        },
+        "sha256": "d9a4a54f088636f90ed5e02fc102e839eab352da0819521e43c33c5a2c568aa2",
+        "character_count": 2161
+      },
+      "enhanced": {
+        "score": 100,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors",
+          "narrative_fields",
+          "causal_chain",
+          "setup_payoff",
+          "scene_necessity"
+        ],
+        "failed_checks": [],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "narrative_fields": true,
+          "causal_chain": true,
+          "setup_payoff": true,
+          "scene_necessity": true
+        },
+        "sha256": "241a9275acce235512df933ccb4fc45262878acd9627042460289650bee667ac",
+        "character_count": 4154
+      },
+      "score_delta": 50
+    },
+    {
+      "case_id": "storyboard_tactic_shift",
+      "kind": "storyboard",
+      "seed": 2026083003,
+      "baseline": {
+        "score": 50,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "tactic_order"
+        ],
+        "failed_checks": [
+          "anchors",
+          "narrative_fields",
+          "performance_beats",
+          "cue_budget"
+        ],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": false,
+          "narrative_fields": false,
+          "performance_beats": false,
+          "cue_budget": false,
+          "tactic_order": true
+        },
+        "sha256": "8e0317ab36ee29efaf8e8b21b9d383a0d4b5eea73023ab2eacd793343053105c",
+        "character_count": 2664
+      },
+      "enhanced": {
+        "score": 100,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors",
+          "narrative_fields",
+          "performance_beats",
+          "cue_budget",
+          "tactic_order"
+        ],
+        "failed_checks": [],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "narrative_fields": true,
+          "performance_beats": true,
+          "cue_budget": true,
+          "tactic_order": true
+        },
+        "sha256": "26b6f22e29000defa3ec0da26a4d85be501fcc4f93d588cc5b746d494612f225",
+        "character_count": 4200
+      },
+      "score_delta": 50
+    },
+    {
+      "case_id": "storyboard_silent_mask_break",
+      "kind": "storyboard",
+      "seed": 2026083004,
+      "baseline": {
+        "score": 50,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "silent_contract"
+        ],
+        "failed_checks": [
+          "anchors",
+          "narrative_fields",
+          "performance_beats",
+          "cue_budget"
+        ],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": false,
+          "narrative_fields": false,
+          "performance_beats": false,
+          "cue_budget": false,
+          "silent_contract": true
+        },
+        "sha256": "b358674998e0d5d6459782052cf900a3d245283077a6fec9fd5563ec925fa5c3",
+        "character_count": 3147
+      },
+      "enhanced": {
+        "score": 100,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors",
+          "narrative_fields",
+          "performance_beats",
+          "cue_budget",
+          "silent_contract"
+        ],
+        "failed_checks": [],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "narrative_fields": true,
+          "performance_beats": true,
+          "cue_budget": true,
+          "silent_contract": true
+        },
+        "sha256": "a84be798fbf511e2b4f969c405ee3f0771fa7b5f3b9ee06ad58cd16a73b9b2bd",
+        "character_count": 3761
+      },
+      "score_delta": 50
+    },
+    {
+      "case_id": "longform_world_cost",
+      "kind": "longform",
+      "seed": 2026083005,
+      "baseline": {
+        "score": 38,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields"
+        ],
+        "failed_checks": [
+          "anchors",
+          "gapless_schedule",
+          "world_rule_checks",
+          "knowledge_state",
+          "downstream_status"
+        ],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": false,
+          "gapless_schedule": false,
+          "world_rule_checks": false,
+          "knowledge_state": false,
+          "downstream_status": false
+        },
+        "sha256": "508a13ae6a4ac7bfcf6e1e5fa7ccbf1cd1da853bc9d13416e962cb109c8c10b4",
+        "character_count": 3298
+      },
+      "enhanced": {
+        "score": 100,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors",
+          "gapless_schedule",
+          "world_rule_checks",
+          "knowledge_state",
+          "downstream_status"
+        ],
+        "failed_checks": [],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "gapless_schedule": true,
+          "world_rule_checks": true,
+          "knowledge_state": true,
+          "downstream_status": true
+        },
+        "sha256": "45a10cbbd6057df6344b29488a5a8ee91a038ae5806411bc07f0f885cbaedc3e",
+        "character_count": 2157
+      },
+      "score_delta": 62
+    },
+    {
+      "case_id": "longform_knowledge_and_invalidation",
+      "kind": "longform",
+      "seed": 2026083006,
+      "baseline": {
+        "score": 38,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields"
+        ],
+        "failed_checks": [
+          "anchors",
+          "gapless_schedule",
+          "world_rule_checks",
+          "knowledge_state",
+          "downstream_status"
+        ],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": false,
+          "gapless_schedule": false,
+          "world_rule_checks": false,
+          "knowledge_state": false,
+          "downstream_status": false
+        },
+        "sha256": "4e9914ef36b9450f8918ec129e9f3039eed59e41d6f59322b87d265ef876f10a",
+        "character_count": 3065
+      },
+      "enhanced": {
+        "score": 100,
+        "passed_checks": [
+          "structured",
+          "count",
+          "base_fields",
+          "anchors",
+          "gapless_schedule",
+          "world_rule_checks",
+          "knowledge_state",
+          "downstream_status"
+        ],
+        "failed_checks": [],
+        "checks": {
+          "structured": true,
+          "count": true,
+          "base_fields": true,
+          "anchors": true,
+          "gapless_schedule": true,
+          "world_rule_checks": true,
+          "knowledge_state": true,
+          "downstream_status": true
+        },
+        "sha256": "35550cff091327841ed1e70286a90e4d4aa56f9ab80686ab4938f585a80efc2b",
+        "character_count": 2368
+      },
+      "score_delta": 62
+    }
+  ]
+}

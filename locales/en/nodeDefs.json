@@ -90,6 +90,56 @@
     },
     "outputs": {"0": {"name": "Text"}}
   },
+  "T8FilmProjectRouter": {
+    "display_name": "T8 Film Project Router",
+    "inputs": {
+      "project_title": {"name": "Project title"},
+      "mode": {"name": "Workflow mode"},
+      "target_stage": {"name": "Target stage"},
+      "authoritative_inputs": {"name": "Authoritative inputs"},
+      "changed_stage": {"name": "Changed upstream stage"},
+      "world_rules": {"name": "Hard world rules"},
+      "ability_costs_and_limits": {"name": "Costs and limits"},
+      "knowledge_gaps": {"name": "Character knowledge gaps"},
+      "previous_state_json": {"name": "Previous state JSON (optional)"},
+      "previous_state": {"name": "Previous project state (optional, direct preferred)"}
+    },
+    "outputs": {
+      "0": {"name": "Film project state"},
+      "1": {"name": "Active-stage context"},
+      "2": {"name": "Project-state JSON"},
+      "3": {"name": "Invalidation report JSON"}
+    }
+  },
+  "T8CharacterPerformanceBible": {
+    "display_name": "T8 Character Performance Bible",
+    "inputs": {
+      "character_id": {"name": "Character ID / media label"},
+      "scene_objective": {"name": "Current scene objective"},
+      "obstacle_and_stakes": {"name": "Obstacle and stakes"},
+      "tactics": {"name": "Available tactics"},
+      "physical_task_and_inertia": {"name": "Physical task and body-state inertia"},
+      "voice_lock": {"name": "Voice lock"},
+      "mask_break_trigger": {"name": "Mask-break trigger"},
+      "gaze_and_listening": {"name": "Gaze target and listening response"}
+    },
+    "outputs": {
+      "0": {"name": "Character performance bible"},
+      "1": {"name": "Performance contract text"},
+      "2": {"name": "Performance bible JSON"}
+    }
+  },
+  "T8CharacterPerformanceBibleStack": {
+    "display_name": "T8 Character Performance Bible Stack",
+    "inputs": {
+      "character_performance_bibles": {"name": "Character bibles (1–8)"}
+    },
+    "outputs": {
+      "0": {"name": "Character performance set"},
+      "1": {"name": "Performance contract text"},
+      "2": {"name": "Character performance set JSON"}
+    }
+  },
   "T8CreativeDirector": {
     "display_name": "T8 Creative Director",
     "inputs": {"premise": {"name": "Creative premise (required)"}},
@@ -107,7 +157,7 @@
   },
   "T8LongFormPlanner": {
     "display_name": "T8 Long-form Planner",
-    "inputs": {"concept": {"name": "Full-film concept / script (required)"}, "total_duration_seconds": {"name": "Total duration (seconds)"}, "segment_duration_seconds": {"name": "Target segment duration (seconds)"}},
+    "inputs": {"concept": {"name": "Full-film concept / script (required)"}, "total_duration_seconds": {"name": "Total duration (seconds)"}, "segment_duration_seconds": {"name": "Target segment duration (seconds)"}, "contract_failure_policy": {"name": "Contract failure handling"}},
     "outputs": {"0": {"name": "Global continuity brief"}, "1": {"name": "H3 segments JSON"}, "2": {"name": "Seedance 2.0 segments JSON"}, "3": {"name": "Handoff table JSON"}}
   },
   "T8ReferenceRoleMapper": {
@@ -127,7 +177,7 @@
   },
   "T8StoryboardPack": {
     "display_name": "T8 Storyboard Pack",
-    "inputs": {"concept": {"name": "Concept / selected direction (required)"}, "duration_seconds": {"name": "Target duration (seconds)"}, "shot_count": {"name": "Shot count"}},
+    "inputs": {"concept": {"name": "Concept / selected direction (required)"}, "duration_seconds": {"name": "Target duration (seconds)"}, "shot_count": {"name": "Shot count"}, "contract_failure_policy": {"name": "Contract failure handling"}},
     "outputs": {"0": {"name": "Global prompt"}, "1": {"name": "Shot list JSON"}, "2": {"name": "Keyframe prompts JSON"}, "3": {"name": "Transitions & sound JSON"}}
   },
   "T8CreativeDNAMixer": {

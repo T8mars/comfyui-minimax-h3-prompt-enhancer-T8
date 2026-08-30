@@ -19,6 +19,12 @@ from .performance_director import (
     resolve_performance_mode,
     seedance_performance_instruction,
 )
+from .film_workflow import (
+    FilmWorkflowError,
+    T8CharacterPerformanceBibleIO,
+    character_performance_instruction,
+    coerce_character_performance_bibles,
+)
 
 from .local_qwen_provider import (
     DEFAULT_CONTEXT_SIZE,
@@ -589,6 +595,7 @@ def _build_messages(
     media_parts: list[dict[str, Any]],
     case_template: str,
     performance_director_config: Any = None,
+    character_performance_bible: Any = None,
 ) -> list[dict[str, Any]]:
     complexity_rules = {
         "AUTO（自动判断）": (
@@ -644,6 +651,12 @@ def _build_messages(
     )
     if performance_rule:
         system_rules.append(performance_rule)
+    character_rule = character_performance_instruction(
+        character_performance_bible,
+        model_target="Seedance 2.0",
+    )
+    if character_rule:
+        system_rules.append(character_rule)
     case_instruction = resolve_case_template(case_template, "seedance20", prompt)
     if case_instruction:
         system_rules.append(case_instruction)
@@ -722,6 +735,7 @@ def enhance_seedance20_prompt(
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
     performance_director_config: Any = None,
+    character_performance_bible: Any = None,
     progress_callback: Any = None,
     provider_request_options: Any = None,
 ) -> str:
@@ -742,7 +756,10 @@ def enhance_seedance20_prompt(
         raise Seedance20PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
     try:
         resolve_performance_mode(performance_director_config)
+        coerce_character_performance_bibles(character_performance_bible)
     except PerformanceDirectorConfigError as exc:
+        raise Seedance20PromptEnhancerError(str(exc)) from exc
+    except FilmWorkflowError as exc:
         raise Seedance20PromptEnhancerError(str(exc)) from exc
 
     selections = {
@@ -829,6 +846,7 @@ def enhance_seedance20_prompt(
                 [],
                 case_template,
                 performance_director_config,
+                character_performance_bible,
             ), output_language)
             visual_budget = local_visual_part_budget(messages, settings)
             media_parts, _media_report = build_local_multimodal_parts(
@@ -861,6 +879,7 @@ def enhance_seedance20_prompt(
                 media_parts,
                 case_template,
                 performance_director_config,
+                character_performance_bible,
             ), output_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -940,6 +959,7 @@ def enhance_seedance20_prompt(
             media_parts,
             case_template,
             performance_director_config,
+            character_performance_bible,
         )
         result = _request_completion(
             session,
@@ -1261,6 +1281,12 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     optional=True,
                     tooltip="不连接时完全使用本节点原有字段；连接后使用共享配置，断开即恢复。",
                 ),
+                T8CharacterPerformanceBibleIO.Input(
+                    "character_performance_bible",
+                    display_name="角色表演圣经（可选）",
+                    optional=True,
+                    tooltip="连接 T8 Character Performance Bible；不新增请求，只向本次人物表演编译提供权威目标、阻力、策略和身体惯性。",
+                ),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1324,6 +1350,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        character_performance_bible=None,
         performance_director_config=None,
         provider_config=None,
     ) -> io.NodeOutput:
@@ -1411,6 +1438,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 local_video_sample_fps=local_video_sample_fps,
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
+                character_performance_bible=character_performance_bible,
                 performance_director_config=performance_director_config,
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,

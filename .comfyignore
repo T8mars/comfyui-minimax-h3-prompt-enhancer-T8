@@ -7,6 +7,8 @@ tests/
 tools/
 case_templates/source_batches/
 *_smoke.py
+/film_workflow_ab_benchmark.py
+/film_workflow_render_acceptance.py
 
 # T8 case GIFs remain in the GitHub repository for legacy/full-clone users.
 # Registry installs use the signed, catalog-pinned preview asset channel instead.

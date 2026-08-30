@@ -20,15 +20,33 @@ Compatibility invariants:
 - A workflow saved by 1.1 is not promised to load in older 1.0.x code because
   older code does not know the new local-provider controls.
 - The optional `provider_config` socket remains after every existing serialized input. H3 and
-  Seedance additionally expose an optional, connection-only `performance_director_config`
-  immediately before it; Music 3 does not. Neither Custom Type socket adds a serialized widget,
+  Seedance keep the existing connection-only `performance_director_config` immediately before it,
+  then append the new `character_performance_bible` after it; Music 3 does not. None of these
+  Custom Type sockets adds a serialized widget,
   so 1.0.x/1.1.x/1.2.0 workflows keep their 31/35/38 widget arrays and original provider path.
   An unconnected performance config uses conditional `AUTO`: it can improve character/acting
   requests but explicitly skips non-performance intent. Connecting `Off` restores the former
   prompt compiler without the performance-directing section.
-- `T8LLMProviderConfig`, `T8PerformanceDirectorConfig`, `T8PromptInspector`, `T8PromptText`, and `T8ShowText`
+- `T8LLMProviderConfig`, `T8PerformanceDirectorConfig`, `T8FilmProjectRouter`,
+  `T8CharacterPerformanceBible`, `T8CharacterPerformanceBibleStack`, `T8PromptInspector`,
+  `T8PromptText`, and `T8ShowText`
   are additional utility node IDs;
   they do not replace, rename, or reorder the original three node registrations.
+- The multi-character Stack keeps the existing `T8_CHARACTER_PERFORMANCE_BIBLE` socket type,
+  so the H3/Seedance/Storyboard connection contract stays compatible with a single Bible.
+- Film Project Router adds only an optional connection-only `previous_state` socket. Existing
+  serialized widgets retain their order, while a connected prior state can inherit blank project facts.
+  Entering `[清空继承]` or `[CLEAR_INHERITED]` in one inheritable text widget clears only that field,
+  without adding a widget or changing the saved input/connection order.
+- Long-form and Storyboard also append their new project-state/character sockets after every prior
+  socket, preserving the target-slot numbers of existing provider and performance-config links.
+- Long-form and Storyboard contract cards use non-serialized DOM widgets and `ui` metadata only;
+  output sockets, return order, and paid-request count remain unchanged. The cards follow `Comfy.Locale`
+  and use bounded adaptive height instead of a clipping fixed height.
+- Long-form and Storyboard append one serialized `contract_failure_policy` combo after every existing
+  input. Missing values execute with compatibility-warning behavior; the strict option uses ComfyUI's
+  native `ExecutionBlocker` only after a paid response fails the local contract, while retaining UI and
+  JSON diagnostics. Existing socket positions and all output positions remain unchanged.
 - A connected provider config does not mutate the original node widgets.
   Disconnecting it restores the saved per-node provider values immediately.
 - Legacy H3 21/22-value, Seedance 25/26-value, and Music 31-value arrays are

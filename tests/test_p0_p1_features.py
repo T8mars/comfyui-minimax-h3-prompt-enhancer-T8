@@ -90,6 +90,9 @@ class P0P1FeatureTests(unittest.TestCase):
         self.assertEqual(
             [schema.node_id for schema in schemas[8:]],
             [
+                "T8FilmProjectRouter",
+                "T8CharacterPerformanceBible",
+                "T8CharacterPerformanceBibleStack",
                 "T8CreativeDirector",
                 "T8CreativeContextAssembler",
                 "T8DirectedRevision",
@@ -105,8 +108,10 @@ class P0P1FeatureTests(unittest.TestCase):
                 "T8MusicVideoBeatSheet",
             ],
         )
-        for schema in schemas[:3]:
-            self.assertEqual(schema.inputs[-1].id, "provider_config")
+        for schema in schemas[:2]:
+            self.assertEqual(schema.inputs[-2].id, "provider_config")
+            self.assertEqual(schema.inputs[-1].id, "character_performance_bible")
+        self.assertEqual(schemas[2].inputs[-1].id, "provider_config")
 
     def test_original_serialized_widget_contracts_remain_31_35_38(self):
         expected = {

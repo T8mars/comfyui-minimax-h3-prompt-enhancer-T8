@@ -54,13 +54,16 @@ The suite adds planning, exploration, revision, and delivery helpers without rep
 
 | Node | LLM calls | Purpose |
 | --- | ---: | --- |
+| `T8 Film Project Router` | 0 | Maintain stages, authoritative inputs, revisions, world contracts, and downstream invalidation caused by upstream changes |
+| `T8 Character Performance Bible` | 0 | Compile objective, obstacle, tactics, physical inertia, voice, and listening behavior into a lightweight contract capped at three observable cue channels per beat |
+| `T8 Character Performance Bible Stack` | 0 | Combine 1–8 independent character contracts, reject duplicate IDs, and keep each character's objective, tactic, and cues separate in multi-character shots |
 | `T8 Creative Director` | 0 | Shared story, identity, world, visual, motion, and sound brief with `LOCK / EVOLVE / AUTO` policies |
 | `T8 Creative Context Assembler` | 0 | Compile the brief, reference map, Creative DNA, and personal preset into a `STRING` for existing nodes |
 | `T8 Directed Revision` | 1 | Apply only the requested delta and return a local diff |
-| `T8 Long-form Planner` | 1 | Split any positive duration into continuity-aware H3 and Seedance 2.0 segments |
+| `T8 Long-form Planner` | 1 | Split any positive duration into H3/Seedance segments with continuity, world-rule, knowledge-state, and stale-stage checks |
 | `T8 Reference Role Mapper` | 1 | Analyze only directly connected user images/videos and assign identity, costume, scene, motion, camera, style, and exclusion roles |
 | `T8 Creative Candidate Lab` / `T8 Candidate Selector` | 1 / 0 | Generate 2–4 structurally distinct directions and select one locally |
-| `T8 Storyboard Pack` | 1 | Global prompt, shot JSON, still-keyframe prompts, transitions, sound, media bindings, and optional per-shot performance IR |
+| `T8 Storyboard Pack` | 1 | Global prompt, shot JSON, keyframes, transitions/sound, media bindings, performance IR, and causality/value/necessity/setup-payoff audit |
 | `T8 Creative DNA Mixer` | 0 | Blend structure/camera/payoff mechanics from up to three non-official T8 cases without using preview media |
 | `T8 Personal Creative Preset` | 0 | Store user-owned text rules inside the workflow only |
 | `T8 Music Creative Lab` | 1 | Lyrics/caption candidates, scoped lyric revision, titles, and soft CJK singability text checks |
@@ -70,6 +73,12 @@ The suite adds planning, exploration, revision, and delivery helpers without rep
 LLM-backed helpers default to Seedance NZ. Connect `T8 LLM Provider Config` to use AI Workshop, an OpenAI-compatible endpoint, or local GGUF instead. Each execution represents one logical generation request. Seedance NZ may make up to six bounded transport attempts only for the safe gateway set 500/502/503/504/520–530; authentication, balance, rate-limit, and ambiguous read-timeout failures are not blindly repeated. A non-empty unstructured provider response is preserved and reported with `structured_response=false` instead of being rejected.
 
 The seven candidate scores are deterministic local text heuristics, not model self-scores or objective artistic judgments, and they never reject a non-empty candidate. Storyboard keyframe and transition/sound tables are derived locally from the returned shot contract to avoid duplicated paid output. On 2026-08-28 the real `bytedance/doubao-seed-evolving` endpoint passed redacted binary-contract checks for candidates, directed revision, long-form planning, a four-shot storyboard, image role mapping, Chinese lyric candidates, and a five-event MV beat sheet. That acceptance score is not a subjective art-quality score.
+
+For Router continuations, blank authoritative fields inherit. Enter `[CLEAR_INHERITED]` (or `[清空继承]`) in one field to delete only that inherited value while other blank fields continue to inherit. Router, Long-form, and Storyboard status cards follow the ComfyUI locale and grow with wrapped diagnostics. Long-form and Storyboard default to compatibility warning so existing workflows retain their behavior; select the recommended strict contract policy to stop downstream execution with ComfyUI's native blocker while preserving the card and JSON `validation_errors`. These local checks do not add an LLM call.
+
+On 2026-08-30, six real paired text A/B groups covered causality/value shift, setup/payoff, tactic progression, silent acting, world-rule/permanent-cost continuity, and knowledge-gap/downstream invalidation. With identical cases and seeds on Seedance NZ `qwen/qwen3.6-flash`, the former contract averaged 44 and the final enhanced contract averaged 100; all six enhanced groups were non-regressive. These are deterministic JSON-shape, literal-anchor, ordering, cue-budget, and state-field checks, not subjective artistic scores. The final retest reused six matching paid baselines and issued six new enhanced requests. Two earlier `bytedance/doubao-seed-evolving` enhanced trials returned HTTP 524, were excluded from scoring, and stored no response text. See the redacted [`film_workflow_paid_ab_2026-08-30.json`](./tests/fixtures/film_workflow_paid_ab_2026-08-30.json) report and the reproducible [`film_workflow_ab_benchmark.py`](./film_workflow_ab_benchmark.py) runner. New reports record repository version/commit, model ID, parameter and seed policies, and contract hashes. `--model` supports separate cloud-model reruns and baseline reuse requires an exact model/contract match. Local-Qwen parameter delivery is covered by local regression tests, but is not presented as real cross-model quality evidence until an actual local run is recorded.
+
+For final H3 / Seedance render acceptance, [`film_workflow_render_acceptance.py`](./film_workflow_render_acceptance.py) consumes a real-video manifest and records hashes, ffprobe duration/stream evidence, and a named five-axis human review. It neither generates nor stores video/credentials and never treats a perfect text-contract score as a perfect rendered film.
 
 Only media connected directly to Reference Role Mapper is analyzed. Bundled official/T8 GIFs and case-source videos are never model references. Local video mode uses timestamped visual samples and does not analyze audio. The Beat Sheet node has no AUDIO input and never claims to hear a song or detect BPM.
 
@@ -215,7 +224,7 @@ Import [`example_workflows/music3_prompt_lyrics_enhancer_example.json`](./exampl
 | [`prompt_inspector_local_qwen_example.json`](./example_workflows/prompt_inspector_local_qwen_example.json) | Local H3 enhancement followed by local structural inspection |
 | [`text_utilities_example.json`](./example_workflows/text_utilities_example.json) | Built-in `T8 Prompt Text` to `T8 Show Text` STRING workflow |
 | [`creative_direction_revision_example.json`](./example_workflows/creative_direction_revision_example.json) | Creative Director → Candidate Lab → selection → directed revision |
-| [`creative_longform_storyboard_example.json`](./example_workflows/creative_longform_storyboard_example.json) | One creative brief drives long-form segmentation and storyboard packaging |
+| [`creative_longform_storyboard_example.json`](./example_workflows/creative_longform_storyboard_example.json) | Film state, a character-performance bible, and one creative brief drive long-form segmentation and storyboard audit |
 | [`creative_music_video_suite_example.json`](./example_workflows/creative_music_video_suite_example.json) | Music candidates, version selection, and H3/Seedance 2.0 beat-sheet direction |
 | [`creative_reference_dna_preset_example.json`](./example_workflows/creative_reference_dna_preset_example.json) | Reference roles, T8 Creative DNA, and a personal preset assembled into a legacy-compatible STRING context |
 
