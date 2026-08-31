@@ -1,90 +1,90 @@
 {
   "schema_version": "t8-remote-preview-channel/v1",
-  "channel_version": "2026.08.30.1",
+  "channel_version": "2026.08.31.1",
   "catalog_id": "t8-unofficial-case-library-v2",
-  "catalog_digest": "0eab856f28ff90155cf971fc5b33cc31eee61f90d9ec3c2d7f28209847432c55",
+  "catalog_digest": "8a193dc4225821d4fcf76c8a54cee5e96d6f33e85c3b409cabfae231f035b32b",
   "repository": "T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets",
-  "release_tag": "preview-assets-v2026.08.30.1",
-  "preview_count": 377,
+  "release_tag": "preview-assets-v2026.08.31.1",
+  "preview_count": 397,
   "human_preview_only": true,
   "policy": "Human UI previews only; never send or connect them to a model or LLM.",
   "shards": [
     {
       "id": "shard-0",
       "asset": "preview-shard-0.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-0.zip",
-      "sha256": "b50bce21ad100510cc759baec4d139da10a9d84f5a11aa12d98fcd882e0010b7",
-      "bytes": 4403354,
-      "file_count": 21
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-0.zip",
+      "sha256": "b863538905e68e98487f8f598b3bafff3ca298a8a6e303e969988c3df1935257",
+      "bytes": 4796321,
+      "file_count": 22
     },
     {
       "id": "shard-1",
       "asset": "preview-shard-1.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-1.zip",
-      "sha256": "36657f0fe4c27f791469a4c42aa331dd40857d92a534993ca53884fdb1d2a919",
-      "bytes": 5194327,
-      "file_count": 23
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-1.zip",
+      "sha256": "03a5c997c4281f12c21cbf9e4a0ce7f1602ba227e9cb7a75c15ab86decbf858d",
+      "bytes": 5961883,
+      "file_count": 26
     },
     {
       "id": "shard-2",
       "asset": "preview-shard-2.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-2.zip",
-      "sha256": "d373d58b612b71f2384dfa80eae7689d68785b275e3b1179a6dd7faba40ca61f",
-      "bytes": 4503711,
-      "file_count": 19
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-2.zip",
+      "sha256": "e99ef00a1db6d43590b9362805632f4cd77eb86823600825ad8bb4c7ca1e1ae7",
+      "bytes": 4683557,
+      "file_count": 20
     },
     {
       "id": "shard-3",
       "asset": "preview-shard-3.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-3.zip",
-      "sha256": "17c7765346d463eda684ac22dc1e0c618937e3a9ef797cdace4ca0ba4a08c5c6",
-      "bytes": 5073870,
-      "file_count": 21
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-3.zip",
+      "sha256": "eca29220d23b108c12e83800e35ba152e37d7caa83afe5a801922874c3502480",
+      "bytes": 5322367,
+      "file_count": 22
     },
     {
       "id": "shard-4",
       "asset": "preview-shard-4.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-4.zip",
-      "sha256": "afcf586cf32d7f7a8ab7c62385e0bf9d93220d6960f219803da33d04bf3cb32d",
-      "bytes": 6019748,
-      "file_count": 29
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-4.zip",
+      "sha256": "36509ee81a334a6a3ea5588a21a421403fd801d9b276693367d89e949fccc26c",
+      "bytes": 6327034,
+      "file_count": 31
     },
     {
       "id": "shard-5",
       "asset": "preview-shard-5.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-5.zip",
-      "sha256": "7ba7e115fb946eebdff942631001ccdff0774512eebd9d48c0131aeaaf350138",
-      "bytes": 9287687,
-      "file_count": 38
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-5.zip",
+      "sha256": "f3a37791e3756c31244311d486cea9f7bd249c4b400b388ed7f073cda34ab1db",
+      "bytes": 9486154,
+      "file_count": 39
     },
     {
       "id": "shard-6",
       "asset": "preview-shard-6.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-6.zip",
-      "sha256": "d2ca4a951338b35c69dee37b7d4d8154bcdbb5fbf645ef8fd8907160cbcb51b8",
-      "bytes": 4687942,
-      "file_count": 23
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-6.zip",
+      "sha256": "c01f175d27dca328beddabf184dc84815806aee62af8cff801092ba1b1509a4d",
+      "bytes": 4913525,
+      "file_count": 24
     },
     {
       "id": "shard-7",
       "asset": "preview-shard-7.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-7.zip",
-      "sha256": "d32382f8e9a089f6c7878d41044861aa4910a86fefeb45f1e93cfda576d44586",
-      "bytes": 3606728,
-      "file_count": 14
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-7.zip",
+      "sha256": "a246c421201c8147c172e3a9c8400b8784f61158a106be644e8dfa390dd77428",
+      "bytes": 4556039,
+      "file_count": 18
     },
     {
       "id": "shard-8",
       "asset": "preview-shard-8.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-8.zip",
-      "sha256": "be5741ad3b5e60d967ac45b07f586e815267f1d96195f62b468cd4f5cdf6707b",
-      "bytes": 4035097,
-      "file_count": 20
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-8.zip",
+      "sha256": "e1722efca20abd236fda7290904f5cd7c152a52bc604a38204dce4695628313e",
+      "bytes": 4175592,
+      "file_count": 21
     },
     {
       "id": "shard-9",
       "asset": "preview-shard-9.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-9.zip",
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-9.zip",
       "sha256": "0cf85ba112be4392e30f4ea773f9798e70d2b7ebb825e3484fdd4092cde198c8",
       "bytes": 5370664,
       "file_count": 23
@@ -92,15 +92,15 @@
     {
       "id": "shard-a",
       "asset": "preview-shard-a.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-a.zip",
-      "sha256": "a85e0f4644d5d49e524625e0b785c87bdc2fd76baaff7e4dd18d507c9eeec409",
-      "bytes": 5862656,
-      "file_count": 21
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-a.zip",
+      "sha256": "8dc44d0a4b451d718f4b937689e9326df23e5962f05216189c85f0e93453d168",
+      "bytes": 6317839,
+      "file_count": 22
     },
     {
       "id": "shard-b",
       "asset": "preview-shard-b.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-b.zip",
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-b.zip",
       "sha256": "4a0e80cd8d61fb8d7c6ea87d2f8a260ccea482922e609c67538b7d2f267f16bb",
       "bytes": 5202717,
       "file_count": 21
@@ -108,15 +108,15 @@
     {
       "id": "shard-c",
       "asset": "preview-shard-c.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-c.zip",
-      "sha256": "92f53fba5fc3bee79f62239b7bb79766fdcb6e5b1ef659c8fe199d2ce978e22f",
-      "bytes": 4222356,
-      "file_count": 20
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-c.zip",
+      "sha256": "2ee2000099a18baafdd9b1548c9f331de9d10075ce282fce8d722136fb5abc13",
+      "bytes": 4561449,
+      "file_count": 22
     },
     {
       "id": "shard-d",
       "asset": "preview-shard-d.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-d.zip",
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-d.zip",
       "sha256": "e5634d8625e063172616ac92753542ccee708e954c9c9395fd0241852f0512c6",
       "bytes": 5395675,
       "file_count": 24
@@ -124,7 +124,7 @@
     {
       "id": "shard-e",
       "asset": "preview-shard-e.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-e.zip",
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-e.zip",
       "sha256": "f9037fc29671aee0654a3150ff8226f3df4c4446394c97bf5e6b5c62e168968a",
       "bytes": 7814676,
       "file_count": 33
@@ -132,10 +132,10 @@
     {
       "id": "shard-f",
       "asset": "preview-shard-f.zip",
-      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.30.1/preview-shard-f.zip",
-      "sha256": "2a2a1cfd212220e20958c36c8997daef2fed608b8f64e576aa7bfefc905ecc10",
-      "bytes": 5737383,
-      "file_count": 27
+      "url": "https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets/releases/download/preview-assets-v2026.08.31.1/preview-shard-f.zip",
+      "sha256": "13b54a2b8299cccc5cc2b9610da2252058d9e1f4a887ed8b256dcaad4ee27fe7",
+      "bytes": 6478508,
+      "file_count": 29
     }
   ],
   "previews": [
@@ -491,6 +491,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-afrinxai-2094304601919074308-browser-2094304601919074308-video-1",
+      "source_sha256": "14d998b0d45f10c30197f9d41c7babe91e19f3de46fbec938d3c71c2546734de",
+      "file_sha256": "1d41fabec1f248083fd5636a1f00d1f7cc174696733051b3caacb6dd08db4fb4",
+      "bytes": 461676,
+      "file": "1d41fabec1f248083fd5636a1f00d1f7cc174696733051b3caacb6dd08db4fb4.gif",
+      "shard": "shard-1",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-aimikoda-2053053922332262547-browser-2053053922332262547-video-1",
       "source_sha256": "cf993c466b526faf00ae507002af9d51ba1bee602a1a35df2b78b2d3d265a3cf",
       "file_sha256": "35f03c58c49266447f1d47f7447d3dfd7cd65b2141a8adc9e997ebf57cff691f",
@@ -599,6 +608,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-aimikoda-2094279178602283013-browser-2094279178602283013-video-1",
+      "source_sha256": "0fc34a6328eb54421c460b8b6a908e62b5149e23ac177b51af84b52d2be58c3e",
+      "file_sha256": "44b0aa3246cbefaf3767aafc7616ab7d4ba52adcebcf2ee8cfc235c0137d5bf6",
+      "bytes": 151024,
+      "file": "44b0aa3246cbefaf3767aafc7616ab7d4ba52adcebcf2ee8cfc235c0137d5bf6.gif",
+      "shard": "shard-4",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-airina-xyz-2086404681480233236-browser-2086404681480233236-video-1",
       "source_sha256": "e54809d1a7abc327ac18144f9fab804e3bf667fb3038a13e3de9f296e2080450",
       "file_sha256": "d2014a265ecd7502587b2e3d2a155742f3167e4a7d8e8f77b8ddce778fffc9dd",
@@ -680,6 +698,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-aiwithjames-2094270762001514657-browser-2094270762001514657-video-1",
+      "source_sha256": "e50228ff5b9c50b2e8157f5b918f832a58e8082e19813e1a931ee5db06a476d9",
+      "file_sha256": "aa30b5d453501376a1884554fd5f54804865837a816ce104a4184cd92d4838c2",
+      "bytes": 454800,
+      "file": "aa30b5d453501376a1884554fd5f54804865837a816ce104a4184cd92d4838c2.gif",
+      "shard": "shard-a",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-aiwithjessica-2091081481707802813-browser-2091081481707802813-video-1",
       "source_sha256": "77ce3f5c44802f1648cccb05ec8deef09cd1b52d06edd642441d3a413ee539ea",
       "file_sha256": "e2647104075fe1ab54575cc9861d555dc0a1f3747af483e7cdbffe4a3e24ffb0",
@@ -713,6 +740,15 @@
       "bytes": 175153,
       "file": "07de744d292feede76a9b87aa9b0d30c434472327b00b974883d66553c639056.gif",
       "shard": "shard-0",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-aiwithminal-2094297733175902349-browser-2094297733175902349-video-1",
+      "source_sha256": "e1509748e6b643a4864001bf506a758ae2b56b24c36bf9a75c332a4be6dd79b0",
+      "file_sha256": "f19d2bfd610001947bc962ded7794dcadbda5792b0c6d6121c0f16a6bc9297a6",
+      "bytes": 260820,
+      "file": "f19d2bfd610001947bc962ded7794dcadbda5792b0c6d6121c0f16a6bc9297a6.gif",
+      "shard": "shard-f",
       "human_preview_only": true
     },
     {
@@ -905,6 +941,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-ayzalnooor24521-2094243156225315270-browser-2094243156225315270-video-1",
+      "source_sha256": "183cc0bf19ae88bbd8d04ddba03db884b72398b47aee455adbef343af9f5f27d",
+      "file_sha256": "0c039b73c69c11b72e420ee582c5306b6b52d9f6db99f2d9397a096ddc166bd1",
+      "bytes": 392584,
+      "file": "0c039b73c69c11b72e420ee582c5306b6b52d9f6db99f2d9397a096ddc166bd1.gif",
+      "shard": "shard-0",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-azed-ai-1965494859818827964-browser-1965494859818827964-video-1",
       "source_sha256": "f27ea1d1c29ea709e02bd642e6f75b4a537dad815f4137d887ce2c686acf703f",
       "file_sha256": "f01e7207eb99781329d5ab5c92d2b66c9b8c0e91c625e3f19aa49d1f9e99ce4e",
@@ -1013,6 +1058,24 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-caliraval-2094284844792520881-browser-2094284844792520881-video-1",
+      "source_sha256": "27a138c248ac049e93a032bfb6539fb6ff69ff93312b89fd4b6a1ee7fe178d72",
+      "file_sha256": "caa01b037764019772ac88124d55fb5f3dbf22dd8e0df72bc5a8f2fd350312ed",
+      "bytes": 175946,
+      "file": "caa01b037764019772ac88124d55fb5f3dbf22dd8e0df72bc5a8f2fd350312ed.gif",
+      "shard": "shard-c",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-canaistudios-2094319440745677219-browser-2094319440745677219-video-1",
+      "source_sha256": "a414b80ec130c0b432b549daaa802603e786569dff7df281dd67ad713a34b31b",
+      "file_sha256": "318821face11b13d309dbda914ac87fb7ea651d6a87165d6ae0c5895c9a1ed29",
+      "bytes": 248114,
+      "file": "318821face11b13d309dbda914ac87fb7ea651d6a87165d6ae0c5895c9a1ed29.gif",
+      "shard": "shard-3",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-castuananh-2090577363751039169-browser-2090577363751039169-video-1",
       "source_sha256": "aaf060f9af89ef0a4fe7cc265899d32f53ec19a4c7899937196b38aeb8ed9f82",
       "file_sha256": "12e5cbaa2ed8a00b9580d1027bc6c77ea7827d01525a3795bc84e92ee605c8ca",
@@ -1109,6 +1172,15 @@
       "bytes": 367672,
       "file": "938057cfd7d06eca1856aeb3ccd7e1bb4beefc84c1047cc987e47ea6b9f3fb34.gif",
       "shard": "shard-9",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-codewithhajra-2094099803407835369-browser-2094099803407835369-video-1",
+      "source_sha256": "3707a1d0d44c630a3b6b5921ba969783f80800e4039863b7ff1c07f96f306993",
+      "file_sha256": "714fdaced9beef88457ae084d911ec9d1ff53c6eb0c7610eac1c5a349da4629c",
+      "bytes": 162180,
+      "file": "714fdaced9beef88457ae084d911ec9d1ff53c6eb0c7610eac1c5a349da4629c.gif",
+      "shard": "shard-7",
       "human_preview_only": true
     },
     {
@@ -1220,6 +1292,24 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-decat2025-2094197194584723764-browser-2094197194584723764-video-1",
+      "source_sha256": "83efbf7c135d9ddd63f72174a5cea9a596d6e7fac9ab9f5a3c507f24ace2f49f",
+      "file_sha256": "1e521cb5436cbbb71b83f0761ed254fccb77ed55645236fa1cb391d7aa45e9b0",
+      "bytes": 128062,
+      "file": "1e521cb5436cbbb71b83f0761ed254fccb77ed55645236fa1cb391d7aa45e9b0.gif",
+      "shard": "shard-1",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-decat2025-2094229194653733265-browser-2094229194653733265-video-1",
+      "source_sha256": "198b7871b834fc28b85314e2113a9425890e0359b2b014eefcf04c45c31ad5fd",
+      "file_sha256": "789e1a97a041bfd9e3e14254a4ccc92c0f8fa3b1165fa34d8a3c94ae1f954c11",
+      "bytes": 185833,
+      "file": "789e1a97a041bfd9e3e14254a4ccc92c0f8fa3b1165fa34d8a3c94ae1f954c11.gif",
+      "shard": "shard-7",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-derek-wall90176-2086464559439855938-browser-2086464559439855938-video-1",
       "source_sha256": "d3fc44721bb51f7bc42360109eb65c57cd78487b251b909b07ba7fe371c9da3e",
       "file_sha256": "44bafe83f608378f15ce61ad02044427ff722a7621c41c3fec1965b38ce404a1",
@@ -1319,6 +1409,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-ejaz-bashir1-2094292563704643811-browser-2094292563704643811-video-1",
+      "source_sha256": "f88f6a9c026c69413fc89b5c25e284160b8fd49148392abc38b679e0e3a4c834",
+      "file_sha256": "44e2fc82fd9604d0d484aef30e356d98d264c3c63d6d334955fde49a1313a405",
+      "bytes": 155496,
+      "file": "44e2fc82fd9604d0d484aef30e356d98d264c3c63d6d334955fde49a1313a405.gif",
+      "shard": "shard-4",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-elsasofia-ai-2088582116615610532-browser-2088582116615610532-video-1",
       "source_sha256": "f1100b4b2404344f1630b48ce6dbc8156d856956ea453c0644d0cc27a5f6b4e9",
       "file_sha256": "d13fe5afb7d0f3d30e110ee7ffd806ac341c557baef025d3ee6a36eab725902c",
@@ -1342,6 +1441,15 @@
       "file_sha256": "7e19a580a55cfc7faa7f07ed83a5012cdff627e4c2e1ec34da13dfbe0a5e41ed",
       "bytes": 312288,
       "file": "7e19a580a55cfc7faa7f07ed83a5012cdff627e4c2e1ec34da13dfbe0a5e41ed.gif",
+      "shard": "shard-7",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-ewotanosimo2310-2094299737839305097-browser-2094299737839305097-video-1",
+      "source_sha256": "fd1281df0f2e1f60f2fbd9593b302fed296aa82bae50f0d20410c542f4661449",
+      "file_sha256": "761e5985111be48b76672aecb3263e8f135d0f4e74612638441bc4dc54f57bbb",
+      "bytes": 473595,
+      "file": "761e5985111be48b76672aecb3263e8f135d0f4e74612638441bc4dc54f57bbb.gif",
       "shard": "shard-7",
       "human_preview_only": true
     },
@@ -1415,6 +1523,15 @@
       "bytes": 157503,
       "file": "eec7a9a0cbe89ebf431c50f75f9acb5a52715bbf05cfbe2c1993934b7d042e2a.gif",
       "shard": "shard-e",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-geekcatx-2094279910034706924-browser-2094279910034706924-video-1",
+      "source_sha256": "8110be4a288ec5fd3cd51d372c988a7c0534f917f011210ff1c2adbdf7a10e65",
+      "file_sha256": "f8574d7b2f2e07c7f854a0f53020e9c49f69e8131709974b964a2c6bc1b12913",
+      "bytes": 479539,
+      "file": "f8574d7b2f2e07c7f854a0f53020e9c49f69e8131709974b964a2c6bc1b12913.gif",
+      "shard": "shard-f",
       "human_preview_only": true
     },
     {
@@ -1850,6 +1967,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-jonnyboy-2094319381647966415-browser-2094319381647966415-video-1",
+      "source_sha256": "44f7a1abb0253048af8a329701206e4d4ac8d2528674262f8fa3ed5dd4ea64c2",
+      "file_sha256": "824489ecbf5c9eb044a07439b8af77138670a658f3418267a8b5374f4b46937e",
+      "bytes": 140112,
+      "file": "824489ecbf5c9eb044a07439b8af77138670a658f3418267a8b5374f4b46937e.gif",
+      "shard": "shard-8",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-juliaclarky-2087748648981745821-browser-2087748648981745821-video-1",
       "source_sha256": "c37debf31c232e6361b8750aeada20ff5b4d100f8b0d105acd3909fbc7646ad7",
       "file_sha256": "204f86d15a81c72f8c59b8baf59f5e062a2b4ec8aa10a100e60258a65df0262c",
@@ -1892,6 +2018,15 @@
       "bytes": 71646,
       "file": "486ee6572bfb9e6e2fe9028fd75fe623d64d952faefbd192abf6e277b4982d3f.gif",
       "shard": "shard-4",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-just-sharon7-2094305294117429711-browser-2094305294117429711-video-1",
+      "source_sha256": "c549948d293c6c65627381292000ffcd80f8ab410229ac6e782e93ab343ee219",
+      "file_sha256": "27231c97e6aaf78cd7706204f7d1c406bbbb022aafb4d5ff6947e8e38731f3ff",
+      "bytes": 179463,
+      "file": "27231c97e6aaf78cd7706204f7d1c406bbbb022aafb4d5ff6947e8e38731f3ff.gif",
+      "shard": "shard-2",
       "human_preview_only": true
     },
     {
@@ -2138,6 +2273,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-maybeegreen-2094290118706335756-browser-2094290118706335756-video-1",
+      "source_sha256": "61a3d64712304b6a826067404ffbf8a10691896b325bed6a6b90a17ac7b38e60",
+      "file_sha256": "75583e907a5a038ca42a4b2c9c84cb513b601ef93596f2b146a8b32986675927",
+      "bytes": 126171,
+      "file": "75583e907a5a038ca42a4b2c9c84cb513b601ef93596f2b146a8b32986675927.gif",
+      "shard": "shard-7",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-mayorkingai-2090145591083077637-browser-2090145591083077637-video-1",
       "source_sha256": "40a93131f70e60bee130b4c56cd31748ef44ccbd236f7f0e8160497e7afbaf8c",
       "file_sha256": "42d83ce16f1a9f7ff025fe1975e864404b820db5f32d5bbb324dc1fe969c371c",
@@ -2291,6 +2435,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-mrdasonx-2094318362470101207-browser-2094318362470101207-video-1",
+      "source_sha256": "7c1839695a11b973e8a5dde2d3bff0abc1d1aa6fa231064ba93b4c35a3850a95",
+      "file_sha256": "c68bcd1f444957f4a42b43d71aaeaef0ebb60a5e54daaa3facfc764d67774e87",
+      "bytes": 162381,
+      "file": "c68bcd1f444957f4a42b43d71aaeaef0ebb60a5e54daaa3facfc764d67774e87.gif",
+      "shard": "shard-c",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-mrdavids1-2043483738001035369-browser-2043483738001035369-video-1",
       "source_sha256": "0d486b2daf562f1e63576c0f8168ed8be9feec46f3529edfd0c83035b3463ce5",
       "file_sha256": "20781efbaf247f0319c2e1ac1b9112f8786ef1fb727168f1beff904fd983f222",
@@ -2432,6 +2585,15 @@
       "bytes": 89790,
       "file": "bfe43299a88661e0d13541baa59a8149f2d429274bec38ceb139326229335e86.gif",
       "shard": "shard-b",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-nexlowx-2094144180884849051-browser-2094144180884849051-video-1",
+      "source_sha256": "24af7d0ab0c59443c1c8a93f1601af6d1a1e37662c12181daf7af80695f7a5d5",
+      "file_sha256": "6e860ba2d3c8bddbc61a1deb1dd4e2c130ca9d21dd9d22d3fe1db0e529a0c6e6",
+      "bytes": 225200,
+      "file": "6e860ba2d3c8bddbc61a1deb1dd4e2c130ca9d21dd9d22d3fe1db0e529a0c6e6.gif",
+      "shard": "shard-6",
       "human_preview_only": true
     },
     {
@@ -2696,6 +2858,15 @@
       "human_preview_only": true
     },
     {
+      "case_id": "x-ponyodong-2094282576542470337-browser-2094282576542470337-video-1",
+      "source_sha256": "e1e4e47d0079ea265054b8e3ce716b27c75c5e913cc7a78bf430dc13cca9540f",
+      "file_sha256": "1b4c7c937aa0f2be5fe20b061b5909e094bf5e2e474e2acbbf493074babd46a7",
+      "bytes": 176669,
+      "file": "1b4c7c937aa0f2be5fe20b061b5909e094bf5e2e474e2acbbf493074babd46a7.gif",
+      "shard": "shard-1",
+      "human_preview_only": true
+    },
+    {
       "case_id": "x-primee32-2087285945213059079-browser-2087285945213059079-video-1",
       "source_sha256": "250dc331cf616b2b33109c7fb0ad00ed324fa549e984a7de8349f68ef797e298",
       "file_sha256": "a5c687ef088e3febb2ddbf950e040f6aa0988782adb4c4f7512397e2d02a7ec1",
@@ -2846,6 +3017,15 @@
       "bytes": 224723,
       "file": "8326c114da8afdad5f6a7fd73fcda93c962abf106835196b627db66e5c72c960.gif",
       "shard": "shard-8",
+      "human_preview_only": true
+    },
+    {
+      "case_id": "x-sarischerika-2094199982463340589-browser-2094199982463340589-video-1",
+      "source_sha256": "7fc9a11761254fef2c6b0a52f5ebb31bae7275b63db6b2d1ec6ea7e3d3605198",
+      "file_sha256": "571e9868444837a82643113757a89b88b90146dfe670f5f8f57f7b6c6102bde7",
+      "bytes": 198084,
+      "file": "571e9868444837a82643113757a89b88b90146dfe670f5f8f57f7b6c6102bde7.gif",
+      "shard": "shard-5",
       "human_preview_only": true
     },
     {

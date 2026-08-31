@@ -420,18 +420,18 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertEqual(offsets, sorted(offsets))
                 self.assertTrue(output.rstrip().endswith(f"实现{anchors[-1]}。"))
 
-    def test_configured_local_template_library_serves_all_377_human_only_gifs(self):
+    def test_configured_local_template_library_serves_all_397_human_only_gifs(self):
         manifest_path = case_library_routes.configured_manifest_path()
         if manifest_path is None or not manifest_path.is_file():
             self.skipTest("Local GIF case library is not configured on this machine")
         catalog = case_library_routes.runtime_public_catalog()
         previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-        self.assertEqual(len(previews), 377)
+        self.assertEqual(len(previews), 397)
         self.assertTrue(all(preview["available"] for preview in previews))
         self.assertTrue(all(preview["preview_url"].startswith("/t8-prompt-enhancer/case-preview/") for preview in previews))
         case_previews = [preview for preview in previews if not preview["case_id"].startswith("community-skill--")]
         community_previews = [preview for preview in previews if preview["case_id"].startswith("community-skill--")]
-        self.assertEqual(len(case_previews), 375)
+        self.assertEqual(len(case_previews), 395)
         self.assertEqual(len(community_previews), 2)
         self.assertTrue(all(preview["source_url"].startswith("https://") for preview in case_previews))
         self.assertTrue(all(preview["source_url"] == "" for preview in community_previews))
@@ -445,20 +445,21 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 self.assertTrue(record["import_policy"]["preview_only"])
                 self.assertFalse(record["import_policy"]["source_media_connected"])
 
-    def test_github_checkout_serves_all_377_bundled_gifs_without_local_manifests(self):
+    def test_github_checkout_uses_377_bundled_gifs_and_downloads_newer_previews(self):
         with (
             patch.object(case_library_routes, "configured_manifest_path", return_value=None),
             patch.object(case_library_routes, "configured_community_manifest_path", return_value=None),
         ):
             catalog = case_library_routes.runtime_public_catalog()
             previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-            self.assertEqual(len(previews), 377)
+            self.assertEqual(len(previews), 397)
             self.assertFalse(catalog["preview_manifest_configured"])
-            self.assertTrue(catalog["bundled_previews_included"])
+            self.assertFalse(catalog["bundled_previews_included"])
             self.assertEqual(catalog["bundled_preview_count"], 377)
-            self.assertTrue(all(preview["available"] for preview in previews))
+            self.assertEqual(sum(preview["available"] for preview in previews), 377)
+            self.assertTrue(all(preview["downloadable"] for preview in previews))
             self.assertTrue(all(preview["source_url"] == "" for preview in previews))
-            for preview in previews:
+            for preview in (item for item in previews if item["available"]):
                 path, record = case_library_routes.resolve_preview(preview["case_id"], verify_hash=True)
                 self.assertEqual(record["_template_kind"], "bundled")
                 self.assertTrue(path.is_relative_to(case_library_routes.BUNDLED_PREVIEW_ROOT))
@@ -483,7 +484,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 case_library_routes._bundled_preview_records.cache_clear()
                 catalog = case_library_routes.runtime_public_catalog()
                 previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-                self.assertEqual(len(previews), 377)
+                self.assertEqual(len(previews), 397)
                 self.assertFalse(catalog["bundled_previews_included"])
                 self.assertEqual(catalog["bundled_preview_count"], 0)
                 self.assertTrue(all(preview["downloadable"] for preview in previews))
@@ -500,7 +501,8 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         }
         self.assertEqual(manifest["schema_version"], "t8-bundled-case-previews/v1")
         self.assertEqual(manifest["preview_count"], 377)
-        self.assertEqual({item["case_id"] for item in manifest["previews"]}, set(expected))
+        self.assertEqual(len(manifest["previews"]), 377)
+        self.assertTrue({item["case_id"] for item in manifest["previews"]} < set(expected))
         self.assertEqual(
             {path.name for path in case_library_routes.BUNDLED_PREVIEW_ROOT.glob("*.gif")},
             {item["file"] for item in manifest["previews"]},

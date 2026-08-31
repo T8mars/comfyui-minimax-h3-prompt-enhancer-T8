@@ -1,0 +1,18 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-08-31-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-afrinxai-2094304601919074308-browser-2094304601919074308-video-1",
+      "template_id": "t8-case-route-inventory-accumulation-return-v1",
+      "label": "晨间收获闭环｜人物巡园、连续采摘与动物回应",
+      "summary": "同一人物沿菜园路径完成巡看、采摘、装篮和离开，农作物变化形成进度证据；家禽只作为环境回应，不抢夺主任务，终局带着成果回到原路径。",
+      "case_sha256": "b10ce143953795887b4a87d21bd855e7d027f409fa81327ece83232916f3968a",
+      "creative_dna_sha256": "feeb0e08eca12c5c64d416b545722801accfa2369a142387ec51112c47fcbb94",
+      "h3_adapter_sha256": "eba007d5c17a0c1adad23cd947a772cc257a9090683f8dc4d2be60ef8a7522ec",
+      "seedance20_adapter_sha256": "14d352a9c5b1b96a5f1f5a978760cd8a7fc4d59500866683cc289407c6b83f6a",
+      "mechanism_fingerprint": "91ae7fd91228851a9ce1a0bda683862ba92b071fdd0e7ddc9c77ea838f930ca5"
+    }
+  ]
+}

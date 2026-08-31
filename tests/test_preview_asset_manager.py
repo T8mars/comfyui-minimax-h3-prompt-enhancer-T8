@@ -95,7 +95,7 @@ class PreviewAssetManagerTests(unittest.TestCase):
                 Path(temporary), ROOT / "preview_assets" / "channel.json"
             )
             loaded = manager.channel(allowed)
-            self.assertEqual(loaded["channel_version"], "2026.08.30.1")
+            self.assertEqual(loaded["channel_version"], "2026.08.31.1")
             self.assertEqual(set(loaded["_preview_index"]), set(allowed))
             self.assertEqual(len(loaded["_shard_index"]), 16)
             self.assertEqual(channel["catalog_digest"], loaded["catalog_digest"])

@@ -5,6 +5,21 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.11.1] - 2026-08-31
+
+### Changed
+
+- Import `batch-2026-08-31-01` as one new stable selector,
+  `晨间收获闭环｜人物巡园、连续采摘与动物回应`, plus 19 evidence variants attached to existing
+  mechanisms. The non-official library now contains 395 source cases, 214 case
+  selectors, 181 evidence variants, and two standalone community Skills (216
+  selectors total); no existing selector is removed, renamed, or semantically
+  changed.
+- Advance the human-only dynamic-preview channel to `2026.08.31.1`, covering
+  all 397 T8 previews in 16 hash-pinned shards. The main node repository keeps
+  its existing 377-GIF offline baseline while future preview growth ships only
+  through the separately versioned resource package.
+
 ## [1.11.0] - 2026-08-30
 
 ### Added

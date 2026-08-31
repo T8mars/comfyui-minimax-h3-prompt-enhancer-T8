@@ -8,4 +8,4 @@ This directory contains lightweight GIF previews bundled for the non-official T8
 - The distributable encoding profile is 2 fps, maximum width 160 px, and a 32-color palette.
 - Source videos are not included.
 
-Regenerate the directory with `tools/bundle_t8_case_previews.py` whenever the selector catalog changes. Generate into an empty directory, validate the manifest and tests, then replace this directory as one reviewed change.
+This 377-preview directory is the frozen offline baseline for full GitHub clones. Generate complete candidates with `tools/bundle_t8_case_previews.py` in an external staging directory, validate them, and publish future preview growth only through the versioned dynamic asset channel; do not append new GIFs here.
