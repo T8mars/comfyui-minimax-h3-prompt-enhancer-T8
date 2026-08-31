@@ -3,6 +3,15 @@ from typing import Any
 
 import requests
 from comfy_api.latest import io
+from .completion_recovery import (
+    RECOVERY_ACTION_NORMAL,
+    RECOVERY_ACTION_RESTORE,
+    CompletionRecoveryError,
+    begin_recovery_record,
+    complete_recovery_record,
+    mark_recovery_failed,
+    recover_outputs,
+)
 from .execution_diagnostics import DiagnosticsRun
 from .provider_config import (
     PROVIDER_LOCAL,
@@ -736,6 +745,8 @@ def enhance_seedance20_prompt(
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
     performance_director_config: Any = None,
     character_performance_bible: Any = None,
+    recovery_component: str = "",
+    recovery_slot: str = "",
     progress_callback: Any = None,
     provider_request_options: Any = None,
 ) -> str:
@@ -936,7 +947,7 @@ def enhance_seedance20_prompt(
             )
         if progress_callback:
             progress_callback("media_prepared", asset_count=len(media_plan))
-        messages = _build_messages(
+        messages = apply_local_language_lock(_build_messages(
             prompt,
             task_intent,
             complexity_mode,
@@ -960,7 +971,8 @@ def enhance_seedance20_prompt(
             case_template,
             performance_director_config,
             character_performance_bible,
-        )
+        ), output_language)
+        cloud_attempts: list[int] = []
         result = _request_completion(
             session,
             api_key,
@@ -969,13 +981,28 @@ def enhance_seedance20_prompt(
             chat_url,
             provider_name,
             model_id,
-            attempts_callback=(
-                (lambda attempts: progress_callback("llm_completed", attempts=attempts))
-                if progress_callback
-                else None
-            ),
+            attempts_callback=cloud_attempts.append,
             provider_request_options=provider_request_options,
+            recovery_component=recovery_component,
+            recovery_slot=recovery_slot,
         )
+        if needs_local_language_repair(result, output_language):
+            result = _request_completion(
+                session,
+                api_key,
+                local_language_repair_messages(result, output_language),
+                rewrite_mode,
+                chat_url,
+                provider_name,
+                model_id,
+                attempts_callback=cloud_attempts.append,
+                provider_request_options=provider_request_options,
+                recovery_component=recovery_component,
+                recovery_slot=recovery_slot,
+                temperature_override=0.1,
+            )
+        if progress_callback:
+            progress_callback("llm_completed", attempts=sum(cloud_attempts))
         if progress_callback:
             progress_callback("output_finalized")
         return result
@@ -1269,6 +1296,22 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                io.String.Input(
+                    "recovery_slot",
+                    display_name="恢复槽（内部）",
+                    optional=True,
+                    default="",
+                    socketless=True,
+                    advanced=True,
+                ),
+                io.String.Input(
+                    "recovery_action",
+                    display_name="恢复动作（内部）",
+                    optional=True,
+                    default=RECOVERY_ACTION_NORMAL,
+                    socketless=True,
+                    advanced=True,
+                ),
                 T8PerformanceDirectorConfigIO.Input(
                     "performance_director_config",
                     display_name="表演导演配置（可选）",
@@ -1353,7 +1396,14 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         character_performance_bible=None,
         performance_director_config=None,
         provider_config=None,
+        recovery_slot="",
+        recovery_action=RECOVERY_ACTION_NORMAL,
     ) -> io.NodeOutput:
+        if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
+            try:
+                return io.NodeOutput(*recover_outputs("Seedance20PromptEnhancerT8", recovery_slot, 1))
+            except CompletionRecoveryError as error:
+                raise Seedance20PromptEnhancerError(str(error)) from error
         try:
             merged = merge_provider_config(
                 {
@@ -1397,6 +1447,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_unload_policy = merged["local_unload_policy"]
         local_comfy_memory_policy = merged["local_comfy_memory_policy"]
         provider_request_options = merged["provider_request_options"]
+        begin_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, api_mode)
         diagnostic = DiagnosticsRun("Seedance20PromptEnhancerT8", api_mode, 4)
         try:
             result = enhance_seedance20_prompt(
@@ -1442,10 +1493,14 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 performance_director_config=performance_director_config,
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
+                recovery_component="Seedance20PromptEnhancerT8",
+                recovery_slot=recovery_slot,
             )
         except Exception as error:
+            mark_recovery_failed("Seedance20PromptEnhancerT8", recovery_slot, error)
             diagnostic.complete("failed", error)
             raise
+        complete_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, (result,))
         diagnostic.complete("success")
         return io.NodeOutput(result)
 

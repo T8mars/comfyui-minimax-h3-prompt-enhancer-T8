@@ -67,6 +67,22 @@ class FakeSession:
         pass
 
 
+class SequencedChatSession(FakeSession):
+    def __init__(self, completions):
+        super().__init__("")
+        self.completions = list(completions)
+
+    def post(self, url, **kwargs):
+        if "files" in kwargs:
+            return super().post(url, **kwargs)
+        self.chat_requests.append(kwargs)
+        self.chat_urls.append(url)
+        content = self.completions.pop(0)
+        return FakeResponse(200, {
+            "choices": [{"finish_reason": "stop", "message": {"content": content}}]
+        })
+
+
 class AnchorAwareSeedanceSession(FakeSession):
     def post(self, url, **kwargs):
         if "json" in kwargs:
@@ -97,6 +113,23 @@ class FakeVideo:
 
 
 class Seedance20PromptEnhancerTests(unittest.TestCase):
+    def test_manual_recovery_returns_cached_output_without_provider_validation(self):
+        slot = "t8-s20-restore-test-0001"
+        seedance20.begin_recovery_record("Seedance20PromptEnhancerT8", slot, "Seedance")
+        seedance20.complete_recovery_record("Seedance20PromptEnhancerT8", slot, ("cached Seedance result",))
+        result = seedance20.Seedance20PromptEnhancer.execute(
+            prompt="",
+            task_intent="AUTO",
+            complexity_mode=seedance20.COMPLEXITY_OPTIONS[0],
+            duration_seconds=seedance20.AUTO_DURATION,
+            shot_count=seedance20.AUTO_SHOT_COUNT,
+            rewrite_mode="balanced",
+            output_detail=seedance20.OUTPUT_DETAILS[0],
+            recovery_slot=slot,
+            recovery_action=seedance20.RECOVERY_ACTION_RESTORE,
+        )
+        self.assertEqual(result[0], "cached Seedance result")
+
     def run_enhancer(self, session=None, **kwargs):
         values = {
             "prompt": "一名舞者在雨夜完成一次连续旋转。",
@@ -194,6 +227,30 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertNotIn("integrated_multimodal_description", system)
         self.assertNotIn("[Shot N] At MM:SS", system)
         self.assertNotIn("overall_soundscape:", system)
+
+    def test_cloud_chinese_language_miss_is_repaired_once(self):
+        wrong = (
+            "A dancer enters the rain-soaked street and turns toward camera while the lens follows in a smooth "
+            "continuous move. Reflections shift beneath her feet before the shot settles on a calm final pose."
+        )
+        corrected = (
+            "舞者进入被雨水浸湿的街道，镜头连续平稳跟随她转向镜头。脚下倒影随步伐变化，"
+            "人物完成一次流畅旋转后停在清晰而克制的结束姿态，环境与动作保持连贯。"
+        )
+        session = SequencedChatSession([wrong, corrected])
+        self.assertEqual(self.run_enhancer(session, output_language="中文"), corrected)
+        self.assertEqual(len(session.chat_requests), 2)
+        first, repair = session.chat_requests
+        self.assertIn("FINAL LOCAL OUTPUT LANGUAGE LOCK", first["json"]["messages"][0]["content"])
+        self.assertEqual(first["json"]["temperature"], 0.7)
+        self.assertEqual(repair["json"]["temperature"], 0.1)
+        self.assertNotEqual(first["headers"]["Idempotency-Key"], repair["headers"]["Idempotency-Key"])
+
+    def test_cloud_chinese_output_uses_one_request(self):
+        corrected = "舞者在雨夜完成连续旋转，镜头稳定跟随，最后在街灯下自然停住。"
+        session = FakeSession(corrected)
+        self.assertEqual(self.run_enhancer(session, output_language="中文"), corrected)
+        self.assertEqual(len(session.chat_requests), 1)
 
     def test_fixed_shot_count_overrides_approximate_user_count_without_timestamps(self):
         session = FakeSession()

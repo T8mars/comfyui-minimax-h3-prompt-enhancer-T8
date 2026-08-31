@@ -4,6 +4,7 @@ import json
 import os
 import re
 import time
+import uuid
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,17 @@ except ImportError:
             return ""
 
 try:
+    from .completion_recovery import (
+        RECOVERY_ACTION_NORMAL,
+        RECOVERY_ACTION_RESTORE,
+        CompletionRecoveryError,
+        begin_recovery_record,
+        checkpoint_recovery_text,
+        complete_recovery_record,
+        mark_recovery_ambiguous,
+        mark_recovery_failed,
+        recover_outputs,
+    )
     from .execution_diagnostics import DiagnosticsRun
     from .provider_capabilities import apply_chat_request_options
     from .provider_config import (
@@ -50,6 +62,17 @@ try:
         coerce_character_performance_bibles,
     )
 except ImportError:
+    from completion_recovery import (
+        RECOVERY_ACTION_NORMAL,
+        RECOVERY_ACTION_RESTORE,
+        CompletionRecoveryError,
+        begin_recovery_record,
+        checkpoint_recovery_text,
+        complete_recovery_record,
+        mark_recovery_ambiguous,
+        mark_recovery_failed,
+        recover_outputs,
+    )
     from execution_diagnostics import DiagnosticsRun
     from provider_capabilities import apply_chat_request_options
     from provider_config import (
@@ -162,7 +185,7 @@ AI_WORKSHOP_MODEL_OPTIONS = [AI_WORKSHOP_DEFAULT_MODEL, CUSTOM_MODEL_OPTION]
 MAX_FILE_BYTES = 50 * 1024 * 1024
 REQUEST_TIMEOUT = (20, 300)
 SEEDANCE_CHAT_RETRY_DELAYS = (0.5, 1.0)
-SEEDANCE_ROUTE_SEQUENCE = ("environment", "direct")
+SEEDANCE_ROUTE_SEQUENCE = ("direct", "environment")
 DIRECT_ROUTE_PROXIES = {"http": "", "https": "", "all": ""}
 # Seedance.nz is fronted by regional gateways. These statuses all mean that the
 # gateway/TLS path failed before a usable completion reached the client; unlike
@@ -942,18 +965,36 @@ def _is_seedance_chat_endpoint(chat_url: str) -> bool:
 
 
 def _is_retryable_seedance_network_error(error: requests.RequestException) -> bool:
-    # A read timeout is deliberately excluded: the server may already have
-    # completed the paid generation even though its response did not arrive.
-    if isinstance(error, requests.exceptions.ReadTimeout):
+    # Proxy/read/stream failures can happen after the provider accepted the
+    # paid request. Retrying them blindly may create a second paid generation.
+    if isinstance(
+        error,
+        (
+            requests.exceptions.ProxyError,
+            requests.exceptions.ReadTimeout,
+            requests.exceptions.ChunkedEncodingError,
+        ),
+    ):
         return False
     return isinstance(
         error,
         (
             requests.exceptions.SSLError,
             requests.exceptions.ConnectTimeout,
-            requests.exceptions.ConnectionError,
         ),
     )
+
+
+def _is_ambiguous_seedance_network_error(error: requests.RequestException) -> bool:
+    return isinstance(
+        error,
+        (
+            requests.exceptions.ProxyError,
+            requests.exceptions.ReadTimeout,
+            requests.exceptions.ChunkedEncodingError,
+            requests.exceptions.ConnectionError,
+        ),
+    ) and not isinstance(error, requests.exceptions.ConnectTimeout)
 
 
 def _seedance_request_route_kwargs(
@@ -961,11 +1002,11 @@ def _seedance_request_route_kwargs(
     attempt: int,
     enabled: bool,
 ) -> dict[str, dict[str, str]]:
-    """Alternate the normal environment route with an explicit direct route.
+    """Try an explicit direct route before falling back to the environment.
 
-    The first attempt preserves the user's configured proxy behavior. A retry
-    bypasses a broken regional/system proxy, and the final attempt restores the
-    configured route. Custom OpenAI-compatible endpoints never inherit this
+    Seedance.nz users frequently inherit an unavailable system proxy. The first
+    attempt therefore bypasses it. A safe pre-connection retry may use the
+    environment route. Custom OpenAI-compatible endpoints never inherit this
     Seedance.nz-only policy.
     """
     if not enabled:
@@ -1316,25 +1357,56 @@ def _request_completion(
     attempts_callback: Any = None,
     provider_request_options: Any = None,
     retry_delays: tuple[float, ...] | None = None,
+    recovery_component: str = "",
+    recovery_slot: str = "",
+    temperature_override: float | None = None,
 ) -> str:
+    is_seedance = _is_seedance_chat_endpoint(chat_url)
+    temperature = (
+        float(temperature_override)
+        if temperature_override is not None
+        else MODE_TEMPERATURES[rewrite_mode]
+    )
     payload = apply_chat_request_options({
         "model": model_id,
         "messages": messages,
-        "stream": False,
-    }, chat_url=chat_url, temperature=MODE_TEMPERATURES[rewrite_mode], options=provider_request_options)
+        "stream": is_seedance,
+    }, chat_url=chat_url, temperature=temperature, options=provider_request_options)
     retry_delays = (
         tuple(retry_delays)
-        if retry_delays is not None and _is_seedance_chat_endpoint(chat_url)
-        else SEEDANCE_CHAT_RETRY_DELAYS if _is_seedance_chat_endpoint(chat_url) else ()
+        if retry_delays is not None and is_seedance
+        else SEEDANCE_CHAT_RETRY_DELAYS if is_seedance else ()
     )
+    request_id = f"t8-{uuid.uuid4()}"
+    if is_seedance and recovery_component and recovery_slot:
+        # A deliberate follow-up (for example a language-only correction) is a
+        # new logical request. Clear the preceding response checkpoint first so
+        # a later disconnect can never expose a stale draft as the current run.
+        checkpoint_recovery_text(recovery_component, recovery_slot, "", complete=False)
+
+    def checkpoint(text: str, complete: bool, response_id: str) -> None:
+        checkpoint_recovery_text(
+            recovery_component,
+            recovery_slot,
+            text,
+            complete=complete,
+            response_id=response_id,
+        )
 
     def network_error(error: requests.RequestException, attempt: int, delays: tuple[float, ...]) -> Exception:
+        if (
+            is_seedance
+            and recovery_component
+            and recovery_slot
+            and _is_ambiguous_seedance_network_error(error)
+        ):
+            mark_recovery_ambiguous(recovery_component, recovery_slot, error)
         if _is_retryable_seedance_network_error(error) and delays:
             retry_note = f"Fast retry was exhausted after {attempt} attempts."
-        elif isinstance(error, requests.exceptions.ReadTimeout):
+        elif is_seedance and _is_ambiguous_seedance_network_error(error):
             retry_note = (
-                "The response state is ambiguous, so it was not retried automatically "
-                "to avoid a duplicate paid generation."
+                "The upstream may already have completed. It was not retried to avoid duplicate billing. "
+                "Use the node's recovery button to read a complete local stream checkpoint when available."
             )
         else:
             retry_note = "The paid request was not retried automatically."
@@ -1364,6 +1436,12 @@ def _request_completion(
         empty_content_error=lambda: PromptEnhancerError(
             f"{provider_name} chat returned an empty final answer."
         ),
+        extra_headers=(
+            {"Idempotency-Key": request_id, "X-Client-Request-Id": request_id}
+            if is_seedance
+            else None
+        ),
+        on_checkpoint=checkpoint if is_seedance and recovery_component and recovery_slot else None,
     )
     if attempts_callback:
         attempts_callback(result.attempts)
@@ -1430,6 +1508,8 @@ def enhance_prompt(
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
     performance_director_config: Any = None,
     character_performance_bible: Any = None,
+    recovery_component: str = "",
+    recovery_slot: str = "",
     progress_callback: Any = None,
     provider_request_options: Any = None,
 ) -> str:
@@ -1625,7 +1705,10 @@ def enhance_prompt(
             media_parts = _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
         if progress_callback:
             progress_callback("media_prepared", asset_count=len(media_plan))
-        messages = _build_messages(
+        effective_cloud_language = _effective_output_language(
+            output_language, official_skill_profile
+        )
+        messages = apply_local_language_lock(_build_messages(
             prompt,
             task_type,
             duration_seconds,
@@ -1645,7 +1728,8 @@ def enhance_prompt(
             case_template,
             performance_director_config,
             character_performance_bible,
-        )
+        ), effective_cloud_language)
+        cloud_attempts: list[int] = []
         response_text = _request_completion(
             session,
             api_key,
@@ -1654,13 +1738,28 @@ def enhance_prompt(
             chat_url,
             provider_name,
             model_id,
-            attempts_callback=(
-                (lambda attempts: progress_callback("llm_completed", attempts=attempts))
-                if progress_callback
-                else None
-            ),
+            attempts_callback=cloud_attempts.append,
             provider_request_options=provider_request_options,
+            recovery_component=recovery_component,
+            recovery_slot=recovery_slot,
         )
+        if needs_local_language_repair(response_text, effective_cloud_language):
+            response_text = _request_completion(
+                session,
+                api_key,
+                local_language_repair_messages(response_text, effective_cloud_language),
+                rewrite_mode,
+                chat_url,
+                provider_name,
+                model_id,
+                attempts_callback=cloud_attempts.append,
+                provider_request_options=provider_request_options,
+                recovery_component=recovery_component,
+                recovery_slot=recovery_slot,
+                temperature_override=0.1,
+            )
+        if progress_callback:
+            progress_callback("llm_completed", attempts=sum(cloud_attempts))
         result = _reorder_complete_fields(response_text, task_type)
         if progress_callback:
             progress_callback("output_finalized")
@@ -1934,6 +2033,22 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                io.String.Input(
+                    "recovery_slot",
+                    display_name="恢复槽（内部）",
+                    optional=True,
+                    default="",
+                    socketless=True,
+                    advanced=True,
+                ),
+                io.String.Input(
+                    "recovery_action",
+                    display_name="恢复动作（内部）",
+                    optional=True,
+                    default=RECOVERY_ACTION_NORMAL,
+                    socketless=True,
+                    advanced=True,
+                ),
                 T8PerformanceDirectorConfigIO.Input(
                     "performance_director_config",
                     display_name="表演导演配置（可选）",
@@ -2017,7 +2132,14 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         character_performance_bible=None,
         performance_director_config=None,
         provider_config=None,
+        recovery_slot="",
+        recovery_action=RECOVERY_ACTION_NORMAL,
     ) -> io.NodeOutput:
+        if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
+            try:
+                return io.NodeOutput(*recover_outputs("MiniMaxH3PromptEnhancerT8", recovery_slot, 1))
+            except CompletionRecoveryError as error:
+                raise PromptEnhancerError(str(error)) from error
         try:
             merged = merge_provider_config(
                 {
@@ -2061,6 +2183,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         local_unload_policy = merged["local_unload_policy"]
         local_comfy_memory_policy = merged["local_comfy_memory_policy"]
         provider_request_options = merged["provider_request_options"]
+        begin_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, api_mode)
         diagnostic = DiagnosticsRun("MiniMaxH3PromptEnhancerT8", api_mode, 4)
         try:
             result = enhance_prompt(
@@ -2102,10 +2225,14 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 performance_director_config=performance_director_config,
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
+                recovery_component="MiniMaxH3PromptEnhancerT8",
+                recovery_slot=recovery_slot,
             )
         except Exception as error:
+            mark_recovery_failed("MiniMaxH3PromptEnhancerT8", recovery_slot, error)
             diagnostic.complete("failed", error)
             raise
+        complete_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, (result,))
         diagnostic.complete("success")
         return io.NodeOutput(result)
 

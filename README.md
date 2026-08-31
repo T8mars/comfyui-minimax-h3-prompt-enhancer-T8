@@ -60,7 +60,7 @@
 - 新增独立 Music 3 节点：完整内置官方 `music-caption-rewriter`、18 个流派索引和 1000 个模板，并严格按 router → 最多 2 个索引 → 最多 3 个模板逐级披露，绝不会把全库塞进一次 LLM 请求。
 - Music 3 的官方 Caption 与歌词完全分离；生成/润色歌词属于清楚标注的 T8 非官方扩展，严格保留模式不会改动用户歌词。
 - T8 案例支持独立浏览器：按分类筛选、搜索、收藏、最近使用和单 GIF 懒加载预览；原有下拉值与工作流 selector 保持兼容。
-- 三个节点提供 ComfyUI 原生进度和仅驻留内存的脱敏执行诊断；诊断不保存 API Key、URL、提示词、歌词、模板正文、媒体或模型推理。
+- 三个节点提供 ComfyUI 原生进度、仅驻留内存的脱敏执行诊断，以及“恢复上次云端结果（不重新生成）”按钮；恢复只读取当前进程内的完整结果，不会重新提交付费请求。
 - 三个节点新增“渠道能力预检”和“查看/复制脱敏诊断”入口；OpenAI 兼容未知渠道不会被标记为已验证视觉模型。
 - 可选 `T8 LLM Provider Config` 辅助节点可统一渠道、模型、Base URL、本地 Qwen 设置、`temperature` 策略和白名单参数；断开后立即恢复三个原节点自己的值。
 - 可选 `T8 Performance Director Config` 为人物/角色/情绪/对白请求增加可观察的表演结构，支持 `AUTO / 强化 / 关闭`；不新增 LLM 请求，不属于 MiniMax 官方 Skill。
@@ -70,7 +70,7 @@
 
 ## 可选的 P0–P2 辅助节点
 
-`T8 LLM Provider Config`、`T8 Performance Director Config`、`T8 Prompt Inspector`、`T8 Prompt Text` 和 `T8 Show Text` 是仓库自带的辅助节点，不替代三个核心 enhancer，也不改变它们的既有输出。`T8 Prompt Text` 可替代第三方多行文本输入节点，`T8 Show Text` 可在节点内只读显示并原样透传 `STRING`。H3/Seedance 只追加无 widget 的可选 `character_performance_bible`、`performance_director_config` 与 `provider_config` socket，Music 3 只追加 `provider_config`；旧工作流的 31/35/38 个序列化 widget、API Key `STRING` 接线、默认渠道和输出顺序保持不变。
+`T8 LLM Provider Config`、`T8 Performance Director Config`、`T8 Prompt Inspector`、`T8 Prompt Text` 和 `T8 Show Text` 是仓库自带的辅助节点，不替代三个核心 enhancer，也不改变它们的既有输出。`T8 Prompt Text` 可替代第三方多行文本输入节点，`T8 Show Text` 可在节点内只读显示并原样透传 `STRING`。H3/Seedance 只追加可选 `character_performance_bible`、`performance_director_config` 与 `provider_config` socket，Music 3 只追加 `provider_config`；恢复功能使用隐藏运行时字段和节点属性，不加入原有 `widgets_values` 数组。旧工作流的 31/35/38 个序列化 widget、API Key `STRING` 接线、默认渠道和输出顺序保持不变。
 
 ### “共享 LLM 渠道配置”怎么连接
 
@@ -762,7 +762,7 @@ GGUF 与 mmproj 统一放入 ComfyUI 的 `models/LLM/` 或任意子目录；历�
 - 三个节点共享互斥运行锁，避免同时抢占显存；独立 `llama-server` 等待与请求期间支持 ComfyUI 取消。`llama-cpp-python` 是兼容回退路径，其底层同步推理的中途取消能力取决于已安装绑定版本。
 - 默认关闭思考以降低延迟；可在高级选项开启思考、选择推理强度、上下文、最大输出、视频采样率、显存释放及执行后卸载/驻留/10 分钟 TTL。
 - 运行时只监听 `127.0.0.1` 随机端口，使用随机临时令牌并关闭 Web UI；成功、异常、取消和 ComfyUI 退出都会执行相应清理。
-- 本地模型会在完整官方 Skill 与案例之后收到最终语言锁，确保“输出语言”对 H3、Seedance 2.0 和 Music 3 Structured Caption 的说明正文生效。若返回内容明显整体跑到另一种语言，节点只在同一次本地模型驻留期间追加一次低温语言纠正；已经符合语言要求时不增加调用。协议字段、时间码、参考标签以及用户原始对白、歌词、品牌/UI 文案和画面文字保持原样。H3 的“官方 Skill 严格（全英文协议）”仍按设计优先于中文选项。
+- 本地与云端模型都会在完整官方 Skill 与案例之后收到最终语言锁，确保“输出语言”对 H3、Seedance 2.0 和 Music 3 Structured Caption 的说明正文生效。只有在完整响应已经收到、且本地检测到正文明显整体跑到另一种语言时，节点才追加一次低温“只纠正语言、不改内容”请求；已符合语言要求时不增加调用，网络状态未知时也绝不会借语言纠正名义重投。协议字段、时间码、参考标签以及用户原始对白、歌词、品牌/UI 文案和画面文字保持原样。H3 的“官方 Skill 严格（全英文协议）”仍按设计优先于中文选项。
 - 本地输出继续遵守既有 content-first 规则：H3 仅在完整命中字段时重排，Seedance 非空放行，Music 3 保留歌词保护和官方 Caption 阶段合同。
 
 ## API Key 安全
@@ -826,7 +826,9 @@ Music 3 只在三个官方标题都被唯一命中但顺序错误时进行本地
 - 响应缺少正文或正文全空白。
 - 本地渠道缺少/损坏 GGUF、mmproj 或 llama.cpp 运行时，视觉/上下文预算越界，或本地推理进程异常退出。
 
-平价小屋的 `https://api.seedance.nz/v1/chat/completions` 遇到 SSL/建连故障，或 HTTP 500/502/503/504 与 Cloudflare 520–526/530 网关故障时会快速重试：共 3 次尝试，按“环境代理 → 显式直连 → 环境代理”切换网络路径，间隔 0.5 秒和 1 秒；任意一次取得成功响应都会继续正常输出。401、余额不足、429、读取超时和用户自定义 OpenAI 兼容接口不会自动重试。读取超时时服务端可能已经完成生成，节点会保留错误而不盲目重复付费。Seedance 素材上传同样会在安全的连接/网关故障下切换路径；上传遇到 429 时仍按服务端提示等待后重试。
+平价小屋的 `https://api.seedance.nz/v1/chat/completions` 首次使用显式直连，避开失效的系统代理；只有确认发生在建连前的 SSL/ConnectTimeout，或 HTTP 500/502/503/504 与 Cloudflare 520–526/530 网关状态才进入有界重试，路径按“显式直连 → 环境代理 → 显式直连”切换，间隔 0.5 秒和 1 秒。401、余额不足、429、ProxyError、读取超时、流式响应中断和用户自定义 OpenAI 兼容接口不会盲目重投。Seedance Chat 使用流式响应并在内存中持续写入检查点；SSE 始终从原始字节按 UTF-8 解码，不信任网关缺失或错误的字符集声明。收到完整结束标记后即使代理在关闭连接时断开，也会直接返回已经完整接收的结果。2026-09-01 真实验收捕获到 `text/event-stream` 被客户端默认识别为 `ISO-8859-1` 的现场响应；修复后单次请求得到 228 个中文字符、0 个乱码替换字符，且恢复读取没有新增 API 请求。素材上传同样直连优先并在安全故障下切换路径；上传遇到 429 时仍按服务端提示等待后重试。
+
+三个核心节点底部都有“恢复上次云端结果（不重新生成）”按钮。它只读取当前 ComfyUI 进程最近一小时内、同一节点已经完整完成的内存结果，不调用任何 LLM；复制节点时会自动生成独立恢复槽，重启 ComfyUI 后缓存清空。中途断流得到的残缺文本不会冒充最终提示词。如果上游已经生成、但零个响应字节到达本机，按钮会明确提示无法安全取回：2026-09-01 对当前接口的真实探测确认，相同 `Idempotency-Key` 仍会产生不同 completion 并分别计费，且没有可用的按 completion ID 查询结果端点，因此节点绝不会用“重试获取”偷偷再发一次付费生成。
 
 Music 3 的 `official_reference_selection` 是“官方完整”模式必经阶段：必须成功选中至少 1 个官方模板才能继续编译 Caption。在 `api.seedance.nz` 遇到临时网关故障时最多尝试 6 次，按 0.5、1、2、4、8 秒有界退避；不会静默降级为无模板生成。
 
@@ -838,7 +840,7 @@ Music 3 的 `official_reference_selection` 是“官方完整”模式必经阶�
 .\python\python.exe -m unittest discover -s ComfyUI\custom_nodes\comfyui-minimax-h3-prompt-enhancer-T8\tests -v
 ```
 
-单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏和云端 provider 重试合同；`tests/test_local_qwen.py` 核验第四渠道免 Key、模型路径安全、seed 映射、图片 Base64、真实时间戳视频抽样、按首次出现顺序描述视频阶段、无音轨声明、三节点接线以及 Music 不加载视觉能力。`tests/test_platform_11.py` 独立验证共享传输重试、诊断字段白名单与 URL/Key/错误正文脱敏，以及三节点旧工作流迁移矩阵。
+单元测试使用 mock API、本地媒体夹具和官方 Skill 静态资源，不联网、不上传素材、不产生费用。`tests/test_music3.py` 还会核验全部 18 个索引、1000 个模板、固定内容树哈希、逐级披露上限、歌词隔离、局部润色边界、安全 control tags、阶段缓存、诊断脱敏、云端 provider 重试与 Caption 语言纠正合同；`tests/test_local_qwen.py` 核验第四渠道免 Key、模型路径安全、seed 映射、图片 Base64、真实时间戳视频抽样、按首次出现顺序描述视频阶段、无音轨声明、三节点接线以及 Music 不加载视觉能力。`tests/test_platform_11.py` 独立验证共享传输重试、SSE 原始 UTF-8 解码、诊断字段白名单与 URL/Key/错误正文脱敏，以及三节点旧工作流迁移矩阵。
 
 维护者发布前还应运行确定性仓库门禁；它会检查禁入文件、疑似密钥、全部已跟踪 JSON、官方 Skill 快照、Python/JavaScript 语法、`.comfyignore` 实际发布面、Registry YARA 触发模式和 90 MiB GIF 总预算。该上限专门为 Comfy Registry 的 100 MB ZIP 扫描保留余量，避免 Action 发布成功但版本随后被标记为 `Flagged`：
 

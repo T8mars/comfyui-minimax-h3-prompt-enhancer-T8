@@ -4,6 +4,8 @@ import sys
 import unittest
 from pathlib import Path
 
+import requests
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,6 +31,40 @@ class Response:
         return self._body
 
 
+class StreamResponse(Response):
+    def __init__(self, lines):
+        super().__init__(200, {})
+        self.headers = {"Content-Type": "text/event-stream; charset=utf-8"}
+        self.lines = list(lines)
+        self.closed = False
+
+    def iter_lines(self, decode_unicode=True):
+        del decode_unicode
+        for item in self.lines:
+            if isinstance(item, BaseException):
+                raise item
+            yield item
+
+    def close(self):
+        self.closed = True
+
+
+class WrongCharsetStreamResponse(StreamResponse):
+    def __init__(self, lines):
+        super().__init__(lines)
+        self.headers = {"Content-Type": "text/event-stream; charset=iso-8859-1"}
+        self.decode_unicode_flags = []
+
+    def iter_lines(self, decode_unicode=True):
+        self.decode_unicode_flags.append(decode_unicode)
+        for item in self.lines:
+            raw = item.encode("utf-8") if isinstance(item, str) else item
+            if decode_unicode and isinstance(raw, bytes):
+                yield raw.decode("iso-8859-1")
+            else:
+                yield raw
+
+
 class Session:
     def __init__(self, responses):
         self.responses = iter(responses)
@@ -40,6 +76,79 @@ class Session:
 
 
 class Platform11Tests(unittest.TestCase):
+    @staticmethod
+    def stream_request(response, checkpoints=None):
+        session = Session([response])
+        result = transport.request_chat_completion(
+            session=session,
+            url="https://provider.invalid/v1/chat/completions",
+            api_key="placeholder-not-a-live-secret",
+            payload={"messages": [], "stream": True},
+            timeout=(1, 2),
+            retry_delays=(0.25, 0.5),
+            retryable_status_codes=frozenset(),
+            route_kwargs=lambda _attempt, _has_retry: {},
+            is_retryable_network_error=lambda _error: True,
+            sleep=lambda _delay: None,
+            network_error=lambda _error, attempt, delays: RuntimeError(
+                f"network attempt={attempt} remaining_policy={len(delays)}"
+            ),
+            http_error=lambda *_args: None,
+            invalid_json_error=lambda: RuntimeError("json"),
+            missing_content_error=lambda: RuntimeError("missing"),
+            empty_content_error=lambda: RuntimeError("empty"),
+            on_checkpoint=(
+                (lambda text, complete, response_id: checkpoints.append((text, complete, response_id)))
+                if checkpoints is not None
+                else None
+            ),
+        )
+        return session, result
+
+    def test_stream_transport_returns_complete_checkpoint_and_response_id(self):
+        checkpoints = []
+        response = StreamResponse([
+            'data: {"id":"chatcmpl-test","choices":[{"delta":{"content":"hello "}}]}',
+            'data: {"id":"chatcmpl-test","choices":[{"delta":{"content":"world"},"finish_reason":"stop"}]}',
+            "data: [DONE]",
+        ])
+        session, result = self.stream_request(response, checkpoints)
+        self.assertEqual(result.text, "hello world")
+        self.assertEqual(result.response_id, "chatcmpl-test")
+        self.assertEqual(len(session.calls), 1)
+        self.assertTrue(response.closed)
+        self.assertTrue(checkpoints[-1][1])
+
+    def test_stream_transport_decodes_raw_sse_bytes_as_utf8_despite_bad_charset(self):
+        expected = "镜头稳定跟随舞者，雨夜街道的倒影自然变化。"
+        event = json.dumps(
+            {"id": "chatcmpl-utf8", "choices": [{"delta": {"content": expected}, "finish_reason": "stop"}]},
+            ensure_ascii=False,
+        )
+        response = WrongCharsetStreamResponse([f"data: {event}", "data: [DONE]"])
+        _session, result = self.stream_request(response)
+        self.assertEqual(result.text, expected)
+        self.assertEqual(response.decode_unicode_flags, [False])
+
+    def test_stream_disconnect_after_finish_marker_returns_without_resubmit(self):
+        response = StreamResponse([
+            'data: {"id":"chatcmpl-finished","choices":[{"delta":{"content":"complete"},"finish_reason":"stop"}]}',
+            requests.exceptions.ProxyError("proxy dropped during final close"),
+        ])
+        session, result = self.stream_request(response)
+        self.assertEqual(result.text, "complete")
+        self.assertEqual(len(session.calls), 1)
+
+    def test_stream_disconnect_before_finish_never_resubmits_paid_request(self):
+        checkpoints = []
+        response = StreamResponse([
+            'data: {"id":"chatcmpl-partial","choices":[{"delta":{"content":"partial"}}]}',
+            requests.exceptions.ProxyError("proxy dropped mid-stream"),
+        ])
+        with self.assertRaisesRegex(RuntimeError, "remaining_policy=0"):
+            self.stream_request(response, checkpoints)
+        self.assertEqual(len(checkpoints), 1)
+        self.assertEqual(checkpoints[0][0], "partial")
     def test_shared_transport_retries_and_preserves_content_parts(self):
         session = Session([
             Response(503, {}),
@@ -161,6 +270,24 @@ class Platform11Tests(unittest.TestCase):
             block = source.split("const SERIALIZED_WIDGET_NAMES = [", 1)[1].split("];", 1)[0]
             self.assertEqual(block.count('"') // 2, count)
             self.assertIn(legacy, matrix)
+
+    def test_recovery_button_is_present_on_three_core_nodes_without_resubmitting_http(self):
+        helper = (ROOT / "web/js/completion_recovery_ui.mjs").read_text(encoding="utf-8")
+        core = (ROOT / "web/js/completion_recovery_core.mjs").read_text(encoding="utf-8")
+        self.assertIn("恢复上次云端结果（不重新生成）", helper)
+        self.assertIn("restoreCompletionResult", helper)
+        self.assertIn("t8_completion_recovery_slot", core)
+        self.assertIn("await queuePrompt(0, 1, [String(node.id)])", core)
+        self.assertNotIn("/v1/chat/completions", helper + core)
+        self.assertNotIn('method: "POST"', helper + core)
+        for relative in (
+            "web/js/minimax_h3_prompt_enhancer.js",
+            "web/js/seedance20_prompt_enhancer.js",
+            "web/js/music3_prompt_enhancer.js",
+        ):
+            source = (ROOT / relative).read_text(encoding="utf-8")
+            self.assertIn('import { addCompletionRecoveryButton }', source, relative)
+            self.assertIn("addCompletionRecoveryButton(this, NODE_ID", source, relative)
 
     def test_template_browser_is_lazy_persistent_and_responsive(self):
         source = (ROOT / "web/js/template_browser.js").read_text(encoding="utf-8")

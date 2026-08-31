@@ -79,7 +79,8 @@ def needs_local_language_repair(text: str, target_language: Any) -> bool:
     H3 field names, Music 3 headings, labels, timestamps, and protected source
     text legitimately use another language, so this deliberately ignores mixed
     outputs and only catches strongly one-sided results such as an all-English
-    response after the user selected Chinese.
+    response after the user selected Chinese. The check is provider-independent:
+    local GGUF and cloud models can both overweight long embedded Skills.
     """
 
     family = _language_family(target_language)
@@ -150,9 +151,10 @@ def apply_local_language_lock(
 ) -> list[dict[str, Any]]:
     """Append the selected language as the final instruction in both roles.
 
-    Local GGUF models can overweight long embedded English Skills/examples.
-    Keeping this instruction last in both the system and user text makes the
-    serialized UI value unambiguous without removing any official source.
+    Models can overweight long embedded English Skills/examples. Keeping this
+    instruction last in both the system and user text makes the serialized UI
+    value unambiguous without removing any official source. The historical
+    function name is retained for compatibility with existing imports.
     """
 
     lock = local_language_lock(target_language)

@@ -25,6 +25,7 @@ credentials = sys.modules[f"{SPEC.name}.credential_store"]
 provider_config = sys.modules[f"{SPEC.name}.provider_config"]
 inspector = sys.modules[f"{SPEC.name}.prompt_inspector"]
 credential_routes = sys.modules[f"{SPEC.name}.credential_routes"]
+completion_recovery_routes = sys.modules[f"{SPEC.name}.completion_recovery_routes"]
 core_nodes = sys.modules[f"{SPEC.name}.nodes"]
 seedance20 = sys.modules[f"{SPEC.name}.seedance20"]
 
@@ -35,6 +36,26 @@ class FakeConnectionResponse:
 
 
 class P0P1FeatureTests(unittest.TestCase):
+    def test_completion_recovery_status_route_accepts_only_same_origin_or_local_requests(self):
+        class Request:
+            def __init__(self, *, headers=None, host="127.0.0.1:8188", remote="127.0.0.1"):
+                self.headers = headers or {}
+                self.host = host
+                self.remote = remote
+
+        self.assertTrue(completion_recovery_routes._same_origin_request(Request(
+            headers={"Sec-Fetch-Site": "same-origin", "Origin": "http://127.0.0.1:8188"},
+        )))
+        self.assertFalse(completion_recovery_routes._same_origin_request(Request(
+            headers={"Sec-Fetch-Site": "cross-site", "Origin": "https://attacker.invalid"},
+            remote="203.0.113.5",
+        )))
+        self.assertTrue(completion_recovery_routes._same_origin_request(Request()))
+        self.assertFalse(completion_recovery_routes._same_origin_request(Request(
+            host="comfy.example",
+            remote="203.0.113.5",
+        )))
+
     def test_utility_example_widget_order_matches_comfy_runtime_order(self):
         workflow = json.loads((ROOT / "example_workflows" / "prompt_inspector_local_qwen_example.json").read_text(encoding="utf-8"))
         by_type = {node["type"]: node for node in workflow["nodes"]}
@@ -112,6 +133,10 @@ class P0P1FeatureTests(unittest.TestCase):
             self.assertEqual(schema.inputs[-2].id, "provider_config")
             self.assertEqual(schema.inputs[-1].id, "character_performance_bible")
         self.assertEqual(schemas[2].inputs[-1].id, "provider_config")
+        for schema in schemas[:3]:
+            input_ids = [item.id for item in schema.inputs]
+            self.assertIn("recovery_slot", input_ids)
+            self.assertIn("recovery_action", input_ids)
 
     def test_original_serialized_widget_contracts_remain_31_35_38(self):
         expected = {

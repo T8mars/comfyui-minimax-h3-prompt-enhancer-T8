@@ -5,6 +5,38 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-09-01
+
+### Added
+
+- Add a memory-only `Restore previous cloud result` action to the MiniMax H3,
+  Seedance 2.0, and MiniMax Music 3 core nodes. A restore reads the last fully
+  completed response for that node slot without submitting another paid request.
+- Add a same-origin, read-only recovery status endpoint plus bounded in-memory
+  checkpoints with one-hour expiry, fixed record/character limits, and no API
+  key, source prompt, image, or video data in status responses.
+
+### Changed
+
+- Route Seedance-compatible cloud requests to the direct API endpoint first,
+  stream responses into recovery checkpoints, and attach a unique idempotency
+  key and client request ID to each logical call.
+- Apply the requested output-language contract consistently to cloud and local
+  H3, Seedance, and Music generation. A fully received response that is clearly
+  in the wrong language may receive one low-temperature language-only repair;
+  ambiguous network failures are never repaired or blindly resubmitted.
+
+### Fixed
+
+- Decode streamed SSE bytes explicitly as UTF-8 so Chinese output is not
+  corrupted when an upstream `text/event-stream` response is mislabeled as
+  ISO-8859-1.
+- Stop retrying proxy errors, read timeouts, and mid-stream disconnects when the
+  upstream may already be generating. Partial or zero-byte checkpoints are
+  never exposed as successful recovered results.
+- Preserve the published 31/35/38-widget contracts and existing workflows while
+  assigning copied nodes independent recovery slots.
+
 ## [1.11.1] - 2026-08-31
 
 ### Changed

@@ -202,11 +202,29 @@ class PromptEnhancerTests(unittest.TestCase):
             "duration_seconds": 5,
             "rewrite_mode": "balanced",
             "description_word_target": 0,
+            # Most transport/contract fixtures below intentionally return an
+            # English H3 artifact. Language-specific tests override this.
+            "output_language": "English",
             "session": session,
         }
         defaults.update(kwargs)
         with patch.dict(os.environ, {"SEEDANCE_API_KEY": "secret-key"}):
             return nodes.enhance_prompt(**defaults)
+
+    def test_manual_recovery_returns_cached_output_without_provider_validation(self):
+        slot = "t8-h3-restore-test-0001"
+        nodes.begin_recovery_record("MiniMaxH3PromptEnhancerT8", slot, "Seedance")
+        nodes.complete_recovery_record("MiniMaxH3PromptEnhancerT8", slot, ("cached H3 result",))
+        result = nodes.MiniMaxH3PromptEnhancer.execute(
+            prompt="",
+            task_type="T2VA",
+            duration_seconds=5,
+            rewrite_mode="balanced",
+            description_word_target=0,
+            recovery_slot=slot,
+            recovery_action=nodes.RECOVERY_ACTION_RESTORE,
+        )
+        self.assertEqual(result[0], "cached H3 result")
 
     def test_schema_has_one_model_free_string_output_and_native_autogrow_media(self):
         schema = nodes.MiniMaxH3PromptEnhancer.define_schema()
@@ -389,7 +407,7 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_output_language_rules_and_length_units_reach_the_model(self):
         chinese_session = FakeSession(basic_output())
-        self.run_enhancer(chinese_session, description_word_target=200)
+        self.run_enhancer(chinese_session, output_language="中文", description_word_target=200)
         chinese_messages = chinese_session.chat_requests[0]["json"]["messages"]
         self.assertIn("Output language: Simplified Chinese", chinese_messages[0]["content"])
         self.assertIn("Selected output language: 中文", chinese_messages[1]["content"])
@@ -406,6 +424,46 @@ class PromptEnhancerTests(unittest.TestCase):
         legacy_messages = legacy_session.chat_requests[0]["json"]["messages"]
         self.assertIn("Output language: Simplified Chinese", legacy_messages[0]["content"])
         self.assertIn("Prompt construction mode: 官方增强", legacy_messages[1]["content"])
+
+    def test_cloud_chinese_language_miss_is_corrected_once_after_complete_response(self):
+        corrected = (
+            "integrated_multimodal_description: [Shot 1] 中景跟随骑行者穿过安静街道，"
+            "柔和日光落在车轮与路面上，人物动作连续自然，镜头稳定推进并在路口平缓收束。\n\n"
+            "overall_soundscape: 轻微车流声、自行车链条声与远处鸟鸣保持自然层次。\n\n"
+            "non_diegetic_music: 无额外配乐。"
+        )
+        session = SequencedChatSession(
+            [
+                FakeResponse(200, {"choices": [{"message": {"content": basic_output()}}]}),
+                FakeResponse(200, {"choices": [{"message": {"content": corrected}}]}),
+            ]
+        )
+        result = self.run_enhancer(
+            session,
+            prompt="骑行者穿过安静街道。",
+            output_language="中文",
+        )
+        self.assertEqual(result, corrected)
+        self.assertEqual(len(session.chat_requests), 2)
+        first, repair = session.chat_requests
+        self.assertIn("FINAL LOCAL OUTPUT LANGUAGE LOCK", first["json"]["messages"][0]["content"])
+        self.assertEqual(first["json"]["temperature"], 0.7)
+        self.assertEqual(repair["json"]["temperature"], 0.1)
+        self.assertIn("严格的语言纠正编辑器", repair["json"]["messages"][0]["content"])
+        self.assertNotEqual(first["headers"]["Idempotency-Key"], repair["headers"]["Idempotency-Key"])
+
+    def test_cloud_chinese_output_needs_no_language_repair_request(self):
+        corrected = (
+            "integrated_multimodal_description: [Shot 1] 女孩在雨夜缓慢转身，镜头贴近人物并保持稳定跟随。\n\n"
+            "overall_soundscape: 雨声、脚步声与衣料摩擦声自然衔接。\n\n"
+            "non_diegetic_music: 克制的弦乐在结尾淡出。"
+        )
+        session = FakeSession(corrected)
+        self.assertEqual(
+            self.run_enhancer(session, prompt="女孩在雨夜转身。", output_language="中文"),
+            corrected,
+        )
+        self.assertEqual(len(session.chat_requests), 1)
 
     def test_official_skill_strict_profile_forces_english_contract_without_breaking_compatibility(self):
         compatibility_session = FakeSession(basic_output())
@@ -738,7 +796,12 @@ class PromptEnhancerTests(unittest.TestCase):
         for selection in nodes.CASE_TEMPLATE_OPTIONS[1:]:
             with self.subTest(selection=selection):
                 session = AnchorAwareH3Session()
-                output = self.run_enhancer(session, prompt="美丽的女人", case_template=selection)
+                output = self.run_enhancer(
+                    session,
+                    prompt="美丽的女人",
+                    output_language="中文",
+                    case_template=selection,
+                )
                 system = session.chat_requests[0]["json"]["messages"][0]["content"]
                 block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
                 anchors = re.findall(r"^\d+\. (.+)$", block, re.MULTILINE)
@@ -1159,7 +1222,7 @@ class PromptEnhancerTests(unittest.TestCase):
                 request = session.chat_requests[0]
                 self.assertEqual(request["json"]["model"], "bytedance/doubao-seed-evolving")
                 self.assertEqual(request["json"]["temperature"], temperature)
-                self.assertFalse(request["json"]["stream"])
+                self.assertTrue(request["json"]["stream"])
 
     def test_seed_reaches_the_prompt_as_a_variation_marker_not_an_undocumented_api_field(self):
         first_session = FakeSession(basic_output())
@@ -1218,6 +1281,7 @@ class PromptEnhancerTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             result = nodes.enhance_prompt(
                 prompt="A cyclist crosses the street.",
+                output_language="English",
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
                 openai_base_url="https://gateway.example/v1",
@@ -1236,6 +1300,7 @@ class PromptEnhancerTests(unittest.TestCase):
             result = nodes.enhance_prompt(
                 prompt="Transfer the complete temporal reference to the pictured subject.",
                 task_type="Ref2VA",
+                output_language="English",
                 reference_images={"reference_image_0": torch.zeros((1, 2, 2, 3))},
                 reference_videos={"reference_video_0": FakeVideo(data=video_bytes)},
                 api_key="workshop-key",
@@ -1260,6 +1325,7 @@ class PromptEnhancerTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             nodes.enhance_prompt(
                 prompt="A cyclist crosses the street.",
+                output_language="English",
                 api_key="workshop-key",
                 api_mode=nodes.AI_WORKSHOP_API_MODE,
                 ai_workshop_model=nodes.CUSTOM_MODEL_OPTION,
@@ -1283,6 +1349,7 @@ class PromptEnhancerTests(unittest.TestCase):
             nodes.enhance_prompt(
                 prompt="A cyclist crosses the street.",
                 task_type="I2VA（首帧图生音视频）",
+                output_language="English",
                 first_frame=torch.zeros((1, 1, 1, 3)),
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
@@ -1316,6 +1383,7 @@ class PromptEnhancerTests(unittest.TestCase):
             nodes.enhance_prompt(
                 prompt="Transfer the referenced action to the pictured subject.",
                 task_type="Ref2VA（参考图/视频生音视频）",
+                output_language="English",
                 reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
                 reference_videos={
                     "reference_video_0": FakeVideo(),
@@ -1702,7 +1770,7 @@ class PromptEnhancerTests(unittest.TestCase):
         success = FakeResponse(200, {"choices": [{"message": {"content": expected}}]})
         session = SequencedChatSession([
             requests.exceptions.SSLError("regional TLS failure"),
-            requests.exceptions.ConnectionError("temporary route reset"),
+            requests.exceptions.ConnectTimeout("environment route connect timeout"),
             success,
         ])
         environment_proxy = {"https": "http://proxy.example:8080"}
@@ -1712,7 +1780,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
         self.assertEqual(
             [request["proxies"] for request in session.chat_requests],
-            [environment_proxy, nodes.DIRECT_ROUTE_PROXIES, environment_proxy],
+            [nodes.DIRECT_ROUTE_PROXIES, environment_proxy, nodes.DIRECT_ROUTE_PROXIES],
         )
 
     def test_seedance_gateway_retry_returns_the_successful_generation(self):
@@ -1785,9 +1853,19 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_timeout_is_not_retried(self):
         session = FakeSession("", chat_exception=requests.exceptions.ReadTimeout("secret-key must not leak"))
-        with self.assertRaisesRegex(nodes.PromptEnhancerError, "response state is ambiguous"):
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "may already have completed"):
             self.run_enhancer(session)
         self.assertEqual(len(session.chat_requests), 1)
+
+    def test_proxy_error_is_ambiguous_and_never_blindly_retried(self):
+        session = SequencedChatSession([
+            requests.exceptions.ProxyError("proxy dropped after upstream acceptance"),
+            FakeResponse(200, {"choices": [{"message": {"content": basic_output()}}]}),
+        ])
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "may already have completed") as raised:
+            self.run_enhancer(session)
+        self.assertEqual(len(session.chat_requests), 1)
+        self.assertIn("recovery button", str(raised.exception))
 
     def test_free_upload_429_retries_once_without_duplicate_chat(self):
         class RateLimitedUploadSession(FakeSession):
@@ -1831,7 +1909,7 @@ class PromptEnhancerTests(unittest.TestCase):
             self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
         self.assertEqual(
             [request["proxies"] for request in session.upload_route_kwargs],
-            [environment_proxy, nodes.DIRECT_ROUTE_PROXIES, environment_proxy],
+            [nodes.DIRECT_ROUTE_PROXIES, environment_proxy, nodes.DIRECT_ROUTE_PROXIES],
         )
         self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
         self.assertEqual(len(session.chat_requests), 1)

@@ -8,6 +8,7 @@ from .local_qwen_routes import register_local_qwen_routes
 from .diagnostics_routes import register_diagnostics_routes
 from .provider_config import T8LLMProviderConfig
 from .credential_routes import register_credential_routes
+from .completion_recovery_routes import register_completion_recovery_routes
 from .prompt_inspector import T8PromptInspector
 from .performance_director import T8PerformanceDirectorConfig
 from .film_workflow import (
@@ -24,6 +25,7 @@ register_routes()
 register_local_qwen_routes()
 register_diagnostics_routes()
 register_credential_routes()
+register_completion_recovery_routes()
 
 
 class T8PromptEnhancerExtension(ComfyExtension):

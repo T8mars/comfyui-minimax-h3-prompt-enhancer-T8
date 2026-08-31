@@ -114,6 +114,18 @@ class SequenceSession:
 
 
 class Music3PromptEnhancerTests(unittest.TestCase):
+    def test_manual_recovery_returns_all_cached_outputs_without_provider_validation(self):
+        slot = "t8-music3-restore-test-0001"
+        outputs = ("cached lyrics", "cached caption", "cached payload", "cached report")
+        music3.begin_recovery_record("MiniMaxMusic3PromptEnhancerT8", slot, "Seedance")
+        music3.complete_recovery_record("MiniMaxMusic3PromptEnhancerT8", slot, outputs)
+        result = music3.MiniMaxMusic3PromptEnhancer.execute(
+            music_idea="",
+            recovery_slot=slot,
+            recovery_action=music3.RECOVERY_ACTION_RESTORE,
+        )
+        self.assertEqual(tuple(result), outputs)
+
     def setUp(self):
         music3.clear_music3_stage_cache()
 
@@ -289,7 +301,46 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(json.loads(payload_text)["instructions"], CAPTION)
         report = json.loads(report_text)
         self.assertIn("lyrics_language_repair_applied", report["warnings"])
-        self.assertEqual([item["stage"] for item in report["stages"]], ["lyrics_generation", "lyrics_language_repair", "official_caption_compilation"])
+        self.assertEqual(
+            [item["stage"] for item in report["stages"]],
+            ["lyrics_generation", "lyrics_language_repair", "official_caption_compilation"],
+        )
+
+    def test_cloud_chinese_caption_is_language_locked_and_repaired_once(self):
+        corrected_caption = """### Global Metadata
+温暖的华语流行抒情曲以中速律动展开，情绪从克制逐步走向明亮释放。
+
+### Vocal Details
+清澈温暖的女声主唱从贴近耳语的主歌发展到开放副歌，轻柔和声只在高潮处加入。
+
+### Arrangement
+主歌由钢琴和原声吉他建立空间，副歌加入稳定鼓组与宽阔弦乐，尾奏逐层撤去节奏并留下钢琴动机。"""
+
+        class ChineseCaptionSession(AdaptiveSession):
+            def post(self, url, **kwargs):
+                system = kwargs["json"]["messages"][0]["content"]
+                if "严格的语言纠正编辑器" in system:
+                    self.urls.append(url)
+                    self.requests.append(kwargs)
+                    return FakeResponse(
+                        200,
+                        {"choices": [{"message": {"content": corrected_caption}}]},
+                    )
+                return super().post(url, **kwargs)
+
+        session = ChineseCaptionSession()
+        _lyrics, caption, payload_text, report_text = self.run_enhancer(
+            session,
+            caption_language="中文",
+        )
+        self.assertEqual(caption, corrected_caption)
+        self.assertEqual(json.loads(payload_text)["instructions"], corrected_caption)
+        self.assertEqual(len(session.requests), 2)
+        self.assertIn("FINAL LOCAL OUTPUT LANGUAGE LOCK", session.requests[0]["json"]["messages"][0]["content"])
+        self.assertEqual(session.requests[1]["json"]["temperature"], 0.1)
+        report = json.loads(report_text)
+        self.assertEqual(report["request_count"], 2)
+        self.assertIn("caption_language_repair", [stage["stage"] for stage in report["stages"]])
 
     def test_instrumental_mode_outputs_official_tag_and_no_lyric_call(self):
         session = AdaptiveSession()
@@ -646,7 +697,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(len(session.requests), 2)
         self.assertEqual(
             [request["proxies"] for request in session.requests],
-            [environment_proxy, {"http": "", "https": "", "all": ""}],
+            [{"http": "", "https": "", "all": ""}, environment_proxy],
         )
 
     def test_seedance_cloudflare_530_fast_retry_returns_success(self):
@@ -691,7 +742,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         )
         self.assertEqual(
             [request["proxies"] for request in session.requests],
-            [environment_proxy, {"http": "", "https": "", "all": ""}] * 3,
+            [{"http": "", "https": "", "all": ""}, environment_proxy] * 3,
         )
 
     def test_official_reference_selection_reports_six_exhausted_attempts(self):

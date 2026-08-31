@@ -15,6 +15,13 @@ Compatibility invariants:
 - Node IDs, categories, socket names, and output order do not change in 1.1.
 - Existing case-template human names and stable IDs resolve to the same case.
 - Existing API-key `STRING` links remain authoritative over the hidden widget.
+- Completion recovery adds two hidden runtime inputs but keeps them out of the published 31/35/38
+  `widgets_values` arrays. A per-node recovery slot is stored in node properties, duplicate slots are
+  regenerated on copy, and missing properties receive a new local slot without shifting old values.
+- Provider-independent language locking and the optional one-shot correction do not add serialized
+  widgets or outputs. The correction is considered only after a complete response is available; an
+  ambiguous network failure never becomes a second paid request. Stream decoding is fixed to raw
+  UTF-8 bytes and therefore does not depend on a gateway's declared charset.
 - Missing new controls receive safe defaults; migrations never copy an obsolete
   upload endpoint into `openai_video_urls`.
 - A workflow saved by 1.1 is not promised to load in older 1.0.x code because

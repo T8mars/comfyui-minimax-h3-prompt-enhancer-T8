@@ -7,6 +7,7 @@ import secrets
 import sys
 import threading
 import time
+import uuid
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -19,6 +20,17 @@ try:
 except (ImportError, RuntimeError):  # Static tooling must not initialize ComfyUI GPU modules.
     ProgressBar = None
 from .execution_diagnostics import DiagnosticsRun
+from .completion_recovery import (
+    RECOVERY_ACTION_NORMAL,
+    RECOVERY_ACTION_RESTORE,
+    CompletionRecoveryError,
+    begin_recovery_record,
+    checkpoint_recovery_text,
+    complete_recovery_record,
+    mark_recovery_ambiguous,
+    mark_recovery_failed,
+    recover_outputs,
+)
 from .provider_capabilities import apply_chat_request_options
 from .provider_config import (
     PROVIDER_LOCAL,
@@ -85,6 +97,7 @@ from .nodes import (
     SEEDANCE_API_MODE,
     PromptEnhancerError,
     _is_retryable_seedance_network_error,
+    _is_ambiguous_seedance_network_error,
     _is_seedance_chat_endpoint,
     _provider_config,
     _resolve_llm_model,
@@ -423,6 +436,8 @@ class Music3RequestRunner:
         progress: ProgressBar | None = None,
         local_provider: LocalQwenProvider | None = None,
         provider_request_options: Any = None,
+        recovery_component: str = "",
+        recovery_slot: str = "",
     ):
         self.session = session
         self.api_key = api_key
@@ -435,6 +450,8 @@ class Music3RequestRunner:
         self.progress = progress
         self.local_provider = local_provider
         self.provider_request_options = provider_request_options
+        self.recovery_component = str(recovery_component or "")
+        self.recovery_slot = str(recovery_slot or "")
 
     def complete(self, messages: list[dict[str, Any]], temperature: float, stage: str) -> str:
         _throw_if_processing_interrupted()
@@ -480,6 +497,8 @@ class Music3RequestRunner:
                 self.model_id,
                 stage,
                 provider_request_options=self.provider_request_options,
+                recovery_component=self.recovery_component,
+                recovery_slot=self.recovery_slot,
             )
         _throw_if_processing_interrupted()
         if self.cache_enabled:
@@ -729,24 +748,50 @@ def _request_music_completion(
     model_id: str,
     stage: str,
     provider_request_options: Any = None,
+    recovery_component: str = "",
+    recovery_slot: str = "",
 ) -> str:
+    is_seedance = _is_seedance_chat_endpoint(chat_url)
     payload = apply_chat_request_options({
         "model": model_id,
         "messages": messages,
-        "stream": False,
+        "stream": is_seedance,
     }, chat_url=chat_url, temperature=temperature, options=provider_request_options)
     retry_delays: tuple[float, ...] = ()
-    if _is_seedance_chat_endpoint(chat_url):
+    if is_seedance:
         retry_delays = (
             OFFICIAL_REFERENCE_RETRY_DELAYS
             if stage == "official_reference_selection"
             else SEEDANCE_CHAT_RETRY_DELAYS
         )
+    request_id = f"t8-{uuid.uuid4()}"
+    if is_seedance and recovery_component and recovery_slot:
+        checkpoint_recovery_text(recovery_component, recovery_slot, "", complete=False)
+
+    def checkpoint(text: str, complete: bool, response_id: str) -> None:
+        checkpoint_recovery_text(
+            recovery_component,
+            recovery_slot,
+            text,
+            complete=complete,
+            response_id=response_id,
+        )
+
     def network_error(error: requests.RequestException, attempt: int, delays: tuple[float, ...]) -> Exception:
+        if (
+            is_seedance
+            and recovery_component
+            and recovery_slot
+            and _is_ambiguous_seedance_network_error(error)
+        ):
+            mark_recovery_ambiguous(recovery_component, recovery_slot, error)
         if _is_retryable_seedance_network_error(error) and delays:
             note = f"Fast retry was exhausted after {attempt} attempts."
-        elif isinstance(error, requests.exceptions.ReadTimeout):
-            note = "The paid response state is ambiguous, so it was not retried automatically."
+        elif is_seedance and _is_ambiguous_seedance_network_error(error):
+            note = (
+                "The upstream may already have completed. It was not retried to avoid duplicate billing. "
+                "Use the node's recovery button to read a complete local stream checkpoint when available."
+            )
         else:
             note = "The paid request was not retried automatically."
         return Music3PromptEnhancerError(
@@ -781,6 +826,12 @@ def _request_music_completion(
             f"{provider_name} Music 3 response is empty."
         ),
         strip_result=True,
+        extra_headers=(
+            {"Idempotency-Key": request_id, "X-Client-Request-Id": request_id}
+            if is_seedance
+            else None
+        ),
+        on_checkpoint=checkpoint if is_seedance and recovery_component and recovery_slot else None,
     )
     return result.text
 
@@ -1637,20 +1688,24 @@ def _compile_caption(
         "Music_Brief": brief.as_prompt_data(),
         "variation_seed": int(seed),
     }
+    # Keep the Music_Brief as valid standalone JSON for providers and
+    # diagnostics that parse the user message. The final language lock belongs
+    # at the end of the system instruction; the brief already carries the
+    # selected output language as structured data.
+    locked_system = apply_local_language_lock(
+        [{"role": "system", "content": _caption_system(selected)}],
+        brief.caption_language,
+    )[0]
     messages = [
-            {"role": "system", "content": _caption_system(selected)},
-            {"role": "user", "content": json.dumps(user_data, ensure_ascii=False)},
-        ]
-    if runner.local_provider is not None:
-        messages = apply_local_language_lock(messages, brief.caption_language)
+        locked_system,
+        {"role": "user", "content": json.dumps(user_data, ensure_ascii=False)},
+    ]
     response = runner.complete(
         messages,
         CAPTION_TEMPERATURES[brief.rewrite_mode],
         "official_caption_compilation",
     )
-    if runner.local_provider is not None and needs_local_language_repair(
-        response, brief.caption_language
-    ):
+    if needs_local_language_repair(response, brief.caption_language):
         response = runner.complete(
             local_language_repair_messages(response, brief.caption_language),
             0.1,
@@ -1813,6 +1868,8 @@ def enhance_music3_prompt(
     local_reasoning_effort: str = "medium",
     local_unload_policy: str = LOCAL_UNLOAD_AFTER_RUN,
     local_comfy_memory_policy: str = LOCAL_COMFY_MEMORY_POLICIES[0],
+    recovery_component: str = "",
+    recovery_slot: str = "",
     provider_request_options: Any = None,
 ) -> tuple[str, str, str, str]:
     music_idea = str(music_idea or "").strip()
@@ -1990,6 +2047,8 @@ def enhance_music3_prompt(
         progress=progress,
         local_provider=local_provider,
         provider_request_options=provider_request_options,
+        recovery_component=recovery_component,
+        recovery_slot=recovery_slot,
     )
     succeeded = False
     try:
@@ -2361,6 +2420,22 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                 ),
+                io.String.Input(
+                    "recovery_slot",
+                    display_name="恢复槽（内部）",
+                    optional=True,
+                    default="",
+                    socketless=True,
+                    advanced=True,
+                ),
+                io.String.Input(
+                    "recovery_action",
+                    display_name="恢复动作（内部）",
+                    optional=True,
+                    default=RECOVERY_ACTION_NORMAL,
+                    socketless=True,
+                    advanced=True,
+                ),
                 T8ProviderConfigIO.Input(
                     "provider_config",
                     display_name="共享 LLM 渠道配置（可选）",
@@ -2424,7 +2499,14 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
         provider_config=None,
+        recovery_slot="",
+        recovery_action=RECOVERY_ACTION_NORMAL,
     ) -> io.NodeOutput:
+        if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
+            try:
+                return io.NodeOutput(*recover_outputs("MiniMaxMusic3PromptEnhancerT8", recovery_slot, 4))
+            except CompletionRecoveryError as error:
+                raise Music3PromptEnhancerError(str(error)) from error
         try:
             merged = merge_provider_config(
                 {
@@ -2464,6 +2546,7 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         local_unload_policy = merged["local_unload_policy"]
         local_comfy_memory_policy = merged["local_comfy_memory_policy"]
         provider_request_options = merged["provider_request_options"]
+        begin_recovery_record("MiniMaxMusic3PromptEnhancerT8", recovery_slot, api_mode)
         diagnostic = DiagnosticsRun("MiniMaxMusic3PromptEnhancerT8", api_mode, 1, emit_progress=False)
         try:
             result = enhance_music3_prompt(
@@ -2506,11 +2589,15 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                 local_unload_policy=local_unload_policy,
                 local_comfy_memory_policy=local_comfy_memory_policy,
                 provider_request_options=provider_request_options,
+                recovery_component="MiniMaxMusic3PromptEnhancerT8",
+                recovery_slot=recovery_slot,
             )
         except Exception as error:
+            mark_recovery_failed("MiniMaxMusic3PromptEnhancerT8", recovery_slot, error)
             diagnostic.complete("failed", error)
             raise
         diagnostic.advance("music_pipeline_completed")
+        complete_recovery_record("MiniMaxMusic3PromptEnhancerT8", recovery_slot, result)
         diagnostic.complete("success")
         return io.NodeOutput(*result)
 

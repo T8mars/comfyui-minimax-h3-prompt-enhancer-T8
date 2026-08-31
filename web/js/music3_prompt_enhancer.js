@@ -6,6 +6,7 @@ import {
 } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
+import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
 import {
     bindOpenAIProviderPersistence,
     restoreOpenAIProviderState,
@@ -670,6 +671,13 @@ app.registerExtension({
             );
             diagnosticsWidget.serializeValue = () => undefined;
 
+            addCompletionRecoveryButton(this, NODE_ID, {
+                beforeQueue: () => {
+                    this.t8CommitOpenAIProviderState?.();
+                    this.music3CommitApiKey?.();
+                },
+            });
+
             let queuing = false;
             const runWidget = this.addWidget(
                 "button",
@@ -782,6 +790,7 @@ app.registerExtension({
                 this.music3UpdateConditional?.();
                 this.music3UpdateApiMode?.();
                 this.music3UpdateEstimate?.();
+                this.t8EnsureRecoverySlot?.();
                 resizeNode(this);
             });
         };

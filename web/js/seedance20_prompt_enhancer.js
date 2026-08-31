@@ -7,6 +7,7 @@ import {
 } from "./local_qwen_status.js";
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
+import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
 import {
     bindOpenAIProviderPersistence,
     namedWidgetValueMapByDiscriminator,
@@ -569,6 +570,13 @@ app.registerExtension({
             );
             diagnosticsWidget.serializeValue = () => undefined;
 
+            addCompletionRecoveryButton(this, NODE_ID, {
+                beforeQueue: () => {
+                    this.t8CommitOpenAIProviderState?.();
+                    this.s20CommitApiKey?.();
+                },
+            });
+
             let queuing = false;
             const runWidget = this.addWidget(
                 "button",
@@ -678,6 +686,7 @@ app.registerExtension({
                 this.t8RestoreCaseTemplate?.(this.t8PendingCaseTemplateValue);
                 if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.s20NormalizeOptions?.();
+                this.t8EnsureRecoverySlot?.();
             });
         };
 
