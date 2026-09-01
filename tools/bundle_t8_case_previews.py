@@ -26,6 +26,27 @@ class PreviewBundleError(RuntimeError):
     pass
 
 
+def preview_budget_status(total_bytes: int, *, external_release: bool = False) -> str:
+    """Classify a bundle without confusing node-package and asset-release limits.
+
+    The aggregate 90 MiB ceiling protects the Comfy Registry node ZIP.  Dynamic
+    preview releases are distributed as independently bounded shards, so their
+    aggregate size may exceed that ceiling while every GIF and shard remains
+    subject to its own safety limit.
+    """
+    if total_bytes > PREVIEW_HARD_LIMIT_BYTES:
+        if external_release:
+            return "external-release-only"
+        raise PreviewBundleError(
+            f"Bundled previews use {total_bytes} bytes, above hard limit {PREVIEW_HARD_LIMIT_BYTES}"
+        )
+    if total_bytes >= PREVIEW_CONFIRM_BYTES:
+        return "confirm"
+    if total_bytes >= PREVIEW_WARNING_BYTES:
+        return "warning"
+    return "ok"
+
+
 def _read_json(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -326,6 +347,15 @@ def main() -> int:
         type=Path,
         help="Reuse hash-verified encoded GIFs when their source SHA-256 has not changed.",
     )
+    parser.add_argument(
+        "--external-release",
+        action="store_true",
+        help=(
+            "Allow the aggregate bundle to exceed the Comfy Registry node-ZIP budget. "
+            "Use only when the output will be distributed through the separately "
+            "sharded dynamic-preview asset repository."
+        ),
+    )
     args = parser.parse_args()
     if not 1 <= args.fps <= 15 or not 160 <= args.max_width <= 640 or not 32 <= args.colors <= 128:
         raise PreviewBundleError("Encoding limits: fps 1-15, max-width 160-640, colors 32-128")
@@ -341,16 +371,7 @@ def main() -> int:
         existing_bundle=args.existing_bundle.resolve() if args.existing_bundle else None,
     )
     total_bytes = int(manifest["total_bytes"])
-    if total_bytes > PREVIEW_HARD_LIMIT_BYTES:
-        raise PreviewBundleError(
-            f"Bundled previews use {total_bytes} bytes, above hard limit {PREVIEW_HARD_LIMIT_BYTES}"
-        )
-    if total_bytes >= PREVIEW_CONFIRM_BYTES:
-        status = "confirm"
-    elif total_bytes >= PREVIEW_WARNING_BYTES:
-        status = "warning"
-    else:
-        status = "ok"
+    status = preview_budget_status(total_bytes, external_release=args.external_release)
     report = {
         "new_references": manifest["preview_count"],
         "unique_assets": manifest["asset_count"],
@@ -358,6 +379,7 @@ def main() -> int:
         "largest_bytes": manifest["largest_bytes"],
         "total_bytes": total_bytes,
         "budget_status": status,
+        "external_release": bool(args.external_release),
         "thresholds": {
             "warning": PREVIEW_WARNING_BYTES,
             "confirm": PREVIEW_CONFIRM_BYTES,

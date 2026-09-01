@@ -5,6 +5,23 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.12.1] - 2026-09-02
+
+### Changed
+
+- Import `batch-2026-09-01-02` as seven new stable selectors and 13 evidence
+  variants, while reconciling 20 earlier evidence variants present in the
+  authoritative cumulative snapshot. The non-official library now contains
+  435 source cases, 221 case selectors, 214 evidence variants, and two
+  standalone community Skills (223 selectors total), with no duplicate
+  dropdown entries.
+- Advance the human-only dynamic-preview channel to `2026.09.01.1`, covering
+  all 437 T8 previews in 16 hash-pinned shards while keeping the main
+  repository's 377-GIF offline baseline unchanged.
+- Let the maintainer preview bundler explicitly validate an oversized bundle
+  for the external sharded Release channel, while retaining the hard 90 MiB
+  rejection for any bundle intended for the node/Registry package.
+
 ## [1.12.0] - 2026-09-01
 
 ### Added

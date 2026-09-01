@@ -79,6 +79,15 @@ class PreviewBudgetToolTests(unittest.TestCase):
         self.assertLess(bundler.PREVIEW_CONFIRM_BYTES, bundler.PREVIEW_HARD_LIMIT_BYTES)
         self.assertEqual(bundler.NEW_PREVIEW_FILE_LIMIT_BYTES, 2 * 1024 * 1024)
 
+    def test_aggregate_node_budget_can_only_be_exceeded_for_external_release(self):
+        oversized = bundler.PREVIEW_HARD_LIMIT_BYTES + 1
+        with self.assertRaises(bundler.PreviewBundleError):
+            bundler.preview_budget_status(oversized)
+        self.assertEqual(
+            bundler.preview_budget_status(oversized, external_release=True),
+            "external-release-only",
+        )
+
     def test_unchanged_source_reuses_the_verified_existing_bundle_without_ffmpeg(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

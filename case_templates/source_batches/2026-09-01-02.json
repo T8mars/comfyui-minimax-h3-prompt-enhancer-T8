@@ -1,0 +1,84 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-09-01-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-sophiaparkerr-2094701248045789443-browser-2094701248045789443-video-1",
+      "template_id": "t8-case-rule-bounded-search-reaction-payoff-v1",
+      "label": "颜色规则搜寻｜任务宣布、同色取物与满载回报",
+      "summary": "先让同一成年人物和购物车建立单色搜寻规则，再用多次货架取物、购物车累积和人物反应证明规则被执行；结尾把满载结果与发起者重新同框。",
+      "case_sha256": "29477931842a3d4272d0bd158f85e5753bfa641b3273460e0dfb980c168fdca8",
+      "creative_dna_sha256": "d26007703091dc1361bf2d22d7b439934fbde53f3bc79d5732f03551dd898bc0",
+      "h3_adapter_sha256": "8adf09783fe6fcb84ddc8f57f4d53220008aba0f2fe592f7b9f6fffa0d2be6b0",
+      "seedance20_adapter_sha256": "13f48c798aa050471c8d8889ad222a34aedc48025a69e5e7c566c8264895fe58",
+      "mechanism_fingerprint": "11d9c445e089c31a124e2ee16b6a1f73377211607558c734161483101cf4623a"
+    },
+    {
+      "case_id": "x-awesome-visuals-2094698010055696386-browser-2094698010055696386-video-1",
+      "template_id": "t8-case-threatening-object-energy-conversion-product-v1",
+      "label": "威胁转商品｜危险逼近、反制命中与材质定型",
+      "summary": "先让一个明确威胁在同一空间逼近成年主角，再由主角取出单一反制工具命中；威胁的体量和轮廓经连续能量变化收缩为完整商品，最后由人物反应确认转化。",
+      "case_sha256": "2c9fde854892293a831704d309b57a7b0466c1d87c74af5e5797b98e174c4ca5",
+      "creative_dna_sha256": "b6fcdb5f0f0b859b529adbb08222f7fd2d7cab612b86272484b55bb29b41ad1a",
+      "h3_adapter_sha256": "f27ee2209970108bd832fbb70ac342587be96944736d57f570de1314ce59deb0",
+      "seedance20_adapter_sha256": "6aba98169ee7e91f40a4af9562cc6f4f9c57adcc156ca124058158f100bdf242",
+      "mechanism_fingerprint": "80a317640935087e66588a9c6bd35ca1f03091e5a99bf9981f3e540ba71d057b"
+    },
+    {
+      "case_id": "x-alin-reaper05-2094686295951859825-browser-2094686295951859825-video-1",
+      "template_id": "t8-case-group-route-individual-curiosity-halt-v1",
+      "label": "群体路线个体停步｜共同奔跑、微物吸引与静场余韵",
+      "summary": "先用统一方向的群体运动建立强路线，再让一个成员因微小发现脱离节奏并停步；镜头从群体尺度收紧到接触细节，最终以个体凝视和空场恢复代替继续奔跑。",
+      "case_sha256": "1223fd5350a0e8ac141e3485e0a946b2393fbc209ae9ff3bbb070678e8be6fc4",
+      "creative_dna_sha256": "4d6230e8e024f4801d2344f80e085f2b05dbaed1b98695635f6c650048e4d9af",
+      "h3_adapter_sha256": "1d7e25dc7d96e2b1dddf481a7e0f0b4b7f08f97f8431b8730b8f5ff9b9c6c71f",
+      "seedance20_adapter_sha256": "e51888f9e2cdd1eb792c4062068df4b9ef97200a5b15182e2af05b2987801b49",
+      "mechanism_fingerprint": "96e2aeadaa28008ffd6904a67941e1243aa1e959a2312e6aad00c745c87fa0b7"
+    },
+    {
+      "case_id": "x-arsalannazir07-2094652983309214152-browser-2094652983309214152-video-1",
+      "template_id": "t8-case-misdirected-violation-comic-retaliation-exit-v1",
+      "label": "违规者自摔反制｜偷取、逃跑失衡与目击者追加惩罚",
+      "summary": "固定高位观察视角先见证一个违规者从成年人身后偷走物件并逃跑，随后违规者自行失衡倒地；被偷者走近取回物件，再用重复但受控的动作完成喜剧惩罚并离场。",
+      "case_sha256": "e5986675f2c12fae06d1f9ed7eb437e0c8dc224c0ee572f575fa358301b01d04",
+      "creative_dna_sha256": "7a52a8bcd25ed344989c3ffe7feb08260f707c8591c5f832536cb6a38fa5e0cb",
+      "h3_adapter_sha256": "31554975bf2f67da63ebff5a618dd318a0349b9f9b5416fd9c99cb7a7dc21d3b",
+      "seedance20_adapter_sha256": "18396289bac3a4165a2face57ea773a3a34f260615a274e21571c9634a999764",
+      "mechanism_fingerprint": "4db2e51e65bc71f16df11c3cc49f71de430e2fbe3739e922b93e54ff230ba8e3"
+    },
+    {
+      "case_id": "x-anugrahthegoat-2094562955107221821-browser-2094562955107221821-video-1",
+      "template_id": "t8-case-interface-capability-proof-montage-v1",
+      "label": "界面能力证明蒙太奇｜输入、工具、生成结果与复盘回标",
+      "summary": "把同一软件的输入框、工具菜单、数据收集、媒体结果、插件连接和错误复盘压缩为多个可验证章节；每个章节都先显示操作再显示结果，终局回到统一产品主张而非随机拼贴。",
+      "case_sha256": "07c6e1e4a38ae0758c3511d2361abe0121fd6c35dca9e9171e3e280da080c183",
+      "creative_dna_sha256": "9f532c144312b11387414ac7850718b187abdcdaf0f32bb90e2ac7fe51d4230b",
+      "h3_adapter_sha256": "412de2f0be9cf61400864da3536aa991358af7f5d33ed182da50842e39aba123",
+      "seedance20_adapter_sha256": "e2165c51e64b400cb7d0ce531fa5872cc5c43e3b514d118359cd8c5a4a5599e5",
+      "mechanism_fingerprint": "a7f01698d46689d3a1a4c2ed148bcade1145b83469ce618bca694f9b6c87be5a"
+    },
+    {
+      "case_id": "x-bmx-ai13-2094556015165636649-browser-2094556015165636649-video-1",
+      "template_id": "t8-case-ritual-expectation-blackout-return-v1",
+      "label": "仪式黑场复位｜期待微笑、吹灭中断与冷光回归",
+      "summary": "用固定正面构图和一根蜡烛建立成年人物的温暖仪式期待，吹灭动作立刻让空间完全黑场；随后同一人物和同一桌面在冷亮环境回归，表情由期待转为失落，完成因果反差。",
+      "case_sha256": "22087a1a1e0ce34d7069dfaffbad4f47b084642f06a45c2126117cb8a122ad8a",
+      "creative_dna_sha256": "d77a14d64147ce45101690e7fad7c2ef9e1c6d041534668490bdea62c0d8edaa",
+      "h3_adapter_sha256": "f7418c98aac19af90c15489dc37f1c544b4423aa6c7b481258151a05d53693fd",
+      "seedance20_adapter_sha256": "8b1f89d5e36d283054ed1481960dbe5e0270d5a9d02462ad6b84a52212bde98f",
+      "mechanism_fingerprint": "c331887ad84ff2d66f1ca8adb72897dbab00704ab8597a804fd6ac713709beab"
+    },
+    {
+      "case_id": "x-allaaisling-2094479832419799506-browser-2094479832419799506-video-1",
+      "template_id": "t8-case-asymmetric-route-cost-overtake-proof-v1",
+      "label": "外线超车证明｜并排行驶、较长路线与车头领先",
+      "summary": "先在海上桥梁建立两辆车并排行驶，再交替使用航拍、车内和低位跟拍证明内外线关系；外线车辆以更长弧线维持速度，终局侧面同框显示车头从齐平变成领先。",
+      "case_sha256": "2c134a8c57e6b709aabbc433518b45ff5416312f536a5f94eeed5240839741fa",
+      "creative_dna_sha256": "3594f7ac4069260165a0c992ef77d67b05f39af7d504585f8148871169d35eb6",
+      "h3_adapter_sha256": "28044c36684d052fcce740ec6ece2536a951334e72996706e179c0e1594f1d36",
+      "seedance20_adapter_sha256": "6fd3d8e84f38be4a62fbf19bf221ad3a1ee43ee888565a2a0d4ca9faa87b055d",
+      "mechanism_fingerprint": "dd493738d3d4bafec1918c4fffb350419b0ec1391e8ba19259b69a455f7e1dec"
+    }
+  ]
+}
