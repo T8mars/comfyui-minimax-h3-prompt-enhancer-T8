@@ -115,13 +115,13 @@
     "display_name": "T8 角色表演圣经",
     "inputs": {
       "character_id": {"name": "角色标识 / 素材标签"},
-      "scene_objective": {"name": "当前场景目标"},
-      "obstacle_and_stakes": {"name": "阻力与失败代价"},
-      "tactics": {"name": "可切换策略"},
-      "physical_task_and_inertia": {"name": "手头动作与身体状态惯性"},
-      "voice_lock": {"name": "声音锁定"},
-      "mask_break_trigger": {"name": "面具破裂触发条件"},
-      "gaze_and_listening": {"name": "视线目标与倾听反应"}
+      "scene_objective": {"name": "场景目标 / Scene objective"},
+      "obstacle_and_stakes": {"name": "阻力与失败代价 / Obstacle & stakes"},
+      "tactics": {"name": "策略阶梯 / Tactics（每行一个）"},
+      "physical_task_and_inertia": {"name": "手头动作与身体惯性 / Physical task & inertia"},
+      "voice_lock": {"name": "声音锁定 / Voice lock（仅说话时）"},
+      "mask_break_trigger": {"name": "面具破裂触发 / Mask-break trigger"},
+      "gaze_and_listening": {"name": "视线与倾听反应 / Gaze & listening"}
     },
     "outputs": {
       "0": {"name": "角色表演圣经"},

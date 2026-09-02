@@ -5,6 +5,18 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.12.2] - 2026-09-02
+
+### Changed
+
+- Add concise Chinese/English guidance and practical acting examples to every
+  multiline field in the T8 Character Performance Bible node, while keeping
+  all field IDs, order, empty defaults, outputs, and saved-workflow behavior
+  unchanged.
+- Update the Chinese and English node labels and bundled help pages to explain
+  that the examples are non-persistent placeholders and never enter the output
+  performance contract or JSON.
+
 ## [1.12.1] - 2026-09-02
 
 ### Changed

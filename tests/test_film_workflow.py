@@ -206,6 +206,29 @@ class FilmWorkflowTests(unittest.TestCase):
                 "character_performance_bible",
             ])
 
+    def test_character_bible_schema_uses_bilingual_nonpersistent_examples(self):
+        schema = film.T8CharacterPerformanceBible.define_schema()
+        inputs = {item.id: item for item in schema.inputs}
+        guided_ids = [
+            "scene_objective",
+            "obstacle_and_stakes",
+            "tactics",
+            "physical_task_and_inertia",
+            "voice_lock",
+            "mask_break_trigger",
+            "gaze_and_listening",
+        ]
+        self.assertEqual([item.id for item in schema.inputs], ["character_id", *guided_ids])
+        for input_id in guided_ids:
+            item = inputs[input_id]
+            self.assertEqual(item.default, "", input_id)
+            self.assertIn("示例 / Example", item.placeholder, input_id)
+            self.assertRegex(item.placeholder, r"[\u4e00-\u9fff]", input_id)
+            self.assertRegex(item.placeholder, r"[A-Za-z]", input_id)
+            self.assertIn("/", item.display_name, input_id)
+        self.assertIn("让妹妹交钥匙", inputs["scene_objective"].placeholder)
+        self.assertIn("One tactic per line", inputs["tactics"].placeholder)
+
     def test_character_bible_reaches_h3_and_seedance_native_compilers(self):
         bible = performance_bible()
         h3_messages = h3._build_messages(

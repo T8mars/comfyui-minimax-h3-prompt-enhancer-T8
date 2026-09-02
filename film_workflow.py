@@ -522,13 +522,76 @@ class T8CharacterPerformanceBible(io.ComfyNode):
             description="把角色目标、阻力、策略、声音与身体惯性编译为轻量表演合同；不调用 LLM。",
             inputs=[
                 io.String.Input("character_id", display_name="角色标识 / 素材标签", default="角色A"),
-                io.String.Input("scene_objective", display_name="当前场景目标（动作动词）", multiline=True, default=""),
-                io.String.Input("obstacle_and_stakes", display_name="阻力与失败代价", multiline=True, default=""),
-                io.String.Input("tactics", display_name="可切换策略（每行一项，最多4项）", multiline=True, default=""),
-                io.String.Input("physical_task_and_inertia", display_name="手头动作与身体状态惯性", multiline=True, default=""),
-                io.String.Input("voice_lock", display_name="声音锁定（仅说话时）", multiline=True, default=""),
-                io.String.Input("mask_break_trigger", display_name="面具破裂触发条件", multiline=True, default=""),
-                io.String.Input("gaze_and_listening", display_name="视线目标与倾听反应", multiline=True, default=""),
+                io.String.Input(
+                    "scene_objective",
+                    display_name="场景目标 / Scene objective",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "场景目标 / Scene objective：想让谁做什么 / Who should do what?\n"
+                        "示例 / Example：让妹妹交钥匙 / Get sister to hand over the keys."
+                    ),
+                ),
+                io.String.Input(
+                    "obstacle_and_stakes",
+                    display_name="阻力与失败代价 / Obstacle & stakes",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "阻力与代价 / Obstacle & stakes：阻力 + 失败后果 / Obstacle + cost of failure.\n"
+                        "示例 / Example：妹妹拒绝；失败将错过末班车 / She refuses; miss the last train."
+                    ),
+                ),
+                io.String.Input(
+                    "tactics",
+                    display_name="策略阶梯 / Tactics（每行一个 / one per line）",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "策略阶梯 / Tactics：每行一个 / One tactic per line.\n"
+                        "示例 / Example：试探询问 / Probe；提出交换 / Trade；直接阻拦 / Block"
+                    ),
+                ),
+                io.String.Input(
+                    "physical_task_and_inertia",
+                    display_name="手头动作与身体惯性 / Physical task & inertia",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "动作与惯性 / Task & inertia：手头动作 + 延续状态 / Task + carried body state.\n"
+                        "示例 / Example：收拾行李，同时压住发抖的手 / Pack while steadying trembling hands."
+                    ),
+                ),
+                io.String.Input(
+                    "voice_lock",
+                    display_name="声音锁定 / Voice lock（仅说话时 / only when speaking）",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "声音锁定 / Voice lock：音量、语速、口音或禁区 / Volume, pace, accent, limits.\n"
+                        "示例 / Example：低声短句，越紧张越慢 / Low, short, slower under stress."
+                    ),
+                ),
+                io.String.Input(
+                    "mask_break_trigger",
+                    display_name="面具破裂触发 / Mask-break trigger",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "面具破裂 / Mask break：何时失去伪装 / What breaks the mask?\n"
+                        "示例 / Example：听见父亲名字时笑容停住 / Smile drops at father's name."
+                    ),
+                ),
+                io.String.Input(
+                    "gaze_and_listening",
+                    display_name="视线与倾听反应 / Gaze & listening",
+                    multiline=True,
+                    default="",
+                    placeholder=(
+                        "视线与倾听 / Gaze & listening：看哪里 + 听后反应 / Gaze + listening response.\n"
+                        "示例 / Example：避开姐姐目光；钥匙一响便抬眼 / Avoid her gaze; look up at key sound."
+                    ),
+                ),
             ],
             outputs=[
                 T8CharacterPerformanceBibleIO.Output(display_name="character_performance_bible"),

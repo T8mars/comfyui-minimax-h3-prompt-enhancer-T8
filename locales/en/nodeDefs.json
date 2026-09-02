@@ -115,13 +115,13 @@
     "display_name": "T8 Character Performance Bible",
     "inputs": {
       "character_id": {"name": "Character ID / media label"},
-      "scene_objective": {"name": "Current scene objective"},
-      "obstacle_and_stakes": {"name": "Obstacle and stakes"},
-      "tactics": {"name": "Available tactics"},
-      "physical_task_and_inertia": {"name": "Physical task and body-state inertia"},
-      "voice_lock": {"name": "Voice lock"},
-      "mask_break_trigger": {"name": "Mask-break trigger"},
-      "gaze_and_listening": {"name": "Gaze target and listening response"}
+      "scene_objective": {"name": "Scene objective / 场景目标"},
+      "obstacle_and_stakes": {"name": "Obstacle & stakes / 阻力与失败代价"},
+      "tactics": {"name": "Tactics / 策略阶梯（one per line）"},
+      "physical_task_and_inertia": {"name": "Physical task & inertia / 手头动作与身体惯性"},
+      "voice_lock": {"name": "Voice lock / 声音锁定（only when speaking）"},
+      "mask_break_trigger": {"name": "Mask-break trigger / 面具破裂触发"},
+      "gaze_and_listening": {"name": "Gaze & listening / 视线与倾听反应"}
     },
     "outputs": {
       "0": {"name": "Character performance bible"},
