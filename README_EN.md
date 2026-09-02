@@ -45,7 +45,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - In-node API-key entry, masked display, workflow save, clear, and registration links; standard `STRING` API-key connections remain supported.
 - OpenAI-compatible Base URL and model ID persist in the workflow and do not need to be re-entered on every run. API keys remain separate.
 - Native progress reporting, memory-only redacted diagnostics, provider capability preflight, local prompt inspection, and a no-resubmit recovery button on all three core enhancers.
-- Optional `T8 Performance Director Config` adds observable acting structure for character, emotion, reaction, and dialogue requests with `AUTO / Strong / Off`; it adds no LLM call and is not an official MiniMax Skill.
+- Optional `T8 Performance Director Config` adds observable acting structure for character, emotion, reaction, and dialogue requests with `AUTO / Strong / Off / Extreme`; it adds no LLM call and is not an official MiniMax Skill.
 - A searchable T8 template browser with categories, search, favorites, recent items, lazy GIF previews, deterministic Top-3 recommendations, and comparison.
 
 ## T8 Creative Director suite
@@ -308,15 +308,16 @@ When connected, the shared node controls provider, model, Base URL, local GGUF s
 
 ### Performance Director Config
 
-Connect the `T8 Performance Director Config` Custom Type output to H3, Seedance 2.0, or `T8 Storyboard Pack`. The config node itself makes no request; it only controls a compact directing section in the next enhancer request.
+Connect the `T8 Performance Director Config` Custom Type output to H3, Seedance 2.0, or `T8 Storyboard Pack`. The config node itself makes no request; it controls the performance-directing section in the next enhancer request.
 
 - `AUTO` is the default and applies only when the text or connected media actually contains a person/character, emotion, dialogue, reaction, or acting intent. Landscape, product, typography, and music-only requests skip it.
 - `Strong` explicitly organizes acting as trigger → reception → one primary response → settled/end state.
 - `Off` injects no performance-directing rule and restores the original compiler path.
+- `Extreme` is appended after the original three options to keep their order stable. It treats even an already enhanced prompt as an editable draft and materially rewrites performance timing, causality, and beat order while preserving character facts, media identity, exact dialogue, duration/shot count, and the target model's native format. Adjective-only or synonym-only edits do not satisfy this mode, and non-character requests never receive invented actors or plot events.
 
 The guidance converts abstract emotion into observable gaze, eyelid, breath, shoulder/neck, hand, or posture cues and establishes camera side plus a concrete gaze target before facial direction. Each trigger, reception, response, or settle beat keeps at most three high-signal cue channels per character instead of stacking an action checklist. A large state change may use a motivated eye/head movement, foreground/action occlusion, or cut, but a transformation the user explicitly requires to remain continuously visible is never hidden. It never invents dialogue and keeps incompatible swallowing or mouth-closing beats outside the speaking span.
 
-AUTO and Strong also lock user-named body parts, product components, colors, left/right relations, and quoted text: for example, “the pupil turns gold” may not become “the iris turns gold.” User-fixed duration/count, verbatim dialogue, media roles, official Skills, hard constraints, and LOCK anchors always win. To audit an enhanced result, connect the original request to Prompt Inspector's optional `source_prompt` socket; the comparison is fully local, warns without rewriting, and adds no request.
+AUTO, Strong, and Extreme also lock user-named body parts, product components, colors, left/right relations, and quoted text: for example, “the pupil turns gold” may not become “the iris turns gold.” User-fixed duration/count, verbatim dialogue, media roles, official Skills, hard constraints, and LOCK anchors always win. To audit an enhanced result, connect the original request to Prompt Inspector's optional `source_prompt` socket; the comparison is fully local, warns without rewriting, and adds no request.
 
 H3 and Seedance use separate compilers. Seedance never receives H3 fields, tags, speaker IDs, millisecond timing, or frame-grid notation. Storyboard adds optional per-shot `dramatic_trigger`, `reception_beat`, `primary_performance_beat`, `observable_cues`, `gaze_target`, `speech_span`, `state_transition_strategy`, and `performance_risks`; non-performance shots keep empty values rather than invented emotion.
 

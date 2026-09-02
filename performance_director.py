@@ -9,8 +9,11 @@ from comfy_api.latest import io
 PERFORMANCE_CONFIG_SCHEMA = "t8-performance-director-config/v1"
 PERFORMANCE_AUTO = "AUTO（按人物 / 表演意图）"
 PERFORMANCE_STRONG = "强化（明确表演结构）"
+PERFORMANCE_EXTREME = "极致（深度表演重构）"
 PERFORMANCE_OFF = "关闭（保持原编译）"
-PERFORMANCE_MODES = [PERFORMANCE_AUTO, PERFORMANCE_STRONG, PERFORMANCE_OFF]
+# Append the new value so the original three option indexes remain stable for
+# hosts or third-party workflow tools that persisted an index instead of text.
+PERFORMANCE_MODES = [PERFORMANCE_AUTO, PERFORMANCE_STRONG, PERFORMANCE_OFF, PERFORMANCE_EXTREME]
 STORYBOARD_SOURCE_REPOSITORY = "https://github.com/phileiny/h3-storyboard-skill"
 STORYBOARD_SOURCE_COMMIT = "ab65851f599435a1ff94ea4931949bd7bcaf069b"
 
@@ -57,12 +60,19 @@ def h3_performance_instruction(
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
-    strength = (
-        "When character performance is present, apply this structure explicitly."
-        if mode == PERFORMANCE_STRONG
-        else
-        "Apply this section only when the user's text or connected media actually contains a person/character, emotion, dialogue, reaction, or acting intent; otherwise ignore it completely."
-    )
+    if mode == PERFORMANCE_EXTREME:
+        strength = " ".join((
+            "EXTREME PERFORMANCE REWRITE CONTRACT: this is a deep acting-direction rewrite, not merely an activation flag or a synonym-polish pass.",
+            "Apply it only to requests or connected media that actually contain a person/character or explicit acting intent; never invent a character, plot event, emotion, or dialogue for a non-performance request.",
+            "Treat any supplied native H3 prompt as an editable draft: preserve its facts, media identities, exact dialogue, timing/count contract, retention facts, and required H3 schema, but materially rewrite the summary and performance-bearing [Shot] passages when their acting causality is weak.",
+            "Silently map each performance passage into an ordered dramatic chain: an existing concrete trigger or intention, a perceivable reception beat, one dominant physical/emotional response, and a visible residue or settled end state. Keep the chain temporally readable even when multiple beats must fit inside one shot.",
+            "For dialogue, direct a brief preparation before speech, controlled gaze/breath/body behavior during the exact line, and a post-line residue after speech; never alter or extend the supplied words. For silent acting, make the change legible through ordered gaze, eyelid, breath, shoulder/neck, hand, or posture evidence rather than emotion labels.",
+            "A valid extreme rewrite must improve dramatic causality, timing, or performance specificity in the performance-bearing passages; changing only adjectives, punctuation, or synonyms is insufficient. Do not rewrite unrelated visual, camera, sound, or retention content merely to appear different.",
+        ))
+    elif mode == PERFORMANCE_STRONG:
+        strength = "When character performance is present, apply this structure explicitly."
+    else:
+        strength = "Apply this section only when the user's text or connected media actually contains a person/character, emotion, dialogue, reaction, or acting intent; otherwise ignore it completely."
     shot_rule = (
         f"The user fixed the shot count at {int(fixed_shot_count)}; never add or remove shots. Distribute the beats inside that exact contract."
         if int(fixed_shot_count or 0) > 0
@@ -94,12 +104,19 @@ def seedance_performance_instruction(
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
-    strength = (
-        "When character performance is present, make the performance causality explicit."
-        if mode == PERFORMANCE_STRONG
-        else
-        "Apply only when the user's text or connected media actually contains a person/character, emotion, dialogue, reaction, or acting intent; otherwise skip this section."
-    )
+    if mode == PERFORMANCE_EXTREME:
+        strength = " ".join((
+            "EXTREME PERFORMANCE REWRITE CONTRACT: perform a deep native Seedance acting-direction rewrite, not a light paraphrase or activation-only pass.",
+            "Apply it only when the request or connected media contains a person/character or explicit acting intent; never invent a character, plot event, emotion, or speech for a non-performance request.",
+            "Treat an already enhanced Seedance prompt as an editable draft. Preserve its facts, reference roles, exact dialogue, duration/count, continuity, stability, subtitle policy, and native natural-language organization, while materially rewriting performance-bearing timing and action passages whose causality is weak.",
+            "Silently organize each performance passage as an ordered chain: an existing concrete trigger or intention, perceivable reception, one dominant response, and visible residue or settled state. The order must remain readable when several beats share one shot.",
+            "For dialogue, stage preparation before speech, controlled gaze/breath/body behavior during the exact line, and post-line residue after it. For silent acting, replace generic emotion labels with ordered visible evidence from gaze, eyelids, breath, shoulders/neck, hands, or posture.",
+            "A valid extreme rewrite must improve dramatic causality, timing, or performance specificity; adjective-only and synonym-only changes are insufficient. Leave unrelated visual, camera, sound, reference, and continuity content alone unless a performance beat requires coordination.",
+        ))
+    elif mode == PERFORMANCE_STRONG:
+        strength = "When character performance is present, make the performance causality explicit."
+    else:
+        strength = "Apply only when the user's text or connected media actually contains a person/character, emotion, dialogue, reaction, or acting intent; otherwise skip this section."
     shot_rule = (
         f"The user fixed exactly {int(fixed_shot_count)} shots; never change that count."
         if int(fixed_shot_count or 0) > 0
@@ -131,6 +148,12 @@ def storyboard_performance_instruction(
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
+    mode_rule = (
+        "EXTREME STORYBOARD PERFORMANCE CONTRACT: for every performance-bearing shot, use the supplied story facts to fully resolve the dramatic trigger, reception beat, one dominant response, observable cues, gaze target, speech span, transition strategy, and settled residue. Treat an existing plan as an editable draft and materially improve causality or timing; adjective-only changes are insufficient. Never invent characters, plot events, emotions, or dialogue, and leave non-performance shots empty."
+        if mode == PERFORMANCE_EXTREME
+        else
+        ""
+    )
     target_rule = (
         "For Seedance targets, keep all direction in native natural language and do not import H3-only syntax or fields."
         if model_target == "Seedance 2.0"
@@ -146,7 +169,8 @@ def storyboard_performance_instruction(
         else
         "AUTO may split competing primary state changes when time permits, without assuming a universal beat limit."
     )
-    return " ".join((
+    return " ".join(part for part in (
+        mode_rule,
         "For every shot, also return dramatic_trigger, reception_beat, primary_performance_beat, observable_cues, gaze_target, speech_span, state_transition_strategy, and performance_risks.",
         "Use empty strings/lists for non-performance shots; never invent acting, speech, or emotion merely to fill fields.",
         "Observable cues must be visible gaze/eyelid/breath/shoulder/hand/posture evidence. Each trigger, reception, response, or settle beat may use no more than three cue channels per character unless dense choreography is explicit. Before returning, silently delete the lowest-signal cues from any beat that exceeds the budget. Establish camera and gaze target before facial direction.",
@@ -156,7 +180,7 @@ def storyboard_performance_instruction(
         target_rule,
         semantic_anchor_instruction(source_prompt),
         "These are community-research-inspired planning fields, not an official model Skill or guaranteed quality score."
-    ))
+    ) if part)
 
 
 _SEMANTIC_ANCHOR_GROUPS: tuple[tuple[str, ...], ...] = (
@@ -467,7 +491,7 @@ class T8PerformanceDirectorConfig(io.ComfyNode):
                     display_name="表演导演模式",
                     options=PERFORMANCE_MODES,
                     default=PERFORMANCE_AUTO,
-                    tooltip="AUTO 仅在人物/角色/情绪/对白/反应意图时应用；强化明确套用结构；关闭恢复原编译。",
+                    tooltip="AUTO 条件启用；强化明确套用原有结构；关闭恢复原编译；极致会深度重构表演因果与节拍。",
                 ),
             ],
             outputs=[T8PerformanceDirectorConfigIO.Output(display_name="performance_director_config")],
@@ -481,6 +505,7 @@ class T8PerformanceDirectorConfig(io.ComfyNode):
 __all__ = [
     "PERFORMANCE_AUTO",
     "PERFORMANCE_CONFIG_SCHEMA",
+    "PERFORMANCE_EXTREME",
     "PERFORMANCE_IR_DEFAULTS",
     "PERFORMANCE_MODES",
     "PERFORMANCE_OFF",

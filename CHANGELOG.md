@@ -5,6 +5,27 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-09-02
+
+### Added
+
+- Add an opt-in `极致（深度表演重构）` Performance Director mode for H3,
+  Seedance 2.0, and Storyboard planning. Existing `AUTO / 强化 / 关闭`
+  values and behavior remain unchanged for saved workflows.
+- Treat already enhanced prompts as editable drafts in Extreme mode and require
+  material improvements to acting causality, timing, or observable performance
+  instead of adjective-only or synonym-only edits, while preserving exact
+  dialogue, facts, media roles, duration, shot count, and native output format.
+
+### Verified
+
+- Add regression coverage for mode serialization, H3/Seedance compiler
+  isolation, existing-draft rewrite rules, fixed shot counts, and exact-dialogue
+  preservation.
+- Complete a paid same-input A/B check against the Seedance chat route: Off and
+  Extreme retained all three shots and exact dialogue, while the Extreme result
+  produced a materially distinct ordered performance pass.
+
 ## [1.12.4] - 2026-09-02
 
 ### Fixed

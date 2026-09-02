@@ -136,18 +136,68 @@ class PerformanceDirectorTests(unittest.TestCase):
         errors = benchmark.validate_manifest(manifest)
         self.assertTrue(any("pre-registered field" in item for item in errors))
 
-    def test_config_node_has_stable_custom_type_and_three_modes(self):
+    def test_config_node_has_stable_custom_type_and_modes(self):
         schema = performance.T8PerformanceDirectorConfig.define_schema()
         self.assertEqual(schema.node_id, "T8PerformanceDirectorConfig")
         self.assertEqual(performance.PERFORMANCE_MODES, [
             performance.PERFORMANCE_AUTO,
             performance.PERFORMANCE_STRONG,
             performance.PERFORMANCE_OFF,
+            performance.PERFORMANCE_EXTREME,
         ])
         config = performance.T8PerformanceDirectorConfig.execute(performance.PERFORMANCE_STRONG)[0]
         self.assertEqual(config["schema_version"], performance.PERFORMANCE_CONFIG_SCHEMA)
         self.assertEqual(config["mode"], performance.PERFORMANCE_STRONG)
         self.assertIn("not an official", config["source"]["relationship"])
+
+    def test_extreme_mode_is_distinct_and_deeply_rewrites_existing_drafts(self):
+        extreme_config = performance.build_performance_director_config(
+            performance.PERFORMANCE_EXTREME
+        )
+        self.assertEqual(
+            performance.resolve_performance_mode(extreme_config),
+            performance.PERFORMANCE_EXTREME,
+        )
+
+        auto_h3 = performance.h3_performance_instruction(
+            None,
+            source_prompt="她看向镜头并说：\"我会回来。\"",
+        )
+        strong_h3 = performance.h3_performance_instruction(
+            performance.build_performance_director_config(performance.PERFORMANCE_STRONG),
+            source_prompt="她看向镜头并说：\"我会回来。\"",
+        )
+        extreme_h3 = performance.h3_performance_instruction(
+            extreme_config,
+            source_prompt="她看向镜头并说：\"我会回来。\"",
+        )
+        self.assertNotIn("EXTREME PERFORMANCE REWRITE CONTRACT", auto_h3)
+        self.assertNotIn("EXTREME PERFORMANCE REWRITE CONTRACT", strong_h3)
+        self.assertIn("EXTREME PERFORMANCE REWRITE CONTRACT", extreme_h3)
+        self.assertIn("editable draft", extreme_h3)
+        self.assertIn("materially rewrite the summary", extreme_h3)
+        self.assertIn("changing only adjectives, punctuation, or synonyms is insufficient", extreme_h3)
+        self.assertGreater(len(extreme_h3), len(strong_h3) + 500)
+
+        extreme_seedance = performance.seedance_performance_instruction(
+            extreme_config,
+            source_prompt="她看向镜头并说：\"我会回来。\"",
+        )
+        self.assertIn("deep native Seedance acting-direction rewrite", extreme_seedance)
+        self.assertIn("already enhanced Seedance prompt as an editable draft", extreme_seedance)
+        self.assertIn("adjective-only and synonym-only changes are insufficient", extreme_seedance)
+        for forbidden in ("[Shot]", "integrated_multimodal_description", "(S1)"):
+            self.assertNotIn(forbidden, extreme_seedance)
+
+        extreme_storyboard = performance.storyboard_performance_instruction(
+            "MiniMax H3",
+            extreme_config,
+            fixed_shot_count=3,
+            source_prompt="她听见门响后停下脚步",
+        )
+        self.assertIn("EXTREME STORYBOARD PERFORMANCE CONTRACT", extreme_storyboard)
+        self.assertIn("materially improve causality or timing", extreme_storyboard)
+        self.assertIn("fixed exactly 3 shots", extreme_storyboard)
 
     def test_invalid_config_is_rejected_and_off_is_exactly_empty(self):
         with self.assertRaises(performance.PerformanceDirectorConfigError):
