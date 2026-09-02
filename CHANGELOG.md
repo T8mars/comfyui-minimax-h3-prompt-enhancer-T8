@@ -5,6 +5,23 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.12.4] - 2026-09-02
+
+### Fixed
+
+- Stop T8 and official template detail cards from feeding ComfyUI's assigned
+  inline DOM height back into their intrinsic content measurement. Previously,
+  selecting a template and repeatedly restoring workflow tabs could serialize
+  H3 or Seedance nodes at heights above 8,000 pixels.
+- Recover already-oversized saved nodes on their next template-detail layout
+  pass without changing node IDs, widget values, or workflow connections.
+
+### Verified
+
+- Add a real-browser regression that starts from the reported 8,267-pixel
+  saved height, verifies recovery to intrinsic content height, and proves
+  repeated workflow restoration remains idempotent.
+
 ## [1.12.3] - 2026-09-02
 
 ### Changed

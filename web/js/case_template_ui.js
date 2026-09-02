@@ -9,6 +9,27 @@ const CATALOG_ENDPOINT = "/t8-prompt-enhancer/case-library";
 let catalogPromise = null;
 
 
+export function measureIntrinsicDomWidgetHeight(element, minimum = 150, padding = 8) {
+    if (!element) return minimum;
+    // ComfyUI writes the allocated DOM-widget height back to the element. If
+    // scrollHeight is read while that inline height is still present, a saved
+    // oversized node can feed its allocated height back in as content height
+    // on every workflow restore. Measure with an intrinsic height, then restore
+    // ComfyUI's layout value without changing the visible frame.
+    const assignedHeight = element.style.height;
+    const assignedMaxHeight = element.style.maxHeight;
+    try {
+        element.style.height = "auto";
+        element.style.maxHeight = "none";
+        const contentHeight = Math.ceil(Number(element.scrollHeight) || 0);
+        return Math.max(minimum, contentHeight + padding);
+    } finally {
+        element.style.height = assignedHeight;
+        element.style.maxHeight = assignedMaxHeight;
+    }
+}
+
+
 function fetchCatalog() {
     if (!catalogPromise) {
         catalogPromise = api.fetchApi(CATALOG_ENDPOINT, { cache: "no-store" })
@@ -247,8 +268,8 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
     const domWidget = node.addDOMWidget("t8_case_template_details", "custom", root, {
         getValue: () => "",
         setValue: () => {},
-        getMinHeight: () => Math.max(150, root.scrollHeight + 8),
-        getMaxHeight: () => Math.max(150, root.scrollHeight + 8),
+        getMinHeight: () => measureIntrinsicDomWidgetHeight(root),
+        getMaxHeight: () => measureIntrinsicDomWidgetHeight(root),
         hideOnZoom: false,
         serialize: false,
         beforeResize() { delete this.width; },

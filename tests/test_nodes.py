@@ -1157,6 +1157,13 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(official.count("required_anchors: ["), 8)
         self.assertEqual(official.count("recommended_input: \""), 8)
         self.assertIn("不会发送给 LLM", official)
+        self.assertIn("export function measureIntrinsicDomWidgetHeight", shared)
+        self.assertIn('element.style.height = "auto"', shared)
+        self.assertIn("getMinHeight: () => measureIntrinsicDomWidgetHeight(root)", shared)
+        self.assertIn("getMaxHeight: () => measureIntrinsicDomWidgetHeight(root)", shared)
+        self.assertIn("measureIntrinsicDomWidgetHeight", official)
+        self.assertNotIn("root.scrollHeight + 8", shared)
+        self.assertNotIn("root.scrollHeight + 8", official)
 
     def test_all_official_preset_gifs_are_bundled_and_hash_pinned(self):
         root = NODES_PATH.parent

@@ -1,6 +1,7 @@
 import { registerTemplateMenuPreview } from "./template_menu_preview.js";
 import {
     createTemplateDetailCard,
+    measureIntrinsicDomWidgetHeight,
     renderTemplateDetail,
     setDomWidgetVisible,
 } from "./case_template_ui.js";
@@ -156,8 +157,8 @@ export function addOfficialPresetUI(node, widget, promptWidget, refreshSize) {
     const domWidget = node.addDOMWidget("t8_official_preset_details", "custom", root, {
         getValue: () => "",
         setValue: () => {},
-        getMinHeight: () => Math.max(150, root.scrollHeight + 8),
-        getMaxHeight: () => Math.max(150, root.scrollHeight + 8),
+        getMinHeight: () => measureIntrinsicDomWidgetHeight(root),
+        getMaxHeight: () => measureIntrinsicDomWidgetHeight(root),
         hideOnZoom: false,
         serialize: false,
         beforeResize() { delete this.width; },

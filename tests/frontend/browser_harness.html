@@ -21,6 +21,7 @@ try {
   const recommendation = await import("../../web/js/template_recommendation.mjs");
   const menu = await import("../../web/js/template_menu_preview.js");
   const templateBrowser = await import("../../web/js/template_browser.js");
+  const { measureIntrinsicDomWidgetHeight } = await import("../../web/js/case_template_ui.js");
   const { app } = await import("../../scripts/app.js");
   await import("../../web/js/film_workflow_ui.js");
 
@@ -54,6 +55,22 @@ try {
   );
   check(reloadedWidgets[0].value === liveBase.value, "live Base URL saved before blur");
   check(reloadedWidgets[1].value === liveModel.value, "live model ID saved before blur");
+
+  const heightProbe = document.createElement("div");
+  heightProbe.style.cssText = "box-sizing:border-box;width:420px;height:8267px;max-height:8267px;overflow:hidden;padding:0";
+  const heightProbeContent = document.createElement("div");
+  heightProbeContent.style.height = "320px";
+  heightProbe.append(heightProbeContent);
+  document.body.append(heightProbe);
+  check(heightProbe.scrollHeight >= 8000, "regression probe starts with the serialized oversized node height");
+  const recoveredHeight = measureIntrinsicDomWidgetHeight(heightProbe);
+  check(recoveredHeight >= 320 && recoveredHeight < 500, "template detail height ignores ComfyUI's oversized inline allocation");
+  check(heightProbe.style.height === "8267px", "intrinsic measurement restores ComfyUI's assigned height");
+  heightProbe.style.height = `${recoveredHeight}px`;
+  heightProbe.style.maxHeight = `${recoveredHeight}px`;
+  const stableHeight = measureIntrinsicDomWidgetHeight(heightProbe);
+  check(stableHeight === recoveredHeight, "workflow restore height is idempotent after recovery");
+  heightProbe.remove();
 
   const filmExtension = app.extensions.find((item) => item.name === "T8.FilmWorkflowStatus");
   check(Boolean(filmExtension), "film workflow UI extension registered");
