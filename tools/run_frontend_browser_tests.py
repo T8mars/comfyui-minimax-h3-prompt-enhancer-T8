@@ -72,15 +72,27 @@ def main() -> int:
             if self.path.split("?", 1)[0] == "/scripts/api.js":
                 payload = b'''export const api = {
   apiURL(path) { return path; },
-  async fetchApi() {
-    return new Response(JSON.stringify({
+  async fetchApi(path) {
+    const payload = path === "/t8-prompt-enhancer/case-library" ? {
+      templates: [{
+        id: "browser-template",
+        label: "Browser regression template",
+        summary: "Verify template detail expansion and collapse.",
+        applicability: "Browser test",
+        input_format: "subject + action",
+        required_anchors: ["stable subject", "visible action"],
+        recommended_input: "A character completes a visible action and settles.",
+        previews: [{ label: "Case GIF", available: false, downloadable: false }]
+      }]
+    } : {
       mode: "on_demand",
       channel_version: "browser-test",
       cached_count: 0,
       downloadable_count: 1,
       cached_bytes: 0,
       cache_root: "browser-test-cache"
-    }), { status: 200, headers: { "Content-Type": "application/json" } });
+    };
+    return new Response(JSON.stringify(payload), { status: 200, headers: { "Content-Type": "application/json" } });
   }
 };
 '''

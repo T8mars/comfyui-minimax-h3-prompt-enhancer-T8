@@ -6,10 +6,16 @@ import { ensurePreview, openPreviewAssetManager } from "./preview_asset_ui.js";
 
 const NO_CASE_TEMPLATE = "无（不使用 T8 案例）";
 const CATALOG_ENDPOINT = "/t8-prompt-enhancer/case-library";
+export const TEMPLATE_DETAIL_MAX_HEIGHT = 620;
 let catalogPromise = null;
 
 
-export function measureIntrinsicDomWidgetHeight(element, minimum = 150, padding = 8) {
+export function measureIntrinsicDomWidgetHeight(
+    element,
+    minimum = 150,
+    padding = 8,
+    maximum = TEMPLATE_DETAIL_MAX_HEIGHT,
+) {
     if (!element) return minimum;
     // ComfyUI writes the allocated DOM-widget height back to the element. If
     // scrollHeight is read while that inline height is still present, a saved
@@ -22,7 +28,7 @@ export function measureIntrinsicDomWidgetHeight(element, minimum = 150, padding 
         element.style.height = "auto";
         element.style.maxHeight = "none";
         const contentHeight = Math.ceil(Number(element.scrollHeight) || 0);
-        return Math.max(minimum, contentHeight + padding);
+        return Math.min(maximum, Math.max(minimum, contentHeight + padding));
     } finally {
         element.style.height = assignedHeight;
         element.style.maxHeight = assignedMaxHeight;
@@ -61,14 +67,37 @@ export function setDomWidgetVisible(widget, visible) {
     if (!("t8CaseOriginalType" in widget)) {
         widget.t8CaseOriginalType = widget.type;
         widget.t8CaseOriginalComputeSize = widget.computeSize;
+        widget.t8CaseOriginalHeight = widget.element?.style.height || "";
+        widget.t8CaseOriginalMaxHeight = widget.element?.style.maxHeight || "";
     }
+    // DOM widgets retain the pixel height assigned by ComfyUI's previous draw.
+    // Restore the card's own intrinsic constraints before every visibility
+    // transition so a visible template cannot leave a stale allocation behind
+    // when the user switches back to "None".
+    delete widget.computedHeight;
+    delete widget.width;
     widget.type = visible ? widget.t8CaseOriginalType : "converted-widget";
     widget.computeSize = visible ? widget.t8CaseOriginalComputeSize : () => [0, -4];
     widget.hidden = !visible;
     if (widget.element) {
+        widget.element.style.height = widget.t8CaseOriginalHeight;
+        widget.element.style.maxHeight = widget.t8CaseOriginalMaxHeight;
+        widget.element.dataset.t8TemplateActive = visible ? "true" : "false";
+        widget.element.dataset.shouldHide = visible ? "false" : "true";
         widget.element.style.display = visible ? "block" : "none";
         widget.element.hidden = !visible;
     }
+}
+
+
+export function clearTemplateDetail(root) {
+    if (!root) return;
+    for (const image of root.querySelectorAll("img")) {
+        image.onload = null;
+        image.onerror = null;
+        image.removeAttribute("src");
+    }
+    root.replaceChildren();
 }
 
 
@@ -87,7 +116,8 @@ export function createTemplateDetailCard() {
         "display:flex", "flex-direction:column", "gap:8px", "width:100%", "box-sizing:border-box",
         "padding:10px", "border:1px solid var(--border-color,#555)", "border-radius:7px",
         "background:var(--comfy-input-bg,#202020)", "color:var(--input-text,#ddd)",
-        "font-size:12px", "line-height:1.45", "overflow:hidden",
+        "font-size:12px", "line-height:1.45", `max-height:${TEMPLATE_DETAIL_MAX_HEIGHT}px`,
+        "overflow-x:hidden", "overflow-y:auto",
     ].join(";");
     return root;
 }
@@ -105,12 +135,7 @@ export function renderTemplateDetail(
         policyText = "仅供人类本地预览，不会作为图像、视频或 LLM 参考素材",
     } = {},
 ) {
-    for (const image of root.querySelectorAll("img")) {
-        image.onload = null;
-        image.onerror = null;
-        image.removeAttribute("src");
-    }
-    root.replaceChildren();
+    clearTemplateDetail(root);
 
     const title = document.createElement("div");
     title.textContent = template.label;
@@ -194,10 +219,12 @@ export function renderTemplateDetail(
             img.alt = `${preview.label} GIF 预览`;
             img.loading = "lazy";
             img.style.cssText = "display:block;width:100%;max-height:220px;object-fit:contain;border-radius:5px;background:#111";
-            img.onload = () => refreshSize?.();
+            img.onload = () => {
+                if (root.dataset.t8TemplateActive === "true") refreshSize?.();
+            };
             img.onerror = () => {
                 img.replaceWith(document.createTextNode("GIF 预览加载失败"));
-                refreshSize?.();
+                if (root.dataset.t8TemplateActive === "true") refreshSize?.();
             };
             figure.append(img);
         } else {
@@ -219,7 +246,7 @@ export function renderTemplateDetail(
                         else unavailable.textContent = "当前为仅手动下载模式；提示词增强可正常使用。";
                     } catch (error) {
                         unavailable.textContent = `GIF 获取失败：${error.message}；不影响提示词增强。`;
-                        refreshSize?.();
+                        if (root.dataset.t8TemplateActive === "true") refreshSize?.();
                     }
                 };
                 download.onclick = () => load(true);
@@ -241,7 +268,7 @@ export function renderTemplateDetail(
         policy.style.opacity = ".65";
         figure.append(policy);
         previewWrap.append(figure);
-        refreshSize?.();
+        if (root.dataset.t8TemplateActive === "true") refreshSize?.();
     };
     if (previewChoices.length > 1) {
         const selector = document.createElement("select");
@@ -257,7 +284,9 @@ export function renderTemplateDetail(
     }
     renderPreview(previewChoices[0]);
     root.append(previewWrap);
-    requestAnimationFrame(() => refreshSize?.());
+    requestAnimationFrame(() => {
+        if (root.dataset.t8TemplateActive === "true") refreshSize?.();
+    });
 }
 
 
@@ -354,8 +383,8 @@ export async function addCaseTemplateUI(node, caseWidget, promptWidget, refreshS
     const update = (value = caseWidget.value) => {
         const template = byLabel.get(value) || byId.get(value);
         if (!template) {
-            root.replaceChildren();
             setDomWidgetVisible(domWidget, false);
+            clearTemplateDetail(root);
         } else {
             if (caseWidget.value !== template.label) caseWidget.value = template.label;
             renderTemplateDetail(root, template, promptWidget, node, refreshSize);

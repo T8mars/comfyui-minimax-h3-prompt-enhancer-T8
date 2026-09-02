@@ -5,6 +5,36 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.13.1] - 2026-09-02
+
+### Changed
+
+- Import `batch-2026-09-02-01` as seven new stable selectors and 13 evidence
+  variants. The non-official library now contains 455 source cases, 228 case
+  selectors, 227 evidence variants, and two standalone community Skills (230
+  selectors total), without removing, renaming, or semantically changing an
+  existing selector.
+- Prepare the human-only dynamic-preview inventory for all 457 T8 previews
+  while keeping the main repository's frozen 377-GIF offline baseline unchanged.
+
+### Fixed
+
+- Fully collapse T8 and official template detail DOM widgets when a user
+  switches a selected template back to `None`: clear ComfyUI's cached and
+  assigned heights, release removed GIF callbacks, and prevent stale deferred
+  resize requests from extending MiniMax H3 or Seedance 2.0 nodes.
+- Cap long template detail cards at a scrollable 620-pixel viewport so unusually
+  verbose templates cannot create runaway node heights.
+
+### Verified
+
+- Validate the immutable delivery manifest, every declared file size and
+  SHA-256, inventory closure, adapter readiness, source-batch identities, and
+  the absence of selector removals, renames, or Creative DNA drift.
+- Add a real-browser regression that performs 12 consecutive
+  `template -> None` cycles and checks one stable expanded height, exact return
+  to the original collapsed height, cleared DOM content, and no cached height.
+
 ## [1.13.0] - 2026-09-02
 
 ### Added

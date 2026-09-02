@@ -1,5 +1,6 @@
 import { registerTemplateMenuPreview } from "./template_menu_preview.js";
 import {
+    clearTemplateDetail,
     createTemplateDetailCard,
     measureIntrinsicDomWidgetHeight,
     renderTemplateDetail,
@@ -173,8 +174,8 @@ export function addOfficialPresetUI(node, widget, promptWidget, refreshSize) {
     const update = (value = widget.value) => {
         const preset = PRESETS[value];
         if (!preset || node.t8IsT8CaseTemplateActive?.()) {
-            root.replaceChildren();
             setDomWidgetVisible(domWidget, false);
+            clearTemplateDetail(root);
         } else {
             renderTemplateDetail(
                 root,

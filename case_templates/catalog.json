@@ -3,11 +3,11 @@
   "catalog_id": "t8-unofficial-case-library-v2",
   "authority": "T8 非官方模板（案例 / 社区 Skill）",
   "default": "无（不使用 T8 案例）",
-  "source_case_count": 435,
-  "case_selector_template_count": 221,
+  "source_case_count": 455,
+  "case_selector_template_count": 228,
   "community_skill_count": 2,
-  "selector_template_count": 223,
-  "evidence_variant_count": 214,
+  "selector_template_count": 230,
+  "evidence_variant_count": 227,
   "pending_completion_count": 0,
   "official_minimax_skills_included": false,
   "templates": [
@@ -1849,6 +1849,23 @@
           "height": 1146,
           "duration_seconds": 14.38,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-mayz1169-2094782705577996727-browser-2094782705577996727-video-1",
+          "label": "像素偶像角色板变体｜设定页复归与舞台身份验真",
+          "short_summary": "固定一张包含正背面、色板、配饰和局部特写的角色设定板，在每次舞台姿态、近景、转身或道具展示后重新出现；用设定页持续核验同一成年身份，并在终卡让完整人物、原创名标与角色板共同可见。",
+          "recommended_input": "为原创明确成年街机作曲人【MIRA】建立固定角色设定板：银色双丸子头、一缕钴蓝刘海、琥珀眼、紫色飞行夹克、黑色百褶长裤与白色菱形胸针；包含正面、背面、侧面、色板和四个细节框。；脸部近景和一次朝镜头伸开手掌之前必须先回到设定板，核验同一缕刘海、眼睛、夹克领和菱形胸针。；终局让角色板与人物共同出现在准确原创主标【MIRA / NIGHT PATCH】旁；身份锚点和文字全部静止。",
+          "required_anchors": [
+            "One persistent identity board occupies a stable screen region and never changes its reference content.",
+            "The board provides at least front, back, side, palette and detail proofs for one clearly adult identity.",
+            "Face, hair, costume, accessory and body proportions stay consistent across full-body and close views.",
+            "The final frame contains board, complete adult and one original readable identity mark together."
+          ],
+          "sha256": "5d8ac4eb7b5d1f470ac35c2526e695c2ffd6bb9fbae856683e120e8509aaeded",
+          "width": 640,
+          "height": 714,
+          "duration_seconds": 14.63,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nUse one fixed identity board as a recurring visual checkpoint between four different live-scene proofs: silhouette and pose, small performance action, locomotion and face-level detail. Keep the board layout stable while camera scale and environment vary, then remove or subordinate the board so the verified live subject owns the final hero composition.\nInvariants:\n- inv-01: Establish the identity board and live subject together before major action.\n- inv-02: Return to the same board layout between distinct live proofs.\n- inv-03: Each live proof must test a different identity dimension.\n- inv-04: Keep defining proportions and markers continuous across board and scene.\n- inv-05: End on the verified live subject rather than a board-only frame.\nVariable slots:\n- lead_subject: An original subject or system whose identity remains stable.\n- setting: A new setting with fixed spatial anchors.\n- escalation_variable: One visible variable that changes in countable causal stages.\n- performance_rule: A restrained behavior rule that makes the mechanism legible.\n- camera_grammar: A coherent information order that does not copy source shot boundaries.\n- payoff: One clean physical or graphic consequence.\n- sound_family: A new hierarchy of diegetic cues supporting state changes.\nFailure prevention:\n- A hidden reference cannot function as visible evidence.: Establish the identity board and live subject together before major action.\n- A changing board destroys the reference baseline.: Return to the same board layout between distinct live proofs.\n- Repeated face close-ups do not prove gait or silhouette.: Each live proof must test a different identity dimension.\n- Marker drift breaks the verification mechanism.: Keep defining proportions and markers continuous across board and scene.\n- A board-only ending feels like documentation, not completion.: End on the verified live subject rather than a board-only frame.\nDo not copy from the source: blonde anime cowgirl with black hat and sunglasses; Route 66 sunset and vintage muscle car; low-angle boots then sunglasses close-up; the NOVA character sheet layout and source end card",
@@ -2742,6 +2759,23 @@
           "width": 640,
           "height": 360,
           "duration_seconds": 9.01,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-techiebysa-2094739935139893587-browser-2094739935139893587-video-1",
+          "label": "梗图选择器变体｜固定菜单、点击切换与发送反馈",
+          "short_summary": "固定应用框架、左侧选项栏、当前高亮和发送按钮持续不变；可见光标每次只选择一个反应类型，主画布随即换成对应人物、配色、短文案和定义动作，最后一次发送反馈证明所有变化来自同一选择系统。",
+          "recommended_input": "建立一个原创反应卡应用：固定藏蓝标题栏、左侧五个中性选项、一条青柠高亮、中央卡片，以及右下角准确按钮【发送卡片】。；只点击一次【大胆胜利】；整个界面保持不变，一名原创成年运动员进入卡片、举起一只拳头，并连续转化成橙色插画胜利肖像。；光标移到【发送卡片】并只点击一次，在未改变的最终卡片旁停留一个绿色已发送勾号；不能再出现额外选择或人物。",
+          "required_anchors": [
+            "One fixed interface, one ordered option rail, one current highlight, one result canvas and one send control establish the baseline.",
+            "Every visible click changes exactly one selection state before the corresponding subject and graphic language update.",
+            "Each result has one distinct readable reaction action rather than a passive portrait or unrelated montage.",
+            "The terminal send acknowledgement preserves the last selected result and proves one complete input-to-output loop."
+          ],
+          "sha256": "e0afb8a73db9cdfc3cc0364836c5ca76070150e15f465ea38bb1dd645bbb61ef",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
           "human_preview_only": true
         }
       ],
@@ -5360,6 +5394,23 @@
           "sha256": "a414b80ec130c0b432b549daaa802603e786569dff7df281dd67ad713a34b31b",
           "width": 640,
           "height": 356,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-eternityspring-2094780794552361367-browser-2094780794552361367-video-1",
+          "label": "非对称体量闪避｜共享地理、路线改写与非胜负终态",
+          "short_summary": "在同一可追踪地理中建立体量悬殊的两方，让重型角色以明确承诺动作压迫路线，小型角色通过平台、转轮和桥面连续改道而非瞬移；终局保持双方同场且不凭空宣布胜负。仅迁移运动机制，不保留来源角色、服装、世界观或IP外观。",
+          "recommended_input": "在同一座高架水电站检修平台上建立原创重型钴蓝维护外骨骼与小型琥珀巡检无人机；涡轮转轮、桁架与缆索桥同时构成可追踪地理。；镜头同时追踪双方绕过同一涡轮转轮：外骨骼走上层桁架，无人机穿过一个开放轮辐后从另一侧上升。；以水电站全景结束：外骨骼稳定站在平台，无人机悬停在桥后；保持体量差与共享地理，不宣布胜负，也不使用任何可识别的系列角色。",
+          "required_anchors": [
+            "Two original opponents with an obvious scale difference and one shared landmark establish the baseline.",
+            "Every heavy committed move changes the smaller figure's route through visible spatial cause and effect.",
+            "At least one repeated landmark proves both opponents remain in the same continuous geography.",
+            "The terminal frame contains both opponents and preserves an unresolved, nonlethal state with no franchise likeness."
+          ],
+          "sha256": "8fd06599f0d41eae6ae1aa80e1216db49b99e9b727b4b013ed64771b975f0c39",
+          "width": 640,
+          "height": 362,
           "duration_seconds": 15.13,
           "human_preview_only": true
         }
@@ -11744,6 +11795,108 @@
           "height": 366,
           "duration_seconds": 15.13,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-airina-xyz-2094787420210553036-browser-2094787420210553036-video-1",
+          "label": "Y2K气泡字卡产品片｜角色动作、物件证明与主标复归",
+          "short_summary": "固定同一成年赛博时尚角色，以眼部、发色、服装和轮廓为身份锚点；气泡、镀铬短词、光标框、产品近景和运动姿势按动作逐模块接力，每章只承担一个信息职责，终局把人物、原创物件与主标重新汇合。",
+          "recommended_input": "一枚虹彩镜头气泡开场，随后显出原创明确成年夜间骑行者：钴蓝短发、琥珀脸颊条、银色夹克与紧凑彗星标记；准确标题【NOVA LOOP】出现。；可见彗星光标选中一个原创棱镜水瓶；随后只切一次青柠银骑行鞋特写，同一只脚踩上圆形地标。；骑行者、水瓶、鞋履证明和两个气泡汇入稳定钴蓝海报；准确完整主标【NOVA LOOP / MOVE BRIGHT】停住，人物与图形运动全部停止。",
+          "required_anchors": [
+            "One clearly adult character, at least four identity anchors and one compact original mark precede the module carousel.",
+            "Every graphic module introduces no more than one new short word and follows one visible body, prop or pointer action.",
+            "At least two recurring graphic anchors preserve continuity while layout geometry changes.",
+            "The final lockup reunites the complete adult, proven objects and original master mark in one still frame."
+          ],
+          "sha256": "2346a14c112f86933b045b6fa382fdbc027dca31b62ee98c1e96af5f3f9efd3a",
+          "width": 640,
+          "height": 366,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-tokyo-valentine-2094761575299334503-browser-2094761575299334503-video-1",
+          "label": "酸性色彩字卡轮播｜成年角色、动作触发与主标归拢",
+          "short_summary": "锁定同一成年时装角色，以发色、服装和眼镜作为身份锚点；巨型立体短词、气球字与图案卡按走动、抬镜和转身逐段切换，最终把人物和完整原创主标汇回同一静止终卡。",
+          "recommended_input": "白色无影棚中建立一名原创明确成年布景设计师：薄荷色短发、琥珀椭圆眼镜、靛蓝工作服与一枚青柠三角胸针；准确标题【SIGNAL】同框出现。；她只抬一次眼镜，钴蓝气球字【BRIGHT】在身后展开；青柠前景圆片只负责擦除这一次转场。；成年人物、四色锚点与青柠三角标记汇入一张静止红色终卡，准确显示【SIGNAL / SHIFT BRIGHT】；人物与图形全部停住。",
+          "required_anchors": [
+            "One clearly adult identity and at least four appearance anchors precede every typography module.",
+            "Each module introduces at most one exact short word and is triggered by one visible character action.",
+            "No module replaces the adult with a different face, age, body or wardrobe identity.",
+            "The terminal lockup reunites the complete adult and the original master mark in one readable still frame."
+          ],
+          "sha256": "a4f5fdecb6c686fb2c979ead43a1ab4611846784fc3fac3abdca2517130f16c3",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-challenger-nd-2094591519005331813-browser-2094591519005331813-video-1",
+          "label": "黏土字母舞台｜成年舞者动作触发、字形飞入与终句合成",
+          "short_summary": "同一明确成年动画舞者在固定彩色黏土舞台上完成连续舞步；散落字母只能在对应动作后弹起、滚动或进入构图，身份与舞台轴线不重置，结尾把全部字母拼成一个清晰原创终句。",
+          "recommended_input": "软珊瑚与蓝色泡棉字母房中建立原创明确成年动画编舞者：紫色短发、青色发带、奶油夹克与钴蓝长裤，人物位于舞台中心。；一次双臂上举让三枚蓝色字母从地面升起，组成准确短词【UP】；脸、发带、夹克与长裤保持不变。；她以稳定终姿把所有已用字母吸引到前景，拼成准确可读短句【MOVE TOGETHER】；同一成年人保持在文字上方可见，全部字母停止。",
+          "required_anchors": [
+            "One clearly adult performer, four appearance anchors and one fixed stage axis precede all letter motion.",
+            "Each letter group moves only after one corresponding readable dance action begins.",
+            "Typography may cross foreground and background but cannot erase performer identity or reset geography.",
+            "The final phrase uses the accumulated letters, remains fully readable and shares the frame with the same adult."
+          ],
+          "sha256": "48fc98527d7259b9cbc993fb08ec8fc383d65efa8d8cda842eab85f6ae92c605",
+          "width": 640,
+          "height": 366,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-itxabdullaa-2094371536623092160-browser-2094371536623092160-video-1",
+          "label": "都市字卡角色轮播｜固定身份、鞋履证明与短词动作接力",
+          "short_summary": "用同一成年风格化角色的蓝色面部、橙帽、奶油帽衫、棋盘短裤与黑包锁定身份；大字、步伐、鞋履、复制残影、杯具和贴纸模块逐项响应动作，最终回到人物与原创主标同框的清晰终卡。",
+          "recommended_input": "原创明确成年快递员从深蓝剪影显形：钴蓝面部、青柠帽、沙色夹克、紫色工装裤与白色螺旋徽章；准确标题【EASY PACE】同框出现。；一只脚跟踩上紫色地面圆片，触发可读鞋履特写与准确短词【STEP】；不出现第二个人或替换服装。；回到单人全身静止画面，快递员、交通牌和重复圆片位于准确主标【PACE CLUB】前；所有文字保持清晰并停止全部残影。",
+          "required_anchors": [
+            "One clearly adult identity and at least five appearance anchors precede every graphic module.",
+            "Each module introduces no more than one exact short word and follows one visible action or prop proof.",
+            "Echoes and stickers remain subordinate to the adult and never become replacement characters.",
+            "The final lockup reunites the complete adult, proven prop, recurring shape and one original readable master mark."
+          ],
+          "sha256": "68ae69ebe9cf18d1d868bd21ffd22b850b6ab2494b8d3243885fca21db7e7e22",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-just-sharon7-2094333791904923946-browser-2094333791904923946-video-1",
+          "label": "编辑时装字卡轮播｜身份锁定、姿态证明与版式总归拢",
+          "short_summary": "锁定同一成年金发模特的脸、发型、粉格西装和金色耳饰，让巨型字母、车镜、姿态组、圆环短词、建筑剪影和编号肖像逐模块响应人物动作；终局必须把完整人物和原创主标收拢到同一静止版式。",
+          "recommended_input": "原创明确成年编辑建筑师从电车窗反射中出现：赤褐波浪长发、齐刘海、薄荷格纹西装与一枚银色方形耳饰；准确黑色标题【GRID】同框。；先用三姿势剪影卡核验身份，再把一次前倾绑定准确短词【BUILD】，把一次四分之一转身绑定【ALIGN】，两者位于不同米白黑版式。；建筑师、银色方块与格纹汇入静止黑铜主标，准确显示【GRID / IN MOTION】；所有字母保持可读，全部碎片停止。",
+          "required_anchors": [
+            "One clearly adult identity and at least four face, hair, wardrobe and accessory anchors precede all layout changes.",
+            "Every module binds one readable pose or movement to no more than one new exact short word.",
+            "Vehicle, building and typography cards remain modules of one campaign through recurring color and shape anchors.",
+            "The final lockup reunites the complete adult and original master mark in one readable still frame."
+          ],
+          "sha256": "55241edbd591266831973a3f9bc95a9323e724b43e8fd143490be4528902b724",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-just-sharon7-2094085208027103678-browser-2094085208027103678-video-1",
+          "label": "音频界面字卡变体｜成年角色、波形、耳机与动作模块",
+          "short_summary": "同一成年动画角色以薄荷双发髻、橙色耳机和藏蓝橙夹克保持身份；播放界面、波形、音量环、下落字、跑跳、编号肖像和圆环破碎按动作分章，最后人物站在完整原创播放主标前。",
+          "recommended_input": "奶油色原创媒体面板先输入准确短词【SYNC】，随后显出原创明确成年声音编辑：钴蓝辫发、琥珀耳机、石墨夹克与薄荷波形徽章。；一次向前奔跑穿过轮廓字【FLOW】，直接衔接受控滑行动作沿藏蓝播放条前进；不出现额外角色或替换服装。；成年人穿过落定碎片，在同心圆中停止；准确完整主标【SYNC / KEEP THE BEAT】同框并保持全部文字可读。",
+          "required_anchors": [
+            "One clearly adult identity and at least four appearance anchors precede every interface module.",
+            "Each module is triggered by one visible body or headphone action and introduces no more than one exact short word.",
+            "Boot and portrait-grid proofs verify the same character before the terminal movement.",
+            "The final lockup reunites the adult, settled fragments, recurring rings and one readable original master mark."
+          ],
+          "sha256": "7d8edb8e133fda2cdc404de942cffffd16f1183810b5423dddb1350ebca6edaa",
+          "width": 640,
+          "height": 366,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one original clearly adult stylized character through at least three stable identity anchors and a compact original name mark. Rotate through at least four visually distinct graphic modules; introduce no more than one new short word or identity field per module, and bind each word to one character action that crosses, strikes, occupies or reveals the typography. Preserve the same silhouette, face anchors, palette and mark geometry while layout depth and card structure change. Before the final lockup, include one explicit identity-verification module such as numbered portraits or a fixed character strip. End when one final action places the character inside the complete original name-and-symbol mark and all motion stops. The reusable mechanism is identity-locked module rotation, action-to-word binding, recurring graphic anchors and character-to-wordmark closure—not the source boxer, face, hair, clothes, words, logo, gym, poster layouts, palette, choreography, creator identity or timing.\nInvariants:\n- inv-01: Establish one clearly adult stylized character with at least three identity anchors and one compact original name mark.\n- inv-02: Use at least four distinct graphic modules but introduce no more than one new short word or identity field in each.\n- inv-03: Bind every module's word to one semantic character action that crosses, strikes, occupies or reveals it.\n- inv-04: Preserve silhouette, face anchors, palette and mark geometry across flat cards and spatial modules.\n- inv-05: Verify identity once, then place the character inside the complete original mark and hold.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- A generic character cannot survive a dense module carousel.: Establish one clearly adult stylized character with at least three identity anchors and one compact original name mark.\n- Multiple new phrases per card create an illegible typography reel.: Use at least four distinct graphic modules but introduce no more than one new short word or identity field in each.\n- Unrelated character motion leaves the words decorative.: Bind every module's word to one semantic character action that crosses, strikes, occupies or reveals it.\n- Changing several identity channels at once makes each module look like a new character.: Preserve silhouette, face anchors, palette and mark geometry across flat cards and spatial modules.\n- Ending on another transient card provides no terminal brand or identity proof.: Verify identity once, then place the character inside the complete original mark and hold.\nDo not copy from the source: the source stylized boxer, face, hair, beard, body proportions, shorts, gloves and exact poses; the source TOBILLO KID name, NO REACH NO FEAR, KICK, FAST and all visible source wording; the source bell mark, kick graphic, triptych silhouettes, numbered fighter posters and exact logo layout; the source gym, ring, punching bag, paper cards, palette, camera path, actions and nine-cut timing; the source creator identity, WakeUpGFX marks, MiniMax H3 claim, watermark and branding",
@@ -14399,6 +14552,40 @@
           "height": 1138,
           "duration_seconds": 13.13,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-0xemotions-2094717352973619547-browser-2094717352973619547-video-1",
+          "label": "层压可颂状态链变体｜揉压、包油、折叠、切卷与烤色证明",
+          "short_summary": "同一工作台、面团、黄油、擀杖、刀具和烤盘持续锁定；面团依次经历包油、折叠、层压、切片、卷形、入盘、刷面和烤色等不可逆状态，终局掰开同一批成品证明层次与拉丝。",
+          "recommended_input": "建立原创成年烘焙师的双手、冷色大理石台、黑麦面团长方片、绿色香草黄油片、枫木擀杖与同一只深色烤盘。；同一层压面片再擀一次，准确切成六个三角形，并把每个三角卷成一个螺旋放入同一烤盘。；在烤盘上方掰开其中一个，证明绿色香草层与蒸汽，再把两半放回其余五个旁边，不替换批次。",
+          "required_anchors": [
+            "One adult hand identity, one work surface, one dough, one fat layer, one rolling tool and one tray persist.",
+            "Each beat performs one irreversible food-state operation and inherits visible material traces from the prior state.",
+            "The oven transition returns the same tray and positions with a plausible baked-state change.",
+            "The terminal split uses one item from the verified batch and exposes internal layers without substitution."
+          ],
+          "sha256": "c319e0f1f8fe74cfab1c2465e1b251cee1f5d9fcf2e96d196e3878eecd8e8c9f",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-viniai-2093586975601398111-browser-2093586975601398111-video-1",
+          "label": "动画快炒状态链｜切配、下锅、装盘、递交与食客反应",
+          "short_summary": "锁定同一成年动画厨师、暖光厨房、蔬菜、刀具、炒锅、餐盘与食客；原料依次经历切开、混合、加热、熟化和装盘等不可逆状态，厨师把同一份成品沿连续路线递交，最后由同一成年食客的第一口反应证明完成。",
+          "recommended_input": "建立原创明确成年夜间咖啡馆厨师：铜色高发束、白色厨师服与青绿色领巾；锁定木质备料台、红椒、黄南瓜、平菇、菜刀、铁炒锅、蓝边餐盘，以及相邻餐区的一名成年食客。；把全部备好食材移入同一只铁炒锅，在可见蓝色火焰上翻炒两次并持续搅动，直到表面油亮软化；不能恢复任何完整生食材。；把同一餐盘递给成年食客，只展示一次克制的第一口品尝；结尾停在温暖满意的微笑，厨师、食客与剩余成品必须同时可见。",
+          "required_anchors": [
+            "One clearly adult chef, one workspace, one ingredient set, one cutting tool, one heated vessel, one plate and one adult diner remain bound.",
+            "Each beat performs one irreversible food-state operation and preserves visible material traces from the prior state.",
+            "The plated food carried through the route is the same cooked batch proven in the wok.",
+            "The final adult tasting reaction occurs only after handoff and keeps the remaining dish visible as completion evidence."
+          ],
+          "sha256": "120d81737de4208971e786b67d55ea1fe5bff36bb48fd7f2a49a08f412587da1",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nLock one original clearly adult cook, one kitchen, one main ingredient set, one primary vessel and visible hand or tool anchors. Build at least five irreversible food states; each beat performs one clear operation and leaves visible residue, shape, color, steam or container continuity that becomes input for the next beat. Do not jump backward to whole ingredients after they are cut or cooked. Keep the same serving through plating and end with one restrained taste by the same adult. The reusable mechanism is irreversible state progression, residue continuity, vessel and hand anchors, serving proof and human tasting closure—not the source woman, kitchen, pasta, ingredients, recipe, plate, camera, creator identity or timing.\nInvariants:\n- inv-01: Lock one clearly adult original cook, kitchen, ingredient set, primary vessel and hand or tool anchors.\n- inv-02: Perform exactly one irreversible operation per beat and preserve visible residue into the next.\n- inv-03: Never return to an earlier whole or uncooked state after transformation.\n- inv-04: Keep food color, quantity and container transitions plausible through cooking and plating.\n- inv-05: End with the same plated serving and one restrained taste by the same adult.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Changing cook or vessel makes steps unverifiable.: Lock one clearly adult original cook, kitchen, ingredient set, primary vessel and hand or tool anchors.\n- Multiple hidden operations create unexplained food jumps.: Perform exactly one irreversible operation per beat and preserve visible residue into the next.\n- A reset breaks the cooking chain.: Never return to an earlier whole or uncooked state after transformation.\n- Sudden volume or color swaps suggest a different dish.: Keep food color, quantity and container transitions plausible through cooking and plating.\n- A generic beauty shot cannot verify completion or continuity.: End with the same plated serving and one restrained taste by the same adult.\nDo not copy from the source: source adult woman, face, clothes, hands and reactions; source kitchen, cutting board, pan, utensils and plate; source chicken, onion, mushrooms, pasta, cream sauce and garnish; source recipe order, quantities, colors and exact cooking actions; source Seedance 2.5 prompt wording, camera, timing and creator identity",
@@ -14814,6 +15001,23 @@
           "height": 360,
           "duration_seconds": 14.26,
           "human_preview_only": true
+        },
+        {
+          "case_id": "x-isabellahan-2094785101603168279-browser-2094785101603168279-video-1",
+          "label": "实体文字世界穿行｜固定方向、材质接力与终点人像",
+          "short_summary": "同一成年时装人物沿固定方向穿过由巨型实体短词构成的空间；每个词用不同材质承担一段地理和动作职责，镜头持续证明人物与字块的前后关系，最后以完整人像和原创主标收束。",
+          "recommended_input": "建立一名原创明确成年城市规划师：铜色辫发、炭灰外套、青绿色围巾与方形银框眼镜；她站在狭长混凝土文字廊入口。；空间方向不反转，依次穿过半透明琥珀材质【FORM】与粗糙蓝石材质【BUILD】；每次转场只由一条前景字边遮挡触发。；在文字廊出口以干净近景人像和准确短标【CITY IN WORDS】结束并停留到可读；不复制任何来源名称、造型或字幕。",
+          "required_anchors": [
+            "One clearly adult identity and one forward spatial route are established before the first word crossing.",
+            "Every word is a physical volume with readable foreground, interior and background relationships.",
+            "At least one visible body-to-letter contact proves the typography belongs to the same world.",
+            "The final portrait occurs beyond the last word and carries one exact original master title."
+          ],
+          "sha256": "87a5c2d8e853baf6178b47ece2cc9e8720503661114cd1a057806862f2428ebd",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\nEstablish one clearly adult original subject and a fixed dark spatial axis before material typography appears. Assign each module one short original word, one material family and one physical behavior. Keep the subject identity and travel direction continuous while material physics change. Compress prior modules through a bounded aperture, ribbon or paper relay rather than random cuts. Converge all material channels into one stable terminal portrait and readable original title. The reusable mechanism is the ordered baseline, trigger, continuity, controlled escalation and terminal proof—not the source identities, brands, wording, locations, props, exact styling, choreography, camera path, creator identity or timing.\nInvariants:\n- inv-01: Establish one clearly adult original subject and a fixed dark spatial axis before material typography appears.\n- inv-02: Assign each module one short original word, one material family and one physical behavior.\n- inv-03: Keep the subject identity and travel direction continuous while material physics change.\n- inv-04: Compress prior modules through a bounded aperture, ribbon or paper relay rather than random cuts.\n- inv-05: Converge all material channels into one stable terminal portrait and readable original title.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without the baseline, later change has no trustworthy reference state.: Establish one clearly adult original subject and a fixed dark spatial axis before material typography appears.\n- Without a visible trigger, the transition reads as an arbitrary edit.: Assign each module one short original word, one material family and one physical behavior.\n- Without continuity, the sequence becomes unrelated montage or identity drift.: Keep the subject identity and travel direction continuous while material physics change.\n- Without controlled escalation, the middle either plateaus or turns into noise.: Compress prior modules through a bounded aperture, ribbon or paper relay rather than random cuts.\n- Without terminal proof, the promised result or reversal remains unverified.: Converge all material channels into one stable terminal portrait and readable original title.\nDo not copy from the source: source fashion woman, face, black styling and poses; source smoke, neon, chrome, plants, electricity, shadow, paper and ribbon designs; source words, logo, brand copy and typefaces; source exact tunnel, aperture, eye, transitions, timing and camera motion; source creator identity, MiniMax H3 claim, platform marks and prompt wording",
@@ -14991,6 +15195,23 @@
           "width": 640,
           "height": 360,
           "duration_seconds": 15.26,
+          "human_preview_only": true
+        },
+        {
+          "case_id": "x-aiwithaliya-2094108309011980339-browser-2094108309011980339-video-1",
+          "label": "粉黑动作字场变体｜成年奔跑者以行动生成空间短词",
+          "short_summary": "把来源的青少年与刺客表面完全排除，改用原创明确成年人；角色在固定粉黑城市轴线上奔跑、落地、挥击和停步，每次动作开始后只生成一个语义短词，并让文字成为可落脚、可击中或可穿越的空间结构。",
+          "recommended_input": "奶油与钴蓝图形城市上方建立原创明确成年跑酷制图师：铜色马尾、白色护目镜、炭灰连体服和青色肘带；她第一次踏上屋顶后才生成空间准确短词【ROUTE】。；落地击裂一块已注册网格地砖，并从冲击点升起实体准确短词【GROUND】；全部身份锚点保持稳定。；终局让成年人直立在坡道后，准确金属主标【MAP THE MOVE】同框；原始城市与前面两个路线锚点继续可见。",
+          "required_anchors": [
+            "One clearly adult original performer and a stable world axis are established before any semantic word appears.",
+            "Each decisive action begins before exactly one related short word becomes visible.",
+            "Identity and geography remain continuous across run, landing, strike and terminal stance.",
+            "The final mark follows the completed route and retains at least two previously established spatial anchors."
+          ],
+          "sha256": "03987192bca84e3014481e3664e9fe8ef66f3011d255b08fc8c8c66bf43f2646",
+          "width": 640,
+          "height": 370,
+          "duration_seconds": 15.13,
           "human_preview_only": true
         }
       ],
@@ -15871,6 +16092,391 @@
         }
       ],
       "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n先在海上桥梁建立两辆车并排行驶，再交替使用航拍、车内和低位跟拍证明内外线关系；外线车辆以更长弧线维持速度，终局侧面同框显示车头从齐平变成领先。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: Two distinct vehicles and fixed lane assignments are readable before the curve.\n- inv-02: Multiple camera carriers preserve the same relative positions and direction.\n- inv-03: Environmental geometry proves which route is longer rather than merely labeling it.\n- inv-04: The overtaking gain accumulates continuously in one comparative side view.\n- inv-05: The final shared frame measures the new lead while both vehicles remain in motion.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"Two distinct vehicles and fixed lane assignments are readable before the curve.\": Two distinct vehicles and fixed lane assignments are readable before the curve.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"Multiple camera carriers preserve the same relative positions and direction.\": Multiple camera carriers preserve the same relative positions and direction.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"Environmental geometry proves which route is longer rather than merely labeling it.\": Environmental geometry proves which route is longer rather than merely labeling it.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"The overtaking gain accumulates continuously in one comparative side view.\": The overtaking gain accumulates continuously in one comparative side view.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"The final shared frame measures the new lead while both vehicles remain in motion.\": The final shared frame measures the new lead while both vehicles remain in motion.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-page-character-breach-counterpart-reaction-v1",
+      "label": "纸页角色越界｜原画基线、实体脱离与双媒介互证",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先把平面角色、书页边界和现实房间同时建立，再让同一身份沿可见破口从绘制状态转为实体；实体离开页面后检查自身并回看原载体，终局让平面与现实两种版本互相反应，证明越界不是普通换镜。",
+      "input_format": "一个平面页面与其中的原创角色先保持静止 + 角色沿可见边界连续越界进入实体空间 + 平面与实体两种载体始终可追踪 + 一个实体对应物作出有因反应 + 终局同框证明两个媒介互相影响",
+      "recommended_input": "在浅色天文台内建立原创折页气象图册和黄铜阅读架；暴雨分格中的成年气象员保持银色辫发、青绿色野外外套与三角琥珀徽章。；同一张脸、辫发、外套和徽章穿过纸缝转为写实成年人并踏上天文台地面；图册、支架和毛边开口继续同框。；写实人物与仍在画内的对应角色沿同一视线轴互看；一朵墨云卷成准确原创短标【FORECAST OUTSIDE】后停留。",
+      "required_anchors": [
+        "One flat character, one physical room and one persistent carrier boundary are readable before any breach.",
+        "A visible action by the flat character causes one local opening in the same registered carrier.",
+        "The physical adult leaves the carrier, verifies the new state and deliberately reconnects attention to the unchanged opening.",
+        "The terminal frame proves both media states and a reciprocal counterpart reaction at the same boundary."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-ai-lifehack55-2094985989404205107-browser-2094985989404205107-video-1",
+        "case_sha256": "abd034489901f8b936647f0818014213f39b7e02f1ae495a3560ff74429803ad",
+        "release_score": 4.953,
+        "creative_dna_sha256": "962d175439d84f533f24399883bf01d9b76b17325938b9f0f5a917fea25988bf",
+        "h3_adapter_sha256": "64d997bb7e1196eb1f9a5d4abc675d9cad0ef371af5de2a8c883ac307c266405",
+        "seedance20_adapter_sha256": "08713d0ca449ccabb5d5a842b5dc85daece82fccf95070d8c587715cca21ed7b"
+      },
+      "previews": [
+        {
+          "case_id": "x-ai-lifehack55-2094985989404205107-browser-2094985989404205107-video-1",
+          "label": "纸页角色越界｜原画基线、实体脱离与双媒介互证",
+          "short_summary": "先把平面角色、书页边界和现实房间同时建立，再让同一身份沿可见破口从绘制状态转为实体；实体离开页面后检查自身并回看原载体，终局让平面与现实两种版本互相反应，证明越界不是普通换镜。",
+          "recommended_input": "在浅色天文台内建立原创折页气象图册和黄铜阅读架；暴雨分格中的成年气象员保持银色辫发、青绿色野外外套与三角琥珀徽章。；同一张脸、辫发、外套和徽章穿过纸缝转为写实成年人并踏上天文台地面；图册、支架和毛边开口继续同框。；写实人物与仍在画内的对应角色沿同一视线轴互看；一朵墨云卷成准确原创短标【FORECAST OUTSIDE】后停留。",
+          "required_anchors": [
+            "One flat character, one physical room and one persistent carrier boundary are readable before any breach.",
+            "A visible action by the flat character causes one local opening in the same registered carrier.",
+            "The physical adult leaves the carrier, verifies the new state and deliberately reconnects attention to the unchanged opening.",
+            "The terminal frame proves both media states and a reciprocal counterpart reaction at the same boundary."
+          ],
+          "sha256": "13a67017f5de98672b5c780bd55e3a680e2eac620f48471ae48ec86411ef8705",
+          "width": 640,
+          "height": 640,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n先把平面角色、书页边界和现实房间同时建立，再让同一身份沿可见破口从绘制状态转为实体；实体离开页面后检查自身并回看原载体，终局让平面与现实两种版本互相反应，证明越界不是普通换镜。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One flat character, one physical room and one persistent carrier boundary are readable before any breach.\n- inv-02: A visible action by the flat character causes one local opening in the same registered carrier.\n- inv-03: Identity anchors remain traceable while the character crosses from drawn representation into a physical adult body.\n- inv-04: The physical adult leaves the carrier, verifies the new state and deliberately reconnects attention to the unchanged opening.\n- inv-05: The terminal frame proves both media states and a reciprocal counterpart reaction at the same boundary.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One flat character, one physical room and one persistent carrier boundary are readable before any breach.\": One flat character, one physical room and one persistent carrier boundary are readable before any breach.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"A visible action by the flat character causes one local opening in the same registered carrier.\": A visible action by the flat character causes one local opening in the same registered carrier.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"Identity anchors remain traceable while the character crosses from drawn representation into a physical adult body.\": Identity anchors remain traceable while the character crosses from drawn representation into a physical adult body.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"The physical adult leaves the carrier, verifies the new state and deliberately reconnects attention to the unchanged opening.\": The physical adult leaves the carrier, verifies the new state and deliberately reconnects attention to the unchanged opening.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"The terminal frame proves both media states and a reciprocal counterpart reaction at the same boundary.\": The terminal frame proves both media states and a reciprocal counterpart reaction at the same boundary.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-private-ritual-object-release-detail-route-return-v1",
+      "label": "私密夜间仪式｜物件收尾、细节路线与同场回归",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "在同一私密夜间空间先建立明确成年人物与一个正在进行的个人仪式；人物完成并放下核心物件后，镜头沿手、肩、服装、步伐和家具接触组成连续细节路线，最后回到同一房间和同一成年人已安定的状态。",
+      "input_format": "一名明确成年原创主体与一个私密固定空间 + 一件被克制释放的个人物件 + 至少两个沿物件表面推进的材质细节证据 + 一条连续离开与返回路线 + 终局回到原空间并保留仪式后的状态",
+      "recommended_input": "原创成年电台档案员独处于午夜录音间，保持铜色短发、靛蓝工作衫和银色耳扣；桌上只有一台卷盘录音机与陶瓷茶杯。；连续细节路线从她扣好磁带盒开始，依次连接耳扣、卷起的袖口、肩包带和离开桌面的靴子。；回到开场轴线的较宽画面，同一成年人安静坐定，录音机关灯、耳机放下、磁带盒闭合；不出现他人、来源水印或复制字幕。",
+      "required_anchors": [
+        "One clearly adult identity, one private room and one active ritual object establish the baseline.",
+        "The adult visibly completes and releases the ritual object before the camera begins the detail route.",
+        "Body movement and tactile contacts form one traceable route from the object station to a resting zone.",
+        "The final wide return preserves person and geography while proving the ritual object is inactive and the adult has settled."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-studio-oneroom-2094736167681826950-browser-2094736167681826950-video-1",
+        "case_sha256": "1f4684bded05bcafdd8c57f7000f90ea8d978bc0e3cb4eb07da607e954cfec6c",
+        "release_score": 4.953,
+        "creative_dna_sha256": "036dcf0900223ce21d9ddb802999fb4b97929ea03bad33cdc88dc4d5030f936e",
+        "h3_adapter_sha256": "8c8aa8da42297e00e9346f896a1e4a6595d61c2072ed8f7e10c7134b9df4f65a",
+        "seedance20_adapter_sha256": "9daebea01ab822ae9298aab7d9db57bef3902f89b19f29a6368f512fd1cbd065"
+      },
+      "previews": [
+        {
+          "case_id": "x-studio-oneroom-2094736167681826950-browser-2094736167681826950-video-1",
+          "label": "私密夜间仪式｜物件收尾、细节路线与同场回归",
+          "short_summary": "在同一私密夜间空间先建立明确成年人物与一个正在进行的个人仪式；人物完成并放下核心物件后，镜头沿手、肩、服装、步伐和家具接触组成连续细节路线，最后回到同一房间和同一成年人已安定的状态。",
+          "recommended_input": "原创成年电台档案员独处于午夜录音间，保持铜色短发、靛蓝工作衫和银色耳扣；桌上只有一台卷盘录音机与陶瓷茶杯。；连续细节路线从她扣好磁带盒开始，依次连接耳扣、卷起的袖口、肩包带和离开桌面的靴子。；回到开场轴线的较宽画面，同一成年人安静坐定，录音机关灯、耳机放下、磁带盒闭合；不出现他人、来源水印或复制字幕。",
+          "required_anchors": [
+            "One clearly adult identity, one private room and one active ritual object establish the baseline.",
+            "The adult visibly completes and releases the ritual object before the camera begins the detail route.",
+            "Body movement and tactile contacts form one traceable route from the object station to a resting zone.",
+            "The final wide return preserves person and geography while proving the ritual object is inactive and the adult has settled."
+          ],
+          "sha256": "2d6d99bed42d45bb0f55919ad21875dd7d51686ba282a623f1a28fcf7caca8a5",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n在同一私密夜间空间先建立明确成年人物与一个正在进行的个人仪式；人物完成并放下核心物件后，镜头沿手、肩、服装、步伐和家具接触组成连续细节路线，最后回到同一房间和同一成年人已安定的状态。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One clearly adult identity, one private room and one active ritual object establish the baseline.\n- inv-02: The adult visibly completes and releases the ritual object before the camera begins the detail route.\n- inv-03: Every detail crop inherits an identity, wardrobe, prop or furniture anchor from the same room.\n- inv-04: Body movement and tactile contacts form one traceable route from the object station to a resting zone.\n- inv-05: The final wide return preserves person and geography while proving the ritual object is inactive and the adult has settled.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One clearly adult identity, one private room and one active ritual object establish the baseline.\": One clearly adult identity, one private room and one active ritual object establish the baseline.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"The adult visibly completes and releases the ritual object before the camera begins the detail route.\": The adult visibly completes and releases the ritual object before the camera begins the detail route.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"Every detail crop inherits an identity, wardrobe, prop or furniture anchor from the same room.\": Every detail crop inherits an identity, wardrobe, prop or furniture anchor from the same room.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"Body movement and tactile contacts form one traceable route from the object station to a resting zone.\": Body movement and tactile contacts form one traceable route from the object station to a resting zone.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"The final wide return preserves person and geography while proving the ritual object is inactive and the adult has settled.\": The final wide return preserves person and geography while proving the ritual object is inactive and the adult has settled.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-fabric-light-credit-continuum-v1",
+      "label": "织物光影职员表｜连续载体、球形压痕与字幕接力",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "只用一条连续可追踪的悬浮织物作为字幕载体，让移动光球、阴影、条纹切片与柔性褶皱依次改变文字的显隐和尺度；每条职员表都绑定一次可见材质变形，最后织物退出黑场而不混入无关画面。",
+      "input_format": "一块连续可追踪的原创织物与一种固定光色 + 至少三条短原创职员表依次出现 + 每条文字由织物折叠或光影变化承载 + 材质和运动方向不断裂 + 终局汇入一个完整可读总标题",
+      "recommended_input": "深海军蓝黑场中，一条原创半透明铜色欧根纱长带悬浮；小型青色光球在布下压出可读凹痕，并显出准确职员表【A FILM BY / INA MERCER】。；圆环只收紧一次并显出准确第二条职员表【MOTION / ELI ROAN】；哑光深蓝切片从前景经过，但不能把载体真正切断。；所有压力释放，铜色织物展平到足以承载准确主标题【TIDAL THREAD】；保持可读后，只让同一条布尾缓慢退出黑场。",
+      "required_anchors": [
+        "One continuous flexible carrier remains identifiable from opening through the final title.",
+        "Every credit appears only after one visible light, pressure, fold or occlusion event acts on that carrier.",
+        "Color and graphic overlays never replace the underlying cloth or introduce a second unrelated scene.",
+        "The terminal title is held on the released carrier before the same material exits into black."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-umesh-ai-2094860777475965366-browser-2094860777475965366-video-1",
+        "case_sha256": "be029ada45b6cbea3e6d8c54eb21c04b350faf7a92b84afaabf6e7330ec5db48",
+        "release_score": 4.953,
+        "creative_dna_sha256": "af8e042396dd65d8dc003ea8b97f5444ee8fa0e05bde098d06418f803d71b994",
+        "h3_adapter_sha256": "85810bce9fbdd35d25fc01fd4ef8d8e6262b0082e2df36a00b7659f254075f82",
+        "seedance20_adapter_sha256": "9b88ed7a672caf16277c27b9feb968899f3f5f0c2a9d32251435fb0ec01ef3c9"
+      },
+      "previews": [
+        {
+          "case_id": "x-umesh-ai-2094860777475965366-browser-2094860777475965366-video-1",
+          "label": "织物光影职员表｜连续载体、球形压痕与字幕接力",
+          "short_summary": "只用一条连续可追踪的悬浮织物作为字幕载体，让移动光球、阴影、条纹切片与柔性褶皱依次改变文字的显隐和尺度；每条职员表都绑定一次可见材质变形，最后织物退出黑场而不混入无关画面。",
+          "recommended_input": "深海军蓝黑场中，一条原创半透明铜色欧根纱长带悬浮；小型青色光球在布下压出可读凹痕，并显出准确职员表【A FILM BY / INA MERCER】。；圆环只收紧一次并显出准确第二条职员表【MOTION / ELI ROAN】；哑光深蓝切片从前景经过，但不能把载体真正切断。；所有压力释放，铜色织物展平到足以承载准确主标题【TIDAL THREAD】；保持可读后，只让同一条布尾缓慢退出黑场。",
+          "required_anchors": [
+            "One continuous flexible carrier remains identifiable from opening through the final title.",
+            "Every credit appears only after one visible light, pressure, fold or occlusion event acts on that carrier.",
+            "Color and graphic overlays never replace the underlying cloth or introduce a second unrelated scene.",
+            "The terminal title is held on the released carrier before the same material exits into black."
+          ],
+          "sha256": "20a5e416f46f85ba906f828d82c1c53882438cf194ff6c3b07af947f6eac51ad",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n只用一条连续可追踪的悬浮织物作为字幕载体，让移动光球、阴影、条纹切片与柔性褶皱依次改变文字的显隐和尺度；每条职员表都绑定一次可见材质变形，最后织物退出黑场而不混入无关画面。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One continuous flexible carrier remains identifiable from opening through the final title.\n- inv-02: Every credit appears only after one visible light, pressure, fold or occlusion event acts on that carrier.\n- inv-03: Deformation may distort text transiently but each exact credit must recover to a readable state.\n- inv-04: Color and graphic overlays never replace the underlying cloth or introduce a second unrelated scene.\n- inv-05: The terminal title is held on the released carrier before the same material exits into black.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One continuous flexible carrier remains identifiable from opening through the final title.\": One continuous flexible carrier remains identifiable from opening through the final title.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"Every credit appears only after one visible light, pressure, fold or occlusion event acts on that carrier.\": Every credit appears only after one visible light, pressure, fold or occlusion event acts on that carrier.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"Deformation may distort text transiently but each exact credit must recover to a readable state.\": Deformation may distort text transiently but each exact credit must recover to a readable state.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"Color and graphic overlays never replace the underlying cloth or introduce a second unrelated scene.\": Color and graphic overlays never replace the underlying cloth or introduce a second unrelated scene.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"The terminal title is held on the released carrier before the same material exits into black.\": The terminal title is held on the released carrier before the same material exits into black.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-catastrophe-to-miniature-set-proof-v1",
+      "label": "灾难幻象拆台｜环境吞没、尺度破绽与微缩片场证明",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先让列车、海岸与建筑共享一个可信地理，再让巨浪沿同一轴线逐层吞没铁路和街区；水雾遮满画面后揭开微缩布景、轨道摄影机、操作人员与水槽，让最后一层明确解释前面的灾难效果。",
+      "input_format": "一个真实尺度灾变状态与可辨认地标 + 灾变过程保持空间因果连续 + 摄影机沿同一轴线逐步拉远并揭示尺度边界 + 场景被证明属于完整微缩装置 + 人手或工作台与模型同框完成终局验证",
+      "recommended_input": "建立原创银色单轨列车穿过微缩沙漠天文台的完整地理：一条红色峡谷、三座白色圆顶与固定从左向右的路线。；尘墙依次越过第一座圆顶、吞没轨道，并把一块轻质天线板推向镜头；人物或车辆身份都不改变。；揭示桌面峡谷、两台受控扬尘机、一条运动控制轨道和三名明确成年工作人员剪影；一块监视器保留开场单轨画面，并显示准确短问句【HOW BIG?】。",
+      "required_anchors": [
+        "One fictional geography and at least three repeated scale anchors are established before the hazard grows.",
+        "The catastrophe advances through the same geography in a readable order rather than resetting locations.",
+        "The revealed set contains at least three legible production cues that causally explain the preceding effect.",
+        "A monitoring layer preserves the opening fiction and confirms the miniature-to-image relationship."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-rosey-watson-2094359148590969166-browser-2094359148590969166-video-1",
+        "case_sha256": "00b115c690271dd6e985082b3fdbe506782d0695af29abc6cfdead35570ca5be",
+        "release_score": 4.953,
+        "creative_dna_sha256": "49c766910fb9fd5d2276250e273a2e93716b7527a4a2dda0660e211ac7a2b92a",
+        "h3_adapter_sha256": "263e624efb74f2f6f8170c7f46b93870a6ec8fff57418ddddb42a7af3a085a6b",
+        "seedance20_adapter_sha256": "2c5b9d8ba1aa29a7db7f4b58559694152ae7646e0b32c94924d512904c6e9753"
+      },
+      "previews": [
+        {
+          "case_id": "x-rosey-watson-2094359148590969166-browser-2094359148590969166-video-1",
+          "label": "灾难幻象拆台｜环境吞没、尺度破绽与微缩片场证明",
+          "short_summary": "先让列车、海岸与建筑共享一个可信地理，再让巨浪沿同一轴线逐层吞没铁路和街区；水雾遮满画面后揭开微缩布景、轨道摄影机、操作人员与水槽，让最后一层明确解释前面的灾难效果。",
+          "recommended_input": "建立原创银色单轨列车穿过微缩沙漠天文台的完整地理：一条红色峡谷、三座白色圆顶与固定从左向右的路线。；尘墙依次越过第一座圆顶、吞没轨道，并把一块轻质天线板推向镜头；人物或车辆身份都不改变。；揭示桌面峡谷、两台受控扬尘机、一条运动控制轨道和三名明确成年工作人员剪影；一块监视器保留开场单轨画面，并显示准确短问句【HOW BIG?】。",
+          "required_anchors": [
+            "One fictional geography and at least three repeated scale anchors are established before the hazard grows.",
+            "The catastrophe advances through the same geography in a readable order rather than resetting locations.",
+            "The revealed set contains at least three legible production cues that causally explain the preceding effect.",
+            "A monitoring layer preserves the opening fiction and confirms the miniature-to-image relationship."
+          ],
+          "sha256": "d4b0826afb49bd97d1a1c86759b812e9b70dc58027449c24abbdc0e9342a30c0",
+          "width": 640,
+          "height": 1138,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n先让列车、海岸与建筑共享一个可信地理，再让巨浪沿同一轴线逐层吞没铁路和街区；水雾遮满画面后揭开微缩布景、轨道摄影机、操作人员与水槽，让最后一层明确解释前面的灾难效果。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One fictional geography and at least three repeated scale anchors are established before the hazard grows.\n- inv-02: The catastrophe advances through the same geography in a readable order rather than resetting locations.\n- inv-03: One full-frame physical occlusion bridges the fictional event to the production layer.\n- inv-04: The revealed set contains at least three legible production cues that causally explain the preceding effect.\n- inv-05: A monitoring layer preserves the opening fiction and confirms the miniature-to-image relationship.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One fictional geography and at least three repeated scale anchors are established before the hazard grows.\": One fictional geography and at least three repeated scale anchors are established before the hazard grows.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"The catastrophe advances through the same geography in a readable order rather than resetting locations.\": The catastrophe advances through the same geography in a readable order rather than resetting locations.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"One full-frame physical occlusion bridges the fictional event to the production layer.\": One full-frame physical occlusion bridges the fictional event to the production layer.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"The revealed set contains at least three legible production cues that causally explain the preceding effect.\": The revealed set contains at least three legible production cues that causally explain the preceding effect.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"A monitoring layer preserves the opening fiction and confirms the miniature-to-image relationship.\": A monitoring layer preserves the opening fiction and confirms the miniature-to-image relationship.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-autonomous-packing-disruption-recovery-v1",
+      "label": "自主收纳回路｜物件逐层入箱、空间扰动与闭合恢复",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "固定房间、床面和旅行箱的注册关系，先逐件建立衣物从散置状态到分区入箱的可见路径；装满后用一次空间扰动打散局部秩序，再让同一批物件沿可追踪路径恢复，并以同一旅行箱完整闭合收尾。",
+      "input_format": "一个可读自动包装系统与连续物料路线 + 至少三类物件按固定规则折叠、分拣或入盒 + 一次局部阻塞打乱但不重置既有状态 + 系统沿可追踪步骤恢复运行 + 终局用完整包装、剩余路线和稳定节拍证明闭环",
+      "recommended_input": "建立原创森林绿野外设备箱，打开在工作台上；灰色折叠地图、铜色线缆、蓝色手套、琥珀仪表与奶油夹克分别位于周围五个固定区域。；琥珀仪表锁入中央泡棉槽，奶油夹克折叠覆盖顶部；任何扰动发生前，先明确证明完整装箱基线。；只反向执行被扰动物件的路径，让所有物品回到已验证仓位；同一设备箱只闭合一次，并保持准确小标【FIELD READY】，不增删设备。",
+      "required_anchors": [
+        "One fixed container, one stable room or table and a countable set of objects establish the baseline.",
+        "Each object follows a visible one-at-a-time path into one persistent compartment before the next object moves.",
+        "The disruption may displace objects but cannot replace, duplicate or erase the container or inventory.",
+        "Recovery retraces displaced relations and ends with the same container closed once in a stable frame."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-techhalla-2094743725138178491-browser-2094743725138178491-video-1",
+        "case_sha256": "e0f78d61ada9307b13697da71f4af0530483ba5b917b1050d323886ce45d7c5c",
+        "release_score": 4.953,
+        "creative_dna_sha256": "21f49b1fec443b60e947a5680a3ac13bddd14780eb68676835be9acd23f77700",
+        "h3_adapter_sha256": "8e8a8daac55e6a290445bae46498c4815cc1028f1d5dae63310fcc1cc21ebee3",
+        "seedance20_adapter_sha256": "4184eb3ba7bca31058cffc10d1459cb3f19bc3da188d33bfb543c9dfe00a2f77"
+      },
+      "previews": [
+        {
+          "case_id": "x-techhalla-2094743725138178491-browser-2094743725138178491-video-1",
+          "label": "自主收纳回路｜物件逐层入箱、空间扰动与闭合恢复",
+          "short_summary": "固定房间、床面和旅行箱的注册关系，先逐件建立衣物从散置状态到分区入箱的可见路径；装满后用一次空间扰动打散局部秩序，再让同一批物件沿可追踪路径恢复，并以同一旅行箱完整闭合收尾。",
+          "recommended_input": "建立原创森林绿野外设备箱，打开在工作台上；灰色折叠地图、铜色线缆、蓝色手套、琥珀仪表与奶油夹克分别位于周围五个固定区域。；琥珀仪表锁入中央泡棉槽，奶油夹克折叠覆盖顶部；任何扰动发生前，先明确证明完整装箱基线。；只反向执行被扰动物件的路径，让所有物品回到已验证仓位；同一设备箱只闭合一次，并保持准确小标【FIELD READY】，不增删设备。",
+          "required_anchors": [
+            "One fixed container, one stable room or table and a countable set of objects establish the baseline.",
+            "Each object follows a visible one-at-a-time path into one persistent compartment before the next object moves.",
+            "The disruption may displace objects but cannot replace, duplicate or erase the container or inventory.",
+            "Recovery retraces displaced relations and ends with the same container closed once in a stable frame."
+          ],
+          "sha256": "df3d081a21881e5373727c3ef0c0f19ea1ab028cb01e42aca802a8f48ba2fbeb",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n固定房间、床面和旅行箱的注册关系，先逐件建立衣物从散置状态到分区入箱的可见路径；装满后用一次空间扰动打散局部秩序，再让同一批物件沿可追踪路径恢复，并以同一旅行箱完整闭合收尾。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One fixed container, one stable room or table and a countable set of objects establish the baseline.\n- inv-02: Each object follows a visible one-at-a-time path into one persistent compartment before the next object moves.\n- inv-03: A complete packed state is visibly verified before one bounded disruption occurs.\n- inv-04: The disruption may displace objects but cannot replace, duplicate or erase the container or inventory.\n- inv-05: Recovery retraces displaced relations and ends with the same container closed once in a stable frame.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One fixed container, one stable room or table and a countable set of objects establish the baseline.\": One fixed container, one stable room or table and a countable set of objects establish the baseline.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"Each object follows a visible one-at-a-time path into one persistent compartment before the next object moves.\": Each object follows a visible one-at-a-time path into one persistent compartment before the next object moves.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"A complete packed state is visibly verified before one bounded disruption occurs.\": A complete packed state is visibly verified before one bounded disruption occurs.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"The disruption may displace objects but cannot replace, duplicate or erase the container or inventory.\": The disruption may displace objects but cannot replace, duplicate or erase the container or inventory.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"Recovery retraces displaced relations and ends with the same container closed once in a stable frame.\": Recovery retraces displaced relations and ends with the same container closed once in a stable frame.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-human-scale-display-writing-completion-v1",
+      "label": "人屏同尺度书写｜既有字面、实体补笔与完成姿态",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "先建立成年人、巨型显示面和未完成文字的尺度关系，再让人物用实体书写工具沿同一表面补齐可见笔画；每次身体移动都对应一段新增墨迹，完成后离开接触点并回到全景，用人物、工具和完整原创字面共同证明结果。",
+      "input_format": "一名明确成年原创书写者、一个固定巨型显示面与一段不完整原创文字 + 每次新增笔画只在工具接触后出现 + 已有文字和显示框保持注册准确 + 工具完成后被释放或盖好 + 终局全景同时证明人物、工具与完整可读文字",
+      "recommended_input": "建立原创明确成年标牌画师：铜色短发、钴蓝工作服与白色方形胸贴；她站在巨型奶油交通显示板前，板上准确未完成短句【MEET AT DA__】，右手持宽头炭黑记号笔。；跟随手部，一条弧形笔画把准确单词【DAWN】补完整；显示板边框、已有文字、服装与工具保持不变。；回到广场全景，成年人、已盖帽记号笔与完整可读短句【MEET AT DAWN】同框；文字与身体运动全部停住。",
+      "required_anchors": [
+        "One clearly adult operator, one fixed display and one incomplete exact text establish the baseline.",
+        "Every new stroke begins only after visible tool-to-surface contact at a registered location.",
+        "The tool is visibly released or capped before the operator leaves the writing surface.",
+        "The final wide proves adult, tool and complete readable original message together."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-akemiwork-2094742068010832007-browser-2094742068010832007-video-1",
+        "case_sha256": "d1f7542bc1765553d4a95a0b066b31a3808e512e7c7be806479fe0a97ed15747",
+        "release_score": 4.953,
+        "creative_dna_sha256": "a212044d8e1666ac42fd3ebcd616370ca7769997f4a15e1a96ddc6a6563702e9",
+        "h3_adapter_sha256": "0a852407f820314c2988f7d8bb1606917be1b6b6a3b03cf6d265b409f4cdc00d",
+        "seedance20_adapter_sha256": "5358a5781d32111864509d5e11e277977f2f0fff2346eca431b297bb94ad8d91"
+      },
+      "previews": [
+        {
+          "case_id": "x-akemiwork-2094742068010832007-browser-2094742068010832007-video-1",
+          "label": "人屏同尺度书写｜既有字面、实体补笔与完成姿态",
+          "short_summary": "先建立成年人、巨型显示面和未完成文字的尺度关系，再让人物用实体书写工具沿同一表面补齐可见笔画；每次身体移动都对应一段新增墨迹，完成后离开接触点并回到全景，用人物、工具和完整原创字面共同证明结果。",
+          "recommended_input": "建立原创明确成年标牌画师：铜色短发、钴蓝工作服与白色方形胸贴；她站在巨型奶油交通显示板前，板上准确未完成短句【MEET AT DA__】，右手持宽头炭黑记号笔。；跟随手部，一条弧形笔画把准确单词【DAWN】补完整；显示板边框、已有文字、服装与工具保持不变。；回到广场全景，成年人、已盖帽记号笔与完整可读短句【MEET AT DAWN】同框；文字与身体运动全部停住。",
+          "required_anchors": [
+            "One clearly adult operator, one fixed display and one incomplete exact text establish the baseline.",
+            "Every new stroke begins only after visible tool-to-surface contact at a registered location.",
+            "The tool is visibly released or capped before the operator leaves the writing surface.",
+            "The final wide proves adult, tool and complete readable original message together."
+          ],
+          "sha256": "741807c2194e167a78db8fdcbf4bee4eb1616d5e828bf367063d2a73b0695198",
+          "width": 640,
+          "height": 360,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n先建立成年人、巨型显示面和未完成文字的尺度关系，再让人物用实体书写工具沿同一表面补齐可见笔画；每次身体移动都对应一段新增墨迹，完成后离开接触点并回到全景，用人物、工具和完整原创字面共同证明结果。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One clearly adult operator, one fixed display and one incomplete exact text establish the baseline.\n- inv-02: Every new stroke begins only after visible tool-to-surface contact at a registered location.\n- inv-03: Existing letters, display frame and operator identity remain unchanged while the missing text is completed.\n- inv-04: The tool is visibly released or capped before the operator leaves the writing surface.\n- inv-05: The final wide proves adult, tool and complete readable original message together.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One clearly adult operator, one fixed display and one incomplete exact text establish the baseline.\": One clearly adult operator, one fixed display and one incomplete exact text establish the baseline.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"Every new stroke begins only after visible tool-to-surface contact at a registered location.\": Every new stroke begins only after visible tool-to-surface contact at a registered location.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"Existing letters, display frame and operator identity remain unchanged while the missing text is completed.\": Existing letters, display frame and operator identity remain unchanged while the missing text is completed.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"The tool is visibly released or capped before the operator leaves the writing surface.\": The tool is visibly released or capped before the operator leaves the writing surface.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"The final wide proves adult, tool and complete readable original message together.\": The final wide proves adult, tool and complete readable original message together.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
+      "variants": {
+        "h3": {
+          "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."
+        },
+        "seedance20": {
+          "guidance": "Seedance 2.0 native adapter. Realize every required mechanism anchor as a concrete filmable event inside one compact paragraph or consecutive 镜头N sequence chosen from the task complexity. Use Seedance subject binding, asset roles, coherent motion and sound syntax; never emit H3 field names, [Shot N], alignment lines or absolute per-shot time ranges. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official Seedance rules and a manual reference template."
+        }
+      }
+    },
+    {
+      "id": "t8-case-paired-flotation-water-route-v1",
+      "label": "双脚浮具水面路线｜交替承重、连续尾流与远端抵达",
+      "legacy_ids": [],
+      "legacy_labels": [],
+      "summary": "固定同一成年人物、码头、水面和远方地标，先证明双脚分别绑定独立透明浮具；人物以左右脚交替承重离开码头，每次接触都产生可归因圆波和连续尾流，短暂回看后继续沿同一方向远离并接近既定目标。",
+      "input_format": "一名明确成年原创主体、一个出发边界、一个远方目标与两套独立浮具 + 每一步先分配可见承重再产生对应圆波 + 两套设备始终分离并留下两条连续尾流 + 一次回看不改变前进方向 + 终局宽景用出发点、目标轴与尾流证明路线完成",
+      "recommended_input": "建立原创明确成年河口测绘员：银色辫发、青绿色干式潜水服，两只靴子各锁定一个独立琥珀环形浮筒；她站在木质科研码头，远方红色信标岛始终居中。；交替完成四个可读步伐离开码头，保持两条独立尾流、稳定服装身份和同一信标方向。；受控加速滑向信标，以宽景结束：码头位于后方，同一成年人居中，两条不中断尾流证明路线已完成。",
+      "required_anchors": [
+        "One clearly adult identity, one departure threshold, one distant destination and two separately bound flotation devices establish the baseline.",
+        "Every step assigns weight to one visible device before a corresponding ripple appears.",
+        "A single look-back may interrupt gaze but cannot reverse travel direction or reset geography.",
+        "The final wide retains adult, departure landmark, destination axis and continuous wake proof."
+      ],
+      "status": "active",
+      "authority": "T8 原创案例模板（非官方）",
+      "official": false,
+      "template_kind": "case",
+      "source": {
+        "case_id": "x-johnagi168-2095057466874527798-browser-2095057466874527798-video-1",
+        "case_sha256": "1b7b6699a056ab79f638309fa156d4b7d327d617a65e002b75bfb7e6fbfe174e",
+        "release_score": 4.953,
+        "creative_dna_sha256": "dd35f674db0343270d2a376d73954c2c837d1cf045684ae64159eadf956093e8",
+        "h3_adapter_sha256": "96afc0fc83ca314018ece8818cfb830e2ce7a17950845951c1fdf0c3e4b2e0d6",
+        "seedance20_adapter_sha256": "d4da466319a7ea1f7b3e192c977dd1680ddec8e9b841d1192ed43348beb2eb26"
+      },
+      "previews": [
+        {
+          "case_id": "x-johnagi168-2095057466874527798-browser-2095057466874527798-video-1",
+          "label": "双脚浮具水面路线｜交替承重、连续尾流与远端抵达",
+          "short_summary": "固定同一成年人物、码头、水面和远方地标，先证明双脚分别绑定独立透明浮具；人物以左右脚交替承重离开码头，每次接触都产生可归因圆波和连续尾流，短暂回看后继续沿同一方向远离并接近既定目标。",
+          "recommended_input": "建立原创明确成年河口测绘员：银色辫发、青绿色干式潜水服，两只靴子各锁定一个独立琥珀环形浮筒；她站在木质科研码头，远方红色信标岛始终居中。；交替完成四个可读步伐离开码头，保持两条独立尾流、稳定服装身份和同一信标方向。；受控加速滑向信标，以宽景结束：码头位于后方，同一成年人居中，两条不中断尾流证明路线已完成。",
+          "required_anchors": [
+            "One clearly adult identity, one departure threshold, one distant destination and two separately bound flotation devices establish the baseline.",
+            "Every step assigns weight to one visible device before a corresponding ripple appears.",
+            "A single look-back may interrupt gaze but cannot reverse travel direction or reset geography.",
+            "The final wide retains adult, departure landmark, destination axis and continuous wake proof."
+          ],
+          "sha256": "fa5fdf85595c9f34fdf77c074981c3eaf8f0808112b28e8b5ab61d6cf43646ea",
+          "width": 640,
+          "height": 1138,
+          "duration_seconds": 15.13,
+          "human_preview_only": true
+        }
+      ],
+      "creative_dna": "Reusable Creative DNA (mechanism and production grammar only):\n固定同一成年人物、码头、水面和远方地标，先证明双脚分别绑定独立透明浮具；人物以左右脚交替承重离开码头，每次接触都产生可归因圆波和连续尾流，短暂回看后继续沿同一方向远离并接近既定目标。 The reusable mechanism preserves causal order, spatial anchors and the final proof while replacing every source-specific person, location, object, wording, choreography and design.\nInvariants:\n- inv-01: One clearly adult identity, one departure threshold, one distant destination and two separately bound flotation devices establish the baseline.\n- inv-02: Every step assigns weight to one visible device before a corresponding ripple appears.\n- inv-03: The two devices remain distinct and generate two traceable wake lines throughout the route.\n- inv-04: A single look-back may interrupt gaze but cannot reverse travel direction or reset geography.\n- inv-05: The final wide retains adult, departure landmark, destination axis and continuous wake proof.\nVariable slots:\n- lead_subject: An original stable subject or pair with a readable role.\n- setting: A new setting with fixed spatial anchors and no source-specific surface.\n- escalation_variable: One causal variable that changes through visible stages.\n- performance_rule: A restrained acting or motion rule that keeps the mechanism legible.\n- camera_grammar: An information order that proves each state without copying source shot boundaries.\n- payoff: A clean final physical, informational or social consequence.\n- sound_family: An original hierarchy of diegetic cues; no unsupported source-audio claim.\nFailure prevention:\n- Without this exact baseline rule, later changes cannot be attributed to the same subject, object or place, so the sequence loses its reference state. Removed rule: \"One clearly adult identity, one departure threshold, one distant destination and two separately bound flotation devices establish the baseline.\": One clearly adult identity, one departure threshold, one distant destination and two separately bound flotation devices establish the baseline.\n- Without this exact trigger rule, the response appears spontaneously and the central cause-and-effect claim is no longer demonstrated. Removed rule: \"Every step assigns weight to one visible device before a corresponding ripple appears.\": Every step assigns weight to one visible device before a corresponding ripple appears.\n- Without this exact progression rule, the middle can jump to a replacement state and the accumulated result is no longer traceable. Removed rule: \"The two devices remain distinct and generate two traceable wake lines throughout the route.\": The two devices remain distinct and generate two traceable wake lines throughout the route.\n- Without this exact reconnection rule, detail or transformed shots can belong to a different subject or geography and continuity cannot be verified. Removed rule: \"A single look-back may interrupt gaze but cannot reverse travel direction or reset geography.\": A single look-back may interrupt gaze but cannot reverse travel direction or reset geography.\n- Without this exact terminal-proof rule, the sequence stops on motion alone and never confirms the promised outcome or preserved aftermath. Removed rule: \"The final wide retains adult, departure landmark, destination axis and continuous wake proof.\": The final wide retains adult, departure landmark, destination axis and continuous wake proof.\nDo not copy from the source: all source faces, bodies, wardrobe, identities and creator-specific character designs; the source location, set dressing, props, products and exact environmental geometry; all source words, logos, watermarks, typefaces and brand identifiers; the source choreography, exact camera path, shot durations and transition timing; the source palette, signature effects, prompt wording, creator handle and narrative particulars",
       "variants": {
         "h3": {
           "guidance": "MiniMax H3 native adapter. Realize every required mechanism anchor as a concrete visible event inside the native H3 integrated description or Ref2VA detailed description. Preserve the exact H3 Base/Ref2VA field order, [Shot N] timeline, camera continuity, soundscape and music separation. Do not emit Seedance 镜头N or @图片N syntax. The case mechanism is lower priority than user intent, observable media, hard constraints, duration, fixed shot count, official H3 rules, official creative presets and a manual reference template."

@@ -1,0 +1,84 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-09-02-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-ai-lifehack55-2094985989404205107-browser-2094985989404205107-video-1",
+      "template_id": "t8-case-page-character-breach-counterpart-reaction-v1",
+      "label": "纸页角色越界｜原画基线、实体脱离与双媒介互证",
+      "summary": "先把平面角色、书页边界和现实房间同时建立，再让同一身份沿可见破口从绘制状态转为实体；实体离开页面后检查自身并回看原载体，终局让平面与现实两种版本互相反应，证明越界不是普通换镜。",
+      "case_sha256": "abd034489901f8b936647f0818014213f39b7e02f1ae495a3560ff74429803ad",
+      "creative_dna_sha256": "962d175439d84f533f24399883bf01d9b76b17325938b9f0f5a917fea25988bf",
+      "h3_adapter_sha256": "64d997bb7e1196eb1f9a5d4abc675d9cad0ef371af5de2a8c883ac307c266405",
+      "seedance20_adapter_sha256": "08713d0ca449ccabb5d5a842b5dc85daece82fccf95070d8c587715cca21ed7b",
+      "mechanism_fingerprint": "b4b7a9d7ffeb02191c2fca2e6dc9821de0efabf151a30e48c919b40e51d7985c"
+    },
+    {
+      "case_id": "x-studio-oneroom-2094736167681826950-browser-2094736167681826950-video-1",
+      "template_id": "t8-case-private-ritual-object-release-detail-route-return-v1",
+      "label": "私密夜间仪式｜物件收尾、细节路线与同场回归",
+      "summary": "在同一私密夜间空间先建立明确成年人物与一个正在进行的个人仪式；人物完成并放下核心物件后，镜头沿手、肩、服装、步伐和家具接触组成连续细节路线，最后回到同一房间和同一成年人已安定的状态。",
+      "case_sha256": "1f4684bded05bcafdd8c57f7000f90ea8d978bc0e3cb4eb07da607e954cfec6c",
+      "creative_dna_sha256": "036dcf0900223ce21d9ddb802999fb4b97929ea03bad33cdc88dc4d5030f936e",
+      "h3_adapter_sha256": "8c8aa8da42297e00e9346f896a1e4a6595d61c2072ed8f7e10c7134b9df4f65a",
+      "seedance20_adapter_sha256": "9daebea01ab822ae9298aab7d9db57bef3902f89b19f29a6368f512fd1cbd065",
+      "mechanism_fingerprint": "5272f7e5ce3859c7d123104ed8dfdcdea30736cd45c81be75641318a65af2a3a"
+    },
+    {
+      "case_id": "x-umesh-ai-2094860777475965366-browser-2094860777475965366-video-1",
+      "template_id": "t8-case-fabric-light-credit-continuum-v1",
+      "label": "织物光影职员表｜连续载体、球形压痕与字幕接力",
+      "summary": "只用一条连续可追踪的悬浮织物作为字幕载体，让移动光球、阴影、条纹切片与柔性褶皱依次改变文字的显隐和尺度；每条职员表都绑定一次可见材质变形，最后织物退出黑场而不混入无关画面。",
+      "case_sha256": "be029ada45b6cbea3e6d8c54eb21c04b350faf7a92b84afaabf6e7330ec5db48",
+      "creative_dna_sha256": "af8e042396dd65d8dc003ea8b97f5444ee8fa0e05bde098d06418f803d71b994",
+      "h3_adapter_sha256": "85810bce9fbdd35d25fc01fd4ef8d8e6262b0082e2df36a00b7659f254075f82",
+      "seedance20_adapter_sha256": "9b88ed7a672caf16277c27b9feb968899f3f5f0c2a9d32251435fb0ec01ef3c9",
+      "mechanism_fingerprint": "72da499d9f10530926de8c6fb9a73591980683a55bdb8f9ff3a4500c8114630f"
+    },
+    {
+      "case_id": "x-rosey-watson-2094359148590969166-browser-2094359148590969166-video-1",
+      "template_id": "t8-case-catastrophe-to-miniature-set-proof-v1",
+      "label": "灾难幻象拆台｜环境吞没、尺度破绽与微缩片场证明",
+      "summary": "先让列车、海岸与建筑共享一个可信地理，再让巨浪沿同一轴线逐层吞没铁路和街区；水雾遮满画面后揭开微缩布景、轨道摄影机、操作人员与水槽，让最后一层明确解释前面的灾难效果。",
+      "case_sha256": "00b115c690271dd6e985082b3fdbe506782d0695af29abc6cfdead35570ca5be",
+      "creative_dna_sha256": "49c766910fb9fd5d2276250e273a2e93716b7527a4a2dda0660e211ac7a2b92a",
+      "h3_adapter_sha256": "263e624efb74f2f6f8170c7f46b93870a6ec8fff57418ddddb42a7af3a085a6b",
+      "seedance20_adapter_sha256": "2c5b9d8ba1aa29a7db7f4b58559694152ae7646e0b32c94924d512904c6e9753",
+      "mechanism_fingerprint": "03e203ff59e064e3447aee901b55327fb30df550609e24756518e4015b3ca2d1"
+    },
+    {
+      "case_id": "x-techhalla-2094743725138178491-browser-2094743725138178491-video-1",
+      "template_id": "t8-case-autonomous-packing-disruption-recovery-v1",
+      "label": "自主收纳回路｜物件逐层入箱、空间扰动与闭合恢复",
+      "summary": "固定房间、床面和旅行箱的注册关系，先逐件建立衣物从散置状态到分区入箱的可见路径；装满后用一次空间扰动打散局部秩序，再让同一批物件沿可追踪路径恢复，并以同一旅行箱完整闭合收尾。",
+      "case_sha256": "e0f78d61ada9307b13697da71f4af0530483ba5b917b1050d323886ce45d7c5c",
+      "creative_dna_sha256": "21f49b1fec443b60e947a5680a3ac13bddd14780eb68676835be9acd23f77700",
+      "h3_adapter_sha256": "8e8a8daac55e6a290445bae46498c4815cc1028f1d5dae63310fcc1cc21ebee3",
+      "seedance20_adapter_sha256": "4184eb3ba7bca31058cffc10d1459cb3f19bc3da188d33bfb543c9dfe00a2f77",
+      "mechanism_fingerprint": "b030764435e2654b80cb106e72b2bbc9f8c957b421ba324feb72b3a58db52ca2"
+    },
+    {
+      "case_id": "x-akemiwork-2094742068010832007-browser-2094742068010832007-video-1",
+      "template_id": "t8-case-human-scale-display-writing-completion-v1",
+      "label": "人屏同尺度书写｜既有字面、实体补笔与完成姿态",
+      "summary": "先建立成年人、巨型显示面和未完成文字的尺度关系，再让人物用实体书写工具沿同一表面补齐可见笔画；每次身体移动都对应一段新增墨迹，完成后离开接触点并回到全景，用人物、工具和完整原创字面共同证明结果。",
+      "case_sha256": "d1f7542bc1765553d4a95a0b066b31a3808e512e7c7be806479fe0a97ed15747",
+      "creative_dna_sha256": "a212044d8e1666ac42fd3ebcd616370ca7769997f4a15e1a96ddc6a6563702e9",
+      "h3_adapter_sha256": "0a852407f820314c2988f7d8bb1606917be1b6b6a3b03cf6d265b409f4cdc00d",
+      "seedance20_adapter_sha256": "5358a5781d32111864509d5e11e277977f2f0fff2346eca431b297bb94ad8d91",
+      "mechanism_fingerprint": "0e5620e2185c5839d8b91243d0fffc6734d9f76fe9de062eb89eb75fe2a3ff51"
+    },
+    {
+      "case_id": "x-johnagi168-2095057466874527798-browser-2095057466874527798-video-1",
+      "template_id": "t8-case-paired-flotation-water-route-v1",
+      "label": "双脚浮具水面路线｜交替承重、连续尾流与远端抵达",
+      "summary": "固定同一成年人物、码头、水面和远方地标，先证明双脚分别绑定独立透明浮具；人物以左右脚交替承重离开码头，每次接触都产生可归因圆波和连续尾流，短暂回看后继续沿同一方向远离并接近既定目标。",
+      "case_sha256": "1b7b6699a056ab79f638309fa156d4b7d327d617a65e002b75bfb7e6fbfe174e",
+      "creative_dna_sha256": "dd35f674db0343270d2a376d73954c2c837d1cf045684ae64159eadf956093e8",
+      "h3_adapter_sha256": "96afc0fc83ca314018ece8818cfb830e2ce7a17950845951c1fdf0c3e4b2e0d6",
+      "seedance20_adapter_sha256": "d4da466319a7ea1f7b3e192c977dd1680ddec8e9b841d1192ed43348beb2eb26",
+      "mechanism_fingerprint": "ff937a42e0255b23fdefb937c5e11c8289a071f7b8beaddca058af757094d1b1"
+    }
+  ]
+}
