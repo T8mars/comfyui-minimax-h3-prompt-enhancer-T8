@@ -103,6 +103,7 @@ try:
         DEFAULT_CONTEXT_SIZE,
         DEFAULT_MAX_TOKENS,
         DEFAULT_VIDEO_SAMPLE_FPS,
+        MAX_OUTPUT_TOKENS,
         LOCAL_QWEN_API_MODE,
         LocalQwenProvider,
         LocalQwenProviderError,
@@ -132,6 +133,7 @@ except ImportError:
         DEFAULT_CONTEXT_SIZE,
         DEFAULT_MAX_TOKENS,
         DEFAULT_VIDEO_SAMPLE_FPS,
+        MAX_OUTPUT_TOKENS,
         LOCAL_QWEN_API_MODE,
         LocalQwenProvider,
         LocalQwenProviderError,
@@ -1979,16 +1981,21 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     step=4096,
                     optional=True,
                     advanced=True,
+                    tooltip="输入文字、视觉部件、思考和最终正文共享此上下文；数值越大，占用的内存/显存越多。",
                 ),
                 io.Int.Input(
                     "local_max_tokens",
-                    display_name="本地最大输出 Token",
+                    display_name="本地单次生成 Token（含思考）",
                     default=DEFAULT_MAX_TOKENS,
                     min=256,
-                    max=8192,
-                    step=256,
+                    max=MAX_OUTPUT_TOKENS,
+                    step=1024,
                     optional=True,
                     advanced=True,
+                    tooltip=(
+                        "思考过程与最终提示词共用此预算。默认 16384；Medium/XHigh 被截断时可继续提高，"
+                        "但必须给 local_context_size 留出输入与至少 1024 Token 安全空间。"
+                    ),
                 ),
                 io.Combo.Input(
                     "local_think_mode",

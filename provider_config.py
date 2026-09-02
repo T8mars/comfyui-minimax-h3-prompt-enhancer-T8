@@ -6,7 +6,12 @@ from comfy_api.latest import io
 
 try:
     from .credential_store import CredentialStoreError, get_credential
-    from .local_qwen_provider import DEFAULT_CONTEXT_SIZE, DEFAULT_MAX_TOKENS, DEFAULT_VIDEO_SAMPLE_FPS
+    from .local_qwen_provider import (
+        DEFAULT_CONTEXT_SIZE,
+        DEFAULT_MAX_TOKENS,
+        DEFAULT_VIDEO_SAMPLE_FPS,
+        MAX_OUTPUT_TOKENS,
+    )
     from .local_qwen_runtime import (
         AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
@@ -29,7 +34,12 @@ try:
     )
 except ImportError:
     from credential_store import CredentialStoreError, get_credential
-    from local_qwen_provider import DEFAULT_CONTEXT_SIZE, DEFAULT_MAX_TOKENS, DEFAULT_VIDEO_SAMPLE_FPS
+    from local_qwen_provider import (
+        DEFAULT_CONTEXT_SIZE,
+        DEFAULT_MAX_TOKENS,
+        DEFAULT_VIDEO_SAMPLE_FPS,
+        MAX_OUTPUT_TOKENS,
+    )
     from local_qwen_runtime import (
         AUTO_MMPROJ,
         DEFAULT_MMPROJ_FILENAME,
@@ -189,8 +199,29 @@ class T8LLMProviderConfig(io.ComfyNode):
                 ),
                 io.Combo.Input("local_model", display_name="本地 GGUF 主模型", options=list_gguf_models(), default=DEFAULT_MODEL_FILENAME, advanced=True),
                 io.Combo.Input("local_mmproj", display_name="本地视觉投影器", options=list_mmproj_models(), default=AUTO_MMPROJ, advanced=True),
-                io.Int.Input("local_context_size", display_name="本地上下文 Token", default=DEFAULT_CONTEXT_SIZE, min=8192, max=65536, step=4096, advanced=True),
-                io.Int.Input("local_max_tokens", display_name="本地最大输出 Token", default=DEFAULT_MAX_TOKENS, min=256, max=8192, step=256, advanced=True),
+                io.Int.Input(
+                    "local_context_size",
+                    display_name="本地上下文 Token",
+                    default=DEFAULT_CONTEXT_SIZE,
+                    min=8192,
+                    max=65536,
+                    step=4096,
+                    advanced=True,
+                    tooltip="输入、视觉部件、思考和最终正文共享此上下文；数值越大，占用的内存/显存越多。",
+                ),
+                io.Int.Input(
+                    "local_max_tokens",
+                    display_name="本地单次生成 Token（含思考）",
+                    default=DEFAULT_MAX_TOKENS,
+                    min=256,
+                    max=MAX_OUTPUT_TOKENS,
+                    step=1024,
+                    advanced=True,
+                    tooltip=(
+                        "思考过程与最终正文共用此预算。默认 16384；Medium/XHigh 被截断时可继续提高，"
+                        "但必须给 local_context_size 留出输入与至少 1024 Token 安全空间。"
+                    ),
+                ),
                 io.Combo.Input("local_think_mode", display_name="本地思考模式", options=LOCAL_THINK_OPTIONS, default=LOCAL_THINK_OFF, advanced=True),
                 io.Combo.Input("local_reasoning_effort", display_name="本地推理强度", options=LOCAL_REASONING_OPTIONS, default="medium", advanced=True),
                 io.Float.Input("local_video_sample_fps", display_name="本地视频采样率", default=DEFAULT_VIDEO_SAMPLE_FPS, min=0.25, max=8.0, step=0.25, advanced=True),

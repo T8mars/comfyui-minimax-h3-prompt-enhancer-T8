@@ -402,7 +402,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(node["widgets_values"][20:22], [0, "fixed"])
         self.assertEqual(node["widgets_values"][22], "Qwen3.8-27B-Q4_K_M.gguf")
         self.assertEqual(node["widgets_values"][23], nodes.AUTO_MMPROJ)
-        self.assertEqual(node["widgets_values"][24:26], [32768, 4096])
+        self.assertEqual(node["widgets_values"][24:26], [32768, 16384])
         self.assertNotRegex(source, r"sk-[A-Za-z0-9_-]{8,}")
 
     def test_output_language_rules_and_length_units_reach_the_model(self):

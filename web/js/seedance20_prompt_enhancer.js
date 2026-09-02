@@ -159,7 +159,7 @@ const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
     local_mmproj: "mmproj-F16.gguf",
     local_context_size: 32768,
-    local_max_tokens: 4096,
+    local_max_tokens: 16384,
     local_think_mode: "关闭（推荐，速度优先）",
     local_reasoning_effort: "medium",
     local_video_sample_fps: 2.0,

@@ -119,6 +119,13 @@ class LocalQwenUnitTests(unittest.TestCase):
     def test_settings_and_seed_contract(self):
         settings = provider.settings_from_values(local_context_size=32768, local_max_tokens=4096)
         self.assertEqual(settings.context_size, 32768)
+        defaults = provider.settings_from_values()
+        self.assertEqual(defaults.max_tokens, 16384)
+        self.assertEqual(provider.MAX_OUTPUT_TOKENS, 61440)
+        expanded = provider.settings_from_values(local_context_size=65536, local_max_tokens=61440)
+        self.assertEqual(expanded.max_tokens, 61440)
+        with self.assertRaisesRegex(provider.LocalQwenProviderError, "61440"):
+            provider.settings_from_values(local_context_size=65536, local_max_tokens=61441)
         self.assertEqual(runtime.normalize_llama_seed(0xFFFFFFFF), 0)
         self.assertEqual(runtime.normalize_llama_seed(0x100000001), 2)
         with self.assertRaises(provider.LocalQwenProviderError):

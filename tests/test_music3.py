@@ -876,7 +876,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         self.assertIn("隐私隔离", node["widgets_values"][19])
         self.assertEqual(len(node["widgets_values"]), 38)
         self.assertEqual(node["widgets_values"][31], "Qwen3.8-27B-Q4_K_M.gguf")
-        self.assertEqual(node["widgets_values"][32:34], [32768, 4096])
+        self.assertEqual(node["widgets_values"][32:34], [32768, 16384])
 
     def test_official_source_manifest_pins_snapshot_counts_and_hash(self):
         manifest = json.loads((PROJECT_ROOT / "official_skills" / "SOURCE.json").read_text(encoding="utf-8"))

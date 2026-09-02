@@ -344,6 +344,8 @@ ComfyUI/models/LLM/
 
 Subdirectories are supported. The scanner reads lightweight GGUF metadata, separates main models from `mmproj` projectors, preserves legacy filenames, and recommends a compatible visual projector. Discovery means the file can be offered to llama.cpp; it does not mean every third-party model has passed this project's quality suite.
 
+`Local tokens per generation (including thinking)` pays for both the model's reasoning and the final artifact. The former 8192 ceiling was a conservative project guardrail, not a Qwen or llama.cpp limit. New nodes and bundled examples now default to `16384`, and users may set `256–61440`; existing workflows retain their saved value and can be raised manually. The output budget must remain at least 1024 tokens below `local_context_size` and must still leave room for prompt and visual inputs. For example, values above `31743` require increasing the default `32768` context to `65536`. Larger contexts consume more RAM/VRAM.
+
 Full GitHub-install runtime fallback order:
 
 1. The pinned `llama-server` installed by this repository.

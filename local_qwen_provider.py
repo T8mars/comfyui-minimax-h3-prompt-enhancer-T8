@@ -54,7 +54,8 @@ except ImportError:
 LOCAL_QWEN_API_MODE = "本地 GGUF（llama.cpp / Qwen，离线）"
 LEGACY_LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）"
 DEFAULT_CONTEXT_SIZE = 32768
-DEFAULT_MAX_TOKENS = 4096
+DEFAULT_MAX_TOKENS = 16384
+MAX_OUTPUT_TOKENS = 61440
 DEFAULT_VIDEO_SAMPLE_FPS = 2.0
 MAX_VISUAL_PARTS = 16
 CONTEXT_SAFETY_TOKENS = 1024
@@ -208,8 +209,10 @@ class LocalQwenSettings:
         sample_fps = float(self.video_sample_fps)
         if context_size < 8192 or context_size > 65536:
             raise LocalQwenProviderError("Local GGUF context size must be between 8192 and 65536 tokens.")
-        if max_tokens < 256 or max_tokens > 8192:
-            raise LocalQwenProviderError("Local GGUF output token limit must be between 256 and 8192.")
+        if max_tokens < 256 or max_tokens > MAX_OUTPUT_TOKENS:
+            raise LocalQwenProviderError(
+                f"Local GGUF output token limit must be between 256 and {MAX_OUTPUT_TOKENS}."
+            )
         if max_tokens + CONTEXT_SAFETY_TOKENS >= context_size:
             raise LocalQwenProviderError("Local GGUF output token limit leaves no usable input context.")
         if sample_fps < 0.25 or sample_fps > 8.0:
@@ -392,6 +395,7 @@ class LocalQwenProvider:
 __all__ = [
     "DEFAULT_CONTEXT_SIZE",
     "DEFAULT_MAX_TOKENS",
+    "MAX_OUTPUT_TOKENS",
     "DEFAULT_VIDEO_SAMPLE_FPS",
     "AUTO_MMPROJ",
     "LOCAL_QWEN_API_MODE",

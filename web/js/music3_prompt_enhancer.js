@@ -156,7 +156,7 @@ const SERIALIZED_WIDGET_NAMES = [
 const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
     local_context_size: 32768,
-    local_max_tokens: 4096,
+    local_max_tokens: 16384,
     local_think_mode: "关闭（推荐，速度优先）",
     local_reasoning_effort: "medium",
     local_unload_policy: "执行后卸载（推荐）",

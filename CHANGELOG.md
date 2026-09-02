@@ -5,6 +5,17 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-09-03
+
+### Changed
+
+- Raise the local GGUF per-generation default from 4096 to 16384 tokens and
+  expand the user-configurable ceiling from 8192 to 61440 for H3, Seedance
+  2.0, Music 3, and the shared provider node. Thinking and final output share
+  this budget; the existing context/input safety validation remains enforced.
+- Update bundled workflows and frontend defaults to 16384 without rewriting
+  the values serialized in users' existing workflows.
+
 ## [1.13.1] - 2026-09-02
 
 ### Changed
