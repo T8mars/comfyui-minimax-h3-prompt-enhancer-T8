@@ -519,76 +519,93 @@ class T8CharacterPerformanceBible(io.ComfyNode):
             node_id="T8CharacterPerformanceBible",
             display_name="T8 Character Performance Bible（角色表演圣经）",
             category="T8/Creative Suite",
-            description="把角色目标、阻力、策略、声音与身体惯性编译为轻量表演合同；不调用 LLM。",
+            description=(
+                "只需填写角色标识、场景目标、阻力与失败代价；其余五项为高级选填。"
+                "本节点只补充人物动机与表演，不替代主提示词，也不调用 LLM。"
+            ),
             inputs=[
-                io.String.Input("character_id", display_name="角色标识 / 素材标签", default="角色A"),
+                io.String.Input(
+                    "character_id",
+                    display_name="角色标识 / Character ID（必填 / Required）",
+                    default="角色A",
+                ),
                 io.String.Input(
                     "scene_objective",
-                    display_name="场景目标 / Scene objective",
+                    display_name="场景目标 / Scene objective（必填 / Required）",
                     multiline=True,
                     default="",
                     placeholder=(
-                        "场景目标 / Scene objective：想让谁做什么 / Who should do what?\n"
+                        "场景目标（必填）/ Scene objective (Required)：想让谁做什么 / Who should do what?\n"
                         "示例 / Example：让妹妹交钥匙 / Get sister to hand over the keys."
                     ),
                 ),
                 io.String.Input(
                     "obstacle_and_stakes",
-                    display_name="阻力与失败代价 / Obstacle & stakes",
+                    display_name="阻力与失败代价 / Obstacle & stakes（必填 / Required）",
                     multiline=True,
                     default="",
                     placeholder=(
-                        "阻力与代价 / Obstacle & stakes：阻力 + 失败后果 / Obstacle + cost of failure.\n"
+                        "阻力与代价（必填）/ Obstacle & stakes (Required)：阻力 + 失败后果 / Obstacle + cost of failure.\n"
                         "示例 / Example：妹妹拒绝；失败将错过末班车 / She refuses; miss the last train."
                     ),
                 ),
                 io.String.Input(
                     "tactics",
-                    display_name="策略阶梯 / Tactics（每行一个 / one per line）",
+                    display_name="策略阶梯 / Tactics（选填 / Optional）",
+                    optional=True,
+                    advanced=True,
                     multiline=True,
                     default="",
                     placeholder=(
-                        "策略阶梯 / Tactics：每行一个 / One tactic per line.\n"
+                        "策略阶梯（选填）/ Tactics (Optional)：每行一个 / One tactic per line.\n"
                         "示例 / Example：试探询问 / Probe；提出交换 / Trade；直接阻拦 / Block"
                     ),
                 ),
                 io.String.Input(
                     "physical_task_and_inertia",
-                    display_name="手头动作与身体惯性 / Physical task & inertia",
+                    display_name="手头动作与身体惯性 / Physical task & inertia（选填 / Optional）",
+                    optional=True,
+                    advanced=True,
                     multiline=True,
                     default="",
                     placeholder=(
-                        "动作与惯性 / Task & inertia：手头动作 + 延续状态 / Task + carried body state.\n"
+                        "动作与惯性（选填）/ Task & inertia (Optional)：手头动作 + 延续状态 / Task + carried body state.\n"
                         "示例 / Example：收拾行李，同时压住发抖的手 / Pack while steadying trembling hands."
                     ),
                 ),
                 io.String.Input(
                     "voice_lock",
-                    display_name="声音锁定 / Voice lock（仅说话时 / only when speaking）",
+                    display_name="声音锁定 / Voice lock（选填 / Optional）",
+                    optional=True,
+                    advanced=True,
                     multiline=True,
                     default="",
                     placeholder=(
-                        "声音锁定 / Voice lock：音量、语速、口音或禁区 / Volume, pace, accent, limits.\n"
+                        "声音锁定（选填）/ Voice lock (Optional)：音量、语速、口音或禁区 / Volume, pace, accent, limits.\n"
                         "示例 / Example：低声短句，越紧张越慢 / Low, short, slower under stress."
                     ),
                 ),
                 io.String.Input(
                     "mask_break_trigger",
-                    display_name="面具破裂触发 / Mask-break trigger",
+                    display_name="面具破裂触发 / Mask-break trigger（选填 / Optional）",
+                    optional=True,
+                    advanced=True,
                     multiline=True,
                     default="",
                     placeholder=(
-                        "面具破裂 / Mask break：何时失去伪装 / What breaks the mask?\n"
+                        "面具破裂（选填）/ Mask break (Optional)：何时失去伪装 / What breaks the mask?\n"
                         "示例 / Example：听见父亲名字时笑容停住 / Smile drops at father's name."
                     ),
                 ),
                 io.String.Input(
                     "gaze_and_listening",
-                    display_name="视线与倾听反应 / Gaze & listening",
+                    display_name="视线与倾听反应 / Gaze & listening（选填 / Optional）",
+                    optional=True,
+                    advanced=True,
                     multiline=True,
                     default="",
                     placeholder=(
-                        "视线与倾听 / Gaze & listening：看哪里 + 听后反应 / Gaze + listening response.\n"
+                        "视线与倾听（选填）/ Gaze & listening (Optional)：看哪里 + 听后反应 / Gaze + listening response.\n"
                         "示例 / Example：避开姐姐目光；钥匙一响便抬眼 / Avoid her gaze; look up at key sound."
                     ),
                 ),

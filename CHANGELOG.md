@@ -5,6 +5,23 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.12.3] - 2026-09-02
+
+### Changed
+
+- Make the Character Performance Bible's three required fields explicit and
+  move its five acting-detail fields behind a non-serialized advanced toggle
+  that starts collapsed.
+- Add a locale-aware usage card explaining prompt/bible scope and the correct
+  green output connection, without changing node IDs, output contracts, or
+  saved values.
+
+### Verified
+
+- Add schema, minimal-execution, localization, and real-browser coverage for
+  required/optional fields, expand/collapse behavior, help-card placement, and
+  non-serialization.
+
 ## [1.12.2] - 2026-09-02
 
 ### Changed

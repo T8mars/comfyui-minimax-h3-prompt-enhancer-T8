@@ -21,6 +21,8 @@ try {
   const recommendation = await import("../../web/js/template_recommendation.mjs");
   const menu = await import("../../web/js/template_menu_preview.js");
   const templateBrowser = await import("../../web/js/template_browser.js");
+  const { app } = await import("../../scripts/app.js");
+  await import("../../web/js/film_workflow_ui.js");
 
   const widgets = ["prompt", "custom_model", "openai_base_url"].map((name) => ({ name, value: "" }));
   state.restoreNamedWidgetValues({ widgets }, new Map([
@@ -52,6 +54,82 @@ try {
   );
   check(reloadedWidgets[0].value === liveBase.value, "live Base URL saved before blur");
   check(reloadedWidgets[1].value === liveModel.value, "live model ID saved before blur");
+
+  const filmExtension = app.extensions.find((item) => item.name === "T8.FilmWorkflowStatus");
+  check(Boolean(filmExtension), "film workflow UI extension registered");
+  function CharacterBibleNode() {
+    this.size = [600, 0];
+    this.widgets = [];
+    this.section = document.createElement("section");
+    this.section.className = "node";
+    this.section.dataset.nodeId = "T8CharacterPerformanceBible";
+    document.body.append(this.section);
+    for (const name of [
+      "character_id", "scene_objective", "obstacle_and_stakes", "tactics",
+      "physical_task_and_inertia", "voice_lock", "mask_break_trigger", "gaze_and_listening",
+    ]) {
+      const element = document.createElement(name === "character_id" ? "input" : "textarea");
+      element.dataset.widgetName = name;
+      this.section.append(element);
+      this.widgets.push({
+        name,
+        type: "text",
+        hidden: false,
+        element,
+        computeSize: () => [520, name === "character_id" ? 28 : 58],
+      });
+    }
+  }
+  CharacterBibleNode.prototype.addWidget = function (type, name, value, callback, options) {
+    const widget = { type, name, value, callback, options, computeSize: () => [520, 28] };
+    this.widgets.push(widget);
+    return widget;
+  };
+  CharacterBibleNode.prototype.addDOMWidget = function (name, type, element, options) {
+    const widget = {
+      name, type, element, options,
+      computeSize: () => [520, Number(options.getMinHeight?.() || 0)],
+    };
+    this.widgets.push(widget);
+    this.section.append(element);
+    return widget;
+  };
+  CharacterBibleNode.prototype.computeSize = function () {
+    const height = this.widgets.reduce((sum, widget) => sum + Math.max(0, Number(widget.computeSize?.()?.[1] || 0)), 24);
+    return [Math.max(520, this.size[0]), height];
+  };
+  CharacterBibleNode.prototype.setSize = function (size) { this.size = size; };
+  CharacterBibleNode.prototype.setDirtyCanvas = function () {};
+  await filmExtension.beforeRegisterNodeDef(CharacterBibleNode, { name: "T8CharacterPerformanceBible" });
+  const bibleNode = new CharacterBibleNode();
+  bibleNode.onNodeCreated();
+  const optionalNames = new Set([
+    "tactics", "physical_task_and_inertia", "voice_lock", "mask_break_trigger", "gaze_and_listening",
+  ]);
+  const optionalWidgets = bibleNode.widgets.filter((widget) => optionalNames.has(widget.name));
+  const bibleToggle = bibleNode.widgets.find((widget) => widget.name.includes("高级表演选项"));
+  const bibleHelp = bibleNode.widgets.find((widget) => widget.name === "t8_character_bible_help");
+  check(optionalWidgets.length === 5, "character bible exposes five advanced optional fields");
+  check(optionalWidgets.every((widget) => widget.hidden && widget.element.hidden), "character bible optional fields start collapsed");
+  check(Boolean(bibleToggle) && bibleToggle.options.serialize === false, "character bible advanced toggle is non-serialized");
+  check(Boolean(bibleHelp) && bibleHelp.options.serialize === false, "character bible help card is non-serialized");
+  check(bibleNode.widgets.at(-1) === bibleHelp, "character bible help card stays at the bottom");
+  check(bibleHelp.element.textContent.includes("不要复制完整提示词"), "character bible help explains prompt separation");
+  const collapsedHeight = bibleNode.size[1];
+  bibleToggle.callback();
+  check(optionalWidgets.every((widget) => !widget.hidden && !widget.element.hidden), "character bible optional fields expand on demand");
+  check(bibleToggle.value === "收起 / Collapse", "character bible toggle reports expanded state");
+  check(bibleNode.size[1] > collapsedHeight, "character bible grows after advanced fields expand");
+  bibleToggle.callback();
+  check(optionalWidgets.every((widget) => widget.hidden && widget.element.hidden), "character bible optional fields collapse again");
+  bibleNode.onNodeCreated();
+  check(bibleNode.widgets.filter((widget) => widget.name === "t8_character_bible_help").length === 1, "character bible help card is installed once");
+  app.ui.settings.getSettingValue = () => "en";
+  const englishBibleNode = new CharacterBibleNode();
+  englishBibleNode.onNodeCreated();
+  const englishBibleHelp = englishBibleNode.widgets.find((widget) => widget.name === "t8_character_bible_help");
+  check(englishBibleHelp.element.textContent.includes("do not copy the complete main prompt"), "character bible help follows the English locale");
+  app.ui.settings.getSettingValue = () => "zh";
 
   const renderedNodes = [];
   for (const nodeId of ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]) {

@@ -114,14 +114,14 @@
   "T8CharacterPerformanceBible": {
     "display_name": "T8 角色表演圣经",
     "inputs": {
-      "character_id": {"name": "角色标识 / 素材标签"},
-      "scene_objective": {"name": "场景目标 / Scene objective"},
-      "obstacle_and_stakes": {"name": "阻力与失败代价 / Obstacle & stakes"},
-      "tactics": {"name": "策略阶梯 / Tactics（每行一个）"},
-      "physical_task_and_inertia": {"name": "手头动作与身体惯性 / Physical task & inertia"},
-      "voice_lock": {"name": "声音锁定 / Voice lock（仅说话时）"},
-      "mask_break_trigger": {"name": "面具破裂触发 / Mask-break trigger"},
-      "gaze_and_listening": {"name": "视线与倾听反应 / Gaze & listening"}
+      "character_id": {"name": "角色标识 / Character ID（必填 / Required）"},
+      "scene_objective": {"name": "场景目标 / Scene objective（必填 / Required）"},
+      "obstacle_and_stakes": {"name": "阻力与失败代价 / Obstacle & stakes（必填 / Required）"},
+      "tactics": {"name": "策略阶梯 / Tactics（选填 / Optional）"},
+      "physical_task_and_inertia": {"name": "手头动作与身体惯性 / Physical task & inertia（选填 / Optional）"},
+      "voice_lock": {"name": "声音锁定 / Voice lock（选填 / Optional）"},
+      "mask_break_trigger": {"name": "面具破裂触发 / Mask-break trigger（选填 / Optional）"},
+      "gaze_and_listening": {"name": "视线与倾听反应 / Gaze & listening（选填 / Optional）"}
     },
     "outputs": {
       "0": {"name": "角色表演圣经"},

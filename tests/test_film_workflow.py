@@ -185,6 +185,18 @@ class FilmWorkflowTests(unittest.TestCase):
         self.assertIn("hideOnZoom: true", combined)
         self.assertIn("Comfy.Locale", combined)
         self.assertIn("estimateStatusCardHeight", combined)
+        self.assertIn('const BIBLE_NODE_ID = "T8CharacterPerformanceBible"', ui_source)
+        self.assertIn("const BIBLE_ADVANCED_WIDGET_NAMES = [", ui_source)
+        self.assertIn('"gaze_and_listening",', ui_source)
+        self.assertIn("installBibleAdvancedToggle(this)", ui_source)
+        self.assertIn("⚙️ 高级表演选项（5 项选填）/ Advanced optional fields", ui_source)
+        self.assertIn('toggle.value = expanded ? "收起 / Collapse" : "展开 / Expand"', ui_source)
+        self.assertIn('node.addDOMWidget("t8_character_bible_help"', ui_source)
+        self.assertIn("必填 / Required", ui_source)
+        self.assertIn("高级选填 / Optional", ui_source)
+        self.assertIn("只把绿色“角色表演圣经”输出", ui_source)
+        self.assertIn("serialize: false", ui_source)
+        self.assertIn("hideOnZoom: true", ui_source)
         self.assertNotIn("requestAnimationFrame", combined)
 
     def test_character_bible_has_bounded_observable_compiler_contract(self):
@@ -196,6 +208,18 @@ class FilmWorkflowTests(unittest.TestCase):
         self.assertIn("迫使警探相信证词", instruction)
         self.assertIn("no more than three", instruction)
         self.assertIn("never invent dialogue", instruction)
+
+    def test_character_bible_runs_with_only_the_three_required_fields(self):
+        bible, contract, encoded = film.T8CharacterPerformanceBible.execute(
+            "哥哥",
+            "让妹妹交出车钥匙",
+            "妹妹拒绝；失败会错过末班车",
+        )
+        self.assertEqual(bible["character_id"], "哥哥")
+        self.assertEqual(bible["tactics"], [])
+        self.assertEqual(bible["voice_lock"], "")
+        self.assertNotIn("voice_lock", contract)
+        self.assertEqual(json.loads(encoded)["obstacle_and_stakes"], "妹妹拒绝；失败会错过末班车")
 
     def test_character_bible_is_connection_only_for_both_core_nodes(self):
         for node in (h3.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
@@ -209,16 +233,38 @@ class FilmWorkflowTests(unittest.TestCase):
     def test_character_bible_schema_uses_bilingual_nonpersistent_examples(self):
         schema = film.T8CharacterPerformanceBible.define_schema()
         inputs = {item.id: item for item in schema.inputs}
-        guided_ids = [
+        required_ids = [
+            "character_id",
             "scene_objective",
             "obstacle_and_stakes",
+        ]
+        optional_ids = [
             "tactics",
             "physical_task_and_inertia",
             "voice_lock",
             "mask_break_trigger",
             "gaze_and_listening",
         ]
-        self.assertEqual([item.id for item in schema.inputs], ["character_id", *guided_ids])
+        guided_ids = [
+            "scene_objective",
+            "obstacle_and_stakes",
+            *optional_ids,
+        ]
+        self.assertEqual([item.id for item in schema.inputs], [*required_ids, *optional_ids])
+        schema_info = schema.get_v1_info(film.T8CharacterPerformanceBible)
+        self.assertEqual(schema_info.input_order["required"], required_ids)
+        self.assertEqual(schema_info.input_order["optional"], optional_ids)
+        for input_id in required_ids:
+            self.assertFalse(inputs[input_id].optional, input_id)
+            self.assertFalse(inputs[input_id].advanced, input_id)
+            self.assertIn("必填 / Required", inputs[input_id].display_name, input_id)
+        for input_id in required_ids[1:]:
+            self.assertIn("(Required)", inputs[input_id].placeholder, input_id)
+        for input_id in optional_ids:
+            self.assertTrue(inputs[input_id].optional, input_id)
+            self.assertTrue(inputs[input_id].advanced, input_id)
+            self.assertIn("选填 / Optional", inputs[input_id].display_name, input_id)
+            self.assertIn("(Optional)", inputs[input_id].placeholder, input_id)
         for input_id in guided_ids:
             item = inputs[input_id]
             self.assertEqual(item.default, "", input_id)

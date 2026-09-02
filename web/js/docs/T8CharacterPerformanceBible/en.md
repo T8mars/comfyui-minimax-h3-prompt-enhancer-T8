@@ -4,6 +4,10 @@ Compiles one current character's objective, obstacle, stakes, tactics, physical 
 
 The bilingual text inside each field is placeholder guidance only; it is never written to the output. Click a field and replace it with your own content.
 
+Only three fields are required: `Character ID`, `Scene objective`, and `Obstacle & stakes`. Tactics, physical inertia, voice, mask break, and gaze/listening are advanced optional fields and remain collapsed until you need precise acting control. Do not copy the complete main prompt into them.
+
+The main prompt owns plot, action, camera, and timing; the performance bible adds only character objectives, resistance, and acting progression. Keep both sources consistent. Connect only the green Character Performance Bible output to the matching H3 or Seedance input; the text and JSON outputs are for inspection.
+
 Quick reference example:
 
 - Scene objective: Get his sister to hand over the car keys.

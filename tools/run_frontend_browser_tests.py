@@ -55,6 +55,20 @@ def main() -> int:
                 self.send_response(204)
                 self.end_headers()
                 return
+            if self.path.split("?", 1)[0] == "/scripts/app.js":
+                payload = b'''export const app = {
+  extensions: [],
+  canvas: { setDirty() {} },
+  ui: { settings: { getSettingValue() { return "zh"; }, settingsValues: {} } },
+  registerExtension(extension) { this.extensions.push(extension); }
+};
+'''
+                self.send_response(200)
+                self.send_header("Content-Type", "text/javascript; charset=utf-8")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
             if self.path.split("?", 1)[0] == "/scripts/api.js":
                 payload = b'''export const api = {
   apiURL(path) { return path; },
@@ -96,7 +110,7 @@ def main() -> int:
                 "--dump-dom",
             ]
             if virtual_time:
-                command.insert(-2, "--virtual-time-budget=2500")
+                command.insert(-2, "--virtual-time-budget=5000")
             command.append(f"{base_url}/{filename}")
             return subprocess.run(
                 command,
@@ -135,6 +149,14 @@ def main() -> int:
             )
     try:
         completed = run_page(HARNESS.name, virtual_time=True)
+        # Headless Chromium can occasionally dump the initial DOM before an
+        # ES-module harness starts, even with a virtual-time budget. Retry only
+        # that exact pre-execution state; real FAIL results are never retried.
+        for _attempt in range(2):
+            result = re.search(r'<pre id="result"[^>]*>(.*?)</pre>', completed.stdout, re.DOTALL)
+            if completed.returncode != 0 or not result or result.group(1).strip() != "RUNNING":
+                break
+            completed = run_page(HARNESS.name, virtual_time=True)
         performance = run_page(PERFORMANCE_HARNESS.name, virtual_time=False)
         screenshot_page = HARNESS.name if args.screenshot_state == "browser" else f"{HARNESS.name}?state=menu"
         capture = capture_page(screenshot_page, args.screenshot) if args.screenshot else None
@@ -143,7 +165,8 @@ def main() -> int:
         server.server_close()
         thread.join(timeout=2)
     if completed.returncode != 0 or 'data-status="pass"' not in completed.stdout:
-        detail = completed.stdout[-4000:] or completed.stderr[-4000:]
+        result = re.search(r'<pre id="result"[^>]*>(.*?)</pre>', completed.stdout, re.DOTALL)
+        detail = (result.group(1) if result else completed.stdout[-4000:]) or completed.stderr[-4000:]
         raise RuntimeError(f"Frontend browser contracts failed (exit={completed.returncode}):\n{detail}")
     if performance.returncode != 0 or 'data-status="pass"' not in performance.stdout:
         detail = performance.stdout[-4000:] or performance.stderr[-4000:]
