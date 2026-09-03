@@ -280,7 +280,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(len(case_template.options), 231)
+        self.assertEqual(len(case_template.options), 237)
         self.assertEqual(case_template.display_name, "非官方模板（案例 / 社区 Skill）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
@@ -704,8 +704,8 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
         self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
-        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 231)
-        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 231)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 237)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 237)
 
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
@@ -816,12 +816,12 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
-        self.assertEqual(len(catalog["templates"]), 230)
-        self.assertEqual(catalog["source_case_count"], 455)
-        self.assertEqual(catalog["case_selector_template_count"], 228)
+        self.assertEqual(len(catalog["templates"]), 236)
+        self.assertEqual(catalog["source_case_count"], 475)
+        self.assertEqual(catalog["case_selector_template_count"], 234)
         self.assertEqual(catalog["community_skill_count"], 2)
-        self.assertEqual(catalog["selector_template_count"], 230)
-        self.assertEqual(catalog["evidence_variant_count"], 227)
+        self.assertEqual(catalog["selector_template_count"], 236)
+        self.assertEqual(catalog["evidence_variant_count"], 241)
         self.assertEqual(catalog["pending_completion_count"], 0)
         self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
@@ -1003,7 +1003,7 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertTrue(template["previews"])
             self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
             preview_count += len(template["previews"])
-        self.assertEqual(preview_count, 457)
+        self.assertEqual(preview_count, 477)
         controller_case = by_id["t8-case-visible-four-axis-controller-same-beat-response-v1"]
         self.assertEqual(controller_case["label"], "指尖控制｜四向同拍全身响应")
         self.assertEqual(len(controller_case["required_anchors"]), 4)
@@ -1017,20 +1017,20 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(len(new_case["previews"]), 1)
         self.assertIn("琥珀玻璃目录标记", new_case["recommended_input"])
         self.assertTrue(all(preview["human_preview_only"] for preview in new_case["previews"]))
-        self.assertEqual(len(by_id["t8c001-product-proof-state-machine"]["previews"]), 22)
+        self.assertEqual(len(by_id["t8c001-product-proof-state-machine"]["previews"]), 23)
         self.assertEqual(len(by_id["t8-case-imperfect-memory-farewell-v1"]["previews"]), 5)
         self.assertEqual(len(by_id["t8-case-flat-geometry-reconstruction-v1"]["previews"]), 5)
         self.assertEqual(len(by_id["t8-case-recurring-identity-board-v1"]["previews"]), 11)
-        self.assertEqual(len(by_id["t8-case-observer-follow-encounter-v1"]["previews"]), 6)
-        self.assertEqual(len(by_id["t8-case-identity-locked-style-world-carousel-v1"]["previews"]), 5)
+        self.assertEqual(len(by_id["t8-case-observer-follow-encounter-v1"]["previews"]), 7)
+        self.assertEqual(len(by_id["t8-case-identity-locked-style-world-carousel-v1"]["previews"]), 7)
         self.assertEqual(len(by_id["t8c002-fixed-composition-medium-ladder"]["previews"]), 3)
-        self.assertEqual(len(by_id["t8-case-character-action-typography-module-carousel-v1"]["previews"]), 21)
+        self.assertEqual(len(by_id["t8-case-character-action-typography-module-carousel-v1"]["previews"]), 22)
         harvest_case = by_id["t8-case-route-inventory-accumulation-return-v1"]
         self.assertEqual(harvest_case["label"], "晨间收获闭环｜人物巡园、连续采摘与动物回应")
         self.assertEqual(len(harvest_case["previews"]), 1)
         self.assertEqual(len(by_id["t8-case-single-accent-scale-activation-relay-v1"]["previews"]), 2)
         self.assertEqual(len(by_id["t8-case-irreversible-cooking-state-chain-serving-proof-v1"]["previews"]), 7)
-        self.assertEqual(len(by_id["t8-case-semantic-typography-world-action-relay-v1"]["previews"]), 6)
+        self.assertEqual(len(by_id["t8-case-semantic-typography-world-action-relay-v1"]["previews"]), 7)
         september_selectors = {
             "t8-case-rule-bounded-search-reaction-payoff-v1",
             "t8-case-threatening-object-energy-conversion-product-v1",
@@ -1039,6 +1039,12 @@ class PromptEnhancerTests(unittest.TestCase):
             "t8-case-interface-capability-proof-montage-v1",
             "t8-case-ritual-expectation-blackout-return-v1",
             "t8-case-asymmetric-route-cost-overtake-proof-v1",
+            "t8-case-scale-paired-stage-response-orbit-hand-rest-v1",
+            "t8-case-cross-medium-paired-route-chapter-synchrony-v1",
+            "t8-case-shared-ride-reaction-stop-recovery-exit-v1",
+            "t8-case-delayed-turn-silhouette-contamination-lens-breach-v1",
+            "t8-case-environment-interrupted-duel-resumption-v1",
+            "t8-case-routine-tool-shoreline-interruption-recovery-return-v1",
         }
         self.assertTrue(september_selectors.issubset(by_id))
         self.assertTrue(all(len(by_id[template_id]["previews"]) >= 1 for template_id in september_selectors))
@@ -1080,7 +1086,7 @@ class PromptEnhancerTests(unittest.TestCase):
             batch = json.loads(source)
             self.assertEqual(batch["schema_version"], "t8-case-template-batch/v1")
             source_cases.extend(batch["cases"])
-        self.assertEqual(len(source_cases), 228)
+        self.assertEqual(len(source_cases), 234)
         self.assertEqual({item["case_id"] for item in source_cases}, set(catalog_by_case))
         for item in source_cases:
             template = catalog_by_case[item["case_id"]]

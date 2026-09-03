@@ -1,0 +1,73 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-09-03-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-imastudio-ai-2095357375549182080-browser-2095357375549182080-video-1",
+      "template_id": "t8-case-scale-paired-stage-response-orbit-hand-rest-v1",
+      "label": "跨尺度舞台搭档｜环绕回应、手掌落点与共同定格",
+      "summary": "锁定成年表演者、微型原创伙伴和同一舞台，先用独立动作建立双方身份，再让小伙伴沿可追踪环线回应人物手势；终局必须落到人物手掌或近身位置，并以共同姿态证明跨尺度关系。",
+      "case_sha256": "0962a8ab6562debb14dbd3764366a9db27e530f93d13fed1429bb057da29140f",
+      "creative_dna_sha256": "05b56cc8173d2f7a9b8f89741722acd6302a904311ce12be4baac89583539079",
+      "h3_adapter_sha256": "14d7522f38d8733dbd3a244598a6c004614f00585a4131e049bb1e0cff9c0bdb",
+      "seedance20_adapter_sha256": "8b7fa248ab436df4dd3bb6fd57d97ba74c148c79fda8518d03dd949f91461f47",
+      "mechanism_fingerprint": "71c283aeef32683c6f422835d9a572440fef55f5022edf9f1f72de77cc5d69b8"
+    },
+    {
+      "case_id": "x-johnagi168-2095340020274000115-browser-2095340020274000115-video-1",
+      "template_id": "t8-case-cross-medium-paired-route-chapter-synchrony-v1",
+      "label": "跨媒介旅伴路线｜地标换章、同步动作与共同终姿",
+      "summary": "固定一名成年真人和一名成年二维原创旅伴，两者保持不同材质却共享方向、节拍与地标路线；每章由一次同步手势或步态证明同场，最终以共同动作结束而非互相替换。",
+      "case_sha256": "773650058e6a35b19ea1fc3a373a75e87b0a05e4c441eef9ed6a1cdc226f7dfa",
+      "creative_dna_sha256": "fbc2bbf67b384f469b1e55793d5fd45a84f7c731d95afd53a734fb646fe0557d",
+      "h3_adapter_sha256": "d99792bf97438d255e6fa7af741e5a7ced6ed9ed4d8903d722e58e08fc53d26b",
+      "seedance20_adapter_sha256": "e6005ccc4cb273cc07a2d24e810c8f14541c9f5d7930486dbc636a826b18d028",
+      "mechanism_fingerprint": "73ad8f99387df2435afbbde048a03777d3db7c9f4c15bb05d847656c715e92d2"
+    },
+    {
+      "case_id": "x-sailorv321-2095143791061766504-browser-2095143791061766504-video-1",
+      "template_id": "t8-case-shared-ride-reaction-stop-recovery-exit-v1",
+      "label": "同乘反应曲线｜设施加速、共同峰值、骤停与离场",
+      "summary": "把两名原创伙伴固定在同一游乐设施和相邻座位，用共同外部运动依次推动戒备、加速反应和情绪峰值；设施骤停后双方必须互相确认、恢复，再共同离开。",
+      "case_sha256": "e83a8c4d6454e1342f7c023cc9e65c83c88de223bdb959cb2cddda4131fc28bc",
+      "creative_dna_sha256": "b59c933bb723eba502f9afacb4da029c2cfa590404c5fb738972c9dd7817ce5e",
+      "h3_adapter_sha256": "9dca1ac5d821346f89ea27c1c52f0e6bb09b01324c249fc12f6719dd69a2087e",
+      "seedance20_adapter_sha256": "b1cb8621b2fd12c3bd520271e3d752e9d081b044b24cb92a63fbe81f428bc46b",
+      "mechanism_fingerprint": "4e06bb5f16bd029d2446410e20c767d668a0aa731f9b45f4be5f3b11f96f7200"
+    },
+    {
+      "case_id": "x-challenger-nd-2095071613201109151-browser-2095071613201109151-video-1",
+      "template_id": "t8-case-delayed-turn-silhouette-contamination-lens-breach-v1",
+      "label": "延迟转身惊变｜固定走廊、轮廓污染与贴镜突破",
+      "summary": "固定走廊中先让成年人物背对镜头保持普通基线，再以一次缓慢转身建立面孔；黑色发丝或烟影从肩部连续扩张，表情和轮廓逐级异变，最终只发生一次贴近镜头的突破。",
+      "case_sha256": "0be0594f7300b2ef7825e79ce42f815f184113d7f147981351c5811faf659e79",
+      "creative_dna_sha256": "c49f8a1f13808607267add05a025f241aca2143a60822d7203b6273db281971e",
+      "h3_adapter_sha256": "7eb934360676952a1c1d7ac521804e6d60edb14c91186108d21b49d0ca26b4f2",
+      "seedance20_adapter_sha256": "98c2bb43ada8e38128d491c0bf6974907434ae4aa379da2e10ce7e2344201d1e",
+      "mechanism_fingerprint": "53b7798850b4c787ef1dcbc42903ff735b55292e2a79138d309e8160e2aad332"
+    },
+    {
+      "case_id": "x-aiwithaly-2095361506863091963-browser-2095361506863091963-video-1",
+      "template_id": "t8-case-environment-interrupted-duel-resumption-v1",
+      "label": "环境介入对决｜攻防交换、外力中断与原位复战",
+      "summary": "先在同一危险环境中建立两名成年对手和可读攻防轴，让风、雨和载体摇摆逐步改变脚步；一次强烈环境事件必须同时打断双方，双方恢复站位后沿原轴继续交锋。",
+      "case_sha256": "5ea797c5eb5ba076d7ef8a6d5dc478333ac1ce154f4c3ceead1945e926d5b743",
+      "creative_dna_sha256": "af3b353a793afd7bf57b247668c311569a7a32063bb6a6233c43c4d759892ed3",
+      "h3_adapter_sha256": "991a311da8412c1595fd6bec4e9b632da2c1d77aa75adb992cc7e1d94783de02",
+      "seedance20_adapter_sha256": "c668ccd011c6347e7b2e1024f56013268c6b9d0d01e830a699cf02a5b437957e",
+      "mechanism_fingerprint": "bacc7cdfc58c8ad97bf872e6c44f02bc2abe88ccf2d351cae0da51ae64190d03"
+    },
+    {
+      "case_id": "x-afrinxai-2095346478248264085-browser-2095346478248264085-video-1",
+      "template_id": "t8-case-routine-tool-shoreline-interruption-recovery-return-v1",
+      "label": "岸边任务回路｜营地准备、带物行进、浪击恢复与返回",
+      "summary": "先让成年人物在固定营地完成一项带工具的晨间准备，再携带同一器具沿清楚路线走到水边；一次海浪打断任务后，人物保持器具并恢复站立，随后沿原方向返回营地。",
+      "case_sha256": "60ec3f3920efa3112a4dd90beeb323b2199731dd61cc9cb91ddd98a60120eff4",
+      "creative_dna_sha256": "2e1352d29b1f3e96f49daf829f43f2513ce253291fc0ae3bfa338710c6eabd11",
+      "h3_adapter_sha256": "6fd4ee2acd206b00cabd61b8fa39d4c71da419ac01a0e2c0be655debee53687a",
+      "seedance20_adapter_sha256": "3603b885a79534ad5c96e2747c03da79d987f28b077905e7c5c0568518a1c881",
+      "mechanism_fingerprint": "661929b51edac3341fd7916d6eda20bc70ffa85e4a6371130d69be99ebcb3f43"
+    }
+  ]
+}

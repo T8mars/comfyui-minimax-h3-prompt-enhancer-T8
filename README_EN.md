@@ -36,7 +36,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - Supports first frame, last frame, first-and-last-frame, multiple reference images, and multiple reference videos.
 - Includes the pinned official MiniMax H3 core prompt-writing Skill and all eight optional official scene Skills.
 - Includes the complete pinned MiniMax Music 3 `music-caption-rewriter` snapshot: 18 family indexes and 1,000 templates with progressive disclosure.
-- Includes 455 released T8 case records consolidated into 228 stable selectors, including 227 evidence variants, plus two independent community Skills. All 230 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and lightweight GIF previews.
+- Includes 475 released T8 case records consolidated into 234 stable selectors, including 241 evidence variants, plus two independent community Skills. All 236 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and lightweight GIF previews.
 - Chinese and English prompt output.
 - `strict`, `balanced`, and `creative` rewrite levels.
 - `AUTO` or fixed 1–20 shot control.
@@ -124,9 +124,9 @@ Or install with Comfy CLI:
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-The Registry package contains the node runtime code, pinned official Skills, the non-official case library, eight official GIFs, and a small preview-channel manifest. The 457 T8 GIFs are not embedded in the Registry ZIP. When a user opens a T8 case, the node downloads only its small release shard and caches it under `ComfyUI/user/t8_prompt_enhancer/preview_assets`. The package still excludes API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, and GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
+The Registry package contains the node runtime code, pinned official Skills, the non-official case library, eight official GIFs, and a small preview-channel manifest. The 477 T8 GIFs are not embedded in the Registry ZIP. When a user opens a T8 case, the node downloads only its small release shard and caches it under `ComfyUI/user/t8_prompt_enhancer/preview_assets`. The package still excludes API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, and GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
 
-All 465 official/T8 previews remain available. The main repository retains the eight official GIFs and the previous 377 T8 GIFs as an offline baseline; all 457 T8 previews, including new additions, are updated through the versioned [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) release channel. Shards, individual GIFs, catalog identities, and source hashes are verified before cache installation. Offline or failed preview downloads never stop prompt enhancement.
+All 485 official/T8 previews remain available. The main repository retains the eight official GIFs and the previous 377 T8 GIFs as an offline baseline; all 477 T8 previews, including new additions, are updated through the versioned [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) release channel. Shards, individual GIFs, catalog identities, and source hashes are verified before cache installation. Offline or failed preview downloads never stop prompt enhancement.
 
 Restart ComfyUI after installation. If the frontend still shows an older node layout, refresh the browser with `Ctrl+F5`.
 
