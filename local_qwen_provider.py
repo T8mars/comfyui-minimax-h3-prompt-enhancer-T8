@@ -59,6 +59,8 @@ MAX_OUTPUT_TOKENS = 61440
 DEFAULT_VIDEO_SAMPLE_FPS = 2.0
 MAX_VISUAL_PARTS = 16
 CONTEXT_SAFETY_TOKENS = 1024
+MIN_OUTPUT_TOKENS = 256
+VISUAL_TOKENS_EACH = 1024
 
 
 _CJK_CHARACTER_RE = re.compile(r"[\u3400-\u9fff]")
@@ -209,9 +211,9 @@ class LocalQwenSettings:
         sample_fps = float(self.video_sample_fps)
         if context_size < 8192 or context_size > 65536:
             raise LocalQwenProviderError("Local GGUF context size must be between 8192 and 65536 tokens.")
-        if max_tokens < 256 or max_tokens > MAX_OUTPUT_TOKENS:
+        if max_tokens < MIN_OUTPUT_TOKENS or max_tokens > MAX_OUTPUT_TOKENS:
             raise LocalQwenProviderError(
-                f"Local GGUF output token limit must be between 256 and {MAX_OUTPUT_TOKENS}."
+                f"Local GGUF output token limit must be between {MIN_OUTPUT_TOKENS} and {MAX_OUTPUT_TOKENS}."
             )
         if max_tokens + CONTEXT_SAFETY_TOKENS >= context_size:
             raise LocalQwenProviderError("Local GGUF output token limit leaves no usable input context.")
@@ -292,16 +294,96 @@ def build_local_multimodal_parts(
 
 
 def local_visual_part_budget(
-    text_only_messages: list[dict[str, Any]], settings: LocalQwenSettings
+    text_only_messages: list[dict[str, Any]],
+    settings: LocalQwenSettings,
+    *,
+    required_visual_parts: int = 0,
 ) -> int:
+    """Return a visual budget that never discards explicitly connected media.
+
+    ``max_tokens`` is an upper bound, not a reservation that should make a
+    valid two-image Ref2VA request fail before inference.  Reserve at least one
+    visual part for every connected image/video, provided the configured
+    context can still hold the request and the minimum generation budget.  The
+    completion path then lowers the effective output ceiling only as much as
+    the actual serialized multimodal input requires.
+    """
+
+    required = int(required_visual_parts)
+    if required < 0:
+        raise LocalQwenProviderError("Required local visual parts cannot be negative.")
+    if required > MAX_VISUAL_PARTS:
+        raise LocalQwenProviderError(
+            f"Local GGUF supports at most {MAX_VISUAL_PARTS} visual parts; received {required}."
+        )
     estimated_text = estimate_message_tokens(text_only_messages)
-    available = (
+    maximum_context_visual_tokens = (
+        settings.context_size
+        - CONTEXT_SAFETY_TOKENS
+        - MIN_OUTPUT_TOKENS
+        - estimated_text
+    )
+    maximum_context_parts = max(
+        0,
+        min(MAX_VISUAL_PARTS, maximum_context_visual_tokens // VISUAL_TOKENS_EACH),
+    )
+    if required > maximum_context_parts:
+        required_context = (
+            estimated_text
+            + CONTEXT_SAFETY_TOKENS
+            + MIN_OUTPUT_TOKENS
+            + required * VISUAL_TOKENS_EACH
+        )
+        raise LocalQwenProviderError(
+            "Local GGUF context cannot fit all connected reference media: "
+            f"requires at least {required} visual parts and approximately {required_context} context tokens, "
+            f"but local_context_size is {settings.context_size}. Increase local_context_size, shorten the "
+            "prompt/template, or remove reference media."
+        )
+    configured_available = (
         settings.context_size
         - settings.max_tokens
         - CONTEXT_SAFETY_TOKENS
         - estimated_text
     )
-    return max(0, min(MAX_VISUAL_PARTS, available // 1024))
+    configured_parts = max(
+        0,
+        min(MAX_VISUAL_PARTS, configured_available // VISUAL_TOKENS_EACH),
+    )
+    return max(required, configured_parts)
+
+
+def local_output_token_budget(
+    messages: list[dict[str, Any]],
+    settings: LocalQwenSettings,
+    requested_max_tokens: int | None = None,
+) -> int:
+    """Fit the requested generation ceiling around the actual input.
+
+    Users configure a maximum output size.  Long Skills and visual parts share
+    the same llama.cpp context, so the effective ceiling may need to be lower
+    for a particular run.  Fitting it here preserves connected media instead
+    of rejecting a valid multimodal request because the unused maximum output
+    allowance was reserved first.
+    """
+
+    requested = int(settings.max_tokens if requested_max_tokens is None else requested_max_tokens)
+    if requested < MIN_OUTPUT_TOKENS or requested > settings.max_tokens:
+        raise LocalQwenProviderError(
+            f"Local output max_tokens must be between {MIN_OUTPUT_TOKENS} and configured limit "
+            f"{settings.max_tokens}."
+        )
+    estimated_input = estimate_message_tokens(messages)
+    maximum_that_fits = settings.context_size - CONTEXT_SAFETY_TOKENS - estimated_input
+    if maximum_that_fits < MIN_OUTPUT_TOKENS:
+        required_context = estimated_input + CONTEXT_SAFETY_TOKENS + MIN_OUTPUT_TOKENS
+        raise LocalQwenProviderError(
+            "Local GGUF context budget is too small for the connected prompt and reference media: "
+            f"estimated input {estimated_input} tokens requires approximately {required_context} context tokens, "
+            f"but local_context_size is {settings.context_size}. Increase local_context_size, shorten the "
+            "prompt/template, lower the video sample rate, or remove reference media."
+        )
+    return min(requested, maximum_that_fits)
 
 
 class LocalQwenProvider:
@@ -360,23 +442,11 @@ class LocalQwenProvider:
         seed: int,
         max_tokens: int | None = None,
     ) -> str:
+        output_tokens = local_output_token_budget(messages, self.settings, max_tokens)
         if self.server is None:
             self.__enter__()
         if self.server is None:
             raise LocalQwenProviderError("Local GGUF provider could not start.")
-        output_tokens = int(max_tokens or self.settings.max_tokens)
-        if output_tokens < 256 or output_tokens > self.settings.max_tokens:
-            raise LocalQwenProviderError(
-                f"Local output max_tokens must be between 256 and configured limit {self.settings.max_tokens}."
-            )
-        estimated_input = estimate_message_tokens(messages)
-        available = self.settings.context_size - output_tokens - CONTEXT_SAFETY_TOKENS
-        if estimated_input > available:
-            raise LocalQwenProviderError(
-                "Local GGUF context budget exceeded before inference: "
-                f"estimated input {estimated_input} tokens, available {available}. "
-                "Reduce reference media/template text, lower video sample rate, or increase local_context_size."
-            )
         try:
             content, _usage = LOCAL_QWEN_MANAGER.complete(
                 self.server,
@@ -396,6 +466,7 @@ __all__ = [
     "DEFAULT_CONTEXT_SIZE",
     "DEFAULT_MAX_TOKENS",
     "MAX_OUTPUT_TOKENS",
+    "MIN_OUTPUT_TOKENS",
     "DEFAULT_VIDEO_SAMPLE_FPS",
     "AUTO_MMPROJ",
     "LOCAL_QWEN_API_MODE",
@@ -406,6 +477,7 @@ __all__ = [
     "build_local_multimodal_parts",
     "apply_local_language_lock",
     "local_visual_part_budget",
+    "local_output_token_budget",
     "local_language_lock",
     "local_language_repair_messages",
     "is_local_qwen_api_mode",

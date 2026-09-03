@@ -2390,8 +2390,8 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                     tooltip=(
-                        "思考过程与最终歌词/Caption 共用此预算。默认 16384；Medium/XHigh 被截断时可继续提高，"
-                        "但必须给 local_context_size 留出输入与至少 1024 Token 安全空间。"
+                        "这是思考过程与最终歌词/Caption 的生成上限。输入文字会优先保留，必要时自动下调"
+                        "本次实际生成上限；如需较长输出，请提高本地上下文 Token。"
                     ),
                 ),
                 io.Combo.Input(

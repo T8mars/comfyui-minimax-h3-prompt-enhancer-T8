@@ -714,6 +714,53 @@ class LocalQwenUnitTests(unittest.TestCase):
                 max_visual_parts=0,
             )
 
+    def test_connected_media_is_reserved_before_the_configured_output_ceiling(self):
+        settings = provider.settings_from_values()
+        text_only_messages = [{"role": "user", "content": "a" * 40000}]
+        self.assertEqual(provider.local_visual_part_budget(text_only_messages, settings), 1)
+        self.assertEqual(
+            provider.local_visual_part_budget(
+                text_only_messages,
+                settings,
+                required_visual_parts=2,
+            ),
+            2,
+        )
+
+        image = np.zeros((1, 32, 48, 3), dtype=np.float32)
+        parts, report = provider.build_local_multimodal_parts(
+            [
+                {"kind": "image", "label": "<Picture 1>", "value": image},
+                {"kind": "image", "label": "<Picture 2>", "value": image},
+            ],
+            settings,
+            max_visual_parts=2,
+        )
+        self.assertEqual(report["image_count"], 2)
+        messages = [{"role": "user", "content": [{"type": "text", "text": "a" * 40000}, *parts]}]
+        effective = provider.local_output_token_budget(messages, settings)
+        self.assertGreaterEqual(effective, provider.MIN_OUTPUT_TOKENS)
+        self.assertLess(effective, settings.max_tokens)
+
+        local = provider.LocalQwenProvider(settings, vision=True)
+        local.server = object()
+        with patch.object(provider.LOCAL_QWEN_MANAGER, "complete", return_value=("ok", {})) as mocked:
+            self.assertEqual(local.complete(messages, temperature=0.2, seed=1), "ok")
+        self.assertEqual(mocked.call_args.kwargs["max_tokens"], effective)
+
+    def test_required_media_reports_context_needed_when_even_minimum_output_cannot_fit(self):
+        settings = provider.settings_from_values(local_context_size=8192, local_max_tokens=4096)
+        messages = [{"role": "user", "content": "中" * 6000}]
+        with self.assertRaisesRegex(
+            provider.LocalQwenProviderError,
+            r"requires at least 2 visual parts.*local_context_size is 8192",
+        ):
+            provider.local_visual_part_budget(
+                messages,
+                settings,
+                required_visual_parts=2,
+            )
+
     def test_video_sampling_uses_real_timestamps_and_contact_sheets(self):
         data = encoded_video_bytes(frame_count=48, fps=24)
         video = NativeVideo(data, duration=2.0, trim=(0.25, 1.0))
@@ -762,6 +809,37 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertTrue(result.startswith("integrated_multimodal_description:"))
         self.assertEqual(len(FakeLocalProvider.instances), 1)
         self.assertFalse(FakeLocalProvider.instances[0].vision)
+
+    def test_h3_default_local_ref2va_accepts_two_connected_images(self):
+        FakeLocalProvider.response = (
+            "subject_definitions:\n<Subject 1> is the referenced performer.\n"
+            "<Picture 1> provides identity.\n<Picture 2> provides wardrobe.\n\n"
+            "summary:\n[reference generation] Create a five-second performance.\n\n"
+            "retention_analysis:\n<Subject 1>: fully_preserved.\n"
+            "<Picture 1>: attribute_transfer.\n<Picture 2>: attribute_transfer.\n\n"
+            "detailed_description:\n[Shot 1] The performer completes one continuous turn.\n\n"
+            "overall_soundscape:\nNatural room ambience.\n\nnon_diegetic_music:\nN/A"
+        )
+        image = np.zeros((1, 32, 48, 3), dtype=np.float32)
+        with patch.object(nodes, "LocalQwenProvider", FakeLocalProvider):
+            result = nodes.enhance_prompt(
+                "Use both references for one continuous performance.",
+                task_type="Ref2VA",
+                reference_images={
+                    "reference_image_0": image,
+                    "reference_image_1": image,
+                },
+                api_mode=nodes.LOCAL_QWEN_API_MODE,
+                output_language="English",
+            )
+        self.assertIn("subject_definitions:", result)
+        instance = FakeLocalProvider.instances[0]
+        self.assertTrue(instance.vision)
+        user_content = instance.messages[0][1]["content"]
+        self.assertEqual(
+            sum(1 for part in user_content if part.get("type") == "image_url"),
+            2,
+        )
 
     def test_h3_local_parameters_and_chinese_language_lock_reach_provider(self):
         FakeLocalProvider.response = (

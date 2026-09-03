@@ -218,8 +218,8 @@ class T8LLMProviderConfig(io.ComfyNode):
                     step=1024,
                     advanced=True,
                     tooltip=(
-                        "思考过程与最终正文共用此预算。默认 16384；Medium/XHigh 被截断时可继续提高，"
-                        "但必须给 local_context_size 留出输入与至少 1024 Token 安全空间。"
+                        "这是思考过程与最终正文的生成上限。输入文字及已连接的图/视频会优先保留，"
+                        "必要时自动下调本次实际生成上限；如需同时保留多媒体和较长输出，请提高本地上下文 Token。"
                     ),
                 ),
                 io.Combo.Input("local_think_mode", display_name="本地思考模式", options=LOCAL_THINK_OPTIONS, default=LOCAL_THINK_OFF, advanced=True),

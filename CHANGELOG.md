@@ -5,6 +5,17 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.14.2] - 2026-09-04
+
+### Fixed
+
+- Preserve every explicitly connected local-GGUF reference image/video before
+  reserving the configured output ceiling, so default 32K-context Ref2VA runs
+  no longer reject two images as a one-image limit. The effective per-run
+  generation ceiling now contracts only when necessary, while genuinely
+  insufficient contexts report the estimated requirement and corrective
+  options.
+
 ## [1.14.1] - 2026-09-03
 
 ### Changed

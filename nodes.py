@@ -1630,7 +1630,14 @@ def enhance_prompt(
                 performance_director_config,
                 character_performance_bible,
             ), effective_local_language)
-            visual_budget = local_visual_part_budget(messages, settings)
+            required_visual_parts = sum(
+                1 for asset in media_plan if asset.get("kind") in {"image", "video"}
+            )
+            visual_budget = local_visual_part_budget(
+                messages,
+                settings,
+                required_visual_parts=required_visual_parts,
+            )
             media_parts, _media_report = build_local_multimodal_parts(
                 media_plan,
                 settings,
@@ -1993,8 +2000,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     advanced=True,
                     tooltip=(
-                        "思考过程与最终提示词共用此预算。默认 16384；Medium/XHigh 被截断时可继续提高，"
-                        "但必须给 local_context_size 留出输入与至少 1024 Token 安全空间。"
+                        "这是思考过程与最终提示词的生成上限。输入文字及已连接的图/视频会优先保留，"
+                        "必要时自动下调本次实际生成上限；如需同时保留多图和较长输出，请提高本地上下文 Token。"
                     ),
                 ),
                 io.Combo.Input(

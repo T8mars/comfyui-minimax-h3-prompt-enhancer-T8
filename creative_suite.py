@@ -275,7 +275,14 @@ def _run_completion(
             text_messages = _messages(system, user)
             media_parts: list[dict[str, Any]] = []
             if media_plan:
-                budget = local_visual_part_budget(text_messages, settings)
+                required_visual_parts = sum(
+                    1 for asset in media_plan if asset.get("kind") in {"image", "video"}
+                )
+                budget = local_visual_part_budget(
+                    text_messages,
+                    settings,
+                    required_visual_parts=required_visual_parts,
+                )
                 media_parts, _report = build_local_multimodal_parts(
                     media_plan,
                     settings,
