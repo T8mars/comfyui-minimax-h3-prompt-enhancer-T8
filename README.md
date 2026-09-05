@@ -681,18 +681,18 @@ MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：
 | `API Key` | 是 | 可连接任意 `STRING`，也可在节点内填写；节点留空时读取 `OPENAI_API_KEY` |
 | `OpenAI 模型 ID` | 是 | 填写兼容服务商提供的完整视觉模型 ID，不再固定为 `bytedance/doubao-seed-evolving` |
 | `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；服务根地址补全为 `/v1/chat/completions`，已有 `/vN` 版本段则直接追加 `/chat/completions` |
-| `视频素材 URL` | 否 | 仅用于视频，每行一个，按已连接 `VIDEO` 的顺序对应；未填写的已连接视频自动使用 Base64 |
+| `视频素材 URL` | 否 | 仅用于视频，每行一个，按已连接 `VIDEO` 的顺序以 `video_url` 透传；未填写的已连接视频自动抽帧成图片发送 |
 
 不再需要、也不要填写单独的“兼容素材上传 URL”。图片没有素材 URL 字段，始终由节点编码成 Base64 并随聊天请求直接发送。
 
 该模式不再使用第二个素材上传端点：
 
 - 图片统一编码为 PNG，通过 `image_url.url` 中的 `data:image/png;base64,...` 内联到同一次 Chat Completions 请求。
-- 视频默认通过 `video_url.url` 中的 `data:video/...;base64,...` 内联完整视频字节。
-- “视频素材 URL”可选，每行一个，按已连接 VIDEO 的顺序替代对应视频的 Base64；未覆盖的视频继续使用 Base64。
+- “视频素材 URL”可选，每行一个，按已连接 VIDEO 的顺序以 `video_url` 原样透传（供声明支持视频内容部件的兼容网关）。
+- 未填写或未覆盖的已连接视频，节点自动抽帧成带时间戳的图片，以 `image_url.url` 的 `data:image/jpeg;base64,...` 发送（适配 llama.cpp 等只接受 `image_url` 的本地视觉模型）。
 - 视频 URL 数量不能超过已连接 VIDEO 数量，且必须是 HTTP(S) 地址。
 
-OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `video_url` 并不是所有兼容供应商都支持的统一能力。这里的视频格式面向声明支持视频理解的兼容网关；用户填写的模型和网关必须同时支持视频内容部件，节点不会降级到纯文字或抽帧请求。
+OpenAI 官方 Chat Completions 定义了 Base64 图片输入，但通用的 `video_url` 并不是所有兼容供应商都支持的统一能力。针对只接受 `image_url` 的端点（例如本地 llama.cpp），节点会把未指定 URL 的视频抽帧成图片再发送，避免请求被 `unsupported content[].type` 拒绝。
 
 ### 本地 GGUF（llama.cpp / Qwen，离线推理）
 
