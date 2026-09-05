@@ -1433,6 +1433,31 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertTrue(fallback_url.startswith("data:video/mp4;base64,"))
         self.assertEqual(base64.b64decode(fallback_url.split(",", 1)[1]), second_video)
 
+    def test_openai_compatible_inline_video_is_sampled_into_image_url_frames(self):
+        # llama.cpp and other image-only OpenAI-compatible endpoints reject the
+        # nonstandard video_url part with "unsupported content[].type". An inline
+        # (no explicit URL) video must be sampled to image_url frames instead.
+        from PIL import Image
+        from local_qwen_media import SampledFrame
+
+        frames = [
+            SampledFrame(timestamp=0.0, image=Image.new("RGB", (8, 8), (10, 20, 30))),
+            SampledFrame(timestamp=0.5, image=Image.new("RGB", (8, 8), (40, 50, 60))),
+        ]
+        with patch("local_qwen_media.sample_video", return_value=(frames, 1.0)):
+            media_plan = [{"kind": "video", "label": "<Video 1>", "value": FakeVideo()}]
+            parts = nodes._openai_media_plan(media_plan, "")
+        self.assertEqual(
+            [part["type"] for part in parts],
+            ["text", "text", "image_url", "text", "image_url"],
+        )
+        self.assertNotIn("video_url", [part["type"] for part in parts])
+        self.assertEqual(parts[1]["text"], "<Video 1> at 0.000s.")
+        self.assertEqual(parts[3]["text"], "<Video 1> at 0.500s.")
+        self.assertTrue(parts[2]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
+        self.assertTrue(parts[4]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
+        self.assertIn("timestamped visual samples", parts[0]["text"])
+
     def test_node_api_key_overrides_environment_key(self):
         session = FakeSession(basic_output())
         self.run_enhancer(session, api_key="node-key")

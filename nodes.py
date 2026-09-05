@@ -174,6 +174,11 @@ except ImportError:
         resolve_case_template,
     )
 
+try:
+    from .local_qwen_media import LocalQwenMediaError, sample_video_as_data_urls
+except ImportError:
+    from local_qwen_media import LocalQwenMediaError, sample_video_as_data_urls
+
 
 API_BASE_URL = "https://api.seedance.nz"
 CHAT_COMPLETIONS_URL = f"{API_BASE_URL}/v1/chat/completions"
@@ -1159,16 +1164,56 @@ def _openai_media_plan(media_plan: list[dict[str, Any]], video_urls_text: str) -
 
         if video_index < len(video_urls):
             video_url = video_urls[video_index]
+            content_parts.append({
+                "type": "text",
+                "text": f"The next attached temporal video is {label}. Analyze its complete timeline.",
+            })
+            content_parts.append({"type": "video_url", "video_url": {"url": video_url}})
         else:
-            data, _extension, mime_type = _video_to_bytes(asset["value"], max_file_bytes=None)
-            video_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
+            content_parts.extend(_openai_video_parts(asset["value"], label))
         video_index += 1
-        content_parts.append({
-            "type": "text",
-            "text": f"The next attached temporal video is {label}. Analyze its complete timeline.",
-        })
-        content_parts.append({"type": "video_url", "video_url": {"url": video_url}})
     return content_parts
+
+
+_OPENAI_VIDEO_SAMPLE_FPS = DEFAULT_VIDEO_SAMPLE_FPS
+_OPENAI_VIDEO_MAX_FRAMES = 9
+
+
+def _openai_video_parts(value: Any, label: str) -> list[dict[str, Any]]:
+    """Represent an inline (no explicit URL) video as ordered timestamped image frames.
+
+    ``video_url`` is a nonstandard OpenAI part that image-only compatible
+    endpoints (for example llama.cpp) reject with ``unsupported content[].type``.
+    Fall back to the inline ``video_url`` data URI only when the video cannot be
+    decoded into frames, so every existing call site keeps working unchanged.
+    """
+    try:
+        pairs, duration = sample_video_as_data_urls(
+            value,
+            frames_per_second=_OPENAI_VIDEO_SAMPLE_FPS,
+            max_frames=_OPENAI_VIDEO_MAX_FRAMES,
+        )
+    except LocalQwenMediaError:
+        data, _extension, mime_type = _video_to_bytes(value, max_file_bytes=None)
+        video_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
+        return [
+            {"type": "text", "text": f"The next attached temporal video is {label}. Analyze its complete timeline."},
+            {"type": "video_url", "video_url": {"url": video_url}},
+        ]
+    parts: list[dict[str, Any]] = [
+        {
+            "type": "text",
+            "text": (
+                f"The next attached temporal video is {label}. It is represented by {len(pairs)} ordered "
+                f"timestamped visual samples covering {duration:.3f}s. Read the timestamps in order and describe "
+                f"only visible changes supported by those samples; no audio was analyzed."
+            ),
+        }
+    ]
+    for timestamp, url in pairs:
+        parts.append({"type": "text", "text": f"{label} at {timestamp:.3f}s."})
+        parts.append({"type": "image_url", "image_url": {"url": url}})
+    return parts
 
 
 def _effective_output_language(output_language: str, official_skill_profile: str) -> str:
@@ -1939,7 +1984,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     multiline=True,
                     default="",
                     socketless=True,
-                    tooltip="每行一个，按已连接 VIDEO 顺序替代视频 Base64；未填写或未覆盖的视频仍以内联 Base64 发送。图片始终内联 Base64。",
+                    tooltip="每行一个，按已连接 VIDEO 顺序以 video_url 原样透传（供支持视频的供应商）。未填写或未覆盖的视频自动抽帧成图片以 image_url 发送（适配 llama.cpp 等仅图像端点）。图片始终内联 Base64。",
                 ),
                 io.Int.Input(
                     "seed",

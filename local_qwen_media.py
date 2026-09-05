@@ -324,6 +324,27 @@ def build_local_media_parts(
     }
 
 
+def sample_video_as_data_urls(
+    value: Any,
+    *,
+    frames_per_second: float,
+    max_frames: int = 9,
+) -> tuple[list[tuple[float, str]], float]:
+    """Sample a native ComfyUI VIDEO into (timestamp, image data URL) pairs.
+
+    Used by OpenAI-compatible endpoints that accept ``image_url`` but reject the
+    nonstandard ``video_url`` part (for example llama.cpp). Only visible video is
+    sampled; audio is never analyzed.
+    """
+    frames, duration = sample_video(value, frames_per_second)
+    selected = _uniform_samples(frames, max(1, int(max_frames)))
+    pairs = [
+        (round(sample.timestamp, 3), _jpeg_data_url(sample.image, quality=86))
+        for sample in selected
+    ]
+    return pairs, duration
+
+
 def estimate_message_tokens(messages: list[dict[str, Any]], visual_tokens_each: int = 1024) -> int:
     text_characters = 0
     visual_parts = 0
@@ -369,4 +390,5 @@ __all__ = [
     "estimate_message_tokens",
     "image_part",
     "sample_video",
+    "sample_video_as_data_urls",
 ]

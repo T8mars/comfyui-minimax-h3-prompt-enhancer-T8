@@ -1204,7 +1204,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     multiline=True,
                     default="",
                     socketless=True,
-                    tooltip="每行一个，按已连接 VIDEO 顺序替代视频 Base64；未填写或未覆盖的视频仍以内联 Base64 发送。图片始终内联 Base64。",
+                    tooltip="每行一个，按已连接 VIDEO 顺序以 video_url 原样透传（供支持视频的供应商）。未填写或未覆盖的视频自动抽帧成图片以 image_url 发送（适配 llama.cpp 等仅图像端点）。图片始终内联 Base64。",
                 ),
                 io.Int.Input(
                     "seed",
