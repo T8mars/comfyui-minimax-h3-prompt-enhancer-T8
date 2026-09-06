@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-09-04-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-nusratsid1-2095795648012661127-browser-2095795648012661127-video-1",
+      "template_id": "t8-case-urgent-route-missed-threshold-redirection-v1",
+      "label": "错过阈值转向｜急行路线、离站证据与新方向",
+      "summary": "用一个清晰目的地和连续急行路线制造时间压力；人物到站时载具已经越过可进入阈值，工作人员的方向手势确认失败，人物必须停顿、判断并沿新方向离开，而不是无因果重置。",
+      "case_sha256": "f8ee9f808fd04016b28f9668595aff1163a01abc6d03653d9d88ec3caef80ede",
+      "creative_dna_sha256": "215c35fa72a12278147b1ab485ae1fdb043cd90638761aafc9fd3c7a7897ad78",
+      "h3_adapter_sha256": "f79c36653b7be66bb859f51f529e313d50943c4c035f6255eec08a05f4c740b8",
+      "seedance20_adapter_sha256": "f841d154788e2b33ab2b35080bcac675912dce822aaa5ed3b53a4fdf870761cc",
+      "mechanism_fingerprint": "c174185868c73a1717461d32938949e17af01b85a4fc66fc3562c3842eb5549c"
+    },
+    {
+      "case_id": "x-kiber-alla-2095867010919845981-browser-2095867010919845981-video-1",
+      "template_id": "t8-case-product-finish-alternation-detail-return-v1",
+      "label": "产品表面交替｜整体基线、微距材质与英雄复归",
+      "summary": "先以完整产品和柔软承托面建立轮廓，再在同一角度交替展示中性建模态与成品材质；微距只验证镶嵌、倒角和反光，最后回到完整英雄构图，禁止随机改变结构。",
+      "case_sha256": "967c121434a7b442c2c9c11d0fc8e739c5595418a31f8ab040d7a99de1641d69",
+      "creative_dna_sha256": "51370018bfddcedc9f7417f073cca0486a96e266b5da58b162817530a04447a4",
+      "h3_adapter_sha256": "a38ec01d9f636a8814aca38cf3be03509fcdf95527a92e37bb5b2bcdb8bb8529",
+      "seedance20_adapter_sha256": "accfff50b8e2527218e90c6ab6e2f57914b4760cf0e3454f4da70ee357f31656",
+      "mechanism_fingerprint": "7165b7c11cbe168194bde8cbe43634a623afd10479fb180740c500f3fdda1c8f"
+    },
+    {
+      "case_id": "x-ou-zhen599-2095866920990105639-browser-2095866920990105639-video-1",
+      "template_id": "t8-case-object-ritual-augmentation-release-v1",
+      "label": "物件仪式增幅｜交付基线、环形锁定与能量释放",
+      "summary": "在同一封闭环境里建立两名成年角色和一件中立物件；物件先被竖直悬停，再由另一角色生成可数环形结构完成校准，能量沿物件自下而上释放，最后双方回到不攻击的稳定关系。",
+      "case_sha256": "69b0a29a3f77b7e8930ddb189b997f051dd770d3cffa9d11d6cd3f60c407a157",
+      "creative_dna_sha256": "eadf444cc78d29d2f60c9630ee5d5f29a33db2989d361ee805ee2817876399ad",
+      "h3_adapter_sha256": "541d60f0cb85bc05b0a2729c656fc935cbc70b48686b2e0196e3278043b6cc35",
+      "seedance20_adapter_sha256": "b148091ca692fb149184c1e705917b734db0a12ef2b1071e64a755fd9331a386",
+      "mechanism_fingerprint": "f9eb3cc67eea012b85fb0201ce634e572296720fef110313dff484554168cd74"
+    }
+  ]
+}

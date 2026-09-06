@@ -5,6 +5,18 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.14.3] - 2026-09-06
+
+### Changed
+
+- Import `batch-2026-09-04-01` as three new stable selectors and 17 evidence
+  variants. The non-official library now contains 495 source cases, 237 case
+  selectors, 258 evidence variants, and two standalone community Skills (239
+  selectors total), without removing, renaming, or semantically changing an
+  existing selector.
+- Prepare the human-only dynamic-preview inventory for all 497 T8 previews
+  while keeping the main repository's frozen 377-GIF offline baseline unchanged.
+
 ## [1.14.2] - 2026-09-04
 
 ### Fixed
