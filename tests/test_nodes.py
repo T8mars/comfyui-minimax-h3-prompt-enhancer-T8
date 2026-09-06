@@ -1403,10 +1403,17 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(session.uploads, [])
         self.assertEqual(session.chat_requests, [])
 
-    def test_openai_compatible_video_supports_direct_url_then_base64_fallback(self):
+    def test_openai_compatible_video_supports_direct_url_then_samples_inline_video(self):
         session = FakeSession(reference_output())
-        second_video = b"second-complete-video"
-        with patch.dict(os.environ, {}, clear=True):
+        sampled = [
+            (0.0, "data:image/jpeg;base64,AAAA"),
+            (1.5, "data:image/jpeg;base64,BBBB"),
+        ]
+        with patch.dict(os.environ, {}, clear=True), patch.object(
+            nodes,
+            "sample_video_as_data_urls",
+            return_value=(sampled, 3.0),
+        ) as sampler:
             nodes.enhance_prompt(
                 prompt="Transfer the referenced action to the pictured subject.",
                 task_type="Ref2VA（参考图/视频生音视频）",
@@ -1414,13 +1421,14 @@ class PromptEnhancerTests(unittest.TestCase):
                 reference_images={"reference_image_0": torch.zeros((1, 1, 1, 3))},
                 reference_videos={
                     "reference_video_0": FakeVideo(),
-                    "reference_video_1": FakeVideo(data=second_video),
+                    "reference_video_1": FakeVideo(),
                 },
                 api_key="compatible-key",
                 api_mode=nodes.OPENAI_API_MODE,
                 openai_base_url="https://gateway.example/v1/chat/completions",
                 openai_video_urls="https://media.example/reference-one.mp4",
                 custom_model="provider/video-vision-model",
+                local_video_sample_fps=3.25,
                 session=session,
             )
         self.assertEqual(session.chat_urls, ["https://gateway.example/v1/chat/completions"])
@@ -1428,13 +1436,49 @@ class PromptEnhancerTests(unittest.TestCase):
         parts = session.chat_requests[0]["json"]["messages"][1]["content"]
         self.assertEqual(
             [part["type"] for part in parts],
-            ["text", "text", "image_url", "text", "video_url", "text", "video_url"],
+            [
+                "text",
+                "text",
+                "image_url",
+                "text",
+                "video_url",
+                "text",
+                "text",
+                "image_url",
+                "text",
+                "image_url",
+            ],
         )
         self.assertTrue(parts[2]["image_url"]["url"].startswith("data:image/png;base64,"))
         self.assertEqual(parts[4]["video_url"]["url"], "https://media.example/reference-one.mp4")
-        fallback_url = parts[6]["video_url"]["url"]
-        self.assertTrue(fallback_url.startswith("data:video/mp4;base64,"))
-        self.assertEqual(base64.b64decode(fallback_url.split(",", 1)[1]), second_video)
+        self.assertIn("timestamped visual samples", parts[5]["text"])
+        self.assertEqual(parts[6]["text"], "<Video 2> at 0.000s.")
+        self.assertEqual(parts[7]["image_url"]["url"], sampled[0][1])
+        self.assertEqual(parts[8]["text"], "<Video 2> at 1.500s.")
+        self.assertEqual(parts[9]["image_url"]["url"], sampled[1][1])
+        sampler.assert_called_once()
+        self.assertEqual(sampler.call_args.kwargs["frames_per_second"], 3.25)
+        self.assertEqual(sampler.call_args.kwargs["max_frames"], 9)
+
+    def test_openai_compatible_video_sampling_failure_stops_before_paid_request(self):
+        session = FakeSession(reference_output())
+        with patch.dict(os.environ, {}, clear=True), patch.object(
+            nodes,
+            "sample_video_as_data_urls",
+            side_effect=nodes.LocalQwenMediaError("VIDEO sampling produced no frames."),
+        ), self.assertRaisesRegex(nodes.PromptEnhancerError, "video sampling failed before the request was sent"):
+            nodes.enhance_prompt(
+                prompt="Transfer the referenced action.",
+                task_type="Ref2VA（参考图/视频生音视频）",
+                output_language="English",
+                reference_videos={"reference_video_0": FakeVideo()},
+                api_key="compatible-key",
+                api_mode=nodes.OPENAI_API_MODE,
+                openai_base_url="https://gateway.example/v1",
+                custom_model="provider/image-vision-model",
+                session=session,
+            )
+        self.assertEqual(session.chat_requests, [])
 
     def test_node_api_key_overrides_environment_key(self):
         session = FakeSession(basic_output())

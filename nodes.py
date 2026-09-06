@@ -160,6 +160,11 @@ except ImportError:
     )
 
 try:
+    from .local_qwen_media import LocalQwenMediaError, sample_video_as_data_urls
+except ImportError:
+    from local_qwen_media import LocalQwenMediaError, sample_video_as_data_urls
+
+try:
     from .case_templates import (
         CASE_TEMPLATE_OPTIONS,
         NO_CASE_TEMPLATE,
@@ -1137,8 +1142,51 @@ def _openai_video_url_list(value: str) -> list[str]:
     return urls
 
 
-def _openai_media_plan(media_plan: list[dict[str, Any]], video_urls_text: str) -> list[dict[str, Any]]:
-    """Inline images and videos for a generic OpenAI-compatible multimodal request."""
+_OPENAI_VIDEO_MAX_FRAMES = 9
+
+
+def _openai_video_parts(
+    value: Any,
+    label: str,
+    *,
+    frames_per_second: float,
+) -> list[dict[str, Any]]:
+    """Represent an inline video as ordered image parts supported by vision APIs."""
+    try:
+        pairs, duration = sample_video_as_data_urls(
+            value,
+            frames_per_second=frames_per_second,
+            max_frames=_OPENAI_VIDEO_MAX_FRAMES,
+        )
+    except LocalQwenMediaError as error:
+        raise PromptEnhancerError(
+            "OpenAI-compatible video sampling failed before the request was sent: "
+            f"{error} Restore ComfyUI's PyAV dependency or provide an HTTP(S) video URL only when "
+            "the selected provider explicitly supports video_url content parts."
+        ) from error
+
+    parts: list[dict[str, Any]] = [
+        {
+            "type": "text",
+            "text": (
+                f"The next attached temporal video is {label}. It is represented by {len(pairs)} ordered "
+                f"timestamped visual samples covering {duration:.3f}s. Read the timestamps in order and "
+                "describe only visible changes supported by those samples; no audio was analyzed."
+            ),
+        }
+    ]
+    for timestamp, data_url in pairs:
+        parts.append({"type": "text", "text": f"{label} at {timestamp:.3f}s."})
+        parts.append({"type": "image_url", "image_url": {"url": data_url}})
+    return parts
+
+
+def _openai_media_plan(
+    media_plan: list[dict[str, Any]],
+    video_urls_text: str,
+    video_sample_fps: float = DEFAULT_VIDEO_SAMPLE_FPS,
+) -> list[dict[str, Any]]:
+    """Inline images and sampled video frames for an OpenAI-compatible request."""
     video_urls = _openai_video_url_list(video_urls_text)
     video_count = sum(asset["kind"] == "video" for asset in media_plan)
     if len(video_urls) > video_count:
@@ -1159,15 +1207,20 @@ def _openai_media_plan(media_plan: list[dict[str, Any]], video_urls_text: str) -
 
         if video_index < len(video_urls):
             video_url = video_urls[video_index]
+            content_parts.append({
+                "type": "text",
+                "text": f"The next attached temporal video is {label}. Analyze its complete timeline.",
+            })
+            content_parts.append({"type": "video_url", "video_url": {"url": video_url}})
         else:
-            data, _extension, mime_type = _video_to_bytes(asset["value"], max_file_bytes=None)
-            video_url = f"data:{mime_type};base64,{base64.b64encode(data).decode('ascii')}"
+            content_parts.extend(
+                _openai_video_parts(
+                    asset["value"],
+                    label,
+                    frames_per_second=video_sample_fps,
+                )
+            )
         video_index += 1
-        content_parts.append({
-            "type": "text",
-            "text": f"The next attached temporal video is {label}. Analyze its complete timeline.",
-        })
-        content_parts.append({"type": "video_url", "video_url": {"url": video_url}})
     return content_parts
 
 
@@ -1709,7 +1762,11 @@ def enhance_prompt(
         if effective_api_mode == AI_WORKSHOP_API_MODE:
             media_parts = _inline_media_plan(media_plan)
         elif effective_api_mode == OPENAI_API_MODE:
-            media_parts = _openai_media_plan(media_plan, openai_video_urls)
+            media_parts = _openai_media_plan(
+                media_plan,
+                openai_video_urls,
+                video_sample_fps=local_video_sample_fps,
+            )
         else:
             media_parts = _upload_media_plan(session, api_key, media_plan, upload_url, provider_name)
         if progress_callback:
@@ -1946,7 +2003,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     multiline=True,
                     default="",
                     socketless=True,
-                    tooltip="每行一个，按已连接 VIDEO 顺序替代视频 Base64；未填写或未覆盖的视频仍以内联 Base64 发送。图片始终内联 Base64。",
+                    tooltip="每行一个，按已连接 VIDEO 顺序以 video_url 透传（仅用于明确支持视频部件的渠道）。未填写或未覆盖的视频自动抽帧为 image_url（适配 llama.cpp 等仅图像端点）。图片始终内联 Base64。",
                 ),
                 io.Int.Input(
                     "seed",

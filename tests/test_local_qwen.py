@@ -795,6 +795,19 @@ class LocalQwenUnitTests(unittest.TestCase):
         self.assertEqual(video_report["sent_frame_count"], 9)
         self.assertGreater(video_report["uniformly_reduced_frame_count"], 0)
 
+    def test_openai_video_samples_export_ordered_jpeg_data_urls(self):
+        data = encoded_video_bytes(frame_count=48, fps=24)
+        video = NativeVideo(data, duration=2.0)
+        pairs, duration = media.sample_video_as_data_urls(
+            video,
+            frames_per_second=8.0,
+            max_frames=9,
+        )
+        self.assertAlmostEqual(duration, 2.0, places=3)
+        self.assertEqual(len(pairs), 9)
+        self.assertLessEqual(pairs[0][0], pairs[-1][0])
+        self.assertTrue(all(url.startswith("data:image/jpeg;base64,") for _timestamp, url in pairs))
+
     def test_h3_local_provider_needs_no_key_and_preserves_output_policy(self):
         FakeLocalProvider.response = (
             "integrated_multimodal_description: [Shot 1] 一名骑手穿过安静街道。\n\n"

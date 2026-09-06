@@ -209,6 +209,26 @@ def _uniform_samples(items: list[SampledFrame], limit: int) -> list[SampledFrame
     return [items[index] for index in indices]
 
 
+def sample_video_as_data_urls(
+    value: Any,
+    *,
+    frames_per_second: float,
+    max_frames: int = 9,
+) -> tuple[list[tuple[float, str]], float]:
+    """Sample a native ComfyUI VIDEO into timestamped JPEG data URLs.
+
+    Generic OpenAI-compatible vision endpoints commonly support ``image_url``
+    but reject the non-standard ``video_url`` content part. This helper keeps
+    the decoded samples in timeline order and never analyzes audio.
+    """
+    frames, duration = sample_video(value, frames_per_second)
+    selected = _uniform_samples(frames, max(1, int(max_frames)))
+    return [
+        (round(sample.timestamp, 3), _jpeg_data_url(sample.image, quality=86))
+        for sample in selected
+    ], duration
+
+
 def _contact_sheet(frames: list[SampledFrame], video_label: str) -> Image.Image:
     if len(frames) > 9:
         raise LocalQwenMediaError("A local Qwen contact sheet cannot contain more than 9 frames.")
@@ -369,4 +389,5 @@ __all__ = [
     "estimate_message_tokens",
     "image_part",
     "sample_video",
+    "sample_video_as_data_urls",
 ]

@@ -944,7 +944,11 @@ def enhance_seedance20_prompt(
         if effective_api_mode == AI_WORKSHOP_API_MODE:
             media_parts = _inline_media_plan(media_plan)
         elif effective_api_mode == OPENAI_API_MODE:
-            media_parts = _openai_media_plan(media_plan, cleaned["openai_video_urls"])
+            media_parts = _openai_media_plan(
+                media_plan,
+                cleaned["openai_video_urls"],
+                video_sample_fps=local_video_sample_fps,
+            )
         else:
             media_parts = _upload_seedance20_media_plan(
                 session,
@@ -1211,7 +1215,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     multiline=True,
                     default="",
                     socketless=True,
-                    tooltip="每行一个，按已连接 VIDEO 顺序替代视频 Base64；未填写或未覆盖的视频仍以内联 Base64 发送。图片始终内联 Base64。",
+                    tooltip="每行一个，按已连接 VIDEO 顺序以 video_url 透传（仅用于明确支持视频部件的渠道）。未填写或未覆盖的视频自动抽帧为 image_url（适配 llama.cpp 等仅图像端点）。图片始终内联 Base64。",
                 ),
                 io.Int.Input(
                     "seed",

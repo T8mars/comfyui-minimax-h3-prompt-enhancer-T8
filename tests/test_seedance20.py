@@ -28,6 +28,7 @@ package = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = package
 SPEC.loader.exec_module(package)
 seedance20 = sys.modules[f"{SPEC.name}.seedance20"]
+nodes = sys.modules[f"{SPEC.name}.nodes"]
 case_library_routes = sys.modules[f"{SPEC.name}.case_library_routes"]
 
 
@@ -593,32 +594,39 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         self.assertIn("never claim to have heard or analyzed", combined)
         self.assertIn("@音频1", combined)
 
-    def test_openai_compatible_uses_base64_images_and_optional_video_urls(self):
+    def test_openai_compatible_uses_base64_images_urls_and_sampled_inline_video(self):
         session = FakeSession()
         image = torch.zeros((1, 8, 8, 3), dtype=torch.float32)
-        fallback_video = b"seedance20-inline-video"
-        self.run_enhancer(
-            session,
-            task_intent="MultiRef",
-            reference_images={"reference_image_0": image},
-            reference_videos={
-                "reference_video_0": FakeVideo(),
-                "reference_video_1": FakeVideo(data=fallback_video),
-            },
-            api_mode=seedance20.OPENAI_API_MODE,
-            openai_base_url="https://provider.example/v1",
-            openai_video_urls="https://media.example/first.mp4",
-            custom_model="provider/video-vision-model",
-        )
+        sampled = [(0.25, "data:image/jpeg;base64,CCCC")]
+        with patch.object(
+            nodes,
+            "sample_video_as_data_urls",
+            return_value=(sampled, 3.0),
+        ) as sampler:
+            self.run_enhancer(
+                session,
+                task_intent="MultiRef",
+                reference_images={"reference_image_0": image},
+                reference_videos={
+                    "reference_video_0": FakeVideo(),
+                    "reference_video_1": FakeVideo(),
+                },
+                api_mode=seedance20.OPENAI_API_MODE,
+                openai_base_url="https://provider.example/v1",
+                openai_video_urls="https://media.example/first.mp4",
+                custom_model="provider/video-vision-model",
+                local_video_sample_fps=1.5,
+            )
         self.assertEqual(session.chat_urls, ["https://provider.example/v1/chat/completions"])
         self.assertEqual(session.uploads, [])
         self.assertEqual(session.chat_requests[0]["json"]["model"], "provider/video-vision-model")
         parts = session.chat_requests[0]["json"]["messages"][1]["content"]
         self.assertTrue(parts[2]["image_url"]["url"].startswith("data:image/png;base64,"))
         self.assertEqual(parts[4]["video_url"]["url"], "https://media.example/first.mp4")
-        fallback_url = parts[6]["video_url"]["url"]
-        self.assertTrue(fallback_url.startswith("data:video/mp4;base64,"))
-        self.assertEqual(base64.b64decode(fallback_url.split(",", 1)[1]), fallback_video)
+        self.assertIn("timestamped visual samples", parts[5]["text"])
+        self.assertTrue(parts[6]["text"].endswith(" at 0.250s."))
+        self.assertEqual(parts[7]["image_url"]["url"], sampled[0][1])
+        self.assertEqual(sampler.call_args.kwargs["frames_per_second"], 1.5)
 
     def test_openai_compatible_accepts_v3_base_url(self):
         session = FakeSession()

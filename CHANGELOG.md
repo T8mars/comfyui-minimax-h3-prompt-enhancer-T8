@@ -5,6 +5,20 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.14.4] - 2026-09-06
+
+### Fixed
+
+- Convert connected inline videos to ordered, timestamped JPEG `image_url`
+  samples for generic OpenAI-compatible H3 and Seedance 2.0 requests, avoiding
+  `HTTP 400 unsupported content[].type` from image-only llama.cpp/Qwen vision
+  endpoints. Explicit HTTP(S) video URLs remain an opt-in `video_url` path for
+  providers that advertise that capability.
+- Stop before any provider request when a connected video cannot be sampled,
+  rather than silently retrying the same known-incompatible inline `video_url`
+  representation. H3 and Seedance 2.0 now share regression coverage for the
+  sampled path and the configured sampling rate.
+
 ## [1.14.3] - 2026-09-06
 
 ### Changed

@@ -681,18 +681,18 @@ MiniMax H3 与 Seedance 2.0 两个节点使用相同的 OpenAI 兼容配置：
 | `API Key` | 是 | 可连接任意 `STRING`，也可在节点内填写；节点留空时读取 `OPENAI_API_KEY` |
 | `OpenAI 模型 ID` | 是 | 填写兼容服务商提供的完整视觉模型 ID，不再固定为 `bytedance/doubao-seed-evolving` |
 | `OpenAI Base URL` | 是 | 只填写一个聊天接口地址；服务根地址补全为 `/v1/chat/completions`，已有 `/vN` 版本段则直接追加 `/chat/completions` |
-| `视频素材 URL` | 否 | 仅用于视频，每行一个，按已连接 `VIDEO` 的顺序对应；未填写的已连接视频自动使用 Base64 |
+| `视频素材 URL` | 否 | 仅用于明确支持 `video_url` 的渠道；每行一个，按已连接 `VIDEO` 顺序透传。未填写的已连接视频自动抽帧成图片 |
 
 不再需要、也不要填写单独的“兼容素材上传 URL”。图片没有素材 URL 字段，始终由节点编码成 Base64 并随聊天请求直接发送。
 
 该模式不再使用第二个素材上传端点：
 
 - 图片统一编码为 PNG，通过 `image_url.url` 中的 `data:image/png;base64,...` 内联到同一次 Chat Completions 请求。
-- 视频默认通过 `video_url.url` 中的 `data:video/...;base64,...` 内联完整视频字节。
-- “视频素材 URL”可选，每行一个，按已连接 VIDEO 的顺序替代对应视频的 Base64；未覆盖的视频继续使用 Base64。
+- 未填写“视频素材 URL”的已连接视频会按时间顺序抽帧，均匀保留最多 9 帧，以带时间戳的 JPEG `image_url` 发送；这兼容 llama.cpp 等只接受图片内容部件的视觉端点，且不会分析音轨。
+- “视频素材 URL”可选，每行一个，按已连接 VIDEO 的顺序以 `video_url` 原样透传；只有供应商明确声明支持该内容部件时才填写。
 - 视频 URL 数量不能超过已连接 VIDEO 数量，且必须是 HTTP(S) 地址。
 
-OpenAI 官方 Chat Completions 明确定义了 Base64 图片输入，但通用 `video_url` 并不是所有兼容供应商都支持的统一能力。这里的视频格式面向声明支持视频理解的兼容网关；用户填写的模型和网关必须同时支持视频内容部件，节点不会降级到纯文字或抽帧请求。
+OpenAI 官方 Chat Completions 明确定义了图片输入，但通用 `video_url` 并不是所有兼容供应商都支持的统一能力。默认抽帧路径可避免 llama.cpp/Qwen 视觉端点返回 `HTTP 400 unsupported content[].type`。如果抽帧在请求前失败，节点会直接给出可操作错误且不会发起可能计费的模型请求，也不会静默退回已知不兼容的完整视频格式。
 
 ### 本地 GGUF（llama.cpp / Qwen，离线推理）
 
@@ -781,7 +781,7 @@ GGUF 与 mmproj 统一放入 ComfyUI 的 `models/LLM/` 或任意子目录；历�
 ## 图片与视频处理
 
 - 云端图片编码为 PNG；平价小屋模式上传，AI 工坊与 OpenAI 兼容模式内联为 Base64 Data URL。本地 Qwen 图片编码为限边 JPEG Data URL。
-- 云端视频使用 ComfyUI 原生 `VIDEO` 的完整流；AI 工坊与 OpenAI 兼容模式默认内联完整视频字节。本地 Qwen 是单独的、明确标注的视觉采样路径：读取真实帧率/PTS 与活动裁剪窗口，生成带时间戳的有序联系表，不读取音轨。
+- 云端视频使用 ComfyUI 原生 `VIDEO`：平价小屋上传完整流，AI 工坊按其实测协议内联完整字节；OpenAI 兼容模式默认发送带时间戳的有序抽帧，只有用户填写 HTTP(S) 视频 URL 时才以 `video_url` 透传。本地 Qwen 同样读取真实帧率/PTS 与活动裁剪窗口生成有序视觉证据，不读取音轨。
 - 支持 MP4、AVI、MOV、MKV，单文件不超过 50 MB。
 - Ref2VA 单个视频时长 2–15 秒，多个视频总时长不超过 15 秒。
 - Ref2VA 最多 9 张图片、3 个视频，总素材数最多 12。

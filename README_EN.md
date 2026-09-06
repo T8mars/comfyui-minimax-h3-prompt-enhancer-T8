@@ -283,7 +283,8 @@ Use `T8STAR_API_KEY` when the node key is empty.
 Only one Base URL and one model ID are required. The Base URL may be a service root, a versioned root such as `/v1` or `/api/v3`, or a complete `/chat/completions` URL. The node normalizes the final chat endpoint.
 
 - Images are always encoded as PNG Base64 Data URLs in the same Chat Completions request.
-- Videos are Base64 by default. Optional HTTP(S) video material URLs can replace connected videos in connection order.
+- Connected videos without a material URL are sampled in timeline order and sent as up to nine timestamped JPEG `image_url` parts. This supports image-only vision endpoints such as llama.cpp and never analyzes audio.
+- Optional HTTP(S) video material URLs are passed through as `video_url` in connection order and should be used only when the provider explicitly supports that content part.
 - There is no second upload URL.
 - The provider and selected model must actually support the multimodal content parts used by H3 or Seedance.
 - Base URL and model ID are saved in the current workflow and restored across runs and API-mode switches. API keys are not stored in this compatibility state.
@@ -407,7 +408,7 @@ Recent execution diagnostics are memory-only and redacted. They include node cla
 ## Media handling
 
 - Cloud images use PNG. Seedance.nz uploads them; AI Workshop and OpenAI-compatible mode inline them as Base64 Data URLs.
-- Cloud video uses the complete native ComfyUI `VIDEO` stream. AI Workshop and OpenAI-compatible mode inline complete bytes unless an optional video URL is supplied.
+- Cloud video uses the native ComfyUI `VIDEO` stream. Seedance NZ uploads complete bytes and AI Workshop inlines complete bytes using its verified protocol. OpenAI-compatible mode sends timestamped sampled frames by default, or passes through an explicitly supplied HTTP(S) video URL.
 - Local GGUF mode samples frames at real timestamps and respects the active crop window. It does not upload original video bytes or analyze audio.
 - Supported containers include MP4, AVI, MOV, and MKV, up to 50 MB per file.
 - H3 Ref2VA accepts up to nine images, three videos, and twelve total reference assets. A single reference video must be 2–15 seconds, and multiple reference videos must total no more than 15 seconds.
