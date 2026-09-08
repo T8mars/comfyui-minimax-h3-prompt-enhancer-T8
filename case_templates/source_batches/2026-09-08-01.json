@@ -1,0 +1,40 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-09-08-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-aimikoda-2097112285827268887-browser-2097112285827268887-video-1",
+      "template_id": "t8-case-carrier-relay-shared-world-trailer-v1",
+      "label": "意象载体预告接力｜花果传递、角色轮换与巨像回标",
+      "summary": "用一种高对比色载体在多名成年角色之间接力，让花、果实、器皿和鸟群把看似分散的章节绑定到同一世界；终局把全部载体痕迹汇聚到巨像与准确片名。",
+      "case_sha256": "661dcd59de7b1873f71a77ac7c146bfb8917f38d96a9da0f6e8e3743886b8af3",
+      "creative_dna_sha256": "0493e201e684290a4b62023b92f9e6697092c7cc51ccefc18a4c78696d0caa35",
+      "h3_adapter_sha256": "cbc27cff1ff9d1891949f311c8db237dac370a39a071ad7758a11a8175f6098b",
+      "seedance20_adapter_sha256": "f84d7bb932321d66ad19b27257287ac31e19d4ba840ed861bb4f8af9ea1c5d6b",
+      "mechanism_fingerprint": "d5271dca2cb906df4a1b6e51e5c1d276f473f647cbc217436dc573c7c72ce084"
+    },
+    {
+      "case_id": "x-ai-lifehack55-2097150941388771724-browser-2097150941388771724-video-1",
+      "template_id": "t8-case-emotional-purge-conversion-payoff-v1",
+      "label": "情绪物证清空｜低谷表情、旧物处置与价值回报",
+      "summary": "先用同一成年人物的泪痕和旧照片建立关系低谷，再让她把照片装入一个可追踪袋子、发现可变现物件并完成柜台交易；现金结果必须来自已展示物件，终局情绪由悲伤转为释然。",
+      "case_sha256": "e2f5181b1136e6ae360041b8d71c69f6ecdcaca10d8ae818b7e71fbc52c62106",
+      "creative_dna_sha256": "24d5573359d82cfbf41b5ca74fbf5e5edf31e1ce5f00930b01e8e2c3ce38a1cb",
+      "h3_adapter_sha256": "57c9a63c2202e94f9f7f24239cf6252cf0c43b816f0d73002c23614c39f36b6d",
+      "seedance20_adapter_sha256": "68b0367e4190ac7f1aa4e61c0667ceea8e6a9b67d79a3b3060451e055cd87029",
+      "mechanism_fingerprint": "54dccc3d19521fdc2ea64087eecbcb522382343a62629dab4c8ef862b514a234"
+    },
+    {
+      "case_id": "x-ronny-minimax-2096956415307076072-browser-2096956415307076072-video-1",
+      "template_id": "t8-case-social-interface-prank-materialization-v1",
+      "label": "界面恶作剧实体化｜屏内内容、屏外清除与手写回执",
+      "summary": "先把成年人物限制在圆形社交视频窗内完成普通动作，再让同一人物走出屏幕边界、用实体工具清除页面内容并直接在空白界面写下结果；终局回到人物与手写字同框。",
+      "case_sha256": "de807eb502a391dc8c59e26ba26651c376975f024e92a47137ce7003519413ff",
+      "creative_dna_sha256": "74ee37684e2f57eb9b336213eea6e9bf7e4b5cb3f056822b1e6eddb6bd40de6f",
+      "h3_adapter_sha256": "a340fea9793407bc3e8de66f83a9dbe850b7fee502e51f3f64b9c6ebaa7caff1",
+      "seedance20_adapter_sha256": "ef124ff80fe9a6c2b53681bda17e7755aab31fd4c4f98be996addb9e77909b66",
+      "mechanism_fingerprint": "821d9e65edf52e572d159f8199bf6bd7f7d3bb596f09b13b6a6f9676674452c0"
+    }
+  ]
+}
