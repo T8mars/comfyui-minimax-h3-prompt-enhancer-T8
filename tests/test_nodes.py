@@ -817,11 +817,11 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
         self.assertEqual(len(catalog["templates"]), 242)
-        self.assertEqual(catalog["source_case_count"], 515)
+        self.assertEqual(catalog["source_case_count"], 535)
         self.assertEqual(catalog["case_selector_template_count"], 240)
         self.assertEqual(catalog["community_skill_count"], 2)
         self.assertEqual(catalog["selector_template_count"], 242)
-        self.assertEqual(catalog["evidence_variant_count"], 275)
+        self.assertEqual(catalog["evidence_variant_count"], 295)
         self.assertEqual(catalog["pending_completion_count"], 0)
         self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
@@ -1003,7 +1003,7 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertTrue(template["previews"])
             self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
             preview_count += len(template["previews"])
-        self.assertEqual(preview_count, 517)
+        self.assertEqual(preview_count, 537)
         controller_case = by_id["t8-case-visible-four-axis-controller-same-beat-response-v1"]
         self.assertEqual(controller_case["label"], "指尖控制｜四向同拍全身响应")
         self.assertEqual(len(controller_case["required_anchors"]), 4)
@@ -1024,11 +1024,11 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(len(by_id["t8-case-observer-follow-encounter-v1"]["previews"]), 8)
         self.assertEqual(len(by_id["t8-case-identity-locked-style-world-carousel-v1"]["previews"]), 7)
         self.assertEqual(len(by_id["t8c002-fixed-composition-medium-ladder"]["previews"]), 3)
-        self.assertEqual(len(by_id["t8-case-character-action-typography-module-carousel-v1"]["previews"]), 25)
+        self.assertEqual(len(by_id["t8-case-character-action-typography-module-carousel-v1"]["previews"]), 26)
         harvest_case = by_id["t8-case-route-inventory-accumulation-return-v1"]
         self.assertEqual(harvest_case["label"], "晨间收获闭环｜人物巡园、连续采摘与动物回应")
         self.assertEqual(len(harvest_case["previews"]), 1)
-        self.assertEqual(len(by_id["t8-case-single-accent-scale-activation-relay-v1"]["previews"]), 3)
+        self.assertEqual(len(by_id["t8-case-single-accent-scale-activation-relay-v1"]["previews"]), 5)
         self.assertEqual(len(by_id["t8-case-irreversible-cooking-state-chain-serving-proof-v1"]["previews"]), 8)
         self.assertEqual(len(by_id["t8-case-semantic-typography-world-action-relay-v1"]["previews"]), 8)
         september_selectors = {
