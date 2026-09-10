@@ -48,6 +48,10 @@ REGISTRY_SCANNER_TRIPWIRES = {
 }
 REGISTRY_ALL_TEXT_TRIPWIRES = {
     "async_http_client_session": b"aiohttp.ClientSession",
+    "environment_read": b"os.environ[",
+}
+REGISTRY_ALL_TEXT_REGEX_TRIPWIRES = {
+    "direct_path_read_bytes": re.compile(rb"\bPath\([^\r\n]+\)\.read_bytes\(\)"),
 }
 
 
@@ -327,8 +331,11 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         for label, pattern in REGISTRY_ALL_TEXT_TRIPWIRES.items():
             if pattern in payload:
                 findings.append(f"{path.relative_to(ROOT).as_posix()}:{label}")
+        for label, pattern in REGISTRY_ALL_TEXT_REGEX_TRIPWIRES.items():
+            if pattern.search(payload):
+                findings.append(f"{path.relative_to(ROOT).as_posix()}:{label}")
     if findings:
-        raise VerificationError(f"Registry scanner tripwires remain in shipped Python: {findings}")
+        raise VerificationError(f"Registry scanner tripwires remain in shipped text: {findings}")
     return {
         "registry_files": len(shipped),
         "registry_python_files": len(python_files),

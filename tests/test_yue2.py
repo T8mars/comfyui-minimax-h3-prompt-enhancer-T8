@@ -1,7 +1,9 @@
 import asyncio
 import importlib.util
 import json
+import shutil
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -72,6 +74,35 @@ class YuE2Tests(unittest.TestCase):
         for _, call in session.calls:
             self.assertEqual(call["json"]["max_tokens"], yue.DEFAULT_MAX_TOKENS)
             self.assertEqual(call["headers"]["Authorization"], "Bearer test-key")
+
+    def test_registry_snapshot_omits_only_audio_tutorial(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            snapshot = Path(temporary) / "yue2-music"
+            shutil.copytree(yue.SOURCE_ROOT, snapshot)
+            tutorial = snapshot / "references" / "generation-and-covers.md"
+            tutorial.unlink()
+            with patch.object(yue, "SOURCE_ROOT", snapshot):
+                self.assertEqual(yue.official_snapshot()["commit"], yue.SOURCE_COMMIT)
+                result = self.run_node()
+                yue.validate_request(json.loads(result[3]))
+                tutorial.write_text("changed tutorial", encoding="utf-8")
+                with self.assertRaises(yue.YuE2PromptError):
+                    yue.official_snapshot()
+                tutorial.unlink()
+                required = snapshot / "references" / "abc-editing.md"
+                required.write_text("changed rules", encoding="utf-8")
+                with self.assertRaises(yue.YuE2PromptError):
+                    yue.official_snapshot()
+                required.unlink()
+                with self.assertRaises(FileNotFoundError):
+                    yue.official_snapshot()
+
+    def test_snapshot_cannot_declare_prompt_rules_repository_only(self):
+        manifest = json.loads((yue.SOURCE_ROOT / "source.json").read_text(encoding="utf-8"))
+        manifest["repository_only"].append("SKILL.md")
+        with patch.object(yue.json, "loads", return_value=manifest):
+            with self.assertRaises(yue.YuE2PromptError):
+                yue.official_snapshot()
 
     def test_preserve_byte_exact_and_one_call(self):
         session = Session()

@@ -100,8 +100,15 @@ def official_snapshot() -> dict[str, Any]:
     manifest = json.loads((SOURCE_ROOT / "source.json").read_text(encoding="utf-8"))
     if manifest.get("commit") != SOURCE_COMMIT:
         raise YuE2PromptError("YuE2 官方快照版本与节点不一致，请完整更新节点。")
+    repository_only = {"references/generation-and-covers.md"}
+    if set(manifest.get("repository_only", [])) != repository_only:
+        raise YuE2PromptError("YuE2 官方快照清单不一致，请完整更新节点。")
     for filename, expected in manifest["files"].items():
-        data = (SOURCE_ROOT / filename).read_text(encoding="utf-8").replace("\r\n", "\n")
+        path = SOURCE_ROOT / filename
+        # Registry omits only the upstream audio-runtime tutorial, not prompt rules.
+        if filename in repository_only and not path.exists():
+            continue
+        data = path.read_text(encoding="utf-8").replace("\r\n", "\n")
         if hashlib.sha256(data.encode()).hexdigest() != expected:
             raise YuE2PromptError("YuE2 官方规则快照不完整，请从 GitHub 更新节点。")
     return {"commit": manifest["commit"], "protocol": "yue2-native-v1"}

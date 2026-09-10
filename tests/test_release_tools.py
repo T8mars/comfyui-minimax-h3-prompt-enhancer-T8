@@ -47,6 +47,19 @@ class ReleaseToolTests(unittest.TestCase):
                 with self.assertRaises(verify.VerificationError):
                     verify.verify_toml_and_yaml([bad_yaml])
 
+    def test_registry_gate_checks_observed_patterns_in_markdown(self):
+        files = verify.tracked_files()
+        read_bytes = Path.read_bytes
+        for payload, label in (
+            (b'```python\nmodel = os.environ["MODEL_DIR"]\n```', "environment_read"),
+            (b'```python\nlyrics = Path("lyrics.txt").read_bytes()\n```', "direct_path_read_bytes"),
+        ):
+            def read(path):
+                return payload if path == ROOT / "README.md" else read_bytes(path)
+            with self.subTest(label=label), patch.object(Path, "read_bytes", read):
+                with self.assertRaisesRegex(verify.VerificationError, "README.md:" + label):
+                    verify.verify_registry_package_hygiene(files)
+
     def test_semver_parse_order_and_bumps(self):
         value = release.Version.parse("1.2.3")
         self.assertEqual(str(value.bump("patch")), "1.2.4")

@@ -105,3 +105,8 @@ Instructions and ABC helper are Apache-2.0. Text composition/review is a T8
 extension. Music weights, if separately installed, retain their own licenses.
 The bundled source manifest checks normalized UTF-8 hashes; no upstream access
 or model download occurs when executing this node.
+
+Registry 安装包不包含官方的音频运行教程 `generation-and-covers.md`；它不参与本节点
+运行，原文保留在 GitHub 和上方官方链接中。提示词规则、ABC 参考和许可证仍随包提供并校验。
+Registry omits only the upstream audio-runtime tutorial; the unmodified document
+remains on GitHub. Prompt rules, ABC references and license remain bundled and checked.

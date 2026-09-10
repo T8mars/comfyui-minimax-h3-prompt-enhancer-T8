@@ -5,6 +5,17 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.15.2] - 2026-09-11
+
+### Fixed
+
+- Keep the unmodified upstream YuE2 audio-runtime tutorial on GitHub, outside the
+  Registry package. Registry 1.15.1 flagged its Markdown environment/file-reading
+  examples; the text-only node never executes them. Retain all prompt/ABC rules,
+  licensing and hash verification, allowing only this documented tutorial omission.
+- Extend package checks to catch the observed scanner patterns in documentation
+  as well as Python, and test creation from a Registry-trimmed source snapshot.
+
 ## [1.15.1] - 2026-09-11
 
 ### Fixed

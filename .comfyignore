@@ -28,6 +28,8 @@ credential_connection_probe.py
 /SKILL.md
 /roadmap.md
 /design-qa.md
+# Upstream audio-runtime tutorial stays on GitHub; the text-only node does not use it.
+/official_skills/yue2-music/references/generation-and-covers.md
 .env
 .env.*
 runtime/
