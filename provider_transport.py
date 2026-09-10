@@ -23,11 +23,16 @@ class ChatTransportResult:
     response_id: str = ""
 
 
+class ChatCompletionTruncatedError(RuntimeError):
+    """An opt-in caller requires a final answer, not a token-limited fragment."""
+
+
 @dataclass
 class _StreamAccumulator:
     text: str = ""
     response_id: str = ""
     complete: bool = False
+    finish_reason: str = ""
 
 
 def strip_inline_reasoning(content: str) -> str:
@@ -99,6 +104,7 @@ def _consume_openai_stream(
                 # OpenAI message event rather than token deltas.
                 accumulator.text = _text_content(message.get("content"))
             if choice.get("finish_reason") is not None:
+                accumulator.finish_reason = str(choice["finish_reason"])
                 accumulator.complete = bool(accumulator.text.strip())
         if on_checkpoint is not None and accumulator.text:
             on_checkpoint(
@@ -129,6 +135,7 @@ def request_chat_completion(
     on_attempt: Callable[[int, str], None] | None = None,
     extra_headers: dict[str, str] | None = None,
     on_checkpoint: Callable[[str, bool, str], None] | None = None,
+    require_complete: bool = False,
 ) -> ChatTransportResult:
     """Run one OpenAI-compatible chat request with a caller-owned paid retry policy.
 
@@ -185,6 +192,8 @@ def request_chat_completion(
             # return the fully checkpointed answer even if the proxy drops the
             # final connection close.
             if accumulator.complete and accumulator.text.strip():
+                if require_complete and accumulator.finish_reason in {"length", "max_tokens", "content_filter"}:
+                    raise ChatCompletionTruncatedError("LLM output was interrupted: " + accumulator.finish_reason) from error
                 content = strip_inline_reasoning(accumulator.text)
                 on_attempt and on_attempt(attempt, "success_after_stream_disconnect")
                 return ChatTransportResult(content.strip() if strip_result else content, attempt, accumulator.response_id)
@@ -194,6 +203,8 @@ def request_chat_completion(
             if callable(close):
                 close()
         content = strip_inline_reasoning(accumulator.text)
+        if require_complete and accumulator.finish_reason in {"length", "max_tokens", "content_filter"}:
+            raise ChatCompletionTruncatedError("LLM output was interrupted: " + accumulator.finish_reason)
         if not accumulator.complete:
             raise missing_content_error()
         if not content.strip():
@@ -208,6 +219,8 @@ def request_chat_completion(
         content = data["choices"][0]["message"]["content"]
     except (KeyError, IndexError, TypeError) as error:
         raise missing_content_error() from error
+    if require_complete and data["choices"][0].get("finish_reason") in {"length", "max_tokens", "content_filter"}:
+        raise ChatCompletionTruncatedError("LLM output was interrupted: " + str(data["choices"][0]["finish_reason"]))
     content = _text_content(content)
     if isinstance(content, str):
         content = strip_inline_reasoning(content)

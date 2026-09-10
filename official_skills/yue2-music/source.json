@@ -1,0 +1,12 @@
+{
+  "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+  "url": "https://github.com/multimodal-art-projection/YuE/tree/92a73cc7652fcc1f937855e4b765e0a0edd7ff2e/skills/yue2-music",
+  "files": {
+    "references/editing-workflows.md": "6d1ed38facc21e9670d16891561885c2e360e8df3ebc382a147a6a6467a3b398",
+    "assets/prompt.json": "6b590fc427a8262e2c07d4097ae213384d70d9ac9d62357bb0d26485eb19fc50",
+    "SKILL.md": "d7c010ee8bc6b4338fc53cdc363d2e478ced446a8ff9c6a20346bac5525dfdf9",
+    "references/abc-editing.md": "398e239ab21d6a05bbf943bf9f71aaa81886d735b877e52548b04f5543f14c43",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "references/generation-and-covers.md": "f8bc42ce439747bf6022ac410b45edf6f915fc669030048b76c576d40e644a22"
+  }
+}

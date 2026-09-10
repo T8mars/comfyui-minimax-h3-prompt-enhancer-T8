@@ -5,6 +5,25 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-09-11
+
+### Added
+
+- Add the independent YuE2 music prompt and lyrics creator with existing cloud,
+  OpenAI-compatible and local GGUF providers. Output native `style`, `lyrics`,
+  optional ABC, request JSON and a creation report without generating audio.
+- Support original lyrics, exact preservation/restyling, selected-section edits,
+  instrumental briefs and optional text review. Keep lyric/style languages separate.
+- Pin the official YuE2 Skill contract and attributed Apache-2.0 ABC helper;
+  explicitly remove chord symbols while checking both melodic voices.
+- Include four standalone workflows, bilingual help, collapsed advanced controls,
+  saved provider settings and recovery of the last complete five-output result.
+
+### Fixed
+
+- Opt YuE2 into explicit local JSON schemas and completion-limit checks, including
+  the Registry's Python runtime. Existing nodes retain their prior default behavior.
+
 ## [1.14.6] - 2026-09-10
 
 ### Changed

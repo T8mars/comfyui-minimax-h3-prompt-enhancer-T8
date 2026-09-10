@@ -611,6 +611,7 @@ class LlamaServer:
         temperature: float,
         think_mode: bool,
         reasoning_effort: str,
+        response_format: dict[str, Any] | None = None,
     ) -> tuple[str, dict[str, Any]]:
         if not self.is_running:
             raise LocalQwenRuntimeError("Local llama-server is not running.")
@@ -646,6 +647,8 @@ class LlamaServer:
             )
 
         completed = threading.Event()
+        if response_format is not None:
+            payload["response_format"] = response_format
         result: dict[str, Any] = {}
         failure: list[BaseException] = []
 
@@ -679,7 +682,7 @@ class LlamaServer:
             raise LocalQwenRuntimeError(
                 "Qwen returned no final answer. Disable thinking or increase the local output token limit."
             )
-        return content, result.get("usage") or {}
+        return content, {**(result.get("usage") or {}), "finish_reason": result["choices"][0].get("finish_reason")}
 
 
 class LlamaPythonRuntime:
@@ -815,6 +818,7 @@ class LlamaPythonRuntime:
         temperature: float,
         think_mode: bool,
         reasoning_effort: str,
+        response_format: dict[str, Any] | None = None,
     ) -> tuple[str, dict[str, Any]]:
         del reasoning_effort
         if self.llm is None:
@@ -835,6 +839,8 @@ class LlamaPythonRuntime:
             "repeat_penalty": 1.0,
             "presence_penalty": 0.0 if think_mode else 1.5,
         }
+        if response_format is not None:
+            options["response_format"] = response_format
         if not _supports_keyword_argument(self.llm.create_chat_completion, "presence_penalty"):
             options.pop("presence_penalty")
         try:
@@ -855,7 +861,7 @@ class LlamaPythonRuntime:
             raise LocalQwenRuntimeError(
                 "The local GGUF returned no final answer. Disable thinking or increase max output tokens."
             )
-        return content, result.get("usage") or {}
+        return content, {**(result.get("usage") or {}), "finish_reason": result["choices"][0].get("finish_reason")}
 
 
 class LocalQwenManager:

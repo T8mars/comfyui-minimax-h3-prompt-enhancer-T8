@@ -72,3 +72,14 @@ implementation is independently written and treats the source observations as
 narrow experimental evidence, not as an official MiniMax Skill or a universal
 model guarantee. Exact source hashes, evidence scope, limitations, and
 prohibited overclaims are recorded under `research_sources/`.
+# YuE2 Music Skill and native ABC helper
+
+The `official_skills/yue2-music/` snapshot and `yue2_abc.py` derive from
+multimodal-art-projection/YuE at commit
+`92a73cc7652fcc1f937855e4b765e0a0edd7ff2e`, `skills/yue2-music/`.
+Copyright (c) 2026 the YuE2 authors. Licensed under Apache License 2.0; the full
+license is included in `official_skills/yue2-music/LICENSE`.
+T8's adaptation removes the ABC helper's CLI/file operations and retains its
+native parser, reports, chord stripping and symbolic invariants. No model weights
+are distributed or downloaded by the new node. Their separate licenses do not
+change the license of this text adapter.

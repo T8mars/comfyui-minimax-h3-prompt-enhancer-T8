@@ -441,6 +441,8 @@ class LocalQwenProvider:
         temperature: float,
         seed: int,
         max_tokens: int | None = None,
+        require_complete: bool = False,
+        response_format: dict[str, Any] | None = None,
     ) -> str:
         output_tokens = local_output_token_budget(messages, self.settings, max_tokens)
         if self.server is None:
@@ -448,7 +450,7 @@ class LocalQwenProvider:
         if self.server is None:
             raise LocalQwenProviderError("Local GGUF provider could not start.")
         try:
-            content, _usage = LOCAL_QWEN_MANAGER.complete(
+            content, usage = LOCAL_QWEN_MANAGER.complete(
                 self.server,
                 messages=messages,
                 seed=int(seed),
@@ -456,9 +458,12 @@ class LocalQwenProvider:
                 temperature=float(temperature),
                 think_mode=self.settings.think_mode == LOCAL_THINK_ON,
                 reasoning_effort=self.settings.reasoning_effort,
+                **({"response_format": response_format} if response_format is not None else {}),
             )
         except LocalQwenRuntimeError as error:
             raise LocalQwenProviderError(str(error)) from error
+        if require_complete and usage.get("finish_reason") in {"length", "max_tokens", "content_filter"}:
+            raise LocalQwenProviderError("Local GGUF output was truncated/interrupted. Increase output/context tokens or disable thinking.")
         return content
 
 

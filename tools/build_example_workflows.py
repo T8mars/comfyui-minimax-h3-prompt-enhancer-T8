@@ -803,8 +803,8 @@ def check() -> None:
         "MiniMaxMusic3PromptEnhancerT8": 38,
     }
     workflows = sorted(EXAMPLES.glob("*.json"))
-    if len(workflows) != 13:
-        raise RuntimeError(f"Expected 13 example workflows, found {len(workflows)}")
+    if len(workflows) != 17:
+        raise RuntimeError(f"Expected 17 example workflows, found {len(workflows)}")
     expected_inputs = {
         "MiniMaxH3PromptEnhancerT8": [
             "first_frame", "last_frame", "reference_images.reference_image_0",
@@ -815,6 +815,7 @@ def check() -> None:
             "reference_videos.reference_video_0", "api_key", "provider_config",
         ],
         "MiniMaxMusic3PromptEnhancerT8": ["api_key", "provider_config"],
+        "YuE2MusicPromptEnhancerT8": ["api_key", "provider_config"],
         "T8LLMProviderConfig": [],
         "T8PromptInspector": ["prompt"],
         "T8PromptText": [],
@@ -894,6 +895,7 @@ def check() -> None:
         if "sk-" in path.read_text(encoding="utf-8"):
             raise RuntimeError(f"{path.name}: possible API key")
     required = {
+        "YuE2MusicPromptEnhancerT8",
         "MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8",
         "T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText",
         "T8CreativeDirector", "T8CreativeContextAssembler", "T8DirectedRevision",
@@ -931,6 +933,9 @@ def main() -> int:
         check()
     else:
         build()
+        # Imported here because the YuE2 builder reuses this module's helpers.
+        from build_yue2_workflows import main as build_yue2
+        build_yue2()
         check()
     return 0
 

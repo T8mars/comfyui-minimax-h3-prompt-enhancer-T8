@@ -2,11 +2,29 @@
   <a href="./README.md">简体中文</a> | <strong>English</strong>
 </p>
 
-# ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 Prompt Enhancer T8
+# ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
+
+## New: YuE2 music prompt and lyrics creation
+
+The independent **YuE2 Music Prompt & Lyrics Enhancer (T8)** writes original lyrics,
+preserves supplied lyrics exactly, edits a selected section, restyles a song, and
+validates optional native ABC or removes chords while preserving both melodies.
+Outputs: `style`, `lyrics`, `abc`, official request JSON, and a creation report.
+This is text preparation, not audio generation; no music weights are downloaded.
+
+Use the existing cloud/OpenAI-compatible/local GGUF providers and shared provider
+config. Defaults are Chinese lyrics with English style descriptions, independently
+controlled. Advanced fields are collapsed, with examples, help and completed-result
+recovery. Existing core nodes and workflows remain unchanged.
+
+[Guide and call costs](web/js/docs/yue2_music.md) · [Cloud creation](example_workflows/yue2_cloud_creation_example.json) · [Preserve lyrics](example_workflows/yue2_preserve_lyrics_example.json) · [Local GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC melody](example_workflows/yue2_abc_melody_example.json)
+
+Optional review scores evaluate text, not audible music. YuE2 `full / melody / off`
+select score planning, not LLM reasoning strength. Target duration is advisory.
 
 A ComfyUI node suite for improving MiniMax H3 and Seedance 2.0 video prompts and preparing MiniMax Music 3 lyrics and structured music captions. The H3 and Seedance nodes accept text plus real ComfyUI `IMAGE` and `VIDEO` inputs. The Music 3 node is text-only and returns lyrics, an official structured caption, a downstream-ready payload, and a redacted enhancement report as separate outputs.
 
-The three core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, a user-supplied OpenAI-compatible endpoint, or a local llama.cpp-compatible GGUF model. Provider transport and error handling are shared, while the prompt contracts remain isolated for each target model.
+All four core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, a user-supplied OpenAI-compatible endpoint, or a local llama.cpp-compatible GGUF model. Provider transport and error handling are shared, while the prompt contracts remain isolated for each target model.
 
 > The repository homepage intentionally remains Chinese through [`README.md`](./README.md). Use the language switch above to move between the Chinese and English guides.
 
@@ -26,6 +44,7 @@ The three core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, 
 | `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | Generate MiniMax H3 prompts | T2VA, I2VA, FL2VA, L2VA, Ref2VA |
 | `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | Generate Seedance 2.0 prompts | Text-to-video, first frame, first/last frame, multimodal reference, edit, extend, track completion, combined tasks |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | Prepare Music 3 lyrics and captions | AUTO, new lyrics, preserve, scoped rewrite, instrumental |
+| `YuE2 音乐提示词与歌词创作（T8）` | Prepare native YuE2 style and lyrics | Original lyrics, preserve/restyle, section edits, instrumental, optional ABC preparation |
 
 This project does not currently provide a Seedance 2.5 prompt node. It does not call video or music generation, polling, preview, or download APIs.
 

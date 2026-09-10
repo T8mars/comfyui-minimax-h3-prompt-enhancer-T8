@@ -83,9 +83,9 @@ class MaintenanceTests(unittest.TestCase):
         self.assertTrue(result[0]["pinned_contains_upstream"])
 
     def test_real_skill_manifests_expose_configured_commit_fields(self):
-        self.assertEqual(len(drift.SOURCES), 10)
+        self.assertEqual(len(drift.SOURCES), 11)
         self.assertEqual(
-            {source["path"].removeprefix("skills/") for source in drift.SOURCES[2:]},
+            {source["path"].removeprefix("skills/") for source in drift.SOURCES[2:-1]},
             set(drift.CREATIVE_H3_SKILLS),
         )
         for source in drift.SOURCES:
@@ -96,7 +96,7 @@ class MaintenanceTests(unittest.TestCase):
 
     def test_native_workflows_have_same_name_thumbnails(self):
         workflows = sorted((ROOT / "example_workflows").glob("*.json"))
-        self.assertEqual(len(workflows), 13)
+        self.assertEqual(len(workflows), 17)
         seen_types = set()
         for workflow in workflows:
             with self.subTest(workflow=workflow.name):

@@ -43,7 +43,13 @@ SOURCES = (
         "commit_field": "source_commit",
     }
     for skill in CREATIVE_H3_SKILLS
-)
+) + ({
+    "name": "YuE2 yue2-music",
+    "repo": "multimodal-art-projection/YuE",
+    "path": "skills/yue2-music",
+    "manifest": ROOT / "official_skills" / "yue2-music" / "source.json",
+    "commit_field": "commit",
+},)
 
 
 class DriftCheckError(RuntimeError):

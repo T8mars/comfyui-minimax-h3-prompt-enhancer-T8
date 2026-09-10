@@ -11,6 +11,7 @@
 </style>
 <body><pre id="result">RUNNING</pre></body>
 <script type="module">
+import * as yueUI from "../../web/js/yue2_prompt_enhancer.js";
 const result = document.querySelector("#result");
 const failures = [];
 const check = (value, message) => { if (!value) failures.push(message); };
@@ -365,6 +366,48 @@ try {
   const safe = diagnostics.sanitizeDiagnosticRecord({
     component: "node", provider: "provider", outcome: "success", stages: [], prompt: "secret-body",
   });
+  const yueExtension = app.extensions.find(e => e.name === "T8.YuE2Music");
+  class YueNode {
+    constructor() {
+      this.id = 999;
+      this.properties = {};
+      this.size = [650, 650];
+      this.widgets = ["music_idea", "lyrics", "lyrics_mode", "api_mode", "custom_model", "openai_base_url", "abc", "recovery_slot", "recovery_action"].map(name => ({name, value: "", type: "text", computeSize: () => [650, 40]}));
+      this.graph = { _nodes: [this], change() {} };
+    }
+    addWidget(type, name, value, callback, options) { const w = {type, name, value, callback, options, computeSize: () => [650, 30]}; this.widgets.push(w); return w; }
+    addDOMWidget(name, type, element, options) { const w = {name, type, element, options, computeSize: () => [650, options.getMinHeight()]}; this.widgets.push(w); return w; }
+    computeSize() { return [650, 100 + this.widgets.reduce((n, w) => n + (w.hidden ? 0 : (w.computeSize?.(650)?.[1] || 30)), 0)]; }
+    setSize(size) { this.size = size; }
+    setDirtyCanvas() {}
+  }
+  await yueExtension.beforeRegisterNodeDef(YueNode, {name: yueUI.YUE2_NODE_ID});
+  const yueNode = new YueNode();
+  yueNode.onNodeCreated();
+  const yueHeight = yueNode.size[1];
+  const yueToggle = yueNode.widgets.find(w => w.name.includes("高级创作"));
+  check(yueNode.widgets.find(w => w.name === "abc").hidden, "YuE2 advanced ABC is initially collapsed");
+  for (let i = 0; i < 20; i++) { yueToggle.callback(); yueToggle.callback(); }
+  check(yueNode.size[1] === yueHeight, "YuE2 toggle cycles do not accumulate height");
+  check(yueNode.widgets.find(w => w.name === "recovery_action").hidden, "YuE2 recovery internals stay hidden");
+  const fieldYue = name => yueNode.widgets.find(w => w.name === name);
+  fieldYue("custom_model").value = "vendor/music-text";
+  fieldYue("openai_base_url").value = "https://example.test/v1";
+  fieldYue("lyrics").value = "[Chorus]\n中文原词";
+  const yueSerialized = {};
+  yueNode.onSerialize(yueSerialized);
+  const yueReloaded = new YueNode();
+  yueReloaded.onNodeCreated();
+  yueReloaded.onConfigure(yueSerialized);
+  check(yueReloaded.widgets.find(w => w.name === "custom_model").value === "vendor/music-text", "YuE2 model ID survives reload");
+  check(yueReloaded.widgets.find(w => w.name === "lyrics").value.includes("中文原词"), "YuE2 lyrics survive reload");
+  check(yueReloaded.widgets.find(w => w.name === "openai_base_url").value.endsWith("/v1"), "YuE2 Base URL survives reload");
+  const helpYue = yueNode.widgets.find(w => w.name === "t8_yue2_help");
+  check(helpYue.element.querySelectorAll("button").length === 3, "YuE2 shows three usable examples");
+  check(helpYue.computeSize(650)[1] === 220, "YuE2 help owns bounded height below run controls");
+  const yueCount = yueNode.widgets.length;
+  yueUI.installYuE2UI(yueNode);
+  check(yueNode.widgets.length === yueCount, "YuE2 UI initialization is idempotent");
   check(!JSON.stringify(safe).includes("secret-body"), "diagnostics browser allowlist");
   check(capability.providerCapabilitySummary("OpenAI兼容接口（备用）", "https://unknown.test/v1").profile === "openai-compatible-unknown", "unknown provider boundary");
   check(recommendation.rankTemplates([{ id: "one", label: "产品广告", required_anchors: [] }], { prompt: "产品" })[0].template.id === "one", "local recommendation");

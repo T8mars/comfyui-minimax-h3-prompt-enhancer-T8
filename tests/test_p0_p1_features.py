@@ -109,7 +109,7 @@ class P0P1FeatureTests(unittest.TestCase):
         )
         self.assertEqual(schemas[7].node_id, "T8PerformanceDirectorConfig")
         self.assertEqual(
-            [schema.node_id for schema in schemas[8:]],
+            [schema.node_id for schema in schemas[8:-1]],
             [
                 "T8FilmProjectRouter",
                 "T8CharacterPerformanceBible",

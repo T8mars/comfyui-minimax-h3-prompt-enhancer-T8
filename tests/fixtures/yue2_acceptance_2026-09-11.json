@@ -1,0 +1,390 @@
+{
+  "date": "2026-09-11",
+  "version": "1.15.0",
+  "scope": "Text acceptance; no audio generation or listening score.",
+  "cases": [
+    {
+      "case": "zh_new_reviewed",
+      "input": {
+        "music_idea": "原创中文公路歌。离乡青年清晨带着旧地图出发，从犹豫到决定向前；不要空泛口号。女声、钢琴与吉他，88 BPM，短而易记的副歌，完整主副歌结构。",
+        "quality_mode": "创作审校 / Reviewed"
+      },
+      "request": {
+        "style": "Original Mandarin Chinese indie folk-road song at a steady 88 BPM. Warm, intimate female lead vocal begins softly and hesitantly, then gains quiet confidence through the pre-choruses into a short, memorable chorus. Fingerpicked acoustic guitar and piano form the core, with subtle bass, gentle brushed drums, and light ambient texture entering as the journey unfolds. Verse arrangements stay sparse and observational; pre-choruses rise with added piano chords and percussion; choruses open into a flowing, singable resolve. The bridge pulls back to reflective guitar and piano before the final chorus gains warmth and momentum, followed by a quiet, clear outro. Sung entirely in Chinese.",
+        "lyrics": "[Verse 1]\n六点零五分，天还没亮透\n水壶在背包里晃了好久\n旧地图摊在膝盖上\n折痕把家乡磨得发白\n门锁咔哒响，风钻进袖口\n我提着行李，没立刻走\n\n[Pre-Chorus]\n巷口的灯还亮着\n早点摊掀开蒸笼\n白气飘过旧墙头\n像谁轻轻叫我别走\n我把围巾绕紧，把地图折好\n这一次不等谁点头\n\n[Chorus]\n旧地图摊开，天慢慢亮起来\n沿着褪色的线往前开\n雾退到山后，风钻进袖口\n下一站，不问还有多久\n旧地图摊开，心慢慢定下来\n车轮压过露水和尘埃\n路会弯，雾会散\n我往前开，一直往前开\n\n[Verse 2]\n加油站招牌缺了一块\n热纸杯在掌心软下来\n工人拖水管，冲昨夜的雨\n我望着路标发了一会儿呆\n收音机跳着陌生的地名\n旁边的司机在掸烟灰\n他探头问我往哪儿去\n我指指前面，说先往前开\n\n[Pre-Chorus]\n油表满格，里程表归零\n后视镜里的屋顶越来越轻\n不是没有一点怕\n只是风已吹过衣领\n我把车速压得很稳\n让呼吸跟着引擎\n\n[Chorus]\n旧地图摊开，天慢慢亮起来\n沿着褪色的线往前开\n雾退到山后，风钻进袖口\n下一站，不问还有多久\n旧地图摊开，心慢慢定下来\n车轮压过露水和尘埃\n路会弯，雾会散\n我往前开，一直往前开\n\n[Bridge]\n旧桥边停下，摊开地图\n父亲的铅笔字已经模糊\n他圈过的小镇被新路绕过\n芦苇花白了半个坡\n我喝完凉掉的茶\n对着后视镜把头发束好\n不是忽然找到了答案\n是雾里有一段光在闪\n\n[Chorus]\n旧地图摊开，天已经亮起来\n沿着褪色的线往前开\n雾退到山后，风钻进袖口\n下一站，不问还有多久\n旧地图摊开，心慢慢定下来\n车轮压过露水和尘埃\n路会弯，雾会散\n我往前开，一直往前开\n\n[Outro]\n八点十七分，太阳升高\n副驾的地图边角翘了翘\n我踩下油门，没再回头\n晨光正落在前方路标",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "生成新歌词 / New lyrics",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Seedance",
+        "model": "bytedance/doubao-seed-evolving",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "lyrics",
+            "attempts": 1,
+            "seconds": 87.078
+          },
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 13.968
+          },
+          {
+            "stage": "review",
+            "attempts": 1,
+            "seconds": 63.969
+          }
+        ],
+        "requests": 3,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": true,
+          "original_preserved": null,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "planner": "YuE2"
+        },
+        "review": {
+          "scores": {
+            "theme_and_story": 18,
+            "singability": 18,
+            "chorus_hook": 18,
+            "section_development": 19,
+            "style_lyrics_coherence": 18
+          },
+          "issues": [
+            "\"油表满格，里程表归零\"细节略可商榷：车辆总里程表通常不能归零，若指短途计程，可改为\"小计里程归零\"或\"短途表归零\"，会更可信。",
+            "副歌共有八句，虽然\"旧地图摊开，天慢慢亮起来\"和\"路会弯，雾会散\"记忆点明确，但相对brief里的\"短而易记\"仍略长；反复时可考虑精简后四句，或将其作为副歌延伸段。",
+            "\"风钻进袖口\"在Verse 1与Chorus中完全重复，作为动机呼应成立，但若想增加新鲜感，副歌可换成另一个与风、速度或温度有关的具体意象。",
+            "\"工人拖水管，冲昨夜的雨\"搭配稍显含混，水管冲掉的更像是雨水或雨痕，可考虑改为\"冲去昨夜的雨痕\"。",
+            "\"让呼吸跟着引擎\"口语上略有省略，文字完整性可作\"让呼吸跟着引擎声\"，但需配合原有乐句字数与节奏。"
+          ],
+          "revision_needed": false,
+          "total": 91,
+          "scope": "LLM text review only; no audio score",
+          "score_applies_to": "final_text"
+        },
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。"
+        ],
+        "audio_generated": false
+      }
+    },
+    {
+      "case": "en_new",
+      "input": {
+        "music_idea": "An original English folk song: a night-shift baker sees sunrise after sharing the last loaf with a stranger. Concrete images, warm male voice, acoustic guitar, memorable chorus. Two short verses and repeated chorus.",
+        "lyrics_language": "English"
+      },
+      "request": {
+        "style": "Original English folk in a warm, intimate acoustic setting. Solo steel-string acoustic guitar fingerpicking during the verses, opening into gentle strumming for a memorable, singable chorus. Warm, weathered male voice sung in English, reflective and tender, growing brighter with each chorus. Moderate steady tempo, sparse and human arrangement with subtle dynamic lift, evoking dawn, kindness, and quiet relief.",
+        "lyrics": "[Verse]\nFlour dust drifting in neon light,\noven ticking at the edge of night.\nThe last loaf rested on the cooling tray,\ngold as the lamps going out over the bay.\n\n[Chorus]\nRise, rise, morning sun,\nwarm as the bread we give someone.\nOne open door, one loaf to share—\nthat is what the night was for.\nSteam on the air and light on the street,\nbless the hands that strangers meet.\n\n[Verse]\nA tap came soft on the back-shop door,\na stranger stepped in from the frosty floor.\nI shared the last loaf, then watched her go\nunder the first gold sun on the snow.\n\n[Chorus]\nRise, rise, morning sun,\nwarm as the bread we give someone.\nOne open door, one loaf to share—\nthat is what the night was for.\nSteam on the air and light on the street,\nbless the hands that strangers meet.",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "生成新歌词 / New lyrics",
+        "lyrics_language": "English",
+        "style_language": "English",
+        "provider": "Seedance",
+        "model": "bytedance/doubao-seed-evolving",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "lyrics",
+            "attempts": 1,
+            "seconds": 35.39
+          },
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 12.844
+          }
+        ],
+        "requests": 2,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": true,
+          "original_preserved": null,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "planner": "YuE2"
+        },
+        "review": null,
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。"
+        ],
+        "audio_generated": false
+      }
+    },
+    {
+      "case": "zh_preserve",
+      "input": {
+        "music_idea": "原词严格保留，温暖摇滚版，主歌克制、副歌开阔，干净电吉他与弹性鼓组。",
+        "lyrics": "[Verse]\n车窗留着雨的形状\n旧地图折进了衣裳\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n\n[Verse]\n绕过没说完的惆怅\n路牌已换新的方向\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n"
+      },
+      "request": {
+        "style": "Warm heartland alternative rock with clean electric guitars, melodic bass, and a supple, dynamic drum kit. Verses are restrained and intimate, featuring soft guitar textures and steady understated drums; choruses open into wide, uplifting space with layered guitars, fuller grooves, and soaring but sincere vocals. Sung in Mandarin Chinese. Mid-tempo, gradually building arrangement that stays clear, warm, and emotionally open.",
+        "lyrics": "[Verse]\n车窗留着雨的形状\n旧地图折进了衣裳\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n\n[Verse]\n绕过没说完的惆怅\n路牌已换新的方向\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "严格保留歌词 / Preserve",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Seedance",
+        "model": "bytedance/doubao-seed-evolving",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 14.203
+          }
+        ],
+        "requests": 1,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": true,
+          "original_preserved": true,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "planner": "YuE2"
+        },
+        "review": null,
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。"
+        ],
+        "audio_generated": false
+      }
+    },
+    {
+      "case": "zh_edit_second_chorus",
+      "input": {
+        "music_idea": "中文公路歌，温暖女声钢琴吉他，歌词其余部分不要改。",
+        "lyrics": "[Verse]\n车窗留着雨的形状\n旧地图折进了衣裳\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n\n[Verse]\n绕过没说完的惆怅\n路牌已换新的方向\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n",
+        "lyrics_mode": "定向改词 / Edit section",
+        "edit_section": "Chorus",
+        "edit_occurrence": 2,
+        "edit_request": "只改第二次副歌，以具体的黎明意象表现终于出发，保持两行。"
+      },
+      "request": {
+        "style": "Warm Mandarin road-trip folk-pop with gentle acoustic piano and fingerpicked electric/acoustic guitar, soft brushed drums, and subtle bass. Lead vocal is a tender, clear, intimate female voice in Sung Mandarin, carrying nostalgic yet hopeful emotion. Mid-tempo, unhurried groove; verses stay sparse and close, while choruses bloom with layered harmonies, warmer piano chords, and light percussion, evoking open roads, morning light, and quiet departure.",
+        "lyrics": "[Verse]\n车窗留着雨的形状\n旧地图折进了衣裳\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n\n[Verse]\n绕过没说完的惆怅\n路牌已换新的方向\n\n[Chorus]\n朝霞铺满了车窗\n引擎轻声说出发\n",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "定向改词 / Edit section",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Seedance",
+        "model": "bytedance/doubao-seed-evolving",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "lyrics",
+            "attempts": 1,
+            "seconds": 55.422
+          },
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 12.64
+          }
+        ],
+        "requests": 2,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": true,
+          "original_preserved": null,
+          "outside_edit_preserved": true
+        },
+        "abc": {
+          "provided": false,
+          "planner": "YuE2"
+        },
+        "review": null,
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。"
+        ],
+        "audio_generated": false
+      }
+    },
+    {
+      "case": "zh_new_reviewed",
+      "input": {
+        "music_idea": "原创中文公路歌。离乡青年清晨带着旧地图出发，从犹豫到决定向前；不要空泛口号。女声、钢琴与吉他，88 BPM，短而易记的副歌，完整主副歌结构。",
+        "quality_mode": "标准 / Standard",
+        "api_mode": "本地 GGUF（llama.cpp / Qwen，离线）",
+        "local_model": "Qwen3.5-4B_Abliterated.f16.gguf",
+        "local_context_size": 16384,
+        "local_max_tokens": 8192
+      },
+      "request": {
+        "style": "Chinese indie folk road song; acoustic piano and fingerpicked guitar drive a sparse, emotive texture; female vocals with intimate storytelling tone and slight breathiness; lyrics in Chinese; tempo 88 BPM; structure progresses from quiet verses to building pre-chorus tension, explosive yet melodic chorus, reflective bridge, and fading instrumental outro.",
+        "lyrics": "[Verse 1]\n闹钟没响我就起身\n窗外灰雾像旧地图的折痕\n背包里塞着半包烟和一张票\n镜子里的眼睛还没学会说走\n\n[Pre-Chorus]\n母亲在电话那头问冷不冷\n父亲把伞留在屋檐下不肯送\n我掐灭了犹豫的最后一秒\n只听见风穿过巷口的声音\n\n[Chorus]\n就这一站 别回头再等谁\n就算路是弯的 心也要往前飞\n旧地图泛黄 也标得出新海\n只要车轮滚过 就不算白费\n\n[Verse 2]\n早餐摊的热气烫了脸颊\n陌生人递来半块温热的饼\n城市在玻璃幕墙上慢慢后退\n我把名字写在车窗不起眼的角落\n\n[Pre-Chorus]\n母亲在电话那头问冷不冷\n父亲把伞留在屋檐下不肯送\n我掐灭了犹豫的最后一秒\n只听见风穿过巷口的声音\n\n[Chorus]\n就这一站 别回头再等谁\n就算路是弯的 心也要往前飞\n旧地图泛黄 也标得出新海\n只要车轮滚过 就不算白费\n\n[Bridge]\n不必等到天亮才敢出发\n黑夜也是远方最真实的底色\n每一步脚印都会变成路碑\n哪怕孤独 也比原地更值得\n\n[Chorus]\n就这一站 别回头再等谁\n就算路是弯的 心也要往前飞\n旧地图泛黄 也标得出新海\n只要车轮滚过 就不算白费\n\n[Outro]\n引擎声渐远 雾散开一线天光\n我松开手 让往事随风流浪\n前方有路 就在脚下\n就这一站 出发吧",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "生成新歌词 / New lyrics",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Local llama.cpp GGUF",
+        "model": "Qwen3.5-4B_Abliterated.f16.gguf",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "lyrics",
+            "attempts": 1,
+            "seconds": 20.969
+          },
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 3.375
+          }
+        ],
+        "requests": 2,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": true,
+          "original_preserved": null,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "planner": "YuE2"
+        },
+        "review": null,
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。"
+        ],
+        "audio_generated": false
+      }
+    },
+    {
+      "case": "zh_new_reviewed",
+      "input": {
+        "music_idea": "原创中文公路歌。离乡青年清晨带着旧地图出发，从犹豫到决定向前；不要空泛口号。女声、钢琴与吉他，88 BPM，短而易记的副歌，完整主副歌结构。",
+        "quality_mode": "创作审校 / Reviewed",
+        "api_mode": "本地 GGUF（llama.cpp / Qwen，离线）",
+        "local_model": "Qwen3.5-4B_Abliterated.f16.gguf",
+        "local_context_size": 16384,
+        "local_max_tokens": 8192
+      },
+      "request": {
+        "style": "Chinese indie folk road song; acoustic piano and fingerpicked guitar drive a sparse, emotive texture; female vocals with intimate storytelling tone and slight breathiness; lyrics in Chinese; tempo 88 BPM; structure progresses from quiet verses to building pre-chorus tension, explosive yet melodic chorus, reflective bridge, and fading instrumental outro.",
+        "lyrics": "[Verse 1]\n闹钟没响我就起身\n窗外灰雾像旧地图的折痕\n背包里塞着半包烟和一张票\n镜子里的眼睛还没学会说走\n\n[Pre-Chorus]\n母亲在电话那头问冷不冷\n父亲把伞留在屋檐下不肯送\n我掐灭了犹豫的最后一秒\n只听见风穿过巷口的声音\n\n[Chorus]\n就这一站 别回头再等谁\n就算路是弯的 心也要往前飞\n旧地图泛黄 也标得出新海\n只要车轮滚过 就不算白费\n\n[Verse 2]\n早餐摊的热气烫了脸颊\n陌生人递来半块温热的饼\n城市在玻璃幕墙上慢慢后退\n我把名字写在车窗不起眼的角落\n\n[Pre-Chorus]\n母亲在电话那头问冷不冷\n父亲把伞留在屋檐下不肯送\n我掐灭了犹豫的最后一秒\n只听见风穿过巷口的声音\n\n[Chorus]\n就这一站 别回头再等谁\n就算路是弯的 心也要往前飞\n旧地图泛黄 也标得出新海\n只要车轮滚过 就不算白费\n\n[Bridge]\n不必等到天亮才敢出发\n黑夜也是远方最真实的底色\n每一步脚印都会变成路碑\n哪怕孤独 也比原地更值得\n\n[Chorus]\n就这一站 别回头再等谁\n就算路是弯的 心也要往前飞\n旧地图泛黄 也标得出新海\n只要车轮滚过 就不算白费\n\n[Outro]\n引擎声渐远 雾散开一线天光\n我松开手 让往事随风流浪\n前方有路 就在脚下\n就这一站 出发吧",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "生成新歌词 / New lyrics",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Local llama.cpp GGUF",
+        "model": "Qwen3.5-4B_Abliterated.f16.gguf",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "lyrics",
+            "attempts": 1,
+            "seconds": 20.609
+          },
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 3.36
+          },
+          {
+            "stage": "review",
+            "attempts": 1,
+            "seconds": 10.594
+          }
+        ],
+        "requests": 3,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": true,
+          "original_preserved": null,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "planner": "YuE2"
+        },
+        "review": {
+          "scores": {
+            "theme_and_story": 18,
+            "singability": 16,
+            "chorus_hook": 14,
+            "section_development": 17,
+            "style_lyrics_coherence": 19
+          },
+          "issues": [
+            "The chorus line '就算路是弯的 心也要往前飞' uses the idiom '心往哪飞' which is slightly less idiomatic in standard Chinese road songs compared to '心往哪走'; consider changing to '心也要往前闯' or '心也要往前奔' for better rhythmic flow and colloquial resonance.",
+            "The bridge section introduces a strong philosophical shift ('黑夜也是远方最真实的底色'), which feels slightly more abstract than the concrete imagery of the verses; ensure this transition is supported by musical dynamics (e.g., a slight drop in instrumentation) to maintain the 'sparse, emotive texture' described in the brief.",
+            "Ensure the vocal delivery in the outro matches the 'slight breathiness' specified in the style guide, particularly on lines like '让往事随风流浪', to emphasize the intimate storytelling tone."
+          ],
+          "revision_needed": false,
+          "total": 84,
+          "scope": "LLM text review only; no audio score",
+          "score_applies_to": "final_text"
+        },
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。"
+        ],
+        "audio_generated": false
+      }
+    }
+  ]
+}

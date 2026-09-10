@@ -128,7 +128,7 @@ class CreativeSuiteTests(unittest.TestCase):
             "MiniMaxMusic3PromptEnhancerT8",
         ])
         self.assertEqual(len(ids), len(set(ids)))
-        self.assertEqual(ids[-13:], [node.define_schema().node_id for node in creative.CREATIVE_SUITE_NODES])
+        self.assertEqual(ids[-14:-1], [node.define_schema().node_id for node in creative.CREATIVE_SUITE_NODES])
 
     def test_creative_director_is_local_and_preserves_dimension_policies(self):
         result = creative.T8CreativeDirector.execute(

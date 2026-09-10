@@ -1,0 +1,435 @@
+{
+  "id": "3e133829-1602-52d5-92c0-1f0c13258d92",
+  "revision": 0,
+  "last_node_id": 7,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写你的 LLM API Key / Your key"
+    },
+    {
+      "id": 2,
+      "type": "YuE2MusicPromptEnhancerT8",
+      "pos": [
+        500,
+        40
+      ],
+      "size": [
+        680,
+        980
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 1
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "style",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "abc",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "yue2_request_json",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "creation_report_json",
+          "type": "STRING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "YuE2MusicPromptEnhancerT8",
+        "t8_yue2_widgets_v1": {
+          "music_idea": "ABC 是一小节接口演示，不是完整歌曲。保持旋律，温暖中文人声，钢琴吉他。真实创作请替换完整乐谱与匹配歌词。",
+          "lyrics_mode": "严格保留歌词 / Preserve",
+          "lyrics_language": "中文",
+          "lyrics": "[Verse]\n风吹过来\n",
+          "cot": "melody（旋律谱面）",
+          "api_mode": "贞贞平价小屋（推荐）",
+          "quality_mode": "标准 / Standard",
+          "seed": 0,
+          "style_language": "English",
+          "structure": "",
+          "genre": "",
+          "vocal": "",
+          "instruments": "",
+          "bpm": 0,
+          "meter": "AUTO",
+          "key_scale": "",
+          "constraints": "",
+          "target_duration_seconds": 0,
+          "creativity": "balanced",
+          "edit_section": "Chorus",
+          "edit_occurrence": 1,
+          "edit_request": "",
+          "abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=88\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:C\n% verse\nV: Vocal\n\"C\"C8D8E8G8|\nV: Ins\nZ|\n",
+          "abc_action": "去和弦，保留双声部旋律 / Strip chords",
+          "yue2_seed": 831001,
+          "song_id": "song",
+          "cfg_scale": -1.0,
+          "ai_workshop_model": "gemini-3.5-flash",
+          "custom_model": "",
+          "openai_base_url": "",
+          "llm_max_tokens": 16384,
+          "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+          "local_context_size": 32768,
+          "local_max_tokens": 16384,
+          "local_think_mode": "关闭（推荐，速度优先）",
+          "local_reasoning_effort": "medium",
+          "local_unload_policy": "执行后卸载（推荐）",
+          "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+          "recovery_slot": "",
+          "recovery_action": "normal"
+        }
+      },
+      "widgets_values": [
+        "ABC 是一小节接口演示，不是完整歌曲。保持旋律，温暖中文人声，钢琴吉他。真实创作请替换完整乐谱与匹配歌词。",
+        "严格保留歌词 / Preserve",
+        "中文",
+        "[Verse]\n风吹过来\n",
+        "melody（旋律谱面）",
+        "贞贞平价小屋（推荐）",
+        "标准 / Standard",
+        0,
+        "English",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "AUTO",
+        "",
+        "",
+        0,
+        "balanced",
+        "Chorus",
+        1,
+        "",
+        "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=88\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:C\n% verse\nV: Vocal\n\"C\"C8D8E8G8|\nV: Ins\nZ|\n",
+        "去和弦，保留双声部旋律 / Strip chords",
+        831001,
+        "song",
+        -1.0,
+        "gemini-3.5-flash",
+        "",
+        "",
+        16384,
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "normal"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "T8ShowText",
+      "pos": [
+        1250,
+        40
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "style"
+    },
+    {
+      "id": 4,
+      "type": "T8ShowText",
+      "pos": [
+        1250,
+        430
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 3,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "lyrics"
+    },
+    {
+      "id": 5,
+      "type": "T8ShowText",
+      "pos": [
+        1250,
+        820
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "abc"
+    },
+    {
+      "id": 6,
+      "type": "T8ShowText",
+      "pos": [
+        1750,
+        40
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 5,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "yue2_request_json"
+    },
+    {
+      "id": 7,
+      "type": "T8ShowText",
+      "pos": [
+        1750,
+        430
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 6,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "creation_report_json"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      2,
+      1,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      2,
+      2,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      2,
+      3,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      2,
+      4,
+      7,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

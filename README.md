@@ -11,7 +11,17 @@
 | RunningHub APIKEY（国内版） | 需要适配更多 AI 应用的国内用户 | 适配更多 AI 应用，并可体验最新模型。 | <a href="https://www.runninghub.cn/user-center/1819214514410942465/webapp?inviteCode=rh-v1121"><kbd>获取国内版 APIKEY</kbd></a> |
 | RunningHub APIKEY（海外版） | 海外模型、更宽松审核场景 | 审核更宽松，支持海外模型。 | <a href="https://www.runninghub.ai/user-center/1907375370302308353/webapp?inviteCode=rh-v1121"><kbd>获取海外版 APIKEY</kbd></a> |
 
-# ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 Prompt Enhancer T8
+# ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
+
+## 新增：YuE2 音乐提示词与歌词创作
+
+新增独立节点 **YuE2 音乐提示词与歌词创作（T8）**：支持一句话写歌、原词逐字保留、指定段落改词、换风格、可选 ABC 乐谱校验与保留旋律去和弦。输出 `style`、`lyrics`、`abc`、官方请求 JSON 和创作报告；不生成音频、不下载音乐模型，不影响原有三个核心节点。
+
+支持现有四类云端／本地 GGUF 渠道与共享配置。默认中文歌词＋英文风格描述；高级设置折叠，并提供参考案例、使用说明与完整结果恢复按钮。
+
+[使用说明与费用边界](web/js/docs/yue2_music.md) · [云端创作](example_workflows/yue2_cloud_creation_example.json) · [保留原词](example_workflows/yue2_preserve_lyrics_example.json) · [本地 GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC 旋律](example_workflows/yue2_abc_melody_example.json)
+
+创作审校评分只代表文本评审，不是音乐听感评分。YuE2 的 `full / melody / off` 是谱面规划方式，不等于 LLM 思考强度；时长仅为规划参考。
 
 一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 llama.cpp 兼容 GGUF。
 
@@ -29,13 +39,14 @@
 | 模型网盘 | [夸克网盘下载](https://pan.quark.cn/s/c9c267081fbf) |
 | Hugging Face | [t8star](https://huggingface.co/t8star) |
 
-## 三个独立节点
+## 四个独立核心节点
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
 | `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
 | `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | 生成 Music 3 歌词与音乐描述 | AUTO、生成歌词、严格保留、局部润色、纯器乐 |
+| `YuE2 音乐提示词与歌词创作（T8）` | 生成 YuE2 风格与歌词 | 原创、保留原词、定向改词、纯器乐、可选 ABC 准备 |
 
 本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频或音乐生成、轮询、试听或下载接口。
 
