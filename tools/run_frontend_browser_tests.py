@@ -118,6 +118,9 @@ def main() -> int:
                 "--disable-extensions",
                 "--disable-background-networking",
                 "--no-first-run",
+                # Bound DOM capture even when pending resources pause virtual time.
+                # https://developer.chrome.com/docs/automation-and-testing/headless-cli#timeout
+                "--timeout=10000",
                 f"--user-data-dir={profile}",
                 "--dump-dom",
             ]
@@ -146,6 +149,7 @@ def main() -> int:
                     "--disable-extensions",
                     "--disable-background-networking",
                     "--no-first-run",
+                    "--timeout=10000",
                     f"--user-data-dir={profile}",
                     "--window-size=1280,900",
                     f"--screenshot={target}",

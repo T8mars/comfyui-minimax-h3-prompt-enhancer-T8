@@ -5,6 +5,15 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.15.1] - 2026-09-11
+
+### Fixed
+
+- Bound headless Chrome DOM/screenshot capture before the outer process deadline.
+  The 1.15.0 release runner twice timed out despite the same commit passing both
+  compatibility jobs. Keep all browser assertions and require explicit PASS;
+  do not treat a timed-out or unfinished test as a successful release.
+
 ## [1.15.0] - 2026-09-11
 
 ### Added
