@@ -157,7 +157,8 @@
           "local_unload_policy": "执行后卸载（推荐）",
           "local_comfy_memory_policy": "AUTO（显存不足时释放）",
           "recovery_slot": "",
-          "recovery_action": "normal"
+          "recovery_action": "normal",
+          "abc_source": "自动创作 ABC（T8 LLM）/ Compose"
         }
       },
       "widgets_values": [
@@ -200,7 +201,8 @@
         "执行后卸载（推荐）",
         "AUTO（显存不足时释放）",
         "",
-        "normal"
+        "normal",
+        "自动创作 ABC（T8 LLM）/ Compose"
       ]
     },
     {

@@ -23,6 +23,19 @@ STYLE = "Mandarin acoustic pop, warm female voice, piano and guitar, 88 BPM, res
 ABC = 'X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=88\nV: Vocal clef=treble name="Vocal Melody" snm="Vocal"\nV: Ins clef=treble name="Ins Melody" snm="Inst."\nK:C\n% verse\nV: Vocal\n"C"C8D8E8G8|\nV: Ins\nZ|\n'
 
 
+def composed_fixture(content):
+    sections = content["required_sections"] or ["instrumental"]
+    score = ABC.split("% verse")[0]
+    for name in sections:
+        vocal, ins = '"C"C8D8E8G8|', 'Z|'
+        if content["brief"]["instrumental"]:
+            vocal, ins = '"C"z32|', 'C8D8E8G8|'
+        if content["score_mode"] == "melody":
+            vocal = vocal.replace('"C"', '')
+        score += f"% {name}\nV: Vocal\n{vocal}\nV: Ins\n{ins}\n"
+    return {"abc": score}
+
+
 class Response:
     status_code = 200
     headers = {"Content-Type": "application/json"}
@@ -42,6 +55,8 @@ class Session:
             value = self.replies.pop(0)
             return value if isinstance(value, Response) else Response(value)
         system = kwargs["json"]["messages"][0]["content"]
+        if "T8 LLM composer" in system:
+            return Response(composed_fixture(json.loads(kwargs["json"]["messages"][1]["content"])))
         if "independent textual critic" in system:
             return Response({"scores": {k: 17 for k in yue.RUBRIC}, "issues": [], "revision_needed": False})
         if "replacement body ONLY" in system:
@@ -67,9 +82,9 @@ class YuE2Tests(unittest.TestCase):
         style, lyrics, abc, payload, report = self.run_node(session=session)
         data = json.loads(payload)
         yue.validate_request(data)
-        self.assertEqual(data, {"style": style, "lyrics": lyrics, "cot": "full", "seed": 831001, "id": "song"})
-        self.assertEqual(abc, "")
-        self.assertEqual(len(session.calls), 2)
+        self.assertEqual(data, {"style": style, "lyrics": lyrics, "cot": "full", "seed": 831001, "id": "song", "abc": abc})
+        self.assertTrue(abc)
+        self.assertEqual(len(session.calls), 3)
         self.assertTrue(json.loads(report)["checks"]["lyrics_language"])
         for _, call in session.calls:
             self.assertEqual(call["json"]["max_tokens"], yue.DEFAULT_MAX_TOKENS)
@@ -104,12 +119,12 @@ class YuE2Tests(unittest.TestCase):
             with self.assertRaises(yue.YuE2PromptError):
                 yue.official_snapshot()
 
-    def test_preserve_byte_exact_and_one_call(self):
+    def test_preserve_byte_exact_with_generated_abc(self):
         session = Session()
         original = LYRICS.replace("\n", "\r\n")
         result = self.run_node(lyrics=original, session=session)
         self.assertEqual(result[1], original)
-        self.assertEqual(len(session.calls), 1)
+        self.assertEqual(len(session.calls), 2)
 
     def test_edit_only_second_chorus(self):
         result = self.run_node(lyrics_mode=yue.EDIT, lyrics=LYRICS, edit_section="Chorus", edit_occurrence=2, edit_request="更有希望")
@@ -121,7 +136,7 @@ class YuE2Tests(unittest.TestCase):
     def test_language_repair_then_validate(self):
         session = Session([{"lyrics": "[Verse]\nWe drive into the morning"}, {"lyrics": LYRICS}, {"style": STYLE}])
         result = self.run_node(session=session)
-        self.assertEqual(len(session.calls), 3)
+        self.assertEqual(len(session.calls), 4)
         self.assertEqual(result[1], LYRICS.strip())
 
     def test_wrong_language_twice_fails(self):
@@ -139,7 +154,7 @@ class YuE2Tests(unittest.TestCase):
         report = json.loads(result[4])
         self.assertEqual(report["review"]["total"], 85)
         self.assertFalse(report["audio_generated"])
-        self.assertEqual(report["requests"], 3)
+        self.assertEqual(report["requests"], 4)
 
     def test_review_cannot_edit_preserved_lyrics(self):
         replies = [{"style": STYLE}, {"scores": {k: 14 for k in yue.RUBRIC}, "issues": ["Needs brighter ending"], "revision_needed": True}, {"style": STYLE + " A bright final refrain."}]
@@ -181,7 +196,7 @@ class YuE2Tests(unittest.TestCase):
         session = Session()
         result = self.run_node(lyrics_mode=yue.INSTRUMENTAL, session=session)
         self.assertEqual(result[1], "")
-        self.assertEqual(len(session.calls), 1)
+        self.assertEqual(len(session.calls), 2)
         self.assertTrue(json.loads(session.calls[0][1]["json"]["messages"][1]["content"])["brief"]["instrumental"])
 
     def test_provider_modes_and_custom_params(self):
@@ -208,6 +223,8 @@ class YuE2Tests(unittest.TestCase):
                 self.closed = True
             def complete(self, messages, **kwargs):
                 self.calls.append(kwargs)
+                if "T8 LLM composer" in messages[0]["content"]:
+                    return json.dumps(composed_fixture(json.loads(messages[1]["content"])))
                 return json.dumps({"style": STYLE} if "style input" in messages[0]["content"] else {"lyrics": LYRICS})
         with patch.object(yue, "LocalQwenProvider", Local):
             result = self.run_node(api_mode=yue.LOCAL_QWEN_API_MODE, local_model="custom.gguf", local_context_size=16384,
@@ -222,6 +239,7 @@ class YuE2Tests(unittest.TestCase):
         self.assertTrue(local.closed)
         self.assertEqual(local.calls[0]["response_format"]["schema"]["required"], ["lyrics"])
         self.assertEqual(local.calls[1]["response_format"]["schema"]["required"], ["style"])
+        self.assertEqual(local.calls[2]["response_format"]["schema"]["required"], ["abc"])
         self.assertTrue(local.calls[0]["require_complete"])
         self.assertEqual(json.loads(result[4])["provider"], "Local llama.cpp GGUF")
 
@@ -234,7 +252,7 @@ class YuE2Tests(unittest.TestCase):
 
     def test_manual_recovery_zero_paid_requests(self):
         slot = "test-yue-recovery-123"
-        outputs = (STYLE, LYRICS, "", "{}", "{}")
+        outputs = (STYLE, LYRICS, ABC, json.dumps({"style": STYLE, "lyrics": LYRICS, "abc": ABC}), "{}")
         yue.begin_recovery_record(yue.NODE_ID, slot, "Seedance")
         yue.complete_recovery_record(yue.NODE_ID, slot, outputs)
         with patch.object(yue, "enhance_yue2_prompt", side_effect=AssertionError("paid call")):
@@ -303,6 +321,135 @@ class YuE2Tests(unittest.TestCase):
                 session = Session([{"lyrics": LYRICS}, {"style": STYLE}, {"scores": scores, "revision_needed": needed, "issues": issues}])
                 with self.assertRaisesRegex(yue.YuE2PromptError, "评分"):
                     self.run_node(quality_mode=yue.REVIEW, session=session)
+
+    def test_full_and_melody_populate_output_and_payload(self):
+        for cot in ("full", "melody"):
+            with self.subTest(cot=cot):
+                result = self.run_node(cot=cot, lyrics=LYRICS)
+                self.assertEqual(result[2], json.loads(result[3])["abc"])
+                score = yue.yue2_abc.parse_abc(result[2])
+                self.assertEqual(bool(score.voices["Vocal"].chords), cot == "full")
+                report = json.loads(result[4])["abc"]
+                self.assertEqual(report["source"], "t8_llm")
+                self.assertEqual(report["section_comments"], ["verse", "chorus", "verse", "chorus"])
+                self.assertNotIn("invariants", report)
+
+    def test_live_full_score_comment_placement_without_music_changes(self):
+        recorded = json.loads((ROOT / "tests/fixtures/yue2_abc_live_full.json").read_text(encoding="utf-8"))["abc"]
+        with self.assertRaises(yue.yue2_abc.AbcError):
+            yue.yue2_abc.parse_abc(recorded)
+        canonical = yue.normalize_generated_abc(recorded)
+        music = lambda text: [line for line in text.splitlines() if line.endswith("|")]
+        self.assertEqual(music(canonical), music(recorded))
+        self.assertEqual(yue.normalize_generated_abc(canonical), canonical)
+        score = yue.yue2_abc.parse_abc(canonical)
+        self.assertEqual(len(score.voices["Vocal"].bars), 16)
+        self.assertEqual(score.voices["Vocal"].bars, score.voices["Ins"].bars)
+        session = Session([{"style": STYLE}, {"abc": recorded}])
+        result = self.run_node(lyrics="[Verse]\nKeep the light\n[Chorus]\nCarry the dawn", session=session)
+        self.assertEqual(result[2], canonical)
+        self.assertEqual(json.loads(result[4])["requests"], 2)
+        self.assertEqual(json.loads(result[4])["abc"]["repairs"], [])
+        # No normalization/recomposition of externally supplied music.
+        with self.assertRaises(yue.YuE2PromptError):
+            self.run_node(abc=recorded)
+        with self.assertRaises(yue.yue2_abc.AbcError):
+            yue.yue2_abc.parse_abc(yue.normalize_generated_abc(recorded.replace("z4 A8 c8 f8 e4", "z4 A8 c8 f8 e2", 1)))
+
+    def test_off_and_explicit_downstream_do_not_compose(self):
+        for controls in ({"cot": "off"}, {"cot": "full", "abc_source": yue.ABC_DOWNSTREAM}, {"cot": "melody", "abc_source": yue.ABC_DOWNSTREAM}):
+            session = Session()
+            result = self.run_node(lyrics=LYRICS, session=session, **controls)
+            self.assertEqual(result[2], "")
+            self.assertNotIn("abc", json.loads(result[3]))
+            self.assertEqual(len(session.calls), 1)
+        result = self.run_node(lyrics=LYRICS, abc=ABC, abc_source=yue.ABC_DOWNSTREAM)
+        self.assertEqual(result[2], ABC)
+        self.assertEqual(json.loads(result[4])["abc"]["source"], "user")
+
+    def test_live_title_and_inline_section_comments_are_metadata_only(self):
+        recorded = json.loads((ROOT / "tests/fixtures/yue2_abc_live_full_repair.json").read_text(encoding="utf-8"))["abc"]
+        with self.assertRaises(yue.yue2_abc.AbcError):
+            yue.yue2_abc.parse_abc(recorded)
+        canonical = yue.normalize_generated_abc(recorded)
+        self.assertEqual(canonical.splitlines()[1], "T:")
+        self.assertEqual([l for l in recorded.splitlines() if l.endswith("|")],
+                         [l for l in canonical.splitlines() if l.endswith("|")])
+        self.assertEqual(yue.normalize_generated_abc(canonical), canonical)
+        self.assertEqual(len(yue.yue2_abc.parse_abc(canonical).voices["Vocal"].bars), 8)
+        result = self.run_node(lyrics="[Verse]\nKeep the light\n[Chorus]\nCarry the dawn",
+                               session=Session([{"style": STYLE}, {"abc": recorded}]))
+        report = json.loads(result[4])["abc"]
+        self.assertEqual(report["generated_title"], "Carry the Dawn")
+        self.assertEqual(report["section_comments"], ["verse", "chorus"])
+        self.assertTrue(report["format_normalized"])
+        self.assertEqual(report["repairs"], [])
+
+    def test_abc_validation_repairs_once_without_touching_lyrics(self):
+        invalid = ABC.replace("C8D8E8G8", "C8D8E8G4")
+        session = Session([{"style": STYLE}, {"abc": invalid}])
+        result = self.run_node(lyrics=LYRICS, session=session)
+        report = json.loads(result[4])
+        self.assertEqual(result[1], LYRICS)
+        self.assertEqual([s["stage"] for s in report["stages"]], ["style", "abc", "abc_repair"])
+        self.assertEqual(len(report["abc"]["repairs"]), 1)
+        for bad in (invalid, "", ABC, ABC.replace('"C"', '')):
+            session = Session([{"style": STYLE}, {"abc": bad}, {"abc": bad}])
+            with self.subTest(bad=bad), self.assertRaisesRegex(yue.YuE2PromptError, "未返回空谱"):
+                self.run_node(lyrics=LYRICS, session=session)
+            self.assertEqual(len(session.calls), 3)
+
+    def test_live_inline_music_is_split_but_bad_duration_is_not_hidden(self):
+        recorded = json.loads((ROOT / "tests/fixtures/yue2_abc_live_melody_invalid.json").read_text(encoding="utf-8"))["abc"]
+        canonical = yue.normalize_generated_abc(recorded)
+        self.assertIn("V: Vocal\nC8 F8", canonical)
+        self.assertIn("V: Ins\nz16 F8", canonical)
+        self.assertIn("z8 c8 a8 F16", canonical)  # 40 units: do not truncate to 32.
+        with self.assertRaisesRegex(yue.yue2_abc.AbcError, "exceeds meter duration"):
+            yue.yue2_abc.parse_abc(canonical)
+        session = Session([{"style": STYLE}, {"abc": recorded}])
+        result = self.run_node(lyrics=LYRICS, cot="melody", session=session)
+        repair = json.loads(session.calls[-1][1]["json"]["messages"][1]["content"])
+        self.assertEqual(repair["invalid_abc"], canonical)
+        self.assertIn("exceeds meter duration", repair["validation_error"])
+        self.assertEqual(len(json.loads(result[4])["abc"]["repairs"]), 1)
+        self.assertEqual(result[1], LYRICS)
+        # The actual subsequent cloud repair is valid once the same layout is
+        # canonicalized; no fabricated score is used for this regression.
+        fixed = json.loads((ROOT / "tests/fixtures/yue2_abc_live_melody_repair.json").read_text(encoding="utf-8"))["abc"]
+        original = "[Verse]\r\nI kept a light beside the door\r\nFor every dream we had before\r\n\r\n[Chorus]\r\nCarry the dawn into the rain\r\nWe learn to start again\r\n"
+        result = self.run_node(lyrics=original, cot="melody", session=Session([
+            {"style": STYLE}, {"abc": recorded}, {"abc": fixed}]))
+        self.assertEqual(result[1], original)
+        score = yue.yue2_abc.parse_abc(result[2])
+        self.assertEqual(len(score.voices["Vocal"].bars), 8)
+        self.assertFalse(score.voices["Vocal"].chords)
+        self.assertEqual(json.loads(result[4])["requests"], 3)
+
+    def test_abc_uses_final_reviewed_lyrics_and_modes(self):
+        revised = "[Verse]\n街灯唤醒远方\n[Chorus]\n雨落在新方向"
+        session = Session([{"lyrics": LYRICS}, {"style": STYLE},
+            {"scores": {k: 14 for k in yue.RUBRIC}, "issues": ["Revise hook"], "revision_needed": True}, {"lyrics": revised}])
+        result = self.run_node(quality_mode=yue.REVIEW, session=session, abc_action=yue.ABC_STRIP)
+        content = json.loads(session.calls[-1][1]["json"]["messages"][1]["content"])
+        self.assertEqual(content["final_lyrics"], revised)
+        self.assertEqual(content["score_mode"], "melody")
+        self.assertFalse(yue.yue2_abc.parse_abc(result[2]).voices["Vocal"].chords)
+
+    def test_verified_cloud_full_and_melody_recordings(self):
+        data = json.loads((ROOT / "tests/fixtures/yue2_abc_live_verified.json").read_text(encoding="utf-8"))
+        for case in data["cases"]:
+            with self.subTest(mode=case["mode"]):
+                request, report = case["request"], case["report"]
+                yue.validate_request(request)
+                self.assertEqual(request["lyrics"], case["input"]["lyrics"])
+                score = yue.yue2_abc.parse_abc(request["abc"])
+                self.assertEqual(yue.hashlib.sha256(request["abc"].encode()).hexdigest(), report["abc"]["output_sha256"])
+                self.assertEqual(bool(score.voices["Vocal"].chords), case["mode"] == "full")
+                self.assertEqual(score.voices["Vocal"].bars, score.voices["Ins"].bars)
+                self.assertEqual(report["requests"], 2)
+                self.assertEqual(report["abc"]["repairs"], [])
+                self.assertFalse(report["abc"]["audio_verified"])
 
     def test_json_schema_reaches_all_local_backends(self):
         standalone = importlib.import_module(SPEC.name + ".local_qwen_standalone_runtime")

@@ -23,6 +23,8 @@ def main():
     parser.add_argument("--output", default="runtime/yue2-acceptance")
     parser.add_argument("--local-model", default="")
     parser.add_argument("--local-reviewed", action="store_true")
+    parser.add_argument("--abc-regression", action="store_true", help="Paid full/melody score regression with unchanged English lyrics and Chinese language control")
+    parser.add_argument("--abc-case", choices=("full", "melody"), help="Limit --abc-regression to one mode")
     args = parser.parse_args()
     key = "" if args.local_model else getpass.getpass("API key (not saved): ")
     output = Path(args.output)
@@ -53,9 +55,27 @@ def main():
         ("zh_preserve", dict(music_idea="原词严格保留，温暖摇滚版，主歌克制、副歌开阔，干净电吉他与弹性鼓组。", lyrics=original)),
         ("zh_edit_second_chorus", dict(music_idea="中文公路歌，温暖女声钢琴吉他，歌词其余部分不要改。", lyrics=original, lyrics_mode=yue.EDIT, edit_section="Chorus", edit_occurrence=2, edit_request="只改第二次副歌，以具体的黎明意象表现终于出发，保持两行。")),
     ]
+    if args.abc_regression:
+        original = "[Verse]\r\nI kept a light beside the door\r\nFor every dream we had before\r\n\r\n[Chorus]\r\nCarry the dawn into the rain\r\nWe learn to start again\r\n"
+        cases = [("abc_" + cot, dict(music_idea="流行pop, r&b", lyrics=original,
+                  lyrics_mode=yue.PRESERVE, lyrics_language="中文", cot=cot)) for cot in ("full", "melody")]
+        if args.abc_case:
+            cases = [case for case in cases if case[1]["cot"] == args.abc_case]
     if args.local_model:
-        cases = cases[:1]
+        cases = cases if args.abc_regression else cases[:1]
         cases[0][1]["quality_mode"] = yue.REVIEW if args.local_reviewed else yue.STANDARD
+    original_stage = yue.YuE2Runner.complete
+    stage_outputs = []
+    def traced_stage(runner, stage, *positional, **options):
+        print(json.dumps({"stage": stage, "event": "started", "model": runner.model}), flush=True)
+        result = original_stage(runner, stage, *positional, **options)
+        if args.abc_regression:
+            stage_outputs.append({**runner.stages[-1], "result": result})
+            serialized = json.dumps(stage_outputs, ensure_ascii=False, indent=2)
+            (output / "abc_stage_outputs.json").write_text(serialized.replace(key, "[redacted]") if key else serialized, encoding="utf-8")
+        print(json.dumps({"stage": stage, "event": "completed"}), flush=True)
+        return result
+    yue.YuE2Runner.complete = traced_stage
     rows = []
     for name, values in cases:
         if args.local_model:
@@ -65,7 +85,14 @@ def main():
             result = yue.enhance_yue2_prompt(api_key=key, seed=314159, **values)
             request, report = json.loads(result[3]), json.loads(result[4])
             yue.validate_request(request)
-            assert report["checks"]["lyrics_language"]
+            if not args.abc_regression:
+                assert report["checks"]["lyrics_language"]
+            else:
+                assert result[1] == original
+                assert result[2] and result[2] == request["abc"]
+                score = yue.yue2_abc.parse_abc(result[2])
+                assert bool(score.voices["Vocal"].chords) == (values["cot"] == "full")
+                assert score.voices["Vocal"].bars == score.voices["Ins"].bars
             if name == "zh_preserve":
                 assert result[1] == original
             if name == "zh_edit_second_chorus":

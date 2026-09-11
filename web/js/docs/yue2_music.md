@@ -38,8 +38,24 @@ audio guarantee.
 | melody | 无和弦标记的旋律规划 / chord-free melody planning |
 | off | 跳过乐谱阶段 / no symbolic score stage |
 
-这些模式不等于 LLM 的思考强度或创作质量。ABC 为空时，节点不会伪造一份曲谱。
-外部 ABC 会绕过 YuE2 自己的谱面规划；使用者应提供完整、检查过的谱面。
+这些模式不等于 LLM 的思考强度或创作质量。现在未输入已有 ABC 时，`full / melody`
+默认通过当前 LLM 增加一次作谱调用：full 输出旋律与和弦，melody 输出不含和弦的谱面。
+已有 ABC 始终优先，不会被重新创作；`off` 的 ABC 按设计为空。
+
+这是 **T8 LLM 作曲扩展，不是 YuE2 模型自身生成的谱面**。本地 GGUF 和云端使用同一流程。
+返回前检查原生双声部、小节时值、模式与段落；失败最多进行一次定向修正，不用空串或示例冒充成品。
+校验只证明符号格式与指定检查项，不证明好听、逐字演唱或音频遵谱。
+标题、段落注释和声部换行等生成格式差异会规范化，但不会自动删音符或改时值来通过检查。
+[ABC 空输出修复实测记录](yue2_abc_acceptance.md)。
+
+若希望保持旧版方式：高级设置 → **未提供乐谱时 → 交给下游 YuE2 规划**。
+此时 ABC 留空、JSON 只传 `cot`，由下游实际 YuE2 模型出谱。
+手动或 LLM 提供的外部 ABC 都会绕过 YuE2 自己的谱面规划。
+
+With no supplied ABC, full/melody now compose a score through the selected LLM.
+Full includes native chord symbols; melody is chord-free. Existing scores take priority.
+Choose Advanced → Empty ABC input → Downstream to retain the previous empty-output
+behavior. T8-composed scores are not YuE2 model outputs or audio quality evidence.
 
 With external ABC, `off` is invalid. `melody` does not strip chords automatically:
 select the explicit strip-chords action, or use `full` to retain harmony. The
@@ -61,7 +77,9 @@ mismatch without rewriting or rejecting the user's lyrics.
 - 连接共享 LLM 渠道配置时，其渠道和模型设置优先；断开后使用本节点高级设置。
 - OpenAI 的 Base URL 和模型 ID 随工作流保存。可通过共享配置的凭据管理保存本地密钥别名；公开分享前移除文本节点中的密钥。
 - 本地是纯文本模式，不加载视觉投影器；采用现有 GGUF 模型目录和卸载策略。
-- 标准新歌／局部改词通常 2 次 LLM 请求；保留原词／纯器乐通常 1 次。
+- 默认 full/melody 自动作谱：标准新歌／局部改词通常 3 次，保留原词／纯器乐通常 2 次。
+- 已有 ABC、off 或选择下游规划时，不新增作谱调用：新歌／改词通常 2 次，保留／纯器乐通常 1 次。
+- 作谱校验失败最多追加 1 次修正；生成的谱面使用最终歌词，不会覆盖保留原词。
 - 创作审校增加 1 次评分，必要时最多 1 次定向修订；歌词语言纠正可能再增加 1 次。HTTP 重试另计。报告记录实际请求次数。
 - 云端与本地生成上限分别可设，默认 16384 Token。思考与正文共用上限；本地还受上下文剩余容量影响。截断不能当作完整结果。
 
@@ -76,7 +94,9 @@ an interrupted creation with no complete result cannot be recovered as a song.
 
 `style`, `lyrics`, optional `abc`, `yue2_request_json`, `creation_report_json`.
 Native JSON contains only `style`, `lyrics`, `cot`, `seed`, `id` and optional
-`abc` / `cfg_scale`. There is no invented duration, reference_audio or phonemes
+`abc` / `cfg_scale`. Nonempty ABC is identical in the ABC output and request JSON.
+The report identifies its source as user-supplied, T8 LLM, downstream YuE2, or off.
+There is no invented duration, reference_audio or phonemes
 field. Planned duration is advisory. CFG is not a creativity slider.
 
 创作审校按主题叙事、可唱性、副歌记忆点、段落发展、词曲风格协调五项各 20 分评价。

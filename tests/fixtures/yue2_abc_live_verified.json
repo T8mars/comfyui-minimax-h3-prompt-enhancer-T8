@@ -1,0 +1,194 @@
+{
+  "source": "Paid Seedance regression on 2026-09-11; recorded final successful outputs, not audio verification",
+  "cases": [
+    {
+      "mode": "full",
+      "input": {
+        "music_idea": "流行pop, r&b",
+        "lyrics": "[Verse]\r\nI kept a light beside the door\r\nFor every dream we had before\r\n\r\n[Chorus]\r\nCarry the dawn into the rain\r\nWe learn to start again\r\n",
+        "lyrics_mode": "严格保留歌词 / Preserve",
+        "lyrics_language": "中文",
+        "cot": "full"
+      },
+      "request": {
+        "style": "Contemporary pop-R&B with warm electric piano, soft synth pads, mellow electric guitar, rounded bass, and crisp laid-back drums. Soulful, intimate lead vocal with smooth runs and gentle layered harmonies, sung in English. Mid-tempo steady groove; sparse reflective verse, fuller polished chorus with expanded harmonies while keeping a tender, hopeful atmosphere.",
+        "lyrics": "[Verse]\r\nI kept a light beside the door\r\nFor every dream we had before\r\n\r\n[Chorus]\r\nCarry the dawn into the rain\r\nWe learn to start again\r\n",
+        "cot": "full",
+        "seed": 831001,
+        "id": "song",
+        "abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=84\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:F\n% verse\nV: Vocal\n\"Fmaj7\" z4 A8 G4 A4 c8 z4 | \"Em7\" d8 c4 A4 z16 | \"Dm7\" F8 A4 c4 d8 z8 | \"C/E\" z32 |\nV: Ins\nz8 F8 A8 c8 | E8 G8 ^B8 d8 | z8 d8 c8 A8 | E8 G8 C8 E8 |\nV: Vocal\n\"Dm7\" z4 F8 G4 A4 c8 z4 | \"Bbmaj7\" d8 c4 A12 z8 | \"C7sus4\" c4 d4 c4 A16 z4 | \"Fmaj7\" F16 z16 |\nV: Ins\nz8 D8 F8 A8 | z8 B8 d8 f8 | z8 G8 C8 F8 | A8 c8 f8 c8 |\n% chorus\nV: Vocal\n\"Dm7\" z4 f4 e4 d8 z12 | \"Bbmaj7\" f8 d4 c4 z16 | \"F/A\" a8 c'24- | \"C7\" c'8 b8 a8 f8 |\nV: Ins\nd8 f8 a8 d8 | B8 d8 f8 B8 | A8 c8 f8 a8 | G8 c8 e8 g8 |\nV: Vocal\n\"Dm7\" z4 f4 e4 d8 z12 | \"Bbmaj7\" f8 d4 c4 z16 | \"C7sus4\" c4 d4 f4 g4-g16 | \"Fmaj7\" f32 |\nV: Ins\nD8 F8 A8 d8 | B8 d8 f8 B8 | G8 c8 f8 g8 | F32 |"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "严格保留歌词 / Preserve",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Seedance",
+        "model": "bytedance/doubao-seed-evolving",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 10.219
+          },
+          {
+            "stage": "abc",
+            "attempts": 1,
+            "seconds": 392.187
+          }
+        ],
+        "requests": 2,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": false,
+          "original_preserved": true,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "action": "保留 / Preserve",
+          "bpm": 84,
+          "meter": "4/4",
+          "key": "F",
+          "control_conflicts": [],
+          "output_sha256": "df76dfafcdad681947b29f5c0c06aa0e498bd150a57022d104797b741e122266",
+          "audio_verified": false,
+          "generated": true,
+          "source": "t8_llm",
+          "planner": "T8 LLM",
+          "structural_check": true,
+          "format_normalized": true,
+          "required_sections": [
+            "verse",
+            "chorus"
+          ],
+          "section_comments": [
+            "verse",
+            "chorus"
+          ],
+          "nominal_duration_seconds": 45.714285714285715,
+          "voices": {
+            "Vocal": {
+              "notes": 45,
+              "measures": 16,
+              "chords": 16
+            },
+            "Ins": {
+              "notes": 56,
+              "measures": 16,
+              "chords": 0
+            }
+          },
+          "repairs": [],
+          "generated_title": "Carry the Dawn"
+        },
+        "review": null,
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。",
+          "原词与所选歌词语言可能不一致；严格保留优先，未擅自翻译。",
+          "ABC 由当前 LLM 创作并通过原生格式检查，不是 YuE2 模型出谱，也不是听感验收；作为外部谱面会跳过下游重新规划。"
+        ],
+        "audio_generated": false
+      }
+    },
+    {
+      "mode": "melody",
+      "input": {
+        "music_idea": "流行pop, r&b",
+        "lyrics": "[Verse]\r\nI kept a light beside the door\r\nFor every dream we had before\r\n\r\n[Chorus]\r\nCarry the dawn into the rain\r\nWe learn to start again\r\n",
+        "lyrics_mode": "严格保留歌词 / Preserve",
+        "lyrics_language": "中文",
+        "cot": "melody"
+      },
+      "request": {
+        "style": "Polished contemporary pop-R&B, sung in English. Smooth, intimate lead vocals with gentle harmonies, warm electric piano, soft synth pads, restrained R&B drum machine, deep rounded bass, and subtle clean guitar. Mid-tempo, spacious verse builds into a fuller, uplifting chorus with layered vocals and a brighter groove while retaining a tender, reflective atmosphere.",
+        "lyrics": "[Verse]\r\nI kept a light beside the door\r\nFor every dream we had before\r\n\r\n[Chorus]\r\nCarry the dawn into the rain\r\nWe learn to start again\r\n",
+        "cot": "melody",
+        "seed": 831001,
+        "id": "song",
+        "abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=82\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:F\n% verse\nV: Vocal\nz4 a4 c'8 a4 c'12 | d'4 c'8 a4 f12 z4 |\nV: Ins\nF8 A8 c8 d8 | G8 c8 e8 g8 |\nV: Vocal\nz4 a4 c'8 d'4 c'12 | d'4 c'8 a4 g12 z4 |\nV: Ins\nF8 A8 c8 d8 | G8 c4 e4 g16 |\n% chorus\nV: Vocal\nf'8 e'8 d'8 c'8 | d'6 e'6 f'6 a'12 z2 |\nV: Ins\nf8 a8 c'8 f'8 | d8 a8 d'8 f'8 |\nV: Vocal\nf'8 g'8 a'8 g'8 | f'8 f'24 |\nV: Ins\nb8 d'8 f'8 b8 | f'8 a'8 f'16 |"
+      },
+      "report": {
+        "schema_version": "t8-yue2-creation/v1",
+        "official_source": {
+          "commit": "92a73cc7652fcc1f937855e4b765e0a0edd7ff2e",
+          "protocol": "yue2-native-v1"
+        },
+        "effective_lyrics_mode": "严格保留歌词 / Preserve",
+        "lyrics_language": "中文",
+        "style_language": "English",
+        "provider": "Seedance",
+        "model": "bytedance/doubao-seed-evolving",
+        "llm_seed": 314159,
+        "stages": [
+          {
+            "stage": "style",
+            "attempts": 1,
+            "seconds": 8.063
+          },
+          {
+            "stage": "abc",
+            "attempts": 1,
+            "seconds": 318.14
+          }
+        ],
+        "requests": 2,
+        "checks": {
+          "official_request": true,
+          "lyrics_language": false,
+          "original_preserved": true,
+          "outside_edit_preserved": null
+        },
+        "abc": {
+          "provided": false,
+          "action": "保留 / Preserve",
+          "bpm": 82,
+          "meter": "4/4",
+          "key": "F",
+          "control_conflicts": [],
+          "output_sha256": "244c039460f5a45ebb3af0608397c573e50633bdfdb70a2ad3ebf9446bac6f36",
+          "audio_verified": false,
+          "generated": true,
+          "source": "t8_llm",
+          "planner": "T8 LLM",
+          "structural_check": true,
+          "format_normalized": false,
+          "required_sections": [
+            "verse",
+            "chorus"
+          ],
+          "section_comments": [
+            "verse",
+            "chorus"
+          ],
+          "nominal_duration_seconds": 23.414634146341463,
+          "voices": {
+            "Vocal": {
+              "notes": 30,
+              "measures": 8,
+              "chords": 0
+            },
+            "Ins": {
+              "notes": 31,
+              "measures": 8,
+              "chords": 0
+            }
+          },
+          "repairs": []
+        },
+        "review": null,
+        "warnings": [
+          "音乐尚未渲染；文本或乐谱检查不代表实际听感通过。",
+          "原词与所选歌词语言可能不一致；严格保留优先，未擅自翻译。",
+          "ABC 由当前 LLM 创作并通过原生格式检查，不是 YuE2 模型出谱，也不是听感验收；作为外部谱面会跳过下游重新规划。"
+        ],
+        "audio_generated": false
+      }
+    }
+  ]
+}

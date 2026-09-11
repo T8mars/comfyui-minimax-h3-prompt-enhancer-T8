@@ -72,7 +72,7 @@ export function installYuE2UI(node) {
     card.style.cssText = "box-sizing:border-box;width:100%;height:100%;padding:10px;background:#152238;color:#e5eefc;border:1px solid #3b82f6;border-radius:7px;font:12px/1.5 system-ui;overflow:auto";
     const info = document.createElement("div");
     info.style.whiteSpace = "pre-wrap";
-    info.textContent = "使用说明 / How to use\n1. 写主题即可；有词时 AUTO 原样保留，无词时创作。\n2. style 接风格，lyrics 接歌词；JSON 给 YuE2 官方接口。\n3. full 默认由 YuE2 规划乐谱，不是 LLM 思考强度。\n4. 中文歌词不随英文 style 翻译；本节点不生成音频。\n费用：标准新歌通常 2 次，保留歌词 1 次；审校另加 1–2 次，语言修正可能多 1 次。\nShared config overrides node provider fields; local mode needs no API key.";
+    info.textContent = "使用说明 / How to use\n1. 写主题即可；有词时 AUTO 原样保留，无词时创作。\n2. 已有 ABC 可留空；full 生成旋律＋和弦，melody 无和弦，off 无谱。\n3. ABC 由当前 LLM 创作（T8 扩展），不是 YuE2 模型出谱；已有 ABC 优先保留。\n4. style 接风格，lyrics 接歌词，abc 从右侧输出乐谱；本节点不生成音频。\n费用：默认新歌约 3 次、保留歌词约 2 次；ABC 校验失败最多修正 1 次，审校另加 1–2 次。\nFull/melody compose ABC via your LLM; off leaves it empty. Advanced → Empty ABC input → Downstream 保留原来的下游规划方式（少 1 次作谱调用）。";
     card.append(info);
     for (const [label, brief] of EXAMPLES) {
         const sample = document.createElement("button");

@@ -372,7 +372,7 @@ try {
       this.id = 999;
       this.properties = {};
       this.size = [650, 650];
-      this.widgets = ["music_idea", "lyrics", "lyrics_mode", "api_mode", "custom_model", "openai_base_url", "abc", "recovery_slot", "recovery_action"].map(name => ({name, value: "", type: "text", computeSize: () => [650, 40]}));
+      this.widgets = ["music_idea", "lyrics", "lyrics_mode", "api_mode", "custom_model", "openai_base_url", "abc", "abc_source", "recovery_slot", "recovery_action"].map(name => ({name, value: "", type: "text", computeSize: () => [650, 40]}));
       this.graph = { _nodes: [this], change() {} };
     }
     addWidget(type, name, value, callback, options) { const w = {type, name, value, callback, options, computeSize: () => [650, 30]}; this.widgets.push(w); return w; }
@@ -394,6 +394,7 @@ try {
   fieldYue("custom_model").value = "vendor/music-text";
   fieldYue("openai_base_url").value = "https://example.test/v1";
   fieldYue("lyrics").value = "[Chorus]\n中文原词";
+  fieldYue("abc_source").value = "交给下游 YuE2 规划（ABC 留空）/ Downstream";
   const yueSerialized = {};
   yueNode.onSerialize(yueSerialized);
   const yueReloaded = new YueNode();
@@ -401,10 +402,12 @@ try {
   yueReloaded.onConfigure(yueSerialized);
   check(yueReloaded.widgets.find(w => w.name === "custom_model").value === "vendor/music-text", "YuE2 model ID survives reload");
   check(yueReloaded.widgets.find(w => w.name === "lyrics").value.includes("中文原词"), "YuE2 lyrics survive reload");
+  check(yueReloaded.widgets.find(w => w.name === "abc_source").value.includes("Downstream"), "YuE2 ABC source survives reload");
   check(yueReloaded.widgets.find(w => w.name === "openai_base_url").value.endsWith("/v1"), "YuE2 Base URL survives reload");
   const helpYue = yueNode.widgets.find(w => w.name === "t8_yue2_help");
   check(helpYue.element.querySelectorAll("button").length === 3, "YuE2 shows three usable examples");
   check(helpYue.computeSize(650)[1] === 220, "YuE2 help owns bounded height below run controls");
+  check(helpYue.element.textContent.includes("Full/melody compose ABC"), "YuE2 help explains score composition and source");
   const yueCount = yueNode.widgets.length;
   yueUI.installYuE2UI(yueNode);
   check(yueNode.widgets.length === yueCount, "YuE2 UI initialization is idempotent");

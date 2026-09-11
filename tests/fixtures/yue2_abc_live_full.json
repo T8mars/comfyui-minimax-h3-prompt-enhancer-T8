@@ -1,0 +1,6 @@
+{
+  "source": "Live Seedance text response; no audio verification",
+  "model": "bytedance/doubao-seed-evolving",
+  "mode": "full",
+  "abc": "X:1\nT:\nM:4/4\nL:1/32\nQ:1/4=78\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:F\nV: Vocal\n% verse\n\"Fmaj7\" z4 A8 c8 f8 e4 | \"Dm7\" d8 c8 A8 G4 z4 | \"Bbmaj7\" z4 A8 c8 d8 c4 | \"C7sus4\" c4 A8 F16 z4 |\nV: Ins\nZ | Z | z8 c4 a4 F4 G4 c4 z4 | z8 A4 c4 F4 c4 z8 |\nV: Vocal\n\"Fmaj7\" z4 A8 c8 f8 e4 | \"Dm7\" d8 c8 A8 G8 | \"Bbmaj7\" z4 A8 c8 d8 f4 | \"C7\" e4 d8 c16 z4 |\nV: Ins\nZ | z8 F4 A4 c4 A4 F4 z4 | z8 d4 c4 A4 F4 z8 | z16 c4 a4 F8 |\nV: Vocal\n% chorus\n\"Dm7\" f8 f8 a8 c8 | \"Bbmaj7\" d8 c8 _B8 a4 z4 | \"Fmaj7\" z4 a8 c8 d8 c4 | \"C7sus4\" z4 _B8 A16 z4 |\nV: Ins\nd8 f8 a8 f8 | _B8 d8 f8 d8 | a8 c8 f8 e8 | d8 f8 g8 f8 |\nV: Vocal\n\"Dm7\" f8 a8 c8 d8 | \"Bbmaj7\" c8 _B8 a8 F4 z4 | \"F/C\" g8 a8 _B8 c8 | \"Fmaj7\" c8 A8 F16 |\nV: Ins\nd8 f8 a8 d8 | _B8 d8 f8 d8 | c8 e8 g8 e8 | F32 |"
+}

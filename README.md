@@ -21,7 +21,9 @@
 
 [使用说明与费用边界](web/js/docs/yue2_music.md) · [云端创作](example_workflows/yue2_cloud_creation_example.json) · [保留原词](example_workflows/yue2_preserve_lyrics_example.json) · [本地 GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC 旋律](example_workflows/yue2_abc_melody_example.json)
 
-创作审校评分只代表文本评审，不是音乐听感评分。YuE2 的 `full / melody / off` 是谱面规划方式，不等于 LLM 思考强度；时长仅为规划参考。
+未提供已有 ABC 时，`full / melody` 默认调用当前 LLM 创作谱面（T8 扩展）：完整模式含旋律与和弦，旋律模式不含和弦；已有谱面优先保留。高级设置可切回「交给下游 YuE2 规划」，此时 ABC 留空。自动作谱通常增加 1 次请求，校验失败最多再修正 1 次。
+
+创作审校评分只代表文本评审，不是音乐听感评分。YuE2 的 `full / melody / off` 是谱面模式，不等于 LLM 思考强度；时长仅为规划参考。
 
 一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 llama.cpp 兼容 GGUF。
 

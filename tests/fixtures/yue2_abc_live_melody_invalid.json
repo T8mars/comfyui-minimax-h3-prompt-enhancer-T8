@@ -1,0 +1,6 @@
+{
+  "source": "Live Seedance melody response with invalid bar duration",
+  "model": "bytedance/doubao-seed-evolving",
+  "mode": "melody",
+  "abc": "X:1\nT:Untitled\nM:4/4\nL:1/32\nQ:1/4=72\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:F\n% verse\nV: Vocal C8 F8 A4 G4 z8 | F8 E8 D4 C12 |\nV: Ins z16 F8 A8 | z8 c8 a8 F16 |\nV: Vocal A8 G8 F4 E4 z8 | D8 E8 F4 F12 |\nV: Ins z16 A8 c8 | z8 a8 g8 F16 |\n% chorus\nV: Vocal c8 a8 g4 a4 z8 | g8 f8 g4 c12 |\nV: Ins F8 A8 c8 a8 | z8 g8 f8 c16 |\nV: Vocal c8 a8 g4 f4 z8 | a8 F24 |\nV: Ins F8 A8 c8 d8 | F32 |"
+}

@@ -1,0 +1,6 @@
+{
+  "source": "Live Seedance repair response; no audio verification",
+  "model": "bytedance/doubao-seed-evolving",
+  "mode": "full",
+  "abc": "X:1\nT: Carry the Dawn\nM:4/4\nL:1/32\nQ:1/4=80\nV: Vocal clef=treble name=\"Vocal Melody\" snm=\"Vocal\"\nV: Ins clef=treble name=\"Ins Melody\" snm=\"Inst.\"\nK:F\nV: Vocal % verse\n\"Fmaj7\" z8 A4 c4 f4 e4 z8 | \"Dm7\" d4 c4 A4 G16 z4 |\nV: Ins\nZ | z16 A4 c4 F4 c4 |\nV: Vocal\n\"Bbmaj7\" z8 B4 c4 d4 c4 z8 | \"C7sus4\" c4 A4 F4 C16 z4 |\nV: Ins\nZ | z8 F4 A4 c4 A4 F4 z4 |\nV: Vocal % chorus\n\"Dm7\" f8 f8 a8 c8 | \"Bbmaj7\" d4 c4 B4 a16 z4 |\nV: Ins\nd8 f8 a8 f8 | B8 d8 f8 d8 |\nV: Vocal\n\"F/C\" g8 a8 B8 c8 | \"Fmaj7\" A8 F24 |\nV: Ins\nc8 e8 g8 e8 | F32 |"
+}

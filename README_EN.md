@@ -19,6 +19,12 @@ recovery. Existing core nodes and workflows remain unchanged.
 
 [Guide and call costs](web/js/docs/yue2_music.md) · [Cloud creation](example_workflows/yue2_cloud_creation_example.json) · [Preserve lyrics](example_workflows/yue2_preserve_lyrics_example.json) · [Local GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC melody](example_workflows/yue2_abc_melody_example.json)
 
+Without an existing ABC score, full/melody now use the selected LLM to compose one
+(a T8 extension, not the YuE2 model planner). Full includes melody and chord symbols;
+melody is chord-free. Existing scores take priority. Advanced settings retain the
+Downstream option for an empty ABC output and native YuE2 planning. Composition adds
+one call, plus at most one structural repair call.
+
 Optional review scores evaluate text, not audible music. YuE2 `full / melody / off`
 select score planning, not LLM reasoning strength. Target duration is advisory.
 

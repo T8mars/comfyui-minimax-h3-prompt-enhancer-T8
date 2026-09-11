@@ -5,6 +5,24 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.16.0] - 2026-09-11
+
+### Added
+
+- Compose YuE2 full/melody ABC through the selected cloud or local LLM when no
+  existing score is supplied. Retain explicit downstream-only planning as an option.
+- Include recorded full/melody cloud acceptance evidence and regression fixtures;
+  keep score validation separate from audio quality claims.
+
+### Fixed
+
+- Populate YuE2 ABC output for full/melody with no supplied score by composing through
+  the selected cloud/local LLM. Validate native voices, measure timing, mode and section
+  coverage, with at most one repair; include the same ABC in the native request JSON.
+- Preserve original lyrics and existing ABC, keep off score-free, and retain the former
+  downstream YuE2 planner as an explicit option. Explain T8 score provenance and added
+  request costs in bilingual help; keep existing widget positions and node outputs.
+
 ## [1.15.2] - 2026-09-11
 
 ### Fixed
