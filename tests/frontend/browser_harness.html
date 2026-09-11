@@ -10,6 +10,10 @@
   button { height: 28px; }
 </style>
 <body><pre id="result">RUNNING</pre></body>
+<script>
+window.addEventListener("error", event => { document.querySelector("#result").textContent = `FAIL: ${event.message} (${event.filename}:${event.lineno}:${event.colno})`; });
+window.addEventListener("unhandledrejection", event => { document.querySelector("#result").textContent = "FAIL: " + String(event.reason); });
+</script>
 <script type="module">
 import * as yueUI from "../../web/js/yue2_prompt_enhancer.js";
 const result = document.querySelector("#result");
@@ -404,10 +408,24 @@ try {
   check(yueReloaded.widgets.find(w => w.name === "lyrics").value.includes("中文原词"), "YuE2 lyrics survive reload");
   check(yueReloaded.widgets.find(w => w.name === "abc_source").value.includes("Downstream"), "YuE2 ABC source survives reload");
   check(yueReloaded.widgets.find(w => w.name === "openai_base_url").value.endsWith("/v1"), "YuE2 Base URL survives reload");
+  const legacyYue = new YueNode();
+  legacyYue.onNodeCreated();
+  const legacyData = structuredClone(yueSerialized);
+  delete legacyData.properties.t8_yue2_widgets_v1.abc_source;
+  legacyYue.onConfigure(legacyData);
+  check(legacyYue.widgets.find(w => w.name === "abc_source").value === "自动创作 ABC（T8 LLM）/ Compose", "YuE2 old workflow blank appended ABC source is restored");
+  check(legacyYue.widgets.find(w => w.name === "lyrics").value.includes("中文原词"), "YuE2 migration preserves old lyrics");
+  yueNode.onExecuted({t8_yue2_status: ["ABC failed \u003cscript>not executable\u003c/script>"], t8_yue2_partial: [true]});
+  check(yueNode.t8Yue2UI.status.textContent.includes("ABC failed"), "YuE2 visibly reports partial success");
+  check(!yueNode.t8Yue2UI.status.querySelector("script"), "YuE2 result status uses safe text, not HTML");
+  check(yueNode.size[1] === yueHeight, "YuE2 failure status cannot grow node height");
+  yueNode.onExecuted({t8_yue2_status: ["Complete"], t8_yue2_partial: [false]});
+  check(!yueNode.t8Yue2UI.status.textContent.includes("ABC failed"), "YuE2 next result replaces old failure status");
   const helpYue = yueNode.widgets.find(w => w.name === "t8_yue2_help");
   check(helpYue.element.querySelectorAll("button").length === 3, "YuE2 shows three usable examples");
   check(helpYue.computeSize(650)[1] === 220, "YuE2 help owns bounded height below run controls");
   check(helpYue.element.textContent.includes("Full/melody compose ABC"), "YuE2 help explains score composition and source");
+  check(helpYue.element.children[1].textContent.includes("本地 9B") && helpYue.element.children[1].textContent.includes("Prefer an API"), "YuE2 prominently shows bilingual local 9B ABC model guidance");
   const yueCount = yueNode.widgets.length;
   yueUI.installYuE2UI(yueNode);
   check(yueNode.widgets.length === yueCount, "YuE2 UI initialization is idempotent");

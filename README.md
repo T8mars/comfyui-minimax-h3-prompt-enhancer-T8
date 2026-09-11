@@ -23,6 +23,8 @@
 
 未提供已有 ABC 时，`full / melody` 默认调用当前 LLM 创作谱面（T8 扩展）：完整模式含旋律与和弦，旋律模式不含和弦；已有谱面优先保留。高级设置可切回「交给下游 YuE2 规划」，此时 ABC 留空。自动作谱通常增加 1 次请求，校验失败最多再修正 1 次。
 
+> **ABC 作谱模型建议：本地 9B LLM 可能生成不符合要求的 ABC 格式或小节时值。** 建议优先使用 API，或尝试参数规模更大的模型。本次本地 9B 的 full、melody 实测均未通过谱面校验；已有 API 通过记录，但不代表所有 API 或更大模型都能通过，更大模型本次尚未实测。ABC 失败仍输出风格、歌词和请求 JSON，坏谱不输出，并显示失败原因。详见 [实测记录](web/js/docs/yue2_abc_acceptance.md)。
+
 创作审校评分只代表文本评审，不是音乐听感评分。YuE2 的 `full / melody / off` 是谱面模式，不等于 LLM 思考强度；时长仅为规划参考。
 
 一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 llama.cpp 兼容 GGUF。

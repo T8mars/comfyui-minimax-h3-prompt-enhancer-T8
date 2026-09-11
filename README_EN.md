@@ -25,6 +25,8 @@ melody is chord-free. Existing scores take priority. Advanced settings retain th
 Downstream option for an empty ABC output and native YuE2 planning. Composition adds
 one call, plus at most one structural repair call.
 
+> **ABC model guidance: local 9B LLMs may produce invalid ABC formatting or measure timing.** Prefer an API, or try a larger-parameter model. Both local 9B full/melody tests failed score validation. Recorded API tests passed, but this does not guarantee other APIs or larger models; larger models were not tested in this round. Failed ABC does not block style, lyrics or request JSON: the rejected score is omitted and the reason is shown. See the [test evidence](web/js/docs/yue2_abc_acceptance.md).
+
 Optional review scores evaluate text, not audible music. YuE2 `full / melody / off`
 select score planning, not LLM reasoning strength. Target duration is advisory.
 

@@ -5,6 +5,20 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.16.1] - 2026-09-11
+
+### Fixed
+
+- Return valid YuE2 style, lyrics and request JSON when ABC composition or validation
+  fails. Omit rejected scores, show an explicit partial-success warning and retain
+  recovery without another LLM call; user cancellation still stops execution.
+- Normalize generated voice display labels and section comments without changing
+  notes or rhythm. Restore blank ABC-source fields in older workflows without
+  changing explicit downstream-planning choices.
+- Document real local 9B ABC format/timing failures in full and melody tests, and
+  recommend an API or trying a larger model without promising valid scores. Show
+  the warning in the node and bilingual guides; keep node outputs and layout stable.
+
 ## [1.16.0] - 2026-09-11
 
 ### Added

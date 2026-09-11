@@ -70,9 +70,18 @@ export function installYuE2UI(node) {
 
     const card = document.createElement("div");
     card.style.cssText = "box-sizing:border-box;width:100%;height:100%;padding:10px;background:#152238;color:#e5eefc;border:1px solid #3b82f6;border-radius:7px;font:12px/1.5 system-ui;overflow:auto";
+    state.status = document.createElement("div");
+    state.status.style.cssText = "white-space:pre-wrap;font-weight:600;margin-bottom:8px;padding:6px;border-radius:4px";
+    state.status.textContent = "运行后在此显示结果状态 / Run to see result status";
+    card.append(state.status);
+    const modelWarning = document.createElement("div");
+    modelWarning.style.cssText = "white-space:pre-wrap;font-weight:600;margin-bottom:8px;padding:6px;border:1px solid #e6ae50;border-radius:4px;background:#493516;color:#ffe5b4";
+    modelWarning.textContent = "⚠ ABC 作谱：本地 9B 可能有格式或时值错误，建议用 API 或尝试更大参数模型（本次未测，不保证通过）。ABC 失败仍保留风格、歌词和 JSON。\nLocal 9B may produce invalid ABC. Prefer an API or try a larger model (not tested here; no guarantee). Style/lyrics/JSON remain available if ABC fails.";
+    card.append(modelWarning);
     const info = document.createElement("div");
     info.style.whiteSpace = "pre-wrap";
     info.textContent = "使用说明 / How to use\n1. 写主题即可；有词时 AUTO 原样保留，无词时创作。\n2. 已有 ABC 可留空；full 生成旋律＋和弦，melody 无和弦，off 无谱。\n3. ABC 由当前 LLM 创作（T8 扩展），不是 YuE2 模型出谱；已有 ABC 优先保留。\n4. style 接风格，lyrics 接歌词，abc 从右侧输出乐谱；本节点不生成音频。\n费用：默认新歌约 3 次、保留歌词约 2 次；ABC 校验失败最多修正 1 次，审校另加 1–2 次。\nFull/melody compose ABC via your LLM; off leaves it empty. Advanced → Empty ABC input → Downstream 保留原来的下游规划方式（少 1 次作谱调用）。";
+    info.textContent += "\nABC 未通过时保留风格、歌词与 JSON；坏谱不输出，下游按 full/melody 重新规划。\nIf ABC fails, style/lyrics remain usable; the request omits the rejected score.";
     card.append(info);
     for (const [label, brief] of EXAMPLES) {
         const sample = document.createElement("button");
@@ -102,6 +111,7 @@ app.registerExtension({
         const created = nodeType.prototype.onNodeCreated;
         const serialized = nodeType.prototype.onSerialize;
         const configured = nodeType.prototype.onConfigure;
+        const executed = nodeType.prototype.onExecuted;
         nodeType.prototype.onNodeCreated = function () {
             const result = created?.apply(this, arguments);
             installYuE2UI(this);
@@ -120,8 +130,22 @@ app.registerExtension({
             if (saved && typeof saved === "object" && !Array.isArray(saved)) {
                 for (const widget of this.t8Yue2UI.widgets) if (widget.name !== "api_key" && Object.hasOwn(saved, widget.name)) widget.value = saved[widget.name];
             }
+            // Old workflows may have a blank UI-button slot at the appended field.
+            const source = this.t8Yue2UI.field("abc_source");
+            if (source && (source.value == null || source.value === "")) {
+                source.value = "自动创作 ABC（T8 LLM）/ Compose";
+            }
             this.t8EnsureRecoverySlot?.();
             this.t8Yue2UI.refresh();
+        };
+        nodeType.prototype.onExecuted = function (message) {
+            executed?.apply(this, arguments);
+            installYuE2UI(this);
+            const text = message?.t8_yue2_status?.[0];
+            if (typeof text === "string") {
+                this.t8Yue2UI.status.textContent = "上次结果 / Last result\n" + text;
+                this.t8Yue2UI.status.style.background = message.t8_yue2_partial?.[0] ? "#684314" : "#164534";
+            }
         };
     },
 });

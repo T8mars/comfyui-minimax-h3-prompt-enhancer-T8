@@ -32,6 +32,10 @@ audio guarantee.
 
 ## 官方谱面模式 / Official score modes
 
+> **模型选择提醒：本地 9B LLM 可能生成格式或小节时值不合格的 ABC，建议优先使用 API，或尝试更大参数模型。** 本次 9B 的 full、melody 均有真实校验失败记录；API 有通过记录，但更大模型本次未测，不能保证一定通过。ABC 失败仍保留风格、歌词和请求 JSON，并明确提示，不会输出坏谱。
+>
+> **Model guidance: local 9B LLMs may produce invalid ABC formatting or measure timing. Prefer an API, or try a larger model.** Both 9B full/melody tests failed validation; recorded API tests passed, but larger models were not tested in this round and validity is not guaranteed. Failed ABC does not block style, lyrics or request JSON; rejected scores are omitted with a warning.
+
 | 模式 | 作用 / Behavior |
 | --- | --- |
 | full | 默认；YuE2 规划旋律和和声 / melody and harmony planning |
@@ -44,6 +48,9 @@ audio guarantee.
 
 这是 **T8 LLM 作曲扩展，不是 YuE2 模型自身生成的谱面**。本地 GGUF 和云端使用同一流程。
 返回前检查原生双声部、小节时值、模式与段落；失败最多进行一次定向修正，不用空串或示例冒充成品。
+**ABC 最终失败不再中断其他输出**：风格、歌词和请求 JSON 照常保留；ABC 留空，
+报告标记 `partial_success` 并注明原因，节点底部显示醒目提示。JSON 不包含未通过的谱面，
+下游按原 full/melody 设置重新规划；不是声称作谱成功。已有谱面不合格时也不会擅自重写。
 校验只证明符号格式与指定检查项，不证明好听、逐字演唱或音频遵谱。
 标题、段落注释和声部换行等生成格式差异会规范化，但不会自动删音符或改时值来通过检查。
 [ABC 空输出修复实测记录](yue2_abc_acceptance.md)。
@@ -57,7 +64,12 @@ Full includes native chord symbols; melody is chord-free. Existing scores take p
 Choose Advanced → Empty ABC input → Downstream to retain the previous empty-output
 behavior. T8-composed scores are not YuE2 model outputs or audio quality evidence.
 
-With external ABC, `off` is invalid. `melody` does not strip chords automatically:
+If ABC generation/validation fails, style, lyrics and request JSON still return.
+The report marks `partial_success`, the node shows a warning, and invalid ABC is
+omitted. Downstream YuE2 may then plan a fresh score using the original full/melody
+mode; this does not preserve the rejected score. Supplied scores are not recomposed.
+
+With external ABC, `off` does not consume the supplied score. `melody` does not strip chords automatically:
 select the explicit strip-chords action, or use `full` to retain harmony. The
 official lightweight helper checks only its bounded native two-voice dialect,
 not the complete ABC standard. Chord removal compares sounding notes, onsets,
@@ -89,6 +101,8 @@ are sequential. Output limits include reasoning; provider capacity still applies
 The recovery button reads the last complete five-output result in the current
 ComfyUI process, not a remote task-query API. Restarting ComfyUI clears this cache;
 an interrupted creation with no complete result cannot be recovered as a song.
+Partial success (valid style/lyrics, failed ABC) is also recoverable with its warning,
+without rerunning the LLM. User cancellation still stops execution.
 
 ## 输出与评分 / Outputs and evaluation
 

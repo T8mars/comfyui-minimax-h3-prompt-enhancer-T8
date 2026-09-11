@@ -173,8 +173,7 @@ class YuE2Tests(unittest.TestCase):
         self.run_node(abc=ABC, cot="melody", abc_action=yue.ABC_STRIP)
 
     def test_conflicts_fail_before_paid_call(self):
-        for values in [{"abc": ABC, "cot": "off"}, {"abc": ABC, "cot": "melody"},
-                       {"lyrics_mode": yue.PRESERVE}, {"lyrics_mode": yue.EDIT, "lyrics": LYRICS},
+        for values in [{"lyrics_mode": yue.PRESERVE}, {"lyrics_mode": yue.EDIT, "lyrics": LYRICS},
                        {"lyrics_mode": yue.EDIT, "lyrics": LYRICS, "edit_request": "改词", "edit_occurrence": 8},
                        {"song_id": "../outside"}, {"cot": "wrong"}]:
             with self.subTest(values=values):
@@ -351,8 +350,10 @@ class YuE2Tests(unittest.TestCase):
         self.assertEqual(json.loads(result[4])["requests"], 2)
         self.assertEqual(json.loads(result[4])["abc"]["repairs"], [])
         # No normalization/recomposition of externally supplied music.
-        with self.assertRaises(yue.YuE2PromptError):
-            self.run_node(abc=recorded)
+        external = self.run_node(abc=recorded)
+        self.assertEqual(external[2], "")
+        self.assertEqual(json.loads(external[4])["abc"]["source"], "user")
+        self.assertEqual(json.loads(external[4])["status"], "partial_success")
         with self.assertRaises(yue.yue2_abc.AbcError):
             yue.yue2_abc.parse_abc(yue.normalize_generated_abc(recorded.replace("z4 A8 c8 f8 e4", "z4 A8 c8 f8 e2", 1)))
 
@@ -385,6 +386,28 @@ class YuE2Tests(unittest.TestCase):
         self.assertTrue(report["format_normalized"])
         self.assertEqual(report["repairs"], [])
 
+    def test_actual_local_voice_labels_normalize_but_bad_rhythm_stays_rejected(self):
+        raw = json.loads((ROOT / "tests/fixtures/yue2_abc_local_9b_rejected.json").read_text(encoding="utf-8"))["abc"]
+        # Before: a display-only instrument name masks the real rhythm failure.
+        with self.assertRaisesRegex(yue.yue2_abc.AbcError, "voice definitions"):
+            yue.yue2_abc.parse_abc(raw.replace("T:渡口的信", "T:"))
+        canonical = yue.normalize_generated_abc(raw)
+        self.assertIn('V: Ins clef=treble name="Ins Melody" snm="Inst."', canonical)
+        self.assertIn("% verse 1\nV: Vocal\n", canonical)
+        self.assertEqual(yue.normalize_generated_abc(canonical), canonical)
+        with self.assertRaisesRegex(yue.yue2_abc.AbcError, "measure end"):
+            yue.yue2_abc.parse_abc(canonical)
+        result = self.run_node(lyrics=LYRICS, session=Session([{"style": STYLE}, {"abc": raw}, {"abc": raw}]))
+        self.assertEqual(result[:3], (STYLE, LYRICS, ""))
+        self.assertIn("measure end", json.loads(result[4])["abc"]["error"])
+        # A valid score with only changed display labels keeps identical music.
+        labels = ABC.replace('name="Ins Melody" snm="Inst."', 'name="Guzheng & Strings" snm="Ins."')
+        self.assertEqual(yue.normalize_generated_abc(labels), ABC.rstrip())
+        for changed in (labels.replace("clef=treble", "clef=bass"), labels.replace("V: Ins", "V: Piano"),
+                        labels.replace('snm="Ins."', 'snm="Ins." octave=-1')):
+            with self.assertRaises(yue.yue2_abc.AbcError):
+                yue.yue2_abc.parse_abc(yue.normalize_generated_abc(changed))
+
     def test_abc_validation_repairs_once_without_touching_lyrics(self):
         invalid = ABC.replace("C8D8E8G8", "C8D8E8G4")
         session = Session([{"style": STYLE}, {"abc": invalid}])
@@ -395,9 +418,66 @@ class YuE2Tests(unittest.TestCase):
         self.assertEqual(len(report["abc"]["repairs"]), 1)
         for bad in (invalid, "", ABC, ABC.replace('"C"', '')):
             session = Session([{"style": STYLE}, {"abc": bad}, {"abc": bad}])
-            with self.subTest(bad=bad), self.assertRaisesRegex(yue.YuE2PromptError, "未返回空谱"):
-                self.run_node(lyrics=LYRICS, session=session)
+            with self.subTest(bad=bad):
+                result = self.run_node(lyrics=LYRICS, session=session)
+                self.assertEqual(result[:3], (STYLE, LYRICS, ""))
+                self.assertNotIn("abc", json.loads(result[3]))
+                self.assertEqual(json.loads(result[4])["status"], "partial_success")
             self.assertEqual(len(session.calls), 3)
+
+    def test_bad_supplied_abc_preserves_other_outputs_without_recomposition(self):
+        for abc, cot in [(ABC, "off"), (ABC, "melody"), ("invalid ABC", "full")]:
+            with self.subTest(cot=cot):
+                session = Session()
+                result = self.run_node(lyrics=LYRICS, abc=abc, cot=cot, session=session)
+                self.assertEqual(result[:3], (STYLE, LYRICS, ""))
+                request, report = json.loads(result[3]), json.loads(result[4])
+                yue.validate_request(request)
+                self.assertNotIn("abc", request)
+                self.assertEqual(request["cot"], cot)
+                self.assertFalse(report["abc"]["structural_check"])
+                self.assertEqual(report["abc"]["source"], "user")
+                self.assertEqual(len(session.calls), 1)
+
+    def test_abc_stage_errors_keep_text_but_cancellation_propagates(self):
+        complete = yue.YuE2Runner._complete
+        for error in (yue.YuE2PromptError("Invalid JSON"), yue.LocalQwenProviderError("output truncated")):
+            def fail_abc(runner, stage, *args):
+                if stage == "abc":
+                    raise error
+                return complete(runner, stage, *args)
+            with self.subTest(error=error), patch.object(yue.YuE2Runner, "_complete", fail_abc):
+                result = self.run_node(lyrics=LYRICS)
+                report = json.loads(result[4])
+                self.assertEqual(result[:3], (STYLE, LYRICS, ""))
+                self.assertEqual(report["stages"][-1]["status"], "failed")
+                self.assertTrue(report["requests_estimated"])
+        class Interrupted(Exception):
+            pass
+        with patch.object(yue, "compose_abc", side_effect=Interrupted("cancelled")):
+            with self.assertRaises(Interrupted):
+                self.run_node(lyrics=LYRICS)
+
+    def test_partial_outputs_and_warning_are_recoverable_without_new_request(self):
+        slot = "test-yue-partial-recovery"
+        result = self.run_node(lyrics=LYRICS, session=Session([{"style": STYLE}, {"abc": "bad"}, {"abc": "bad"}]))
+        with patch.object(yue, "enhance_yue2_prompt", return_value=result):
+            output = yue.YuE2MusicPromptEnhancer.execute(music_idea="music", recovery_slot=slot)
+        self.assertEqual(tuple(output), result)
+        self.assertTrue(output.ui["t8_yue2_partial"][0])
+        self.assertIn("ABC", output.ui["t8_yue2_status"][0])
+        with patch.object(yue, "enhance_yue2_prompt", side_effect=AssertionError("must not generate")):
+            recovered = yue.YuE2MusicPromptEnhancer.execute(recovery_slot=slot, recovery_action=yue.RECOVERY_ACTION_RESTORE)
+        self.assertEqual(tuple(recovered), result)
+        self.assertEqual(recovered.ui, output.ui)
+
+    def test_legacy_blank_abc_source_defaults_but_unknown_values_fail(self):
+        for value in ("", None):
+            self.assertTrue(yue.YuE2MusicPromptEnhancer.validate_inputs(abc_source=value))
+            self.assertTrue(self.run_node(lyrics=LYRICS, abc_source=value)[2])
+        self.assertNotEqual(yue.YuE2MusicPromptEnhancer.validate_inputs(abc_source="typo"), True)
+        with self.assertRaises(yue.YuE2PromptError):
+            self.run_node(abc_source="typo")
 
     def test_live_inline_music_is_split_but_bad_duration_is_not_hidden(self):
         recorded = json.loads((ROOT / "tests/fixtures/yue2_abc_live_melody_invalid.json").read_text(encoding="utf-8"))["abc"]

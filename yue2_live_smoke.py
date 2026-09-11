@@ -22,6 +22,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="runtime/yue2-acceptance")
     parser.add_argument("--local-model", default="")
+    parser.add_argument("--local-context-size", type=int, default=16384)
+    parser.add_argument("--local-max-tokens", type=int, default=8192)
+    parser.add_argument("--music-idea", default="", help="Override the first case brief for a reported local failure")
+    parser.add_argument("--seed", type=int, default=314159)
     parser.add_argument("--local-reviewed", action="store_true")
     parser.add_argument("--abc-regression", action="store_true", help="Paid full/melody score regression with unchanged English lyrics and Chinese language control")
     parser.add_argument("--abc-case", choices=("full", "melody"), help="Limit --abc-regression to one mode")
@@ -44,8 +48,8 @@ def main():
             count = 0
             def complete(self, messages, **options):
                 text = super().complete(messages, **options)
-                self.count += 1
-                (output / f"local_reply_{self.count}.txt").write_text(text, encoding="utf-8")
+                RecordingLocalProvider.count += 1
+                (output / f"local_reply_{RecordingLocalProvider.count}.txt").write_text(text, encoding="utf-8")
                 return text
         yue.LocalQwenProvider = RecordingLocalProvider
     original = "[Verse]\n车窗留着雨的形状\n旧地图折进了衣裳\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n\n[Verse]\n绕过没说完的惆怅\n路牌已换新的方向\n\n[Chorus]\n把明天唱给远方\n让灯火接住目光\n"
@@ -64,6 +68,8 @@ def main():
     if args.local_model:
         cases = cases if args.abc_regression else cases[:1]
         cases[0][1]["quality_mode"] = yue.REVIEW if args.local_reviewed else yue.STANDARD
+    if args.music_idea:
+        cases[0][1]["music_idea"] = args.music_idea
     original_stage = yue.YuE2Runner.complete
     stage_outputs = []
     def traced_stage(runner, stage, *positional, **options):
@@ -79,11 +85,14 @@ def main():
     rows = []
     for name, values in cases:
         if args.local_model:
-            values.update(api_mode=yue.LOCAL_QWEN_API_MODE, local_model=args.local_model, local_context_size=16384, local_max_tokens=8192)
+            values.update(api_mode=yue.LOCAL_QWEN_API_MODE, local_model=args.local_model,
+                          local_context_size=args.local_context_size, local_max_tokens=args.local_max_tokens)
         started = time.monotonic()
         try:
-            result = yue.enhance_yue2_prompt(api_key=key, seed=314159, **values)
+            result = yue.enhance_yue2_prompt(api_key=key, seed=args.seed, **values)
             request, report = json.loads(result[3]), json.loads(result[4])
+            artifact = {"case": name, "input": {**values, "seed": args.seed}, "request": request, "report": report}
+            (output / (name + ".json")).write_text(json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             yue.validate_request(request)
             if not args.abc_regression:
                 assert report["checks"]["lyrics_language"]
@@ -98,9 +107,7 @@ def main():
             if name == "zh_edit_second_chorus":
                 start, end = yue.edit_span(original, "Chorus", 2)
                 assert result[1].startswith(original[:start]) and result[1].endswith(original[end:])
-            artifact = {"case": name, "input": values, "request": request, "report": report}
-            (output / (name + ".json")).write_text(json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            rows.append({"case": name, "passed": True, "requests": report["requests"], "seconds": round(time.monotonic() - started, 2), "text_review": report["review"]})
+            rows.append({"case": name, "passed": True, "abc_status": report["abc"].get("status"), "requests": report["requests"], "seconds": round(time.monotonic() - started, 2), "text_review": report["review"]})
         except Exception as exc:
             rows.append({"case": name, "passed": False, "error_type": type(exc).__name__, "error": str(exc).replace(key, "[redacted]") if key else str(exc)})
         print(json.dumps(rows[-1], ensure_ascii=False), flush=True)
