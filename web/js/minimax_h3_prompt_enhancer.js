@@ -109,6 +109,10 @@ const SERIALIZED_WIDGET_NAMES = [
     "local_video_sample_fps",
     "local_unload_policy",
     "local_comfy_memory_policy",
+    "relay_mode",
+    "relay_event_count",
+    "relay_duration_seconds",
+    "relay_time_ranges",
 ];
 const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
@@ -120,6 +124,10 @@ const LOCAL_WIDGET_DEFAULTS = {
     local_video_sample_fps: 2.0,
     local_unload_policy: "执行后卸载（推荐）",
     local_comfy_memory_policy: "AUTO（显存不足时释放）",
+    relay_mode: "普通增强 / Normal",
+    relay_event_count: 0,
+    relay_duration_seconds: 0,
+    relay_time_ranges: "",
 };
 
 
@@ -495,6 +503,26 @@ function addApiKeyWidget(node, sourceWidget, apiModeWidget) {
 }
 
 
+export function configureRelayWidgets(node) {
+    const mode = node.widgets?.find((widget) => widget.name === "relay_mode");
+    const controls = ["relay_event_count", "relay_duration_seconds", "relay_time_ranges"]
+        .map((name) => node.widgets?.find((widget) => widget.name === name)).filter(Boolean);
+    node.t8UpdateRelayMode = () => {
+        const enabled = mode?.value === "Prompt Relay 编排";
+        for (const widget of controls) setWidgetVisible(widget, enabled);
+    };
+    if (mode) {
+        mode.tooltip = "普通增强保持原功能。Relay 输出接 Plan 的 global/local/time + length，timing_mode=seconds；不要同时连接 typed events。通常一次创作；语言和格式纠正各可能额外一次。";
+        const callback = mode.callback;
+        mode.callback = (...args) => {
+            callback?.apply(mode, args);
+            node.t8UpdateRelayMode();
+            resizeNode(node);
+        };
+    }
+    node.t8UpdateRelayMode();
+}
+
 app.registerExtension({
     name: "T8.MiniMaxH3PromptEnhancer",
 
@@ -527,6 +555,7 @@ app.registerExtension({
             const openaiBaseUrlWidget = this.widgets?.find((widget) => widget.name === "openai_base_url");
             const openaiVideoUrlsWidget = this.widgets?.find((widget) => widget.name === "openai_video_urls");
             const seedWidget = this.widgets?.find((widget) => widget.name === "seed");
+            configureRelayWidgets(this);
             const localWidgets = [
                 "local_model", "local_mmproj", "local_context_size", "local_max_tokens",
                 "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
@@ -615,6 +644,7 @@ app.registerExtension({
                 this.t8UpdateMvPreset?.();
                 this.t8UpdateOfficialPreset?.();
                 this.t8UpdateSkillPriority?.();
+                this.t8UpdateRelayMode?.();
             };
             this.t8NormalizePromptOptions();
 
@@ -721,6 +751,9 @@ app.registerExtension({
                 { serialize: false },
             );
             localSkillBundleWidget.serializeValue = () => undefined;
+            const relayHelp = this.addWidget("button", "📖 Prompt Relay 使用说明 / Wiring guide", "global / local / time + length",
+                () => window.open(new URL("./docs/h3_prompt_relay.md", import.meta.url).href, "_blank", "noopener,noreferrer"), { serialize: false });
+            relayHelp.serializeValue = () => undefined;
             this.t8UpdateApiMode?.();
             resizeNode(this);
         };
@@ -748,7 +781,7 @@ app.registerExtension({
             const restoredValues = namedWidgetValueMap(
                 SERIALIZED_WIDGET_NAMES,
                 args[0]?.widgets_values,
-                [22, SERIALIZED_WIDGET_NAMES.length],
+                [22, 31, SERIALIZED_WIDGET_NAMES.length],
             );
             if (restoredValues) {
                 args[0] = {
@@ -757,7 +790,7 @@ app.registerExtension({
                         SERIALIZED_WIDGET_NAMES,
                         args[0].widgets_values,
                         LOCAL_WIDGET_DEFAULTS,
-                        [22, SERIALIZED_WIDGET_NAMES.length],
+                        [22, 31, SERIALIZED_WIDGET_NAMES.length],
                     ),
                 };
             }

@@ -13,6 +13,12 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## 新增：H3 Prompt Relay 编排
+
+原 H3 增强节点新增默认关闭的 Relay 模式：输出全局提示词、逐事件提示词、秒数范围、对齐帧数和校验报告。普通增强及第一个输出保持原用途；支持原有云端／本地渠道。无需加载视频模型即可生成文本，接入执行项目的 Relay Plan 后才启用时序路由。
+
+[中英文使用说明与接线](web/js/docs/h3_prompt_relay.md) · [8 秒云端示例工作流](example_workflows/h3_prompt_relay_example.json)
+
 ## 新增：YuE2 音乐提示词与歌词创作
 
 新增独立节点 **YuE2 音乐提示词与歌词创作（T8）**：支持一句话写歌、原词逐字保留、指定段落改词、换风格、可选 ABC 乐谱校验与保留旋律去和弦。输出 `style`、`lyrics`、`abc`、官方请求 JSON 和创作报告；不生成音频、不下载音乐模型，不影响原有三个核心节点。

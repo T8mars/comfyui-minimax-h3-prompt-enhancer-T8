@@ -4,6 +4,12 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: H3 Prompt Relay authoring
+
+The existing H3 enhancer has an opt-in Relay mode: global prompt, event prompts, seconds ranges, aligned frame count and a validation report. Normal mode and the original first output keep their purpose. Existing cloud/local providers remain available; text authoring does not load a video model or activate downstream attention routing.
+
+[Bilingual guide and wiring](web/js/docs/h3_prompt_relay.md) · [8-second cloud workflow](example_workflows/h3_prompt_relay_example.json)
+
 ## New: YuE2 music prompt and lyrics creation
 
 The independent **YuE2 Music Prompt & Lyrics Enhancer (T8)** writes original lyrics,

@@ -5,6 +5,30 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.17.0] - 2026-09-13
+
+### Added
+
+- Opt-in Prompt Relay authoring in the existing H3 enhancer: global prompt,
+  per-event prompts, decimal-seconds ranges, aligned frame count and a static
+  report. Normal mode, original output slot zero and prior widget positions remain.
+- Deterministic 24 FPS timing, five-frame event minimum, up to 32 events,
+  explicit timing or weighted allocation, and ending-state alignment padding.
+- Existing cloud/local media and provider settings remain shared. One bounded
+  Relay format correction and full six-output recovery are supported; recovery
+  never resubmits a paid request.
+- Bilingual wiring guide, a text-only cloud tutorial and an optional downstream
+  Relay Plan adapter. No video generation, sampler changes or cache deletion.
+
+### Validation
+
+- Seedance cloud smoke covers specified and automatic timelines, exact result
+  recovery and multi-image reference input. Parser checks use the actual local
+  execution project's pure timeline functions without importing GPU components.
+- Native schema, historical workflow prefixes, frontend controls and repository
+  safety gates are covered by regression tests. This is text/format validation,
+  not rendered-video or local-model quality certification.
+
 ## [1.16.2] - 2026-09-12
 
 ### Changed

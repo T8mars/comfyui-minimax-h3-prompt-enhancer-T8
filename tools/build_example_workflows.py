@@ -803,8 +803,8 @@ def check() -> None:
         "MiniMaxMusic3PromptEnhancerT8": 38,
     }
     workflows = sorted(EXAMPLES.glob("*.json"))
-    if len(workflows) != 17:
-        raise RuntimeError(f"Expected 17 example workflows, found {len(workflows)}")
+    if len(workflows) != 18:
+        raise RuntimeError(f"Expected 18 example workflows, found {len(workflows)}")
     expected_inputs = {
         "MiniMaxH3PromptEnhancerT8": [
             "first_frame", "last_frame", "reference_images.reference_image_0",
@@ -863,7 +863,8 @@ def check() -> None:
                 )
             if node["type"] in expected_counts:
                 values = node.get("widgets_values", [])
-                if len(values) != expected_counts[node["type"]]:
+                counts = (31, 35) if node["type"] == "MiniMaxH3PromptEnhancerT8" else (expected_counts[node["type"]],)
+                if len(values) not in counts:
                     raise RuntimeError(f"{path.name}: invalid {node['type']} widget count {len(values)}")
                 local_index = {"MiniMaxH3PromptEnhancerT8": 22, "Seedance20PromptEnhancerT8": 26, "MiniMaxMusic3PromptEnhancerT8": 31}[node["type"]]
                 if values[local_index] in (None, "", "randomize"):
@@ -936,6 +937,8 @@ def main() -> int:
         # Imported here because the YuE2 builder reuses this module's helpers.
         from build_yue2_workflows import main as build_yue2
         build_yue2()
+        from build_h3_relay_workflow import main as build_relay
+        build_relay()
         check()
     return 0
 

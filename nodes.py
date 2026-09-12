@@ -1,6 +1,7 @@
 import base64
 import io as python_io
 import json
+import math
 import os
 import re
 import time
@@ -15,6 +16,11 @@ import requests
 from PIL import Image
 
 from comfy_api.latest import ComfyExtension, io
+
+try:
+    from .h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response
+except ImportError:
+    from h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response
 
 try:
     from .environment_defaults import optional_environment_value
@@ -815,10 +821,10 @@ def _validate_inputs(
     if prompt_mode == "参考模板融合" and not str(reference_template or "").strip():
         raise PromptEnhancerError("reference_template is required when prompt_mode is 参考模板融合.")
     try:
-        normalized_duration = int(duration_seconds)
+        normalized_duration = float(duration_seconds)
     except (TypeError, ValueError) as error:
         raise PromptEnhancerError("duration_seconds must be a positive integer.") from error
-    if normalized_duration < 1:
+    if not math.isfinite(normalized_duration) or normalized_duration <= 0:
         raise PromptEnhancerError("duration_seconds must be a positive integer.")
     if description_word_target != 0 and not 80 <= int(description_word_target) <= 1000:
         raise PromptEnhancerError("description_word_target must be 0 (auto) or between 80 and 1000.")
@@ -1329,6 +1335,7 @@ def _build_messages(
     case_template: str,
     performance_director_config: Any = None,
     character_performance_bible: Any = None,
+    relay_config: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     effective_language = _effective_output_language(output_language, official_skill_profile)
     case_instruction = resolve_case_template(case_template, "h3", prompt)
@@ -1372,6 +1379,10 @@ def _build_messages(
     if case_instruction:
         system_rules.append(T8_CASE_PRECEDENCE_RULE)
         system_rules.append(case_instruction)
+    if relay_config:
+        system_rules.append(relay_instruction(
+            duration_seconds, relay_config["event_count"], relay_config["time_ranges"], task_type,
+        ))
     system_content = "\n\n".join(system_rules)
     user_text = _build_user_instruction(
         prompt,
@@ -1525,6 +1536,33 @@ def _reorder_complete_fields(text: str, task_type: str) -> str:
     return prefix + "\n\n".join(f"{field}: {sections[field]}" for field in fields)
 
 
+def _h3_language_repair_messages(text, language, relay_config):
+    messages = local_language_repair_messages(text, language)
+    if relay_config:
+        messages[0]["content"] += (
+            "\nKeep the complete Relay JSON object and its keys, events, weights and end_state fields. "
+            "Only translate descriptive string values; preserve native_prompt field headers, "
+            "original dialogue and visible text. Return JSON, not a standalone native prompt."
+        )
+    return messages
+
+
+def _relay_repair_messages(text, duration, config, task_type, messages):
+    if not config:
+        return None
+    try:
+        compile_relay_response(text, duration, config["event_count"], config["time_ranges"], task_type)
+    except ValueError as error:
+        return [*messages, {"role": "assistant", "content": text}, {
+            "role": "user", "content": (
+                "Repair the Relay JSON structure once, keeping the original user facts, dialogue, "
+                "language and references. Return the complete corrected JSON object. "
+                f"Parser error: {error}"
+            ),
+        }]
+    return None
+
+
 def enhance_prompt(
     prompt: str,
     task_type: str = "T2VA",
@@ -1567,11 +1605,12 @@ def enhance_prompt(
     recovery_slot: str = "",
     progress_callback: Any = None,
     provider_request_options: Any = None,
+    relay_config: dict[str, Any] | None = None,
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
     try:
-        duration_seconds = int(duration_seconds)
+        duration_seconds = float(duration_seconds) if relay_config else int(duration_seconds)
     except (TypeError, ValueError) as error:
         raise PromptEnhancerError("duration_seconds must be a positive integer.") from error
     try:
@@ -1682,6 +1721,7 @@ def enhance_prompt(
                 case_template,
                 performance_director_config,
                 character_performance_bible,
+                relay_config,
             ), effective_local_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -1718,6 +1758,7 @@ def enhance_prompt(
                 case_template,
                 performance_director_config,
                 character_performance_bible,
+                relay_config,
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -1734,14 +1775,18 @@ def enhance_prompt(
                 )
                 if needs_local_language_repair(response_text, effective_local_language):
                     response_text = provider.complete(
-                        local_language_repair_messages(response_text, effective_local_language),
+                        _h3_language_repair_messages(response_text, effective_local_language, relay_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
                     local_attempts += 1
+                repair = _relay_repair_messages(response_text, duration_seconds, relay_config, task_type, messages)
+                if repair:
+                    response_text = provider.complete(repair, temperature=0.1, seed=int(seed))
+                    local_attempts += 1
             if progress_callback:
                 progress_callback("llm_completed", attempts=local_attempts)
-            result = _reorder_complete_fields(response_text, task_type)
+            result = response_text if relay_config else _reorder_complete_fields(response_text, task_type)
             if progress_callback:
                 progress_callback("output_finalized")
             return result
@@ -1794,6 +1839,7 @@ def enhance_prompt(
             case_template,
             performance_director_config,
             character_performance_bible,
+            relay_config,
         ), effective_cloud_language)
         cloud_attempts: list[int] = []
         response_text = _request_completion(
@@ -1813,7 +1859,7 @@ def enhance_prompt(
             response_text = _request_completion(
                 session,
                 api_key,
-                local_language_repair_messages(response_text, effective_cloud_language),
+                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -1824,9 +1870,18 @@ def enhance_prompt(
                 recovery_slot=recovery_slot,
                 temperature_override=0.1,
             )
+        repair = _relay_repair_messages(response_text, duration_seconds, relay_config, task_type, messages)
+        if repair:
+            response_text = _request_completion(
+                session, api_key, repair, rewrite_mode, chat_url, provider_name, model_id,
+                provider_request_options=provider_request_options,
+                recovery_component=recovery_component, recovery_slot=recovery_slot,
+                temperature_override=0.1,
+                attempts_callback=cloud_attempts.append,
+            )
         if progress_callback:
             progress_callback("llm_completed", attempts=sum(cloud_attempts))
-        result = _reorder_complete_fields(response_text, task_type)
+        result = response_text if relay_config else _reorder_complete_fields(response_text, task_type)
         if progress_callback:
             progress_callback("output_finalized")
         return result
@@ -2138,8 +2193,18 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     optional=True,
                     tooltip="连接 T8 Character Performance Bible；不新增请求，只向本次人物表演编译提供权威目标、阻力、策略和身体惯性。",
                 ),
+                io.Combo.Input("relay_mode", display_name="输出模式 / Output mode", options=[NORMAL, RELAY], default=NORMAL, optional=True),
+                io.Int.Input("relay_event_count", display_name="Relay 事件数（0=自动；非镜头数）", default=0, min=0, max=32, optional=True),
+                io.Float.Input("relay_duration_seconds", display_name="Relay 精确秒数（0=沿用目标时长）", default=0, min=0, step=0.01, optional=True),
+                io.String.Input("relay_time_ranges", display_name="Relay 指定时间（选填）", default="", multiline=True, optional=True,
+                                tooltip="每行十进制秒 start-end，例如 0-2.5。留空自动安排；填写时必须连续覆盖成片时长。24 FPS，补齐帧只延续结尾。"),
             ],
-            outputs=[io.String.Output(display_name="enhanced_prompt")],
+            outputs=[io.String.Output(display_name="enhanced_prompt"),
+                     io.String.Output(display_name="global_prompt"),
+                     io.String.Output(display_name="local_prompts"),
+                     io.String.Output(display_name="time_ranges"),
+                     io.Int.Output(display_name="relay_length"),
+                     io.String.Output(display_name="relay_report")],
         )
 
     @classmethod
@@ -2205,11 +2270,28 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         provider_config=None,
         recovery_slot="",
         recovery_action=RECOVERY_ACTION_NORMAL,
+        relay_mode=NORMAL,
+        relay_event_count=0,
+        relay_duration_seconds=0,
+        relay_time_ranges="",
     ) -> io.NodeOutput:
+        if relay_mode not in (NORMAL, RELAY):
+            raise PromptEnhancerError("Unsupported Relay output mode.")
+        relay_enabled = relay_mode == RELAY
         if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
             try:
-                return io.NodeOutput(*recover_outputs("MiniMaxH3PromptEnhancerT8", recovery_slot, 1))
+                cached = recover_outputs("MiniMaxH3PromptEnhancerT8", recovery_slot, 6 if relay_enabled else 1)
+                return io.NodeOutput(*( (*cached[:4], int(cached[4]), cached[5]) if relay_enabled else (cached[0], "", "", "", 0, "") ))
             except CompletionRecoveryError as error:
+                raise PromptEnhancerError(str(error)) from error
+        relay_config = None
+        if relay_enabled:
+            duration_seconds = float(relay_duration_seconds or duration_seconds)
+            relay_config = {"event_count": int(relay_event_count), "time_ranges": str(relay_time_ranges or "")}
+            # Validate the timeline before uploads or paid requests.
+            try:
+                relay_instruction(duration_seconds, relay_config["event_count"], relay_config["time_ranges"], _canonical_task_type(task_type))
+            except ValueError as error:
                 raise PromptEnhancerError(str(error)) from error
         try:
             merged = merge_provider_config(
@@ -2298,14 +2380,20 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 progress_callback=diagnostic.advance,
                 recovery_component="MiniMaxH3PromptEnhancerT8",
                 recovery_slot=recovery_slot,
+                **({"relay_config": relay_config} if relay_enabled else {}),
             )
+            if relay_enabled:
+                compiled = compile_relay_response(result, duration_seconds, relay_config["event_count"], relay_config["time_ranges"], _canonical_task_type(task_type), _effective_output_language(output_language, official_skill_profile))
+                outputs = tuple(compiled[name] for name in ("enhanced_prompt", "global_prompt", "local_prompts", "time_ranges", "relay_length", "relay_report"))
+            else:
+                outputs = (result, "", "", "", 0, "")
         except Exception as error:
             mark_recovery_failed("MiniMaxH3PromptEnhancerT8", recovery_slot, error)
             diagnostic.complete("failed", error)
             raise
-        complete_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, (result,))
+        complete_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, outputs if relay_enabled else (result,))
         diagnostic.complete("success")
-        return io.NodeOutput(result)
+        return io.NodeOutput(*outputs)
 
 
 class MiniMaxH3PromptEnhancerExtension(ComfyExtension):

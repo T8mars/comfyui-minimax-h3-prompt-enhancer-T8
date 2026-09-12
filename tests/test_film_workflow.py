@@ -69,7 +69,7 @@ class FilmWorkflowTests(unittest.TestCase):
         longform_ids = [item.id for item in creative.T8LongFormPlanner.define_schema().inputs]
         storyboard_ids = [item.id for item in creative.T8StoryboardPack.define_schema().inputs]
         self.assertEqual(
-            h3_ids[-3:],
+            h3_ids[-7:-4],
             ["performance_director_config", "provider_config", "character_performance_bible"],
         )
         self.assertEqual(
@@ -224,6 +224,9 @@ class FilmWorkflowTests(unittest.TestCase):
     def test_character_bible_is_connection_only_for_both_core_nodes(self):
         for node in (h3.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
             ids = [item.id for item in node.define_schema().inputs]
+            if node is h3.MiniMaxH3PromptEnhancer:
+                self.assertEqual(ids[-4:], ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"])
+                ids = ids[:-4]
             self.assertEqual(ids[-3:], [
                 "performance_director_config",
                 "provider_config",

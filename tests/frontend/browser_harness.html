@@ -34,6 +34,20 @@ try {
     TEMPLATE_DETAIL_MAX_HEIGHT,
   } = await import("../../web/js/case_template_ui.js");
   const { app } = await import("../../scripts/app.js");
+  const { configureRelayWidgets } = await import("../../web/js/minimax_h3_prompt_enhancer.js");
+  const relayControls = ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"]
+    .map((name, index) => ({ name, value: index === 0 ? "普通增强 / Normal" : 0, type: "number", computeSize: () => [300, 24], element: document.createElement("div") }));
+  const relayNode = { widgets: relayControls, size: [600, 200], computeSize() { return [600, 200 + this.widgets.filter(w => !w.hidden).length * 24]; }, setSize(size) { this.size = size; }, setDirtyCanvas() {} };
+  configureRelayWidgets(relayNode);
+  check(relayControls.slice(1).every(w => w.hidden), "Relay controls hidden in ordinary mode");
+  for (let cycle = 0; cycle < 20; cycle++) {
+    relayControls[0].value = "Prompt Relay 编排";
+    relayControls[0].callback();
+    check(relayControls.slice(1).every(w => !w.hidden && !w.element.hidden), "Relay controls open without stale hidden state");
+    relayControls[0].value = "普通增强 / Normal";
+    relayControls[0].callback();
+  }
+  check(relayControls.slice(1).every(w => w.hidden && w.element.hidden), "Relay controls collapse after toggles");
   await import("../../web/js/film_workflow_ui.js");
 
   const widgets = ["prompt", "custom_model", "openai_base_url"].map((name) => ({ name, value: "" }));
@@ -430,6 +444,7 @@ try {
   yueUI.installYuE2UI(yueNode);
   check(yueNode.widgets.length === yueCount, "YuE2 UI initialization is idempotent");
   check(!JSON.stringify(safe).includes("secret-body"), "diagnostics browser allowlist");
+  check(relayNode.size[1] === 224, "Relay toggle cycles do not accumulate node height");
   check(capability.providerCapabilitySummary("OpenAI兼容接口（备用）", "https://unknown.test/v1").profile === "openai-compatible-unknown", "unknown provider boundary");
   check(recommendation.rankTemplates([{ id: "one", label: "产品广告", required_anchors: [] }], { prompt: "产品" })[0].template.id === "one", "local recommendation");
 } catch (error) {

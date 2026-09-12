@@ -96,7 +96,7 @@ class MaintenanceTests(unittest.TestCase):
 
     def test_native_workflows_have_same_name_thumbnails(self):
         workflows = sorted((ROOT / "example_workflows").glob("*.json"))
-        self.assertEqual(len(workflows), 17)
+        self.assertEqual(len(workflows), 18)
         seen_types = set()
         for workflow in workflows:
             with self.subTest(workflow=workflow.name):
@@ -113,7 +113,7 @@ class MaintenanceTests(unittest.TestCase):
                     }.get(node["type"])
                     if expected:
                         count, model_index = expected
-                        self.assertEqual(len(node["widgets_values"]), count)
+                        self.assertIn(len(node["widgets_values"]), (31, 35) if node["type"] == "MiniMaxH3PromptEnhancerT8" else (count,))
                         self.assertNotIn(node["widgets_values"][model_index], (None, "", "randomize"))
         self.assertTrue({
             "MiniMaxH3PromptEnhancerT8",

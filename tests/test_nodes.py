@@ -247,7 +247,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertIn("seed", input_names)
         self.assertIn("shot_count", input_names)
         self.assertLess(input_names.index("api_key"), input_names.index("output_language"))
-        self.assertEqual([output.display_name for output in schema.outputs], ["enhanced_prompt"])
+        self.assertEqual([output.display_name for output in schema.outputs], ["enhanced_prompt", "global_prompt", "local_prompts", "time_ranges", "relay_length", "relay_report"])
         images = next(item for item in schema.inputs if item.id == "reference_images")
         videos = next(item for item in schema.inputs if item.id == "reference_videos")
         api_key = next(item for item in schema.inputs if item.id == "api_key")
