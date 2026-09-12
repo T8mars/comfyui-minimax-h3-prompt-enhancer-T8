@@ -5,6 +5,19 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.16.2] - 2026-09-12
+
+### Changed
+
+- Import `batch-2026-09-12-01`: 19 evidence variants for 17 existing templates.
+  The library now contains 554 source cases, 240 stable case selectors and
+  314 evidence variants, plus two community Skills (242 non-official choices).
+- Update dynamic previews to channel `2026.09.12.1`, covering all 556 T8 GIFs
+  in 16 release shards. Retain the frozen local GIF baseline and eight official
+  previews; no new GIFs enter the node repository or Registry package.
+- Preserve template IDs, names, prompt contracts and existing workflows; update
+  bilingual inventory documentation and exact-count regression checks.
+
 ## [1.16.1] - 2026-09-11
 
 ### Fixed
