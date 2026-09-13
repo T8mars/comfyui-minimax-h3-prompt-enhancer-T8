@@ -72,6 +72,17 @@ class H3PromptRelayTests(unittest.TestCase):
         self.assertEqual(result["enhanced_prompt"], native)
         self.assertNotIn("Global scene:", result["enhanced_prompt"])
 
+    def test_language_sections_decode_unicode_escapes_and_keep_events_separate(self):
+        data = payload(2)
+        data["global_prompt"] = "固定人物、服装、场景与镜头风格。"
+        data["events"][0]["prompt"] = "她捡起车票。"
+        data["events"][0]["end_state"] = "她拿稳车票。"
+        raw = json.dumps(data, ensure_ascii=True)
+        sections = relay.relay_language_sections(raw)
+        self.assertEqual(sections[0], data["global_prompt"])
+        self.assertIn(data["events"][0]["prompt"], sections)
+        self.assertNotIn("\\u56fa", " ".join(sections))
+
     def test_explicit_seconds_override_weights(self):
         data = payload()
         data["events"][0]["weight"] = 999

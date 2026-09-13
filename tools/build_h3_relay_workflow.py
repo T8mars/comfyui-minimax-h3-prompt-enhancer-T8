@@ -52,11 +52,17 @@ def plan_example():
 
 def main():
     path = ROOT / "example_workflows/h3_prompt_relay_example.json"
-    path.write_text(json.dumps(generate(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    tutorial_text = json.dumps(generate(), ensure_ascii=False, indent=2) + "\n"
+    path.write_text(tutorial_text, encoding="utf-8")
     _write_thumbnail(path.with_suffix(".jpg"), "H3 Prompt Relay", "Global + Local + Time", "Cloud / local GGUF", "T8 - 24 FPS timeline planning")
     adapter = ROOT / "docs/workflows/h3_prompt_relay_plan.json"
     adapter.parent.mkdir(parents=True, exist_ok=True)
-    adapter.write_text(json.dumps(plan_example(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    adapter_text = json.dumps(plan_example(), ensure_ascii=False, indent=2) + "\n"
+    adapter.write_text(adapter_text, encoding="utf-8")
+    static = ROOT / "web/js/docs/workflows"
+    static.mkdir(parents=True, exist_ok=True)
+    (static / path.name).write_text(tutorial_text, encoding="utf-8")
+    (static / adapter.name).write_text(adapter_text, encoding="utf-8")
 
 
 if __name__ == "__main__":

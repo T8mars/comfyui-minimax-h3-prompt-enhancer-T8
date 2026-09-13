@@ -18,9 +18,9 @@ from PIL import Image
 from comfy_api.latest import ComfyExtension, io
 
 try:
-    from .h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response
+    from .h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response, relay_language_sections
 except ImportError:
-    from h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response
+    from h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response, relay_language_sections
 
 try:
     from .environment_defaults import optional_environment_value
@@ -1547,6 +1547,37 @@ def _h3_language_repair_messages(text, language, relay_config):
     return messages
 
 
+_RELAY_CJK = re.compile(r"[\u3400-\u9fff]")
+_RELAY_LATIN_WORD = re.compile(r"[A-Za-z]+(?:['’-][A-Za-z]+)*")
+
+
+def _needs_h3_language_repair(text, language, relay_config):
+    if not relay_config:
+        return needs_local_language_repair(text, language)
+    try:
+        sections = relay_language_sections(text)
+    except ValueError:
+        # Relay structure is repaired first. Inspecting malformed JSON as raw
+        # text would misread escaped Chinese and JSON protocol keys as prose.
+        return False
+    normalized = str(language or "").strip().casefold()
+    chinese = normalized in {"中文", "chinese", "simplified chinese", "zh", "zh-cn"}
+    english = normalized in {"english", "英文", "en"} or normalized.startswith("english（")
+    for section in sections:
+        if needs_local_language_repair(section, language):
+            return True
+        cjk = len(_RELAY_CJK.findall(section))
+        latin = len(_RELAY_LATIN_WORD.findall(section))
+        # Short Relay events need a tighter guard than a full H3 artifact.
+        # Exact foreign-language dialogue remains protected by the correction
+        # prompt; this check only asks the provider to correct descriptions.
+        if chinese and cjk == 0 and latin >= 4:
+            return True
+        if english and latin == 0 and cjk >= 8:
+            return True
+    return False
+
+
 def _relay_repair_messages(text, duration, config, task_type, messages):
     if not config:
         return None
@@ -1560,6 +1591,25 @@ def _relay_repair_messages(text, duration, config, task_type, messages):
                 f"Parser error: {error}"
             ),
         }]
+    return None
+
+
+def _next_relay_correction(
+    text, duration, config, task_type, messages, language, *, format_used, language_used,
+):
+    repair = _relay_repair_messages(text, duration, config, task_type, messages)
+    if repair:
+        if format_used:
+            raise PromptEnhancerError(
+                "Prompt Relay output is still structurally invalid after one bounded format correction."
+            )
+        return "format", repair
+    if _needs_h3_language_repair(text, language, config):
+        if language_used:
+            raise PromptEnhancerError(
+                "Prompt Relay descriptive fields still do not match the selected output language after one correction."
+            )
+        return "language", _h3_language_repair_messages(text, language, config)
     return None
 
 
@@ -1773,16 +1823,28 @@ def enhance_prompt(
                     temperature=MODE_TEMPERATURES[rewrite_mode],
                     seed=int(seed),
                 )
-                if needs_local_language_repair(response_text, effective_local_language):
+                if relay_config:
+                    format_used = language_used = False
+                    while True:
+                        correction = _next_relay_correction(
+                            response_text, duration_seconds, relay_config, task_type, messages,
+                            effective_local_language, format_used=format_used, language_used=language_used,
+                        )
+                        if correction is None:
+                            break
+                        kind, correction_messages = correction
+                        response_text = provider.complete(
+                            correction_messages, temperature=0.1, seed=int(seed),
+                        )
+                        local_attempts += 1
+                        format_used = format_used or kind == "format"
+                        language_used = language_used or kind == "language"
+                elif needs_local_language_repair(response_text, effective_local_language):
                     response_text = provider.complete(
                         _h3_language_repair_messages(response_text, effective_local_language, relay_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
-                    local_attempts += 1
-                repair = _relay_repair_messages(response_text, duration_seconds, relay_config, task_type, messages)
-                if repair:
-                    response_text = provider.complete(repair, temperature=0.1, seed=int(seed))
                     local_attempts += 1
             if progress_callback:
                 progress_callback("llm_completed", attempts=local_attempts)
@@ -1855,7 +1917,26 @@ def enhance_prompt(
             recovery_component=recovery_component,
             recovery_slot=recovery_slot,
         )
-        if needs_local_language_repair(response_text, effective_cloud_language):
+        if relay_config:
+            format_used = language_used = False
+            while True:
+                correction = _next_relay_correction(
+                    response_text, duration_seconds, relay_config, task_type, messages,
+                    effective_cloud_language, format_used=format_used, language_used=language_used,
+                )
+                if correction is None:
+                    break
+                kind, correction_messages = correction
+                response_text = _request_completion(
+                    session, api_key, correction_messages, rewrite_mode, chat_url, provider_name, model_id,
+                    attempts_callback=cloud_attempts.append,
+                    provider_request_options=provider_request_options,
+                    recovery_component=recovery_component, recovery_slot=recovery_slot,
+                    temperature_override=0.1,
+                )
+                format_used = format_used or kind == "format"
+                language_used = language_used or kind == "language"
+        elif needs_local_language_repair(response_text, effective_cloud_language):
             response_text = _request_completion(
                 session,
                 api_key,
@@ -1869,15 +1950,6 @@ def enhance_prompt(
                 recovery_component=recovery_component,
                 recovery_slot=recovery_slot,
                 temperature_override=0.1,
-            )
-        repair = _relay_repair_messages(response_text, duration_seconds, relay_config, task_type, messages)
-        if repair:
-            response_text = _request_completion(
-                session, api_key, repair, rewrite_mode, chat_url, provider_name, model_id,
-                provider_request_options=provider_request_options,
-                recovery_component=recovery_component, recovery_slot=recovery_slot,
-                temperature_override=0.1,
-                attempts_callback=cloud_attempts.append,
             )
         if progress_callback:
             progress_callback("llm_completed", attempts=sum(cloud_attempts))

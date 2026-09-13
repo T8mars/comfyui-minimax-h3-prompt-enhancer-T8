@@ -190,6 +190,25 @@ def _parse(text: Any) -> dict:
     return result
 
 
+def relay_language_sections(text: Any) -> tuple[str, ...]:
+    """Return decoded descriptive fields for per-output language validation.
+
+    Parsing first is important: valid JSON may encode Chinese as ``\\uXXXX``.
+    Each event field stays separate so a long native prompt cannot hide one
+    event or global prompt that was produced in the wrong language.
+    """
+
+    data = _parse(text)
+    sections = [data.get("global_prompt")]
+    events = data.get("events")
+    if isinstance(events, list):
+        for event in events:
+            if isinstance(event, dict):
+                sections.extend((event.get("prompt"), event.get("end_state")))
+    sections.append(data.get("native_prompt"))
+    return tuple(value for value in sections if isinstance(value, str) and value.strip())
+
+
 def _native(value: Any, task: str) -> str:
     native = _nonempty(value, "native_prompt")
     if native.lstrip().startswith(("{", "[", "```")):

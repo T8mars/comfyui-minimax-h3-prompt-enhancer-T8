@@ -142,6 +142,21 @@ class MaintenanceTests(unittest.TestCase):
         }.issubset(seen_types))
         self.assertFalse({"CR Prompt Text", "easy showAnything"}.intersection(seen_types))
 
+    def test_relay_help_workflow_downloads_are_static_and_match_sources(self):
+        pairs = (
+            (ROOT / "example_workflows" / "h3_prompt_relay_example.json",
+             ROOT / "web/js/docs/workflows" / "h3_prompt_relay_example.json"),
+            (ROOT / "docs/workflows" / "h3_prompt_relay_plan.json",
+             ROOT / "web/js/docs/workflows" / "h3_prompt_relay_plan.json"),
+        )
+        for source, static in pairs:
+            self.assertTrue(static.is_file())
+            self.assertEqual(static.read_bytes(), source.read_bytes())
+        guide = (ROOT / "web/js/docs/h3_prompt_relay.md").read_text(encoding="utf-8")
+        self.assertIn("./workflows/h3_prompt_relay_example.json", guide)
+        self.assertIn("./workflows/h3_prompt_relay_plan.json", guide)
+        self.assertNotIn("../../../example_workflows", guide)
+
     def test_locales_and_node_docs_cover_all_v3_nodes(self):
         node_ids = {
             "MiniMaxH3PromptEnhancerT8",

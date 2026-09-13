@@ -20,6 +20,20 @@ class RelayIntegrationTests(unittest.TestCase):
         return dict(prompt="A woman returns a ticket.", task_type="T2VA", duration_seconds=8,
                     rewrite_mode="balanced", description_word_target=0, output_language="English", **extra)
 
+    def chinese_draft(self):
+        return json.dumps({
+            "global_prompt": "固定镜头拍摄安静车站，保持人物身份、服装、场景与晨光连续一致，全程没有配乐。",
+            "events": [
+                {"prompt": "女生弯腰捡起地上的车票。", "end_state": "女生站稳并拿着车票。", "weight": 1},
+                {"prompt": "女生把车票交给乘客，乘客接过后点头。", "end_state": "乘客拿稳车票，两人自然站立。", "weight": 1},
+            ],
+            "native_prompt": (
+                "integrated_multimodal_description: 固定镜头拍摄安静车站。女生捡起车票交给乘客，"
+                "乘客接过后点头，两人自然站立，人物身份、服装和场景始终一致。\n"
+                "overall_soundscape: 安静车站的自然环境声。\nnon_diegetic_music: 无配乐。"
+            ),
+        }, ensure_ascii=False)
+
     def test_normal_keeps_first_output_and_does_not_enable_relay(self):
         with patch.object(nodes, "enhance_prompt", return_value="unchanged") as completion:
             result = nodes.MiniMaxH3PromptEnhancer.execute(**self.inputs())
@@ -73,6 +87,54 @@ class RelayIntegrationTests(unittest.TestCase):
         self.assertEqual(result, self.draft())
         self.assertEqual(next(details["attempts"] for stage, details in calls if stage == "llm_completed"), 2)
 
+    def test_relay_language_validation_checks_each_decoded_output_section(self):
+        data = json.loads(self.chinese_draft())
+        data["global_prompt"] = (
+            "A static camera records a quiet railway station in warm morning light. "
+            "Keep identities, clothing and scenery consistent with no background music."
+        )
+        mixed = json.dumps(data, ensure_ascii=False)
+        escaped_chinese = json.dumps(json.loads(self.chinese_draft()), ensure_ascii=True)
+        config = {"event_count": 2, "time_ranges": ""}
+        self.assertTrue(nodes._needs_h3_language_repair(mixed, "中文", config))
+        self.assertFalse(nodes._needs_h3_language_repair(escaped_chinese, "中文", config))
+
+    def test_format_repair_is_followed_by_one_language_repair(self):
+        data = json.loads(self.chinese_draft())
+        data["global_prompt"] = (
+            "A static camera records a quiet railway station in warm morning light. "
+            "Keep identities, clothing and scenery consistent with no background music."
+        )
+        mixed = json.dumps(data, ensure_ascii=False)
+        responses = iter(["{}", mixed, self.chinese_draft()])
+        calls = []
+
+        def complete(*args, **kwargs):
+            calls.append(args[2])
+            kwargs["attempts_callback"](1)
+            return next(responses)
+
+        args = self.inputs()
+        args["output_language"] = "中文"
+        with patch.object(nodes, "_request_completion", side_effect=complete):
+            result = nodes.enhance_prompt(
+                **args, api_key="test-placeholder", session=FakeSession(""),
+                relay_config={"event_count": 2, "time_ranges": ""},
+            )
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(result, self.chinese_draft())
+        self.assertFalse(nodes._needs_h3_language_repair(result, "中文", {"event_count": 2}))
+
+    def test_relay_corrections_fail_closed_after_each_budget_is_used(self):
+        data = json.loads(self.chinese_draft())
+        data["global_prompt"] = "A static railway station remains unchanged through the full scene."
+        mixed = json.dumps(data, ensure_ascii=False)
+        with self.assertRaisesRegex(nodes.PromptEnhancerError, "selected output language"):
+            nodes._next_relay_correction(
+                mixed, 8, {"event_count": 2, "time_ranges": ""}, "T2VA", [], "中文",
+                format_used=False, language_used=True,
+            )
+
     def test_repair_preserves_json_and_normal_repair_is_unchanged(self):
         self.assertEqual(nodes._h3_language_repair_messages("text", "中文", None), nodes.local_language_repair_messages("text", "中文"))
         self.assertIn("Relay JSON", nodes._h3_language_repair_messages("{}", "中文", {"event_count": 0})[0]["content"])
@@ -100,6 +162,25 @@ class RelayIntegrationTests(unittest.TestCase):
         self.assertEqual(instance.settings.max_tokens, 24576)
         self.assertEqual(instance.closed, [False])
         self.assertIn("H3 PROMPT RELAY", instance.messages[0][0]["content"])
+
+    def test_local_mock_uses_the_same_bounded_format_then_language_repairs(self):
+        from test_local_qwen import FakeLocalProvider
+        data = json.loads(self.chinese_draft())
+        data["global_prompt"] = "A static railway station stays visually consistent for the complete scene."
+        responses = iter(["{}", json.dumps(data, ensure_ascii=False), self.chinese_draft()])
+        FakeLocalProvider.instances = []
+        FakeLocalProvider.response = lambda _messages: next(responses)
+        args = self.inputs()
+        args["output_language"] = "中文"
+        with patch.object(nodes, "LocalQwenProvider", FakeLocalProvider):
+            result = nodes.enhance_prompt(
+                **args, api_mode=nodes.LOCAL_QWEN_API_MODE,
+                relay_config={"event_count": 2, "time_ranges": ""},
+            )
+        instance = FakeLocalProvider.instances[-1]
+        self.assertEqual(result, self.chinese_draft())
+        self.assertEqual(len(instance.calls), 3)
+        self.assertEqual(instance.closed, [False])
 
 
 if __name__ == "__main__":

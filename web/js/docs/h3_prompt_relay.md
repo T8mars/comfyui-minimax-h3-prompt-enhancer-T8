@@ -4,7 +4,7 @@
 
 ## 最简单的用法
 
-[本仓库文本示例](../../../example_workflows/h3_prompt_relay_example.json)不依赖视频执行节点；[已接好 Relay Plan 的适配示例](../../../docs/workflows/h3_prompt_relay_plan.json)另需安装包含 `MiniMaxH3PromptRelayPlanT8Advanced` 的 T8 H3 执行项目。适配示例只编译时间线，不加载视频模型、不排队生成视频。
+[下载文本示例](./workflows/h3_prompt_relay_example.json)不依赖视频执行节点；[下载已接好 Relay Plan 的适配示例](./workflows/h3_prompt_relay_plan.json)另需安装包含 `MiniMaxH3PromptRelayPlanT8Advanced` 的 T8 H3 执行项目。两个链接均由 ComfyUI 本机静态目录提供；适配示例只编译时间线，不加载视频模型、不排队生成视频。
 
 1. 写创意，设目标时长。例：`女生在站台捡起车票，交给乘客，说“你的车票。”，对方点头，她挥手。8秒，一镜到底，无配乐。`
 2. 打开 Relay；事件数 `0` 自动安排。事件不是镜头，不会要求每个事件都切镜。

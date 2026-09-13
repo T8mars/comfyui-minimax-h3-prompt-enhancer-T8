@@ -5,6 +5,20 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.17.1] - 2026-09-13
+
+### Fixed
+
+- Prompt Relay language checks now parse JSON escapes and validate global,
+  per-event and native fields independently, so one long field cannot hide an
+  English section when Chinese output was selected.
+- Relay applies at most one structural and one language correction in either
+  order, revalidates after each correction and fails closed if either bounded
+  correction still leaves an invalid result.
+- The in-node Relay guide now serves both workflow downloads from the plugin's
+  actual ComfyUI static directory instead of linking to repository-root paths
+  that returned HTTP 404.
+
 ## [1.17.0] - 2026-09-13
 
 ### Added
