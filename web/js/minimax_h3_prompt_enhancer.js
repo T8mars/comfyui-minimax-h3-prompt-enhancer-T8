@@ -10,6 +10,7 @@ import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
 import { addDirectionalSkillUI, directionalSkillId, directionalSkillLabel, isDirectionalSkillEnabled } from "./h3_directional_skill_ui.mjs";
+import { addQualityUI, qualityLabel, creationLabel } from "./h3_quality_ui.mjs";
 import {
     bindOpenAIProviderPersistence,
     expandNamedWidgetValues,
@@ -115,6 +116,8 @@ const SERIALIZED_WIDGET_NAMES = [
     "relay_duration_seconds",
     "relay_time_ranges",
     "director_skill",
+    "quality_mode",
+    "creation_mode",
 ];
 const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
@@ -131,6 +134,8 @@ const LOCAL_WIDGET_DEFAULTS = {
     relay_duration_seconds: 0,
     relay_time_ranges: "",
     director_skill: "关闭 / Off",
+    quality_mode: "保持原样 / Off",
+    creation_mode: "原有编排 / Original",
 };
 
 
@@ -560,6 +565,7 @@ app.registerExtension({
             const openaiVideoUrlsWidget = this.widgets?.find((widget) => widget.name === "openai_video_urls");
             const seedWidget = this.widgets?.find((widget) => widget.name === "seed");
             configureRelayWidgets(this);
+            addQualityUI(this);
             const localWidgets = [
                 "local_model", "local_mmproj", "local_context_size", "local_max_tokens",
                 "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
@@ -804,7 +810,7 @@ app.registerExtension({
             let restoredValues = namedWidgetValueMap(
                 SERIALIZED_WIDGET_NAMES,
                 args[0]?.widgets_values,
-                [22, 31, 35, SERIALIZED_WIDGET_NAMES.length],
+                [22, 31, 35, 36, SERIALIZED_WIDGET_NAMES.length],
             );
             if (restoredValues) {
                 args[0] = {
@@ -813,10 +819,12 @@ app.registerExtension({
                         SERIALIZED_WIDGET_NAMES,
                         args[0].widgets_values,
                         LOCAL_WIDGET_DEFAULTS,
-                        [22, 31, 35, SERIALIZED_WIDGET_NAMES.length],
+                        [22, 31, 35, 36, SERIALIZED_WIDGET_NAMES.length],
                     ),
                 };
                 args[0].widgets_values[35] = directionalSkillLabel(args[0].widgets_values[35]);
+                args[0].widgets_values[36] = qualityLabel(args[0].widgets_values[36]);
+                args[0].widgets_values[37] = creationLabel(args[0].widgets_values[37]);
                 // Restore appended defaults by name as well: the optional
                 // director control is displayed beside templates, not at the end.
                 restoredValues = namedWidgetValueMap(SERIALIZED_WIDGET_NAMES, args[0].widgets_values);
@@ -837,6 +845,7 @@ app.registerExtension({
                 this.t8RestoreCaseTemplate?.(this.t8PendingCaseTemplateValue);
                 if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.t8NormalizePromptOptions?.();
+                this.t8UpdateQuality?.();
                 this.t8EnsureRecoverySlot?.();
             });
         };

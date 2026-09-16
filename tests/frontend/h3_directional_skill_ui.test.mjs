@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
+import { addQualityUI, qualityLabel, creationLabel } from "../../web/js/h3_quality_ui.mjs";
 import * as widgetState from "../../web/js/widget_state.mjs";
 import {
     DIRECTIONAL_HELP_HEIGHT,
@@ -130,6 +131,7 @@ async function enhancerHarness(filename, target) {
     const context = vm.createContext({
         ...widgetState,
         addDirectionalSkillUI,
+        addQualityUI, qualityLabel, creationLabel,
         directionalSkillId,
         directionalSkillLabel,
         isDirectionalSkillEnabled,
@@ -149,7 +151,8 @@ async function enhancerHarness(filename, target) {
             this.widgets = names.map((name) => ({ name, value: `not restored ${name}` }));
             // Reproduce the native UI's positional configure after the director
             // widget was moved beside templates. Named restoration must fix it.
-            const director = this.widgets.pop();
+            const director = this.widgets.find((w) => w.name === "director_skill");
+            this.widgets.splice(this.widgets.indexOf(director), 1);
             this.widgets.splice(this.widgets.findIndex((widget) => widget.name === "case_template") + 1, 0, director);
             this.properties = {};
             this.t8NormalizePromptOptions = this.s20NormalizeOptions = () => {
@@ -195,18 +198,18 @@ function sampleValues(names) {
     return names.map((name) => concrete[name] ?? `saved ${name}`);
 }
 
-test("H3 22/31/35 workflows preserve every field and fill only appended defaults", async () => {
+test("H3 22/31/35/36 workflows preserve every field and fill only appended defaults", async () => {
     const harness = await enhancerHarness("minimax_h3_prompt_enhancer.js", "h3");
-    assert.equal(harness.names.length, 36);
+    assert.equal(harness.names.length, 38);
     assert.equal(harness.names[35], "director_skill");
-    for (const length of [22, 31, 35]) {
+    for (const length of [22, 31, 35, 36]) {
         const saved = sampleValues(harness.names.slice(0, length));
         const before = [...saved];
         const node = harness.configure(saved);
         const restored = harness.values(node);
-        harness.names.slice(0, length).forEach((name, index) => assert.equal(restored[name], saved[index], name));
+        harness.names.slice(0, length).forEach((name, index) => assert.equal(restored[name], name === "director_skill" ? directionalSkillLabel(saved[index]) : saved[index], name));
         harness.names.slice(length).forEach((name) => assert.equal(restored[name], harness.defaults[name], name));
-        assert.equal(restored.director_skill, "关闭 / Off");
+        assert.equal(restored.director_skill, length === 36 ? directionalSkillLabel("cinematic_gunfight") : "关闭 / Off");
         assert.deepEqual(saved, before, "migration must not mutate source workflow");
     }
 });
@@ -230,7 +233,7 @@ test("H3 older 16/17/19/21 layouts still migrate before the appended skill", asy
 
 test("Seedance 26/35 published and runtime layouts preserve INT and provider positions", async () => {
     const harness = await enhancerHarness("seedance20_prompt_enhancer.js", "seedance20");
-    assert.equal(harness.names.length, 36);
+    assert.equal(harness.names.length, 38);
     assert.equal(harness.names[35], "director_skill");
     for (const layout of [harness.fixture.publishedV1, harness.fixture.runtimeV1, harness.fixture.published, harness.names.slice(0, 35)]) {
         const names = [...layout];
@@ -240,6 +243,10 @@ test("Seedance 26/35 published and runtime layouts preserve INT and provider pos
         assert.equal(restored.custom_length_target, 333);
         assert.equal(restored.director_skill, "关闭 / Off");
     }
+    const old36 = harness.values(harness.configure(sampleValues(harness.names.slice(0, 36))));
+    assert.equal(old36.director_skill, directionalSkillLabel("cinematic_gunfight"));
+    assert.equal(old36.quality_mode, harness.defaults.quality_mode);
+    assert.equal(old36.creation_mode, harness.defaults.creation_mode);
 });
 
 test("Seedance 23/25 legacy workflows still keep their original values", async () => {
@@ -264,7 +271,7 @@ test("both current workflows serialize stable skill IDs and reload without shift
         assert.equal(restored.director_skill, directionalSkillLabel("cinematic_gunfight"));
         const serialized = {};
         node.onSerialize(serialized);
-        assert.equal(serialized.widgets_values.length, 36);
+        assert.equal(serialized.widgets_values.length, 38);
         assert.equal(serialized.widgets_values[35], "cinematic_gunfight");
         const again = harness.values(harness.configure([...serialized.widgets_values]));
         assert.equal(again.seed, 42);

@@ -13,6 +13,14 @@ from urllib.parse import urlsplit, urlunsplit
 
 import numpy as np
 import requests
+try:
+    from .h3_quality import (QUALITY_OFF, QUALITY_OPTIONS, CREATION_OFF, CREATION_OPTIONS,
+                             normalize_quality, normalize_creation, creation_instruction)
+    from .quality_pipeline import h3_quality_result, retained_draft_provider
+except ImportError:
+    from h3_quality import (QUALITY_OFF, QUALITY_OPTIONS, CREATION_OFF, CREATION_OPTIONS,
+                            normalize_quality, normalize_creation, creation_instruction)
+    from quality_pipeline import h3_quality_result, retained_draft_provider
 from PIL import Image
 
 from comfy_api.latest import ComfyExtension, io
@@ -1346,6 +1354,7 @@ def _build_messages(
     character_performance_bible: Any = None,
     relay_config: dict[str, Any] | None = None,
     director_skill: Any = DIRECTOR_OFF,
+    creation_mode: Any = CREATION_OFF,
 ) -> list[dict[str, Any]]:
     skill_id, shot_count = prepare_director_skill(director_skill, shot_count)
     directional = skill_id != DIRECTOR_OFF
@@ -1397,6 +1406,9 @@ def _build_messages(
         system_rules.append(case_instruction)
     if directional:
         system_rules.append(director_instruction(skill_id, "h3"))
+    causal_rule = creation_instruction("h3", creation_mode)
+    if causal_rule:
+        system_rules.append(causal_rule)
     if relay_config:
         system_rules.append(relay_instruction(
             duration_seconds, relay_config["event_count"], relay_config["time_ranges"], task_type,
@@ -1620,6 +1632,7 @@ def _relay_repair_messages(text, duration, config, task_type, messages):
 
 def _next_relay_correction(
     text, duration, config, task_type, messages, language, *, format_used, language_used, director_skill=DIRECTOR_OFF,
+    skip_language=False,
 ):
     repair = _relay_repair_messages(text, duration, config, task_type, messages)
     if repair:
@@ -1628,7 +1641,7 @@ def _next_relay_correction(
                 "Prompt Relay output is still structurally invalid after one bounded format correction."
             )
         return "format", repair
-    if _needs_h3_language_repair(text, language, config):
+    if not skip_language and _needs_h3_language_repair(text, language, config):
         if language_used:
             raise PromptEnhancerError(
                 "Prompt Relay descriptive fields still do not match the selected output language after one correction."
@@ -1681,7 +1694,14 @@ def enhance_prompt(
     provider_request_options: Any = None,
     relay_config: dict[str, Any] | None = None,
     director_skill: Any = DIRECTOR_OFF,
+    quality_mode: Any = QUALITY_OFF,
+    creation_mode: Any = CREATION_OFF,
 ) -> str:
+    try:
+        quality_mode = normalize_quality(quality_mode)
+        creation_mode = normalize_creation(creation_mode)
+    except ValueError as error:
+        raise PromptEnhancerError(str(error)) from error
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
     try:
@@ -1807,6 +1827,7 @@ def enhance_prompt(
                 character_performance_bible,
                 relay_config,
                 director_skill,
+                creation_mode,
             ), effective_local_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -1845,6 +1866,7 @@ def enhance_prompt(
                 character_performance_bible,
                 relay_config,
                 director_skill,
+                creation_mode,
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -1853,7 +1875,9 @@ def enhance_prompt(
                     "frame coverage, complete-video access, heard audio, speech transcription, or soundtrack analysis."
                 )
             local_attempts = 1
-            with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
+            retained = {}
+            with retained_draft_provider(LocalQwenProvider(settings, vision=bool(media_plan)), retained,
+                                         enabled=quality_mode != QUALITY_OFF, progress=progress_callback) as provider:
                 response_text = provider.complete(
                     messages,
                     temperature=MODE_TEMPERATURES[rewrite_mode],
@@ -1865,6 +1889,7 @@ def enhance_prompt(
                         correction = _next_relay_correction(
                             response_text, duration_seconds, relay_config, task_type, messages,
                             effective_local_language, format_used=format_used, language_used=language_used,
+                            skip_language=quality_mode != QUALITY_OFF,
                             director_skill=director_skill,
                         )
                         if correction is None:
@@ -1876,16 +1901,25 @@ def enhance_prompt(
                         local_attempts += 1
                         format_used = format_used or kind == "format"
                         language_used = language_used or kind == "language"
-                elif needs_local_language_repair(response_text, effective_local_language):
+                elif quality_mode == QUALITY_OFF and needs_local_language_repair(response_text, effective_local_language):
                     response_text = provider.complete(
                         _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill),
                         temperature=0.1,
                         seed=int(seed),
                     )
                     local_attempts += 1
+                response_text, quality_metrics = h3_quality_result(
+                    response_text, mode=quality_mode, messages=messages,
+                    complete=lambda correction: provider.complete(correction, temperature=0.1, seed=int(seed)),
+                    task_type=task_type, duration=duration_seconds, shot_count=shot_count,
+                    language=effective_local_language, source="\n".join((str(prompt), reference_context, constraints)),
+                    media_labels=[asset["label"] for asset in media_plan], relay_config=relay_config, progress=progress_callback,
+                )
+                local_attempts += quality_metrics.get("correction_calls", 0)
+                retained["draft"] = response_text
             if progress_callback:
                 progress_callback("llm_completed", attempts=local_attempts)
-            result = response_text if relay_config else _reorder_complete_fields(response_text, task_type)
+            result = response_text if relay_config or quality_mode != QUALITY_OFF else _reorder_complete_fields(response_text, task_type)
             if progress_callback:
                 progress_callback("output_finalized")
             return result
@@ -1940,6 +1974,7 @@ def enhance_prompt(
             character_performance_bible,
             relay_config,
             director_skill,
+            creation_mode,
         ), effective_cloud_language)
         cloud_attempts: list[int] = []
         response_text = _request_completion(
@@ -1961,6 +1996,7 @@ def enhance_prompt(
                 correction = _next_relay_correction(
                     response_text, duration_seconds, relay_config, task_type, messages,
                     effective_cloud_language, format_used=format_used, language_used=language_used,
+                    skip_language=quality_mode != QUALITY_OFF,
                     director_skill=director_skill,
                 )
                 if correction is None:
@@ -1975,7 +2011,7 @@ def enhance_prompt(
                 )
                 format_used = format_used or kind == "format"
                 language_used = language_used or kind == "language"
-        elif needs_local_language_repair(response_text, effective_cloud_language):
+        elif quality_mode == QUALITY_OFF and needs_local_language_repair(response_text, effective_cloud_language):
             response_text = _request_completion(
                 session,
                 api_key,
@@ -1990,9 +2026,19 @@ def enhance_prompt(
                 recovery_slot=recovery_slot,
                 temperature_override=0.1,
             )
+        response_text, _quality_metrics = h3_quality_result(
+            response_text, mode=quality_mode, messages=messages,
+            complete=lambda correction: _request_completion(
+                session, api_key, correction, rewrite_mode, chat_url, provider_name, model_id,
+                attempts_callback=cloud_attempts.append, provider_request_options=provider_request_options,
+                recovery_component=recovery_component, recovery_slot=recovery_slot, temperature_override=0.1),
+            task_type=task_type, duration=duration_seconds, shot_count=shot_count,
+            language=effective_cloud_language, source="\n".join((str(prompt), reference_context, constraints)),
+            media_labels=[asset["label"] for asset in media_plan], relay_config=relay_config, progress=progress_callback,
+        )
         if progress_callback:
             progress_callback("llm_completed", attempts=sum(cloud_attempts))
-        result = response_text if relay_config else _reorder_complete_fields(response_text, task_type)
+        result = response_text if relay_config or quality_mode != QUALITY_OFF else _reorder_complete_fields(response_text, task_type)
         if progress_callback:
             progress_callback("output_finalized")
         return result
@@ -2312,6 +2358,10 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 io.Combo.Input("director_skill", display_name="定向创作 Skill（T8，非官方） / Directional Skill",
                                options=DIRECTOR_OPTIONS, default=DIRECTOR_OPTIONS[0], optional=True,
                                tooltip="默认关闭，保留旧行为。开启时仅暂停其他场景模板，H3格式和用户事实不变；关闭恢复。长镜头需要1或AUTO镜头数。"),
+                io.Combo.Input("quality_mode", display_name="输出质量流程 / Quality", options=QUALITY_OPTIONS,
+                               default=QUALITY_OFF, optional=True, tooltip="Off保留原行为；Check只检查；Repair精确修协议，最多追加1次LLM纠正。失败保留完整稿，详情见脱敏诊断；不代表成片通过。"),
+                io.Combo.Input("creation_mode", display_name="动作编排 / Creation", options=CREATION_OPTIONS,
+                               default=CREATION_OFF, optional=True, tooltip="原有编排不变；因果优化在同一次生成中补动作衔接与状态继承，不新增规划请求，不覆盖原事实、台词、镜头数及结束状态。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt"),
                      io.String.Output(display_name="global_prompt"),
@@ -2389,6 +2439,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         relay_duration_seconds=0,
         relay_time_ranges="",
         director_skill=DIRECTOR_OFF,
+        quality_mode=QUALITY_OFF,
+        creation_mode=CREATION_OFF,
     ) -> io.NodeOutput:
         if relay_mode not in (NORMAL, RELAY):
             raise PromptEnhancerError("Unsupported Relay output mode.")
@@ -2453,8 +2505,10 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         provider_request_options = merged["provider_request_options"]
         # Invalid directional preflight must not replace a previously paid result.
         try:
+            quality_mode = normalize_quality(quality_mode)
+            creation_mode = normalize_creation(creation_mode)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
-        except DirectionalSkillError as error:
+        except (DirectionalSkillError, ValueError) as error:
             raise PromptEnhancerError(str(error)) from error
         metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
                                      mode=relay_mode, shot_count=effective_shots)
@@ -2504,6 +2558,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 recovery_slot=recovery_slot,
                 **({"relay_config": relay_config} if relay_enabled else {}),
                 **({"director_skill": director_skill} if director_skill != DIRECTOR_OFF else {}),
+                **({"quality_mode": quality_mode} if quality_mode != QUALITY_OFF else {}),
+                **({"creation_mode": creation_mode} if creation_mode != CREATION_OFF else {}),
             )
             if relay_enabled:
                 compiled = compile_relay_response(result, duration_seconds, relay_config["event_count"], relay_config["time_ranges"], _canonical_task_type(task_type), _effective_output_language(output_language, official_skill_profile))
@@ -2516,6 +2572,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             raise
         complete_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, outputs if relay_enabled else (result,))
         diagnostic.complete("success")
+        if quality_mode != QUALITY_OFF:
+            return io.NodeOutput(*outputs, ui={"t8_quality_status": [json.dumps(diagnostic.quality_summary(), ensure_ascii=False)]})
         return io.NodeOutput(*outputs)
 
 

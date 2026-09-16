@@ -7,6 +7,10 @@ from typing import Any
 from comfy_api.latest import io
 
 try:
+    from .h3_quality import check_h3
+except ImportError:
+    from h3_quality import check_h3
+try:
     from .performance_director import performance_risk_warnings, semantic_anchor_warnings
 except ImportError:
     from performance_director import performance_risk_warnings, semantic_anchor_warnings
@@ -234,6 +238,14 @@ def inspect_prompt(
         warnings.extend(performance_risk_warnings(text, family))
         warnings.extend(semantic_anchor_warnings(source_prompt, text, family))
 
+    quality = None
+    if family == FAMILY_H3:
+        quality = check_h3(text, task_type=task_intent, duration=duration_seconds,
+                           shot_count=0 if expected_shot_count == "AUTO" else int(expected_shot_count),
+                           language=expected_language, source=str(source_prompt or ""))
+        warnings.extend(quality["issues"])
+    warnings = list({item["code"]: item for item in reversed(warnings)}.values())[::-1]
+
     penalty_weights = {"error": 15, "warning": 8, "info": 3, "advisory": 0}
     penalty = sum(penalty_weights.get(item["severity"], 0) for item in warnings)
     score = max(0, 100 - penalty)
@@ -245,6 +257,8 @@ def inspect_prompt(
         "detected_shots": len(shots),
         "warnings": warnings,
     }
+    if quality is not None:
+        report["contract_check"] = quality
     summary = f"{family} · 结构分 {score}/100 · {len(warnings)} 条提示（仅本地结构检查，不判断创意质量）"
     return original, json.dumps(report, ensure_ascii=False, indent=2), summary
 

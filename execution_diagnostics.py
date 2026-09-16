@@ -7,9 +7,9 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Any
 try:
-    from .completion_recovery import safe_director_metadata
+    from .completion_recovery import safe_director_metadata, safe_quality_metadata
 except ImportError:
-    from completion_recovery import safe_director_metadata
+    from completion_recovery import safe_director_metadata, safe_quality_metadata
 
 try:
     from comfy.utils import ProgressBar
@@ -75,10 +75,23 @@ class DiagnosticsRun:
         metadata = safe_director_metadata(safe_metrics.get("creation_metadata"))
         if metadata:
             event["creation_metadata"] = metadata
+        quality = safe_quality_metadata(safe_metrics.get("quality_metadata"))
+        if quality:
+            event["quality_metadata"] = quality
         self._stages.append(event)
         self._last = now
         if self._progress is not None:
             self._progress.update(1)
+
+    def quality_summary(self) -> dict[str, Any]:
+        result = {}
+        for stage in self._stages:
+            metadata = stage.get("quality_metadata", {})
+            if metadata.get("result") == "cleanup_failed_draft_kept":
+                result["cleanup_failed"] = True
+            else:
+                result.update(metadata)
+        return result
 
     def complete(self, outcome: str, error: BaseException | None = None) -> None:
         if self._finished:

@@ -345,8 +345,8 @@ class PerformanceDirectorTests(unittest.TestCase):
     def test_core_schemas_preserve_performance_and_provider_order_before_new_character_socket(self):
         for cls in (nodes.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
             schema = cls.define_schema()
-            self.assertEqual(schema.inputs[-1].id, "director_skill")
-            inputs = schema.inputs[:-5] if cls is nodes.MiniMaxH3PromptEnhancer else schema.inputs[:-1]
+            self.assertEqual([i.id for i in schema.inputs[-3:]], ["director_skill", "quality_mode", "creation_mode"])
+            inputs = schema.inputs[:-7] if cls is nodes.MiniMaxH3PromptEnhancer else schema.inputs[:-3]
             self.assertEqual(inputs[-3].id, "performance_director_config")
             self.assertEqual(inputs[-2].id, "provider_config")
             self.assertEqual(inputs[-1].id, "character_performance_bible")
@@ -367,7 +367,7 @@ class PerformanceDirectorTests(unittest.TestCase):
 
     def test_performance_advisories_do_not_reduce_structural_score(self):
         prompt = "\n".join((
-            "integrated_multimodal_description: A sad character remains still.",
+            "integrated_multimodal_description: [Shot 1] A sad character remains still.",
             "overall_soundscape: quiet room tone",
             "non_diegetic_music: none",
         ))

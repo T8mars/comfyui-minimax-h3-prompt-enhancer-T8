@@ -50,6 +50,47 @@ try {
   check(relayControls.slice(1).every(w => w.hidden && w.element.hidden), "Relay controls collapse after toggles");
   await import("../../web/js/film_workflow_ui.js");
 
+  const qualityUI = await import("../../web/js/h3_quality_ui.mjs");
+  const qualityHost = document.createElement("section");
+  qualityHost.className = "node";
+  document.body.append(qualityHost);
+  const qualityNode = {
+    widgets: [{ name: "quality_mode", value: "off" }, { name: "creation_mode", value: "off" }],
+    graph: { change() {} }, setDirtyCanvas() {},
+    addDOMWidget(name, type, element, options) {
+      const widget = { name, type, element, options };
+      this.widgets.push(widget);
+      qualityHost.append(element);
+      return widget;
+    },
+  };
+  const qualityHelp = qualityUI.addQualityUI(qualityNode);
+  const qualityRun = document.createElement("button");
+  qualityRun.textContent = "运行 / Run";
+  qualityHost.append(qualityRun);
+  const originalQualityHeight = qualityHost.getBoundingClientRect().height;
+  const originalWidgetCount = qualityNode.widgets.length;
+  for (let cycle = 0; cycle < 40; cycle++) {
+    qualityNode.widgets[0].value = cycle % 2 ? "repair" : "check";
+    qualityNode.widgets[0].callback();
+    qualityNode.widgets[1].value = cycle % 2 ? "causal" : "off";
+    qualityNode.widgets[1].callback();
+    qualityNode.onExecuted({ t8_quality_status: [JSON.stringify({
+      result: cycle % 2 ? "corrected" : "candidate_rejected",
+      issue_codes: Array(100).fill("h3_missing_speaker"), correction_calls: 1,
+      prompt: "private-body-should-not-display",
+    })] });
+    check(qualityHelp.element.getBoundingClientRect().height === qualityUI.QUALITY_HELP_HEIGHT, "quality status owns a fixed DOM height after repeated results");
+    check(qualityRun.getBoundingClientRect().top >= qualityHelp.element.getBoundingClientRect().bottom, "quality status never covers the run button");
+    check(qualityHost.getBoundingClientRect().height === originalQualityHeight, "quality modes and results never accumulate node height");
+    check(!qualityHelp.element.textContent.includes("private-body-should-not-display"), "quality status cannot expose arbitrary metadata");
+  }
+  qualityUI.addQualityUI(qualityNode);
+  check(qualityNode.widgets.length === originalWidgetCount, "quality card initialization is idempotent in an actual browser");
+  check(qualityHelp.options.serialize === false && qualityHelp.serializeValue() === undefined, "quality help adds no positional serialized value");
+  qualityNode.widgets[0].callback();
+  check(qualityHelp.element.textContent.includes("等待运行"), "changing quality mode clears stale result status");
+
   const widgets = ["prompt", "custom_model", "openai_base_url"].map((name) => ({ name, value: "" }));
   state.restoreNamedWidgetValues({ widgets }, new Map([
     ["prompt", "旧提示"], ["custom_model", "vendor/model"], ["openai_base_url", "https://provider.test/v1"],

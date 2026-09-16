@@ -13,6 +13,12 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## 新增：可选质量流程与因果动作优化
+
+原 H3 / Seedance 节点新增 **质量检查、最多一次质量纠正、因果动作优化**。默认 Off / Original，旧工作流和原生输出保持不变；不需新增表格或连线。检查失败和纠正次数会在节点说明卡与脱敏诊断中显示；追加纠正可能计费，失败保留完整稿。复杂语义、物理可达性及成片仍需人工验收，不把结构分当创作质量。
+
+[简明中英文说明与费用边界](docs/h3-quality-creation.md) · [只检查示例](example_workflows/h3_seedance_quality_check_example.json) · [因果优化＋纠正示例](example_workflows/h3_seedance_causal_creation_example.json)
+
 ## 新增：H3 / Seedance 定向创作 Skill
 
 原 H3 与 Seedance 2.0 增强节点新增默认关闭的三个独立选项：**连续战斗长镜头、高密度连续攻防、电影枪战导演**。只吸收非官方创作方法，保留两平台原生格式、原有渠道与输出，不需要新增连线。开启时当前请求暂停旧案例/手动模板编排及 H3 可选官方场景，保留原选择，关闭后恢复；长镜头的镜头数 `AUTO` 按一镜处理，固定两镜以上会在付费调用前提示冲突。

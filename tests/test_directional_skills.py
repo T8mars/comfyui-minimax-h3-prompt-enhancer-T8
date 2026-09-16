@@ -277,11 +277,13 @@ class DirectionalSkillTests(unittest.TestCase):
             ("seedance20.py", sd.Seedance20PromptEnhancer, "enhance_seedance20_prompt", sd),
         ):
             names = [item.id for item in cls.define_schema().inputs]
-            self.assertEqual(names[-1], "director_skill")
+            self.assertEqual(names[-3:], ["director_skill", "quality_mode", "creation_mode"])
             source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=ROOT).decode("utf-8")
             definition = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == function)
             old_names = [n.arg for n in definition.args.args]
-            self.assertEqual(list(inspect.signature(getattr(module, function)).parameters)[:-1], old_names)
+            current = list(inspect.signature(getattr(module, function)).parameters)
+            self.assertEqual(current[:len(old_names)], old_names)
+            self.assertEqual(current[len(old_names):], ["director_skill", "quality_mode", "creation_mode"])
             self.assertEqual(len(cls.define_schema().outputs), 6 if filename == "nodes.py" else 1)
 
     def test_non_mapping_resource_metadata_is_wrapped_and_off_stays_independent(self):

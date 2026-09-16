@@ -33,6 +33,14 @@ class ReleaseToolTests(unittest.TestCase):
         runtime_shim = (ROOT / "local_qwen_runtime.py").read_text(encoding="utf-8")
         self.assertNotIn("importlib.import_module(", runtime_shim)
 
+    def test_repository_secret_gate_includes_mjs_modules(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            module = root / "probe.mjs"
+            module.write_text('const fixture = "' + 'sk-' + 'x' * 32 + '";', encoding="utf-8")
+            with patch.object(verify, "ROOT", root), self.assertRaisesRegex(verify.VerificationError, 'probe.mjs'):
+                verify.verify_secrets([module])
+
     def test_repository_gate_parses_toml_and_yaml(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

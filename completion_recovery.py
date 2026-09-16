@@ -89,6 +89,38 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     return result if "director_skill" in result else {}
 
 
+def safe_quality_metadata(values: Any) -> dict[str, Any]:
+    """Strict finite diagnostic vocabulary. No arbitrary prompt/error strings."""
+    if not isinstance(values, dict):
+        return {}
+    results = {"checked", "corrected", "candidate_rejected", "correction_failed_draft_kept",
+               "budget_exhausted_draft_kept", "protocol_repair_failed_draft_kept",
+               "check_failed_draft_kept", "cleanup_failed_draft_kept"}
+    modes = {"保持原样 / Off", "质量检查 / Check", "质量纠正（最多追加1次） / Repair"}
+    codes = {"empty_prompt", "h3_missing_core_fields", "h3_field_order", "h3_missing_first_shot", "shot_sequence",
+             "shot_count_mismatch", "h3_shot_timecode", "non_monotonic_timecodes", "duration_budget", "h3_alignment",
+             "h3_unexpected_prefix", "h3_unavailable_asset", "h3_undefined_reference", "h3_retention_marker",
+             "h3_duplicate_definition", "h3_retention_missing", "h3_vocal_language", "h3_missing_speaker",
+             "h3_speaker_identity", "semantic_exact_text_missing", "h3_extra_dialogue", "h3_visible_text_changed",
+             "h3_dialogue_source_changed", "h3_vocal_wrong_layer", "h3_diegetic_music_layer", "h3_descriptive_language",
+             "relay_invalid_authoring", "seedance_h3_protocol_leak"}
+    unchecked = {"physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending",
+                 "descriptive_language", "alignment_duration", "shot_count", "relay_compilation",
+                 "relay_semantic_equivalence", "contract_check", "vocal_language"}
+    result = {}
+    for key, vocabulary in (("result", results), ("quality_mode", modes)):
+        if isinstance(values.get(key), str) and values[key] in vocabulary:
+            result[key] = values[key]
+    for key, limit in (("correction_calls", 1), ("protocol_edits", 3)):
+        value = values.get(key)
+        if isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= limit:
+            result[key] = value
+    for key, vocabulary in (("issue_codes", codes), ("unchecked", unchecked)):
+        if isinstance(values.get(key), list):
+            result[key] = list(dict.fromkeys(v for v in values[key] if isinstance(v, str) and v in vocabulary))[:40]
+    return result if "result" in result or "quality_mode" in result else {}
+
+
 def begin_recovery_record(component: Any, slot: Any, provider: Any, *, metadata: Any = None) -> bool:
     component_name = _safe_component(component)
     slot_name = _safe_slot(slot)

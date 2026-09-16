@@ -9,6 +9,7 @@ import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
 import { addDirectionalSkillUI, directionalSkillId, directionalSkillLabel, isDirectionalSkillEnabled } from "./h3_directional_skill_ui.mjs";
+import { addQualityUI, qualityLabel, creationLabel } from "./h3_quality_ui.mjs";
 import {
     bindOpenAIProviderPersistence,
     namedWidgetValueMapByDiscriminator,
@@ -157,6 +158,8 @@ const SERIALIZED_WIDGET_NAMES = [
     "local_unload_policy",
     "local_comfy_memory_policy",
     "director_skill",
+    "quality_mode",
+    "creation_mode",
 ];
 const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
@@ -169,6 +172,8 @@ const LOCAL_WIDGET_DEFAULTS = {
     local_unload_policy: "执行后卸载（推荐）",
     local_comfy_memory_policy: "AUTO（显存不足时释放）",
     director_skill: "关闭 / Off",
+    quality_mode: "保持原样 / Off",
+    creation_mode: "原有编排 / Original",
 };
 
 
@@ -176,6 +181,7 @@ function serializedWidgetValueMap(values) {
     if (!Array.isArray(values)) return null;
     const layouts = values.length === SERIALIZED_WIDGET_NAMES.length
         ? [SERIALIZED_WIDGET_NAMES]
+        : values.length === 36 ? [SERIALIZED_WIDGET_NAMES.slice(0, 36)]
         : values.length === RUNTIME_LEGACY_WIDGET_NAMES.length
             ? [RUNTIME_LEGACY_WIDGET_NAMES, PUBLISHED_WIDGET_NAMES]
         : values.length === RUNTIME_V1_WIDGET_NAMES.length
@@ -189,6 +195,8 @@ function remapSerializedWidgetValues(values) {
     const source = serializedWidgetValueMap(values);
     const result = remapNamedWidgetValues(SERIALIZED_WIDGET_NAMES, source, LOCAL_WIDGET_DEFAULTS, values);
     if (source) result[35] = directionalSkillLabel(result[35]);
+    if (source) result[36] = qualityLabel(result[36]);
+    if (source) result[37] = creationLabel(result[37]);
     return result;
 }
 
@@ -499,6 +507,7 @@ app.registerExtension({
             const templateWidget = find("reference_template");
             const caseTemplateWidget = find("case_template");
             const directorSkillWidget = find("director_skill");
+            addQualityUI(this);
             const apiModeWidget = find("api_mode");
             const aiWorkshopModelWidget = find("ai_workshop_model");
             const customModelWidget = find("custom_model");
@@ -713,6 +722,7 @@ app.registerExtension({
                 this.t8RestoreCaseTemplate?.(this.t8PendingCaseTemplateValue);
                 if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.s20NormalizeOptions?.();
+                this.t8UpdateQuality?.();
                 this.t8EnsureRecoverySlot?.();
             });
         };

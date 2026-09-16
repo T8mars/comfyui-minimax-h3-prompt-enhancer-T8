@@ -1,4 +1,16 @@
 const SAFE_STAGE_KEYS = new Set(["stage", "duration_ms", "attempts", "asset_count", "cache_hit"]);
+const QUALITY_CODES = new Set("empty_prompt h3_missing_core_fields h3_field_order h3_missing_first_shot shot_sequence shot_count_mismatch h3_shot_timecode non_monotonic_timecodes duration_budget h3_alignment h3_unexpected_prefix h3_unavailable_asset h3_undefined_reference h3_retention_marker h3_duplicate_definition h3_retention_missing h3_vocal_language h3_missing_speaker h3_speaker_identity semantic_exact_text_missing h3_extra_dialogue h3_visible_text_changed h3_dialogue_source_changed h3_vocal_wrong_layer h3_diegetic_music_layer h3_descriptive_language relay_invalid_authoring seedance_h3_protocol_leak".split(" "));
+export function sanitizeQualityMetadata(value) {
+    if (!value || typeof value !== "object") return undefined;
+    const result = {};
+    if (["checked", "corrected", "candidate_rejected", "correction_failed_draft_kept", "budget_exhausted_draft_kept", "protocol_repair_failed_draft_kept", "check_failed_draft_kept", "cleanup_failed_draft_kept"].includes(value.result)) result.result = value.result;
+    if (["保持原样 / Off", "质量检查 / Check", "质量纠正（最多追加1次） / Repair"].includes(value.quality_mode)) result.quality_mode = value.quality_mode;
+    if ([0, 1].includes(value.correction_calls)) result.correction_calls = value.correction_calls;
+    if (Number.isInteger(value.protocol_edits) && value.protocol_edits >= 0 && value.protocol_edits <= 3) result.protocol_edits = value.protocol_edits;
+    if (Array.isArray(value.issue_codes)) result.issue_codes = [...new Set(value.issue_codes.filter((s) => QUALITY_CODES.has(s)))];
+    if (Array.isArray(value.unchecked)) result.unchecked = value.unchecked.filter((s) => ["physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending", "descriptive_language", "alignment_duration", "shot_count", "relay_compilation", "relay_semantic_equivalence", "contract_check", "vocal_language"].includes(s));
+    return result.result || result.quality_mode ? result : undefined;
+}
 
 
 function safeInteger(value) {
@@ -32,6 +44,8 @@ export function sanitizeDiagnosticRecord(record) {
                     if (value !== undefined) safe[key] = value;
                 }
             }
+            const quality = sanitizeQualityMetadata(stage.quality_metadata);
+            if (quality) safe.quality_metadata = quality;
             return safe;
         })
         : [];
@@ -80,7 +94,7 @@ function renderDialog(record) {
     title.textContent = "脱敏执行诊断";
     title.style.cssText = "font-size:18px;font-weight:700;margin-bottom:8px";
     const notice = document.createElement("div");
-    notice.textContent = "仅包含节点、渠道、阶段、耗时、尝试次数、素材数量、缓存状态和安全错误类别。";
+    notice.textContent = "仅包含节点、渠道、阶段、耗时、尝试次数、素材数量、缓存状态、安全错误类别及质量检查代码。unchecked为未验证项，不等于通过。";
     notice.style.cssText = "color:#bbb;margin-bottom:10px";
     const pre = document.createElement("pre");
     pre.textContent = JSON.stringify(record, null, 2);

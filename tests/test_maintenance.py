@@ -98,11 +98,13 @@ class MaintenanceTests(unittest.TestCase):
         workflows = sorted((ROOT / "example_workflows").glob("*.json"))
         with patch.object(sys, "path", [str(ROOT / "tools"), *sys.path]):
             directional_examples = load_tool("t8_directional_examples", "build_directional_skill_workflows.py")
-        STEMS = directional_examples.STEMS
-        self.assertEqual(len(workflows), 21)
-        directional = [path for path in workflows if path.stem in STEMS]
-        self.assertEqual({path.stem for path in directional}, set(STEMS))
+            quality_examples = load_tool("t8_quality_examples", "build_quality_workflows.py")
+        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS)
+        self.assertEqual(len(workflows), 23)
+        extra = [path for path in workflows if path.stem in STEMS]
+        self.assertEqual({path.stem for path in extra}, set(STEMS))
         directional_examples.check()
+        quality_examples.check()
         workflows = [path for path in workflows if path.stem not in STEMS]
         self.assertEqual(len(workflows), 18)  # Original 18 retain all thumbnail/field checks.
         seen_types = set()

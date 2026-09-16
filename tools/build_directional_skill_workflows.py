@@ -30,7 +30,9 @@ def widget_names(filename: str) -> list[str]:
     match = re.search(r"const SERIALIZED_WIDGET_NAMES = \[([\s\S]*?)\];", source)
     if not match:
         raise RuntimeError("Serialized widget schema is missing")
-    return re.findall(r'"([a-z_]+)"', match.group(1))
+    # These published examples intentionally retain their original 36-value
+    # layout. New optional quality/creation values default Off during migration.
+    return re.findall(r'"([a-z_]+)"', match.group(1))[:36]
 
 
 def generate() -> dict[str, dict]:

@@ -3,6 +3,26 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.19.0] - 2026-09-17
+
+- Optional, append-only H3/Seedance quality checks and at most one logical quality/language correction; precise protocol edits preserve protected original text. Failed/rejected corrections retain a complete draft and final recovery output.
+- H3 mode-aware schema, alignment, timeline, descriptive-language, exact vocal/visible-text, reference and audio-layer checking. Inspector stays read-only; unknown semantics/physics/video quality remain unverified.
+- Opt-in causal action/state inheritance within the original request, keeping H3/Seedance grammars separate. Fixed-size bilingual status guidance and two checked example workflows; old widget positions and Off requests preserved.
+- Relay's format and quality/language budgets are distinct; cleanup failure is reported separately without discarding a successful draft. Real API acceptance is exploratory, not a rendered-quality guarantee.
+
+### Validation and limitations
+
+- 40 real first generations and 7 corrections returned successful chat responses;
+  12 real PNG uploads exercised first/last-frame input. Saved-draft correction
+  rechecks resolved the six measurable problem drafts without hiding prior failures.
+- 588 CPU tests: 586 passed, 2 optional downstream Relay parser tests skipped;
+  34 frontend tests and real-browser contracts passed. Existing workflow layouts,
+  outputs and Off request paths have compatibility regression coverage.
+- Twelve sealed, deidentified creative reviews did not establish a stable causal
+  improvement. Causal remains opt-in and experimental; Original remains default.
+  Source/ownership semantics, physical feasibility and rendered quality still need
+  review. A clean protocol check is not a creative-quality guarantee.
+
 ## [1.18.0] - 2026-09-17
 
 ### Added

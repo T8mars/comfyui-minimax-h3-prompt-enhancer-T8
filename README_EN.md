@@ -4,6 +4,12 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: optional quality workflow and causal creation
+
+The existing H3/Seedance nodes offer **Check, one bounded quality correction, and Causal creation**. Off/Original preserve old workflows and native outputs. No extra form or wiring is required. Node guidance and redacted diagnostics show failures and correction counts. Corrections may cost one additional logical request; failures retain the complete draft. Text contracts do not prove complex semantics, physics or rendered video quality.
+
+[Bilingual guide and cost boundaries](docs/h3-quality-creation.md) · [Check example](example_workflows/h3_seedance_quality_check_example.json) · [Causal + repair example](example_workflows/h3_seedance_causal_creation_example.json)
+
 ## New: H3 / Seedance directional creation Skills
 
 The existing H3 and Seedance 2.0 enhancers now offer three independent, opt-in methods: **Continuous combat, High-density combat, and Cinematic gunfight**. Off remains the default. These non-official creative methods retain each platform's native format, providers and outputs without extra wiring. While enabled, they pause old case/manual-template choreography and optional H3 scene presets for the current request; saved choices resume when switched off. Continuous combat resolves AUTO to one shot and rejects an explicit count above one before paid calls.

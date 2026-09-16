@@ -150,8 +150,10 @@ def main() -> int:
                     "--disable-background-networking",
                     "--no-first-run",
                     "--timeout=10000",
+                    "--virtual-time-budget=5000",
                     f"--user-data-dir={profile}",
                     "--window-size=1280,900",
+                    "--dump-dom",
                     f"--screenshot={target}",
                     f"{base_url}/{filename}",
                 ],
@@ -176,6 +178,14 @@ def main() -> int:
         performance = run_page(PERFORMANCE_HARNESS.name, virtual_time=False)
         screenshot_page = HARNESS.name if args.screenshot_state == "browser" else f"{HARNESS.name}?state=menu"
         capture = capture_page(screenshot_page, args.screenshot) if args.screenshot else None
+        if capture is not None:
+            # A successful process alone does not prove that a screenshot
+            # captured the asynchronously imported UI rather than RUNNING.
+            for _attempt in range(2):
+                capture_result = re.search(r'<pre id="result"[^>]*>(.*?)</pre>', capture.stdout, re.DOTALL)
+                if capture.returncode != 0 or not capture_result or capture_result.group(1).strip() != "RUNNING":
+                    break
+                capture = capture_page(screenshot_page, args.screenshot)
     finally:
         server.shutdown()
         server.server_close()
@@ -187,7 +197,7 @@ def main() -> int:
     if performance.returncode != 0 or 'data-status="pass"' not in performance.stdout:
         detail = performance.stdout[-4000:] or performance.stderr[-4000:]
         raise RuntimeError(f"Frontend performance baseline failed (exit={performance.returncode}):\n{detail}")
-    if capture is not None and capture.returncode != 0:
+    if capture is not None and (capture.returncode != 0 or 'data-status="pass"' not in capture.stdout):
         detail = capture.stdout[-4000:] or capture.stderr[-4000:]
         raise RuntimeError(f"Frontend QA screenshot failed (exit={capture.returncode}):\n{detail}")
     metrics = re.search(r"PASS\s*(\{[^<]+\})", performance.stdout)

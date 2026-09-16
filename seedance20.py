@@ -2,6 +2,9 @@ import json
 from typing import Any
 
 import requests
+from .h3_quality import (QUALITY_OFF, QUALITY_OPTIONS, CREATION_OFF, CREATION_OPTIONS,
+                         normalize_quality, normalize_creation, creation_instruction)
+from .quality_pipeline import seedance_quality_result, retained_draft_provider
 from comfy_api.latest import io
 from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
     prepare_director_skill, director_instruction, coordinated_performance_instruction,
@@ -610,6 +613,7 @@ def _build_messages(
     performance_director_config: Any = None,
     character_performance_bible: Any = None,
     director_skill: Any = DIRECTOR_OFF,
+    creation_mode: Any = CREATION_OFF,
 ) -> list[dict[str, Any]]:
     skill_id, shot_count = prepare_director_skill(director_skill, shot_count)
     directional = skill_id != DIRECTOR_OFF
@@ -681,6 +685,9 @@ def _build_messages(
         system_rules.append(case_instruction)
     if directional:
         system_rules.append(director_instruction(skill_id, "seedance20"))
+    causal_rule = creation_instruction("seedance20", creation_mode)
+    if causal_rule:
+        system_rules.append(causal_rule)
     system_content = "\n\n".join(system_rules)
 
     user_lines = [
@@ -766,7 +773,14 @@ def enhance_seedance20_prompt(
     progress_callback: Any = None,
     provider_request_options: Any = None,
     director_skill: Any = DIRECTOR_OFF,
+    quality_mode: Any = QUALITY_OFF,
+    creation_mode: Any = CREATION_OFF,
 ) -> str:
+    try:
+        quality_mode = normalize_quality(quality_mode)
+        creation_mode = normalize_creation(creation_mode)
+    except ValueError as error:
+        raise Seedance20PromptEnhancerError(str(error)) from error
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
     shots = _normalize_shot_count(shot_count)
@@ -884,6 +898,7 @@ def enhance_seedance20_prompt(
                 performance_director_config,
                 character_performance_bible,
                 director_skill,
+                creation_mode,
             ), output_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -925,6 +940,7 @@ def enhance_seedance20_prompt(
                 performance_director_config,
                 character_performance_bible,
                 director_skill,
+                creation_mode,
             ), output_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -936,19 +952,29 @@ def enhance_seedance20_prompt(
                     "do not mention a later-phase identifier before its earlier-phase identifier has appeared."
                 )
             local_attempts = 1
-            with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
+            retained = {}
+            with retained_draft_provider(LocalQwenProvider(settings, vision=bool(media_plan)), retained,
+                                         enabled=quality_mode != QUALITY_OFF, progress=progress_callback) as provider:
                 result = provider.complete(
                     messages,
                     temperature={"strict": 0.2, "balanced": 0.7, "creative": 1.2}[rewrite_mode],
                     seed=int(seed),
                 )
-                if needs_local_language_repair(result, output_language):
+                if quality_mode == QUALITY_OFF and needs_local_language_repair(result, output_language):
                     result = provider.complete(
                         preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill),
                         temperature=0.1,
                         seed=int(seed),
                     )
                     local_attempts += 1
+                result, quality_metrics = seedance_quality_result(
+                    result, mode=quality_mode, messages=messages,
+                    complete=lambda correction: provider.complete(correction, temperature=0.1, seed=int(seed)),
+                    language=output_language, source="\n".join((str(prompt), cleaned["reference_context"], cleaned["constraints"])),
+                    shot_count=shots, progress=progress_callback,
+                )
+                local_attempts += quality_metrics.get("correction_calls", 0)
+                retained["draft"] = result
             if progress_callback:
                 progress_callback("llm_completed", attempts=local_attempts)
                 progress_callback("output_finalized")
@@ -1010,6 +1036,7 @@ def enhance_seedance20_prompt(
             performance_director_config,
             character_performance_bible,
             director_skill,
+            creation_mode,
         ), output_language)
         cloud_attempts: list[int] = []
         result = _request_completion(
@@ -1025,7 +1052,7 @@ def enhance_seedance20_prompt(
             recovery_component=recovery_component,
             recovery_slot=recovery_slot,
         )
-        if needs_local_language_repair(result, output_language):
+        if quality_mode == QUALITY_OFF and needs_local_language_repair(result, output_language):
             result = _request_completion(
                 session,
                 api_key,
@@ -1040,6 +1067,15 @@ def enhance_seedance20_prompt(
                 recovery_slot=recovery_slot,
                 temperature_override=0.1,
             )
+        result, _quality_metrics = seedance_quality_result(
+            result, mode=quality_mode, messages=messages,
+            complete=lambda correction: _request_completion(
+                session, api_key, correction, rewrite_mode, chat_url, provider_name, model_id,
+                attempts_callback=cloud_attempts.append, provider_request_options=provider_request_options,
+                recovery_component=recovery_component, recovery_slot=recovery_slot, temperature_override=0.1),
+            language=output_language, source="\n".join((str(prompt), cleaned["reference_context"], cleaned["constraints"])),
+            shot_count=shots, progress=progress_callback,
+        )
         if progress_callback:
             progress_callback("llm_completed", attempts=sum(cloud_attempts))
         if progress_callback:
@@ -1377,6 +1413,10 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 io.Combo.Input("director_skill", display_name="定向创作 Skill（T8，非官方） / Directional Skill",
                                options=DIRECTOR_OPTIONS, default=DIRECTOR_OPTIONS[0], optional=True,
                                tooltip="默认关闭，保留旧行为。开启时仅暂停其他场景模板，Seedance原有格式和用户事实不变；关闭恢复。长镜头需要1或AUTO。"),
+                io.Combo.Input("quality_mode", display_name="输出质量流程 / Quality", options=QUALITY_OPTIONS,
+                               default=QUALITY_OFF, optional=True, tooltip="Check只检查；Repair最多追加1次纠正，失败保留完整稿。沿用Seedance自然语言，不套H3格式。详情见脱敏诊断。"),
+                io.Combo.Input("creation_mode", display_name="动作编排 / Creation", options=CREATION_OPTIONS,
+                               default=CREATION_OFF, optional=True, tooltip="默认原有编排；因果优化在同次生成中补动作连接与状态继承，不新增规划调用，不覆盖事实和结束状态。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1446,6 +1486,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         recovery_slot="",
         recovery_action=RECOVERY_ACTION_NORMAL,
         director_skill=DIRECTOR_OFF,
+        quality_mode=QUALITY_OFF,
+        creation_mode=CREATION_OFF,
     ) -> io.NodeOutput:
         if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
             try:
@@ -1496,8 +1538,10 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_comfy_memory_policy = merged["local_comfy_memory_policy"]
         provider_request_options = merged["provider_request_options"]
         try:
+            quality_mode = normalize_quality(quality_mode)
+            creation_mode = normalize_creation(creation_mode)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
-        except DirectionalSkillError as error:
+        except (DirectionalSkillError, ValueError) as error:
             raise Seedance20PromptEnhancerError(str(error)) from error
         metadata = director_metadata(director_skill, language=output_language, mode="Seedance 2.0", shot_count=effective_shots)
         begin_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
@@ -1545,6 +1589,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 character_performance_bible=character_performance_bible,
                 performance_director_config=performance_director_config,
                 **({"director_skill": director_skill} if director_skill != DIRECTOR_OFF else {}),
+                **({"quality_mode": quality_mode} if quality_mode != QUALITY_OFF else {}),
+                **({"creation_mode": creation_mode} if creation_mode != CREATION_OFF else {}),
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
                 recovery_component="Seedance20PromptEnhancerT8",
@@ -1556,6 +1602,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
             raise
         complete_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, (result,))
         diagnostic.complete("success")
+        if quality_mode != QUALITY_OFF:
+            return io.NodeOutput(result, ui={"t8_quality_status": [json.dumps(diagnostic.quality_summary(), ensure_ascii=False)]})
         return io.NodeOutput(result)
 
 

@@ -28,7 +28,7 @@ FORBIDDEN_TRACKED = (
 )
 SECRET_RE = re.compile(rb"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{24,}")
 TEXT_SUFFIXES = {
-    ".css", ".html", ".ini", ".js", ".json", ".md", ".py", ".toml", ".txt", ".yaml", ".yml",
+    ".css", ".html", ".ini", ".js", ".mjs", ".json", ".md", ".py", ".toml", ".txt", ".yaml", ".yml",
 }
 PREVIEW_WARNING_BYTES = 80 * 1024 * 1024
 PREVIEW_CONFIRM_BYTES = 85 * 1024 * 1024
@@ -293,6 +293,9 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "official_skills/h3-prompt-writing/SKILL.md",
         "official_skills/music-caption-rewriter/SKILL.md",
         "directional_skills.py",
+        "h3_quality.py",
+        "quality_pipeline.py",
+        "web/js/h3_quality_ui.mjs",
         "web/js/h3_directional_skill_ui.mjs",
         *{f"directional_skills/{skill}/{name}" for skill in
           ("continuous_combat", "high_density_combat", "cinematic_gunfight")
