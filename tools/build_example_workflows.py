@@ -797,12 +797,15 @@ def build() -> None:
 
 
 def check() -> None:
+    from build_directional_skill_workflows import STEMS as directional_stems, check as check_directional
+
+    check_directional()
     expected_counts = {
         "MiniMaxH3PromptEnhancerT8": 31,
         "Seedance20PromptEnhancerT8": 35,
         "MiniMaxMusic3PromptEnhancerT8": 38,
     }
-    workflows = sorted(EXAMPLES.glob("*.json"))
+    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in directional_stems)
     if len(workflows) != 18:
         raise RuntimeError(f"Expected 18 example workflows, found {len(workflows)}")
     expected_inputs = {

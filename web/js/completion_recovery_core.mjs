@@ -38,7 +38,11 @@ export function ensureUniqueSlot(node, slotWidget) {
 
 export function recoveryMessage(status) {
     if (status.recoverable) {
-        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。";
+        const meta = status.creation_metadata;
+        const provenance = meta?.director_skill
+            ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
+            : "";
+        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance;
     }
     if (status.state === "ambiguous_partial") {
         return `上次请求返回途中断开，只收到 ${status.partial_chars || 0} 个字符；为防止把截断提示词当成完整结果，节点不会自动输出这段内容，也不会重新扣费。`;
@@ -84,6 +88,7 @@ export async function restoreCompletionResult({
             alertFn?.(recoveryMessage(status));
             return { queued: false, status };
         }
+        if (status.creation_metadata?.director_skill) alertFn?.(recoveryMessage(status));
         beforeQueue?.();
         actionWidget.value = RESTORE_ACTION;
         await queuePrompt(0, 1, [String(node.id)]);

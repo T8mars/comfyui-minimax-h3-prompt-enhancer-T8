@@ -3,7 +3,43 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
-## [Unreleased]
+## [1.18.0] - 2026-09-17
+
+### Added
+
+- Three independently adapted, opt-in T8 directional creation Skills in both
+  existing H3 and Seedance 2.0 enhancers: continuous combat, high-density
+  exchanges and fictional cinematic gunfight direction. Platform-native
+  formatting, provider channels, media roles and existing outputs remain.
+- Bilingual selector guidance and three parallel H3/Seedance example workflows.
+  Append-only optional storage preserves historical widget layouts; Off is default.
+- Recovery provenance identifies the original Skill instead of implying that
+  restoring a saved draft regenerates it with the currently selected Skill.
+
+### Fixed
+
+- H3 Inspector now distinguishes native base/reference field layouts and target
+  cut timing from retention metadata and quoted dialogue/visible text. It checks
+  speaker IDs and English vocal-language tags without rewriting the prompt.
+- Directional resource/count/ID validation happens before media/paid requests
+  or overwriting the previous recoverable result. Known IDs require strings.
+- Fixed-height directional help reserves its full footprint in modern DOM
+  widgets; switching Skills does not accumulate extra widgets or node height.
+- Fetch the exact frozen compatibility baseline in shallow CI checkouts, without
+  requiring the full GIF history or skipping legacy-request comparisons.
+
+### Validation scope
+
+- API text evidence is the creative acceptance basis. Local 9B verifies wiring,
+  parameter forwarding and unloading, not the standard for creative quality.
+  Execution/structure checks do not establish downstream rendered-video quality.
+
+### Known limitations
+
+- Real API samples can still localize H3 speaker/cut-header punctuation or omit
+  an explicitly requested wait interval. Check native protocol, exact dialogue,
+  ownership and ending; successful generation or a total score is not acceptance.
+  Directional Skills remain opt-in and Off preserves the original behavior.
 
 ## [1.17.2] - 2026-09-14
 

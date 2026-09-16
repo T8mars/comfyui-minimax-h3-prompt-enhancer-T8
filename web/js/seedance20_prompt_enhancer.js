@@ -8,6 +8,7 @@ import {
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
+import { addDirectionalSkillUI, directionalSkillId, directionalSkillLabel, isDirectionalSkillEnabled } from "./h3_directional_skill_ui.mjs";
 import {
     bindOpenAIProviderPersistence,
     namedWidgetValueMapByDiscriminator,
@@ -118,6 +119,7 @@ const LOCAL_WIDGET_NAMES = [
     "local_comfy_memory_policy",
 ];
 const PUBLISHED_WIDGET_NAMES = [...PUBLISHED_V1_WIDGET_NAMES, ...LOCAL_WIDGET_NAMES];
+const RUNTIME_LEGACY_WIDGET_NAMES = [...RUNTIME_V1_WIDGET_NAMES, ...LOCAL_WIDGET_NAMES];
 const SERIALIZED_WIDGET_NAMES = [
     "prompt",
     "task_intent",
@@ -154,6 +156,7 @@ const SERIALIZED_WIDGET_NAMES = [
     "local_video_sample_fps",
     "local_unload_policy",
     "local_comfy_memory_policy",
+    "director_skill",
 ];
 const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
@@ -165,13 +168,16 @@ const LOCAL_WIDGET_DEFAULTS = {
     local_video_sample_fps: 2.0,
     local_unload_policy: "执行后卸载（推荐）",
     local_comfy_memory_policy: "AUTO（显存不足时释放）",
+    director_skill: "关闭 / Off",
 };
 
 
 function serializedWidgetValueMap(values) {
     if (!Array.isArray(values)) return null;
     const layouts = values.length === SERIALIZED_WIDGET_NAMES.length
-        ? [SERIALIZED_WIDGET_NAMES, PUBLISHED_WIDGET_NAMES]
+        ? [SERIALIZED_WIDGET_NAMES]
+        : values.length === RUNTIME_LEGACY_WIDGET_NAMES.length
+            ? [RUNTIME_LEGACY_WIDGET_NAMES, PUBLISHED_WIDGET_NAMES]
         : values.length === RUNTIME_V1_WIDGET_NAMES.length
             ? [RUNTIME_V1_WIDGET_NAMES, PUBLISHED_V1_WIDGET_NAMES]
             : [];
@@ -181,7 +187,9 @@ function serializedWidgetValueMap(values) {
 
 function remapSerializedWidgetValues(values) {
     const source = serializedWidgetValueMap(values);
-    return remapNamedWidgetValues(SERIALIZED_WIDGET_NAMES, source, LOCAL_WIDGET_DEFAULTS, values);
+    const result = remapNamedWidgetValues(SERIALIZED_WIDGET_NAMES, source, LOCAL_WIDGET_DEFAULTS, values);
+    if (source) result[35] = directionalSkillLabel(result[35]);
+    return result;
 }
 
 
@@ -490,6 +498,7 @@ app.registerExtension({
             const promptModeWidget = find("prompt_mode");
             const templateWidget = find("reference_template");
             const caseTemplateWidget = find("case_template");
+            const directorSkillWidget = find("director_skill");
             const apiModeWidget = find("api_mode");
             const aiWorkshopModelWidget = find("ai_workshop_model");
             const customModelWidget = find("custom_model");
@@ -514,7 +523,7 @@ app.registerExtension({
                 this,
                 promptModeWidget,
                 templateWidget,
-                (value) => value === "参考模板融合",
+                (value) => value === "参考模板融合" && !isDirectionalSkillEnabled(directorSkillWidget?.value),
             );
             addApiModeBehavior(
                 this, apiModeWidget, baseUrlWidget, videoUrlsWidget,
@@ -529,6 +538,7 @@ app.registerExtension({
                 normalizeChoice(shotCountWidget, [AUTO_SHOT_COUNT, ...Array.from({ length: 20 }, (_, index) => String(index + 1))], AUTO_SHOT_COUNT);
                 normalizeChoice(outputLanguageWidget, ["中文", "English"], "中文");
                 normalizeChoice(promptModeWidget, ["官方优化", "参考模板融合"], "官方优化");
+                if (directorSkillWidget) directorSkillWidget.value = directionalSkillLabel(directorSkillWidget.value);
                 normalizeChoice(
                     apiModeWidget,
                     [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE],
@@ -541,8 +551,24 @@ app.registerExtension({
                 );
                 this.s20UpdateTemplate?.();
                 this.s20UpdateApiMode?.();
+                this.t8UpdateSkillPriority?.();
             };
             this.s20NormalizeOptions();
+
+            this.t8UpdateSkillPriority = () => {
+                if (isDirectionalSkillEnabled(directorSkillWidget?.value)) this.t8UpdateCaseTemplate?.(NO_CASE_TEMPLATE);
+                this.t8UpdateDirectionalSkill?.();
+                this.setDirtyCanvas?.(true, true);
+            };
+            addDirectionalSkillUI(this, directorSkillWidget, {
+                target: "seedance20",
+                onChange: (active) => {
+                    this.s20UpdateTemplate?.();
+                    this.t8UpdateCaseTemplate?.(active ? NO_CASE_TEMPLATE : undefined);
+                    this.t8UpdateSkillPriority?.();
+                    resizeNode(this);
+                },
+            });
 
             addCaseTemplateUI(this, caseTemplateWidget, promptWidget, () => resizeNode(this));
 
@@ -664,12 +690,13 @@ app.registerExtension({
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 25) {
                 args[0].widgets_values.splice(9, 0, NO_CASE_TEMPLATE);
             }
-            const restoredValues = serializedWidgetValueMap(args[0]?.widgets_values);
+            let restoredValues = serializedWidgetValueMap(args[0]?.widgets_values);
             if (Array.isArray(args[0]?.widgets_values)) {
                 args[0] = {
                     ...args[0],
                     widgets_values: remapSerializedWidgetValues(args[0].widgets_values),
                 };
+                if (restoredValues) restoredValues = serializedWidgetValueMap(args[0].widgets_values);
             }
             this.t8PendingCaseTemplateValue = restoredValues?.get("case_template")
                 ?? args[0]?.widgets_values?.[9];
@@ -704,7 +731,7 @@ app.registerExtension({
                 SERIALIZED_WIDGET_NAMES,
                 (name, value, widget) => name === "case_template"
                     ? serializedCaseTemplateValue(this, widget)
-                    : value,
+                    : name === "director_skill" ? directionalSkillId(value) : value,
             );
         };
     },

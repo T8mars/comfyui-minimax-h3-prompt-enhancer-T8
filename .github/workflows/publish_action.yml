@@ -24,6 +24,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: _source
+      - name: Fetch frozen directional compatibility baseline
+        run: git -C _source fetch --no-tags --depth=1 origin bfaae3ce13a8bdf3d4907146c13cfc280a2b2c36
       - name: Check out minimum supported ComfyUI
         uses: actions/checkout@v4
         with:

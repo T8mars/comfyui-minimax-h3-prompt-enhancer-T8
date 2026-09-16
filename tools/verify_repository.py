@@ -292,6 +292,11 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "web/js/preview_asset_ui.js",
         "official_skills/h3-prompt-writing/SKILL.md",
         "official_skills/music-caption-rewriter/SKILL.md",
+        "directional_skills.py",
+        "web/js/h3_directional_skill_ui.mjs",
+        *{f"directional_skills/{skill}/{name}" for skill in
+          ("continuous_combat", "high_density_combat", "cinematic_gunfight")
+          for name in ("SKILL.md", "meta.json")},
     }
     missing = sorted(required - shipped_relative)
     if missing:

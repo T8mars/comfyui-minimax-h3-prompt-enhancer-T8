@@ -6,6 +6,10 @@ import time
 from collections import deque
 from dataclasses import dataclass, field
 from typing import Any
+try:
+    from .completion_recovery import safe_director_metadata
+except ImportError:
+    from completion_recovery import safe_director_metadata
 
 try:
     from comfy.utils import ProgressBar
@@ -68,6 +72,9 @@ class DiagnosticsRun:
         for key in ("attempts", "asset_count", "cache_hit"):
             if key in safe_metrics:
                 event[key] = safe_metrics[key]
+        metadata = safe_director_metadata(safe_metrics.get("creation_metadata"))
+        if metadata:
+            event["creation_metadata"] = metadata
         self._stages.append(event)
         self._last = now
         if self._progress is not None:

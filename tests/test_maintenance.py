@@ -96,7 +96,15 @@ class MaintenanceTests(unittest.TestCase):
 
     def test_native_workflows_have_same_name_thumbnails(self):
         workflows = sorted((ROOT / "example_workflows").glob("*.json"))
-        self.assertEqual(len(workflows), 18)
+        with patch.object(sys, "path", [str(ROOT / "tools"), *sys.path]):
+            directional_examples = load_tool("t8_directional_examples", "build_directional_skill_workflows.py")
+        STEMS = directional_examples.STEMS
+        self.assertEqual(len(workflows), 21)
+        directional = [path for path in workflows if path.stem in STEMS]
+        self.assertEqual({path.stem for path in directional}, set(STEMS))
+        directional_examples.check()
+        workflows = [path for path in workflows if path.stem not in STEMS]
+        self.assertEqual(len(workflows), 18)  # Original 18 retain all thumbnail/field checks.
         seen_types = set()
         for workflow in workflows:
             with self.subTest(workflow=workflow.name):

@@ -88,6 +88,30 @@ test("partial recovery warns and never queues a provider run", async () => {
     assert.match(alerts[0], /不会重新扣费/);
 });
 
+test("restoring a directional draft shows its original provenance before queuing, not the current selection", async () => {
+    const { node, slotWidget, actionWidget } = fixture();
+    node.widgets.push({ name: "director_skill", value: "cinematic_gunfight" });
+    const events = [];
+    const status = { recoverable: true, state: "completed", creation_metadata: {
+        director_skill: "continuous_combat", director_revision: "1.0.0",
+        output_language: "中文", output_mode: "普通增强 / Normal", effective_shot_count: 1,
+    } };
+    const result = await restoreCompletionResult({
+        node, component: "MiniMaxH3PromptEnhancerT8", slotWidget, actionWidget,
+        fetchFn: async () => ({ ok: true, json: async () => status }),
+        alertFn: (message) => events.push(message),
+        queuePrompt: async () => events.push("queue"),
+    });
+    assert.equal(result.queued, true);
+    assert.equal(events.length, 2);
+    assert.match(events[0], /continuous_combat v1\.0\.0.*中文/);
+    assert.match(events[0], /恢复的是原稿，不是按当前 Skill 重新创作/);
+    assert.doesNotMatch(events[0], /cinematic_gunfight/);
+    assert.equal(events[1], "queue");
+    assert.equal(actionWidget.value, NORMAL_ACTION);
+    assert.equal(node.widgets.at(-1).value, "cinematic_gunfight");
+});
+
 
 test("status failure resets the action and does not queue", async () => {
     const { node, slotWidget, actionWidget } = fixture();

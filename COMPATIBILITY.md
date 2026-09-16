@@ -6,16 +6,24 @@ workflows use the current deterministic widget order.
 
 | Node ID | Current serialized widgets | Accepted 1.0.x layouts | Migration behavior | Stable outputs |
 | --- | ---: | --- | --- | --- |
-| `MiniMaxH3PromptEnhancerT8` | 35 | 16, 17, 19, or 21 values; also 22/31 | Preserves the first 31 widget positions and appends four optional Relay fields with Normal/0/0/empty defaults. Historical migrations remain; a removed upload URL is not reused as a video URL. | Slot 0 `enhanced_prompt`; appended global/local/time/length/report |
-| `Seedance20PromptEnhancerT8` | 35 | 23 or 25 values | Inserts the AI-Workshop model fields and case-template default; later 1.1 local-model controls use schema defaults. A removed `openai_upload_url` is not reused as a video URL. | `enhanced_prompt` |
+| `MiniMaxH3PromptEnhancerT8` | 36 | 16, 17, 19, or 21 values; also 22/31/35 | Preserves all prior 35 positions, including the four Relay fields, and appends `director_skill=none`. Historical migrations remain; a removed upload URL is not reused as a video URL. | Slot 0 `enhanced_prompt`; appended global/local/time/length/report |
+| `Seedance20PromptEnhancerT8` | 36 | 23 or 25 values; also both published/runtime 26/35 layouts | Maps historical values by name, preserving integer length, provider, seed and model fields; appends `director_skill=none`. A removed `openai_upload_url` is not reused as a video URL. | `enhanced_prompt` |
 | `MiniMaxMusic3PromptEnhancerT8` | 38 | Both published-order and ComfyUI runtime-order 31-value layouts | Detects the old layout from the API-mode position, maps values by widget name, then appends 1.1 local-model controls with defaults. | `lyrics`, `music_caption`, `music3_payload_json`, `enhancement_report_json` |
 
 Compatibility invariants:
 
+- The optional directional selector is appended after all prior H3/Seedance inputs and
+  serialized values. Its visual location after the case selector does not change stored
+  positions. Missing values default to Off; unknown IDs are retained for explicit backend
+  validation, never silently changed to another Skill. Old 35-value workflows now save 36
+  values. Off is covered by complete-message and full-pipeline comparisons with the prior
+  commit. On preserves each platform's native format and does not add a planning LLM call.
+  The three new text-only directional comparison examples have their own deterministic
+  checker; all original 18 examples keep their original thumbnail and widget checks.
 - Since 1.17.0, H3 appends `relay_mode`, `relay_event_count`, `relay_duration_seconds`,
   and `relay_time_ranges` after the original inputs. The three existing connection-only
   config sockets retain their indices and relative order. Existing 31-value workflows
-  load in Normal mode; saving uses 35 values. The historical contracts below describe
+  load in Normal mode; this originally saved 35 values (now 36 with directional Off). The historical contracts below describe
   their original introduction, not the current H3 total.
 - H3 output zero remains native `enhanced_prompt`. Five appended outputs are
   global/local/time STRINGs, an INT frame length, and a report STRING. Normal mode

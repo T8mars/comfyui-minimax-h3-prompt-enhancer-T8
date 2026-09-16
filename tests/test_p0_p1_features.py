@@ -130,7 +130,8 @@ class P0P1FeatureTests(unittest.TestCase):
             ],
         )
         for schema in schemas[:2]:
-            inputs = schema.inputs[:-4] if schema.node_id == "MiniMaxH3PromptEnhancerT8" else schema.inputs
+            self.assertEqual(schema.inputs[-1].id, "director_skill")
+            inputs = schema.inputs[:-5] if schema.node_id == "MiniMaxH3PromptEnhancerT8" else schema.inputs[:-1]
             self.assertEqual(inputs[-2].id, "provider_config")
             self.assertEqual(inputs[-1].id, "character_performance_bible")
         self.assertEqual(schemas[2].inputs[-1].id, "provider_config")
@@ -141,8 +142,8 @@ class P0P1FeatureTests(unittest.TestCase):
 
     def test_serialized_widget_contracts_append_relay_after_original_31(self):
         expected = {
-            "minimax_h3_prompt_enhancer.js": 35,
-            "seedance20_prompt_enhancer.js": 35,
+            "minimax_h3_prompt_enhancer.js": 36,
+            "seedance20_prompt_enhancer.js": 36,
             "music3_prompt_enhancer.js": 38,
         }
         for filename, count in expected.items():
@@ -151,15 +152,17 @@ class P0P1FeatureTests(unittest.TestCase):
             names = re.findall(r'^\s*"([A-Za-z0-9_]+)",?\s*$', block, re.MULTILINE)
             self.assertEqual(len(names), count, filename)
             self.assertEqual(len(names), len(set(names)), filename)
+            if filename != "music3_prompt_enhancer.js":
+                self.assertEqual(names[-1], "director_skill")
             if filename == "minimax_h3_prompt_enhancer.js":
-                self.assertEqual(names[31:], ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"])
+                self.assertEqual(names[31:35], ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"])
                 self.assertEqual(names[22:31], ["local_model", "local_mmproj", "local_context_size", "local_max_tokens", "local_think_mode", "local_reasoning_effort", "local_video_sample_fps", "local_unload_policy", "local_comfy_memory_policy"])
 
     def test_new_request_options_are_appended_after_existing_function_parameters(self):
         h3_names = list(inspect.signature(core_nodes.enhance_prompt).parameters)
         seedance_names = list(inspect.signature(seedance20.enhance_seedance20_prompt).parameters)
-        self.assertEqual(h3_names[-3:], ["progress_callback", "provider_request_options", "relay_config"])
-        self.assertEqual(seedance_names[-2:], ["progress_callback", "provider_request_options"])
+        self.assertEqual(h3_names[-4:], ["progress_callback", "provider_request_options", "relay_config", "director_skill"])
+        self.assertEqual(seedance_names[-3:], ["progress_callback", "provider_request_options", "director_skill"])
 
     def test_disconnected_provider_config_is_an_exact_behavioral_noop(self):
         original = {

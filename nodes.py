@@ -18,6 +18,15 @@ from PIL import Image
 from comfy_api.latest import ComfyExtension, io
 
 try:
+    from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
+        normalize_director_skill, prepare_director_skill, director_instruction,
+        coordinated_performance_instruction, template_fact_lookup, director_metadata, preserve_director_on_repair)
+except ImportError:
+    from directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
+        normalize_director_skill, prepare_director_skill, director_instruction,
+        coordinated_performance_instruction, template_fact_lookup, director_metadata, preserve_director_on_repair)
+
+try:
     from .h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response, relay_language_sections
 except ImportError:
     from h3_prompt_relay import NORMAL, RELAY, relay_instruction, compile_relay_response, relay_language_sections
@@ -1336,9 +1345,15 @@ def _build_messages(
     performance_director_config: Any = None,
     character_performance_bible: Any = None,
     relay_config: dict[str, Any] | None = None,
+    director_skill: Any = DIRECTOR_OFF,
 ) -> list[dict[str, Any]]:
+    skill_id, shot_count = prepare_director_skill(director_skill, shot_count)
+    directional = skill_id != DIRECTOR_OFF
+    if directional:
+        prompt_mode = "官方增强"
+        creative_preset = NO_CREATIVE_PRESET
     effective_language = _effective_output_language(output_language, official_skill_profile)
-    case_instruction = resolve_case_template(case_template, "h3", prompt)
+    case_instruction = "" if directional else resolve_case_template(case_template, "h3", prompt)
     effective_creative_preset = NO_CREATIVE_PRESET if case_instruction else creative_preset
     system_rules = [
         COMMON_SYSTEM_RULES,
@@ -1363,10 +1378,11 @@ def _build_messages(
             constraints,
         ),
     ]
-    performance_rule = h3_performance_instruction(
-        performance_director_config,
-        fixed_shot_count=shot_count,
-        source_prompt=prompt,
+    performance_rule = (
+        coordinated_performance_instruction(performance_director_config, source_prompt=prompt,
+                                           shot_count=shot_count, model_target="MiniMax H3")
+        if directional else h3_performance_instruction(
+            performance_director_config, fixed_shot_count=shot_count, source_prompt=prompt)
     )
     if performance_rule:
         system_rules.append(performance_rule)
@@ -1379,6 +1395,8 @@ def _build_messages(
     if case_instruction:
         system_rules.append(T8_CASE_PRECEDENCE_RULE)
         system_rules.append(case_instruction)
+    if directional:
+        system_rules.append(director_instruction(skill_id, "h3"))
     if relay_config:
         system_rules.append(relay_instruction(
             duration_seconds, relay_config["event_count"], relay_config["time_ranges"], task_type,
@@ -1402,6 +1420,10 @@ def _build_messages(
         effective_creative_preset,
     )
     user_content: str | list[dict[str, Any]]
+    if directional:
+        fact_lookup = template_fact_lookup(prompt, reference_template, reference_context, constraints)
+        if fact_lookup:
+            user_text += "\n" + fact_lookup
     if media_parts:
         user_content = [{"type": "text", "text": user_text}, *media_parts]
     else:
@@ -1536,8 +1558,10 @@ def _reorder_complete_fields(text: str, task_type: str) -> str:
     return prefix + "\n\n".join(f"{field}: {sections[field]}" for field in fields)
 
 
-def _h3_language_repair_messages(text, language, relay_config):
+def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF):
     messages = local_language_repair_messages(text, language)
+    if original_messages is not None:
+        messages = preserve_director_on_repair(messages, original_messages, director_skill)
     if relay_config:
         messages[0]["content"] += (
             "\nKeep the complete Relay JSON object and its keys, events, weights and end_state fields. "
@@ -1595,7 +1619,7 @@ def _relay_repair_messages(text, duration, config, task_type, messages):
 
 
 def _next_relay_correction(
-    text, duration, config, task_type, messages, language, *, format_used, language_used,
+    text, duration, config, task_type, messages, language, *, format_used, language_used, director_skill=DIRECTOR_OFF,
 ):
     repair = _relay_repair_messages(text, duration, config, task_type, messages)
     if repair:
@@ -1609,7 +1633,7 @@ def _next_relay_correction(
             raise PromptEnhancerError(
                 "Prompt Relay descriptive fields still do not match the selected output language after one correction."
             )
-        return "language", _h3_language_repair_messages(text, language, config)
+        return "language", _h3_language_repair_messages(text, language, config, messages, director_skill)
     return None
 
 
@@ -1656,9 +1680,15 @@ def enhance_prompt(
     progress_callback: Any = None,
     provider_request_options: Any = None,
     relay_config: dict[str, Any] | None = None,
+    director_skill: Any = DIRECTOR_OFF,
 ) -> str:
     task_type = _canonical_task_type(task_type)
     shot_count = _normalize_shot_count(shot_count)
+    try:
+        director_skill, shot_count = prepare_director_skill(director_skill, shot_count)
+    except DirectionalSkillError as error:
+        raise PromptEnhancerError(str(error)) from error
+    directional = director_skill != DIRECTOR_OFF
     try:
         duration_seconds = float(duration_seconds) if relay_config else int(duration_seconds)
     except (TypeError, ValueError) as error:
@@ -1672,9 +1702,9 @@ def enhance_prompt(
     output_language = str(output_language or "中文")
     prompt_mode = str(prompt_mode or "官方增强")
     official_skill_profile = str(official_skill_profile or COMPAT_SKILL_PROFILE)
-    creative_preset = _canonical_creative_preset(creative_preset)
+    creative_preset = NO_CREATIVE_PRESET if directional else _canonical_creative_preset(creative_preset)
     try:
-        case_template = canonical_case_template_label(case_template)
+        case_template = NO_CASE_TEMPLATE if directional else canonical_case_template_label(case_template)
     except ValueError as exc:
         raise PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
     try:
@@ -1715,6 +1745,8 @@ def enhance_prompt(
     if API_KEY_PATTERN.search(str(prompt or "")):
         raise PromptEnhancerError("Remove the API-key-like secret from prompt before running this node.")
     effective_api_mode = str(api_mode or SEEDANCE_API_MODE)
+    if directional:
+        prompt_mode = "官方增强"
     media_plan = _validate_inputs(
         prompt,
         task_type,
@@ -1734,7 +1766,9 @@ def enhance_prompt(
         MAX_FILE_BYTES if effective_api_mode == SEEDANCE_API_MODE else None,
     )
     if progress_callback:
-        progress_callback("input_validated", asset_count=len(media_plan))
+        metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
+                                     mode=RELAY if relay_config else NORMAL, shot_count=shot_count)
+        progress_callback("input_validated", asset_count=len(media_plan), **({"creation_metadata": metadata} if metadata else {}))
     if is_local_qwen_api_mode(effective_api_mode):
         try:
             settings = local_qwen_settings(
@@ -1772,6 +1806,7 @@ def enhance_prompt(
                 performance_director_config,
                 character_performance_bible,
                 relay_config,
+                director_skill,
             ), effective_local_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -1809,6 +1844,7 @@ def enhance_prompt(
                 performance_director_config,
                 character_performance_bible,
                 relay_config,
+                director_skill,
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -1829,6 +1865,7 @@ def enhance_prompt(
                         correction = _next_relay_correction(
                             response_text, duration_seconds, relay_config, task_type, messages,
                             effective_local_language, format_used=format_used, language_used=language_used,
+                            director_skill=director_skill,
                         )
                         if correction is None:
                             break
@@ -1841,7 +1878,7 @@ def enhance_prompt(
                         language_used = language_used or kind == "language"
                 elif needs_local_language_repair(response_text, effective_local_language):
                     response_text = provider.complete(
-                        _h3_language_repair_messages(response_text, effective_local_language, relay_config),
+                        _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -1902,6 +1939,7 @@ def enhance_prompt(
             performance_director_config,
             character_performance_bible,
             relay_config,
+            director_skill,
         ), effective_cloud_language)
         cloud_attempts: list[int] = []
         response_text = _request_completion(
@@ -1923,6 +1961,7 @@ def enhance_prompt(
                 correction = _next_relay_correction(
                     response_text, duration_seconds, relay_config, task_type, messages,
                     effective_cloud_language, format_used=format_used, language_used=language_used,
+                    director_skill=director_skill,
                 )
                 if correction is None:
                     break
@@ -1940,7 +1979,7 @@ def enhance_prompt(
             response_text = _request_completion(
                 session,
                 api_key,
-                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config),
+                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config, messages, director_skill),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -2270,6 +2309,9 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 io.Float.Input("relay_duration_seconds", display_name="Relay 精确秒数（0=沿用目标时长）", default=0, min=0, step=0.01, optional=True),
                 io.String.Input("relay_time_ranges", display_name="Relay 指定时间（选填）", default="", multiline=True, optional=True,
                                 tooltip="每行十进制秒 start-end，例如 0-2.5。留空自动安排；填写时必须连续覆盖成片时长。24 FPS，补齐帧只延续结尾。"),
+                io.Combo.Input("director_skill", display_name="定向创作 Skill（T8，非官方） / Directional Skill",
+                               options=DIRECTOR_OPTIONS, default=DIRECTOR_OPTIONS[0], optional=True,
+                               tooltip="默认关闭，保留旧行为。开启时仅暂停其他场景模板，H3格式和用户事实不变；关闭恢复。长镜头需要1或AUTO镜头数。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt"),
                      io.String.Output(display_name="global_prompt"),
@@ -2346,6 +2388,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         relay_event_count=0,
         relay_duration_seconds=0,
         relay_time_ranges="",
+        director_skill=DIRECTOR_OFF,
     ) -> io.NodeOutput:
         if relay_mode not in (NORMAL, RELAY):
             raise PromptEnhancerError("Unsupported Relay output mode.")
@@ -2408,7 +2451,14 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         local_unload_policy = merged["local_unload_policy"]
         local_comfy_memory_policy = merged["local_comfy_memory_policy"]
         provider_request_options = merged["provider_request_options"]
-        begin_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, api_mode)
+        # Invalid directional preflight must not replace a previously paid result.
+        try:
+            director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
+        except DirectionalSkillError as error:
+            raise PromptEnhancerError(str(error)) from error
+        metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
+                                     mode=relay_mode, shot_count=effective_shots)
+        begin_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("MiniMaxH3PromptEnhancerT8", api_mode, 4)
         try:
             result = enhance_prompt(
@@ -2453,6 +2503,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 recovery_component="MiniMaxH3PromptEnhancerT8",
                 recovery_slot=recovery_slot,
                 **({"relay_config": relay_config} if relay_enabled else {}),
+                **({"director_skill": director_skill} if director_skill != DIRECTOR_OFF else {}),
             )
             if relay_enabled:
                 compiled = compile_relay_response(result, duration_seconds, relay_config["event_count"], relay_config["time_ranges"], _canonical_task_type(task_type), _effective_output_language(output_language, official_skill_profile))

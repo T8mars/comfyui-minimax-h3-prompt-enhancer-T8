@@ -3,6 +3,9 @@ from typing import Any
 
 import requests
 from comfy_api.latest import io
+from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
+    prepare_director_skill, director_instruction, coordinated_performance_instruction,
+    template_fact_lookup, director_metadata, preserve_director_on_repair)
 from .completion_recovery import (
     RECOVERY_ACTION_NORMAL,
     RECOVERY_ACTION_RESTORE,
@@ -606,7 +609,12 @@ def _build_messages(
     case_template: str,
     performance_director_config: Any = None,
     character_performance_bible: Any = None,
+    director_skill: Any = DIRECTOR_OFF,
 ) -> list[dict[str, Any]]:
+    skill_id, shot_count = prepare_director_skill(director_skill, shot_count)
+    directional = skill_id != DIRECTOR_OFF
+    if directional:
+        prompt_mode = "官方优化"
     complexity_rules = {
         "AUTO（自动判断）": (
             "Complexity: AUTO. Editing, extension, track-fill, and a single continuous event normally use one compact "
@@ -654,10 +662,11 @@ def _build_messages(
         _stability_instruction(stability_constraints),
         prompt_mode_rule,
     ]
-    performance_rule = seedance_performance_instruction(
-        performance_director_config,
-        fixed_shot_count=shot_count,
-        source_prompt=prompt,
+    performance_rule = (
+        coordinated_performance_instruction(performance_director_config, source_prompt=prompt,
+                                           shot_count=shot_count, model_target="Seedance 2.0")
+        if directional else seedance_performance_instruction(
+            performance_director_config, fixed_shot_count=shot_count, source_prompt=prompt)
     )
     if performance_rule:
         system_rules.append(performance_rule)
@@ -667,9 +676,11 @@ def _build_messages(
     )
     if character_rule:
         system_rules.append(character_rule)
-    case_instruction = resolve_case_template(case_template, "seedance20", prompt)
+    case_instruction = "" if directional else resolve_case_template(case_template, "seedance20", prompt)
     if case_instruction:
         system_rules.append(case_instruction)
+    if directional:
+        system_rules.append(director_instruction(skill_id, "seedance20"))
     system_content = "\n\n".join(system_rules)
 
     user_lines = [
@@ -693,6 +704,10 @@ def _build_messages(
             json.dumps(str(reference_template).strip(), ensure_ascii=False),
         ])
     user_text = "\n".join(user_lines)
+    if directional:
+        fact_lookup = template_fact_lookup(prompt, reference_template, reference_context, constraints)
+        if fact_lookup:
+            user_text += "\n" + fact_lookup
     user_content: str | list[dict[str, Any]]
     if media_parts:
         user_content = [{"type": "text", "text": user_text}, *media_parts]
@@ -750,20 +765,28 @@ def enhance_seedance20_prompt(
     recovery_slot: str = "",
     progress_callback: Any = None,
     provider_request_options: Any = None,
+    director_skill: Any = DIRECTOR_OFF,
 ) -> str:
     task_intent = _canonical_task_intent(task_intent)
     duration = _normalize_duration(duration_seconds)
     shots = _normalize_shot_count(shot_count)
+    try:
+        director_skill, shots = prepare_director_skill(director_skill, shots)
+    except DirectionalSkillError as error:
+        raise Seedance20PromptEnhancerError(str(error)) from error
+    directional = director_skill != DIRECTOR_OFF
     complexity_mode = str(complexity_mode or COMPLEXITY_OPTIONS[0])
     output_detail = str(output_detail or OUTPUT_DETAILS[0])
     output_language = str(output_language or "中文")
     prompt_mode = str(prompt_mode or "官方优化")
+    if directional:
+        prompt_mode = "官方优化"
     reference_syntax = str(reference_syntax or REFERENCE_SYNTAXES[0])
     subtitle_policy = str(subtitle_policy or SUBTITLE_POLICIES[0])
     stability_constraints = str(stability_constraints or STABILITY_POLICIES[0])
     custom_length_target = int(custom_length_target or 0)
     try:
-        case_template = canonical_case_template_label(case_template)
+        case_template = NO_CASE_TEMPLATE if directional else canonical_case_template_label(case_template)
     except ValueError as exc:
         raise Seedance20PromptEnhancerError(f"Unsupported case_template: {case_template}") from exc
     try:
@@ -821,7 +844,8 @@ def enhance_seedance20_prompt(
         MAX_FILE_BYTES if effective_api_mode == SEEDANCE_API_MODE else None,
     )
     if progress_callback:
-        progress_callback("input_validated", asset_count=len(media_plan))
+        metadata = director_metadata(director_skill, language=output_language, mode="Seedance 2.0", shot_count=shots)
+        progress_callback("input_validated", asset_count=len(media_plan), **({"creation_metadata": metadata} if metadata else {}))
     if is_local_qwen_api_mode(effective_api_mode):
         try:
             settings = local_qwen_settings(
@@ -859,6 +883,7 @@ def enhance_seedance20_prompt(
                 case_template,
                 performance_director_config,
                 character_performance_bible,
+                director_skill,
             ), output_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -899,6 +924,7 @@ def enhance_seedance20_prompt(
                 case_template,
                 performance_director_config,
                 character_performance_bible,
+                director_skill,
             ), output_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -918,7 +944,7 @@ def enhance_seedance20_prompt(
                 )
                 if needs_local_language_repair(result, output_language):
                     result = provider.complete(
-                        local_language_repair_messages(result, output_language),
+                        preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -983,6 +1009,7 @@ def enhance_seedance20_prompt(
             case_template,
             performance_director_config,
             character_performance_bible,
+            director_skill,
         ), output_language)
         cloud_attempts: list[int] = []
         result = _request_completion(
@@ -1002,7 +1029,7 @@ def enhance_seedance20_prompt(
             result = _request_completion(
                 session,
                 api_key,
-                local_language_repair_messages(result, output_language),
+                preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -1347,6 +1374,9 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     optional=True,
                     tooltip="连接 T8 Character Performance Bible；不新增请求，只向本次人物表演编译提供权威目标、阻力、策略和身体惯性。",
                 ),
+                io.Combo.Input("director_skill", display_name="定向创作 Skill（T8，非官方） / Directional Skill",
+                               options=DIRECTOR_OPTIONS, default=DIRECTOR_OPTIONS[0], optional=True,
+                               tooltip="默认关闭，保留旧行为。开启时仅暂停其他场景模板，Seedance原有格式和用户事实不变；关闭恢复。长镜头需要1或AUTO。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1415,6 +1445,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         provider_config=None,
         recovery_slot="",
         recovery_action=RECOVERY_ACTION_NORMAL,
+        director_skill=DIRECTOR_OFF,
     ) -> io.NodeOutput:
         if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
             try:
@@ -1464,7 +1495,12 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         local_unload_policy = merged["local_unload_policy"]
         local_comfy_memory_policy = merged["local_comfy_memory_policy"]
         provider_request_options = merged["provider_request_options"]
-        begin_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, api_mode)
+        try:
+            director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
+        except DirectionalSkillError as error:
+            raise Seedance20PromptEnhancerError(str(error)) from error
+        metadata = director_metadata(director_skill, language=output_language, mode="Seedance 2.0", shot_count=effective_shots)
+        begin_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("Seedance20PromptEnhancerT8", api_mode, 4)
         try:
             result = enhance_seedance20_prompt(
@@ -1508,6 +1544,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 local_comfy_memory_policy=local_comfy_memory_policy,
                 character_performance_bible=character_performance_bible,
                 performance_director_config=performance_director_config,
+                **({"director_skill": director_skill} if director_skill != DIRECTOR_OFF else {}),
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
                 recovery_component="Seedance20PromptEnhancerT8",

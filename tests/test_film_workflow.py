@@ -69,13 +69,15 @@ class FilmWorkflowTests(unittest.TestCase):
         longform_ids = [item.id for item in creative.T8LongFormPlanner.define_schema().inputs]
         storyboard_ids = [item.id for item in creative.T8StoryboardPack.define_schema().inputs]
         self.assertEqual(
-            h3_ids[-7:-4],
+            h3_ids[-8:-5],
             ["performance_director_config", "provider_config", "character_performance_bible"],
         )
         self.assertEqual(
-            seedance_ids[-3:],
+            seedance_ids[-4:-1],
             ["performance_director_config", "provider_config", "character_performance_bible"],
         )
+        self.assertEqual(h3_ids[-1], "director_skill")
+        self.assertEqual(seedance_ids[-1], "director_skill")
         self.assertEqual(longform_ids[-2:], ["film_project_state", "contract_failure_policy"])
         self.assertLess(longform_ids.index("provider_config"), longform_ids.index("film_project_state"))
         self.assertEqual(
@@ -224,6 +226,7 @@ class FilmWorkflowTests(unittest.TestCase):
     def test_character_bible_is_connection_only_for_both_core_nodes(self):
         for node in (h3.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
             ids = [item.id for item in node.define_schema().inputs]
+            self.assertEqual(ids.pop(), "director_skill")
             if node is h3.MiniMaxH3PromptEnhancer:
                 self.assertEqual(ids[-4:], ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"])
                 ids = ids[:-4]

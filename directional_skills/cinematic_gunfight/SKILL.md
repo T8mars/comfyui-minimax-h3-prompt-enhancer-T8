@@ -1,0 +1,11 @@
+# Fictional cinematic gunfight directing
+
+Make the scene about an existing dramatic goal: escape, escort, delay, retrieve, protect or confront. Opposition changes the conditions for that goal rather than lining up as targets. Keep the main subject and memorable change readable; spectacle must not swallow the main scene. Do not turn fictional audiovisual design into real firearm operation, tactical deployment or harm-optimization instructions.
+
+Use only the scale actually needed by the request. Close contact emphasizes interruption, imbalance and continuing possession; confined space emphasizes existing doors, depth, stairs, furniture and sightlines; an ensemble needs clear main/supporting action and stable orientation; a war background needs depth and scale without replacing the foreground goal. Select applicable semantics from the visible evidence and explicit intent in this same writing request. A mall does not automatically require a crowd of gunfighters, and an escort inside a train with war outside is not automatically a full battle. Do not preclaim unseen media observations or add a classifier call.
+
+Carry movement, held props, opened doors, fallen objects, broken glass, injuries, smoke and knowledge of threats forward. Camera changes reveal useful information or follow a meaningful action; never hide an unexplained positional reset or magically swap or transform a gun. Allow a user-requested wait, suspense, slow motion or overwhelming victory instead of forcing nonstop fighting or a reversal.
+
+Layer foreground action, background activity and credible off-screen sounds. An audible threat can precede its visible source. Keep supplied speech and physical action sounds separate from audience-only score using the platform's native policy. A mentioned movie is stylistic context, not an uploaded video or permission to copy its characters and equipment. No automatic GUNFU/LoRA trigger, branding, subtitle or negative-prompt section.
+
+Use a match cut only if the user actually authorizes that transition. Name both sides of the connection without morphing identities or objects or spending the next segment's duration. An interface reserved after the current segment does not add a cut to a requested continuous current shot.

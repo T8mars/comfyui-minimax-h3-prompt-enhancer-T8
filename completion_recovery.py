@@ -33,6 +33,7 @@ class RecoveryRecord:
     outputs: tuple[str, ...] = ()
     response_id: str = ""
     error_type: str = ""
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 _RECORDS: OrderedDict[tuple[str, str], RecoveryRecord] = OrderedDict()
@@ -71,12 +72,30 @@ def _prune_locked(now: float | None = None) -> None:
         _RECORDS.popitem(last=False)
 
 
-def begin_recovery_record(component: Any, slot: Any, provider: Any) -> bool:
+def safe_director_metadata(values: Any) -> dict[str, Any]:
+    if not isinstance(values, dict):
+        return {}
+    allowed = {
+        "director_skill": {"continuous_combat", "high_density_combat", "cinematic_gunfight"},
+        "director_revision": {"1.0.0"},
+        "output_language": {"中文", "English"},
+        "output_mode": {"普通增强 / Normal", "Prompt Relay 编排", "Seedance 2.0"},
+    }
+    result = {key: values[key] for key, options in allowed.items()
+              if isinstance(values.get(key), str) and values[key] in options}
+    count = values.get("effective_shot_count")
+    if isinstance(count, int) and not isinstance(count, bool) and 0 <= count <= 20:
+        result["effective_shot_count"] = count
+    return result if "director_skill" in result else {}
+
+
+def begin_recovery_record(component: Any, slot: Any, provider: Any, *, metadata: Any = None) -> bool:
     component_name = _safe_component(component)
     slot_name = _safe_slot(slot)
     if not slot_name:
         return False
-    record = RecoveryRecord(component=component_name, slot=slot_name, provider=_safe_provider(provider))
+    record = RecoveryRecord(component=component_name, slot=slot_name, provider=_safe_provider(provider),
+                            metadata=safe_director_metadata(metadata))
     with _LOCK:
         _prune_locked()
         key = (component_name, slot_name)
@@ -215,6 +234,7 @@ def recovery_status(component: Any, slot: Any) -> dict[str, Any]:
             "age_seconds": max(0, round(time.time() - record.updated_at)),
             "memory_only": True,
             "error_type": record.error_type,
+            **({"creation_metadata": dict(record.metadata)} if record.metadata else {}),
         }
 
 

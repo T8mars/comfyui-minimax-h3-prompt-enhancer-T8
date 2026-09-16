@@ -9,6 +9,7 @@ import {
 import { showRedactedDiagnostics } from "./diagnostics_viewer.mjs";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
 import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
+import { addDirectionalSkillUI, directionalSkillId, directionalSkillLabel, isDirectionalSkillEnabled } from "./h3_directional_skill_ui.mjs";
 import {
     bindOpenAIProviderPersistence,
     expandNamedWidgetValues,
@@ -113,6 +114,7 @@ const SERIALIZED_WIDGET_NAMES = [
     "relay_event_count",
     "relay_duration_seconds",
     "relay_time_ranges",
+    "director_skill",
 ];
 const LOCAL_WIDGET_DEFAULTS = {
     local_model: "Qwen3.8-27B-Q4_K_M.gguf",
@@ -128,6 +130,7 @@ const LOCAL_WIDGET_DEFAULTS = {
     relay_event_count: 0,
     relay_duration_seconds: 0,
     relay_time_ranges: "",
+    director_skill: "关闭 / Off",
 };
 
 
@@ -208,7 +211,7 @@ function addMvPresetBehavior(node, presetWidget, promptWidget, referenceContextW
     }
 
     const update = (preset = presetWidget.value) => {
-        const isMv = preset === MV_CREATIVE_PRESET;
+        const isMv = preset === MV_CREATIVE_PRESET && !isDirectionalSkillEnabled(node.widgets?.find((widget) => widget.name === "director_skill")?.value);
         for (const [widget, mvTooltip, mvPlaceholder] of tracked) {
             widget.tooltip = isMv ? mvTooltip : widget.t8MvOriginalTooltip;
             const input = getWidgetInput(widget);
@@ -258,7 +261,7 @@ function addReferenceTemplateBehavior(node, modeWidget, templateWidget) {
         if (LEGACY_UI_VALUES.has(String(templateWidget.value || "").trim())) {
             setTextWidgetValue(templateWidget, "");
         }
-        setWidgetVisible(templateWidget, mode === "参考模板融合");
+        setWidgetVisible(templateWidget, mode === "参考模板融合" && !isDirectionalSkillEnabled(node.widgets?.find((widget) => widget.name === "director_skill")?.value));
         resizeNode(node);
     };
     const originalCallback = modeWidget.callback;
@@ -545,6 +548,7 @@ app.registerExtension({
             const officialSkillProfileWidget = this.widgets?.find((widget) => widget.name === "official_skill_profile");
             const creativePresetWidget = this.widgets?.find((widget) => widget.name === "creative_preset");
             const caseTemplateWidget = this.widgets?.find((widget) => widget.name === "case_template");
+            const directorSkillWidget = this.widgets?.find((widget) => widget.name === "director_skill");
             const referenceTemplateWidget = this.widgets?.find((widget) => widget.name === "reference_template");
             const referenceContextWidget = this.widgets?.find((widget) => widget.name === "reference_context");
             const constraintsWidget = this.widgets?.find((widget) => widget.name === "constraints");
@@ -582,18 +586,25 @@ app.registerExtension({
 
             this.t8IsT8CaseTemplateActive = () => {
                 const value = String(caseTemplateWidget?.value || "").trim();
-                return Boolean(value && value !== NO_CASE_TEMPLATE);
+                return isDirectionalSkillEnabled(directorSkillWidget?.value) || Boolean(value && value !== NO_CASE_TEMPLATE);
             };
             this.t8UpdateSkillPriority = () => {
                 if (!creativePresetWidget) return;
+                const directionalActive = isDirectionalSkillEnabled(directorSkillWidget?.value);
                 const t8Active = this.t8IsT8CaseTemplateActive();
-                creativePresetWidget.label = t8Active
+                creativePresetWidget.label = directionalActive
+                    ? "MiniMax 官方场景 Skill（定向技能优先，当前停用）"
+                    : t8Active
                     ? "MiniMax 官方场景 Skill（T8 优先，当前停用）"
                     : "MiniMax 官方场景 Skill（8 个可选）";
-                creativePresetWidget.tooltip = t8Active
+                creativePresetWidget.tooltip = directionalActive
+                    ? "当前使用独立定向创作 Skill；官方场景选择已保留，关闭定向技能后恢复。H3 核心格式仍生效。"
+                    : t8Active
                     ? "已选择 T8 非官方模板：本次只应用 T8 模板，8 个可选官方场景 Skill（包括 AUTO）暂不生效；H3 核心写作 Skill 仍始终启用。取消 T8 模板后，本项自动恢复。"
                     : "选择一个官方场景 Skill 后，节点下方会显示用途、推荐输入、结构锚点、官方 GIF 与来源；GIF 不会发送给 LLM。选择 T8 非官方模板时，T8 模板优先，本项暂不生效。";
                 this.t8UpdateOfficialPreset?.();
+                if (directionalActive) this.t8UpdateCaseTemplate?.(NO_CASE_TEMPLATE);
+                this.t8UpdateDirectionalSkill?.();
                 this.setDirtyCanvas?.(true, true);
             };
 
@@ -620,6 +631,7 @@ app.registerExtension({
                     creativePresetWidget.value = MV_CREATIVE_PRESET;
                 }
                 normalizeChoice(creativePresetWidget, CREATIVE_PRESET_OPTIONS, NO_CREATIVE_PRESET);
+                if (directorSkillWidget) directorSkillWidget.value = directionalSkillLabel(directorSkillWidget.value);
                 normalizeChoice(
                     apiModeWidget,
                     [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE],
@@ -647,6 +659,17 @@ app.registerExtension({
                 this.t8UpdateRelayMode?.();
             };
             this.t8NormalizePromptOptions();
+
+            addDirectionalSkillUI(this, directorSkillWidget, {
+                target: "h3",
+                onChange: (active) => {
+                    this.t8UpdateReferenceTemplate?.();
+                    this.t8UpdateMvPreset?.();
+                    this.t8UpdateCaseTemplate?.(active ? NO_CASE_TEMPLATE : undefined);
+                    this.t8UpdateSkillPriority?.();
+                    resizeNode(this);
+                },
+            });
 
             addOfficialPresetUI(this, creativePresetWidget, promptWidget, () => resizeNode(this));
             addCaseTemplateUI(this, caseTemplateWidget, promptWidget, () => resizeNode(this));
@@ -778,10 +801,10 @@ app.registerExtension({
             if (Array.isArray(args[0]?.widgets_values) && args[0].widgets_values.length === 21) {
                 args[0].widgets_values.splice(10, 0, NO_CASE_TEMPLATE);
             }
-            const restoredValues = namedWidgetValueMap(
+            let restoredValues = namedWidgetValueMap(
                 SERIALIZED_WIDGET_NAMES,
                 args[0]?.widgets_values,
-                [22, 31, SERIALIZED_WIDGET_NAMES.length],
+                [22, 31, 35, SERIALIZED_WIDGET_NAMES.length],
             );
             if (restoredValues) {
                 args[0] = {
@@ -790,9 +813,13 @@ app.registerExtension({
                         SERIALIZED_WIDGET_NAMES,
                         args[0].widgets_values,
                         LOCAL_WIDGET_DEFAULTS,
-                        [22, 31, SERIALIZED_WIDGET_NAMES.length],
+                        [22, 31, 35, SERIALIZED_WIDGET_NAMES.length],
                     ),
                 };
+                args[0].widgets_values[35] = directionalSkillLabel(args[0].widgets_values[35]);
+                // Restore appended defaults by name as well: the optional
+                // director control is displayed beside templates, not at the end.
+                restoredValues = namedWidgetValueMap(SERIALIZED_WIDGET_NAMES, args[0].widgets_values);
             }
             if (Array.isArray(args[0]?.widgets_values)) {
                 this.t8PendingCaseTemplateValue = args[0].widgets_values[10];
@@ -826,7 +853,7 @@ app.registerExtension({
                 SERIALIZED_WIDGET_NAMES,
                 (name, value, widget) => name === "case_template"
                     ? serializedCaseTemplateValue(this, widget)
-                    : value,
+                    : name === "director_skill" ? directionalSkillId(value) : value,
             );
         };
     },

@@ -4,6 +4,12 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: H3 / Seedance directional creation Skills
+
+The existing H3 and Seedance 2.0 enhancers now offer three independent, opt-in methods: **Continuous combat, High-density combat, and Cinematic gunfight**. Off remains the default. These non-official creative methods retain each platform's native format, providers and outputs without extra wiring. While enabled, they pause old case/manual-template choreography and optional H3 scene presets for the current request; saved choices resume when switched off. Continuous combat resolves AUTO to one shot and rejects an explicit count above one before paid calls.
+
+[Concise bilingual guide](docs/directional-skills.md) · Side-by-side cloud examples: [Continuous combat](example_workflows/directional_continuous_combat_comparison.json) / [High-density combat](example_workflows/directional_high_density_combat_comparison.json) / [Cinematic gunfight](example_workflows/directional_cinematic_gunfight_comparison.json). Keys are blank. Running the full graph invokes both text enhancers; the Skill itself adds no planning or scoring call, while existing repairs/retries may still run.
+
 ## New: H3 Prompt Relay authoring
 
 The existing H3 enhancer has an opt-in Relay mode: global prompt, event prompts, seconds ranges, aligned frame count and a validation report. Normal mode and the original first output keep their purpose. Existing cloud/local providers remain available; text authoring does not load a video model or activate downstream attention routing.

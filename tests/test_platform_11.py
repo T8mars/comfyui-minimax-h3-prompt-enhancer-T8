@@ -261,8 +261,8 @@ class Platform11Tests(unittest.TestCase):
     def test_compatibility_matrix_matches_frontend_migration_contracts(self):
         matrix = (ROOT / "COMPATIBILITY.md").read_text(encoding="utf-8")
         expected = {
-            "web/js/minimax_h3_prompt_enhancer.js": (35, "16, 17, 19, or 21"),
-            "web/js/seedance20_prompt_enhancer.js": (35, "23 or 25"),
+            "web/js/minimax_h3_prompt_enhancer.js": (36, "16, 17, 19, or 21"),
+            "web/js/seedance20_prompt_enhancer.js": (36, "23 or 25"),
             "web/js/music3_prompt_enhancer.js": (38, "31-value"),
         }
         for relative, (count, legacy) in expected.items():

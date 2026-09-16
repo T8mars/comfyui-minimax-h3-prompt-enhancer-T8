@@ -13,6 +13,12 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## 新增：H3 / Seedance 定向创作 Skill
+
+原 H3 与 Seedance 2.0 增强节点新增默认关闭的三个独立选项：**连续战斗长镜头、高密度连续攻防、电影枪战导演**。只吸收非官方创作方法，保留两平台原生格式、原有渠道与输出，不需要新增连线。开启时当前请求暂停旧案例/手动模板编排及 H3 可选官方场景，保留原选择，关闭后恢复；长镜头的镜头数 `AUTO` 按一镜处理，固定两镜以上会在付费调用前提示冲突。
+
+[简明中英文使用说明](docs/directional-skills.md) · 云端双节点示例：[长镜头](example_workflows/directional_continuous_combat_comparison.json) / [连续攻防](example_workflows/directional_high_density_combat_comparison.json) / [电影枪战](example_workflows/directional_cinematic_gunfight_comparison.json)。示例 Key 留空，完整运行会分别调用 H3 和 Seedance 两个文本增强请求；技能本身不增加规划或评分调用，已有修复/重试仍按原规则执行。
+
 ## 新增：H3 Prompt Relay 编排
 
 原 H3 增强节点新增默认关闭的 Relay 模式：输出全局提示词、逐事件提示词、秒数范围、对齐帧数和校验报告。普通增强及第一个输出保持原用途；支持原有云端／本地渠道。无需加载视频模型即可生成文本，接入执行项目的 Relay Plan 后才启用时序路由。
