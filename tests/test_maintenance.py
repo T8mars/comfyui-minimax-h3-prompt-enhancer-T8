@@ -100,7 +100,7 @@ class MaintenanceTests(unittest.TestCase):
             directional_examples = load_tool("t8_directional_examples", "build_directional_skill_workflows.py")
             quality_examples = load_tool("t8_quality_examples", "build_quality_workflows.py")
         STEMS = (*directional_examples.STEMS, *quality_examples.STEMS)
-        self.assertEqual(len(workflows), 23)
+        self.assertEqual(len(workflows), 18 + len(STEMS))
         extra = [path for path in workflows if path.stem in STEMS]
         self.assertEqual({path.stem for path in extra}, set(STEMS))
         directional_examples.check()

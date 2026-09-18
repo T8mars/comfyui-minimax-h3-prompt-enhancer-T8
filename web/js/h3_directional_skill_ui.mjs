@@ -1,9 +1,10 @@
 // Shared presentation only. Each enhancer retains its own output compiler.
 export const DIRECTIONAL_SKILLS = Object.freeze([
     { id: "none", label: "关闭 / Off", summary: "按原来的场景与模板设置增强提示词。" },
-    { id: "continuous_combat", label: "连续战斗长镜头 / Continuous combat", summary: "连续摄影路径、攻防起伏、空间与受击状态承接。", example: "例 / Example: 双剑客走廊交锋，一镜到底 / Corridor sword duel, one take." },
-    { id: "high_density_combat", label: "高密度连续攻防 / High-density combat", summary: "按已有武器与能力编排攻防，让上一动作结果触发下一动作。", example: "例 / Example: 两人徒手连续攻防8秒 / Unarmed duel, 8s nonstop." },
-    { id: "cinematic_gunfight", label: "电影枪战导演 / Cinematic gunfight", summary: "围绕人物目标组织枪战、空间、动作回应与声音。", example: "例 / Example: 雨夜枪战掩护同伴撤离 / Rainy gunfight, cover an escape." },
+    { id: "continuous_combat", label: "Fisher-连续战斗长镜头 / Continuous combat", legacyLabel: "连续战斗长镜头 / Continuous combat", summary: "连续摄影路径、攻防起伏、空间与受击状态承接。", example: "例 / Example: 双剑客走廊交锋，一镜到底 / Corridor sword duel, one take." },
+    { id: "high_density_combat", label: "土豆-高密度连续攻防 / High-density combat", legacyLabel: "高密度连续攻防 / High-density combat", summary: "按已有武器与能力编排攻防，让上一动作结果触发下一动作。", example: "例 / Example: 两人徒手连续攻防8秒 / Unarmed duel, 8s nonstop." },
+    { id: "cinematic_gunfight", label: "兔子-电影枪战导演 / Cinematic gunfight", legacyLabel: "电影枪战导演 / Cinematic gunfight", summary: "围绕人物目标组织枪战、空间、动作回应与声音。", example: "例 / Example: 雨夜枪战掩护同伴撤离 / Rainy gunfight, cover an escape." },
+    { id: "ning_wenwu", label: "宁版-文武双全 / Ning · Drama & Action", summary: "文戏看信息与反应，武戏看发力与受力；围绕关键变化选择观看重点。", example: "例 / Example: 说完原句后拔剑，但不出手 / Speak, then draw the sword without attacking." },
 ]);
 
 export function directionalSkillId(value) {
@@ -14,7 +15,7 @@ export function directionalSkillId(value) {
     const text = original.trim();
     // Preserve unknown values for the backend's explicit, sanitized validation.
     // An unrecognized saved selection must never silently become Off.
-    return DIRECTIONAL_SKILLS.find((item) => item.id === text || item.label === text)?.id || (text ? original : "none");
+    return DIRECTIONAL_SKILLS.find((item) => item.id === text || item.label === text || item.legacyLabel === text)?.id || (text ? original : "none");
 }
 
 export function directionalSkillLabel(value) {

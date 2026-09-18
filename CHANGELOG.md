@@ -3,6 +3,44 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.20.0] - 2026-09-18
+
+### Added
+
+- Opt-in `Ning · Drama & Action / 宁版-文武双全` as a fourth independent
+  directional Skill in the existing H3 and Seedance 2.0 enhancers. Independently
+  adapted methods guide information reception, readable force/distance and
+  motivated camera attention while keeping each platform's native grammar.
+- Bilingual guidance, source attribution and a parallel cloud example workflow.
+  The new example explicitly selects the existing Repair mode; choosing Ning
+  alone does not change quality, performance or causal settings. Off remains default.
+- User-requested author prefixes: Fisher-Continuous combat, 土豆-High-density
+  combat and 兔子-Cinematic gunfight. IDs and directing resources are unchanged;
+  both enhancers accept historical unprefixed labels and save the original IDs.
+
+### Fixed
+
+- Blinded review tooling keeps two distinct candidate IDs when Off/On produce
+  identical text and rejects mismatched baseline settings or source facts.
+- Shallow CI fetches both frozen compatibility baselines for regression checks;
+  recovery provenance and Registry package checks recognize the new Skill.
+
+### Validation and limitations
+
+- 598 CPU tests: 596 passed, 2 optional downstream Relay parser tests skipped;
+  36 frontend tests and real-browser contract/performance gates passed. Published
+  Off/legacy Skill requests, resources, outputs and widget layouts remain unchanged.
+- 52 real API results and 54 HTTP calls include exploratory revisions and
+  corrections. In the final same-configuration 32-draft comparison, Ning had
+  13/16 explicit text passes and 3 failures; Off had 8 passes, 7 failures and one
+  prop/scenery boundary. These small, repeated samples are not a universal win rate.
+- Narrow gains appeared in action direction and executable spatial detail.
+  Added ambient sound, omitted waits/duration and ordinary English in Chinese
+  descriptions remain model-compliance limits despite complete inputs. A clean
+  format check does not guarantee semantics or rendered-video quality.
+- Ning's local GGUF route has transport-double regression coverage, not real
+  local inference or video-quality acceptance. No model or credential is bundled.
+
 ## [1.19.0] - 2026-09-17
 
 - Optional, append-only H3/Seedance quality checks and at most one logical quality/language correction; precise protocol edits preserve protected original text. Failed/rejected corrections retain a complete draft and final recovery output.

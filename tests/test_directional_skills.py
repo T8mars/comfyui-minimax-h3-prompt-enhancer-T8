@@ -21,7 +21,7 @@ import test_seedance20
 sd = test_seedance20.seedance20
 h3 = test_seedance20.nodes
 from directional_skills import (
-    DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError, _load_resource,
+    DIRECTOR_OFF, DIRECTOR_OPTIONS, DIRECTOR_LABELS, DirectionalSkillError, _load_resource,
     normalize_director_skill, prepare_director_skill, director_instruction,
     template_fact_lookup, preserve_director_on_repair,
 )
@@ -30,8 +30,8 @@ from completion_recovery import safe_director_metadata
 BASELINE_COMMIT = "bfaae3ce13a8bdf3d4907146c13cfc280a2b2c36"
 
 
-def original_function(filename, name, module):
-    source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=ROOT).decode("utf-8")
+def original_function(filename, name, module, commit=BASELINE_COMMIT):
+    source = subprocess.check_output(["git", "show", f"{commit}:{filename}"], cwd=ROOT).decode("utf-8")
     definition = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == name)
     namespace = dict(vars(module))
     exec(compile(ast.Module(body=[definition], type_ignores=[]), filename, "exec"), namespace)
@@ -178,14 +178,14 @@ class DirectionalSkillTests(unittest.TestCase):
     def test_explicit_opt_in_and_unknown(self):
         for value in (None, "", "  ", "none", DIRECTOR_OPTIONS[0]):
             self.assertEqual(normalize_director_skill(value), DIRECTOR_OFF)
-        for label, stable in zip(DIRECTOR_OPTIONS[1:], ("continuous_combat", "high_density_combat", "cinematic_gunfight")):
+        for label, stable in list(DIRECTOR_LABELS.items())[1:]:
             self.assertEqual(normalize_director_skill(label), stable)
             self.assertEqual(normalize_director_skill(stable), stable)
         with self.assertRaises(DirectionalSkillError):
             normalize_director_skill("sk-" + "x" * 30)
 
     def test_resources_are_independent_and_platform_neutral(self):
-        for skill in ("continuous_combat", "high_density_combat", "cinematic_gunfight"):
+        for skill in list(DIRECTOR_LABELS.values())[1:]:
             text, meta = _load_resource(skill)
             self.assertEqual(meta["id"], skill)
             self.assertEqual(meta["version"], "1.0.0")
@@ -224,7 +224,7 @@ class DirectionalSkillTests(unittest.TestCase):
                 self.assertEqual(sd._build_messages(**args), old(**args), (task, lang))
 
     def test_on_pauses_optional_templates_without_losing_original_facts(self):
-        for skill in ("continuous_combat", "high_density_combat", "cinematic_gunfight"):
+        for skill in list(DIRECTOR_LABELS.values())[1:]:
             with patch.object(h3, "resolve_case_template", side_effect=AssertionError("paused")):
                 result = h3._build_messages(**h3_args(director_skill=skill, case_template="stale-case",
                     creative_preset="stale-preset", prompt_mode="参考模板融合", reference_template="OLD_TEMPLATE_CHOREOGRAPHY"))
@@ -310,7 +310,7 @@ class DirectionalSkillTests(unittest.TestCase):
         }
         image = np.zeros((1, 16, 16, 3), dtype=np.float32)
         for module in (h3, sd):
-            for skill in ("continuous_combat", "high_density_combat", "cinematic_gunfight"):
+            for skill in list(DIRECTOR_LABELS.values())[1:]:
                 for attached in (False, True):
                     for language in ("中文", "English"):
                         with self.subTest(platform=module.__name__, skill=skill, image=attached, language=language):
@@ -388,11 +388,11 @@ class DirectionalSkillTests(unittest.TestCase):
         malformed = json.loads(relay_draft())
         malformed["native_prompt"] = ""
         responses = [json.dumps(malformed), relay_draft(), relay_draft(True)]
-        for transport in ("local", "cloud"):
-            with self.subTest(transport=transport):
+        for skill, transport in ((skill, transport) for skill in list(DIRECTOR_LABELS.values())[1:] for transport in ("local", "cloud")):
+            with self.subTest(skill=skill, transport=transport):
                 inputs = dict(prompt="保留红色袖口。LOCK: ticket stays in the right hand.",
                               constraints="不添加武器，角色持续持有车票。", output_language="中文",
-                              duration_seconds=8, director_skill="continuous_combat",
+                              duration_seconds=8, director_skill=skill,
                               relay_config={"event_count": 2, "time_ranges": "0-4\n4-8"}, seed=12)
                 if transport == "local":
                     instances = []
@@ -413,7 +413,7 @@ class DirectionalSkillTests(unittest.TestCase):
                 self.assertEqual(result, responses[-1])
                 self.assertEqual(len(calls), 3)
                 for call in calls:
-                    self.assertIn("continuous_combat", call["messages"][0]["content"])
+                    self.assertIn(skill, call["messages"][0]["content"])
                     joined = "\n".join(primary_text(message["content"]) for message in call["messages"] if message["role"] == "user")
                     self.assertIn("红色袖口", joined)
                     self.assertIn("ticket stays in the right hand", joined)

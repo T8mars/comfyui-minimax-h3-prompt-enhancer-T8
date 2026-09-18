@@ -10,11 +10,19 @@ from typing import Any
 DIRECTOR_OFF = "none"
 DIRECTOR_LABELS = {
     "关闭 / Off": DIRECTOR_OFF,
+    "Fisher-连续战斗长镜头 / Continuous combat": "continuous_combat",
+    "土豆-高密度连续攻防 / High-density combat": "high_density_combat",
+    "兔子-电影枪战导演 / Cinematic gunfight": "cinematic_gunfight",
+    "宁版-文武双全 / Ning · Drama & Action": "ning_wenwu",
+}
+DIRECTOR_OPTIONS = list(DIRECTOR_LABELS)
+# Display-only attribution must not invalidate workflows/API clients that saved
+# the previously published labels. Keep aliases out of the visible options.
+DIRECTOR_LEGACY_LABELS = {
     "连续战斗长镜头 / Continuous combat": "continuous_combat",
     "高密度连续攻防 / High-density combat": "high_density_combat",
     "电影枪战导演 / Cinematic gunfight": "cinematic_gunfight",
 }
-DIRECTOR_OPTIONS = list(DIRECTOR_LABELS)
 DIRECTOR_REVISION = "1.0.0"
 _ROOT = Path(__file__).resolve().parent / "directional_skills"
 
@@ -27,17 +35,19 @@ def normalize_director_skill(value: Any = DIRECTOR_OFF) -> str:
     if value is None:
         value = DIRECTOR_OFF
     if not isinstance(value, str):
-        raise DirectionalSkillError("Unknown directional Skill. Select Off or one of the three T8 directing Skills.")
+        raise DirectionalSkillError("Unknown directional Skill. Select Off or one of the available directing Skills.")
     text = value.strip() or DIRECTOR_OFF
     if text in DIRECTOR_LABELS:
         return DIRECTOR_LABELS[text]
+    if text in DIRECTOR_LEGACY_LABELS:
+        return DIRECTOR_LEGACY_LABELS[text]
     if text in {DIRECTOR_OFF, *DIRECTOR_LABELS.values()}:
         return text
     # Do not echo arbitrary user data or turn a stale selection into a new Skill.
-    raise DirectionalSkillError("Unknown directional Skill. Select Off or one of the three T8 directing Skills.")
+    raise DirectionalSkillError("Unknown directional Skill. Select Off or one of the available directing Skills.")
 
 
-@lru_cache(maxsize=3)
+@lru_cache(maxsize=len(DIRECTOR_LABELS) - 1)
 def _load_resource(skill_id: str) -> tuple[str, dict[str, Any]]:
     try:
         meta = json.loads((_ROOT / skill_id / "meta.json").read_text(encoding="utf-8"))
@@ -73,6 +83,8 @@ def director_instruction(value: Any, model_target: str) -> str:
         if model_target == "h3" else
         "Use only the existing native Seedance 2.0 natural-language organization, reference syntax and shot policy. For selected Chinese output use the repository's native {} dialogue, <> sound-effect, （） background-music and 【】 visible-text policy only for requested elements; keep actual supplied words unchanged. Never import H3 fields, tags, speaker IDs or millisecond cut syntax."
     )
+    if skill_id == "ning_wenwu" and model_target == "h3":
+        native += " H3 protocol delimiters are literal ASCII even in Chinese descriptions: use (S1), not （S1）. For actual supplied Chinese speech, use says: <d>[Chinese] followed by the exact original words and </d> after that ID; speech in other languages keeps its actual language label. Delivery and recipient reactions remain outside the tag. Do not localize speaker parentheses, language labels or native field names; check these literal delimiters before returning."
     return "\n".join((
         f"T8 DIRECTIONAL CREATION: {skill_id} v{DIRECTOR_REVISION} (independently adapted local directing methods; non-official).",
         "This is the sole optional scene-directing source for THIS request. Other optional scene presets, case templates and manual template choreography are paused; the platform core always remains authoritative.",

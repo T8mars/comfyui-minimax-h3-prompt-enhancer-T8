@@ -64,6 +64,17 @@ user content are intentionally excluded from this repository.
 
 ## Community performance-directing research
 
+### Ning drama/action directing methods
+
+`directional_skills/ning_wenwu/` independently restates user-supplied Ning
+directing methods for information reception, motivated camera attention and
+readable action feedback. The source bundle SHA256 is
+`bb75451a04c7ea741acc246d62902432c5b02d0faf0b213334edcf4c5c938c26`.
+This is a non-official adaptation; no source Skill text, templates or examples
+are redistributed, and no upstream public license is inferred from local delivery.
+The method does not change either platform's native prompt format or certify
+camera feasibility or rendered video quality.
+
 The optional performance-directing rules were informed by the independently
 maintained `phileiny/h3-storyboard-skill` repository at commit
 `ab65851f599435a1ff94ea4931949bd7bcaf069b`, licensed under the MIT License.

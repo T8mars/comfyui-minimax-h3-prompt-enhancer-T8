@@ -36,6 +36,30 @@ test("directional choices round-trip stable IDs and retain each model's format o
     }
 });
 
+test("author labels migrate legacy saved labels without changing IDs or workflow fields", async () => {
+    for (const [filename, target] of [["minimax_h3_prompt_enhancer.js", "h3"], ["seedance20_prompt_enhancer.js", "seedance20"]]) {
+        const harness = await enhancerHarness(filename, target);
+        for (const skill of DIRECTIONAL_SKILLS.filter((item) => item.legacyLabel)) {
+            assert.equal(directionalSkillId(skill.legacyLabel), skill.id);
+            assert.equal(directionalSkillLabel(skill.legacyLabel), skill.label);
+            const saved = sampleValues(harness.names);
+            saved[35] = skill.legacyLabel;
+            const node = harness.configure(saved);
+            const values = harness.values(node);
+            assert.equal(values.director_skill, skill.label);
+            assert.equal(values.seed, 42);
+            assert.equal(values.local_model, "test-model.gguf");
+            assert.equal(values.case_template, "saved case_template");
+            const serialized = {};
+            node.onSerialize(serialized);
+            assert.equal(serialized.widgets_values.length, 38);
+            assert.equal(serialized.widgets_values[35], skill.id);
+            const restored = harness.values(harness.configure(serialized.widgets_values));
+            assert.equal(restored.director_skill, skill.label);
+        }
+    }
+});
+
 test("unknown IDs are preserved for validation without activating a skill or exposing the value in help", () => {
     for (const invalid of [0, false, [], {}]) {
         assert.equal(directionalSkillId(invalid), invalid);
@@ -82,7 +106,7 @@ test("20 skill/off cycles retain saved templates and fixed geometry without extr
         assert.equal(node.widgets[2], detail);
         const baselineLength = node.widgets.length;
         for (let i = 0; i < 20; i++) {
-            skill.value = DIRECTIONAL_SKILLS[1 + i % 3].id;
+            skill.value = DIRECTIONAL_SKILLS[1 + i % (DIRECTIONAL_SKILLS.length - 1)].id;
             skill.callback();
             for (const [name, value] of Object.entries(saved)) {
                 const widget = node.widgets.find((item) => item.name === name);
@@ -279,6 +303,27 @@ test("both current workflows serialize stable skill IDs and reload without shift
         assert.equal(again.local_model, "test-model.gguf");
         assert.equal(again.custom_model, "vendor/my-model");
         assert.equal(again.director_skill, restored.director_skill);
+    }
+});
+
+test("Ning round-trips through both enhancer hooks without changing the 38-value layout", async () => {
+    for (const [filename, target] of [["minimax_h3_prompt_enhancer.js", "h3"], ["seedance20_prompt_enhancer.js", "seedance20"]]) {
+        const harness = await enhancerHarness(filename, target);
+        for (const length of [36, 38]) {
+            const saved = sampleValues(harness.names.slice(0, length));
+            saved[35] = "ning_wenwu";
+            const node = harness.configure(saved);
+            assert.equal(harness.values(node).director_skill, directionalSkillLabel("ning_wenwu"));
+            const serialized = {};
+            node.onSerialize(serialized);
+            assert.equal(serialized.widgets_values.length, 38);
+            assert.equal(serialized.widgets_values[35], "ning_wenwu");
+            const restored = harness.values(harness.configure(serialized.widgets_values));
+            assert.equal(restored.director_skill, directionalSkillLabel("ning_wenwu"));
+            assert.equal(restored.seed, 42);
+            assert.equal(restored.local_model, "test-model.gguf");
+            assert.equal(restored.case_template, "saved case_template");
+        }
     }
 });
 

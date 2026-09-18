@@ -1,4 +1,4 @@
-"""Build/check only three text-only directional examples; never rebuild legacy examples."""
+"""Build/check text-only directional examples; preserve existing example layouts."""
 from __future__ import annotations
 
 import argparse
@@ -15,12 +15,14 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "example_workflows"
 SMALL_MODEL = "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf"
 CASES = {
-    "continuous_combat": ("连续战斗长镜头 / Continuous combat", 12,
+    "continuous_combat": ("Fisher-连续战斗长镜头 / Continuous combat", 12,
         "12秒，一镜到底。两名成年剑客沿空走廊交锋，白衣者后退到柱旁，借柱侧身避开来剑，顺着对方未收住的冲势绕到侧面；黑衣者转身继续追击。保持双方衣服、剑和移动方向一致，不增加能力，不定格，不加对白、字幕或配乐。"),
-    "high_density_combat": ("高密度连续攻防 / High-density combat", 8,
+    "high_density_combat": ("土豆-高密度连续攻防 / High-density combat", 8,
         "8秒。空旷练功场上两名成年练习者徒手连续攻防，红袖者出拳被蓝袖者格开，红袖者顺势转身避让，蓝袖者随其位移继续进攻。让攻防因果和重心移动清楚，全程保持空手，不停下来摆姿势，不强定胜负，不加对白、字幕或配乐。"),
-    "cinematic_gunfight": ("电影枪战导演 / Cinematic gunfight", 12,
+    "cinematic_gunfight": ("兔子-电影枪战导演 / Cinematic gunfight", 12,
         "12秒虚构电影枪战。雨夜空车站，两名成年同伴带着同一个箱子向出口撤离，远处枪声响起，前方玻璃碎裂迫使他们改变路线；前者拉开侧门，后者带箱跟上。重点是撤离目标、人物回应、雨水和碎玻璃的连续状态；不要讲解枪械操作，不增加平民、字幕或配乐。"),
+    "ning_wenwu": ("宁版-文武双全 / Ning · Drama & Action", 12,
+        "12秒虚构电影片段，两名成年人物在走廊门口。黑衣侍卫站在左侧，红衣来客在右侧。侍卫先低声说原句“到此为止。”，来客听完才把已拿着的信放回自己的右侧口袋；随后侍卫拔出已有长剑挡住通道，但不出击。结尾双方仍在门口，门仍关闭，信归来客，剑归侍卫。一个连续镜头，让对白、手部动作与通道阻隔的变化清楚。不能新增人物、台词、武器、法术或胜负，无字幕，无配乐。"),
 }
 STEMS = tuple(f"directional_{skill}_comparison" for skill in CASES)
 
@@ -30,8 +32,7 @@ def widget_names(filename: str) -> list[str]:
     match = re.search(r"const SERIALIZED_WIDGET_NAMES = \[([\s\S]*?)\];", source)
     if not match:
         raise RuntimeError("Serialized widget schema is missing")
-    # These published examples intentionally retain their original 36-value
-    # layout. New optional quality/creation values default Off during migration.
+    # The three published examples retain their original 36-value layout.
     return re.findall(r'"([a-z_]+)"', match.group(1))[:36]
 
 
@@ -55,6 +56,11 @@ def generate() -> dict[str, dict]:
             values.update(duration_seconds=duration if kind == "H3" else str(duration),
                           shot_count="AUTO（系统自动判断）", local_model=SMALL_MODEL,
                           local_max_tokens=16384)
+            if skill == "ning_wenwu":
+                # Explicit settings in this NEW example, not an implicit change
+                # to the selector or any existing saved workflow.
+                names = [*names, "quality_mode", "creation_mode"]
+                values.update(quality_mode="repair", creation_mode="off")
             node["widgets_values"] = [values[name] for name in names]
             node["title"] = f"{kind} · {label}"
             node["size"] = [640, 1160]
@@ -88,8 +94,14 @@ def check() -> None:
         for node_id, filename in [(2, "minimax_h3_prompt_enhancer.js"), (3, "seedance20_prompt_enhancer.js")]:
             node = nodes[node_id]
             names = widget_names(filename)
+            if stem == "directional_ning_wenwu_comparison":
+                names = [*names, "quality_mode", "creation_mode"]
             values = dict(zip(names, node["widgets_values"]))
-            assert len(node["widgets_values"]) == 36 and names[-1] == "director_skill"
+            assert len(node["widgets_values"]) == len(names)
+            if values["director_skill"] == "ning_wenwu":
+                assert len(names) == 38 and values["quality_mode"] == "repair" and values["creation_mode"] == "off"
+            else:
+                assert len(names) == 36 and names[-1] == "director_skill"
             assert values["director_skill"] in CASES
             assert values["api_mode"] == SEEDANCE_API_MODE and values["api_key"] == ""
             assert values["shot_count"] == "AUTO（系统自动判断）"
@@ -107,7 +119,7 @@ def check() -> None:
             input_ = nodes[dest_id]["inputs"][in_slot]
             assert output["type"] == input_["type"] == kind
             assert link_id in output["links"] and input_["link"] == link_id
-    print("Directional examples: 3 JSONs, 36 widgets per enhancer, H3/Seedance outputs and links valid; no keys/models loaded.")
+    print(f"Directional examples: {len(CASES)} JSONs, legacy 36/new Ning 38 widgets, H3/Seedance outputs and links valid; no keys/models loaded.")
 
 
 def main() -> None:
