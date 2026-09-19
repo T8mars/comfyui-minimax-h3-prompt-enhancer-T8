@@ -125,7 +125,7 @@ def main() -> int:
                 "--dump-dom",
             ]
             if virtual_time:
-                command.insert(-2, "--virtual-time-budget=5000")
+                command.insert(-2, "--virtual-time-budget=12000")
             command.append(f"{base_url}/{filename}")
             return subprocess.run(
                 command,
@@ -150,7 +150,7 @@ def main() -> int:
                     "--disable-background-networking",
                     "--no-first-run",
                     "--timeout=10000",
-                    "--virtual-time-budget=5000",
+                    "--virtual-time-budget=12000",
                     f"--user-data-dir={profile}",
                     "--window-size=1280,900",
                     "--dump-dom",

@@ -2,6 +2,7 @@ import ast
 import copy
 import inspect
 import json
+import os
 import subprocess
 import sys
 import unittest
@@ -11,6 +12,10 @@ from unittest.mock import patch
 
 # Standalone discovery must not initialize CUDA while importing real Comfy IO.
 ROOT = Path(__file__).resolve().parents[1]
+# In CI the source checkout is copied into ComfyUI/custom_nodes, so the
+# nearest .git belongs to ComfyUI rather than this node.  The workflow points
+# this at the sibling _source checkout; local runs keep the project root.
+GIT_ROOT = Path(os.environ.get("T8_SOURCE_GIT_ROOT", ROOT)).resolve()
 sys.path.insert(0, str(ROOT.parents[1]))
 import comfy.cli_args
 
@@ -31,7 +36,7 @@ BASELINE_COMMIT = "bfaae3ce13a8bdf3d4907146c13cfc280a2b2c36"
 
 
 def original_function(filename, name, module, commit=BASELINE_COMMIT):
-    source = subprocess.check_output(["git", "show", f"{commit}:{filename}"], cwd=ROOT).decode("utf-8")
+    source = subprocess.check_output(["git", "show", f"{commit}:{filename}"], cwd=GIT_ROOT).decode("utf-8")
     definition = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == name)
     namespace = dict(vars(module))
     exec(compile(ast.Module(body=[definition], type_ignores=[]), filename, "exec"), namespace)
@@ -39,7 +44,7 @@ def original_function(filename, name, module, commit=BASELINE_COMMIT):
 
 
 def original_execute(filename, class_name, module):
-    source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=ROOT).decode("utf-8")
+    source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=GIT_ROOT).decode("utf-8")
     cls = next(n for n in ast.parse(source).body if isinstance(n, ast.ClassDef) and n.name == class_name)
     definition = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == "execute")
     definition.decorator_list = []
@@ -278,7 +283,7 @@ class DirectionalSkillTests(unittest.TestCase):
         ):
             names = [item.id for item in cls.define_schema().inputs]
             self.assertEqual(names[-3:], ["director_skill", "quality_mode", "creation_mode"])
-            source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=ROOT).decode("utf-8")
+            source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=GIT_ROOT).decode("utf-8")
             definition = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == function)
             old_names = [n.arg for n in definition.args.args]
             current = list(inspect.signature(getattr(module, function)).parameters)

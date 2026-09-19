@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.21.1] - 2026-09-19
+
+### Fixed
+
+- Make frozen-baseline compatibility tests resolve the source checkout in CI
+  after the node is copied into ComfyUI, and fetch the published 1.20.0
+  baseline for the Registry verification job.
+- Give asynchronous browser contracts a larger bounded virtual-time window on
+  slower Python 3.12 runners, without changing the frontend contract.
+
 ## [1.21.0] - 2026-09-19
 
 ### Added

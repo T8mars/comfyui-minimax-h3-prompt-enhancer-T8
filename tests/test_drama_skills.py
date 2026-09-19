@@ -9,7 +9,7 @@ from unittest.mock import patch
 from pathlib import Path
 
 from test_directional_skills import (
-    ROOT, h3, sd, h3_args, sd_args, original_function, RecordingLocalProvider,
+    ROOT, GIT_ROOT, h3, sd, h3_args, sd_args, original_function, RecordingLocalProvider,
     test_seedance20, native_draft,
 )
 from directional_skills import (
@@ -69,7 +69,7 @@ class DramaIntegrationTests(unittest.TestCase):
     def test_all_old_methods_resources_and_requests_match_published_code(self):
         historical = types.ModuleType("pre_drama_directional")
         historical.__file__ = str(ROOT / "directional_skills.py")
-        exec(compile(subprocess.check_output(["git", "show", f"{PUBLISHED}:directional_skills.py"], cwd=ROOT).decode("utf-8"),
+        exec(compile(subprocess.check_output(["git", "show", f"{PUBLISHED}:directional_skills.py"], cwd=GIT_ROOT).decode("utf-8"),
                      historical.__file__, "exec"), vars(historical))
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             baseline = original_function(filename, "_build_messages", module, PUBLISHED)
@@ -87,7 +87,7 @@ class DramaIntegrationTests(unittest.TestCase):
             for skill in LEGACY[1:]:
                 for name in ("SKILL.md", "meta.json"):
                     path = f"directional_skills/{skill}/{name}"
-                    old = subprocess.check_output(["git", "show", f"{PUBLISHED}:{path}"], cwd=ROOT)
+                    old = subprocess.check_output(["git", "show", f"{PUBLISHED}:{path}"], cwd=GIT_ROOT)
                     self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"))
 
     def test_new_resources_source_and_permission_are_separate(self):

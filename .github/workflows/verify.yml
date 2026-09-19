@@ -72,6 +72,7 @@ jobs:
         working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8
         env:
           PYTHONPATH: ${{ github.workspace }}/ComfyUI
+          T8_SOURCE_GIT_ROOT: ${{ github.workspace }}/_source
         run: python -m unittest discover -s tests
       - name: Run real-browser frontend contracts
         working-directory: ComfyUI/custom_nodes/comfyui-minimax-h3-prompt-enhancer-T8

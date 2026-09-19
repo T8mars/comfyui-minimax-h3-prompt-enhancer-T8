@@ -4,7 +4,7 @@ import types
 import unittest
 from unittest.mock import patch
 
-from test_directional_skills import h3, sd, h3_args, sd_args, original_function, ROOT, RecordingLocalProvider, test_seedance20
+from test_directional_skills import h3, sd, h3_args, sd_args, original_function, ROOT, GIT_ROOT, RecordingLocalProvider, test_seedance20
 from directional_skills import prepare_director_skill, director_metadata, director_instruction, _load_resource, normalize_director_skill, DIRECTOR_LABELS, DIRECTOR_LEGACY_LABELS
 from completion_recovery import safe_director_metadata
 from performance_director import PERFORMANCE_OFF, PERFORMANCE_AUTO, PERFORMANCE_STRONG, PERFORMANCE_EXTREME, build_performance_director_config
@@ -33,11 +33,11 @@ class NingIntegrationTests(unittest.TestCase):
         # still compare against the actual published function. Transport/acting
         # implementation remains unchanged bytes.
         for filename in ("performance_director.py",):
-            old = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:{filename}"], cwd=ROOT)
+            old = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:{filename}"], cwd=GIT_ROOT)
             self.assertEqual((ROOT / filename).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"))
         historical_director = types.ModuleType("historical_director")
         historical_director.__file__ = str(ROOT / "directional_skills.py")
-        source = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:directional_skills.py"], cwd=ROOT).decode("utf-8")
+        source = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:directional_skills.py"], cwd=GIT_ROOT).decode("utf-8")
         exec(compile(source, historical_director.__file__, "exec"), vars(historical_director))
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             baseline = original_function(filename, "_build_messages", module, PRE_NING_COMMIT)
@@ -53,7 +53,7 @@ class NingIntegrationTests(unittest.TestCase):
         for skill in LEGACY_SKILLS[1:]:
             for name in ("SKILL.md", "meta.json"):
                 path = f"directional_skills/{skill}/{name}"
-                old = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:{path}"], cwd=ROOT)
+                old = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:{path}"], cwd=GIT_ROOT)
                 self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"))
 
     def test_ning_does_not_impose_shot_or_duration_threshold(self):
