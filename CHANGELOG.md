@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.21.2] - 2026-09-19
+
+### Fixed
+
+- Raise the bounded Chrome DOM-capture timeout and virtual-time budget for
+  asynchronous frontend contracts, preventing slower CI runners from ending
+  at the initial `RUNNING` marker before module imports complete.
+
 ## [1.21.1] - 2026-09-19
 
 ### Fixed

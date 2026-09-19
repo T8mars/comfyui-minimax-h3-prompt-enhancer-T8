@@ -120,12 +120,12 @@ def main() -> int:
                 "--no-first-run",
                 # Bound DOM capture even when pending resources pause virtual time.
                 # https://developer.chrome.com/docs/automation-and-testing/headless-cli#timeout
-                "--timeout=10000",
+                "--timeout=30000",
                 f"--user-data-dir={profile}",
                 "--dump-dom",
             ]
             if virtual_time:
-                command.insert(-2, "--virtual-time-budget=12000")
+                command.insert(-2, "--virtual-time-budget=20000")
             command.append(f"{base_url}/{filename}")
             return subprocess.run(
                 command,
@@ -134,7 +134,7 @@ def main() -> int:
                 text=True,
                 encoding="utf-8",
                 errors="replace",
-                timeout=30,
+                timeout=45,
                 check=False,
             )
     def capture_page(filename: str, output: str):
@@ -149,8 +149,8 @@ def main() -> int:
                     "--disable-extensions",
                     "--disable-background-networking",
                     "--no-first-run",
-                    "--timeout=10000",
-                    "--virtual-time-budget=12000",
+                    "--timeout=30000",
+                    "--virtual-time-budget=20000",
                     f"--user-data-dir={profile}",
                     "--window-size=1280,900",
                     "--dump-dom",
@@ -162,7 +162,7 @@ def main() -> int:
                 text=True,
                 encoding="utf-8",
                 errors="replace",
-                timeout=30,
+                timeout=45,
                 check=False,
             )
     try:
