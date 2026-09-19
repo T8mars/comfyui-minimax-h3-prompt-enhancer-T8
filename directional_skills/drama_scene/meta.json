@@ -1,0 +1,19 @@
+{
+  "id": "drama_scene",
+  "version": "1.0.0",
+  "authoring_revision": "1.0.0",
+  "source_repository": "https://github.com/jtydhr88/screenwriting-skills",
+  "source_commit": "50825325b3940a17f032129851f5c83382863000",
+  "source_author": "Terry Jia (jtydhr88)",
+  "source_sha256": "c9f93e9d78dd137b1e8617289df947e54996ce82dad5db8f0f1936264ef95299",
+  "primary_source": "plugins/screenwriting/skills/sw-dialogue/SKILL.md",
+  "source_files": {
+    "plugins/screenwriting/skills/sw-dialogue/SKILL.md": "c9f93e9d78dd137b1e8617289df947e54996ce82dad5db8f0f1936264ef95299",
+    "plugins/screenwriting/skills/sw-character-conflict/SKILL.md": "eec1ede6394ae995137e819d33775df5598851aed03734d45e02693f5fcfedaf",
+    "plugins/screenwriting/skills/sw-scene-craft/SKILL.md": "8e17bd548c7b27e7c88d8bceb498cf7d61e545d567085efecb1e4818f4e0e902",
+    "plugins/screenwriting/skills/chekhov-dramaturgy/SKILL.md": "1baaec90da04dce0f7d1e3d798843850660ca7bccc804c5ea0c5c1486e6191b6"
+  },
+  "relationship": "T8 independently selected, worded and bounded directing adaptation of MIT method summaries. Not supplied or endorsed by the upstream author, MiniMax or Seedance. No source book/script quotations or translated case text bundled.",
+  "license_notice": "../SCREENWRITING-LICENSE.txt",
+  "rights_notice": "../SCREENWRITING-NOTICE.md"
+}

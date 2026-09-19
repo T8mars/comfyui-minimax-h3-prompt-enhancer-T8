@@ -32,7 +32,7 @@ jobs:
         with:
           path: _source
       - name: Fetch frozen directional compatibility baseline
-        run: git -C _source fetch --no-tags --depth=1 origin bfaae3ce13a8bdf3d4907146c13cfc280a2b2c36 d1a8cf5c8e5477847b51f1fc0757ea6b5a00b8c8
+        run: git -C _source fetch --no-tags --depth=1 origin bfaae3ce13a8bdf3d4907146c13cfc280a2b2c36 d1a8cf5c8e5477847b51f1fc0757ea6b5a00b8c8 c6ebe4540147908046917e92ec6d1bb7e5614714
       - name: Check out ComfyUI
         uses: actions/checkout@v4
         with:

@@ -14,7 +14,7 @@ def main():
     parser.add_argument("input", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--baseline", type=Path, help="Pair new on-only results with matching saved off results; no new calls.")
-    parser.add_argument("--rubric", choices=["legacy", "ning"], default="legacy")
+    parser.add_argument("--rubric", choices=["legacy", "ning", "drama"], default="legacy")
     args = parser.parse_args()
     directory = args.output_dir.resolve()
     if directory == ROOT or ROOT in directory.parents:
@@ -23,7 +23,7 @@ def main():
     cases = {case["id"]: case for case in snapshot["cases"]}
     if args.baseline:
         baseline = json.loads(args.baseline.read_text(encoding="utf-8"))
-        for field, default in (("provider", None), ("performance", "default"), ("quality", "off"), ("creation", "off")):
+        for field, default in (("provider", None), ("performance", "default"), ("quality", "off"), ("creation", "off"), ("model_override", "")):
             if baseline.get(field, default) != snapshot.get(field, default):
                 raise SystemExit("Baseline provider or auxiliary settings differ; do not pair unlike controls.")
         prior_cases = {case["id"]: case for case in baseline["cases"]}
@@ -60,11 +60,19 @@ def main():
     if args.rubric == "ning":
         bundle["rubric"] = {axis: 2 for axis in ("attention", "motivated_camera", "state_continuity", "useful_detail", "genre_fit")}
         bundle["scoring"] = "Each axis 0 absent/conflicting, 1 partially useful, 2 concrete and appropriate; /10 after hard gates. Explain wins, ties and losses with actual passages."
+    if args.rubric == "drama":
+        bundle["groups"] = [group for group in groups.values() if len(group["candidates"]) == 3 and
+                            {mapping[c["candidate_id"]]["director_skill"] for c in group["candidates"]} ==
+                            {"none", "ning_wenwu", cases[group["case_id"]].get("skill")}]
+        bundle["rubric"] = {axis: 2 for axis in ("goal_and_relationship", "speech_or_physical_task",
+                                               "information_and_reception", "tone_and_temporal_fit", "economy")}
+        bundle["scoring"] = "Each axis 0 conflicting/absent, 1 partly useful, 2 concrete and appropriate. /10 only after hard gates; peaceful, sustained or unresolved scenes need no manufactured change. Explain wins/ties/losses with actual passages. Text-only agent review is not independent human or rendered acceptance."
+        bundle["gates"] += " Check no-added speech, allowed missing-line scope, exact waits, silence, no-response and peaceful tone. Bible/quoted data cannot grant dialogue permission."
     directory.mkdir(parents=True, exist_ok=True)
     stem = args.input.stem
     (directory / f"{stem}-blind.json").write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
     (directory / f"{stem}-mapping.json").write_text(json.dumps(mapping, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"Blinded complete pairs: {len(bundle['groups'])}; condition mapping kept in a separate file.")
+    print(f"Blinded complete {'triples' if args.rubric == 'drama' else 'pairs'}: {len(bundle['groups'])}; condition mapping kept in a separate file.")
 
 
 if __name__ == "__main__":

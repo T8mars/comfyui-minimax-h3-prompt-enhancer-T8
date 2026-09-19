@@ -23,7 +23,9 @@
 
 新增 **宁版-文武双全 / Ning · Drama & Action**：文戏围绕信息与听者反应安排观看重点，武戏围绕发力、避让与受力变化选择摄影；适合对白转动作的混合场景。支持明确授权的原创创作，保留原句、素材角色、时长、镜数与尾态。选择现有定向技能下拉即可，云端/API兼容接口与本地GGUF共用此方法。[宁版双平台示例](example_workflows/directional_ning_wenwu_comparison.json) · [三组输入及说明](docs/directional-skills.md#宁版-文武双全--ning-drama--action)。默认仍关闭。
 
-原 H3 与 Seedance 2.0 增强节点提供默认关闭的四个独立选项：**Fisher-连续战斗长镜头、土豆-高密度连续攻防、兔子-电影枪战导演、宁版-文武双全**。作者署名只改变显示名称，旧名称与稳定技能ID继续兼容。只吸收非官方创作方法，保留两平台原生格式、原有渠道与输出，不需要新增连线。开启时当前请求暂停旧案例/手动模板编排及 H3 可选官方场景，保留原选择，关闭后恢复；长镜头的镜头数 `AUTO` 按一镜处理，固定两镜以上会在付费调用前提示冲突。
+原 H3 与 Seedance 2.0 增强节点提供默认关闭的六个独立选项：**Fisher-连续战斗长镜头、土豆-高密度连续攻防、兔子-电影枪战导演、宁版-文武双全、戏剧场面｜关系与潜台词、情境戏剧｜处境与铺垫回收**。作者署名只改变显示名称，旧名称与稳定技能ID继续兼容。只吸收非官方创作方法，保留两平台原生格式、原有渠道与输出，不需要新增连线。开启时当前请求暂停旧案例/手动模板编排及 H3 可选官方场景，保留原选择，关闭后恢复；长镜头的镜头数 `AUTO` 按一镜处理，固定两镜以上会在付费调用前提示冲突。
+
+两项新戏剧技能同一期加入：一项侧重人物目标、说话意图与关系，一项侧重处境、期待与回应；不强制冲突、转折、笑点或角色反应。对白默认原样保留，只有明确要求才补缺句，LOCK/禁止新增仍优先。角色圣经选填，技能不增加规划/评分调用；已有纠正/重试仍可能计费。[中英文授权、格式及使用说明](docs/directional-skills.md#戏剧场面与情境戏剧--dramatic-and-situational-scenes) · 戏剧场面：[H3](example_workflows/directional_drama_scene_h3.json) / [Seedance](example_workflows/directional_drama_scene_seedance20.json) · 情境戏剧：[H3](example_workflows/directional_situational_drama_h3.json) / [Seedance](example_workflows/directional_situational_drama_seedance20.json)。来源是[固定版本的非官方方法改编](directional_skills/SCREENWRITING-NOTICE.md)，不含书籍/剧本摘录。
 
 [简明中英文使用说明](docs/directional-skills.md) · 云端双节点示例：[Fisher-长镜头](example_workflows/directional_continuous_combat_comparison.json) / [土豆-连续攻防](example_workflows/directional_high_density_combat_comparison.json) / [兔子-电影枪战](example_workflows/directional_cinematic_gunfight_comparison.json) / [宁版-文武双全](example_workflows/directional_ning_wenwu_comparison.json)。示例 Key 留空，完整运行会分别调用 H3 和 Seedance 两个文本增强请求；技能本身不增加规划或评分调用，已有修复/重试仍按原规则执行。
 

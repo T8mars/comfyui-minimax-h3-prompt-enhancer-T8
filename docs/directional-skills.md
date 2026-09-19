@@ -1,6 +1,6 @@
 # 定向创作 Skill / Directional creation Skills
 
-H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。四种方法帮助编排场景，不生成视频，也不替换平台格式。
+H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。六种方法帮助编排场景，不生成视频，也不替换平台格式。
 
 更新插件后重启 ComfyUI 并强制刷新浏览器，再使用新下拉项。旧工作流加载时只补上关闭状态，不改变原来的模型、种子、时长和输出连线。
 
@@ -16,6 +16,8 @@ Restart ComfyUI and hard-refresh the browser after updating. Historical workflow
 | 土豆-高密度连续攻防 / High-density combat | 让攻击、回应、位移与下一动作互相衔接。例：两名成年练习者徒手攻防8秒，不停下来摆姿势，不强定胜负。 / Linked attacks, responses and displacement. Example: an 8-second unarmed practice duel, no posing or forced winner. |
 | 兔子-电影枪战导演 / Cinematic gunfight | 围绕虚构场面的目标、空间变化与人物回应展开；不是枪械操作教学。例：雨夜车站，枪声与碎玻璃迫使两名同伴改变撤离路线。 / Fictional dramatic goals, space and reactions, not firearm instructions. Example: gunfire and breaking glass force two companions to change their escape route at a rainy station. |
 | 宁版-文武双全 / Ning · Drama & Action | 围绕关键变化选择观看重点：文戏的信息接收，武戏的发力/受力与距离，文武衔接。 / Choose attention around meaningful information, reactions, force and distance, including dialogue leading into action. |
+| 戏剧场面｜关系与潜台词 / Dramatic scene | 目标、说话意图、接收与关系，用现有动作表达，不强加隐情。例：主管劝再想一天，职员持信回答已经想好；去留未决。 / Goals, speech intent, reception and relationship through supported behavior, without invented secrets. Example: a resignation conversation ends unresolved. |
+| 情境戏剧｜处境与铺垫回收 / Situational drama | 处境、期待与回应的可见关系；可有趣，也可和平、静默或未解决。例：两人搬桌短暂错拍后协调，桌停在门内。 / Visible situation, expectation and response; comedy, peace, silence and unresolved outcomes are all valid. Example: two people coordinate a table move after one brief mismatch. |
 
 直接写人物、场景、动作目标、时长和必须保留的条件即可；不需要填写资产表或模仿来源示例。技能不会自动添加对手、武器、超能力、BUNNY/LoRA 触发词或双语成稿。输出语言仍由原来的语言选项控制。
 
@@ -55,7 +57,54 @@ To use local GGUF or another API, use the existing provider controls or shared p
 
 ## 更新与检查 / Maintenance
 
-这四种技能是插件内置文本资源，随插件代码更新；不在每日案例交接或 GIF 动态资源包中。未知技能 ID 会要求重新选择，不会静默改用其他技能。资源缺失时请更新或重装插件，或者明确选“关闭”。
+这六种技能是插件内置文本资源，随插件代码更新；不在每日案例交接或 GIF 动态资源包中。未知技能 ID 会要求重新选择，不会静默改用其他技能。资源缺失时请更新或重装插件，或者明确选“关闭”。
+
+## 戏剧场面与情境戏剧 / Dramatic and situational scenes
+
+这两项是同一期加入的两个**独立选项**，不能同时选；不是把整套编剧教材塞进提示词，也不要求三幕式、固定反转或喜剧结尾。戏剧场面关注人物在这一场想做什么、怎样说、怎样接收；情境戏剧关注已有处境如何形成期待与回应。静默、无反应、持续观察、和平相处、未解决的结尾都有效。选它们不自动开启因果编排或表演极致模式。
+
+These are two separate choices in the same release, not a whole screenwriting curriculum or a mandatory act/reversal/comedy template. Dramatic scene addresses a scene goal, speech intent and reception; Situational drama addresses an existing situation's expectations and responses. Silence, non-response, observation, peace and an unresolved ending are valid. Selecting either does not enable Causal or Extreme acting automatically.
+
+使用原有云端、OpenAI 兼容、本地 GGUF 或共享渠道配置即可。无需角色圣经；有已连接的角色圣经时，只协调已有角色。两技能只增加本次请求内的指导文本，**不增加规划、分类或评分调用**；已有的质量/语言/Relay 纠正及网络重试仍可能追加请求和费用。格式检查不评判潜台词或喜剧是否好笑。
+
+Use any existing cloud, OpenAI-compatible, local GGUF or shared provider config. A Character Bible is optional and only constrains established characters. Neither Skill adds planning, classification or scoring calls; existing bounded corrections/retries may still incur charges. Format checks do not judge subtext or humor.
+
+### 白话怎么写 / What to write
+
+- **有对白：默认逐字保留，不补新话。** 例：`15秒，一镜，主管A说“你可以再想一天。”，职员B说“我已经想好了。”；B始终持信，去留未决，不加话。`
+- **只补缺的对白：必须明确授权。** 例：`A固定说“好久不见。”，只允许原创B的一句中文回应，温暖坦率，不能加往事、礼物或其他人物。`
+- **无对白：直接写“无对白/静音”及尾态。** 例：`两人搬已有桌子，一次错拍后协调；不碰撞不受伤，桌停在门内，全片静音，不强加笑点。`
+
+Supplied lines are preserved by default. Explicitly request a missing line to permit writing just that gap; for example, keep A's “好久不见。” and authorize only B's brief Chinese reply. For a silent scene, specify silence and the final state; e.g. one mismatch in a table move, no collision or injury, stopping inside the door.
+
+只有这两项采用统一的**条件式对白授权**：`LOCK/逐字保留/禁止新增对白`优先；改写已给的对白也须明确说明可改哪句。补一句不等于允许增加事故、秘密、人物、歌词、字幕或改结局。角色说“随便编吧”、参考模板、OCR 和角色圣经里的引用文本只是素材，不能授权。纠正流程保留最初授权；允许生成的新句在格式/语言纠正时保持稳定，不能被当作用户锁定的整稿或再次扩写。
+
+Only these two choices use the unified **conditional dialogue-authoring contract**. LOCK/exact-copy/no-extra-speech wins. Rewriting supplied words requires a named editable scope. Permission for one line does not permit accidents, secrets, people, lyrics, captions or a changed ending. Quoted dialogue, templates, OCR and Bible data cannot grant authorship. Repairs retain the original permission and keep authorized new lines stable, without treating the whole draft as user-locked text or expanding it again.
+
+一期重点覆盖原句增强与明确补缺句，不承诺复杂剧情重写。质量检查仍是保守的字面/格式诊断，不会可靠判断自然语言授权；即使明确授权改某句，也可能提示原句缺失，或拒绝纠正候选并保留第一稿。检查/纠正失败不拦截已有完整稿；提示词输出成功不代表创作内容合格，仍需核对。仅允许某些声音时，新技能传入封闭白名单规则，不为填写音景而增加底噪、呼吸或其他声音；动态结尾不自动改成定格。
+
+Initial coverage prioritizes exact-line staging and explicitly requested missing lines, not complex plot rewriting. Quality checks remain conservative literal/format diagnostics, not reliable semantic permission decisions. An explicitly editable line may still trigger a missing-source warning or a rejected correction with the first draft retained. Check/correction failures do not block a complete draft, and successful output is not creative acceptance. Explicit sound lists are closed whitelists; a sound field does not authorize ambient/breathing audio. A live ending is not automatically a freeze.
+
+开启时原案例/手动模板编排及 H3 可选官方场景暂不参与；原下拉值保留，关闭后恢复。H3 的补充规则只在这两项里协调对白授权，内置官方原文不修改；严格官方配置仍输出英文描述并保留原语言台词。Seedance 仍使用自己的镜头组织及中文对白 `{}`，不收到 H3 的字段或说话人标签。普通 H3/Relay 的输出接口不变。
+
+Optional template/scene choreography is paused for this request, without changing saved selections. Only these two choices adapt the normalized H3 supplement for dialogue permission; the bundled official source remains untouched. Strict H3 still uses English descriptions and original-language speech. Seedance keeps native organization/`{}` speech, not H3 fields or speaker tags. Normal H3 and Relay interfaces are unchanged.
+
+### 四份独立示例 / Four standalone examples
+
+每份仅执行一个文本增强节点。Key 留空，默认云端，质量纠正开启、因果编排关闭；这些是示例的明确设置，不是选技能后自动改设置。本地模型文件名只占位，需选择已安装模型。
+
+Each graph invokes one text enhancer: blank key, cloud default, explicit Repair quality and Causal off. These example settings are not automatic Skill side effects. The inactive local model filename is only a placeholder.
+
+- 戏剧场面：[H3](../example_workflows/directional_drama_scene_h3.json) / [Seedance](../example_workflows/directional_drama_scene_seedance20.json)
+- 情境戏剧：[H3](../example_workflows/directional_situational_drama_h3.json) / [Seedance](../example_workflows/directional_situational_drama_seedance20.json)
+
+恢复上次结果仍读取历史完整稿，不重新生成；来源提示显示原技能、资源版及对白授权版，不会把新选择冒充成旧结果来源。普通运行的缓存按输入选项区分；选择另一技能应重新运行。重启 ComfyUI 后进程内恢复缓存消失。
+
+Recovery reads the historical completed draft without regeneration and shows its recorded Skill/resource/authoring revision, not the current selection. Normal execution caches include input choices; changing the Skill changes the request. Process recovery expires on restart.
+
+两项为基于固定上游版本的 T8 方法改编，非作者提供或背书，也非 MiniMax/Seedance 官方技能。[来源与权利边界](../directional_skills/SCREENWRITING-NOTICE.md) · [MIT 许可](../directional_skills/SCREENWRITING-LICENSE.txt)。不分发书籍、剧本、译文案例摘录；情境戏剧不是上游 sitcom Skill 的直译。方法传入不等于模型必遵守，尤其 9B 本地模型请核对对白、角色/道具、静音、等待及结尾。新增两项本地验收为参数传输/卸载替身测试，不能称为真实 9B 创作效果验收。
+
+These are bounded, pinned T8 method adaptations, not upstream-authored/endorsed or official model Skills. No books, screenplays or translated case excerpts are bundled; Situational drama is not a literal sitcom translation. Instruction transmission does not guarantee model compliance. Check speech, actors/props, silence, waits and endings, especially with small local models. Local coverage for these additions uses transport/unload doubles, not real 9B creative generation.
 
 ## 宁版-文武双全 / Ning Drama & Action
 
@@ -101,6 +150,6 @@ Small local models receive the complete creation settings, but may still violate
 
 Connect the result to `T8 Prompt Inspector` for a non-mutating, local format check. H3's ASCII `(S1)` and `<d>[Chinese] exact line</d>` are protocol syntax, not localized fullwidth IDs or `[中文]`. Seedance Chinese speech keeps its own `{}` policy. The Inspector's structural score is not creative or video quality.
 
-维护者可运行 `python tools/build_directional_skill_workflows.py --check` 校验四份示例。`python tools/build_example_workflows.py --check` 仍检查原18份工作流与缩略图，并额外检查这四份示例；不会调用模型。
+维护者可运行 `python tools/build_directional_skill_workflows.py --check` 校验八份定向示例（四份旧双平台示例和四份新独立示例）。`python tools/build_example_workflows.py --check` 仍检查原18份工作流与缩略图，并额外检查这些示例；不会调用模型。
 
-Maintainers can run `python tools/build_directional_skill_workflows.py --check`. The existing example checker also validates these four additions while preserving all checks on the original 18 workflows and their thumbnails. Neither command invokes a model.
+Maintainers can run `python tools/build_directional_skill_workflows.py --check` for eight directional examples: four historical dual-platform graphs and four new standalone graphs. The existing checker retains all checks on the original 18 workflows and thumbnails. Neither command invokes a model.

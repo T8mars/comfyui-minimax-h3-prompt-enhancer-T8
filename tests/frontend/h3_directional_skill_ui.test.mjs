@@ -60,6 +60,31 @@ test("author labels migrate legacy saved labels without changing IDs or workflow
     }
 });
 
+test("both drama choices round-trip all 38 fields through the real enhancer hooks", async () => {
+    for (const [filename, target] of [["minimax_h3_prompt_enhancer.js", "h3"], ["seedance20_prompt_enhancer.js", "seedance20"]]) {
+        const harness = await enhancerHarness(filename, target);
+        for (const id of ["drama_scene", "situational_drama"]) {
+            const saved = sampleValues(harness.names);
+            saved[35] = id;
+            const node = harness.configure(saved);
+            const values = harness.values(node);
+            assert.equal(values.director_skill, directionalSkillLabel(id));
+            assert.equal(values.seed, 42);
+            assert.equal(values.local_model, "test-model.gguf");
+            assert.equal(values.case_template, "saved case_template");
+            const serialized = {};
+            node.onSerialize(serialized);
+            assert.equal(serialized.widgets_values.length, 38);
+            assert.equal(serialized.widgets_values[35], id);
+            assert.deepEqual(harness.values(harness.configure(serialized.widgets_values)), values);
+            const help = directionalSkillDescription(id, target);
+            assert.match(help, /明确要求/);
+            assert.match(help, /explicit/i);
+            if (target === "seedance20") assert.doesNotMatch(help, /H3/);
+        }
+    }
+});
+
 test("unknown IDs are preserved for validation without activating a skill or exposing the value in help", () => {
     for (const invalid of [0, false, [], {}]) {
         assert.equal(directionalSkillId(invalid), invalid);

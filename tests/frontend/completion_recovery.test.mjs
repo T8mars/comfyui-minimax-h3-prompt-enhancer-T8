@@ -134,6 +134,25 @@ test("status failure resets the action and does not queue", async () => {
     assert.deepEqual(alerts, ["恢复检查失败：offline"]);
 });
 
+test("drama recovery shows stored authoring revision, never the currently selected Skill", async () => {
+    for (const original of ["drama_scene", "situational_drama"]) {
+        const { node, slotWidget, actionWidget } = fixture();
+        node.widgets.push({ name: "director_skill", value: "ning_wenwu" });
+        const alerts = [];
+        const result = await restoreCompletionResult({
+            node, component: "MiniMaxH3PromptEnhancerT8", slotWidget, actionWidget,
+            fetchFn: async () => ({ ok: true, json: async () => ({ recoverable: true, state: "completed", creation_metadata: {
+                director_skill: original, director_revision: "1.0.0", authoring_revision: "1.0.0", output_language: "中文", output_mode: "normal",
+            } }) }),
+            alertFn: (message) => alerts.push(message), queuePrompt: async () => {},
+        });
+        assert.equal(result.queued, true);
+        assert.match(alerts[0], new RegExp(original + " v1\\.0\\.0.*Authoring v1\\.0\\.0"));
+        assert.doesNotMatch(alerts[0], /ning_wenwu/);
+        assert.equal(node.widgets.at(-1).value, "ning_wenwu");
+    }
+});
+
 
 test("copied nodes with duplicate recovery slots receive an independent slot", () => {
     const first = fixture("t8-duplicate-slot-0001");

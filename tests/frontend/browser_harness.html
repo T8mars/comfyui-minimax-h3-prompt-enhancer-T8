@@ -24,6 +24,41 @@ try {
   const diagnostics = await import("../../web/js/diagnostics_viewer.mjs");
   const capability = await import("../../web/js/provider_capability_ui.mjs");
   const recommendation = await import("../../web/js/template_recommendation.mjs");
+  const directing = await import("../../web/js/h3_directional_skill_ui.mjs");
+  for (const target of ["h3", "seedance20"]) {
+    const host = document.createElement("div");
+    host.className = "node";
+    document.body.append(host);
+    const widgets = [
+      { name: "case_template", value: "saved-case", label: "原案例" },
+      { name: "reference_template", value: "saved-template", label: "原模板" },
+      { name: "director_skill", value: "none" },
+    ];
+    const n = { widgets, graph: { change() {} }, setDirtyCanvas() {},
+      addDOMWidget(name, type, element, options) {
+        host.append(element); const w = { name, type, element, options }; this.widgets.push(w); return w;
+      },
+    };
+    const selected = widgets[2];
+    const help = directing.addDirectionalSkillUI(n, selected, { target });
+    const count = n.widgets.length;
+    for (let i = 0; i < 20; i++) {
+      for (const id of ["drama_scene", "situational_drama"]) {
+        selected.value = id; selected.callback();
+        check(help.element.textContent.includes("明确要求") && help.element.textContent.includes("explicit request"), `${target} bilingual conditional dialogue help`);
+        check(help.element.textContent.includes("Example:"), `${target} current example visible in help`);
+        check(help.element.getBoundingClientRect().height === 120, `${target} actual DOM help height is fixed`);
+        if (target === "seedance20") check(!help.element.textContent.includes("H3"), "Seedance help has no H3 syntax");
+        selected.value = "none"; selected.callback();
+        check(n.widgets.length === count, `${target} Skill/Off cycles do not add widgets`);
+        check(n.widgets.find(w => w.name === "case_template").value === "saved-case", `${target} saved template value retained`);
+        check(n.widgets.find(w => w.name === "case_template").label === "原案例", `${target} template label restored`);
+      }
+    }
+    selected.value = target === "h3" ? "drama_scene" : "situational_drama"; selected.callback();
+    directing.addDirectionalSkillUI(n, selected, { target });
+    check(n.widgets.length === count, `${target} directing UI initialization is idempotent`);
+  }
   const menu = await import("../../web/js/template_menu_preview.js");
   const templateBrowser = await import("../../web/js/template_browser.js");
   const {

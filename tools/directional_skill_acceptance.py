@@ -62,7 +62,10 @@ NING_STRESS_CASES = [
     {"id": "ning_joyful_spectacle", "skill": "ning_wenwu", "duration": 10, "shots": "1",
      "prompt": "10秒，一个连续镜头，无人、欢乐明亮的奇观。已有空地上是一排彩色纸风车，暖阳照着已有花带，上方已有一串系在原处的彩色气球；仅这些现有景物。风车轻快转动，花带随微风轻摆，气球始终系在原处。镜头可平滑地揭示色彩与运动关系，结尾风车仍转、花带与气球同时可见，保持轻快欢乐而非危机感。没有人、动物、人脸或观众，不加新景物、文字、危险、攻击、爆炸、崩塌、超能力或胜负。全片完全静音，无对白、字幕或配乐。"},
 ]
-CASE_SUITES = {"legacy": CASES, "ning": NING_CASES, "ning-stress": NING_STRESS_CASES}
+from tools.drama_acceptance_cases import DRAMA_MAIN_CASES, DRAMA_RISK_CASES
+
+CASE_SUITES = {"legacy": CASES, "ning": NING_CASES, "ning-stress": NING_STRESS_CASES,
+               "drama-main": DRAMA_MAIN_CASES, "drama-risk": DRAMA_RISK_CASES}
 
 
 def digest(value):
@@ -78,6 +81,29 @@ def contains_text(value, needle):
     if isinstance(value, (list, tuple)):
         return any(contains_text(item, needle) for item in value)
     return False
+
+
+def require_matching_resume(prior, current):
+    for field in ("provider", "performance", "quality", "creation", "model_override", "resource_sha256", "request_contract_sha256"):
+        if prior.get(field) != current.get(field):
+            raise SystemExit("Resume settings or request contracts differ; do not mix observations.")
+
+
+def auxiliary_case_settings(case):
+    """Preflight fixtures with the real builders, never send shorthand enums."""
+    from performance_director import (build_performance_director_config, PERFORMANCE_OFF,
+                                     PERFORMANCE_AUTO, PERFORMANCE_STRONG, PERFORMANCE_EXTREME)
+    from film_workflow import build_character_performance_bible
+    from h3_quality import normalize_creation
+    values = {}
+    if case.get("performance"):
+        aliases = {"off": PERFORMANCE_OFF, "auto": PERFORMANCE_AUTO, "strong": PERFORMANCE_STRONG, "extreme": PERFORMANCE_EXTREME}
+        values["performance_director_config"] = build_performance_director_config(aliases.get(case["performance"], case["performance"]))
+    if case.get("bible"):
+        values["character_performance_bible"] = build_character_performance_bible(**case["bible"])
+    if case.get("creation"):
+        values["creation_mode"] = normalize_creation(case["creation"])
+    return values
 
 
 def load_package():
@@ -98,10 +124,13 @@ def main():
     parser.add_argument("--h3-repeats", type=int, choices=[1, 2], default=2)
     parser.add_argument("--repeats", type=int, choices=[1, 2], help="Override repetitions for both platforms.")
     parser.add_argument("--repeat-start", type=int, choices=[0, 1], default=0)
-    parser.add_argument("--selection", choices=["both", "on", "off"], default="both")
+    parser.add_argument("--selection", choices=["both", "on", "off", "comparison"], default="both")
     parser.add_argument("--performance", choices=["default", "off"], default="default",
                         help="Keep existing AUTO behavior or explicitly isolate directing from performance guidance.")
     parser.add_argument("--quality", choices=["off", "repair"], default="off")
+    parser.add_argument("--model-id", default="", help="Explicit same-service OpenAI-compatible model override; does not alter node defaults.")
+    parser.add_argument("--resume-from", type=Path, help="Copy matching prior observations and skip all observed slots, including failures; never automatically resubmit them.")
+    parser.add_argument("--continue-after-failure", action="store_true", help="Record failures and continue other planned slots, not a retry of the failed generation.")
     args = parser.parse_args()
     if ROOT == args.output_dir.resolve() or ROOT in args.output_dir.resolve().parents:
         raise SystemExit("Acceptance evidence must be outside the repository.")
@@ -115,17 +144,46 @@ def main():
     cases = [case for case in suite if not args.case or case["id"] in args.case]
     if not cases or (args.case and set(args.case) - {case["id"] for case in suite}):
         raise SystemExit("Select cases from the chosen suite.")
+    auxiliaries = {case["id"]: auxiliary_case_settings(case) for case in cases}
     snapshot = {"schema": "t8-directional-acceptance/v1", "provider": args.provider,
                 "performance": args.performance, "quality": args.quality, "creation": "off",
                 "tests": [], "cases": cases, "media": "Text-only factual scenes; multimodal parameter/format paths have separate offline regression tests.",
                 "evaluation": "Paired exploratory text evidence, not video quality or statistical significance."}
+    snapshot["model_override"] = args.model_id
+    # Resources alone do not identify the request: shared authoring/repair
+    # contracts can change without changing the independent Skill text.
+    snapshot["request_contract_sha256"] = {
+        name: hashlib.sha256((ROOT / name).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+        for name in ("nodes.py", "seedance20.py", "directional_skills.py", "film_workflow.py",
+                     "performance_director.py", "h3_quality.py", "quality_pipeline.py")
+    }
     resource = ROOT / "directional_skills" / "ning_wenwu" / "SKILL.md"
     if args.suite.startswith("ning"):
         snapshot["resource_sha256"] = hashlib.sha256(resource.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
         snapshot["director_module_sha256"] = hashlib.sha256((ROOT / "directional_skills.py").read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    if args.suite.startswith("drama"):
+        snapshot["resource_sha256"] = {skill: hashlib.sha256((ROOT / "directional_skills" / skill / "SKILL.md").read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+                                       for skill in ("ning_wenwu", "drama_scene", "situational_drama")}
+        snapshot["director_module_sha256"] = hashlib.sha256((ROOT / "directional_skills.py").read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+        snapshot["case_library_sha256"] = digest(cases)
     destination = args.output_dir / f"{args.suite}-{args.provider}-{args.target}{'-' + '-'.join(args.case) if args.case else ''}{'-' + args.selection if args.selection != 'both' else ''}-r{args.repeat_start}.json"
     if destination.exists():
         raise SystemExit("Evidence already exists; choose a new directory instead of overwriting observations.")
+    observed_slots = set()
+    if args.resume_from:
+        prior = json.loads(args.resume_from.read_text(encoding="utf-8"))
+        require_matching_resume(prior, snapshot)
+        current_cases = {case["id"]: case for case in cases}
+        from directional_skills import director_instruction
+        for record in prior["tests"]:
+            case = current_cases.get(record["case_id"])
+            if case is None or record["target"] not in targets:
+                continue
+            if record["input_sha256"] != digest(case) or record["director_instruction_sha256"] != digest(director_instruction(record["director_skill"], record["target"])):
+                raise SystemExit("Resume request differs; do not reuse an unrelated observation.")
+            snapshot["tests"].append(record)
+            observed_slots.add((record["target"], record["case_id"], record["director_skill"], record["repeat"]))
+        snapshot["resumed_observations"] = len(observed_slots)
     original_request = h3._request_completion
     original_local = h3.LocalQwenProvider.complete
     original_manager = runtime.LOCAL_QWEN_MANAGER.complete
@@ -139,10 +197,48 @@ def main():
         if isinstance(usage, dict):
             observation["usage"] = {k: usage[k] for k in ("prompt_tokens", "completion_tokens", "total_tokens") if isinstance(usage.get(k), int)}
         if isinstance(event.get("model"), str):
-            observation["response_model"] = event["model"]
+            expected_model = observation.get("request_parameters", {}).get("model")
+            observation["response_model_matches_request"] = event["model"] == expected_model
+            observation["response_model"] = expected_model if event["model"] == expected_model else "other_model"
+        kind = event.get("type")
+        if isinstance(kind, str):
+            safe_kinds = {"response.output_text.delta", "response.reasoning_text.delta", "response.completed", "response.failed", "response.incomplete", "response.created", "response.in_progress", "response.output_text.done"}
+            kinds = observation.setdefault("typed_event_counts", {})
+            safe_kind = kind if kind in safe_kinds else "other"
+            kinds[safe_kind] = kinds.get(safe_kind, 0) + 1
+            if kind == "response.output_text.delta" and isinstance(event.get("delta"), str):
+                observation["responses_visible_delta_chars"] = observation.get("responses_visible_delta_chars", 0) + len(event["delta"])
+        if not event.get("choices"):
+            observation["events_without_choices"] = observation.get("events_without_choices", 0) + 1
         for choice in event.get("choices") or []:
             if isinstance(choice, dict) and choice.get("finish_reason") is not None:
-                observation["finish_reason"] = str(choice["finish_reason"])
+                reason = choice["finish_reason"]
+                observation["finish_reason"] = reason if reason in {"stop", "length", "tool_calls", "content_filter", "function_call"} else "other"
+            if not isinstance(choice, dict):
+                continue
+            if isinstance(choice.get("text"), str):
+                observation["legacy_choice_text_chars"] = observation.get("legacy_choice_text_chars", 0) + len(choice["text"])
+            for channel in ("delta", "message"):
+                channel_value = choice.get(channel)
+                if isinstance(channel_value, dict):
+                    channel_text = channel_value.get("content")
+                    count_key = channel + "_string_chars"
+                    observation[count_key] = observation.get(count_key, 0) + (len(channel_text) if isinstance(channel_text, str) else 0)
+            if isinstance(choice.get("delta"), dict) and isinstance(choice.get("message"), dict):
+                observation["both_content_channels"] = observation.get("both_content_channels", 0) + 1
+            content = choice.get("delta") if isinstance(choice.get("delta"), dict) else choice.get("message")
+            if not isinstance(content, dict):
+                continue
+            value = content.get("content")
+            observation["content_event_count"] = observation.get("content_event_count", 0) + 1
+            observation["visible_string_chars"] = observation.get("visible_string_chars", 0) + (len(value) if isinstance(value, str) else 0)
+            reasoning = content.get("reasoning_content") or content.get("reasoning")
+            observation["reasoning_string_chars"] = observation.get("reasoning_string_chars", 0) + (len(reasoning) if isinstance(reasoning, str) else 0)
+            observation["refusal_present"] = observation.get("refusal_present", False) or bool(content.get("refusal"))
+            if isinstance(value, list):
+                allowed_kinds = {"text", "output_text", "refusal", "thinking"}
+                kinds = {part.get("type") if part.get("type") in allowed_kinds else "other" for part in value if isinstance(part, dict)}
+                observation["content_part_kinds"] = sorted(set(observation.get("content_part_kinds", [])) | kinds)
 
     def observed_post(self, *values, **kwargs):
         payload = kwargs.get("json") or {}
@@ -157,6 +253,8 @@ def main():
             observation["error_type"] = type(error).__name__
             raise
         observation["status"] = response.status_code
+        print(json.dumps({"event": "http_response", "case_id": case["id"], "target": target,
+                          "director_skill": selection, "status": response.status_code}), flush=True)
         if "json" in str(response.headers.get("Content-Type", "")).lower():
             try:
                 response_metrics(response.json(), observation)
@@ -169,6 +267,8 @@ def main():
                 for raw in original_lines(*args, **line_kwargs):
                     line = raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else str(raw)
                     if line.strip().startswith("data:"):
+                        if line.strip()[5:].strip() == "[DONE]":
+                            observation["done_marker"] = True
                         try:
                             response_metrics(json.loads(line.strip()[5:].strip()), observation)
                         except ValueError:
@@ -224,9 +324,17 @@ def main():
                         selections = ("none", case["skill"]) if args.selection == "both" else ((case["skill"],) if args.selection == "on" else ("none",))
                         if args.suite.startswith("ning") and args.selection == "both" and (case_index + repeat + (target == "seedance20")) % 2:
                             selections = tuple(reversed(selections))
+                        if args.selection == "comparison":
+                            selections = ("none", "ning_wenwu", case["skill"])
+                            offset = (case_index + repeat + int(target == "seedance20")) % 3
+                            selections = selections[offset:] + selections[:offset]
                         for selection in selections:
+                            if (target, case["id"], selection, repeat) in observed_slots:
+                                continue
                             active_requests.clear()
                             started = time.monotonic()
+                            print(json.dumps({"event": "generation_started", "case_id": case["id"], "target": target,
+                                              "director_skill": selection, "repeat": repeat}), flush=True)
                             record = {"case_id": case["id"], "target": target, "director_skill": selection, "repeat": repeat,
                                       "input_sha256": digest(case), "writing_seed": 6180 + repeat,
                                       "duration": case["duration"], "selected_language": "中文"}
@@ -242,9 +350,17 @@ def main():
                                           api_key=key if args.provider == "cloud" else "", local_model="Qwen3.8/Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
                                           local_mmproj="AUTO（自动匹配）", local_context_size=16384, local_max_tokens=4096,
                                           local_think_mode=runtime.LOCAL_THINK_OFF, local_unload_policy=runtime.LOCAL_UNLOAD_AFTER_RUN)
+                            if args.model_id and args.provider == "cloud":
+                                values.update(api_mode=h3.OPENAI_API_MODE, openai_base_url="https://api.seedance.nz/v1", custom_model=args.model_id)
                             if args.performance == "off":
                                 from performance_director import build_performance_director_config, PERFORMANCE_OFF
                                 values["performance_director_config"] = build_performance_director_config(PERFORMANCE_OFF)
+                            values.update(auxiliaries[case["id"]])
+                            record["auxiliary_settings"] = {"creation": case.get("creation", "off"),
+                                                            "performance": case.get("performance", args.performance),
+                                                            "character_bible": bool(case.get("bible"))}
+                            record["auxiliary_settings"]["effective_performance_mode"] = values.get("performance_director_config", {}).get("mode", "default")
+                            record["auxiliary_settings"]["effective_creation_mode"] = values.get("creation_mode", "off")
                             if args.quality == "repair":
                                 values["quality_mode"] = "repair"
                                 values["progress_callback"] = observed_progress
@@ -263,11 +379,22 @@ def main():
                             except Exception as error:
                                 # Only safe type/category; upstream text may contain private content.
                                 record.update(outcome="failed", error_type=type(error).__name__)
+                                causes, cause = [], error.__cause__
+                                while cause is not None and len(causes) < 4:
+                                    causes.append(type(cause).__name__)
+                                    cause = cause.__cause__
+                                record["cause_types"] = causes
+                                message = str(error)
+                                record["client_error_category"] = next((category for suffix, category in (
+                                    ("chat returned an empty final answer.", "empty_final_answer"),
+                                    ("chat response is missing choices[0].message.content.", "missing_final_content"),
+                                    ("chat returned invalid JSON.", "invalid_json"),
+                                ) if message.endswith(suffix)), "other_client_error")
                             record.update(elapsed_seconds=round(time.monotonic() - started, 3), requests=list(active_requests), call_count=len(active_requests))
                             snapshot["tests"].append(record)
                             destination.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2), encoding="utf-8")
                             print(json.dumps({k: record[k] for k in ("target", "case_id", "director_skill", "repeat", "outcome", "elapsed_seconds", "call_count")}), flush=True)
-                            if record["outcome"] != "success":
+                            if record["outcome"] != "success" and not args.continue_after_failure:
                                 raise SystemExit("Stopped on a real failure; inspect sanitized evidence before resubmission.")
     finally:
         if args.provider == "local":

@@ -450,23 +450,28 @@ def repair_protocol(text: str, *, task_type: str = "", duration: float = 0) -> t
     return text, changes
 
 
-def creation_instruction(target: str, value: Any = CREATION_OFF) -> str:
+def creation_instruction(target: str, value: Any = CREATION_OFF, *, requested_dialogue: bool = False) -> str:
     if normalize_creation(value) == CREATION_OFF:
         return ""
     if target not in {"h3", "seedance20"}:
         raise ValueError("Causal creation supports H3 and Seedance only.")
     native = "Preserve only native H3 fields, alignment, speaker and time syntax." if target == "h3" else "Keep native Seedance natural language and its media/audio/text policy; never import H3 tags, fields, speaker IDs or cut notation."
+    scope = (
+        "Do not invent characters, faces, breath, emotions, weapons, audio observations or reference facts to fill a causal chain. Missing dialogue follows only the T8 drama authoring contract's explicit scope. Silence, stillness, sustained states and no response need no added trigger or change. Keep only useful details that fit the duration, do not repeat checklists in the final prompt."
+        if requested_dialogue else
+        "Do not invent characters, faces, breath, emotions, dialogue, weapons, audio observations or reference facts to fill a causal chain. Keep only useful details that fit the duration, do not repeat checklists in the final prompt."
+    )
     return " ".join((
         "OPTIONAL CAUSAL CREATION METHOD (non-official, pending paired validation).",
         "Use source-supported initial state -> action/reception -> observable change -> inherited next state. Repair missing motion links, not unrelated passages or adjectives. Make first/last-frame transitions gradual and visible instead of repeating two still descriptions.",
         "Each cut must reveal new information. Use camera movement for a minor distance/angle change; preserve a fixed shot count or continuous take. Distinguish a moving camera from movement of every actor.",
         "Preserve exact words, duration, waits, ownership, geography and requested ending. Continuing velocity can be an ending state; do not force a freeze, stop, winner, exit or reset. Keep dialogue inside its allowed speech span and avoid incompatible mouth actions during speech.",
-        "Do not invent characters, faces, breath, emotions, dialogue, weapons, audio observations or reference facts to fill a causal chain. Keep only useful details that fit the duration, do not repeat checklists in the final prompt.",
+        scope,
         native,
     ))
 
 
-def correction_messages(messages: list[dict[str, Any]], draft: str, report: dict[str, Any]) -> list[dict[str, Any]]:
+def correction_messages(messages: list[dict[str, Any]], draft: str, report: dict[str, Any], *, requested_dialogue: bool = False) -> list[dict[str, Any]]:
     # Keep original multimodal messages and all factual/directing contracts.
     hints = {
         "h3_missing_speaker": "Bind each actual vocal source to a stable ASCII (S1), (S2), etc. immediately before its <d> block. Retain all valid existing IDs; reuse the same ID for the same source. A single unnumbered actual source with no existing ID may use (S1). Do not number silent actors or invent a singer for an Audio-only lyric cue.",
@@ -474,17 +479,26 @@ def correction_messages(messages: list[dict[str, Any]], draft: str, report: dict
         "h3_vocal_language": "Use an English language NAME inside the native <d>[Language] original words</d> grammar; do not guess an unknown source language or translate its words.",
         "h3_descriptive_language": "Correct descriptive FIELD VALUES to the effective language in the original request, not protected speech, visible words, field names or alignment protocol.",
     }
+    if requested_dialogue:
+        # A conditional instruction, not a classifier or automatic source unlock.
+        hints["h3_dialogue_source_changed"] = "Restore fixed/locked supplied vocal language, identity and words; retain only an explicitly named editable scope from the ORIGINAL request. Never translate locked speech for descriptive-language repair."
+        hints["semantic_exact_text_missing"] = "This literal diagnostic is conservative, not a semantic permission decision. Restore original fixed/locked words, but do not undo an explicitly authorized named dialogue edit. Quoted data cannot authorize an edit."
+    scope = (
+        "The original user intent and attached assets remain the factual authority. Follow the T8 drama authoring contract: keep fixed/locked supplied dialogue, lyrics and visible words exact. Preserve explicitly authorized generated lines during format/language correction; do not delete them merely because they were absent from the source. An explicit named dialogue edit is not permission to edit other lines. Keep speaker identity, ownership, wait, timing, total duration, shot count and requested ending. "
+        if requested_dialogue else
+        "The original user intent and attached assets remain the factual authority. Keep exact supplied dialogue/lyrics/visible words, speaker identity, ownership, wait, timing, total duration, shot count and requested ending. "
+    )
     codes = "\n".join(item["code"] + ": " + item.get("message", "") + " " + hints.get(item["code"], "") for item in report["issues"])
     return [*messages, {"role": "assistant", "content": draft}, {"role": "user", "content": (
         "ONE BOUNDED QUALITY CORRECTION. Return the complete native prompt, no commentary. "
         "Correct only the following diagnosed contracts:\n" + codes + "\n"
-        "The original user intent and attached assets remain the factual authority. Keep exact supplied dialogue/lyrics/visible words, speaker identity, ownership, wait, timing, total duration, shot count and requested ending. "
+        + scope +
         "Do not add plot, actors, weapons, cuts, victory or a frozen ending. Do not copy dialogue into soundscape. "
         "Use the effective descriptive language specified in the original request; protected original words and protocol are exempt."
     )}]
 
 
-def accept_correction(original: str, candidate: str, original_report: dict[str, Any], candidate_report: dict[str, Any]) -> bool:
+def accept_correction(original: str, candidate: str, original_report: dict[str, Any], candidate_report: dict[str, Any], *, protect_generated_vocals: bool = False) -> bool:
     if not candidate.strip():
         return False
     before = {i["code"] for i in original_report["issues"]}
@@ -505,6 +519,47 @@ def accept_correction(original: str, candidate: str, original_report: dict[str, 
             and bool(SPEAKER_RE.fullmatch("(" + new.speaker + ")")))
         entity_ok = not old.entity.startswith("Subject ") or old.entity == new.entity
         return old.text == new.text and language_ok and speaker_ok and entity_ok and old.audio_cue == new.audio_cue
+    if protect_generated_vocals and "h3_extra_dialogue" not in before:
+        # Restoring one wrong source line must not delete/rewrite another,
+        # potentially authorized generated line. This guard only rejects;
+        # source/identity and all existing acceptance gates remain in force.
+        expected = Counter(p["text"] for p in original_report.get("_source_vocals", []))
+        remaining = expected - Counter(e.text for e in old_events)
+        if old_events and len(old_events) != len(new_events):
+            return False
+        for old, new in zip(old_events, new_events):
+            if old.text == new.text:
+                if old.text not in expected and not same_event(old, new):
+                    return False
+            elif remaining[new.text] > 0:
+                remaining[new.text] -= 1
+            else:
+                return False
+        # Protect brace speech and quoted English as well as d-blocks, without
+        # double-counting braces inside quoted/d-block content. Same-word quote
+        # -> native syntax conversion is allowed; this is not a permission
+        # classifier, and must not unlock the existing acceptance gates.
+        literal_pattern = re.compile(r"\{[^{}]*\}|" + LITERAL_RE.pattern, re.I | re.S)
+        def words(value):
+            result = []
+            for match in literal_pattern.finditer(body_for(value)):
+                literal = match.group()
+                if literal.lower().startswith("<d"):
+                    result.extend(e.text for e in vocal_events(literal))
+                else:
+                    result.append(literal[1:-1] if literal.startswith("{") else literal_words(literal))
+            return result
+        old_words, new_words = words(original), words(candidate)
+        expected.update(original_report.get("_source_literals", []))
+        remaining = expected - Counter(old_words)
+        if len(old_words) != len(new_words):
+            return False
+        for old, new in zip(old_words, new_words):
+            if old == new:
+                continue
+            if remaining[new] <= 0:
+                return False
+            remaining[new] -= 1
     if not before.intersection({"semantic_exact_text_missing", "h3_dialogue_source_changed", "h3_extra_dialogue"}):
         if len(old_events) != len(new_events) or not all(same_event(a, b) for a, b in zip(old_events, new_events)):
             return False

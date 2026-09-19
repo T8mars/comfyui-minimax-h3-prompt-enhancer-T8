@@ -40,7 +40,7 @@ export function recoveryMessage(status) {
     if (status.recoverable) {
         const meta = status.creation_metadata;
         const provenance = meta?.director_skill
-            ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
+            ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"}${meta.authoring_revision ? ` · Authoring v${meta.authoring_revision}` : ""} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
             : "";
         return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance;
     }

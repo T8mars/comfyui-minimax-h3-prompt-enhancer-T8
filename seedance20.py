@@ -8,7 +8,7 @@ from .quality_pipeline import seedance_quality_result, retained_draft_provider
 from comfy_api.latest import io
 from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
     prepare_director_skill, director_instruction, coordinated_performance_instruction,
-    template_fact_lookup, director_metadata, preserve_director_on_repair)
+    template_fact_lookup, director_metadata, preserve_director_on_repair, is_drama_skill, drama_authoring_instruction)
 from .completion_recovery import (
     RECOVERY_ACTION_NORMAL,
     RECOVERY_ACTION_RESTORE,
@@ -677,6 +677,7 @@ def _build_messages(
     character_rule = character_performance_instruction(
         character_performance_bible,
         model_target="Seedance 2.0",
+        **({"requested_dialogue": True} if is_drama_skill(skill_id) else {}),
     )
     if character_rule:
         system_rules.append(character_rule)
@@ -685,7 +686,10 @@ def _build_messages(
         system_rules.append(case_instruction)
     if directional:
         system_rules.append(director_instruction(skill_id, "seedance20"))
-    causal_rule = creation_instruction("seedance20", creation_mode)
+    authoring_rule = drama_authoring_instruction(skill_id)
+    if authoring_rule:
+        system_rules.append(authoring_rule)
+    causal_rule = creation_instruction("seedance20", creation_mode, **({"requested_dialogue": True} if is_drama_skill(skill_id) else {}))
     if causal_rule:
         system_rules.append(causal_rule)
     system_content = "\n\n".join(system_rules)
@@ -972,6 +976,7 @@ def enhance_seedance20_prompt(
                     complete=lambda correction: provider.complete(correction, temperature=0.1, seed=int(seed)),
                     language=output_language, source="\n".join((str(prompt), cleaned["reference_context"], cleaned["constraints"])),
                     shot_count=shots, progress=progress_callback,
+                    **({"director_skill": director_skill} if is_drama_skill(director_skill) else {}),
                 )
                 local_attempts += quality_metrics.get("correction_calls", 0)
                 retained["draft"] = result
@@ -1075,6 +1080,7 @@ def enhance_seedance20_prompt(
                 recovery_component=recovery_component, recovery_slot=recovery_slot, temperature_override=0.1),
             language=output_language, source="\n".join((str(prompt), cleaned["reference_context"], cleaned["constraints"])),
             shot_count=shots, progress=progress_callback,
+            **({"director_skill": director_skill} if is_drama_skill(director_skill) else {}),
         )
         if progress_callback:
             progress_callback("llm_completed", attempts=sum(cloud_attempts))

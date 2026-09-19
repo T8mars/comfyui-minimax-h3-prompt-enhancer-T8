@@ -5,6 +5,8 @@ export const DIRECTIONAL_SKILLS = Object.freeze([
     { id: "high_density_combat", label: "土豆-高密度连续攻防 / High-density combat", legacyLabel: "高密度连续攻防 / High-density combat", summary: "按已有武器与能力编排攻防，让上一动作结果触发下一动作。", example: "例 / Example: 两人徒手连续攻防8秒 / Unarmed duel, 8s nonstop." },
     { id: "cinematic_gunfight", label: "兔子-电影枪战导演 / Cinematic gunfight", legacyLabel: "电影枪战导演 / Cinematic gunfight", summary: "围绕人物目标组织枪战、空间、动作回应与声音。", example: "例 / Example: 雨夜枪战掩护同伴撤离 / Rainy gunfight, cover an escape." },
     { id: "ning_wenwu", label: "宁版-文武双全 / Ning · Drama & Action", summary: "文戏看信息与反应，武戏看发力与受力；围绕关键变化选择观看重点。", example: "例 / Example: 说完原句后拔剑，但不出手 / Speak, then draw the sword without attacking." },
+    { id: "drama_scene", label: "戏剧场面｜关系与潜台词 / Dramatic scene", summary: "对白、沉默与已有动作表达关系；安静和无回应也成立。 / Words, silence and actions carry relationships; no forced conflict.", example: "例 / Example: 推回辞职信，原句‘明天的会，你还来吗？’ / Return the resignation letter; keep the supplied invitation." },
+    { id: "situational_drama", label: "情境戏剧｜处境与铺垫回收 / Situational drama", summary: "围绕小目标组织应对与期待回收；不默认搞笑或反转。 / Develop a situation and its response; comedy is optional.", example: "例 / Example: 创作两人抬桌过门、礼让错位后协作；无对白 / Create a warm, silent table-moving coordination scene." },
 ]);
 
 export function directionalSkillId(value) {
@@ -41,6 +43,8 @@ export function directionalSkillDescription(value, target = "h3") {
         skill.id === "none" ? "定向创作：关闭 / Off" : `当前创作来源：${skill.label}（非官方）`,
         ...(skill.example ? [skill.example] : []),
         skill.summary,
+        ...(["drama_scene", "situational_drama"].includes(skill.id)
+            ? ["原句默认保留；仅明确要求时创作缺失对白。角色圣经选填。 / Keep supplied lines; new dialogue needs an explicit request. Bible optional."] : []),
         format,
         skill.id === "none" ? "选择一种定向技能即可，无需新增连线或填写表格。" : priority,
         "恢复上次结果不会按当前技能重新生成。",

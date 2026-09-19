@@ -1,0 +1,18 @@
+{
+  "id": "situational_drama",
+  "version": "1.0.0",
+  "authoring_revision": "1.0.0",
+  "source_repository": "https://github.com/jtydhr88/screenwriting-skills",
+  "source_commit": "50825325b3940a17f032129851f5c83382863000",
+  "source_author": "Terry Jia (jtydhr88)",
+  "source_sha256": "d3e4c1f6cdb604e2f0b92d8797530306fea0b5033db8f891f565cb5cc6e6db6b",
+  "primary_source": "plugins/screenwriting/skills/sw-sitcom-comedy/SKILL.md",
+  "source_files": {
+    "plugins/screenwriting/skills/sw-sitcom-comedy/SKILL.md": "d3e4c1f6cdb604e2f0b92d8797530306fea0b5033db8f891f565cb5cc6e6db6b",
+    "plugins/screenwriting/skills/sw-dialogue/SKILL.md": "c9f93e9d78dd137b1e8617289df947e54996ce82dad5db8f0f1936264ef95299",
+    "plugins/screenwriting/skills/sw-scene-craft/SKILL.md": "8e17bd548c7b27e7c88d8bceb498cf7d61e545d567085efecb1e4818f4e0e902"
+  },
+  "relationship": "User-named local situational-drama method: T8 independently selected and worded adaptation of premise-driven situation, setup and response methods. Comedy is optional. Not an upstream translation or endorsement. No book/script quotations or translated case text bundled.",
+  "license_notice": "../SCREENWRITING-LICENSE.txt",
+  "rights_notice": "../SCREENWRITING-NOTICE.md"
+}

@@ -8,11 +8,13 @@ try:
                              repair_protocol, accept_correction, body_for, LITERAL_RE,
                              correction_messages)
     from .h3_prompt_relay import compile_relay_response
+    from .directional_skills import DIRECTOR_OFF, is_drama_skill
 except ImportError:
     from h3_quality import (QUALITY_OFF, check_h3, check_seedance, run_quality,
                             repair_protocol, accept_correction, body_for, LITERAL_RE,
                             correction_messages)
     from h3_prompt_relay import compile_relay_response
+    from directional_skills import DIRECTOR_OFF, is_drama_skill
 
 
 @contextmanager
@@ -45,15 +47,20 @@ def retained_draft_provider(provider, state, *, enabled=False, progress=None):
 
 def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
                       shot_count, language, source, media_labels=None, relay_config=None,
-                      progress=None, budget_used=False):
+                      progress=None, budget_used=False, director_skill=DIRECTOR_OFF):
     if mode == QUALITY_OFF:
         return draft, {}
     options = dict(task_type=task_type, duration=duration, shot_count=shot_count,
                    language=language, source=source, media_labels=media_labels)
+    drama = is_drama_skill(director_skill)
+    def correction(original, text, report):
+        return correction_messages(original, text, report, **({"requested_dialogue": True} if drama else {}))
     if not relay_config:
         return run_quality(draft, mode=mode, messages=messages, complete=complete,
                            check=lambda text: check_h3(text, **options),
                            repair=lambda text: repair_protocol(text, task_type=task_type, duration=duration),
+                           **({"build_correction": correction} if drama else {}),
+                           **({"accept": lambda old, new, before, after: accept_correction(old, new, before, after, protect_generated_vocals=True)} if drama else {}),
                            progress=progress, budget_used=budget_used)
 
     def compile_text(text):
@@ -105,10 +112,11 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
             for key in ("prompt", "end_state"):
                 if [m.group() for m in LITERAL_RE.finditer(first[key])] != [m.group() for m in LITERAL_RE.finditer(second[key])]:
                     return False
-        return accept_correction(a["native_prompt"], b["native_prompt"], before, after)
+        return accept_correction(a["native_prompt"], b["native_prompt"], before, after,
+                                 **({"protect_generated_vocals": True} if drama else {}))
 
     def build(messages, text, report):
-        corrected = correction_messages(messages, text, report)
+        corrected = correction(messages, text, report)
         corrected[-1]["content"] += (
             " Return ONLY the complete original Relay authoring JSON envelope with global_prompt, events and native_prompt. "
             "Retain event count, weights, exact event speech, end-state facts and requested ranges. "
@@ -122,7 +130,11 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
 
 
 def seedance_quality_result(draft, *, mode, messages, complete, language, source,
-                            shot_count=0, progress=None):
+                            shot_count=0, progress=None, director_skill=DIRECTOR_OFF):
     return run_quality(draft, mode=mode, messages=messages, complete=complete,
                        check=lambda text: check_seedance(text, language=language, source=source, shot_count=shot_count),
+                       **({"build_correction": lambda original, text, report: correction_messages(original, text, report, requested_dialogue=True)}
+                          if is_drama_skill(director_skill) else {}),
+                       **({"accept": lambda old, new, before, after: accept_correction(old, new, before, after, protect_generated_vocals=True)}
+                          if is_drama_skill(director_skill) else {}),
                        progress=progress)

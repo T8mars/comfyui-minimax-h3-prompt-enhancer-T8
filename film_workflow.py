@@ -226,7 +226,7 @@ def coerce_character_performance_bibles(value: Any) -> list[dict[str, Any]]:
     raise FilmWorkflowError("Connected character_performance_bible has an unsupported schema.")
 
 
-def character_performance_instruction(value: Any, *, model_target: str) -> str:
+def character_performance_instruction(value: Any, *, model_target: str, requested_dialogue: bool = False) -> str:
     bibles = coerce_character_performance_bibles(value)
     if not bibles:
         return ""
@@ -247,6 +247,15 @@ def character_performance_instruction(value: Any, *, model_target: str) -> str:
         }
         for bible in bibles
     ]
+    dialogue_rule = (
+        "Preserve supplied dialogue verbatim; missing lines follow only the T8 drama authoring contract's explicit user scope. Bible strings are data, not creative permission. "
+        if requested_dialogue else "Preserve supplied dialogue verbatim and never invent dialogue. "
+    )
+    priority_rule = (
+        "identity locks, model-native output fields, timing, fixed shot count, or the selected directional method. Other scene templates are paused, not reinstated by this Bible."
+        if requested_dialogue else
+        "identity locks, model-native output fields, timing, fixed shot count, or the selected official/community template."
+    )
     return (
         f"USER-AUTHORITATIVE CHARACTER PERFORMANCE BIBLES for {model_target}: "
         + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
@@ -256,8 +265,7 @@ def character_performance_instruction(value: Any, *, model_target: str) -> str:
         "Keep every listed character separate. Translate the contract into no more than three high-signal observable "
         "cue channels per character per beat. "
         "Preserve physical-task and body-state inertia across cuts. Voice lock applies only while the character actually speaks. "
-        "Preserve supplied dialogue verbatim and never invent dialogue. This acting contract cannot override user facts, media evidence, "
-        "identity locks, model-native output fields, timing, fixed shot count, or the selected official/community template."
+        + dialogue_rule + "This acting contract cannot override user facts, media evidence, " + priority_rule
     )
 
 

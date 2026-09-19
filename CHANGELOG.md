@@ -3,6 +3,39 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.21.0] - 2026-09-19
+
+### Added
+
+- Added two opt-in independent drama Skills to the existing H3 and Seedance
+  2.0 selectors: `drama_scene` (relationships and subtext) and
+  `situational_drama` (situation, setup and consequence). Existing Skills,
+  Off/default behavior, node IDs, sockets, outputs and workflow field order
+  remain compatible.
+- Added four standalone bilingual H3/Seedance example workflows and pinned
+  source/license notices for the independently bounded T8 adaptations.
+
+### Fixed
+
+- New drama-only authoring and quality-correction guards preserve locked or
+  supplied dialogue, restrict newly authored lines to explicit user scope,
+  keep native H3/Seedance speech grammar, and use a closed sound whitelist.
+- New correction acceptance protection prevents restoring one missing source
+  line from deleting or rewriting another authorized generated line.
+- Recovery provenance, cache signatures, frontend guidance and release checks
+  recognize both new Skills without changing legacy requests.
+
+### Validation and limitations
+
+- 618 Python tests: 616 passed and 2 optional downstream Relay parser tests
+  skipped; 38 frontend tests and real-browser contracts passed. A CPU-isolated
+  candidate Registry archive loaded all 25 nodes, retained 8 official GIFs and
+  included no T8 GIFs, GGUF files or roadmap state.
+- Serial API acceptance used the catalog-confirmed `zhenzhen/gm-3.8-flash`
+  model: 68 slots, 62 usable drafts and 6 recorded failures. Results are
+  exploratory text evidence, not a universal quality win rate or rendered
+  video acceptance; model compliance limits remain documented.
+
 ## [1.20.0] - 2026-09-18
 
 ### Added
