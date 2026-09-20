@@ -130,7 +130,7 @@ class CreativeSuiteTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         # New public nodes append after the existing YuE2 node; the creative
         # suite keeps its historical relative order immediately before them.
-        creative_start = 8
+        creative_start = 11
         creative_end = creative_start + len(creative.CREATIVE_SUITE_NODES)
         self.assertEqual(ids[creative_start:creative_end], [node.define_schema().node_id for node in creative.CREATIVE_SUITE_NODES])
 

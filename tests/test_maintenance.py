@@ -130,8 +130,6 @@ class MaintenanceTests(unittest.TestCase):
             "MiniMaxH3PromptEnhancerT8",
             "Seedance20PromptEnhancerT8",
             "MiniMaxMusic3PromptEnhancerT8",
-            "T8LyricWriter",
-            "T8ArrangementPlanner",
             "QwenImage21PromptEnhancerT8",
             "T8LLMProviderConfig",
             "T8PromptInspector",

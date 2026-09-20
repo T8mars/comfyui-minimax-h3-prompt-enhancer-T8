@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.23.3] - 2026-09-20
+
+### Fixed
+
+- Correct the registration and native-workflow compatibility assertions for
+  the expanded music-planner node list.
+
 ## [1.23.2] - 2026-09-20
 
 ### Fixed
