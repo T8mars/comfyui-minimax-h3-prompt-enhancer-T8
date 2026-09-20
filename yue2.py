@@ -41,6 +41,7 @@ from .provider_config import (
     T8ProviderConfigIO, merge_provider_config,
 )
 from .provider_transport import request_chat_completion, ChatCompletionTruncatedError
+from .music_plan_contract import LYRIC_PLAN_SCHEMA, ARRANGEMENT_PLAN_SCHEMA, MusicPlanError, parse_plan
 
 
 NODE_ID = "YuE2MusicPromptEnhancerT8"
@@ -455,6 +456,28 @@ def enhance_yue2_prompt(*, session=None, **kwargs) -> tuple[str, str, str, str, 
     idea = str(values["music_idea"]).strip()
     if not idea:
         raise YuE2PromptError("请填写创作要求 / Music brief is required.")
+    try:
+        connected_lyric_plan = parse_plan(values.get("lyric_plan", ""), LYRIC_PLAN_SCHEMA)
+        connected_arrangement_plan = parse_plan(values.get("arrangement_plan", ""), ARRANGEMENT_PLAN_SCHEMA)
+    except MusicPlanError as error:
+        raise YuE2PromptError(str(error)) from error
+    planned_lyrics = str((connected_lyric_plan or {}).get("lyrics") or "")
+    if planned_lyrics:
+        existing = str(values.get("lyrics") or "")
+        if existing.strip() and existing.strip() != planned_lyrics.strip():
+            raise YuE2PromptError("已连接作词计划与歌词输入不一致；请只保留一个来源。")
+        if not existing.strip() and values.get("lyrics_mode") in [GENERATE, EDIT]:
+            raise YuE2PromptError("已连接完成作词计划；请将歌词模式设为 AUTO/严格保留，不要重复生成。")
+        if not existing.strip():
+            values["lyrics"] = planned_lyrics
+    if connected_arrangement_plan:
+        for field in ("genre", "instruments", "bpm", "meter", "key_scale", "structure"):
+            current = values.get(field)
+            planned = connected_arrangement_plan.get(field)
+            if current not in (None, "", 0, "AUTO") and planned not in (None, "", 0, "AUTO") and str(current).strip() != str(planned).strip():
+                raise YuE2PromptError(f"编曲计划与节点字段 {field} 冲突；请保留一个明确来源。")
+            if current in (None, "", 0, "AUTO") and planned not in (None, "", 0, "AUTO"):
+                values[field] = planned
     for name in ("music_idea", "lyrics", "structure", "genre", "vocal", "instruments", "constraints", "edit_request", "abc"):
         if API_KEY_PATTERN.search(str(values[name])):
             raise YuE2PromptError(f"请从 {name} 移除密钥，改用 API Key 输入。")
@@ -640,7 +663,11 @@ class YuE2MusicPromptEnhancer(io.ComfyNode):
             else:
                 inputs.append(io.String.Input(name, multiline=name in multiline, socketless=name in {"recovery_slot", "recovery_action"}, **common))
         inputs.extend([io.String.Input("api_key", optional=True, force_input=True, display_name="LLM API Key"),
-                       T8ProviderConfigIO.Input("provider_config", optional=True, display_name="共享 LLM 渠道配置（可选）")])
+                       T8ProviderConfigIO.Input("provider_config", optional=True, display_name="共享 LLM 渠道配置（可选）"),
+                       io.String.Input("lyric_plan", optional=True, multiline=True, dynamic_prompts=True,
+                                        default="", advanced=True, display_name="作词计划（可选）/ Lyric plan"),
+                       io.String.Input("arrangement_plan", optional=True, multiline=True, dynamic_prompts=True,
+                                        default="", advanced=True, display_name="编曲计划（可选）/ Arrangement plan")])
         return io.Schema(node_id=NODE_ID, display_name="YuE2 音乐提示词与歌词创作（T8）", category="T8/Music",
             description="YuE2 style + lyrics + optional ABC. T8 lyric creation; no audio generation or model downloads.",
             inputs=inputs, outputs=[io.String.Output(display_name=n) for n in ("style", "lyrics", "abc", "yue2_request_json", "creation_report_json")])

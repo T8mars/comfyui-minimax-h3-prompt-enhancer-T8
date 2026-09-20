@@ -3,6 +3,7 @@ from comfy_api.latest import ComfyExtension, io
 from .nodes import MiniMaxH3PromptEnhancer
 from .music3 import MiniMaxMusic3PromptEnhancer
 from .yue2 import YuE2MusicPromptEnhancer
+from .music_planners import T8LyricWriter, T8ArrangementPlanner
 from .qwen_image21 import QwenImage21PromptEnhancer
 from .seedance20 import Seedance20PromptEnhancer
 from .case_library_routes import register_routes
@@ -46,6 +47,8 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8CharacterPerformanceBibleStack,
             *CREATIVE_SUITE_NODES,
             YuE2MusicPromptEnhancer,
+            T8LyricWriter,
+            T8ArrangementPlanner,
             QwenImage21PromptEnhancer,
         ]
 
@@ -58,6 +61,8 @@ __all__ = [
     "WEB_DIRECTORY",
     "T8PromptEnhancerExtension",
     "MiniMaxMusic3PromptEnhancer",
+    "T8LyricWriter",
+    "T8ArrangementPlanner",
     "QwenImage21PromptEnhancer",
     "T8LLMProviderConfig",
     "T8PromptInspector",

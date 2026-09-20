@@ -39,6 +39,12 @@ recovery. Existing core nodes and workflows remain unchanged.
 
 [Guide and call costs](web/js/docs/yue2_music.md) · [Cloud creation](example_workflows/yue2_cloud_creation_example.json) · [Preserve lyrics](example_workflows/yue2_preserve_lyrics_example.json) · [Local GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC melody](example_workflows/yue2_abc_melody_example.json)
 
+## New: independent lyric and arrangement planners
+
+Two independent text-only planning nodes are included: **T8 Lyric Writer** returns lyrics plus a versioned `lyric_plan_json`; **T8 Arrangement Planner** returns section, tempo, meter, key, instrumentation, and energy-curve data as `arrangement_plan_json`. They do not generate audio, ABC, or MIDI. Both reuse the YuE2 provider family, shared config, local GGUF runtime, and existing model defaults. With their plan sockets disconnected, Music 3 and YuE2 follow the original workflow behavior unchanged.
+
+A lyric plan can feed Music 3 or YuE2. An arrangement plan is projected only through a small allow-list of music fields; external Skill markup or free-form text is never injected wholesale into a Caption. Plans use `t8-lyric-plan/v1` and `t8-arrangement-plan/v1`, with schema, size, and credential-leak checks before connection. Text review is not an audible-music or audio-render acceptance test.
+
 ## New: Qwen Image 2.1 prompt enhancement
 
 The independent **Qwen Image 2.1 Prompt Enhancer** turns a text brief into an image-generation prompt and accepts one to ten ordered reference images for image editing. It follows the frozen Image Prompt Rewriting Expert Skill bundled in this repository and returns an English visual description plus a separate `wh_ratio` field. The node exposes a maximum prompt length (`0` means automatic), aspect ratio, transparent RGBA, and the same provider family as the other T8 nodes.

@@ -43,6 +43,12 @@
 
 [使用说明与费用边界](web/js/docs/yue2_music.md) · [云端创作](example_workflows/yue2_cloud_creation_example.json) · [保留原词](example_workflows/yue2_preserve_lyrics_example.json) · [本地 GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC 旋律](example_workflows/yue2_abc_melody_example.json)
 
+## 新增：独立作词与编曲规划器
+
+新增两个互相独立的文字规划节点：**T8 作词规划器 / Lyric Writer** 输出歌词与版本化 `lyric_plan_json`；**T8 编曲规划器 / Arrangement Planner** 输出段落、节拍、调性、配器和能量曲线的 `arrangement_plan_json`。它们只生成可复用的文本计划，不生成音频、ABC 或 MIDI。两节点沿用 YuE2 的四类渠道、共享配置、本地 GGUF 和原有默认模型；断开计划 socket 时，Music 3 与 YuE2 的旧工作流完全按原逻辑运行。
+
+作词计划可接入 Music 3 / YuE2，编曲计划只投影受控音乐字段，不把外部 Skill 格式或整段自由文本直接注入 Caption。计划采用 `t8-lyric-plan/v1` 与 `t8-arrangement-plan/v1`，连接前会校验版本、大小和凭据泄漏；质量审校仍是文本审校，不代表听感或音频验收。
+
 ## 新增：Qwen Image 2.1 图像提示词增强
 
 新增独立节点 **Qwen Image 2.1 Prompt Enhancer**：把文字提示词改写为图像生成提示词，也支持连接 1–10 张有序参考图进行图像编辑。它严格使用仓库内冻结的 Image Prompt Rewriting Expert Skill，输出英文画面描述和 `wh_ratio` JSON，并提供最大提示词字数、比例、透明 RGBA 和四类渠道设置。
