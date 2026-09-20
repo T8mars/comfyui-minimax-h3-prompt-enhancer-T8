@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.23.2] - 2026-09-20
+
+### Fixed
+
+- Update node locale/docs and compatibility assertions for the two public music
+  planning nodes so the full ComfyUI test matrix recognizes their registration.
+
 ## [1.23.1] - 2026-09-20
 
 ### Fixed

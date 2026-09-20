@@ -130,7 +130,9 @@ class CreativeSuiteTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         # New public nodes append after the existing YuE2 node; the creative
         # suite keeps its historical relative order immediately before them.
-        self.assertEqual(ids[-15:-2], [node.define_schema().node_id for node in creative.CREATIVE_SUITE_NODES])
+        creative_start = 8
+        creative_end = creative_start + len(creative.CREATIVE_SUITE_NODES)
+        self.assertEqual(ids[creative_start:creative_end], [node.define_schema().node_id for node in creative.CREATIVE_SUITE_NODES])
 
     def test_creative_director_is_local_and_preserves_dimension_policies(self):
         result = creative.T8CreativeDirector.execute(

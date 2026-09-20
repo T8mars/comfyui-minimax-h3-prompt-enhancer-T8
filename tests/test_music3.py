@@ -158,7 +158,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         )
         self.assertEqual(registered[7], "T8PerformanceDirectorConfig")
         self.assertEqual(
-            registered[8:-2],
+            registered[8:-4],
             [
                 "T8FilmProjectRouter",
                 "T8CharacterPerformanceBible",

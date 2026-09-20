@@ -109,7 +109,7 @@ class P0P1FeatureTests(unittest.TestCase):
         )
         self.assertEqual(schemas[7].node_id, "T8PerformanceDirectorConfig")
         self.assertEqual(
-            [schema.node_id for schema in schemas[8:-2]],
+            [schema.node_id for schema in schemas[8:-4]],
             [
                 "T8FilmProjectRouter",
                 "T8CharacterPerformanceBible",
@@ -134,7 +134,8 @@ class P0P1FeatureTests(unittest.TestCase):
             inputs = schema.inputs[:-7] if schema.node_id == "MiniMaxH3PromptEnhancerT8" else schema.inputs[:-3]
             self.assertEqual(inputs[-2].id, "provider_config")
             self.assertEqual(inputs[-1].id, "character_performance_bible")
-        self.assertEqual(schemas[2].inputs[-1].id, "provider_config")
+        self.assertEqual(schemas[2].inputs[-3].id, "provider_config")
+        self.assertEqual([item.id for item in schemas[2].inputs[-2:]], ["lyric_plan", "arrangement_plan"])
         for schema in schemas[:3]:
             input_ids = [item.id for item in schema.inputs]
             self.assertIn("recovery_slot", input_ids)

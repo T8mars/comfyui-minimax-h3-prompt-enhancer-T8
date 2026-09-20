@@ -223,5 +223,15 @@
     "display_name": "T8 音乐视频节拍导演",
     "inputs": {"video_intent": {"name": "MV / 视频意图（必填）"}, "lyrics": {"name": "歌词（可选）"}, "music_caption": {"name": "Music Caption（可选）"}, "known_bpm": {"name": "已知 BPM（0=未知）"}},
     "outputs": {"0": {"name": "节拍表"}, "1": {"name": "节拍表 JSON"}, "2": {"name": "H3 导演方案"}, "3": {"name": "Seedance 2.0 导演方案"}}
+  },
+  "T8LyricWriter": {
+    "display_name": "T8 作词规划器",
+    "inputs": {"music_idea": {"name": "创作主题（必填）"}, "lyrics_mode": {"name": "歌词模式"}, "lyrics_language": {"name": "歌词语言"}, "api_mode": {"name": "LLM 渠道"}, "api_key": {"name": "LLM API Key"}, "provider_config": {"name": "共享 LLM 渠道配置（可选）"}},
+    "outputs": {"0": {"name": "歌词"}, "1": {"name": "作词计划 JSON"}, "2": {"name": "作词报告 JSON"}}
+  },
+  "T8ArrangementPlanner": {
+    "display_name": "T8 编曲规划器",
+    "inputs": {"music_idea": {"name": "音乐创意（必填）"}, "genre": {"name": "曲风"}, "instruments": {"name": "乐器与人声"}, "bpm": {"name": "BPM（0=AUTO）"}, "meter": {"name": "拍号"}, "key_scale": {"name": "调性"}, "api_mode": {"name": "LLM 渠道"}, "api_key": {"name": "LLM API Key"}, "provider_config": {"name": "共享 LLM 渠道配置（可选）"}},
+    "outputs": {"0": {"name": "编曲计划 JSON"}, "1": {"name": "编曲摘要"}, "2": {"name": "编曲报告 JSON"}}
   }
 }

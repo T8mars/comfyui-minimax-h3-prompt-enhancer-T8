@@ -223,5 +223,15 @@
     "display_name": "T8 Music-to-Video Beat Sheet",
     "inputs": {"video_intent": {"name": "MV / video intent (required)"}, "lyrics": {"name": "Lyrics (optional)"}, "music_caption": {"name": "Music Caption (optional)"}, "known_bpm": {"name": "Known BPM (0=unknown)"}},
     "outputs": {"0": {"name": "Beat sheet"}, "1": {"name": "Beat sheet JSON"}, "2": {"name": "H3 direction"}, "3": {"name": "Seedance 2.0 direction"}}
+  },
+  "T8LyricWriter": {
+    "display_name": "T8 Lyric Writer",
+    "inputs": {"music_idea": {"name": "Music idea (required)"}, "lyrics_mode": {"name": "Lyrics mode"}, "lyrics_language": {"name": "Lyrics language"}, "api_mode": {"name": "LLM provider"}, "api_key": {"name": "LLM API Key"}, "provider_config": {"name": "Shared LLM provider config (optional)"}},
+    "outputs": {"0": {"name": "Lyrics"}, "1": {"name": "Lyric plan JSON"}, "2": {"name": "Lyric report JSON"}}
+  },
+  "T8ArrangementPlanner": {
+    "display_name": "T8 Arrangement Planner",
+    "inputs": {"music_idea": {"name": "Music idea (required)"}, "genre": {"name": "Genre"}, "instruments": {"name": "Instruments and vocal"}, "bpm": {"name": "BPM (0=AUTO)"}, "meter": {"name": "Meter"}, "key_scale": {"name": "Key / scale"}, "api_mode": {"name": "LLM provider"}, "api_key": {"name": "LLM API Key"}, "provider_config": {"name": "Shared LLM provider config (optional)"}},
+    "outputs": {"0": {"name": "Arrangement plan JSON"}, "1": {"name": "Arrangement summary"}, "2": {"name": "Arrangement report JSON"}}
   }
 }
