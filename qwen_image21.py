@@ -196,15 +196,35 @@ def _coerce_reference_images(
     """
     collected: dict[str, Any] = {}
     if isinstance(reference_images, Mapping):
-        collected.update({str(key): value for key, value in reference_images.items()})
+        collected.update({str(key): value for key, value in reference_images.items() if value is not None})
     elif isinstance(reference_images, (list, tuple)):
-        collected.update({f"reference_image_{index}": value for index, value in enumerate(reference_images)})
+        collected.update({f"reference_image_{index}": value for index, value in enumerate(reference_images) if value is not None})
 
     for key, value in (extra_inputs or {}).items():
         match = _REFERENCE_IMAGE_KEY.search(str(key))
         if match and value is not None:
             collected.setdefault(f"reference_image_{int(match.group(1))}", value)
     return collected or None
+
+
+def _has_reference_slots(
+    reference_images: Mapping[str, Any] | list[Any] | tuple[Any, ...] | None,
+    extra_inputs: Mapping[str, Any] | None = None,
+) -> bool:
+    """Return whether the graph declares reference-image sockets.
+
+    During ComfyUI's pre-execution validation, linked upstream IMAGE values
+    are intentionally represented as ``None`` because their producer has not
+    run yet.  The autogrow group is still present (with keys such as
+    ``reference_image_0``), so validation must distinguish those pending
+    links from a genuinely empty edit request.
+    """
+    if isinstance(reference_images, Mapping):
+        if any(_REFERENCE_IMAGE_KEY.search(str(key)) for key in reference_images):
+            return True
+    elif isinstance(reference_images, (list, tuple)) and reference_images:
+        return True
+    return any(_REFERENCE_IMAGE_KEY.search(str(key)) for key in (extra_inputs or {}))
 
 
 def _validate_mode(prompt: str, input_mode: str, media_plan: list[dict[str, Any]], ratio: str, max_chars: int, transparent: bool) -> None:
@@ -460,9 +480,15 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
 
     @classmethod
     def validate_inputs(cls, prompt="", input_mode=INPUT_MODE_TEXT, reference_images=None, wh_ratio="auto", max_output_chars=0, transparent_alpha=False, **kwargs):
+        pending_reference_slots = _has_reference_slots(reference_images, kwargs)
         reference_images = _coerce_reference_images(reference_images, kwargs)
         del kwargs
         media_plan = _image_plan(reference_images)
+        if pending_reference_slots and not media_plan:
+            # Linked IMAGE sockets are unresolved while ComfyUI validates the
+            # graph.  Keep mode/ratio/length checks, but defer the 1–10 image
+            # count/type check until execute() receives real tensors.
+            media_plan = [{"kind": "image", "value": None}]
         _validate_mode(str(prompt or ""), input_mode, media_plan, str(wh_ratio or "auto"), int(max_output_chars or 0), bool(transparent_alpha))
         return True
 

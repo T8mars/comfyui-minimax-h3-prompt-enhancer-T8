@@ -222,6 +222,26 @@ class QwenImage21ContractTests(unittest.TestCase):
         self.assertEqual(list(normalized), ["reference_image_0", "reference_image_1"])
         self.assertEqual(len(qwen._image_plan(normalized)), 2)
 
+    def test_linked_reference_slots_are_deferred_during_validation(self):
+        # ComfyUI supplies None placeholders for linked upstream IMAGE values
+        # while validating; the actual tensors arrive during execute().
+        qwen.QwenImage21PromptEnhancer.validate_inputs(
+            prompt="edit this bag",
+            input_mode=qwen.INPUT_MODE_EDIT,
+            reference_images={"reference_image_0": None, "reference_image_1": None},
+        )
+        qwen.QwenImage21PromptEnhancer.validate_inputs(
+            prompt="edit this bag",
+            input_mode=qwen.INPUT_MODE_EDIT,
+            reference_images=[None],
+        )
+        with self.assertRaises(qwen.QwenImage21PromptEnhancerError):
+            qwen.QwenImage21PromptEnhancer.validate_inputs(
+                prompt="text only",
+                input_mode=qwen.INPUT_MODE_TEXT,
+                reference_images={"reference_image_0": None},
+            )
+
     def test_provider_model_and_budget_routing(self):
         self.assertEqual(
             qwen._resolve_image_model(qwen.SEEDANCE_API_MODE, qwen.AI_WORKSHOP_DEFAULT_MODEL, ""),
