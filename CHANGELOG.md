@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.23.4] - 2026-09-20
+
+### Fixed
+
+- Preserve Qwen Image 2.1 reference images when older or migrated ComfyUI
+  workflows deliver Autogrow sockets as flat keyword inputs.
+
 ## [1.23.3] - 2026-09-20
 
 ### Fixed

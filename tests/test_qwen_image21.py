@@ -207,6 +207,21 @@ class QwenImage21ContractTests(unittest.TestCase):
                 prompt="edit these", input_mode=qwen.INPUT_MODE_EDIT, reference_images=eleven,
             )
 
+    def test_flat_autogrow_reference_inputs_are_normalized(self):
+        image = np.zeros((1, 1, 3), dtype=np.float32)
+        qwen.QwenImage21PromptEnhancer.validate_inputs(
+            prompt="edit these",
+            input_mode=qwen.INPUT_MODE_EDIT,
+            reference_image_0=image,
+            **{"reference_images.reference_image_1": image},
+        )
+        normalized = qwen._coerce_reference_images(
+            None,
+            {"reference_image_0": image, "reference_images.reference_image_1": image},
+        )
+        self.assertEqual(list(normalized), ["reference_image_0", "reference_image_1"])
+        self.assertEqual(len(qwen._image_plan(normalized)), 2)
+
     def test_provider_model_and_budget_routing(self):
         self.assertEqual(
             qwen._resolve_image_model(qwen.SEEDANCE_API_MODE, qwen.AI_WORKSHOP_DEFAULT_MODEL, ""),

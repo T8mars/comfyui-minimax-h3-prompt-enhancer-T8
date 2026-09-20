@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -174,6 +175,36 @@ def _image_plan(reference_images: dict[str, Any] | None) -> list[dict[str, Any]]
     if len(assets) > MAX_IMAGES:
         raise QwenImage21PromptEnhancerError(f"Qwen Image 2.1 accepts at most {MAX_IMAGES} reference images; received {len(assets)}.")
     return assets
+
+
+_REFERENCE_IMAGE_KEY = re.compile(r"(?:^|\.)reference_image_(\d+)$")
+
+
+def _coerce_reference_images(
+    reference_images: Mapping[str, Any] | list[Any] | tuple[Any, ...] | None,
+    extra_inputs: Mapping[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    """Normalize V3 autogrow images across old and new ComfyUI runtimes.
+
+    Current ComfyUI rebuilds an ``io.Autogrow`` group as a nested mapping
+    before calling the node.  Older V3 builds and workflows saved during the
+    autogrow migration can still deliver the live sockets as flat keyword
+    arguments (``reference_image_0`` or
+    ``reference_images.reference_image_0``).  Accept both forms so a visible
+    connected image is never discarded merely because the runtime did not
+    rebuild the group.
+    """
+    collected: dict[str, Any] = {}
+    if isinstance(reference_images, Mapping):
+        collected.update({str(key): value for key, value in reference_images.items()})
+    elif isinstance(reference_images, (list, tuple)):
+        collected.update({f"reference_image_{index}": value for index, value in enumerate(reference_images)})
+
+    for key, value in (extra_inputs or {}).items():
+        match = _REFERENCE_IMAGE_KEY.search(str(key))
+        if match and value is not None:
+            collected.setdefault(f"reference_image_{int(match.group(1))}", value)
+    return collected or None
 
 
 def _validate_mode(prompt: str, input_mode: str, media_plan: list[dict[str, Any]], ratio: str, max_chars: int, transparent: bool) -> None:
@@ -429,6 +460,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
 
     @classmethod
     def validate_inputs(cls, prompt="", input_mode=INPUT_MODE_TEXT, reference_images=None, wh_ratio="auto", max_output_chars=0, transparent_alpha=False, **kwargs):
+        reference_images = _coerce_reference_images(reference_images, kwargs)
         del kwargs
         media_plan = _image_plan(reference_images)
         _validate_mode(str(prompt or ""), input_mode, media_plan, str(wh_ratio or "auto"), int(max_output_chars or 0), bool(transparent_alpha))
@@ -461,6 +493,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
         provider_config=None,
         **kwargs,
     ) -> io.NodeOutput:
+        reference_images = _coerce_reference_images(reference_images, kwargs)
         del kwargs
         api_mode = str(api_mode or SEEDANCE_API_MODE)
         input_mode = str(input_mode or INPUT_MODE_TEXT)
