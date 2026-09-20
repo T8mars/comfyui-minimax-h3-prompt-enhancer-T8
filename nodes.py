@@ -1464,6 +1464,7 @@ def _request_completion(
     recovery_component: str = "",
     recovery_slot: str = "",
     temperature_override: float | None = None,
+    stream_acceptor: Any = None,
 ) -> str:
     is_seedance = _is_seedance_chat_endpoint(chat_url)
     temperature = (
@@ -1546,6 +1547,7 @@ def _request_completion(
             else None
         ),
         on_checkpoint=checkpoint if is_seedance and recovery_component and recovery_slot else None,
+        stream_acceptor=stream_acceptor if is_seedance else None,
     )
     if attempts_callback:
         attempts_callback(result.attempts)

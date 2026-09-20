@@ -160,6 +160,8 @@ class QwenImage21ContractTests(unittest.TestCase):
         self.assertIn("reference_images", names)
         self.assertIn("max_output_chars", names)
         self.assertIn("transparent_alpha", names)
+        self.assertIn("recovery_slot", names)
+        self.assertIn("recovery_action", names)
         self.assertEqual([output.display_name for output in schema.outputs], [
             "rewritten_prompt", "wh_ratio", "qwen_image_request_json", "enhancement_report_json",
         ])
@@ -256,6 +258,19 @@ class QwenImage21ContractTests(unittest.TestCase):
         options = qwen._cloud_request_options({"extra_parameters": {"max_completion_tokens": 12345}})
         self.assertEqual(options["extra_parameters"], {"max_completion_tokens": 12345})
 
+    def test_disconnected_stream_is_accepted_only_when_qwen_json_is_valid(self):
+        complete = json.dumps({"rewritten_prompt": "A complete image description.", "wh_ratio": "1:1"})
+        self.assertTrue(
+            qwen._accept_complete_stream(
+                complete, requested_ratio="1:1", transparent=False, max_chars=0,
+            )
+        )
+        self.assertFalse(
+            qwen._accept_complete_stream(
+                complete[:-1], requested_ratio="1:1", transparent=False, max_chars=0,
+            )
+        )
+
     def test_all_requested_ratios_and_transparency_contract(self):
         for ratio in qwen.RATIO_OPTIONS:
             qwen._validate_mode("brief", qwen.INPUT_MODE_TEXT, [], ratio, 0, False)
@@ -293,6 +308,22 @@ class QwenImage21ContractTests(unittest.TestCase):
         self.assertEqual(result[0], "short")
         self.assertEqual(json.loads(result[3])["correction_calls"], 1)
         self.assertEqual(request.call_count, 2)
+
+    def test_cloud_result_can_be_recovered_without_a_second_request(self):
+        valid = json.dumps({"rewritten_prompt": "A recoverable image description.", "wh_ratio": "1:1"})
+        slot = "t8-qwen-recovery-0001"
+        with patch.object(qwen, "_provider_config", return_value=(
+            "test-key", "https://api.seedance.nz/v1/chat/completions", "", "Seedance",
+        )), patch.object(qwen, "_request_completion", return_value=valid) as request:
+            first = qwen.QwenImage21PromptEnhancer.execute(
+                prompt="a square icon", wh_ratio="1:1", api_key="test-credential", recovery_slot=slot,
+            )
+            restored = qwen.QwenImage21PromptEnhancer.execute(
+                prompt="this input is ignored during restore", wh_ratio="auto",
+                api_key="test-credential", recovery_slot=slot, recovery_action=qwen.RECOVERY_ACTION_RESTORE,
+            )
+        self.assertEqual(tuple(restored), tuple(first))
+        self.assertEqual(request.call_count, 1)
 
 
 if __name__ == "__main__":

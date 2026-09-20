@@ -77,7 +77,7 @@ class Session:
 
 class Platform11Tests(unittest.TestCase):
     @staticmethod
-    def stream_request(response, checkpoints=None):
+    def stream_request(response, checkpoints=None, stream_acceptor=None):
         session = Session([response])
         result = transport.request_chat_completion(
             session=session,
@@ -102,6 +102,7 @@ class Platform11Tests(unittest.TestCase):
                 if checkpoints is not None
                 else None
             ),
+            stream_acceptor=stream_acceptor,
         )
         return session, result
 
@@ -149,6 +150,23 @@ class Platform11Tests(unittest.TestCase):
             self.stream_request(response, checkpoints)
         self.assertEqual(len(checkpoints), 1)
         self.assertEqual(checkpoints[0][0], "partial")
+
+    def test_stream_disconnect_returns_only_caller_validated_complete_content(self):
+        expected = '{"rewritten_prompt":"complete","wh_ratio":"1:1"}'
+        def event(text):
+            return "data: " + json.dumps({"id": "chatcmpl-json", "choices": [{"delta": {"content": text}}]})
+        response = StreamResponse([
+            event(expected[:28]),
+            event(expected[28:]),
+            requests.exceptions.ChunkedEncodingError("upstream closed after the JSON body"),
+        ])
+        session, result = self.stream_request(
+            response,
+            stream_acceptor=lambda text: text == expected,
+        )
+        self.assertEqual(result.text, expected)
+        self.assertEqual(result.response_id, "chatcmpl-json")
+        self.assertEqual(len(session.calls), 1)
     def test_shared_transport_retries_and_preserves_content_parts(self):
         session = Session([
             Response(503, {}),
@@ -271,7 +289,7 @@ class Platform11Tests(unittest.TestCase):
             self.assertEqual(block.count('"') // 2, count)
             self.assertIn(legacy, matrix)
 
-    def test_recovery_button_is_present_on_three_core_nodes_without_resubmitting_http(self):
+    def test_recovery_button_is_present_on_cloud_nodes_without_resubmitting_http(self):
         helper = (ROOT / "web/js/completion_recovery_ui.mjs").read_text(encoding="utf-8")
         core = (ROOT / "web/js/completion_recovery_core.mjs").read_text(encoding="utf-8")
         self.assertIn("恢复上次云端结果（不重新生成）", helper)
@@ -284,6 +302,7 @@ class Platform11Tests(unittest.TestCase):
             "web/js/minimax_h3_prompt_enhancer.js",
             "web/js/seedance20_prompt_enhancer.js",
             "web/js/music3_prompt_enhancer.js",
+            "web/js/qwen_image21_prompt_enhancer.js",
         ):
             source = (ROOT / relative).read_text(encoding="utf-8")
             self.assertIn('import { addCompletionRecoveryButton }', source, relative)

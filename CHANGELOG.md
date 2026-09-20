@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.23.7] - 2026-09-20
+
+### Fixed
+
+- Accept a Qwen Image cloud response when a proxy closes the stream after a
+  complete, schema-valid JSON body but before the final SSE marker, without
+  blindly resubmitting a potentially billed request.
+- Add an in-memory recovery button to Qwen Image 2.1 and keep incomplete
+  checkpoints non-recoverable so truncated prompts are never emitted.
+
 ## [1.23.6] - 2026-09-20
 
 ### Fixed

@@ -136,6 +136,7 @@ def request_chat_completion(
     extra_headers: dict[str, str] | None = None,
     on_checkpoint: Callable[[str, bool, str], None] | None = None,
     require_complete: bool = False,
+    stream_acceptor: Callable[[str], bool] | None = None,
 ) -> ChatTransportResult:
     """Run one OpenAI-compatible chat request with a caller-owned paid retry policy.
 
@@ -184,6 +185,17 @@ def request_chat_completion(
     content_type = str(getattr(response, "headers", {}).get("Content-Type", "")).lower()
     if streaming and callable(getattr(response, "iter_lines", None)) and "json" not in content_type:
         accumulator = _StreamAccumulator()
+
+        def accepts_complete_stream(text: str) -> bool:
+            if stream_acceptor is None:
+                return False
+            try:
+                return bool(stream_acceptor(text))
+            except Exception:
+                # A caller-owned validator is a safety gate, never a reason to
+                # turn a transport error into a new node error.
+                return False
+
         try:
             _consume_openai_stream(response, accumulator, on_checkpoint)
         except requests.RequestException as error:
@@ -191,18 +203,41 @@ def request_chat_completion(
             # accepted. Never resubmit it blindly. A finish marker is enough to
             # return the fully checkpointed answer even if the proxy drops the
             # final connection close.
-            if accumulator.complete and accumulator.text.strip():
-                if require_complete and accumulator.finish_reason in {"length", "max_tokens", "content_filter"}:
-                    raise ChatCompletionTruncatedError("LLM output was interrupted: " + accumulator.finish_reason) from error
+            if accumulator.text.strip():
                 content = strip_inline_reasoning(accumulator.text)
-                on_attempt and on_attempt(attempt, "success_after_stream_disconnect")
-                return ChatTransportResult(content.strip() if strip_result else content, attempt, accumulator.response_id)
+                if accumulator.complete and require_complete and accumulator.finish_reason in {"length", "max_tokens", "content_filter"}:
+                    raise ChatCompletionTruncatedError("LLM output was interrupted: " + accumulator.finish_reason) from error
+                if (
+                    content.strip()
+                    and accepts_complete_stream(content)
+                ):
+                    # Some reverse proxies terminate a valid SSE body without
+                    # forwarding the final finish marker.  Let the caller
+                    # accept only content it can validate as a complete,
+                    # provider-specific result; never retry the paid request.
+                    if on_checkpoint is not None:
+                        on_checkpoint(content, True, accumulator.response_id)
+                    on_attempt and on_attempt(attempt, "success_after_valid_stream_disconnect")
+                    return ChatTransportResult(content.strip() if strip_result else content, attempt, accumulator.response_id)
+                if accumulator.complete:
+                    on_attempt and on_attempt(attempt, "success_after_stream_disconnect")
+                    return ChatTransportResult(content.strip() if strip_result else content, attempt, accumulator.response_id)
             raise network_error(error, attempt, ()) from error
         finally:
             close = getattr(response, "close", None)
             if callable(close):
                 close()
         content = strip_inline_reasoning(accumulator.text)
+        if (
+            not accumulator.complete
+            and content.strip()
+            and accepts_complete_stream(content)
+        ):
+            # A clean EOF without [DONE] is handled under the same strict
+            # caller-owned validation rule as a proxy disconnect.
+            accumulator.complete = True
+            if on_checkpoint is not None:
+                on_checkpoint(content, True, accumulator.response_id)
         if require_complete and accumulator.finish_reason in {"length", "max_tokens", "content_filter"}:
             raise ChatCompletionTruncatedError("LLM output was interrupted: " + accumulator.finish_reason)
         if not accumulator.complete:

@@ -30,6 +30,15 @@ try:
         _request_completion,
         _upload_media_plan,
     )
+    from .completion_recovery import (
+        RECOVERY_ACTION_NORMAL,
+        RECOVERY_ACTION_RESTORE,
+        CompletionRecoveryError,
+        begin_recovery_record,
+        complete_recovery_record,
+        mark_recovery_failed,
+        recover_outputs,
+    )
     from .local_qwen_provider import (
         DEFAULT_CONTEXT_SIZE,
         DEFAULT_MAX_TOKENS,
@@ -82,6 +91,15 @@ except ImportError:
         _provider_config,
         _request_completion,
         _upload_media_plan,
+    )
+    from completion_recovery import (  # type: ignore
+        RECOVERY_ACTION_NORMAL,
+        RECOVERY_ACTION_RESTORE,
+        CompletionRecoveryError,
+        begin_recovery_record,
+        complete_recovery_record,
+        mark_recovery_failed,
+        recover_outputs,
     )
     from local_qwen_provider import (  # type: ignore
         DEFAULT_CONTEXT_SIZE,
@@ -368,6 +386,36 @@ def _validate_output(payload: dict[str, Any], *, requested_ratio: str, transpare
     return description, ratio, {"over_limit": over_limit, "prompt_chars": len(description)}
 
 
+def _accept_complete_stream(
+    text: str,
+    *,
+    requested_ratio: str,
+    transparent: bool,
+    max_chars: int,
+) -> bool:
+    """Accept a disconnected cloud stream only when its Qwen JSON is complete.
+
+    Seedance chat is streamed through a proxy.  A proxy can close the socket
+    after the model has emitted the whole JSON object but before ``[DONE]``.
+    This predicate is deliberately strict: a balanced, schema-valid object is
+    safe to use; any partial/invalid response remains ambiguous and is never
+    retried automatically.
+    """
+    try:
+        payload = _extract_json(text)
+        if payload is None:
+            return False
+        _validate_output(
+            payload,
+            requested_ratio=requested_ratio,
+            transparent=transparent,
+            max_chars=max_chars,
+        )
+        return True
+    except (QwenImage21PromptEnhancerError, TypeError, ValueError):
+        return False
+
+
 def _correction_messages(messages: list[dict[str, Any]], draft: str, reason: str) -> list[dict[str, Any]]:
     return [
         *messages,
@@ -468,6 +516,8 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                 io.Float.Input("local_video_sample_fps", display_name="本地视觉采样率", default=DEFAULT_VIDEO_SAMPLE_FPS, min=0.25, max=8.0, step=0.25, optional=True, advanced=True),
                 io.Combo.Input("local_unload_policy", display_name="本地模型卸载策略", options=LOCAL_UNLOAD_POLICIES, default=LOCAL_UNLOAD_AFTER_RUN, optional=True, advanced=True),
                 io.Combo.Input("local_comfy_memory_policy", display_name="本地显存策略", options=LOCAL_COMFY_MEMORY_POLICIES, default=LOCAL_COMFY_MEMORY_POLICIES[0], optional=True, advanced=True),
+                io.String.Input("recovery_slot", display_name="恢复槽（内部）", optional=True, default="", socketless=True, advanced=True),
+                io.String.Input("recovery_action", display_name="恢复动作（内部）", optional=True, default=RECOVERY_ACTION_NORMAL, socketless=True, advanced=True),
                 T8ProviderConfigIO.Input("provider_config", display_name="共享 LLM 渠道配置（可选）", optional=True),
             ],
             outputs=[
@@ -516,9 +566,17 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
         local_video_sample_fps=DEFAULT_VIDEO_SAMPLE_FPS,
         local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
         local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
+        recovery_slot="",
+        recovery_action=RECOVERY_ACTION_NORMAL,
         provider_config=None,
         **kwargs,
     ) -> io.NodeOutput:
+        if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
+            try:
+                cached = recover_outputs(NODE_ID, recovery_slot, 4)
+                return io.NodeOutput(*cached)
+            except CompletionRecoveryError as error:
+                raise QwenImage21PromptEnhancerError(str(error)) from error
         reference_images = _coerce_reference_images(reference_images, kwargs)
         del kwargs
         api_mode = str(api_mode or SEEDANCE_API_MODE)
@@ -571,6 +629,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
         current["provider_request_options"] = _cloud_request_options(current.get("provider_request_options"))
         api_mode = str(current["api_mode"] or SEEDANCE_API_MODE)
         model_id = _resolve_image_model(api_mode, current["ai_workshop_model"], current["custom_model"])
+        begin_recovery_record(NODE_ID, recovery_slot, api_mode)
         corrections = 0
         structured = False
         chosen_ratio = ""
@@ -632,6 +691,11 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                     raw_response = _request_completion(
                         session, api_key, messages, "balanced", chat_url, provider_name, model_id,
                         provider_request_options=current.get("provider_request_options"),
+                        recovery_component=NODE_ID,
+                        recovery_slot=recovery_slot,
+                        stream_acceptor=lambda text: _accept_complete_stream(
+                            text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                        ),
                     )
                     payload = _extract_json(raw_response)
                     try:
@@ -644,6 +708,11 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                                 session, api_key, _correction_messages(messages, raw_response, f"Keep rewritten_prompt at or below {max_chars} characters."),
                                 "balanced", chat_url, provider_name, model_id,
                                 provider_request_options=current.get("provider_request_options"), temperature_override=0.1,
+                                recovery_component=NODE_ID,
+                                recovery_slot=recovery_slot,
+                                stream_acceptor=lambda text: _accept_complete_stream(
+                                    text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                                ),
                             )
                             corrected_payload = _extract_json(corrected)
                             if corrected_payload is not None:
@@ -657,6 +726,11 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                             session, api_key, _correction_messages(messages, raw_response, str(first_error)),
                             "balanced", chat_url, provider_name, model_id,
                             provider_request_options=current.get("provider_request_options"), temperature_override=0.1,
+                            recovery_component=NODE_ID,
+                            recovery_slot=recovery_slot,
+                            stream_acceptor=lambda text: _accept_complete_stream(
+                                text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                            ),
                         )
                         payload = _extract_json(corrected)
                         if payload is None:
@@ -671,6 +745,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
             report_error = str(error)
             rewritten = str(raw_response or "").strip()
             if not rewritten:
+                mark_recovery_failed(NODE_ID, recovery_slot, error)
                 raise QwenImage21PromptEnhancerError(report_error) from error
         request_json = json.dumps({
             "schema_version": "t8-qwen-image-21-request/v1",
@@ -687,6 +762,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
             transparent=bool(transparent_alpha), structured=structured, corrections=corrections,
             over_limit=over_limit, error=report_error,
         )
+        complete_recovery_record(NODE_ID, recovery_slot, (rewritten, chosen_ratio, request_json, report))
         return io.NodeOutput(rewritten, chosen_ratio, request_json, report)
 
 
