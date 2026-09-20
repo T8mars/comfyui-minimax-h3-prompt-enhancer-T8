@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.23.6] - 2026-09-20
+
+### Fixed
+
+- Defer Qwen Image 2.1 reference-image validation until linked upstream IMAGE
+  sockets have produced their tensors, while retaining strict 1–10 image checks
+  during execution and compatibility with legacy flat socket names.
+
 ## [1.23.4] - 2026-09-20
 
 ### Fixed
