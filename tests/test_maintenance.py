@@ -100,13 +100,13 @@ class MaintenanceTests(unittest.TestCase):
             directional_examples = load_tool("t8_directional_examples", "build_directional_skill_workflows.py")
             quality_examples = load_tool("t8_quality_examples", "build_quality_workflows.py")
         STEMS = (*directional_examples.STEMS, *quality_examples.STEMS)
-        self.assertEqual(len(workflows), 18 + len(STEMS))
+        self.assertEqual(len(workflows), 20 + len(STEMS))
         extra = [path for path in workflows if path.stem in STEMS]
         self.assertEqual({path.stem for path in extra}, set(STEMS))
         directional_examples.check()
         quality_examples.check()
         workflows = [path for path in workflows if path.stem not in STEMS]
-        self.assertEqual(len(workflows), 18)  # Original 18 retain all thumbnail/field checks.
+        self.assertEqual(len(workflows), 20)  # Original workflows plus the two Qwen Image examples retain checks.
         seen_types = set()
         for workflow in workflows:
             with self.subTest(workflow=workflow.name):
@@ -120,6 +120,7 @@ class MaintenanceTests(unittest.TestCase):
                         "MiniMaxH3PromptEnhancerT8": (31, 22),
                         "Seedance20PromptEnhancerT8": (35, 26),
                         "MiniMaxMusic3PromptEnhancerT8": (38, 31),
+                        "QwenImage21PromptEnhancerT8": (20, 7),
                     }.get(node["type"])
                     if expected:
                         count, model_index = expected
@@ -129,6 +130,7 @@ class MaintenanceTests(unittest.TestCase):
             "MiniMaxH3PromptEnhancerT8",
             "Seedance20PromptEnhancerT8",
             "MiniMaxMusic3PromptEnhancerT8",
+            "QwenImage21PromptEnhancerT8",
             "T8LLMProviderConfig",
             "T8PromptInspector",
             "T8PromptText",
@@ -172,6 +174,7 @@ class MaintenanceTests(unittest.TestCase):
             "MiniMaxH3PromptEnhancerT8",
             "Seedance20PromptEnhancerT8",
             "MiniMaxMusic3PromptEnhancerT8",
+            "QwenImage21PromptEnhancerT8",
             "T8LLMProviderConfig",
             "T8PromptInspector",
             "T8PromptText",

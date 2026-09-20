@@ -3,6 +3,28 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.22.0] - 2026-09-20
+
+### Added
+
+- Added the independent `Qwen Image 2.1 Prompt Enhancer` for text-to-image and
+  one-to-ten-image editing. It bundles a hash-verified Image Prompt Rewriting
+  Expert Skill, returns English prompt prose plus a separate aspect ratio, and
+  supports bounded length, transparent RGBA, shared cloud/OpenAI/local GGUF
+  providers, bilingual node help and two native example workflows.
+- The default ZhenZhen route uses `qwen/qwen3.8-flash-next` and an 8192-token
+  completion budget (including reasoning) unless shared provider settings
+  explicitly supply `max_tokens` or `max_completion_tokens`.
+
+### Validation and limitations
+
+- Qwen Image contract, provider capability and repository maintenance suites
+  pass 21 targeted tests. The authorized default ZhenZhen route was also tested
+  live with 0/1/3/10 distinct image parts, fixed and automatic ratios,
+  transparent RGBA, and one bounded correction; image counts and strict JSON
+  contracts matched. AI Workshop, OpenAI-compatible and local GGUF paths remain
+  environment-dependent and are not represented as live provider quality claims.
+
 ## [1.21.2] - 2026-09-19
 
 ### Fixed

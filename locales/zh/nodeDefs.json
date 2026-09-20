@@ -47,6 +47,25 @@
       "3": {"name": "增强报告 JSON"}
     }
   },
+  "QwenImage21PromptEnhancerT8": {
+    "display_name": "Qwen Image 2.1 提示词增强器",
+    "inputs": {
+      "prompt": {"name": "图像描述 / Prompt（必填）"},
+      "input_mode": {"name": "输入模式"},
+      "reference_images": {"name": "参考图（最多 10 张）"},
+      "max_output_chars": {"name": "最大提示词字数（0=AI 自动）"},
+      "wh_ratio": {"name": "尺寸比例"},
+      "transparent_alpha": {"name": "透明通道 / RGBA"},
+      "api_mode": {"name": "API 模式"},
+      "api_key": {"name": "API Key"}
+    },
+    "outputs": {
+      "0": {"name": "图像提示词"},
+      "1": {"name": "尺寸比例"},
+      "2": {"name": "Qwen Image 请求 JSON"},
+      "3": {"name": "增强报告 JSON"}
+    }
+  },
   "T8LLMProviderConfig": {
     "display_name": "T8 LLM 共享渠道配置",
     "inputs": {

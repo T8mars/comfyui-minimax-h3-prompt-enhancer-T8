@@ -43,15 +43,23 @@
 
 [使用说明与费用边界](web/js/docs/yue2_music.md) · [云端创作](example_workflows/yue2_cloud_creation_example.json) · [保留原词](example_workflows/yue2_preserve_lyrics_example.json) · [本地 GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC 旋律](example_workflows/yue2_abc_melody_example.json)
 
+## 新增：Qwen Image 2.1 图像提示词增强
+
+新增独立节点 **Qwen Image 2.1 Prompt Enhancer**：把文字提示词改写为图像生成提示词，也支持连接 1–10 张有序参考图进行图像编辑。它严格使用仓库内冻结的 Image Prompt Rewriting Expert Skill，输出英文画面描述和 `wh_ratio` JSON，并提供最大提示词字数、比例、透明 RGBA 和四类渠道设置。
+
+默认渠道为贞贞平价小屋，默认模型为 `qwen/qwen3.8-flash-next`。云端请求默认提供 8192 个输出 Token（包含模型思考），共享渠道配置中如果明确填写 `max_tokens` 或 `max_completion_tokens` 则以用户设置为准；这样可避免长 Skill 在思考阶段耗尽默认预算。`auto` 不向模型施加用户比例限制，最终比例单独输出到 `wh_ratio`，不会写入正文；透明模式会要求 RGBA、Alpha 通道和透明背景语义。默认云端已真实验收 0/1/3/10 张不同图片、严格 JSON、固定与自动比例、透明模式和一次长度纠正；AI 工坊、OpenAI 兼容及本地 GGUF 仍需各自环境做真实质量验收。
+
+[图像提示词节点说明](web/js/docs/qwen_image21.md) · [文生图工作流](example_workflows/qwen_image21_text_example.json) · [多图编辑工作流](example_workflows/qwen_image21_edit_example.json)
+
 未提供已有 ABC 时，`full / melody` 默认调用当前 LLM 创作谱面（T8 扩展）：完整模式含旋律与和弦，旋律模式不含和弦；已有谱面优先保留。高级设置可切回「交给下游 YuE2 规划」，此时 ABC 留空。自动作谱通常增加 1 次请求，校验失败最多再修正 1 次。
 
 > **ABC 作谱模型建议：本地 9B LLM 可能生成不符合要求的 ABC 格式或小节时值。** 建议优先使用 API，或尝试参数规模更大的模型。本次本地 9B 的 full、melody 实测均未通过谱面校验；已有 API 通过记录，但不代表所有 API 或更大模型都能通过，更大模型本次尚未实测。ABC 失败仍输出风格、歌词和请求 JSON，坏谱不输出，并显示失败原因。详见 [实测记录](web/js/docs/yue2_abc_acceptance.md)。
 
 创作审校评分只代表文本评审，不是音乐听感评分。YuE2 的 `full / melody / off` 是谱面模式，不等于 LLM 思考强度；时长仅为规划参考。
 
-一组面向 MiniMax-H3、Seedance 2.0 视频生成和 MiniMax Music 3 音乐生成的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Music 3 节点只处理文字，并把歌词、官方 Structured Caption 和可直接交给下游的 JSON 分开输出。三个节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 llama.cpp 兼容 GGUF。
+一组面向 MiniMax-H3、Seedance 2.0、Qwen Image 2.1 视频/图像创作和 MiniMax Music 3、YuE2 音乐准备的 ComfyUI 提示词增强节点。H3 与 Seedance 2.0 节点支持文字与真实 `IMAGE` / `VIDEO` 素材；Qwen Image 2.1 支持文字和最多 10 张参考图；Music 3 与 YuE2 按各自官方格式输出。所有核心节点均可选择贞贞平价小屋、贞贞的 AI 工坊、用户自己的 OpenAI 兼容接口，或本地 llama.cpp 兼容 GGUF。
 
-三个节点共享已经验证的 API、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用其官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法；Music 3 严格执行官方 `music-caption-rewriter` 的三段描述合同。Music 3 是独立音乐模型，不是 H3 视频模型。
+各节点共享已经验证的 API、密钥和错误处理，但提示词协议完全隔离：MiniMax-H3 使用官方字段、任务类型和时间码；Seedance 2.0 使用任务意图、`镜头N` 事件顺序和官方多模态引用语法；Qwen Image 2.1 使用独立的英文图像观察合同；Music 3 和 YuE2 分别执行各自音乐协议。
 
 ## 社区与资源链接
 
@@ -65,7 +73,7 @@
 | 模型网盘 | [夸克网盘下载](https://pan.quark.cn/s/c9c267081fbf) |
 | Hugging Face | [t8star](https://huggingface.co/t8star) |
 
-## 四个独立核心节点
+## 五个独立核心节点
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
@@ -73,6 +81,7 @@
 | `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | 生成 Music 3 歌词与音乐描述 | AUTO、生成歌词、严格保留、局部润色、纯器乐 |
 | `YuE2 音乐提示词与歌词创作（T8）` | 生成 YuE2 风格与歌词 | 原创、保留原词、定向改词、纯器乐、可选 ABC 准备 |
+| `Qwen Image 2.1 Prompt Enhancer` | 生成图像提示词 | 文生图、1–10 图像编辑、比例、透明 RGBA |
 
 本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频或音乐生成、轮询、试听或下载接口。
 

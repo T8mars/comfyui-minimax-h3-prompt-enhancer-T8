@@ -39,6 +39,14 @@ recovery. Existing core nodes and workflows remain unchanged.
 
 [Guide and call costs](web/js/docs/yue2_music.md) · [Cloud creation](example_workflows/yue2_cloud_creation_example.json) · [Preserve lyrics](example_workflows/yue2_preserve_lyrics_example.json) · [Local GGUF](example_workflows/yue2_local_qwen_example.json) · [ABC melody](example_workflows/yue2_abc_melody_example.json)
 
+## New: Qwen Image 2.1 prompt enhancement
+
+The independent **Qwen Image 2.1 Prompt Enhancer** turns a text brief into an image-generation prompt and accepts one to ten ordered reference images for image editing. It follows the frozen Image Prompt Rewriting Expert Skill bundled in this repository and returns an English visual description plus a separate `wh_ratio` field. The node exposes a maximum prompt length (`0` means automatic), aspect ratio, transparent RGBA, and the same provider family as the other T8 nodes.
+
+The default provider is ZhenZhen Affordable AI Shop and the default model is `qwen/qwen3.8-flash-next`. Cloud requests default to an 8192-token output budget (including hidden reasoning); an explicitly configured `max_tokens` or `max_completion_tokens` takes precedence. `auto` leaves the user ratio unconstrained and keeps the selected ratio out of the prose; the final ratio is returned separately. Transparent mode asks for RGBA, an alpha channel, and a transparent background. The default cloud path has been tested live with zero, one, three, and ten distinct image parts, strict JSON, fixed and automatic ratios, transparent semantics, and one bounded correction. AI Workshop, OpenAI-compatible, and local GGUF quality still require their own environment-specific acceptance.
+
+[Qwen Image guide](web/js/docs/qwen_image21.md) · [Text-to-image workflow](example_workflows/qwen_image21_text_example.json) · [Multi-image edit workflow](example_workflows/qwen_image21_edit_example.json)
+
 Without an existing ABC score, full/melody now use the selected LLM to compose one
 (a T8 extension, not the YuE2 model planner). Full includes melody and chord symbols;
 melody is chord-free. Existing scores take priority. Advanced settings retain the
@@ -50,9 +58,9 @@ one call, plus at most one structural repair call.
 Optional review scores evaluate text, not audible music. YuE2 `full / melody / off`
 select score planning, not LLM reasoning strength. Target duration is advisory.
 
-A ComfyUI node suite for improving MiniMax H3 and Seedance 2.0 video prompts and preparing MiniMax Music 3 lyrics and structured music captions. The H3 and Seedance nodes accept text plus real ComfyUI `IMAGE` and `VIDEO` inputs. The Music 3 node is text-only and returns lyrics, an official structured caption, a downstream-ready payload, and a redacted enhancement report as separate outputs.
+A ComfyUI node suite for improving MiniMax H3 and Seedance 2.0 video prompts, preparing Qwen Image 2.1 image prompts, and preparing MiniMax Music 3 and YuE2 music text. The H3 and Seedance nodes accept text plus real ComfyUI `IMAGE` and `VIDEO` inputs. Qwen Image 2.1 accepts text plus up to ten ordered images; Music 3 and YuE2 keep their own text contracts.
 
-All four core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, a user-supplied OpenAI-compatible endpoint, or a local llama.cpp-compatible GGUF model. Provider transport and error handling are shared, while the prompt contracts remain isolated for each target model.
+All five core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, a user-supplied OpenAI-compatible endpoint, or a local llama.cpp-compatible GGUF model. Provider transport and error handling are shared, while the prompt contracts remain isolated for each target model.
 
 > The repository homepage intentionally remains Chinese through [`README.md`](./README.md). Use the language switch above to move between the Chinese and English guides.
 
@@ -73,6 +81,7 @@ All four core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, a
 | `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | Generate Seedance 2.0 prompts | Text-to-video, first frame, first/last frame, multimodal reference, edit, extend, track completion, combined tasks |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | Prepare Music 3 lyrics and captions | AUTO, new lyrics, preserve, scoped rewrite, instrumental |
 | `YuE2 音乐提示词与歌词创作（T8）` | Prepare native YuE2 style and lyrics | Original lyrics, preserve/restyle, section edits, instrumental, optional ABC preparation |
+| `Qwen Image 2.1 Prompt Enhancer` | Prepare image-generation prompts | Text-to-image, one-to-ten image editing, ratios, transparent RGBA |
 
 This project does not currently provide a Seedance 2.5 prompt node. It does not call video or music generation, polling, preview, or download APIs.
 

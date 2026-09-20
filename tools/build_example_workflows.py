@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import uuid
 from pathlib import Path
 from typing import Any
@@ -806,10 +807,11 @@ def check() -> None:
         "MiniMaxH3PromptEnhancerT8": 31,
         "Seedance20PromptEnhancerT8": 35,
         "MiniMaxMusic3PromptEnhancerT8": 38,
+        "QwenImage21PromptEnhancerT8": 20,
     }
     workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems))
-    if len(workflows) != 18:
-        raise RuntimeError(f"Expected 18 example workflows, found {len(workflows)}")
+    if len(workflows) != 20:
+        raise RuntimeError(f"Expected 20 example workflows, found {len(workflows)}")
     expected_inputs = {
         "MiniMaxH3PromptEnhancerT8": [
             "first_frame", "last_frame", "reference_images.reference_image_0",
@@ -820,6 +822,10 @@ def check() -> None:
             "reference_videos.reference_video_0", "api_key", "provider_config",
         ],
         "MiniMaxMusic3PromptEnhancerT8": ["api_key", "provider_config"],
+        # Text-to-image has no image socket; the edit example exposes the
+        # first ordered reference image socket.  Both are native contracts.
+        "QwenImage21PromptEnhancerT8": None,
+        "LoadImage": [],
         "YuE2MusicPromptEnhancerT8": ["api_key", "provider_config"],
         "T8LLMProviderConfig": [],
         "T8PromptInspector": ["prompt"],
@@ -861,7 +867,12 @@ def check() -> None:
             if node["type"] not in allowed_types:
                 raise RuntimeError(f"{path.name}: unsupported external node {node['type']}")
             actual_inputs = [item["name"] for item in node.get("inputs", [])]
-            if actual_inputs != expected_inputs[node["type"]]:
+            if node["type"] == "QwenImage21PromptEnhancerT8":
+                if actual_inputs not in ([], ["reference_images.reference_image_0"]):
+                    raise RuntimeError(
+                        f"{path.name}: invalid QwenImage21PromptEnhancerT8 sockets {actual_inputs}"
+                    )
+            elif actual_inputs != expected_inputs[node["type"]]:
                 raise RuntimeError(
                     f"{path.name}: invalid {node['type']} sockets {actual_inputs}; "
                     f"expected {expected_inputs[node['type']]}"
@@ -871,7 +882,12 @@ def check() -> None:
                 counts = (31, 35) if node["type"] == "MiniMaxH3PromptEnhancerT8" else (expected_counts[node["type"]],)
                 if len(values) not in counts:
                     raise RuntimeError(f"{path.name}: invalid {node['type']} widget count {len(values)}")
-                local_index = {"MiniMaxH3PromptEnhancerT8": 22, "Seedance20PromptEnhancerT8": 26, "MiniMaxMusic3PromptEnhancerT8": 31}[node["type"]]
+                local_index = {
+                    "MiniMaxH3PromptEnhancerT8": 22,
+                    "Seedance20PromptEnhancerT8": 26,
+                    "MiniMaxMusic3PromptEnhancerT8": 31,
+                    "QwenImage21PromptEnhancerT8": 11,
+                }[node["type"]]
                 if values[local_index] in (None, "", "randomize"):
                     raise RuntimeError(f"{path.name}: invalid local model widget value")
                 if node["type"] == "Seedance20PromptEnhancerT8":
@@ -901,7 +917,7 @@ def check() -> None:
         if "sk-" in path.read_text(encoding="utf-8"):
             raise RuntimeError(f"{path.name}: possible API key")
     required = {
-        "YuE2MusicPromptEnhancerT8",
+        "YuE2MusicPromptEnhancerT8", "QwenImage21PromptEnhancerT8",
         "MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8",
         "T8LLMProviderConfig", "T8PromptInspector", "T8PromptText", "T8ShowText",
         "T8CreativeDirector", "T8CreativeContextAssembler", "T8DirectedRevision",
@@ -928,7 +944,7 @@ def check() -> None:
             providers = [node for node in workflow["nodes"] if node["type"] == "T8LLMProviderConfig"]
             if len(providers) != 1 or providers[0]["widgets_values"][0] != "Local Qwen":
                 raise RuntimeError(f"{path.name}: local workflow has no Local Qwen provider config")
-    print(json.dumps({"workflows": len(workflows), "node_types": sorted(seen_types), "passed": True}, ensure_ascii=False))
+    sys.stdout.write(json.dumps({"workflows": len(workflows), "node_types": sorted(seen_types), "passed": True}, ensure_ascii=False) + "\n")
 
 
 def main() -> int:

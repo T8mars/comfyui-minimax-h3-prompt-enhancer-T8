@@ -47,6 +47,25 @@
       "3": {"name": "Enhancement report JSON"}
     }
   },
+  "QwenImage21PromptEnhancerT8": {
+    "display_name": "Qwen Image 2.1 Prompt Enhancer",
+    "inputs": {
+      "prompt": {"name": "Image brief / Prompt (required)"},
+      "input_mode": {"name": "Input mode"},
+      "reference_images": {"name": "Reference images (up to 10)"},
+      "max_output_chars": {"name": "Maximum prompt characters (0=auto)"},
+      "wh_ratio": {"name": "Aspect ratio"},
+      "transparent_alpha": {"name": "Transparent RGBA"},
+      "api_mode": {"name": "API mode"},
+      "api_key": {"name": "API Key"}
+    },
+    "outputs": {
+      "0": {"name": "Image prompt"},
+      "1": {"name": "Aspect ratio"},
+      "2": {"name": "Qwen Image request JSON"},
+      "3": {"name": "Enhancement report JSON"}
+    }
+  },
   "T8LLMProviderConfig": {
     "display_name": "T8 Shared LLM Provider Config",
     "inputs": {
