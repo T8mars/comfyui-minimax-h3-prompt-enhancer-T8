@@ -3,6 +3,23 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.23.1] - 2026-09-20
+
+### Fixed
+
+- Complete the Registry release metadata for the lyric and arrangement planning
+  nodes introduced in 1.23.0; no node contract or default provider changes.
+
+## [1.23.0] - 2026-09-20
+
+### Added
+
+- Added independent T8 Lyric Writer and Arrangement Planner nodes with
+  versioned, credential-checked text plan contracts.
+- Added optional lyric and arrangement plan inputs to Music 3 and YuE2 while
+  preserving disconnected legacy workflows, provider choices and defaults.
+- Added bilingual documentation and focused contract tests.
+
 ## [1.22.0] - 2026-09-20
 
 ### Added
