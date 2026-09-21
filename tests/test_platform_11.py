@@ -306,7 +306,12 @@ class Platform11Tests(unittest.TestCase):
         ):
             source = (ROOT / relative).read_text(encoding="utf-8")
             self.assertIn('import { addCompletionRecoveryButton }', source, relative)
-            self.assertIn("addCompletionRecoveryButton(this, NODE_ID", source, relative)
+            self.assertIn(
+                "addCompletionRecoveryButton(node, NODE_ID" if "qwen_image21" in relative
+                else "addCompletionRecoveryButton(this, NODE_ID",
+                source,
+                relative,
+            )
 
     def test_template_browser_is_lazy_persistent_and_responsive(self):
         source = (ROOT / "web/js/template_browser.js").read_text(encoding="utf-8")

@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.0] - 2026-09-21
+
+### Added
+
+- Add H3-style Qwen Image 2.1 node actions for provider capability checks,
+  redacted diagnostics, direct execution, local GGUF setup, and usage help.
+- Add provider-aware API Key signup links for ZhenZhen Affordable AI Shop and
+  AI Workshop; hide signup in local and OpenAI-compatible modes without changing
+  existing workflow inputs or outputs.
+
 ## [1.23.7] - 2026-09-20
 
 ### Fixed

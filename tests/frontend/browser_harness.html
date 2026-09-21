@@ -460,6 +460,69 @@ try {
   const safe = diagnostics.sanitizeDiagnosticRecord({
     component: "node", provider: "provider", outcome: "success", stages: [], prompt: "secret-body",
   });
+  const qwenUI = await import("../../web/js/qwen_image21_prompt_enhancer.js");
+  const qwenExtension = app.extensions.find(e => e.name === "T8.QwenImage21PromptEnhancer");
+  class QwenNode {
+    constructor() {
+      this.id = 871;
+      this.properties = {};
+      this.size = [480, 500];
+      this.widgets = [
+        { name: "api_mode", value: "贞贞平价小屋（推荐）", type: "combo" },
+        { name: "openai_base_url", value: "", type: "text" },
+        { name: "recovery_slot", value: "", type: "text" },
+        { name: "recovery_action", value: "normal", type: "text" },
+      ];
+      this.graph = { _nodes: [this], change() {} };
+    }
+    addWidget(type, name, value, callback, options) {
+      const widget = { type, name, value, callback, options, computeSize: () => [480, 30] };
+      this.widgets.push(widget);
+      return widget;
+    }
+    computeSize() { return [480, 100 + this.widgets.reduce((height, widget) => height + (widget.hidden ? 0 : 30), 0)]; }
+    setSize(size) { this.size = size; }
+    setDirtyCanvas() {}
+    onConfigure(data) { this.widgets.find(widget => widget.name === "api_mode").value = data.api_mode; }
+  }
+  await qwenExtension.beforeRegisterNodeDef(QwenNode, { name: "QwenImage21PromptEnhancerT8" });
+  const qwenNode = new QwenNode();
+  qwenNode.onNodeCreated();
+  const qwenActions = qwenNode.widgets.filter(widget => widget.type === "button" || widget.t8OriginalType === "button");
+  const qwenAction = part => qwenNode.widgets.find(widget => widget.name.includes(part));
+  check(qwenAction("获取贞贞 API Key") && !qwenAction("获取贞贞 API Key").hidden, "Qwen Image default provider shows the signup action");
+  check(qwenUI.qwenImage21SignUpUrl("贞贞平价小屋（推荐）").includes("api.seedance.nz/sign-up"), "Qwen Image shop signup URL matches H3");
+  const oldWindowOpen = window.open;
+  let openedQwenSignup = null;
+  window.open = (...args) => { openedQwenSignup = args; };
+  qwenAction("获取贞贞 API Key").callback();
+  check(openedQwenSignup?.[0].includes("api.seedance.nz/sign-up") && openedQwenSignup?.[2] === "noopener,noreferrer", "Qwen Image signup button opens the shop URL safely");
+  check(qwenActions.every(widget => widget.options?.serialize === false && widget.serializeValue() === undefined), "Qwen Image buttons do not change workflow serialization");
+  const qwenMode = qwenNode.widgets.find(widget => widget.name === "api_mode");
+  qwenMode.value = "贞贞的AI工坊（图片/视频）";
+  qwenMode.callback(qwenMode.value);
+  check(qwenAction("获取 AI 工坊 API Key") && qwenUI.qwenImage21SignUpUrl(qwenMode.value).includes("ai.t8star.org/register"), "Qwen Image workshop mode uses workshop signup");
+  qwenAction("获取 AI 工坊 API Key").callback();
+  check(openedQwenSignup?.[0].includes("ai.t8star.org/register"), "Qwen Image signup button switches to the workshop URL");
+  window.open = oldWindowOpen;
+  qwenMode.value = "OpenAI兼容接口（备用）";
+  qwenMode.callback(qwenMode.value);
+  check(qwenAction("获取贞贞 API Key").hidden, "Qwen Image custom OpenAI mode does not advertise the wrong API Key");
+  qwenMode.value = "本地 GGUF（llama.cpp / Qwen，离线）";
+  qwenMode.callback(qwenMode.value);
+  check(!qwenAction("检查本地 Qwen 安装").hidden && qwenAction("获取贞贞 API Key").hidden, "Qwen Image local mode shows local setup instead of API signup");
+  qwenNode.onConfigure({ api_mode: "贞贞平价小屋（推荐）" });
+  qwenNode.t8QwenImage21UpdateApiMode();
+  check(!qwenAction("获取贞贞 API Key").hidden, "Qwen Image signup visibility restores after loading a saved workflow");
+  const qwenCount = qwenNode.widgets.length;
+  qwenUI.installQwenImage21Actions(qwenNode);
+  check(qwenNode.widgets.length === qwenCount, "Qwen Image action initialization is idempotent");
+  let queuedQwen = null;
+  const oldQueuePrompt = app.queuePrompt;
+  app.queuePrompt = async (...args) => { queuedQwen = args; };
+  await qwenAction("运行 Qwen Image").callback();
+  app.queuePrompt = oldQueuePrompt;
+  check(JSON.stringify(queuedQwen) === JSON.stringify([0, 1, ["871"]]), "Qwen Image run button queues only its own node");
   const yueExtension = app.extensions.find(e => e.name === "T8.YuE2Music");
   class YueNode {
     constructor() {
