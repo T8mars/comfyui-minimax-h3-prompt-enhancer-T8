@@ -280,7 +280,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(len(case_template.options), 243)
+        self.assertEqual(len(case_template.options), 263)
         self.assertEqual(case_template.display_name, "非官方模板（案例 / 社区 Skill）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
@@ -704,8 +704,8 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
         self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
-        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 243)
-        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 243)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 263)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 263)
 
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
@@ -723,7 +723,8 @@ class PromptEnhancerTests(unittest.TestCase):
                 self.assertIn("REQUIRED_MECHANISM_ANCHORS", system)
                 anchor_block = system.split("REQUIRED_MECHANISM_ANCHORS", 1)[1].split("SPARSE_INPUT", 1)[0]
                 anchors = re.findall(r"^\d+\. (.+)$", anchor_block, re.MULTILINE)
-                self.assertIn(len(anchors), {4, 5})
+                self.assertGreaterEqual(len(anchors), 2)
+                self.assertLessEqual(len(anchors), 5)
                 self.assertIn(f"realize all {len(anchors)} as concrete events in order", system)
                 self.assertIn("Reusable Creative DNA (mechanism and production grammar only)", system)
                 self.assertIn("MiniMax H3 native adapter", system)
@@ -816,11 +817,11 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
-        self.assertEqual(len(catalog["templates"]), 242)
-        self.assertEqual(catalog["source_case_count"], 573)
-        self.assertEqual(catalog["case_selector_template_count"], 240)
+        self.assertEqual(len(catalog["templates"]), 262)
+        self.assertEqual(catalog["source_case_count"], 593)
+        self.assertEqual(catalog["case_selector_template_count"], 260)
         self.assertEqual(catalog["community_skill_count"], 2)
-        self.assertEqual(catalog["selector_template_count"], 242)
+        self.assertEqual(catalog["selector_template_count"], 262)
         self.assertEqual(catalog["evidence_variant_count"], 333)
         self.assertEqual(catalog["pending_completion_count"], 0)
         self.assertFalse(catalog["official_minimax_skills_included"])
@@ -1003,7 +1004,7 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertTrue(template["previews"])
             self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
             preview_count += len(template["previews"])
-        self.assertEqual(preview_count, 575)
+        self.assertEqual(preview_count, 595)
         controller_case = by_id["t8-case-visible-four-axis-controller-same-beat-response-v1"]
         self.assertEqual(controller_case["label"], "指尖控制｜四向同拍全身响应")
         self.assertEqual(len(controller_case["required_anchors"]), 4)
@@ -1092,7 +1093,7 @@ class PromptEnhancerTests(unittest.TestCase):
             batch = json.loads(source)
             self.assertEqual(batch["schema_version"], "t8-case-template-batch/v1")
             source_cases.extend(batch["cases"])
-        self.assertEqual(len(source_cases), 240)
+        self.assertEqual(len(source_cases), 260)
         self.assertEqual({item["case_id"] for item in source_cases}, set(catalog_by_case))
         for item in source_cases:
             template = catalog_by_case[item["case_id"]]

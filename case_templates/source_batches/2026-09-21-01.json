@@ -1,0 +1,227 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-09-21-01",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-aimikoda-2100258514132217859-browser-2100258514132217859-video-1",
+      "template_id": "t8-case-identity-clue-reconnection-v1",
+      "label": "身份线索回连｜局部累积到主体确认",
+      "summary": "先用一致的局部线索建立身份，再回到已见过的面部标记完成确认。",
+      "case_sha256": "6bc18a9f963628bee29da7fc4f9c8ba5be5260fe1e1f36f9a4861664a3b03333",
+      "creative_dna_sha256": "1cab1db9a4b61fa48f53a324a65ec4fc92b4b89a91cd9f4c6f83dc0ee6b4be6e",
+      "h3_adapter_sha256": "5eca70c9b633d5d91c284e760f36a924b9e7d8179b66802224dfa32786efc18c",
+      "seedance20_adapter_sha256": "11f95bc4ecb1070ce63f2c778baa353d53a7607861ad30947568ce5ac0718d9b",
+      "mechanism_fingerprint": "7c92ad1012aa1d11f3ec97ba56a7aec2a611339564807d906993b2524ecc238e"
+    },
+    {
+      "case_id": "x-aimikoda-2100859492451676273-browser-2100859492451676273-video-1",
+      "template_id": "t8-case-owner-tool-detail-to-action-v1",
+      "label": "人物装备归属｜局部切片到全身动作",
+      "summary": "人物与工具先同框，再逐项核对细节，最后用一次动作证明归属。",
+      "case_sha256": "34240b53a54e014b041fb35b2138cc17242ba289ef15e6b124945a8d55963ffc",
+      "creative_dna_sha256": "bd4c062cc02808154ed0a13193d98c253267b3a052c4ae145ac0de1e6072238a",
+      "h3_adapter_sha256": "102574ee398a082a9a8d7f0a721d69a81c641daaa611c77c869e35ccbf1e31ef",
+      "seedance20_adapter_sha256": "74e7965ef66987e05b02bb69e95a5e189b0b94f6fee862b6264fcbe45e909b00",
+      "mechanism_fingerprint": "ae9de5551709cd0201fe78d66f54495fe26d74d9d45335c707ecd5f92ec7ecc9"
+    },
+    {
+      "case_id": "x-liluocheng13-2101887861536837966-browser-2101887861536837966-video-1",
+      "template_id": "t8-case-still-portrait-state-reframe-v1",
+      "label": "静态人像转义｜微表情改写前段含义",
+      "summary": "让近静镜头留出观察时间，再用少量可见状态变化改变读法。",
+      "case_sha256": "09767183497b6644878c2071d935b78b849ce0b903cb3a18353ad1eacbc2e07c",
+      "creative_dna_sha256": "ff6d0fe106238fcf128b8eb5f32d20cfb5f9809ce8310932ca35332d723dad6d",
+      "h3_adapter_sha256": "78017504760540319279dea7db3bd7577f157f4ab034bdbdf145a4919efab6b0",
+      "seedance20_adapter_sha256": "48dd337f741af316af7e98e5ab0b5a7f20bfb39df59e57acf714ac75b4391a23",
+      "mechanism_fingerprint": "fad5f9e1238f716005bdc85f1d608e3e8e5d5c44e920f57ea49465f2abbe3694"
+    },
+    {
+      "case_id": "x-aiwithmaha-2101887507059351894-browser-2101887507059351894-video-1",
+      "template_id": "t8-case-material-use-product-return-v1",
+      "label": "材质到使用｜产品关联与实证回归",
+      "summary": "同一产品在材料、实际使用和回归镜头之间建立可检查的联系。",
+      "case_sha256": "1b10bfa64438eeece88705019183de64a0a180e38894fd16dcf6d53698286581",
+      "creative_dna_sha256": "86a44ea0afe5a75247540b019cb432bda94b4f5e8d7def264b7e1b45c90a22ce",
+      "h3_adapter_sha256": "ab626b080dff4e02671e971d58048ac1255caa0cc0fd88d35aabd0bb72426855",
+      "seedance20_adapter_sha256": "ec9770fb89cd53d4b056e7a5df71746017dcea9f442b58e5b1feb7ca4ec73d46",
+      "mechanism_fingerprint": "23512f1f722b5fe3463732c85469800f88769cdced7c5c8c6cef4e5780969405"
+    },
+    {
+      "case_id": "x-decat2025-2101800132840935759-browser-2101800132840935759-video-1",
+      "template_id": "t8-case-paired-carrier-clearance-axis-v1",
+      "label": "双载具间距｜同轴移动与安全错位",
+      "summary": "两种载具保持同一行进轴线，以高度与距离变化形成无碰撞张力。",
+      "case_sha256": "130d1709501d541b71b44a7dcd96244c93c7240305c70cd03abae0da1001e491",
+      "creative_dna_sha256": "7fb56964467b65ba8198751dbef821891ac64ce9ee195315032003c4f5dd7eef",
+      "h3_adapter_sha256": "2c5e0b6aab46c57c80c32d829ef42761e71b71972fe858cb172f2584d10622cb",
+      "seedance20_adapter_sha256": "9c71320dc2cca303213d415edc93aa8eb38d90e9a60d610e368945fc2585a3bc",
+      "mechanism_fingerprint": "1c41ad2b725bb96c68265eacb5e1ad3caaa2b9899ac636606169caf5c43eab32"
+    },
+    {
+      "case_id": "x-decat2025-2101857971965681869-browser-2101857971965681869-video-1",
+      "template_id": "t8-case-center-trigger-radial-world-change-v1",
+      "label": "中心触发｜径向环境变形与余波",
+      "summary": "中心动作依次触发外扩边界和场景几何变化，最终保留原点与余波。",
+      "case_sha256": "f64547f7eeba75c32386c3242bf76a5066790411cd490b34c8c90982a1709b2d",
+      "creative_dna_sha256": "47f000be47d5f8d107c17c774f90768a270f173aa7c6d2f998fdef9a28fdf036",
+      "h3_adapter_sha256": "36141e51706080b0b08468f41233eb060720eea69d5e90c3b561ca088c9d3c02",
+      "seedance20_adapter_sha256": "62d9ae475c59bfc28bab117d9c71d451970281ab517713a76924fe7ce9a23147",
+      "mechanism_fingerprint": "6385c1a6b5a0c5300c66458827302426d04b71eb8b774bdc4d6f76c440136299"
+    },
+    {
+      "case_id": "x-hbcoop-2101762862083690640-browser-2101762862083690640-video-1",
+      "template_id": "t8-case-micro-ecology-world-title-scale-v1",
+      "label": "微观到世界｜生态线索扩张与片名",
+      "summary": "从微小生态证据扩到建成环境和世界尺度，最后停在原创片名。",
+      "case_sha256": "088d541f4ac2866f0bbdbeb157ed45e5199370d4ada789e2dd78b562fb16471e",
+      "creative_dna_sha256": "207dfc9f3480e374f0dd976baa6fd28eb641beece57f9dfe80f0c17ebe2179dd",
+      "h3_adapter_sha256": "ae0249441057bd964e5b44d63719e3614b8c32687536f3383756dfe162f58718",
+      "seedance20_adapter_sha256": "1e5b183abdc421187ed70e9ada015e707cd049237ebe1df89ef6e1c51f5ba0cb",
+      "mechanism_fingerprint": "008d3dcf386ec8ae751426719f34ec5a74f3ce54bb71df65c13bef42465929dd"
+    },
+    {
+      "case_id": "x-hbcoop-2101401225652838521-browser-2101401225652838521-video-1",
+      "template_id": "t8-case-empty-scene-anomaly-title-hold-v1",
+      "label": "空场异常｜物质扩张与片名停留",
+      "summary": "先建立有序空场和一个物件，再让单一材质异常扩散并留给标题空间。",
+      "case_sha256": "a0696a9c5163b52dad1e50e27f170ff13f693d520d83a3d70d35a5f31a32c43a",
+      "creative_dna_sha256": "6388e4d6675f05fb160b6b3176da5fea0affb3578ad8ba99b5f1cc12909e96c5",
+      "h3_adapter_sha256": "e2a6a5792380e48638373967748350ffce2321489a526b72972413f76b109425",
+      "seedance20_adapter_sha256": "4434a373136c431ab4a9fc088bdf07eb3e742545655581ef2137838d7249c738",
+      "mechanism_fingerprint": "46452562beb58468b8151f69b9f94430ef77f27d8735462bdd00f3b8b33efd21"
+    },
+    {
+      "case_id": "x-charaspowerai-2101265127584469270-browser-2101265127584469270-video-1",
+      "template_id": "t8-case-line-cut-material-word-reveal-v1",
+      "label": "切线成字｜材料变化与可读停留",
+      "summary": "数次线性操作改写同一材料，让原创字形从物理变化中形成。",
+      "case_sha256": "12e1bdec1d404311d7dd24e59e68bfffc880b4b12bda9fc7ddfb93b06237c2df",
+      "creative_dna_sha256": "02644767b30a299c7253ac44159ba1c95144507af717808add0b593e2f3bd52c",
+      "h3_adapter_sha256": "e74967730e2a6051eda6b61e055b30c5b98fd6f11dfd6e549b41e5b3456c4591",
+      "seedance20_adapter_sha256": "cde57bd837650e22d553e7977f1a132e2899e38adcd077f33bc8a75f124c8985",
+      "mechanism_fingerprint": "1f71809905e430a643e5e41910100728f8159b97b9fdf402cfde900270185dde"
+    },
+    {
+      "case_id": "x-ou-zhen599-2101691337838104675-browser-2101691337838104675-video-1",
+      "template_id": "t8-case-single-input-delayed-container-overflow-v1",
+      "label": "单次投入｜容器延迟变化与失控收束",
+      "summary": "一个小输入在封闭系统中延迟引发可追踪的扩张，人尝试纠正后留下终态。",
+      "case_sha256": "d65850498ca4262df3bff7899a14c227d0708947f5b1f969f21289f93f70acc4",
+      "creative_dna_sha256": "7e397ded8a224ee50aa1feebb180607ad35e0dfb569317e2ecb92eb58f41bc64",
+      "h3_adapter_sha256": "21620ca5da0954a6b1369db45fb2259f214121d2597cfad2df5555b13c446410",
+      "seedance20_adapter_sha256": "eb5d9afeb8ca00b7eaec2e03b602edc74edaea26a0fae56769b5d9e2f59d6d3a",
+      "mechanism_fingerprint": "66196574ef941d2580671ac79b0ea108e022b45fc70d114e9902ce4f56333e6d"
+    },
+    {
+      "case_id": "x-ou-zhen599-2101570041498272162-browser-2101570041498272162-video-1",
+      "template_id": "t8-case-reciprocal-touch-state-confirmation-v1",
+      "label": "双向接触｜动作回应与状态确认",
+      "summary": "一方轻触之后另一方主动回应，再以独立状态信号证明关系变化。",
+      "case_sha256": "7c0904537483e3d3986de6f112ef6973430c4f4534918dd03b271b2538b9052f",
+      "creative_dna_sha256": "541f79873e13c17f5c9acac6320c208dbfaf507b2195bb08396d7f4c6b5a1ce4",
+      "h3_adapter_sha256": "56cfd723266b3392d50b3838974cd6caaca29ceda44ee92c51316e8fb408644f",
+      "seedance20_adapter_sha256": "1d1e347b0f4c1324ef34c118cba542c007a9964bcb9191e9e90dfa7927b1267f",
+      "mechanism_fingerprint": "c865969bd7893287e8258954e78f3745a073fe7c6fb236b290d40f26c6fb32ac"
+    },
+    {
+      "case_id": "x-koyori-hana-2101635986279321978-browser-2101635986279321978-video-1",
+      "template_id": "t8-case-protection-lull-delayed-burst-v1",
+      "label": "保护暂停｜短暂暴露后的迟发反转",
+      "summary": "防护道具先有用，暂时移开后保留暴露空档，随后发生一次温和迟发反转。",
+      "case_sha256": "beb2e8c72491b0f875724053c4f320f098a018cdaea169b4d09ce5dff608e88e",
+      "creative_dna_sha256": "3a73f909d2eaf1081d751d8e4dabaede09235bc5dd41e52e54c7131fb779d0b5",
+      "h3_adapter_sha256": "9574990a748bd06779aecff7299c63af85fb6c2efee3c963e0ac49e08a53f580",
+      "seedance20_adapter_sha256": "c8c376bda72b980a3047775cc4fadcb25f73dbd72875c43f00f68d731b491521",
+      "mechanism_fingerprint": "895597022e131208bbc5b1f447e1b898d0fc672534092d368965dac09a0d8b0f"
+    },
+    {
+      "case_id": "x-maybeegreen-2101766400230781294-browser-2101766400230781294-video-1",
+      "template_id": "t8-case-monument-scale-near-contact-return-v1",
+      "label": "巨构近触｜尺度远景与微动作回望",
+      "summary": "巨型场景先把旅行者缩小，再靠近一个可读微动作，最后回原远景。",
+      "case_sha256": "1663fe5a2db76024ee3a9e35eb0cc4d668a7c943ce3bd4d01cbedd4ea25277fc",
+      "creative_dna_sha256": "311eaee1296d025b9063f29c836df89586ff0cc6a2e7ca6e3e24a5cca0a7e7fa",
+      "h3_adapter_sha256": "6628923f1433368eebf5038cd3f591f2e0204994f3d18654b992db1ef117ff64",
+      "seedance20_adapter_sha256": "7dc3200a1cea021c484420a534763cd97e99d7a46d78692ff4168a72d92a1a14",
+      "mechanism_fingerprint": "8a2c577a167d2c61ffd4bcb113828f1b1ef5856973695b55aa25c7a643e85094"
+    },
+    {
+      "case_id": "x-100xmart-2101793529592783285-browser-2101793529592783285-video-1",
+      "template_id": "t8-case-foreground-witness-monument-handoff-v1",
+      "label": "见证者退场｜前景横穿到远端巨构",
+      "summary": "以近处见证者建立尺度，镜头离开前景后让一次近景运动带出远方目的地。",
+      "case_sha256": "1554b18ce5bf72854471c0d478ef3d153ec74a4c808008796d1ece9161e0f13c",
+      "creative_dna_sha256": "5405a4d4855ac4ad03b0a8475895901a67143456eb30f196541722de3ef76055",
+      "h3_adapter_sha256": "09fbbc1c0ac02b1fbc2d98b811c1081758ca1de74eb44bf6b1bc3ff32419f69e",
+      "seedance20_adapter_sha256": "934c99f90d759c49f4f9632d94f34533bbbcd05854b9db7cd54f98069c17cc5a",
+      "mechanism_fingerprint": "2db937dac7dde14ef3365fd7edce767f6800638a97b5196886d52b079edef3e2"
+    },
+    {
+      "case_id": "x-ayzalnooor24521-2099725642736845113-browser-2099725642736845113-video-1",
+      "template_id": "t8-case-impact-pause-second-entrant-response-v1",
+      "label": "冲击停顿｜第二角色入场与近景确认",
+      "summary": "局部冲击固定空间，短暂停顿后第二角色入场回应，最终以主角近景确认。",
+      "case_sha256": "0327a767451096c9adf1d79c59240a7ddc2bbfb4f95890e3fdd76b879268dc49",
+      "creative_dna_sha256": "b4ad6a75866f6f3a725ab24af5462c5d44ea223c5e4300e532370f2f1b6cb667",
+      "h3_adapter_sha256": "25d38704d93679ca041238f9998894ce382b167ec863bb7ad2dfa05f7a44e84a",
+      "seedance20_adapter_sha256": "594b9ac9b327fa3441cabf9f50f31a16b24cdc02a8db0721028754176cec2cb5",
+      "mechanism_fingerprint": "b1fde2fd8ae8504a97c30f6ccfd376268b854105df28cc310d31d43e8612fb6c"
+    },
+    {
+      "case_id": "x-aiwithminal-2101169774076231947-browser-2101169774076231947-video-1",
+      "template_id": "t8-case-air-cluster-near-surface-wide-landing-v1",
+      "label": "空中群集｜近表面转向到稳定落地",
+      "summary": "始终跟住一个主体，近表面改变方向后拉宽重建地理，最后真实落地。",
+      "case_sha256": "eee59ccbf0ce8d4472f0f698327e7fe60d39ad4aa05f56e04650ded7c89180e7",
+      "creative_dna_sha256": "625f6a4d0688975355656adf858b646a3c58e2e510533c37c8a81c5d6289a3db",
+      "h3_adapter_sha256": "2be0566f6317a4135e9409d1100254e28dbefc0d37a74d3bcac99e0a0d1014be",
+      "seedance20_adapter_sha256": "9563b61efd6341e5d73d7757c6c6a2a2a4512a117859a6d0edecd0f7be00c49a",
+      "mechanism_fingerprint": "a6bf3c70d90bfceaa6fe36c34c2ad5b48c462482e04383b67c0dc7d07eae6881"
+    },
+    {
+      "case_id": "x-spingwangai-2101691409199718442-browser-2101691409199718442-video-1",
+      "template_id": "t8-case-flat-token-physical-spill-recovery-v1",
+      "label": "平面物件落地｜打断表演与收拾恢复",
+      "summary": "稳定平面布局中，图形落成实体打断动作，人物收拾后继续原活动。",
+      "case_sha256": "3a45f843db70180e76a6c47b43ed7522262676a4fcb26ed81fd25c7494c07e5f",
+      "creative_dna_sha256": "1c18a8ea093f3278469afb97917483189d1bc55c1456d635bd6c3ce2edddd238",
+      "h3_adapter_sha256": "35fd7d288d5b188dbb2c9d5fc291b2381e5834e7d423bb329fdca07903d7a38a",
+      "seedance20_adapter_sha256": "7ef139d2d11b9dde008351857f3e3fac942975feec1aee918060bdb74c816e4d",
+      "mechanism_fingerprint": "606eda15d4ead8dee59af9535d4133e2af6071cd69f4cfc7d51a0ab7890d9cee"
+    },
+    {
+      "case_id": "x-tokyo-valentine-2101861841739899212-browser-2101861841739899212-video-1",
+      "template_id": "t8-case-one-to-group-photo-reaction-v1",
+      "label": "一人变群像｜合影后近景反应",
+      "summary": "一人与独立观察者先建立关系，再出现可数的新群体，合影后用面部反应收束。",
+      "case_sha256": "5d149df0c6c1e13816b4db5708ee0ff3ba1288244aca07e7adc1869682aa20ed",
+      "creative_dna_sha256": "2e9585d03b443c6c668b4643343a6a9469bbcc6fab1d813dde53d0aae1341bfa",
+      "h3_adapter_sha256": "ffb8a055234a4b9edadb2588f0f3190bf6cc08c64e12b2de588e71544801cf3e",
+      "seedance20_adapter_sha256": "d0ebf9ac2513c6da322da3bea759a8f4be6b5ed97f955c09ca632f96321747d9",
+      "mechanism_fingerprint": "95099a7bf83c7a452e13baeee07e65cb5182438bdf7b80a6d1792af323e92848"
+    },
+    {
+      "case_id": "x-bunsadak-2101800874372919707-browser-2101800874372919707-video-1",
+      "template_id": "t8-case-three-across-synchronized-orientation-v1",
+      "label": "三角色同拍｜固定阵形与同步转向",
+      "summary": "三个不同主体在稳定场地内同步小动作、共同转向并落在统一终姿。",
+      "case_sha256": "f9823a9d12a6321da4a3cabfe6336fdda87bf41c990086ce6fb80ec21d7ffb59",
+      "creative_dna_sha256": "f44777348e02371a2af83cad8ed31d864f38d1d6a0d030fec00682a614c3cd57",
+      "h3_adapter_sha256": "c848461310b03312feab161f975744bf77aaf32dbea3c940ec782cb07ca04b06",
+      "seedance20_adapter_sha256": "e6918cf14d7f8972066a3a4d15b37024841de89bc0e0a342a9e8a2686a7f755b",
+      "mechanism_fingerprint": "5b137463262d228b4138c0025737f604a8c2e01d0dc350d12b5282328bbf6d48"
+    },
+    {
+      "case_id": "x-ai-lifehack55-2099824223015588149-browser-2099824223015588149-video-1",
+      "template_id": "t8-case-graphic-course-gate-obstacle-solo-finish-v1",
+      "label": "图形赛道｜穿越圆门、障碍升级与单人收束",
+      "summary": "同一主体把抽象图形空间当作路线，跨门、分解障碍、最终独立展示结果。",
+      "case_sha256": "70268a36c7f75f95fdbfe37a9adb3bb4d4fc40cf651fc8cb38cbc4a0c922bb4a",
+      "creative_dna_sha256": "5b4e65da38a27de50637af91cddc59aaffb8036f78d7ca2a95e7491be8c8d0a9",
+      "h3_adapter_sha256": "73fbf2e2905b751ff7ce1a49b851da319d97e3ce4516fa743968ebb6922ae28c",
+      "seedance20_adapter_sha256": "dda3e44ed868e0ba763a96947ba50d688a9a33a864f4160cbc503a7bef480955",
+      "mechanism_fingerprint": "45208e6a7c5b86da08c6bc04aaecaed811be8ebb35da469e8846b7163a5521fc"
+    }
+  ]
+}

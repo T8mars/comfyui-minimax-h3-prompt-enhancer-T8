@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.1] - 2026-09-21
+
+### Added
+
+- Import 20 new T8 case selectors from the September 21 handoff for both H3
+  and Seedance 2.0, bringing the case catalog to 593 source cases and 262
+  non-official selectors without changing existing workflow contracts.
+- Update the verified dynamic preview channel to 595 T8 GIFs while retaining
+  the 377-GIF bundled offline baseline and eight official GIFs.
+
 ## [1.24.0] - 2026-09-21
 
 ### Added
