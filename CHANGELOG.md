@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.3] - 2026-09-22
+
+### Fixed
+
+- Keep real Qwen workflow JSON validation in the Python repository gate so
+  Linux headless Chromium cannot capture the browser harness mid-fetch under
+  virtual time; retain browser coverage of widget migration and reloading.
+
 ## [1.24.2] - 2026-09-22
 
 ### Fixed

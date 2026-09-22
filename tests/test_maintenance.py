@@ -126,6 +126,12 @@ class MaintenanceTests(unittest.TestCase):
                         count, model_index = expected
                         self.assertIn(len(node["widgets_values"]), (31, 35) if node["type"] == "MiniMaxH3PromptEnhancerT8" else (count,))
                         self.assertNotIn(node["widgets_values"][model_index], (None, "", "randomize"))
+                    if node["type"] == "QwenImage21PromptEnhancerT8":
+                        values = node["widgets_values"]
+                        self.assertEqual(values[5], "贞贞平价小屋（推荐）")
+                        self.assertEqual(values[9], 0)
+                        self.assertEqual(values[10], "fixed")
+                        self.assertEqual(values[11], "Qwen3.8-27B-Q4_K_M.gguf")
         self.assertTrue({
             "MiniMaxH3PromptEnhancerT8",
             "Seedance20PromptEnhancerT8",
