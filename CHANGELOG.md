@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.4] - 2026-09-22
+
+### Fixed
+
+- Wait for the frontend harness's explicit pass/fail state through Chromium
+  DevTools instead of accepting an early headless DOM snapshot. This keeps the
+  Linux CI browser gate deterministic while retaining screenshot coverage.
+
 ## [1.24.3] - 2026-09-22
 
 ### Fixed

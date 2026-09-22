@@ -6,7 +6,6 @@ import http.server
 import re
 import shutil
 import subprocess
-import tempfile
 import threading
 from pathlib import Path
 
@@ -109,96 +108,33 @@ def main() -> int:
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     base_url = f"http://127.0.0.1:{server.server_port}/tests/frontend"
-    def run_page(filename: str, *, virtual_time: bool):
-        with tempfile.TemporaryDirectory(prefix="t8-browser-test-") as profile:
-            command = [
-                executable,
-                "--headless=new",
-                "--disable-gpu",
-                "--disable-extensions",
-                "--disable-background-networking",
-                "--no-first-run",
-                # Bound DOM capture even when pending resources pause virtual time.
-                # https://developer.chrome.com/docs/automation-and-testing/headless-cli#timeout
-                "--timeout=30000",
-                f"--user-data-dir={profile}",
-                "--dump-dom",
-            ]
-            if virtual_time:
-                command.insert(-2, "--virtual-time-budget=20000")
-            command.append(f"{base_url}/{filename}")
-            return subprocess.run(
-                command,
-                cwd=ROOT,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=45,
-                check=False,
-            )
-    def capture_page(filename: str, output: str):
-        target = Path(output).expanduser().resolve()
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(prefix="t8-browser-capture-") as profile:
-            return subprocess.run(
-                [
-                    executable,
-                    "--headless=new",
-                    "--disable-gpu",
-                    "--disable-extensions",
-                    "--disable-background-networking",
-                    "--no-first-run",
-                    "--timeout=30000",
-                    "--virtual-time-budget=20000",
-                    f"--user-data-dir={profile}",
-                    "--window-size=1280,900",
-                    "--dump-dom",
-                    f"--screenshot={target}",
-                    f"{base_url}/{filename}",
-                ],
-                cwd=ROOT,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=45,
-                check=False,
-            )
+    def run_page(filename: str, *, screenshot: str = ""):
+        command = ["node", str(ROOT / "tools" / "frontend_browser_cdp.mjs"), executable, f"{base_url}/{filename}"]
+        if screenshot:
+            target = Path(screenshot).expanduser().resolve()
+            target.parent.mkdir(parents=True, exist_ok=True)
+            command.append(str(target))
+        return subprocess.run(
+            command, cwd=ROOT, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=45, check=False,
+        )
     try:
-        completed = run_page(HARNESS.name, virtual_time=True)
-        # Headless Chromium can occasionally dump the initial DOM before an
-        # ES-module harness starts, even with a virtual-time budget. Retry only
-        # that exact pre-execution state; real FAIL results are never retried.
-        for _attempt in range(2):
-            result = re.search(r'<pre id="result"[^>]*>(.*?)</pre>', completed.stdout, re.DOTALL)
-            if completed.returncode != 0 or not result or result.group(1).strip() != "RUNNING":
-                break
-            completed = run_page(HARNESS.name, virtual_time=True)
-        performance = run_page(PERFORMANCE_HARNESS.name, virtual_time=False)
+        completed = run_page(HARNESS.name)
+        performance = run_page(PERFORMANCE_HARNESS.name)
         screenshot_page = HARNESS.name if args.screenshot_state == "browser" else f"{HARNESS.name}?state=menu"
-        capture = capture_page(screenshot_page, args.screenshot) if args.screenshot else None
-        if capture is not None:
-            # A successful process alone does not prove that a screenshot
-            # captured the asynchronously imported UI rather than RUNNING.
-            for _attempt in range(2):
-                capture_result = re.search(r'<pre id="result"[^>]*>(.*?)</pre>', capture.stdout, re.DOTALL)
-                if capture.returncode != 0 or not capture_result or capture_result.group(1).strip() != "RUNNING":
-                    break
-                capture = capture_page(screenshot_page, args.screenshot)
+        capture = run_page(screenshot_page, screenshot=args.screenshot) if args.screenshot else None
     finally:
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
-    if completed.returncode != 0 or 'data-status="pass"' not in completed.stdout:
-        result = re.search(r'<pre id="result"[^>]*>(.*?)</pre>', completed.stdout, re.DOTALL)
-        detail = (result.group(1) if result else completed.stdout[-4000:]) or completed.stderr[-4000:]
+    if completed.returncode != 0 or not completed.stdout.startswith("PASS"):
+        detail = completed.stderr[-4000:] or completed.stdout[-4000:]
         raise RuntimeError(f"Frontend browser contracts failed (exit={completed.returncode}):\n{detail}")
-    if performance.returncode != 0 or 'data-status="pass"' not in performance.stdout:
-        detail = performance.stdout[-4000:] or performance.stderr[-4000:]
+    if performance.returncode != 0 or not performance.stdout.startswith("PASS"):
+        detail = performance.stderr[-4000:] or performance.stdout[-4000:]
         raise RuntimeError(f"Frontend performance baseline failed (exit={performance.returncode}):\n{detail}")
-    if capture is not None and (capture.returncode != 0 or 'data-status="pass"' not in capture.stdout):
-        detail = capture.stdout[-4000:] or capture.stderr[-4000:]
+    if capture is not None and (capture.returncode != 0 or not capture.stdout.startswith("PASS")):
+        detail = capture.stderr[-4000:] or capture.stdout[-4000:]
         raise RuntimeError(f"Frontend QA screenshot failed (exit={capture.returncode}):\n{detail}")
     metrics = re.search(r"PASS\s*(\{[^<]+\})", performance.stdout)
     suffix = f" {metrics.group(1)}" if metrics else ""
