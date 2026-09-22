@@ -485,12 +485,12 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
             self.skipTest("Local GIF case library is not configured on this machine")
         catalog = case_library_routes.runtime_public_catalog()
         previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-        self.assertEqual(len(previews), 595)
+        self.assertEqual(len(previews), 615)
         self.assertTrue(all(preview["available"] for preview in previews))
         self.assertTrue(all(preview["preview_url"].startswith("/t8-prompt-enhancer/case-preview/") for preview in previews))
         case_previews = [preview for preview in previews if not preview["case_id"].startswith("community-skill--")]
         community_previews = [preview for preview in previews if preview["case_id"].startswith("community-skill--")]
-        self.assertEqual(len(case_previews), 593)
+        self.assertEqual(len(case_previews), 613)
         self.assertEqual(len(community_previews), 2)
         self.assertTrue(all(preview["source_url"].startswith("https://") for preview in case_previews))
         self.assertTrue(all(preview["source_url"] == "" for preview in community_previews))
@@ -511,7 +511,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         ):
             catalog = case_library_routes.runtime_public_catalog()
             previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-            self.assertEqual(len(previews), 595)
+            self.assertEqual(len(previews), 615)
             self.assertFalse(catalog["preview_manifest_configured"])
             self.assertFalse(catalog["bundled_previews_included"])
             self.assertEqual(catalog["bundled_preview_count"], 377)
@@ -543,7 +543,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
                 case_library_routes._bundled_preview_records.cache_clear()
                 catalog = case_library_routes.runtime_public_catalog()
                 previews = [preview for template in catalog["templates"] for preview in template["previews"]]
-                self.assertEqual(len(previews), 595)
+                self.assertEqual(len(previews), 615)
                 self.assertFalse(catalog["bundled_previews_included"])
                 self.assertEqual(catalog["bundled_preview_count"], 0)
                 self.assertTrue(all(preview["downloadable"] for preview in previews))

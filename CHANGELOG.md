@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.5] - 2026-09-23
+
+### Added
+
+- Import the September 22 handoff's 13 new T8 case selectors and seven
+  evidence variants for both H3 and Seedance 2.0, bringing the catalog to 613
+  source cases and 275 non-official choices without changing workflow fields.
+- Publish dynamic preview channel `2026.09.22.1` with all 615 T8 case and
+  community-Skill previews in 16 SHA-256-pinned external shards; the Registry
+  package continues to exclude these dynamic GIF assets.
+
 ## [1.24.4] - 2026-09-22
 
 ### Fixed
