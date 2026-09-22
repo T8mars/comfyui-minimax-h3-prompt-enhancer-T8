@@ -244,6 +244,28 @@ class QwenImage21ContractTests(unittest.TestCase):
                 reference_images={"reference_image_0": None},
             )
 
+    def test_linked_prompt_is_checked_after_upstream_execution(self):
+        # ComfyUI passes a None placeholder for a linked STRING during graph
+        # validation; the actual text arrives only at execute().
+        image = np.zeros((1, 1, 3), dtype=np.float32)
+        self.assertTrue(qwen.QwenImage21PromptEnhancer.validate_inputs(
+            prompt=None, input_mode=qwen.INPUT_MODE_EDIT,
+            reference_images={"reference_image_0": None},
+        ))
+        self.assertTrue(qwen.QwenImage21PromptEnhancer.validate_inputs(
+            prompt=None, input_mode=qwen.INPUT_MODE_TEXT,
+        ))
+        with self.assertRaisesRegex(qwen.QwenImage21PromptEnhancerError, "prompt is required"):
+            qwen.QwenImage21PromptEnhancer.validate_inputs(
+                prompt="", input_mode=qwen.INPUT_MODE_TEXT,
+            )
+        with self.assertRaisesRegex(qwen.QwenImage21PromptEnhancerError, "prompt is required"):
+            qwen.QwenImage21PromptEnhancer.execute(
+                prompt="", input_mode=qwen.INPUT_MODE_EDIT,
+                reference_images={"reference_image_0": image},
+                api_mode=qwen.LOCAL_QWEN_API_MODE,
+            )
+
     def test_provider_model_and_budget_routing(self):
         self.assertEqual(
             qwen._resolve_image_model(qwen.SEEDANCE_API_MODE, qwen.AI_WORKSHOP_DEFAULT_MODEL, ""),
@@ -257,6 +279,31 @@ class QwenImage21ContractTests(unittest.TestCase):
         self.assertEqual(qwen._resolve_image_model(qwen.LOCAL_QWEN_API_MODE, "", ""), "local-gguf")
         options = qwen._cloud_request_options({"extra_parameters": {"max_completion_tokens": 12345}})
         self.assertEqual(options["extra_parameters"], {"max_completion_tokens": 12345})
+
+    def test_local_mode_needs_no_api_key(self):
+        class FakeLocalProvider:
+            def __init__(self, settings, vision=False):
+                self.vision = vision
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def complete(self, *_args, **_kwargs):
+                return json.dumps({"rewritten_prompt": "A local image prompt.", "wh_ratio": "1:1"})
+
+        with patch.object(qwen, "local_qwen_settings", return_value=object()), \
+                patch.object(qwen, "LocalQwenProvider", FakeLocalProvider), \
+                patch.object(qwen, "local_visual_part_budget", return_value=0), \
+                patch.object(qwen, "build_local_multimodal_parts", return_value=([], {})), \
+                patch.object(qwen, "_provider_config", side_effect=AssertionError("cloud path must not run")):
+            output = qwen.QwenImage21PromptEnhancer.execute(
+                prompt="a square product photo", wh_ratio="1:1",
+                api_mode=qwen.LOCAL_QWEN_API_MODE, api_key="",
+            )
+        self.assertEqual(output[0], "A local image prompt.")
 
     def test_disconnected_stream_is_accepted_only_when_qwen_json_is_valid(self):
         complete = json.dumps({"rewritten_prompt": "A complete image description.", "wh_ratio": "1:1"})

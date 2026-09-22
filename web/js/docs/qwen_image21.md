@@ -5,7 +5,10 @@ generate an image and it does not download Qwen weights.
 
 ## Basic use
 
-1. Enter a visual brief in **图像描述 / Prompt**.
+1. Enter a visual brief in **图像描述 / Prompt**, or convert that widget to an
+   input and connect an upstream `STRING` node such as CR Prompt Text. A linked
+   prompt is validated after the upstream node runs, not while its value is
+   still unavailable during graph validation.
 2. Select **文生图 / Text-to-image** when no reference image is connected.
 3. Select **图像编辑 / Image edit** when connecting one to ten `IMAGE` inputs.
 4. Keep **最大提示词字数** at `0` unless a specific upper bound is needed.
@@ -50,6 +53,10 @@ Affordable AI Shop. AI Workshop, OpenAI-compatible, shared provider config and
 local GGUF settings follow the same provider family used by the existing T8
 enhancers. Local image editing requires a matching visual `mmproj` and enough
 context for every connected image; images are never silently dropped.
+The local GGUF mode does **not** require an API Key. The `API Key` socket is
+only for cloud modes and may be left unconnected locally. If a saved example
+still has the old title saying to fill an API Key, update this node from GitHub;
+the current example title no longer implies a key is required for local mode.
 
 The node is an independent addition. Existing H3, Seedance 2.0, Music 3 and YuE2
 workflows do not need migration.

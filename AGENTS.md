@@ -10,3 +10,11 @@
 - If one push contains several change types, use the highest applicable increment. When uncertain, default to a `PATCH` increment rather than pushing without a new version.
 - Before pushing, parse `pyproject.toml`, confirm the new version is valid `X.Y.Z`, check that it is newer than both `origin/main` and the latest Registry version, run the relevant tests and secret scan, and confirm `roadmap.md`, API keys, local runtime state, and GGUF files are not staged.
 - A `pyproject.toml` change triggers `.github/workflows/publish_action.yml`; after pushing, verify the GitHub Action and the corresponding Comfy Registry version instead of treating `git push` alone as a completed release.
+
+## ComfyUI workflow compatibility
+
+- Before adding or changing a node with widget inputs, external STRING links,
+  frontend buttons, or `force_input` sockets, follow
+  [the widget/linked-input audit and regression checklist](docs/WIDGET_COMPATIBILITY_AUDIT.md).
+  Test both the saved workflow order and the actual runtime widget order; a
+  connected upstream value is `None` during ComfyUI graph validation.

@@ -807,7 +807,7 @@ def check() -> None:
         "MiniMaxH3PromptEnhancerT8": 31,
         "Seedance20PromptEnhancerT8": 35,
         "MiniMaxMusic3PromptEnhancerT8": 38,
-        "QwenImage21PromptEnhancerT8": 20,
+        "QwenImage21PromptEnhancerT8": 22,
     }
     workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems))
     if len(workflows) != 20:
@@ -890,6 +890,15 @@ def check() -> None:
                 }[node["type"]]
                 if values[local_index] in (None, "", "randomize"):
                     raise RuntimeError(f"{path.name}: invalid local model widget value")
+                if node["type"] == "QwenImage21PromptEnhancerT8":
+                    if values[5] not in (SEEDANCE_API_MODE, LOCAL_API_MODE, "贞贞的AI工坊（图片/视频）", "OpenAI兼容接口（备用）"):
+                        raise RuntimeError(f"{path.name}: Qwen API mode is positionally misaligned")
+                    if not isinstance(values[9], int) or values[10] not in ("fixed", "increment", "decrement", "randomize"):
+                        raise RuntimeError(f"{path.name}: Qwen seed/control values are positionally misaligned")
+                    if not isinstance(values[20], str) or values[21] != "normal":
+                        raise RuntimeError(f"{path.name}: Qwen recovery values are positionally misaligned")
+                    if node.get("title", "").startswith("填写 API Key"):
+                        raise RuntimeError(f"{path.name}: misleading Qwen API Key title")
                 if node["type"] == "Seedance20PromptEnhancerT8":
                     if values[13] not in (SEEDANCE_API_MODE, LOCAL_API_MODE):
                         raise RuntimeError(f"{path.name}: Seedance API mode is positionally misaligned")

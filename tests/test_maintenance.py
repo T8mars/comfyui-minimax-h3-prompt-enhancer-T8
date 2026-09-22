@@ -120,7 +120,7 @@ class MaintenanceTests(unittest.TestCase):
                         "MiniMaxH3PromptEnhancerT8": (31, 22),
                         "Seedance20PromptEnhancerT8": (35, 26),
                         "MiniMaxMusic3PromptEnhancerT8": (38, 31),
-                        "QwenImage21PromptEnhancerT8": (20, 7),
+                        "QwenImage21PromptEnhancerT8": (22, 11),
                     }.get(node["type"])
                     if expected:
                         count, model_index = expected

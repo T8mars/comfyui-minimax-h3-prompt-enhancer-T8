@@ -34,12 +34,12 @@
         0,
         "auto",
         false,
-        "",
         "贞贞平价小屋（推荐）",
         "gemini-3.5-flash",
         "",
         "",
         0,
+        "fixed",
         "Qwen3.8-27B-Q4_K_M.gguf",
         "AUTO（自动匹配）",
         32768,
@@ -48,9 +48,11 @@
         "medium",
         2.0,
         "执行后卸载（推荐）",
-        "AUTO（显存不足时释放）"
+        "AUTO（显存不足时释放）",
+        "",
+        "normal"
       ],
-      "title": "填写 API Key（建议使用环境变量，不要把密钥保存到工作流）"
+      "title": "Qwen Image 2.1 提示词增强（本地 GGUF 无需 API Key）"
     },
     {
       "id": 3,

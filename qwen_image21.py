@@ -245,8 +245,8 @@ def _has_reference_slots(
     return any(_REFERENCE_IMAGE_KEY.search(str(key)) for key in (extra_inputs or {}))
 
 
-def _validate_mode(prompt: str, input_mode: str, media_plan: list[dict[str, Any]], ratio: str, max_chars: int, transparent: bool) -> None:
-    if not str(prompt or "").strip():
+def _validate_mode(prompt: str, input_mode: str, media_plan: list[dict[str, Any]], ratio: str, max_chars: int, transparent: bool, *, require_prompt: bool = True) -> None:
+    if require_prompt and not str(prompt or "").strip():
         raise QwenImage21PromptEnhancerError("prompt is required. Enter the image brief or editing instruction.")
     if input_mode not in INPUT_MODES:
         raise QwenImage21PromptEnhancerError(f"Unsupported input_mode: {input_mode}")
@@ -539,7 +539,11 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
             # graph.  Keep mode/ratio/length checks, but defer the 1–10 image
             # count/type check until execute() receives real tensors.
             media_plan = [{"kind": "image", "value": None}]
-        _validate_mode(str(prompt or ""), input_mode, media_plan, str(wh_ratio or "auto"), int(max_output_chars or 0), bool(transparent_alpha))
+        # A linked STRING is None during ComfyUI's graph-validation pass.
+        # Defer only that unresolved value; still reject an unlinked blank
+        # widget immediately. execute() checks the real upstream text before
+        # touching any model or API.
+        _validate_mode(str(prompt or ""), input_mode, media_plan, str(wh_ratio or "auto"), int(max_output_chars or 0), bool(transparent_alpha), require_prompt=prompt is not None)
         return True
 
     @classmethod

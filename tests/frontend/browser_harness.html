@@ -468,11 +468,13 @@ try {
       this.properties = {};
       this.size = [480, 500];
       this.widgets = [
-        { name: "api_mode", value: "贞贞平价小屋（推荐）", type: "combo" },
-        { name: "openai_base_url", value: "", type: "text" },
-        { name: "recovery_slot", value: "", type: "text" },
-        { name: "recovery_action", value: "normal", type: "text" },
-      ];
+        "prompt", "input_mode", "max_output_chars", "wh_ratio", "transparent_alpha",
+        "api_mode", "ai_workshop_model", "custom_model", "openai_base_url", "seed",
+        "control_after_generate", "local_model", "local_mmproj", "local_context_size",
+        "local_max_tokens", "local_think_mode", "local_reasoning_effort",
+        "local_video_sample_fps", "local_unload_policy", "local_comfy_memory_policy",
+        "recovery_slot", "recovery_action",
+      ].map(name => ({ name, value: name === "api_mode" ? "贞贞平价小屋（推荐）" : name === "recovery_action" ? "normal" : "", type: "text" }));
       this.graph = { _nodes: [this], change() {} };
     }
     addWidget(type, name, value, callback, options) {
@@ -483,7 +485,11 @@ try {
     computeSize() { return [480, 100 + this.widgets.reduce((height, widget) => height + (widget.hidden ? 0 : 30), 0)]; }
     setSize(size) { this.size = size; }
     setDirtyCanvas() {}
-    onConfigure(data) { this.widgets.find(widget => widget.name === "api_mode").value = data.api_mode; }
+    onConfigure(data) {
+      data.widgets_values?.forEach((value, index) => { if (this.widgets[index]) this.widgets[index].value = value; });
+      if (data.api_mode) this.widgets.find(widget => widget.name === "api_mode").value = data.api_mode;
+    }
+    onSerialize(data) { data.widgets_values = this.widgets.map(widget => widget.value); }
   }
   await qwenExtension.beforeRegisterNodeDef(QwenNode, { name: "QwenImage21PromptEnhancerT8" });
   const qwenNode = new QwenNode();
@@ -517,6 +523,120 @@ try {
   const qwenCount = qwenNode.widgets.length;
   qwenUI.installQwenImage21Actions(qwenNode);
   check(qwenNode.widgets.length === qwenCount, "Qwen Image action initialization is idempotent");
+  const publishedQwen20 = [
+    "portrait brief", "图像编辑 / Image edit", 450, "3:4", true, "",
+    "OpenAI兼容接口（备用）", "gemini-3.5-flash", "vendor/vision-model", "https://example.test/v1",
+    12345, "visual.gguf", "mmproj.gguf", 32768, 16384, "关闭（推荐，速度优先）",
+    "medium", 2, "执行后卸载（推荐）", "AUTO（显存不足时释放）",
+  ];
+  qwenNode.widgets.find(w => w.name === "seed").value = NaN;
+  qwenNode.widgets.find(w => w.name === "local_model").value = "t8-misplaced-recovery-slot";
+  qwenNode.onConfigure({ widgets_values: [...publishedQwen20, "t8-published-slot", "normal", "recovery button tooltip"] });
+  check(qwenNode.widgets.find(w => w.name === "api_mode").value === "OpenAI兼容接口（备用）", "Qwen Image legacy API mode restores by name without an api_key widget");
+  check(qwenNode.widgets.find(w => w.name === "seed").value === 12345, "Qwen Image legacy numeric seed does not become a URL or NaN");
+  check(qwenNode.widgets.find(w => w.name === "custom_model").value === "vendor/vision-model", "Qwen Image legacy model ID keeps its position");
+  check(qwenNode.widgets.find(w => w.name === "local_model").value === "visual.gguf", "Qwen Image repairs a previously displaced recovery UUID in the model selector");
+  check(qwenNode.widgets.find(w => w.name === "openai_base_url").value === "https://example.test/v1" && qwenNode.widgets.find(w => w.name === "local_context_size").value === 32768,
+    "Qwen Image legacy Base URL and local numeric settings do not shift");
+  check(qwenNode.widgets.find(w => w.name === "recovery_slot").value === "t8-published-slot", "Qwen Image recovery slot survives a trailing button value");
+  const qwenSaved = {};
+  qwenNode.onSerialize(qwenSaved);
+  check(qwenSaved.widgets_values.length === 22 && qwenSaved.widgets_values[5] === "OpenAI兼容接口（备用）" && qwenSaved.widgets_values[9] === 12345,
+    "Qwen Image saves the 22 named runtime values without API-key or button slots");
+  const reloadedQwen = new QwenNode();
+  reloadedQwen.onNodeCreated();
+  reloadedQwen.onConfigure({ widgets_values: [...qwenSaved.widgets_values, "recovery button tooltip"] });
+  check(reloadedQwen.widgets.find(w => w.name === "seed").value === 12345 && reloadedQwen.widgets.find(w => w.name === "control_after_generate").value === "randomize",
+    "Qwen Image current 22-value workflow remains stable with a RunningHub button tail");
+  const oldQwen = new QwenNode();
+  oldQwen.onNodeCreated();
+  oldQwen.onConfigure({ widgets_values: publishedQwen20 });
+  check(oldQwen.widgets.find(w => w.name === "seed").value === 12345 && oldQwen.widgets.find(w => w.name === "control_after_generate").value === "randomize",
+    "Qwen Image 20-value bundled examples restore seed and default the missing seed control");
+  const localPublishedQwen = new QwenNode();
+  localPublishedQwen.title = "填写 API Key（建议使用环境变量，不要把密钥保存到工作流）";
+  localPublishedQwen.onNodeCreated();
+  const localPublishedValues = [...publishedQwen20];
+  localPublishedValues[6] = "本地 GGUF（llama.cpp / Qwen，离线）";
+  localPublishedQwen.onConfigure({ widgets_values: localPublishedValues });
+  check(localPublishedQwen.widgets.find(w => w.name === "api_mode").value === "本地 GGUF（llama.cpp / Qwen，离线）"
+    && localPublishedQwen.widgets.find(w => w.name === "local_model").value === "visual.gguf"
+    && localPublishedQwen.title.includes("本地 GGUF 无需 API Key"),
+    "Qwen Image old local workflow restores provider/model and removes misleading API Key example title");
+  class QwenNodeWithApiKeyWidget extends QwenNode {
+    constructor() {
+      super();
+      this.widgets.splice(5, 0, { name: "api_key", value: "misplaced provider", type: "text", inputEl: { value: "misplaced provider" } });
+    }
+  }
+  const hostWithApiKeyWidget = new QwenNodeWithApiKeyWidget();
+  hostWithApiKeyWidget.onNodeCreated();
+  hostWithApiKeyWidget.onConfigure({ widgets_values: [...qwenSaved.widgets_values, "trailing action tooltip"] });
+  check(hostWithApiKeyWidget.widgets.find(w => w.name === "api_key").value === ""
+    && hostWithApiKeyWidget.widgets.find(w => w.name === "api_key").inputEl.value === ""
+    && hostWithApiKeyWidget.widgets.find(w => w.name === "api_mode").value === "OpenAI兼容接口（备用）"
+    && hostWithApiKeyWidget.widgets.find(w => w.name === "seed").value === 12345,
+    "Qwen Image canonical workflow also loads on a host that creates an api_key widget");
+  const linkedPromptNoWidget = new QwenNode();
+  linkedPromptNoWidget.widgets = linkedPromptNoWidget.widgets.filter(w => w.name !== "prompt");
+  linkedPromptNoWidget.onNodeCreated();
+  linkedPromptNoWidget.onConfigure({ widgets_values: [...qwenSaved.widgets_values], inputs: [{ name: "prompt", link: 72 }] });
+  const linkedPromptSaved = {};
+  linkedPromptNoWidget.onSerialize(linkedPromptSaved);
+  check(linkedPromptSaved.widgets_values.length === 22 && linkedPromptSaved.widgets_values[0] === ""
+    && linkedPromptNoWidget.widgets.find(w => w.name === "api_mode").value === "OpenAI兼容接口（备用）",
+    "Qwen Image linked prompt remains serializable when a host removes the converted widget");
+  const linkedNullLegacy = [...publishedQwen20];
+  linkedNullLegacy[0] = null;
+  const linkedNullQwen = new QwenNode();
+  linkedNullQwen.onNodeCreated();
+  linkedNullQwen.onConfigure({ widgets_values: linkedNullLegacy, inputs: [{ name: "prompt", link: 73 }] });
+  check(linkedNullQwen.widgets.find(w => w.name === "prompt").value === ""
+    && linkedNullQwen.widgets.find(w => w.name === "api_mode").value === "OpenAI兼容接口（备用）",
+    "Qwen Image historical linked prompt with a null placeholder still migrates by name");
+  const linkedOmittedQwen = new QwenNode();
+  linkedOmittedQwen.onNodeCreated();
+  linkedOmittedQwen.onConfigure({ widgets_values: publishedQwen20.slice(1), inputs: [{ name: "prompt", link: 74 }] });
+  check(linkedOmittedQwen.widgets.find(w => w.name === "prompt").value === ""
+    && linkedOmittedQwen.widgets.find(w => w.name === "api_mode").value === "OpenAI兼容接口（备用）"
+    && linkedOmittedQwen.widgets.find(w => w.name === "seed").value === 12345,
+    "Qwen Image historical host that omits a converted prompt widget still restores API mode and seed");
+  for (const exampleName of ["qwen_image21_text_example", "qwen_image21_edit_example"]) {
+    const response = await fetch(`../../example_workflows/${exampleName}.json`);
+    check(response.ok, `${exampleName} is served to the browser`);
+    const workflow = await response.json();
+    const exampleNode = workflow.nodes.find(node => node.type === "QwenImage21PromptEnhancerT8");
+    const loaded = new QwenNode();
+    loaded.onNodeCreated();
+    loaded.onConfigure(exampleNode);
+    check(exampleNode.widgets_values.length === 22
+      && loaded.widgets.find(w => w.name === "api_mode").value === "贞贞平价小屋（推荐）"
+      && loaded.widgets.find(w => w.name === "seed").value === 0
+      && loaded.widgets.find(w => w.name === "control_after_generate").value === "fixed"
+      && loaded.widgets.find(w => w.name === "local_model").value === "Qwen3.8-27B-Q4_K_M.gguf",
+      `${exampleName} loads with canonical named Qwen widgets and no shifted local fields`);
+  }
+  const noControlValues = qwenSaved.widgets_values.filter((_, index) => index !== 10);
+  const noControlQwen = new QwenNode();
+  noControlQwen.onNodeCreated();
+  noControlQwen.onConfigure({ widgets_values: noControlValues });
+  check(noControlQwen.widgets.find(w => w.name === "seed").value === 12345 && noControlQwen.widgets.find(w => w.name === "local_model").value === "visual.gguf",
+    "Qwen Image runtime without a linked seed control restores local model by name");
+  const publishedWithControl = [...publishedQwen20];
+  publishedWithControl.splice(11, 0, "fixed");
+  publishedWithControl.push("t8-older-control-slot", "normal");
+  const olderControlQwen = new QwenNode();
+  olderControlQwen.onNodeCreated();
+  olderControlQwen.onConfigure({ widgets_values: publishedWithControl });
+  check(olderControlQwen.widgets.find(w => w.name === "seed").value === 12345 && olderControlQwen.widgets.find(w => w.name === "control_after_generate").value === "fixed",
+    "Qwen Image published api_key layout with a linked seed control restores both numbers and controls");
+  const duplicateQwen = new QwenNode();
+  duplicateQwen.graph._nodes = [qwenNode, duplicateQwen];
+  duplicateQwen.onNodeCreated();
+  duplicateQwen.onConfigure({ widgets_values: [...publishedQwen20, "t8-published-slot", "restore_last"] });
+  check(duplicateQwen.widgets.find(w => w.name === "recovery_slot").value !== "t8-published-slot"
+    && duplicateQwen.widgets.find(w => w.name === "recovery_action").value === "normal",
+    "Qwen Image copied recovery slots remain unique and never auto-restore on reload");
   let queuedQwen = null;
   const oldQueuePrompt = app.queuePrompt;
   app.queuePrompt = async (...args) => { queuedQwen = args; };

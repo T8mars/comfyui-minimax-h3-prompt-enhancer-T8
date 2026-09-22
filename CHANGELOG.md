@@ -3,6 +3,19 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.2] - 2026-09-22
+
+### Fixed
+
+- Restore Qwen Image 2.1 workflow widgets by name across legacy API-key slots,
+  linked prompts, seed controls, recovery fields, and host-added button values;
+  ship both example workflows in the stable 22-value order.
+- Defer validation of unresolved upstream STRING prompts until execution in
+  Qwen Image 2.1 and both independent music-planning nodes, while still
+  rejecting an actual empty prompt before a provider request.
+- Clarify that local GGUF mode needs no API Key, migrate the misleading old
+  example title, and record widget compatibility checks for future nodes.
+
 ## [1.24.1] - 2026-09-21
 
 ### Added

@@ -1,6 +1,6 @@
 # Workflow compatibility matrix
 
-The current compatibility contract keeps all three public node IDs and output names stable. Frontend
+The current compatibility contract keeps the original three public node IDs and output names stable. Frontend
 migrations run only while an existing workflow is configured; newly saved
 workflows use the current deterministic widget order.
 
@@ -9,8 +9,21 @@ workflows use the current deterministic widget order.
 | `MiniMaxH3PromptEnhancerT8` | 38 | 16, 17, 19, or 21 values; also 22/31/35/36 | Preserves all prior 36 positions, including Relay and directional Skill. Appends quality Off and creation Original. A removed upload URL is not reused as a video URL. | Slot 0 `enhanced_prompt`; appended global/local/time/length/report |
 | `Seedance20PromptEnhancerT8` | 38 | 23 or 25 values; also both published/runtime 26/35 and current 36 layouts | Maps historical values by name, preserving integer length, provider, seed, model and directional Skill. Appends quality Off and creation Original. A removed `openai_upload_url` is not reused as a video URL. | `enhanced_prompt` |
 | `MiniMaxMusic3PromptEnhancerT8` | 38 | Both published-order and ComfyUI runtime-order 31-value layouts | Detects the old layout from the API-mode position, maps values by widget name, then appends 1.1 local-model controls with defaults. | `lyrics`, `music_caption`, `music3_payload_json`, `enhancement_report_json` |
+| `QwenImage21PromptEnhancerT8` | 22 | 20-value examples, published layouts with an `api_key` placeholder, runtimes without that `force_input` widget or without the linked seed control, and 23+ values with trailing UI buttons | Detects the API-mode and seed-control positions, restores fields by name, discards only unrecognized UI tails, and writes a stable 22-value array excluding the key and buttons. | `rewritten_prompt`, `wh_ratio`, `qwen_image_request_json`, `enhancement_report_json` |
 
 Compatibility invariants:
+
+- Qwen Image's connection-only `api_key` never occupies a slot in newly saved
+  `widgets_values`. Historical arrays that contained its placeholder are read
+  by name, so `api_mode`, `seed`, custom model, Base URL, and local GGUF fields
+  cannot slide into one another on RunningHub. A recovery button tooltip
+  appended by older frontend serialization is ignored; recovery slots remain
+  unique and recovery actions reset to `normal` when a workflow is opened.
+  Both bundled Qwen examples now use the 22-value order; a historically saved
+  20-value example still loads through the same migration. Linked `STRING`
+  prompts may be unresolved during graph validation, so nonempty-prompt
+  validation occurs at execution after upstream nodes finish. Local GGUF mode
+  requires no API Key; only the exact misleading legacy example title is renamed.
 
 - Quality and causal creation are optional, append-only at widget positions 36/37;
   old workflow outputs and connection indices remain stable. Off/Original preserve

@@ -120,11 +120,18 @@ class T8LyricWriter(io.ComfyNode):
 
     @classmethod
     def validate_inputs(cls, music_idea=None):
+        # ComfyUI validates linked STRING inputs before their upstream node
+        # runs, passing None here. Check that resolved text is nonempty in
+        # execute() before making any provider request.
+        if music_idea is None:
+            return True
         return True if str(music_idea or "").strip() else "请填写创作主题 / Music idea。"
 
     @classmethod
     def execute(cls, music_idea="", provider_config=None, **kwargs):
         idea = clean_text(music_idea)
+        if not idea:
+            raise MusicPlanError("请填写创作主题 / Music idea。")
         mode = kwargs.get("lyrics_mode", LYRIC_MODES[0])
         language = clean_text(kwargs.get("lyrics_language", "中文"), limit=64)
         existing = clean_text(kwargs.get("existing_lyrics", ""))
@@ -226,11 +233,15 @@ class T8ArrangementPlanner(io.ComfyNode):
 
     @classmethod
     def validate_inputs(cls, music_idea=None):
+        if music_idea is None:
+            return True
         return True if str(music_idea or "").strip() else "请填写音乐创意 / Music idea。"
 
     @classmethod
     def execute(cls, music_idea="", provider_config=None, **kwargs):
         idea = clean_text(music_idea)
+        if not idea:
+            raise MusicPlanError("请填写音乐创意 / Music idea。")
         connected_lyric = parse_plan(kwargs.get("lyric_plan", ""), LYRIC_PLAN_SCHEMA)
         api_key = str(kwargs.get("api_key", "") or "").strip()
         if len(api_key) > 512:
