@@ -443,12 +443,22 @@ class LocalQwenProvider:
         max_tokens: int | None = None,
         require_complete: bool = False,
         response_format: dict[str, Any] | None = None,
+        top_p: float | None = None,
+        top_k: int | None = None,
+        presence_penalty: float | None = None,
     ) -> str:
         output_tokens = local_output_token_budget(messages, self.settings, max_tokens)
         if self.server is None:
             self.__enter__()
         if self.server is None:
             raise LocalQwenProviderError("Local GGUF provider could not start.")
+        sampling = {}
+        if top_p is not None:
+            sampling["top_p"] = float(top_p)
+        if top_k is not None:
+            sampling["top_k"] = int(top_k)
+        if presence_penalty is not None:
+            sampling["presence_penalty"] = float(presence_penalty)
         try:
             content, usage = LOCAL_QWEN_MANAGER.complete(
                 self.server,
@@ -458,6 +468,7 @@ class LocalQwenProvider:
                 temperature=float(temperature),
                 think_mode=self.settings.think_mode == LOCAL_THINK_ON,
                 reasoning_effort=self.settings.reasoning_effort,
+                **sampling,
                 **({"response_format": response_format} if response_format is not None else {}),
             )
         except LocalQwenRuntimeError as error:
