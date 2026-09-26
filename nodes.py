@@ -6,6 +6,7 @@ import os
 import re
 import time
 import uuid
+from collections.abc import Mapping
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -61,7 +62,7 @@ try:
         recover_outputs,
     )
     from .execution_diagnostics import DiagnosticsRun
-    from .provider_capabilities import apply_chat_request_options
+    from .provider_capabilities import apply_chat_request_options, normalize_extra_parameters
     from .provider_config import (
         PROVIDER_LOCAL,
         PROVIDER_OPENAI,
@@ -97,7 +98,7 @@ except ImportError:
         recover_outputs,
     )
     from execution_diagnostics import DiagnosticsRun
-    from provider_capabilities import apply_chat_request_options
+    from provider_capabilities import apply_chat_request_options, normalize_extra_parameters
     from provider_config import (
         PROVIDER_LOCAL,
         PROVIDER_OPENAI,
@@ -1465,6 +1466,7 @@ def _request_completion(
     recovery_slot: str = "",
     temperature_override: float | None = None,
     stream_acceptor: Any = None,
+    extra_parameters: Mapping[str, Any] | None = None,
 ) -> str:
     is_seedance = _is_seedance_chat_endpoint(chat_url)
     temperature = (
@@ -1477,6 +1479,11 @@ def _request_completion(
         "messages": messages,
         "stream": is_seedance,
     }, chat_url=chat_url, temperature=temperature, options=provider_request_options)
+    if extra_parameters:
+        # Node-owned sampling overrides (e.g. the Qwen Image PE official
+        # profile).  They win over provider passthrough but stay subject to
+        # the same key allowlist; unknown keys raise instead of leaking.
+        payload.update(normalize_extra_parameters(extra_parameters))
     retry_delays = (
         tuple(retry_delays)
         if retry_delays is not None and is_seedance

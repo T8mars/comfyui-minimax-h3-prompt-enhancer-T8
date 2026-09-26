@@ -152,19 +152,30 @@ API_KEY_PATTERN = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 LOCAL_THINK_OPTIONS = [LOCAL_THINK_OFF, LOCAL_THINK_ON]
 SKILL_PATH = Path(__file__).parent / "official_skills" / "qwen-image-2.1" / "SKILL.md"
 SKILL_SHA256 = "a77c9a06c59b120741141d9514b95682bb8761d02bec49ca61def7b2b3d9fb99"
+SKILL_EDIT_PATH = Path(__file__).parent / "official_skills" / "qwen-image-2.1" / "SKILL_EDIT.md"
+SKILL_EDIT_SHA256 = "e378fea686a1431581ba4c654d332ae96adad633f144ae738ec8ce9c4fd66439"
+# Official Qwen-Image-2.1 prompt_rewrite production sampling (pe_core.py profiles).
+# t2i runs presence_penalty=1.5; the edit profile runs 0. A wrong penalty does not
+# fail, it silently changes the sampled distribution.
+PE_SAMPLING = {
+    "t2i": {"temperature": 1.0, "top_p": 0.95, "top_k": 20, "presence_penalty": 1.5},
+    "edit": {"temperature": 1.0, "top_p": 0.95, "top_k": 20, "presence_penalty": 0.0},
+}
 
 
 class QwenImage21PromptEnhancerError(PromptEnhancerError):
     pass
 
 
-def _load_skill() -> str:
+def _load_skill(input_mode: str = INPUT_MODE_TEXT) -> str:
+    edit = input_mode == INPUT_MODE_EDIT
+    path, expected = (SKILL_EDIT_PATH, SKILL_EDIT_SHA256) if edit else (SKILL_PATH, SKILL_SHA256)
     try:
-        text = SKILL_PATH.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8")
     except OSError as error:
         raise QwenImage21PromptEnhancerError("Bundled Qwen Image 2.1 Skill is missing or unreadable. Update from GitHub.") from error
     digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
-    if digest != SKILL_SHA256:
+    if digest != expected:
         raise QwenImage21PromptEnhancerError("Bundled Qwen Image 2.1 Skill hash mismatch. Update the complete node package.")
     return text
 
@@ -262,12 +273,22 @@ def _validate_mode(prompt: str, input_mode: str, media_plan: list[dict[str, Any]
 
 
 def _build_messages(prompt: str, input_mode: str, media_plan: list[dict[str, Any]], ratio: str, max_chars: int, transparent: bool, media_parts: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
-    skill = _load_skill()
-    ratio_rule = (
-        "The user selected auto. Do not impose a user ratio; let the Skill choose its 3:2 or 2:3 default when appropriate."
-        if ratio == "auto"
-        else f"The user selected wh_ratio={ratio}. Preserve this value exactly in the JSON field and never write it in rewritten_prompt."
-    )
+    skill = _load_skill(input_mode)
+    is_edit = input_mode == INPUT_MODE_EDIT
+    if is_edit:
+        # The official edit contract follows the canvas image's ratio via
+        # ratio_follow unless the user pins an explicit ratio.
+        ratio_rule = (
+            "The user selected auto. Follow the official Skill's ratio_follow rules: set wh_ratio to \"\" and set ratio_follow to the canvas input image tag unless the Skill semantics require a fixed ratio."
+            if ratio == "auto"
+            else f"The user selected wh_ratio={ratio}. Preserve this value exactly in the JSON wh_ratio field and set ratio_follow to \"\". Never write the ratio inside rewritten_prompt."
+        )
+    else:
+        ratio_rule = (
+            "The user selected auto. Do not impose a user ratio; let the Skill choose its 3:2 or 2:3 default when appropriate."
+            if ratio == "auto"
+            else f"The user selected wh_ratio={ratio}. Preserve this value exactly in the JSON field and never write it in rewritten_prompt."
+        )
     alpha_rule = (
         "Transparency is required. Describe the finished image as an RGBA image with an alpha channel and a transparent background."
         if transparent
@@ -289,9 +310,10 @@ def _build_messages(prompt: str, input_mode: str, media_plan: list[dict[str, Any
         ratio_rule,
         alpha_rule,
         length_rule,
+        ("For image editing, the official Skill's language rules govern rewritten_prompt (edit instructions follow the user's own language; visible rendered text keeps its original language). This overrides any English-only default." if is_edit else "Write rewritten_prompt in English. The bundled Skill's language applies only to rendered in-image text, which keeps its original script."),
         "The user's brief follows. Fixed visible text and named objects are authoritative:",
         str(prompt).strip(),
-        "Return only one JSON object on one line. Do not add Markdown, analysis, or a preamble.",
+        ("Return only one JSON object on one line with exactly rewritten_prompt, wh_ratio, and ratio_follow. Do not add Markdown, analysis, or a preamble." if is_edit else "Return only one JSON object on one line. Do not add Markdown, analysis, or a preamble."),
     ))
     user_content: str | list[dict[str, Any]] = user_text
     if media_parts:
@@ -350,18 +372,29 @@ def _cloud_request_options(options: Any) -> Any:
     return result
 
 
-def _validate_output(payload: dict[str, Any], *, requested_ratio: str, transparent: bool, max_chars: int) -> tuple[str, str, dict[str, Any]]:
-    if set(payload) != {"rewritten_prompt", "wh_ratio"}:
-        raise QwenImage21PromptEnhancerError("Qwen Image response must contain exactly rewritten_prompt and wh_ratio.")
+def _validate_output(payload: dict[str, Any], *, requested_ratio: str, transparent: bool, max_chars: int, is_edit: bool = False) -> tuple[str, str, dict[str, Any]]:
+    expected_fields = {"rewritten_prompt", "wh_ratio", "ratio_follow"} if is_edit else {"rewritten_prompt", "wh_ratio"}
+    if set(payload) != expected_fields:
+        raise QwenImage21PromptEnhancerError("Qwen Image response must contain exactly rewritten_prompt and wh_ratio." if not is_edit else "Qwen Image edit response must contain exactly rewritten_prompt, wh_ratio, and ratio_follow.")
     description = payload.get("rewritten_prompt")
     ratio = payload.get("wh_ratio")
+    ratio_follow = str(payload.get("ratio_follow") or "")
     if not isinstance(description, str) or not description.strip():
         raise QwenImage21PromptEnhancerError("Qwen Image response is missing a non-empty rewritten_prompt.")
-    if not isinstance(ratio, str) or ratio not in OUTPUT_RATIOS:
+    if not isinstance(ratio, str):
         raise QwenImage21PromptEnhancerError("Qwen Image response contains an invalid wh_ratio.")
     description = description.strip()
-    if requested_ratio != "auto" and ratio != requested_ratio:
-        raise QwenImage21PromptEnhancerError(f"Qwen Image returned wh_ratio={ratio}, expected {requested_ratio}.")
+    if ratio and ratio not in OUTPUT_RATIOS:
+        raise QwenImage21PromptEnhancerError("Qwen Image response contains an invalid wh_ratio.")
+    if is_edit and bool(ratio) == bool(ratio_follow):
+        raise QwenImage21PromptEnhancerError("Edit response must set exactly one of wh_ratio or ratio_follow.")
+    if requested_ratio != "auto":
+        # An explicit user ratio may legitimately live in ratio_follow when the
+        # chosen canvas image already has that exact aspect.
+        if is_edit and not ratio and ratio_follow:
+            pass
+        elif ratio != requested_ratio:
+            raise QwenImage21PromptEnhancerError(f"Qwen Image returned wh_ratio={ratio}, expected {requested_ratio}.")
     # The Skill keeps ratio metadata outside the prose, but exact visible text
     # is required to remain inside straight quotes.  Ignore quoted literals so
     # a real sign such as "1:1" is not destroyed by the ratio guard.
@@ -392,6 +425,7 @@ def _accept_complete_stream(
     requested_ratio: str,
     transparent: bool,
     max_chars: int,
+    is_edit: bool = False,
 ) -> bool:
     """Accept a disconnected cloud stream only when its Qwen JSON is complete.
 
@@ -410,19 +444,21 @@ def _accept_complete_stream(
             requested_ratio=requested_ratio,
             transparent=transparent,
             max_chars=max_chars,
+            is_edit=is_edit,
         )
         return True
     except (QwenImage21PromptEnhancerError, TypeError, ValueError):
         return False
 
 
-def _correction_messages(messages: list[dict[str, Any]], draft: str, reason: str) -> list[dict[str, Any]]:
+def _correction_messages(messages: list[dict[str, Any]], draft: str, reason: str, *, is_edit: bool = False) -> list[dict[str, Any]]:
+    fields = "rewritten_prompt, wh_ratio, and ratio_follow" if is_edit else "rewritten_prompt and wh_ratio"
     return [
         *messages,
         {"role": "assistant", "content": draft},
         {"role": "user", "content": (
             "Repair the previous answer once. Return only one valid one-line JSON object with exactly "
-            "rewritten_prompt and wh_ratio. Preserve every fixed user fact and visible text. " + reason
+            + fields + ". Preserve every fixed user fact and visible text. " + reason
         )},
     ]
 
@@ -523,6 +559,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
             outputs=[
                 io.String.Output(display_name="rewritten_prompt"),
                 io.String.Output(display_name="wh_ratio"),
+                io.String.Output(display_name="ratio_follow"),
                 io.String.Output(display_name="qwen_image_request_json"),
                 io.String.Output(display_name="enhancement_report_json"),
             ],
@@ -577,7 +614,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
     ) -> io.NodeOutput:
         if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
             try:
-                cached = recover_outputs(NODE_ID, recovery_slot, 4)
+                cached = recover_outputs(NODE_ID, recovery_slot, 5)
                 return io.NodeOutput(*cached)
             except CompletionRecoveryError as error:
                 raise QwenImage21PromptEnhancerError(str(error)) from error
@@ -637,9 +674,12 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
         corrections = 0
         structured = False
         chosen_ratio = ""
+        ratio_follow = ""
         over_limit = False
         report_error = ""
         raw_response = ""
+        is_edit = input_mode == INPUT_MODE_EDIT
+        pe_sampling = PE_SAMPLING["edit" if is_edit else "t2i"]
         try:
             if is_local_qwen_api_mode(api_mode):
                 settings = local_qwen_settings(
@@ -650,36 +690,48 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                     local_comfy_memory_policy=current["local_comfy_memory_policy"],
                 )
                 text_messages = _build_messages(str(prompt), input_mode, media_plan, ratio, max_chars, bool(transparent_alpha))
-                text_messages = apply_local_language_lock(text_messages, "English")
+                # The official edit Skill writes the description in the user's own
+                # language; forcing an English lock there would violate it.
+                if not is_edit:
+                    text_messages = apply_local_language_lock(text_messages, "English")
                 visual_budget = local_visual_part_budget(text_messages, settings, required_visual_parts=len(media_plan))
                 media_parts, _ = build_local_multimodal_parts(media_plan, settings, max_visual_parts=visual_budget)
-                messages = apply_local_language_lock(_build_messages(str(prompt), input_mode, media_plan, ratio, max_chars, bool(transparent_alpha), media_parts), "English")
+                messages = _build_messages(str(prompt), input_mode, media_plan, ratio, max_chars, bool(transparent_alpha), media_parts)
+                if not is_edit:
+                    messages = apply_local_language_lock(messages, "English")
                 with LocalQwenProvider(settings, vision=bool(media_plan)) as provider:
-                    raw_response = provider.complete(messages, temperature=0.2, seed=int(seed), require_complete=True)
+                    raw_response = provider.complete(
+                        messages, temperature=pe_sampling["temperature"], seed=int(seed), require_complete=True,
+                        top_p=pe_sampling["top_p"], top_k=pe_sampling["top_k"],
+                        presence_penalty=pe_sampling["presence_penalty"],
+                    )
                     payload = _extract_json(raw_response)
                     try:
                         if payload is None:
                             raise QwenImage21PromptEnhancerError("response is not valid JSON")
-                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars)
+                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit)
+                        ratio_follow = str(payload.get("ratio_follow") or "")
                         if details.get("over_limit"):
                             corrections = 1
                             corrected = provider.complete(
-                                _correction_messages(messages, raw_response, f"Keep rewritten_prompt at or below {max_chars} characters."),
+                                _correction_messages(messages, raw_response, f"Keep rewritten_prompt at or below {max_chars} characters.", is_edit=is_edit),
                                 temperature=0.1, seed=int(seed), require_complete=True,
                             )
                             corrected_payload = _extract_json(corrected)
                             if corrected_payload is not None:
                                 rewritten, chosen_ratio, details = _validate_output(
-                                    corrected_payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                                    corrected_payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit,
                                 )
+                                ratio_follow = str(corrected_payload.get("ratio_follow") or "")
                                 raw_response = corrected
                     except QwenImage21PromptEnhancerError as first_error:
                         corrections = 1
-                        corrected = provider.complete(_correction_messages(messages, raw_response, str(first_error)), temperature=0.1, seed=int(seed), require_complete=True)
+                        corrected = provider.complete(_correction_messages(messages, raw_response, str(first_error), is_edit=is_edit), temperature=0.1, seed=int(seed), require_complete=True)
                         payload = _extract_json(corrected)
                         if payload is None:
                             raise first_error
-                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars)
+                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit)
+                        ratio_follow = str(payload.get("ratio_follow") or "")
                         raw_response = corrected
             else:
                 api_key, chat_url, upload_url, provider_name = _provider_config(api_mode, current["api_key"], current["openai_base_url"])
@@ -695,51 +747,60 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                     raw_response = _request_completion(
                         session, api_key, messages, "balanced", chat_url, provider_name, model_id,
                         provider_request_options=current.get("provider_request_options"),
+                        temperature_override=pe_sampling["temperature"],
+                        extra_parameters={
+                            "top_p": pe_sampling["top_p"],
+                            "top_k": pe_sampling["top_k"],
+                            "presence_penalty": pe_sampling["presence_penalty"],
+                        },
                         recovery_component=NODE_ID,
                         recovery_slot=recovery_slot,
                         stream_acceptor=lambda text: _accept_complete_stream(
-                            text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                            text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit,
                         ),
                     )
                     payload = _extract_json(raw_response)
                     try:
                         if payload is None:
                             raise QwenImage21PromptEnhancerError("response is not valid JSON")
-                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars)
+                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit)
+                        ratio_follow = str(payload.get("ratio_follow") or "")
                         if details.get("over_limit"):
                             corrections = 1
                             corrected = _request_completion(
-                                session, api_key, _correction_messages(messages, raw_response, f"Keep rewritten_prompt at or below {max_chars} characters."),
+                                session, api_key, _correction_messages(messages, raw_response, f"Keep rewritten_prompt at or below {max_chars} characters.", is_edit=is_edit),
                                 "balanced", chat_url, provider_name, model_id,
                                 provider_request_options=current.get("provider_request_options"), temperature_override=0.1,
                                 recovery_component=NODE_ID,
                                 recovery_slot=recovery_slot,
                                 stream_acceptor=lambda text: _accept_complete_stream(
-                                    text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                                    text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit,
                                 ),
                             )
                             corrected_payload = _extract_json(corrected)
                             if corrected_payload is not None:
                                 rewritten, chosen_ratio, details = _validate_output(
-                                    corrected_payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                                    corrected_payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit,
                                 )
+                                ratio_follow = str(corrected_payload.get("ratio_follow") or "")
                                 raw_response = corrected
                     except QwenImage21PromptEnhancerError as first_error:
                         corrections = 1
                         corrected = _request_completion(
-                            session, api_key, _correction_messages(messages, raw_response, str(first_error)),
+                            session, api_key, _correction_messages(messages, raw_response, str(first_error), is_edit=is_edit),
                             "balanced", chat_url, provider_name, model_id,
                             provider_request_options=current.get("provider_request_options"), temperature_override=0.1,
                             recovery_component=NODE_ID,
                             recovery_slot=recovery_slot,
                             stream_acceptor=lambda text: _accept_complete_stream(
-                                text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars,
+                                text, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit,
                             ),
                         )
                         payload = _extract_json(corrected)
                         if payload is None:
                             raise first_error
-                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars)
+                        rewritten, chosen_ratio, details = _validate_output(payload, requested_ratio=ratio, transparent=bool(transparent_alpha), max_chars=max_chars, is_edit=is_edit)
+                        ratio_follow = str(payload.get("ratio_follow") or "")
                         raw_response = corrected
                 finally:
                     session.close()
@@ -758,6 +819,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
             "images": [asset["label"] for asset in media_plan],
             "prompt": str(prompt),
             "wh_ratio": chosen_ratio or (ratio if ratio != "auto" else ""),
+            "ratio_follow": ratio_follow,
             "transparent_alpha": bool(transparent_alpha),
             "max_output_chars": max_chars,
         }, ensure_ascii=False)
@@ -766,8 +828,8 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
             transparent=bool(transparent_alpha), structured=structured, corrections=corrections,
             over_limit=over_limit, error=report_error,
         )
-        complete_recovery_record(NODE_ID, recovery_slot, (rewritten, chosen_ratio, request_json, report))
-        return io.NodeOutput(rewritten, chosen_ratio, request_json, report)
+        complete_recovery_record(NODE_ID, recovery_slot, (rewritten, chosen_ratio, ratio_follow, request_json, report))
+        return io.NodeOutput(rewritten, chosen_ratio, ratio_follow, request_json, report)
 
 
 __all__ = ["QwenImage21PromptEnhancer", "QwenImage21PromptEnhancerError", "NODE_ID", "QWEN_IMAGE_MODEL_ID"]

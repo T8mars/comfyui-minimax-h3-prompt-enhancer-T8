@@ -612,6 +612,9 @@ class LlamaServer:
         think_mode: bool,
         reasoning_effort: str,
         response_format: dict[str, Any] | None = None,
+        top_p: float | None = None,
+        top_k: int | None = None,
+        presence_penalty: float | None = None,
     ) -> tuple[str, dict[str, Any]]:
         if not self.is_running:
             raise LocalQwenRuntimeError("Local llama-server is not running.")
@@ -645,6 +648,12 @@ class LlamaServer:
                 presence_penalty=1.5,
                 repeat_penalty=1.0,
             )
+        if top_p is not None:
+            payload["top_p"] = float(top_p)
+        if top_k is not None:
+            payload["top_k"] = int(top_k)
+        if presence_penalty is not None:
+            payload["presence_penalty"] = float(presence_penalty)
 
         completed = threading.Event()
         if response_format is not None:

@@ -154,6 +154,7 @@ class QwenImage21ContractTests(unittest.TestCase):
 
     def test_skill_snapshot_and_schema(self):
         self.assertTrue(qwen._load_skill().startswith("# Image Prompt Rewriting Expert"))
+        self.assertTrue(qwen._load_skill(qwen.INPUT_MODE_EDIT).startswith("# Edit Prompt Enhancer"))
         schema = qwen.QwenImage21PromptEnhancer.define_schema()
         self.assertEqual(schema.node_id, qwen.NODE_ID)
         names = [item.id for item in schema.inputs]
@@ -163,8 +164,35 @@ class QwenImage21ContractTests(unittest.TestCase):
         self.assertIn("recovery_slot", names)
         self.assertIn("recovery_action", names)
         self.assertEqual([output.display_name for output in schema.outputs], [
-            "rewritten_prompt", "wh_ratio", "qwen_image_request_json", "enhancement_report_json",
+            "rewritten_prompt", "wh_ratio", "ratio_follow", "qwen_image_request_json", "enhancement_report_json",
         ])
+
+    def test_edit_output_contract(self):
+        follow, ratio, details = qwen._validate_output(
+            {"rewritten_prompt": "把天空换成日落。", "wh_ratio": "", "ratio_follow": "<image1>"},
+            requested_ratio="auto", transparent=False, max_chars=0, is_edit=True,
+        )
+        self.assertEqual((follow, ratio), ("把天空换成日落。", ""))
+        fixed, ratio, _ = qwen._validate_output(
+            {"rewritten_prompt": "a sunset sky", "wh_ratio": "16:9", "ratio_follow": ""},
+            requested_ratio="auto", transparent=False, max_chars=0, is_edit=True,
+        )
+        self.assertEqual(ratio, "16:9")
+        for both in (
+            {"rewritten_prompt": "x", "wh_ratio": "1:1", "ratio_follow": "<image1>"},
+            {"rewritten_prompt": "x", "wh_ratio": "", "ratio_follow": ""},
+        ):
+            with self.assertRaises(qwen.QwenImage21PromptEnhancerError):
+                qwen._validate_output(both, requested_ratio="auto", transparent=False, max_chars=0, is_edit=True)
+        with self.assertRaises(qwen.QwenImage21PromptEnhancerError):
+            qwen._validate_output(
+                {"rewritten_prompt": "x", "wh_ratio": "3:2", "ratio_follow": "<image1>"},
+                requested_ratio="auto", transparent=False, max_chars=0,
+            )
+
+    def test_official_sampling_profiles(self):
+        self.assertEqual(qwen.PE_SAMPLING["t2i"], {"temperature": 1.0, "top_p": 0.95, "top_k": 20, "presence_penalty": 1.5})
+        self.assertEqual(qwen.PE_SAMPLING["edit"]["presence_penalty"], 0.0)
 
     def test_fenced_json_and_output_contract(self):
         payload = qwen._extract_json('```json\n{"rewritten_prompt":"A clean scene.","wh_ratio":"1:1"}\n```')
@@ -339,7 +367,7 @@ class QwenImage21ContractTests(unittest.TestCase):
                 prompt="a vertical portrait", input_mode=qwen.INPUT_MODE_EDIT, reference_images=ten,
                 wh_ratio="auto", api_key="test-credential",
             )
-        self.assertEqual(json.loads(result[3])["image_count"], 10)
+        self.assertEqual(json.loads(result[4])["image_count"], 10)
         self.assertEqual(request.call_args.args[-1], qwen.QWEN_IMAGE_MODEL_ID)
         self.assertEqual(request.call_args.kwargs["provider_request_options"]["extra_parameters"]["max_tokens"], 8192)
 
@@ -353,7 +381,7 @@ class QwenImage21ContractTests(unittest.TestCase):
                 prompt="a square icon", max_output_chars=5, wh_ratio="1:1", api_key="test-credential",
             )
         self.assertEqual(result[0], "short")
-        self.assertEqual(json.loads(result[3])["correction_calls"], 1)
+        self.assertEqual(json.loads(result[4])["correction_calls"], 1)
         self.assertEqual(request.call_count, 2)
 
     def test_cloud_result_can_be_recovered_without_a_second_request(self):

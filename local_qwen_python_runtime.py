@@ -424,6 +424,9 @@ class LlamaPythonRuntime:
         think_mode: bool,
         reasoning_effort: str,
         response_format: dict[str, Any] | None = None,
+        top_p: float | None = None,
+        top_k: int | None = None,
+        presence_penalty: float | None = None,
     ) -> tuple[str, dict[str, Any]]:
         del reasoning_effort
         if self.llm is None:
@@ -444,6 +447,14 @@ class LlamaPythonRuntime:
             "repeat_penalty": 1.0,
             "presence_penalty": 0.0 if think_mode else 1.5,
         }
+        if top_p is not None:
+            options["top_p"] = float(top_p)
+        if top_k is not None:
+            options["top_k"] = int(top_k)
+        if presence_penalty is not None and _supports_keyword_argument(
+            self.llm.create_chat_completion, "presence_penalty"
+        ):
+            options["presence_penalty"] = float(presence_penalty)
         if response_format is not None:
             options["response_format"] = response_format
         if not _supports_keyword_argument(self.llm.create_chat_completion, "presence_penalty"):
