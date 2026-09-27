@@ -197,6 +197,45 @@ def _metadata_values(path: Path) -> dict[str, Any]:
     return values
 
 
+def _has_gguf_magic(path: Path) -> bool:
+    """Recognize extensionless GGUF blobs without trusting their filename.
+
+    Some hosted ComfyUI installations deduplicate large models by exposing an
+    extensionless UUID (often a relative symlink) under ``models/LLM``.  The
+    lexical entry therefore has no ``.gguf`` suffix even though opening it
+    reaches a valid GGUF file.  Reading four bytes keeps discovery cheap and
+    prevents unrelated extensionless files from being offered as models.
+    """
+
+    try:
+        with path.open("rb") as handle:
+            return handle.read(4) == b"GGUF"
+    except OSError:
+        return False
+
+
+def _is_supported_gguf_entry(path: Path) -> bool:
+    """Return whether a lexical models/LLM entry is safe to expose.
+
+    Normal ``*.gguf`` files retain the historical behavior.  A suffixless
+    file or file symlink is accepted only when its resolved content carries
+    the GGUF magic header.  Broken links, directories, and arbitrary UUID
+    blobs are ignored.
+    """
+
+    try:
+        if not path.is_file():
+            return False
+    except OSError:
+        return False
+    suffix = path.suffix.casefold()
+    if suffix == GGUF_SUFFIX:
+        return True
+    if suffix:
+        return False
+    return _has_gguf_magic(path)
+
+
 @functools.lru_cache(maxsize=512)
 def _cached_model_info(path_value: str, identifier: str, size: int, mtime_ns: int) -> GGUFModelInfo:
     del mtime_ns
@@ -211,7 +250,10 @@ def _cached_model_info(path_value: str, identifier: str, size: int, mtime_ns: in
         return GGUFModelInfo(
             identifier=identifier,
             path=str(path),
-            filename=path.name,
+            # Keep the lexical models/LLM name.  The resolved target can be an
+            # opaque UUID in a deduplicated store, while the symlink name can
+            # still carry useful model/mmproj hints.
+            filename=Path(identifier).name,
             size=size,
             architecture=architecture,
             model_type=str(values.get("general.type") or ""),
@@ -226,7 +268,7 @@ def _cached_model_info(path_value: str, identifier: str, size: int, mtime_ns: in
         return GGUFModelInfo(
             identifier=identifier,
             path=str(path),
-            filename=path.name,
+            filename=Path(identifier).name,
             size=size,
             metadata_error=str(error),
         )
@@ -254,7 +296,7 @@ def scan_gguf_catalog(*, refresh: bool = False) -> tuple[GGUFModelInfo, ...]:
             try:
                 paths = root.rglob("*")
                 for path in paths:
-                    if not path.is_file() or path.suffix.casefold() != GGUF_SUFFIX:
+                    if not _is_supported_gguf_entry(path):
                         continue
                     resolved = path.resolve()
                     # Keep the user-facing identifier anchored to the lexical
@@ -282,8 +324,12 @@ def _safe_identifier(value: str, *, label: str) -> str:
     if not identifier:
         raise GGUFMetadataError(f"{label} is empty.")
     path = Path(identifier)
-    if path.is_absolute() or ".." in path.parts or path.suffix.casefold() != GGUF_SUFFIX:
-        raise GGUFMetadataError(f"{label} must be a relative GGUF path inside ComfyUI/models/LLM.")
+    suffix = path.suffix.casefold()
+    if path.is_absolute() or ".." in path.parts or suffix not in {"", GGUF_SUFFIX}:
+        raise GGUFMetadataError(
+            f"{label} must be a relative GGUF file or verified suffixless GGUF entry "
+            "inside ComfyUI/models/LLM."
+        )
     return Path(*path.parts).as_posix()
 
 
@@ -293,11 +339,15 @@ def resolve_gguf_path(identifier: str, *, label: str, required: bool = True) -> 
     legacy_root = legacy_qwen_model_directory()
     candidates: list[Path] = []
     if "/" not in safe:
-        candidates.append((legacy_root / safe).resolve())
-    candidates.extend((root / Path(safe)).resolve() for root in roots)
+        candidates.append(legacy_root / safe)
+    candidates.extend(root / Path(safe) for root in roots)
     for candidate in candidates:
-        if candidate.is_file():
-            return candidate
+        # Validate the lexical entry before resolving it.  This preserves the
+        # fact that an extensionless UUID entry is a verified model link while
+        # still returning the canonical target path to llama.cpp.  Relative
+        # symlink targets are resolved by pathlib against the link's parent.
+        if _is_supported_gguf_entry(candidate):
+            return candidate.resolve()
     if "/" not in safe:
         matches = [
             Path(item.path)
@@ -336,7 +386,7 @@ def model_info_for_path(path: Path) -> GGUFModelInfo | None:
     for item in scan_gguf_catalog():
         if Path(item.path) == resolved:
             return item
-    if not resolved.is_file() or resolved.suffix.casefold() != GGUF_SUFFIX:
+    if not _is_supported_gguf_entry(resolved):
         return None
     stat = resolved.stat()
     return _cached_model_info(

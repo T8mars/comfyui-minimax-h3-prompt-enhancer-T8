@@ -3,6 +3,15 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.24.6] - 2026-09-27
+
+### Fixed
+
+- Discover and load GGUF main models and mmproj projectors exposed through
+  relative file symlinks whose entry or backing blob is an extensionless UUID;
+  validate suffixless entries by GGUF magic and continue to ignore unrelated
+  blobs, directories, and broken links.
+
 ## [1.24.5] - 2026-09-23
 
 ### Added

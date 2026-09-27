@@ -750,6 +750,8 @@ OpenAI 官方 Chat Completions 明确定义了图片输入，但通用 `video_ur
 
 本地渠道是三个现有节点的第 4 个互斥 provider，不会新增或替换节点，也不会改变 H3、Seedance 2.0、Music 3 各自的提示词合同。运行时不需要 API Key、Base URL 或云端模型 ID。节点不再把可用范围锁死为两个文件名：会递归扫描 `ComfyUI/models/LLM`，读取轻量 GGUF 元数据，区分主模型与 mmproj，并为视觉模型推荐同名/同目录投影器。
 
+云平台可把 `models/LLM` 中的模型做成文件软链接以去重。链接目标可以位于目录外、使用相对地址，也可以只是没有 `.gguf` 后缀的 UUID；链接入口本身也允许是无后缀 UUID。无后缀条目只有在实际内容以 GGUF 魔数开头时才会出现在下拉列表，普通 UUID 文件、目录和失效链接会被忽略。节点保存并显示 `models/LLM` 内的相对条目标识，执行时再解析到真实文件，因此不会要求云平台暴露绝对存储地址。更新后请完整重启 ComfyUI，或点击“检查本地 Qwen 安装 / 扫描 GGUF”刷新目录。
+
 GitHub 完整安装采用自动回退顺序：本节点固定安装器生成的 `llama-server` → 系统 `PATH` 中的 `llama-server` → 当前 ComfyUI Python 环境已经安装的 `llama-cpp-python`。Manager/Registry 安装为通过 Registry 自动安全审查，仅使用进程内 `llama-cpp-python`，不随包分发外部进程启动器。两种安装都会递归扫描同一个 `models/LLM`，状态窗口会显示实际命中的后端、来源和版本。
 
 如果当前 ComfyUI Python 没有可用的 `llama-cpp-python`，三个核心节点都提供“获取 llama-cpp-python 预编译 Wheel”按钮，跳转到 [JamePeng 预编译 Releases](https://github.com/JamePeng/llama-cpp-python/releases)。必须选择与 **ComfyUI 实际 Python 版本、操作系统和 CUDA 版本**匹配的 Wheel，并用 ComfyUI 自己的 Python 安装，而不是系统 Python：

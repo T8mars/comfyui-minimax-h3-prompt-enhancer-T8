@@ -410,11 +410,11 @@ class LocalQwenUnitTests(unittest.TestCase):
             storage = base / "mounted-model-store"
             root.mkdir()
             storage.mkdir()
-            target = storage / "physical-model.gguf"
+            target = storage / "61e9f699-422a-4d40-a7cf-116eb01f4a58"
             target.write_bytes(b"GGUF")
             link = root / "linked-model.gguf"
             try:
-                link.symlink_to(target)
+                link.symlink_to(Path("..") / storage.name / target.name)
             except OSError as error:
                 self.skipTest(f"symlink creation is unavailable: {error}")
             with (
@@ -428,6 +428,89 @@ class LocalQwenUnitTests(unittest.TestCase):
             catalog._CATALOG_CACHE = None
         self.assertEqual([item.identifier for item in items], ["linked-model.gguf"])
         self.assertEqual(resolved, target)
+
+    def test_catalog_accepts_relative_suffixless_uuid_symlink_and_rejects_non_gguf_blob(self):
+        def gguf_string(value):
+            encoded = value.encode("utf-8")
+            return struct.pack("<Q", len(encoded)) + encoded
+
+        def write_gguf(path, metadata):
+            payload = bytearray(b"GGUF" + struct.pack("<IQQ", 3, 0, len(metadata)))
+            for key, value in metadata.items():
+                payload.extend(gguf_string(key))
+                if isinstance(value, bool):
+                    payload.extend(struct.pack("<I?", 7, value))
+                elif isinstance(value, int):
+                    payload.extend(struct.pack("<IQ", 10, value))
+                else:
+                    payload.extend(struct.pack("<I", 8))
+                    payload.extend(gguf_string(str(value)))
+            path.write_bytes(payload)
+
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory).resolve()
+            root = base / "LLM"
+            storage = base / "deduplicated-blobs"
+            root.mkdir()
+            storage.mkdir()
+            model_uuid = "3d4fe203-f741-4b43-b6c2-9f15c42dc250"
+            projector_uuid = "5aba895a-4d64-4524-8290-bc4bf7a72617"
+            junk_uuid = "f61960c9-eb46-4f6b-8a3e-5c8de9722f9a"
+            broken_uuid = "d3b7b4da-e58b-4bfe-9dc1-97dbca3f5958"
+            model_target = storage / model_uuid
+            projector_target = storage / projector_uuid
+            junk_target = storage / junk_uuid
+            write_gguf(
+                model_target,
+                {
+                    "general.architecture": "qwen3vl",
+                    "general.type": "model",
+                    "general.name": "Qwen3 4B",
+                    "qwen3vl.context_length": 32768,
+                    "tokenizer.chat_template": "{{ messages }}",
+                },
+            )
+            write_gguf(
+                projector_target,
+                {
+                    "general.architecture": "clip",
+                    "general.type": "mmproj",
+                    "general.name": "Qwen3 4B",
+                    "clip.projector_type": "qwen3vl_merger",
+                    "clip.has_vision_encoder": True,
+                },
+            )
+            junk_target.write_bytes(b"not a model")
+            try:
+                for identifier in (model_uuid, projector_uuid, junk_uuid):
+                    (root / identifier).symlink_to(
+                        Path("..") / storage.name / identifier
+                    )
+                (root / broken_uuid).symlink_to(
+                    Path("..") / storage.name / "missing-model-blob"
+                )
+            except OSError as error:
+                self.skipTest(f"symlink creation is unavailable: {error}")
+            self.assertFalse((root / model_uuid).readlink().is_absolute())
+            with (
+                patch.object(catalog, "_registered_model_roots", return_value=(root,)),
+                patch.object(catalog, "llm_model_directory", return_value=root),
+                patch.object(catalog, "legacy_qwen_model_directory", return_value=root / "Qwen3.8"),
+            ):
+                catalog._CATALOG_CACHE = None
+                payload = catalog.catalog_public_payload(refresh=True)
+                model_path = runtime.resolve_model_path(model_uuid, label="model")
+                projector_path = catalog.resolve_projector_path(
+                    catalog.AUTO_MMPROJ,
+                    model_identifier=model_uuid,
+                )
+            catalog._CATALOG_CACHE = None
+        self.assertEqual(payload["model_options"], [model_uuid])
+        self.assertEqual(payload["projector_options"], [catalog.AUTO_MMPROJ, projector_uuid])
+        self.assertNotIn(junk_uuid, payload["model_options"])
+        self.assertNotIn(broken_uuid, payload["model_options"])
+        self.assertEqual(model_path, model_target)
+        self.assertEqual(projector_path, projector_target)
 
     def test_thinking_payload_uses_qwen_official_sampling_contract(self):
         class RunningProcess:
