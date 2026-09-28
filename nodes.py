@@ -27,11 +27,11 @@ from comfy_api.latest import ComfyExtension, io
 
 try:
     from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
-        normalize_director_skill, prepare_director_skill, director_instruction, is_drama_skill, drama_authoring_instruction, drama_core_supplement,
+        normalize_director_skill, prepare_director_skill, director_instruction, is_drama_skill, uses_authoring_contract, drama_authoring_instruction, drama_core_supplement,
         coordinated_performance_instruction, template_fact_lookup, director_metadata, preserve_director_on_repair)
 except ImportError:
     from directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
-        normalize_director_skill, prepare_director_skill, director_instruction, is_drama_skill, drama_authoring_instruction, drama_core_supplement,
+        normalize_director_skill, prepare_director_skill, director_instruction, is_drama_skill, uses_authoring_contract, drama_authoring_instruction, drama_core_supplement,
         coordinated_performance_instruction, template_fact_lookup, director_metadata, preserve_director_on_repair)
 
 try:
@@ -1398,7 +1398,7 @@ def _build_messages(
     character_rule = character_performance_instruction(
         character_performance_bible,
         model_target="MiniMax H3",
-        **({"requested_dialogue": True} if is_drama_skill(skill_id) else {}),
+        **({"requested_dialogue": True} if uses_authoring_contract(skill_id) else {}),
     )
     if character_rule:
         system_rules.append(character_rule)
@@ -1410,7 +1410,7 @@ def _build_messages(
     authoring_rule = drama_authoring_instruction(skill_id)
     if authoring_rule:
         system_rules.append(authoring_rule)
-    causal_rule = creation_instruction("h3", creation_mode, **({"requested_dialogue": True} if is_drama_skill(skill_id) else {}))
+    causal_rule = creation_instruction("h3", creation_mode, **({"requested_dialogue": True} if uses_authoring_contract(skill_id) else {}))
     if causal_rule:
         system_rules.append(causal_rule)
     if relay_config:
@@ -1920,7 +1920,7 @@ def enhance_prompt(
                     task_type=task_type, duration=duration_seconds, shot_count=shot_count,
                     language=effective_local_language, source="\n".join((str(prompt), reference_context, constraints)),
                     media_labels=[asset["label"] for asset in media_plan], relay_config=relay_config, progress=progress_callback,
-                    **({"director_skill": director_skill} if is_drama_skill(director_skill) else {}),
+                    **({"director_skill": director_skill} if uses_authoring_contract(director_skill) else {}),
                 )
                 local_attempts += quality_metrics.get("correction_calls", 0)
                 retained["draft"] = response_text
@@ -2042,7 +2042,7 @@ def enhance_prompt(
             task_type=task_type, duration=duration_seconds, shot_count=shot_count,
             language=effective_cloud_language, source="\n".join((str(prompt), reference_context, constraints)),
             media_labels=[asset["label"] for asset in media_plan], relay_config=relay_config, progress=progress_callback,
-            **({"director_skill": director_skill} if is_drama_skill(director_skill) else {}),
+            **({"director_skill": director_skill} if uses_authoring_contract(director_skill) else {}),
         )
         if progress_callback:
             progress_callback("llm_completed", attempts=sum(cloud_attempts))

@@ -135,7 +135,7 @@ test("status failure resets the action and does not queue", async () => {
 });
 
 test("drama recovery shows stored authoring revision, never the currently selected Skill", async () => {
-    for (const original of ["drama_scene", "situational_drama"]) {
+    for (const original of ["drama_scene", "situational_drama", "zhenzhen_pov"]) {
         const { node, slotWidget, actionWidget } = fixture();
         node.widgets.push({ name: "director_skill", value: "ning_wenwu" });
         const alerts = [];

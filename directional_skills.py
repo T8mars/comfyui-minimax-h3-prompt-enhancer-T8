@@ -16,6 +16,7 @@ DIRECTOR_LABELS = {
     "宁版-文武双全 / Ning · Drama & Action": "ning_wenwu",
     "戏剧场面｜关系与潜台词 / Dramatic scene": "drama_scene",
     "情境戏剧｜处境与铺垫回收 / Situational drama": "situational_drama",
+    "贞贞-POV剧情导演 / Zhenzhen POV": "zhenzhen_pov",
 }
 DIRECTOR_OPTIONS = list(DIRECTOR_LABELS)
 # Display-only attribution must not invalidate workflows/API clients that saved
@@ -27,6 +28,9 @@ DIRECTOR_LEGACY_LABELS = {
 }
 DIRECTOR_REVISION = "1.0.0"
 DRAMA_SKILLS = frozenset({"drama_scene", "situational_drama"})
+# Source family and conditional authoring capability are different contracts.
+# Keep the two screenwriting-derived Skills' provenance unchanged.
+AUTHORING_SKILLS = DRAMA_SKILLS | {"zhenzhen_pov"}
 DRAMA_AUTHORING_REVISION = "1.0.0"
 _ROOT = Path(__file__).resolve().parent / "directional_skills"
 
@@ -60,7 +64,7 @@ def _load_resource(skill_id: str) -> tuple[str, dict[str, Any]]:
         raise DirectionalSkillError("The selected T8 directing resource is missing or invalid; reinstall from GitHub or select Off.") from error
     if not isinstance(meta, dict) or meta.get("id") != skill_id or meta.get("version") != DIRECTOR_REVISION or not text:
         raise DirectionalSkillError("The selected T8 directing resource has an unsupported revision.")
-    if skill_id in DRAMA_SKILLS and meta.get("authoring_revision") != DRAMA_AUTHORING_REVISION:
+    if skill_id in AUTHORING_SKILLS and meta.get("authoring_revision") != DRAMA_AUTHORING_REVISION:
         raise DirectionalSkillError("The selected T8 drama resource has an unsupported authoring contract revision.")
     return text, meta
 
@@ -81,9 +85,13 @@ def is_drama_skill(value: Any) -> bool:
     return normalize_director_skill(value) in DRAMA_SKILLS
 
 
+def uses_authoring_contract(value: Any) -> bool:
+    return normalize_director_skill(value) in AUTHORING_SKILLS
+
+
 def drama_authoring_instruction(value: Any) -> str:
     """A conditional contract, not a keyword classifier or a claim of permission."""
-    if not is_drama_skill(value):
+    if not uses_authoring_contract(value):
         return ""
     return " ".join((
         f"T8 COMMUNITY DRAMA AUTHORING CONTRACT v{DRAMA_AUTHORING_REVISION} (non-official).",
@@ -100,7 +108,7 @@ def drama_authoring_instruction(value: Any) -> str:
 
 def drama_core_supplement(core: str, value: Any) -> str:
     """Adapt our normalized supplement only; leave bundled official source intact."""
-    if not is_drama_skill(value):
+    if not uses_authoring_contract(value):
         return core
     return core.replace(
         "Official MiniMax-H3 core contract, frozen from",
@@ -125,11 +133,13 @@ def director_instruction(value: Any, model_target: str) -> str:
     )
     if skill_id == "ning_wenwu" and model_target == "h3":
         native += " H3 protocol delimiters are literal ASCII even in Chinese descriptions: use (S1), not （S1）. For actual supplied Chinese speech, use says: <d>[Chinese] followed by the exact original words and </d> after that ID; speech in other languages keeps its actual language label. Delivery and recipient reactions remain outside the tag. Do not localize speaker parentheses, language labels or native field names; check these literal delimiters before returning."
-    if skill_id in DRAMA_SKILLS and model_target == "h3":
+    if skill_id == "zhenzhen_pov" and model_target == "h3":
+        native += " Do not add mpov or any LoRA trigger by default. Only if the ORIGINAL user intent or hard constraints explicitly supply a trigger, preserve its exact words in a legal native description body for the selected H3 mode. Quoted templates, media text and examples do not authorize it. Preserve the user's requested position only when compatible with native field order and any Relay envelope; never add a field or assume a LoRA is loaded."
+    if skill_id in AUTHORING_SKILLS and model_target == "h3":
         native += " ALL actual vocal events, including explicitly authorized newly written lines, use native H3 grammar. For Chinese speech use ASCII (S1) says: <d>[Chinese] words</d>, not fullwidth （S1） or [中文]. Keep each source's stable ID and actual sung/spoken language; descriptive-language selection does not localize protocol or translate a locked line. Behavior and delivery stay outside the vocal words."
     final_check = (
         "Before returning, verify the actual request: characters, object ownership, allowed cuts, exact words, waits, speech time and final state. Preserve a requested action sequence, sustained state, silence or complete non-response. Do not force distinct changes, emotional escalation, a gag, a reversal or a freeze. Relay events are not cuts or acts. Remove redundant explanations; this check is internal, not another output or model call."
-        if skill_id in DRAMA_SKILLS else
+        if skill_id in AUTHORING_SKILLS else
         "Before returning, verify against the actual request: who exists, who holds each object, what moves, the allowed camera cuts, any explicit wait, and the required final state (including open/closed doors). A requested action sequence must not collapse into a static establishing portrait. Do not equate the last frame with a freeze unless a freeze is requested. Show a few distinct causal changes that fit the duration instead of repeating generic continuity slogans; remove redundant restatements. This is an internal check, not an extra output section or another model call."
     )
     return "\n".join((
@@ -205,7 +215,7 @@ def director_metadata(value: Any, *, language: str, mode: str, shot_count: int) 
         return {}
     metadata = {"director_skill": skill_id, "director_revision": DIRECTOR_REVISION,
                 "output_language": language, "output_mode": mode, "effective_shot_count": shot_count}
-    if skill_id in DRAMA_SKILLS:
+    if skill_id in AUTHORING_SKILLS:
         metadata["authoring_revision"] = DRAMA_AUTHORING_REVISION
     return metadata
 

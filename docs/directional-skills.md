@@ -1,6 +1,6 @@
 # 定向创作 Skill / Directional creation Skills
 
-H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。六种方法帮助编排场景，不生成视频，也不替换平台格式。
+H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。七种方法帮助编排场景，不生成视频，也不替换平台格式。
 
 更新插件后重启 ComfyUI 并强制刷新浏览器，再使用新下拉项。旧工作流加载时只补上关闭状态，不改变原来的模型、种子、时长和输出连线。
 
@@ -18,6 +18,7 @@ Restart ComfyUI and hard-refresh the browser after updating. Historical workflow
 | 宁版-文武双全 / Ning · Drama & Action | 围绕关键变化选择观看重点：文戏的信息接收，武戏的发力/受力与距离，文武衔接。 / Choose attention around meaningful information, reactions, force and distance, including dialogue leading into action. |
 | 戏剧场面｜关系与潜台词 / Dramatic scene | 目标、说话意图、接收与关系，用现有动作表达，不强加隐情。例：主管劝再想一天，职员持信回答已经想好；去留未决。 / Goals, speech intent, reception and relationship through supported behavior, without invented secrets. Example: a resignation conversation ends unresolved. |
 | 情境戏剧｜处境与铺垫回收 / Situational drama | 处境、期待与回应的可见关系；可有趣，也可和平、静默或未解决。例：两人搬桌短暂错拍后协调，桌停在门内。 / Visible situation, expectation and response; comedy, peace, silence and unresolved outcomes are all valid. Example: two people coordinate a table move after one brief mismatch. |
+| 贞贞-POV剧情导演 / Zhenzhen POV | 视点归属、观众参与、信息接收及动作结果。例：朋友等观看者指向桌左，再把空白卡片放到所指位置。 / Viewpoint, participation, reception and consequence. Example: a friend waits for the viewer to point left before placing a blank card there. |
 
 直接写人物、场景、动作目标、时长和必须保留的条件即可；不需要填写资产表或模仿来源示例。技能不会自动添加对手、武器、超能力、BUNNY/LoRA 触发词或双语成稿。输出语言仍由原来的语言选项控制。
 
@@ -150,6 +151,39 @@ Small local models receive the complete creation settings, but may still violate
 
 Connect the result to `T8 Prompt Inspector` for a non-mutating, local format check. H3's ASCII `(S1)` and `<d>[Chinese] exact line</d>` are protocol syntax, not localized fullwidth IDs or `[中文]`. Seedance Chinese speech keeps its own `{}` policy. The Inspector's structural score is not creative or video quality.
 
-维护者可运行 `python tools/build_directional_skill_workflows.py --check` 校验八份定向示例（四份旧双平台示例和四份新独立示例）。`python tools/build_example_workflows.py --check` 仍检查原18份工作流与缩略图，并额外检查这些示例；不会调用模型。
+维护者可运行 `python tools/build_directional_skill_workflows.py --check` 校验十份定向示例（四份双平台示例、四份戏剧独立示例和两份 POV 独立示例）。`python tools/build_example_workflows.py --check` 仍检查原18份工作流与缩略图，并额外检查这些示例；不会调用模型。
 
-Maintainers can run `python tools/build_directional_skill_workflows.py --check` for eight directional examples: four historical dual-platform graphs and four new standalone graphs. The existing checker retains all checks on the original 18 workflows and thumbnails. Neither command invokes a model.
+Maintainers can run `python tools/build_directional_skill_workflows.py --check` for ten directional examples: four dual-platform graphs, four drama graphs and two POV graphs. The existing checker retains all checks on the original 18 workflows and thumbnails. Neither command invokes a model.
+
+## 贞贞-POV剧情导演 / Zhenzhen POV
+
+在原 H3 或 Seedance 2.0 节点的 **定向创作 Skill** 选择本项，照常填写一个场景即可。稳定 ID 为 `zhenzhen_pov`。「贞贞」是方法署名，不指定人物姓名、性别、伴侣关系、身份图或 API 渠道。所有现有渠道和共享配置继续可用，角色圣经选填，不需要额外节点或表格。
+
+它重点指导四件事：谁在看、观众怎样参与、人物何时收到信息、动作怎样产生可见结果。人物不是一直微笑着等镜头；但安静、无回应、等待、合作和未解决也都是有效剧情，不强制冲突、搞笑或反转。
+
+Select this method in the existing H3 or Seedance selector and describe one scene. It guides viewpoint ownership, viewer participation, information reception and consequences. The credit selects neither a character nor a provider. Existing cloud/local/shared configurations remain available; the Character Bible is optional. Silence, cooperation and unresolved outcomes are valid, not defects that require a twist.
+
+### 最简单的用法 / Quick start
+
+- 导入一份示例：[H3](../example_workflows/directional_zhenzhen_pov_h3.json) 或 [Seedance](../example_workflows/directional_zhenzhen_pov_seedance20.json)。每份只有一个增强分支，Key 留空；云端执行需要填自己的 Key，本地 GGUF 不需要。12 秒、质量纠正是该图的设置；一镜写在示例原文，镜数控件仍为 AUTO，都不是技能默认。 / Each standalone graph has one enhancer and an empty key. Its 12-second and Repair settings are example choices; one take is requested in the prompt while the shot-count control stays AUTO. None is imposed by selecting the Skill.
+- 普通增强：`眼睛第一人称，朋友等我指向桌面左侧，再把手中的空白卡片放在那里，最后卡片留在左侧。不新增对白、人物或道具。` 这是动作与持有关系示例，不是高分剧情展示。 / Ordinary enhancement: a friend waits for the viewer's leftward point before placing the held blank card there; no new speech, people or props.
+- 允许创作：`12秒眼睛POV，两名成年朋友一起等雨停。允许为对方原创一句简短中文提议，我不回答。结尾继续等待，不新增道具、人物、字幕或配乐。` 明确允许才补对白，提供的原句仍逐字保留。 / Explicitly allow one brief proposal while the viewer remains silent and both continue waiting; only that dialogue gap is editable.
+- 静默场景：`8秒固定眼睛POV，对方一直看窗外，不看我、不回应。全片完全静音，不加人物或事件，结尾保持原状态。` 不会因为勾选技能就自动开启极致表演或因果创作。 / A fully silent, unresponsive observation remains valid; selecting POV does not automatically enable Extreme or Causal controls.
+
+### 适配与边界 / Adaptation and limits
+
+无冲突的人物互动生成可采用眼睛 POV；明确的第三人称、固定外部机位、自拍、手持拍摄和原素材编辑要求优先。俯视／平视／仰视通过实际站坐关系与动作表达，不强制每条三角度。局部编辑不把原视频重拍成主观视角，延长／补轨沿用原素材职责。身份图不是首帧，首尾帧仍为各自锚点。
+
+The method prefers eye POV only for unconstrained character interactions. Explicit external cameras, selfies, hand-held filming and editing boundaries take priority. Relative angles follow established positions; they are not three mandatory labels. Identity references do not replace first/last-frame anchors. Edits, continuation and track completion retain their native media responsibilities.
+
+H3 保留所选模式、字面协议与严格英文选项；Seedance 不混入 H3 六段、标签或时间码。H3 Relay 沿用原 JSON 编排与分时逻辑，事件不等于切镜。用户时长、镜数、字数目标和禁止项优先；技能不会强制三条故事、15/20 秒、16:9 或附加 LoRA 触发词。仅当用户原始要求明确给出 H3 触发词时，才在合法正文位置保留原词，不检测或保证 LoRA 已加载。
+
+H3, Seedance and Relay keep their existing separate output contracts. Duration, shot count, length targets and hard constraints remain authoritative. No fixed batch, duration, aspect ratio or automatic LoRA trigger is imported from the source package.
+
+不增加规划、独立导演评分或视频调用；原有语言／格式修复、传输重试仍按原逻辑运行，开启质量纠正可能再请求一次。已有完整稿的质量纠正失败通常保留原稿，但首次生成失败、前置校验失败或无效 Relay 封套仍可能报错；保稿不代表质量合格。恢复上次结果仅恢复原稿及其技能来源，不按当前选项重新生成。
+
+No additional planning, scoring or video request is introduced. Existing language/format repair and transport retries still apply; Quality Repair can add one logical correction request. Retention requires an existing complete draft and does not cover every failure or certify quality. Restoring a result uses its original content and provenance, not the currently selected Skill.
+
+来源：[v1.5.9 快照及改编边界](../directional_skills/zhenzhen_pov/NOTICE.md)。工程验收与20轮讨论摘要：[接入记录](zhenzhen-pov-integration.md)。自动测试验证传参、协议与兼容链路，不保证模型遵循物理动作、相对机位或剧情效果；本次未调用真实云端／本地 LLM 或生成视频。
+
+See the [source notice](../directional_skills/zhenzhen_pov/NOTICE.md) and [integration record](zhenzhen-pov-integration.md). Automated contracts do not prove camera compliance, physical execution or artistic quality. This integration was not evaluated through live cloud/local LLM generation or rendered videos.

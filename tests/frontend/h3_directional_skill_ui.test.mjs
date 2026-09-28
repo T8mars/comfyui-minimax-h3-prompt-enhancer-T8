@@ -60,10 +60,10 @@ test("author labels migrate legacy saved labels without changing IDs or workflow
     }
 });
 
-test("both drama choices round-trip all 38 fields through the real enhancer hooks", async () => {
+test("conditional authoring choices round-trip all 38 fields through the real enhancer hooks", async () => {
     for (const [filename, target] of [["minimax_h3_prompt_enhancer.js", "h3"], ["seedance20_prompt_enhancer.js", "seedance20"]]) {
         const harness = await enhancerHarness(filename, target);
-        for (const id of ["drama_scene", "situational_drama"]) {
+        for (const id of ["drama_scene", "situational_drama", "zhenzhen_pov"]) {
             const saved = sampleValues(harness.names);
             saved[35] = id;
             const node = harness.configure(saved);
@@ -82,6 +82,36 @@ test("both drama choices round-trip all 38 fields through the real enhancer hook
             assert.match(help, /explicit/i);
             if (target === "seedance20") assert.doesNotMatch(help, /H3/);
         }
+    }
+});
+
+test("POV examples and 36-field saves reload with the actual reordered widgets", async () => {
+    for (const [filename, target, type] of [
+        ["minimax_h3_prompt_enhancer.js", "h3", "MiniMaxH3PromptEnhancerT8"],
+        ["seedance20_prompt_enhancer.js", "seedance20", "Seedance20PromptEnhancerT8"],
+    ]) {
+        const harness = await enhancerHarness(filename, target);
+        const workflow = JSON.parse(await readFile(new URL(`../../example_workflows/directional_zhenzhen_pov_${target}.json`, import.meta.url), "utf8"));
+        const original = workflow.nodes.find(n => n.type === type).widgets_values;
+        for (const saved of [original, original.slice(0, 36)]) {
+            const node = harness.configure([...saved]);
+            const values = harness.values(node);
+            assert.equal(values.director_skill, directionalSkillLabel("zhenzhen_pov"));
+            harness.names.slice(0, saved.length).forEach((name, index) => {
+                const expected = name === "quality_mode" ? qualityLabel(saved[index])
+                    : name === "creation_mode" ? creationLabel(saved[index]) : saved[index];
+                if (name !== "director_skill") assert.equal(values[name], expected, name);
+            });
+            const serialized = {};
+            node.onSerialize(serialized);
+            assert.equal(serialized.widgets_values.length, 38);
+            assert.equal(serialized.widgets_values[35], "zhenzhen_pov");
+            assert.deepEqual(harness.values(harness.configure(serialized.widgets_values)), values);
+        }
+        const help = directionalSkillDescription("zhenzhen_pov", target);
+        assert.match(help, /不锁人物或渠道/);
+        assert.match(help, /明确要求/);
+        assert.doesNotMatch(help, /mpov/);
     }
 });
 

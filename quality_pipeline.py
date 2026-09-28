@@ -8,13 +8,13 @@ try:
                              repair_protocol, accept_correction, body_for, LITERAL_RE,
                              correction_messages)
     from .h3_prompt_relay import compile_relay_response
-    from .directional_skills import DIRECTOR_OFF, is_drama_skill
+    from .directional_skills import DIRECTOR_OFF, is_drama_skill, uses_authoring_contract
 except ImportError:
     from h3_quality import (QUALITY_OFF, check_h3, check_seedance, run_quality,
                             repair_protocol, accept_correction, body_for, LITERAL_RE,
                             correction_messages)
     from h3_prompt_relay import compile_relay_response
-    from directional_skills import DIRECTOR_OFF, is_drama_skill
+    from directional_skills import DIRECTOR_OFF, is_drama_skill, uses_authoring_contract
 
 
 @contextmanager
@@ -52,7 +52,7 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
         return draft, {}
     options = dict(task_type=task_type, duration=duration, shot_count=shot_count,
                    language=language, source=source, media_labels=media_labels)
-    drama = is_drama_skill(director_skill)
+    drama = uses_authoring_contract(director_skill)
     def correction(original, text, report):
         return correction_messages(original, text, report, **({"requested_dialogue": True} if drama else {}))
     if not relay_config:
@@ -134,7 +134,7 @@ def seedance_quality_result(draft, *, mode, messages, complete, language, source
     return run_quality(draft, mode=mode, messages=messages, complete=complete,
                        check=lambda text: check_seedance(text, language=language, source=source, shot_count=shot_count),
                        **({"build_correction": lambda original, text, report: correction_messages(original, text, report, requested_dialogue=True)}
-                          if is_drama_skill(director_skill) else {}),
+                          if uses_authoring_contract(director_skill) else {}),
                        **({"accept": lambda old, new, before, after: accept_correction(old, new, before, after, protect_generated_vocals=True)}
-                          if is_drama_skill(director_skill) else {}),
+                          if uses_authoring_contract(director_skill) else {}),
                        progress=progress)

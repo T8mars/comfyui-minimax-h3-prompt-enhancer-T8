@@ -58,14 +58,16 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 25
+assert len(schemas) == 28
+assert [s.node_id for s in schemas[-3:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8"]
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
 module = sys.modules[spec.name + ".directional_skills"]
-assert len(module.DIRECTOR_OPTIONS) == 7 and module.DIRECTOR_LABELS[module.DIRECTOR_OPTIONS[0]] == "none"
-for skill in ("drama_scene", "situational_drama"):
+assert len(module.DIRECTOR_OPTIONS) == 8 and module.DIRECTOR_LABELS[module.DIRECTOR_OPTIONS[0]] == "none"
+for skill in ("drama_scene", "situational_drama", "zhenzhen_pov"):
     assert module.prepare_director_skill(skill, 2) == (skill, 2)
     assert module.director_metadata(skill, language="中文", mode="Seedance 2.0", shot_count=2)["authoring_revision"] == "1.0.0"
+assert (p / "directional_skills/zhenzhen_pov/NOTICE.md").is_file()
 for name, loaded in list(sys.modules.items()):
     if name.startswith(spec.name) and getattr(loaded, "__file__", None):
         assert pathlib.Path(loaded.__file__).is_relative_to(p), name

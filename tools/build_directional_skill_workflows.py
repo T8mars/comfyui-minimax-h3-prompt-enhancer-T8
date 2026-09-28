@@ -28,10 +28,13 @@ CASES = {
         "15秒，固定双人中景，一个连续镜头。成年主管在左、成年员工在右，桌上已有一封辞职信。主管把信推回，员工用右手按住信；主管说原句“明天的会，你还来吗？”，员工听完回答原句“我把资料发给你。”。这是含蓄的挽留与回避，不争吵、不哭，不决定员工最后是否辞职。只有这两句，逐字保留，不新增人物、道具、秘密或对白；无字幕无配乐。"),
     "situational_drama": ("情境戏剧｜处境与铺垫回收 / Situational drama", 15,
         "请原创一个15秒、温暖轻松、无对白的小场面。只有两名成年搬家者和一张已有长桌，两人各握一端，目标是一起把桌子抬过已有门口。允许编排礼让导致一次配合错位，再通过手势默契调整；不要让任何人变蠢，不伤人，不撞坏物品，不添加人或道具。结尾两人协作把桌子完整抬过门，各自仍握原来一端。固定机位，一个连续镜头，只有动作声，无对白、字幕或配乐。"),
+    "zhenzhen_pov": ("贞贞-POV剧情导演 / Zhenzhen POV", 12,
+        "12秒，一个连续镜头，观看者的眼睛第一人称，不是手持拍摄或自拍。我和一位成年朋友同坐在小桌两侧，眼位相近。朋友的完整脸和桌面交互区都能看清。朋友右手持一张空白卡片停在桌面中间上方，等我选择放哪边。我用空闲右手从画面下方指向观看者画面左侧的桌面；朋友看清指向后，用原持卡手把卡片移到所指位置，触桌后松手，再回看我。我的手自然退出画面，结尾空白卡片留在桌面左侧，不定格。不新增人物、物品、对白、字幕或配乐。声音仅有卡片触桌声，不添加环境声、呼吸或笑声。"),
 }
 DRAMA_SKILLS = {"drama_scene", "situational_drama"}
+STANDALONE_SKILLS = DRAMA_SKILLS | {"zhenzhen_pov"}
 STEMS = tuple(stem for skill in CASES for stem in (
-    (f"directional_{skill}_h3", f"directional_{skill}_seedance20") if skill in DRAMA_SKILLS
+    (f"directional_{skill}_h3", f"directional_{skill}_seedance20") if skill in STANDALONE_SKILLS
     else (f"directional_{skill}_comparison",)))
 
 
@@ -64,7 +67,7 @@ def generate() -> dict[str, dict]:
             values.update(duration_seconds=duration if kind == "H3" else str(duration),
                           shot_count="AUTO（系统自动判断）", local_model=SMALL_MODEL,
                           local_max_tokens=16384)
-            if skill == "ning_wenwu" or skill in DRAMA_SKILLS:
+            if skill == "ning_wenwu" or skill in STANDALONE_SKILLS:
                 # Explicit settings in this NEW example, not an implicit change
                 # to the selector or any existing saved workflow.
                 names = [*names, "quality_mode", "creation_mode"]
@@ -85,8 +88,8 @@ def generate() -> dict[str, dict]:
             [1, 1, 0, 2, 4, "STRING"], [2, 1, 0, 3, 4, "STRING"],
             [3, 2, 0, 4, 0, "STRING"], [4, 3, 0, 5, 0, "STRING"],
         ])
-        if skill in DRAMA_SKILLS:
-            # Four self-contained new files: each Skill has both model targets.
+        if skill in STANDALONE_SKILLS:
+            # Self-contained files: each Skill has both model targets.
             # Keep published comparison examples byte-for-byte unchanged.
             for target, ids in (("h3", {1, 2, 4}), ("seedance20", {1, 3, 5})):
                 single = copy.deepcopy(workflow)
@@ -115,11 +118,11 @@ def check() -> None:
                 continue
             node = nodes[node_id]
             names = widget_names(filename)
-            if stem == "directional_ning_wenwu_comparison" or any(stem.startswith(f"directional_{skill}_") for skill in DRAMA_SKILLS):
+            if stem == "directional_ning_wenwu_comparison" or any(stem.startswith(f"directional_{skill}_") for skill in STANDALONE_SKILLS):
                 names = [*names, "quality_mode", "creation_mode"]
             values = dict(zip(names, node["widgets_values"]))
             assert len(node["widgets_values"]) == len(names)
-            if values["director_skill"] == "ning_wenwu" or values["director_skill"] in DRAMA_SKILLS:
+            if values["director_skill"] == "ning_wenwu" or values["director_skill"] in STANDALONE_SKILLS:
                 assert len(names) == 38 and values["quality_mode"] == "repair" and values["creation_mode"] == "off"
             else:
                 assert len(names) == 36 and names[-1] == "director_skill"

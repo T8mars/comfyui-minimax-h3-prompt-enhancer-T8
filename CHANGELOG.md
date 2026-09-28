@@ -3,6 +3,20 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [Unreleased]
+
+## [1.25.0] - 2026-09-28
+
+### Added
+
+- Add the opt-in Zhenzhen POV directing Skill to the existing H3 and Seedance
+  enhancers, including conditional dialogue authorization, native-format repair
+  protection, recovery provenance, bilingual help and two standalone examples.
+  Adapt methods from the user-supplied v1.5.9 snapshot without its private
+  identity assets, production workflow, fixed batches or LoRA triggers.
+- Preserve all existing Skill behavior, widget order, defaults and workflows;
+  separate authoring capabilities from the screenwriting source family.
+
 ## [1.24.6] - 2026-09-27
 
 ### Fixed

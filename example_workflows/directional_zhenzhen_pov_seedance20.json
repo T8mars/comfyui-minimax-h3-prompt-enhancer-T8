@@ -1,0 +1,228 @@
+{
+  "id": "beb22af9-45e9-5a68-8de3-4dd680095380",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写贞贞 API Key / Your API key (clear before sharing)"
+    },
+    {
+      "id": 3,
+      "type": "Seedance20PromptEnhancerT8",
+      "pos": [
+        1180,
+        40
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "提示词增强 LLM API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Seedance20PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "12秒，一个连续镜头，观看者的眼睛第一人称，不是手持拍摄或自拍。我和一位成年朋友同坐在小桌两侧，眼位相近。朋友的完整脸和桌面交互区都能看清。朋友右手持一张空白卡片停在桌面中间上方，等我选择放哪边。我用空闲右手从画面下方指向观看者画面左侧的桌面；朋友看清指向后，用原持卡手把卡片移到所指位置，触桌后松手，再回看我。我的手自然退出画面，结尾空白卡片留在桌面左侧，不定格。不新增人物、物品、对白、字幕或配乐。声音仅有卡片触桌声，不添加环境声、呼吸或笑声。",
+        "AUTO（根据意图与素材判断）",
+        "AUTO（自动判断）",
+        "12",
+        "AUTO（系统自动判断）",
+        "balanced",
+        "AUTO（按内容判断）",
+        "中文",
+        "官方优化",
+        "无（不使用 T8 案例）",
+        "火山官方（@图片N/@视频N/@音频N）",
+        "AUTO（按用户意图）",
+        "AUTO（按场景添加）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "zhenzhen_pov",
+        "repair",
+        "off"
+      ],
+      "title": "Seedance 2.0 · 贞贞-POV剧情导演 / Zhenzhen POV"
+    },
+    {
+      "id": 5,
+      "type": "T8ShowText",
+      "pos": [
+        1180,
+        1250
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "Seedance 原生提示词 / Native Seedance prompt"
+    }
+  ],
+  "links": [
+    [
+      2,
+      1,
+      0,
+      3,
+      4,
+      "STRING"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

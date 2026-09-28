@@ -298,10 +298,11 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "web/js/h3_quality_ui.mjs",
         "web/js/h3_directional_skill_ui.mjs",
         *{f"directional_skills/{skill}/{name}" for skill in
-          ("continuous_combat", "high_density_combat", "cinematic_gunfight", "ning_wenwu", "drama_scene", "situational_drama")
+          ("continuous_combat", "high_density_combat", "cinematic_gunfight", "ning_wenwu", "drama_scene", "situational_drama", "zhenzhen_pov")
           for name in ("SKILL.md", "meta.json")},
         "directional_skills/SCREENWRITING-LICENSE.txt",
         "directional_skills/SCREENWRITING-NOTICE.md",
+        "directional_skills/zhenzhen_pov/NOTICE.md",
     }
     missing = sorted(required - shipped_relative)
     if missing:

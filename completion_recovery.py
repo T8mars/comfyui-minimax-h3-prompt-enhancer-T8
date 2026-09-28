@@ -76,7 +76,7 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     if not isinstance(values, dict):
         return {}
     allowed = {
-        "director_skill": {"continuous_combat", "high_density_combat", "cinematic_gunfight", "ning_wenwu", "drama_scene", "situational_drama"},
+        "director_skill": {"continuous_combat", "high_density_combat", "cinematic_gunfight", "ning_wenwu", "drama_scene", "situational_drama", "zhenzhen_pov"},
         "director_revision": {"1.0.0"},
         "authoring_revision": {"1.0.0"},
         "output_language": {"中文", "English"},
@@ -84,7 +84,7 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     }
     result = {key: values[key] for key, options in allowed.items()
               if isinstance(values.get(key), str) and values[key] in options}
-    if result.get("director_skill") not in {"drama_scene", "situational_drama"}:
+    if result.get("director_skill") not in {"drama_scene", "situational_drama", "zhenzhen_pov"}:
         result.pop("authoring_revision", None)
     count = values.get("effective_shot_count")
     if isinstance(count, int) and not isinstance(count, bool) and 0 <= count <= 20:

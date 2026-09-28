@@ -1,0 +1,21 @@
+{
+  "id": "zhenzhen_pov",
+  "version": "1.0.0",
+  "authoring_revision": "1.0.0",
+  "source_name": "zhenzhen-pov-director",
+  "source_version": "1.5.9",
+  "source_snapshot": "zhenzhen-pov-director-1.5.9-20260928",
+  "primary_source": "SKILL.md",
+  "source_sha256": "505376f62aa3a49385cac9aca6b7c8ad00a16edc21af7b4e3637a65edb26eba4",
+  "source_files": {
+    "SKILL.md": "505376f62aa3a49385cac9aca6b7c8ad00a16edc21af7b4e3637a65edb26eba4",
+    "references/directing.md": "30d3976f7ab03222f43db6c82de6a5980f1808e3d9bc64888451e096e4857ff7",
+    "references/director-review.md": "6b53473c2a068adabf9d4b79040b74738fb38ab82aababf360a6001f94ecf858",
+    "references/h3-adapter.md": "ec53e39c8ae44cadd9b88bcabc0fb0159fbc1bcab2a5a0742e038f6bae5e2aca",
+    "references/pov-angles.md": "163fe35602cd7c7f0c9e0df1ebc0fbd13c61c98f7effa50bc50b18b4a9119fc1",
+    "references/source-cases.md": "4a6f2184efbb9d457e2050dc8e4532920386d2bf3682598f3b2014d87bbcf471",
+    "references/rewrite-examples.md": "5b037d58724aff05c8831fd8fa6dcdfbb0b0c7ee5e0dd7cf4d2fa935b858e84c"
+  },
+  "relationship": "Independently worded T8 adaptation of user-supplied POV directing methods; non-official. Source production workflows, examples and private dependencies are not redistributed.",
+  "rights_notice": "NOTICE.md"
+}

@@ -43,7 +43,7 @@ try {
     const help = directing.addDirectionalSkillUI(n, selected, { target });
     const count = n.widgets.length;
     for (let i = 0; i < 20; i++) {
-      for (const id of ["drama_scene", "situational_drama"]) {
+      for (const id of ["drama_scene", "situational_drama", "zhenzhen_pov"]) {
         selected.value = id; selected.callback();
         check(help.element.textContent.includes("明确要求") && help.element.textContent.includes("explicit request"), `${target} bilingual conditional dialogue help`);
         check(help.element.textContent.includes("Example:"), `${target} current example visible in help`);
@@ -55,7 +55,7 @@ try {
         check(n.widgets.find(w => w.name === "case_template").label === "原案例", `${target} template label restored`);
       }
     }
-    selected.value = target === "h3" ? "drama_scene" : "situational_drama"; selected.callback();
+    selected.value = "zhenzhen_pov"; selected.callback();
     directing.addDirectionalSkillUI(n, selected, { target });
     check(n.widgets.length === count, `${target} directing UI initialization is idempotent`);
   }
