@@ -17,6 +17,7 @@ DIRECTOR_LABELS = {
     "戏剧场面｜关系与潜台词 / Dramatic scene": "drama_scene",
     "情境戏剧｜处境与铺垫回收 / Situational drama": "situational_drama",
     "贞贞-POV剧情导演 / Zhenzhen POV": "zhenzhen_pov",
+    "Jojocodex-武术打斗 / Wushu combat": "wushu_combat",
 }
 DIRECTOR_OPTIONS = list(DIRECTOR_LABELS)
 # Display-only attribution must not invalidate workflows/API clients that saved
@@ -142,6 +143,15 @@ def director_instruction(value: Any, model_target: str) -> str:
         if skill_id in AUTHORING_SKILLS else
         "Before returning, verify against the actual request: who exists, who holds each object, what moves, the allowed camera cuts, any explicit wait, and the required final state (including open/closed doors). A requested action sequence must not collapse into a static establishing portrait. Do not equate the last frame with a freeze unless a freeze is requested. Show a few distinct causal changes that fit the duration instead of repeating generic continuity slogans; remove redundant restatements. This is an internal check, not an extra output section or another model call."
     )
+    if skill_id == "wushu_combat":
+        final_check = (
+            "Before returning, verify the ORIGINAL request, media roles, anatomy, object ownership, "
+            "action order, permitted contacts or misses, support, allowed cuts, exact words and sound scope. "
+            "Keep specified waits, stillness, non-response, duration, shot count and final anchors. "
+            "Where movement is requested, make its cause and next-action connection visible without forcing "
+            "extra exchanges, damage, a winner or a freeze. Relay events are not camera cuts. "
+            "This check is internal, not another output section or model call."
+        )
     return "\n".join((
         f"T8 DIRECTIONAL CREATION: {skill_id} v{DIRECTOR_REVISION} (independently adapted local directing methods; non-official).",
         "This is the sole optional scene-directing source for THIS request. Other optional scene presets, case templates and manual template choreography are paused; the platform core always remains authoritative.",

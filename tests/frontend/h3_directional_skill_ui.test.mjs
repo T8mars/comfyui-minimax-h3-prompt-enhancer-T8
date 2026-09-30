@@ -115,6 +115,43 @@ test("POV examples and 36-field saves reload with the actual reordered widgets",
     }
 });
 
+test("wushu examples retain 38 named fields and 36-field saves through real enhancer hooks", async () => {
+    for (const [filename, target, type] of [
+        ["minimax_h3_prompt_enhancer.js", "h3", "MiniMaxH3PromptEnhancerT8"],
+        ["seedance20_prompt_enhancer.js", "seedance20", "Seedance20PromptEnhancerT8"],
+    ]) {
+        const harness = await enhancerHarness(filename, target);
+        const graph = JSON.parse(await readFile(new URL(`../../example_workflows/directional_wushu_combat_${target}.json`, import.meta.url), "utf8"));
+        const original = graph.nodes.find(n => n.type === type).widgets_values;
+        assert.equal(original.length, 38);
+        assert.equal(original[35], "wushu_combat");
+        assert.equal(original[36], "check");
+        assert.equal(original[37], "off");
+        for (const saved of [original, original.slice(0, 36)]) {
+            const node = harness.configure([...saved]);
+            const values = harness.values(node);
+            assert.equal(values.director_skill, directionalSkillLabel("wushu_combat"));
+            harness.names.slice(0, saved.length).forEach((name, index) => {
+                const expected = name === "director_skill" ? directionalSkillLabel(saved[index])
+                    : name === "quality_mode" ? qualityLabel(saved[index])
+                    : name === "creation_mode" ? creationLabel(saved[index]) : saved[index];
+                assert.equal(values[name], expected, name);
+            });
+            const serialized = {};
+            node.onSerialize(serialized);
+            assert.equal(serialized.widgets_values.length, 38);
+            assert.equal(serialized.widgets_values[35], "wushu_combat");
+            assert.deepEqual(harness.values(harness.configure(serialized.widgets_values)), values);
+        }
+        const help = directionalSkillDescription("wushu_combat", target);
+        assert.match(help, /Jojocodex/);
+        assert.match(help, /跨镜继承/);
+        assert.match(help, /no forced damage/);
+        assert.doesNotMatch(help, /new dialogue needs/);
+        if (target === "seedance20") assert.doesNotMatch(help, /H3/);
+    }
+});
+
 test("unknown IDs are preserved for validation without activating a skill or exposing the value in help", () => {
     for (const invalid of [0, false, [], {}]) {
         assert.equal(directionalSkillId(invalid), invalid);

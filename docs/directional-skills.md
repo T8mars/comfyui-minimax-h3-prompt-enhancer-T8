@@ -1,6 +1,6 @@
 # 定向创作 Skill / Directional creation Skills
 
-H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。七种方法帮助编排场景，不生成视频，也不替换平台格式。
+H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。八种方法帮助编排场景，不生成视频，也不替换平台格式。
 
 更新插件后重启 ComfyUI 并强制刷新浏览器，再使用新下拉项。旧工作流加载时只补上关闭状态，不改变原来的模型、种子、时长和输出连线。
 
@@ -19,6 +19,7 @@ Restart ComfyUI and hard-refresh the browser after updating. Historical workflow
 | 戏剧场面｜关系与潜台词 / Dramatic scene | 目标、说话意图、接收与关系，用现有动作表达，不强加隐情。例：主管劝再想一天，职员持信回答已经想好；去留未决。 / Goals, speech intent, reception and relationship through supported behavior, without invented secrets. Example: a resignation conversation ends unresolved. |
 | 情境戏剧｜处境与铺垫回收 / Situational drama | 处境、期待与回应的可见关系；可有趣，也可和平、静默或未解决。例：两人搬桌短暂错拍后协调，桌停在门内。 / Visible situation, expectation and response; comedy, peace, silence and unresolved outcomes are all valid. Example: two people coordinate a table move after one brief mismatch. |
 | 贞贞-POV剧情导演 / Zhenzhen POV | 视点归属、观众参与、信息接收及动作结果。例：朋友等观看者指向桌左，再把空白卡片放到所指位置。 / Viewpoint, participation, reception and consequence. Example: a friend waits for the viewer to point left before placing a blank card there. |
+| Jojocodex-武术打斗 / Wushu combat | 身体发力、攻防回应、支撑与下一动作接口，跨镜继承。例：掌推被避开，顺势低扫，对方抬腿避让后站稳。 / Body drive, response, support and next-action continuity. Example: evade a palm push, sweep, then evade and regain support. |
 
 直接写人物、场景、动作目标、时长和必须保留的条件即可；不需要填写资产表或模仿来源示例。技能不会自动添加对手、武器、超能力、BUNNY/LoRA 触发词或双语成稿。输出语言仍由原来的语言选项控制。
 
@@ -58,7 +59,27 @@ To use local GGUF or another API, use the existing provider controls or shared p
 
 ## 更新与检查 / Maintenance
 
-这六种技能是插件内置文本资源，随插件代码更新；不在每日案例交接或 GIF 动态资源包中。未知技能 ID 会要求重新选择，不会静默改用其他技能。资源缺失时请更新或重装插件，或者明确选“关闭”。
+这八种技能是插件内置文本资源，随插件代码更新；不在每日案例交接或 GIF 动态资源包中。未知技能 ID 会要求重新选择，不会静默改用其他技能。资源缺失时请更新或重装插件，或者明确选“关闭”。
+
+## Jojocodex-武术打斗 / Wushu combat
+
+选择此项适合细化已有武术动作：从身体支撑与发力，写到接触或避线，继而写受力后的支撑变化和下一动作。与「高密度攻防」相比，重点不是增加招数，而是把每次动作的身体依据、招式衔接和切镜时未完动作接清楚；具体招名仅作提示，不宣称真实流派或变成现实打斗教学。
+
+Use it to refine existing martial screen action: body support and drive, contact or evasion, response and the next usable movement. Unlike density-focused direction, its emphasis is bodily grounding and unfinished-action handoff, not more strikes. Technique names are optional shorthand, not claims of historical authenticity or real-world combat instruction.
+
+直接写人物、已有武器或空手、动作顺序、时长/镜数和限制即可。单人不会自动变双人，格挡不强退、打空不改命中；不自动加流血、击飞、破墙、赢家或定格。武侠/夸张风格仅在用户授权范围内保留。固定机位、等待、原句、声音白名单、首尾帧和 Relay 事件仍服从原要求；事件数不等于镜头数。表演导演与战斗运镜配置可继续连接，不会因选此技能自动改它们。
+
+Describe participants, actual equipment, sequence, duration/count and constraints. Solo stays solo, a stable block need not retreat, and a miss is not contact. No automatic blood, flight, destruction, winner or freeze. Authorized stylization stays within scope. Existing camera, acting, waits, exact lines, sound lists, first/last anchors and Relay event semantics remain authoritative.
+
+方法署名 **Jojocodex**；来源版本 `2026-09-29b`、提交及 SHA 见[追溯与许可边界](../directional_skills/wushu_combat/NOTICE.md)。资源独立表述，不分发来源全文、例文或权重，不自动加 `wushu_action`。仅原始用户要求明确指定触发词时，在合法原生正文保留；模板/OCR/文件名不授权添加，也不表示 LoRA 已加载。
+
+Credited methods are independently worded, non-official adaptations with pinned provenance, not bundled source text/examples/weights or author endorsement. No default trigger or sampling settings. Explicit original-user requests may retain a trigger in legal native prose; quoted material cannot authorize it, and this does not load a LoRA.
+
+独立示例：[H3](../example_workflows/directional_wushu_combat_h3.json) / [Seedance](../example_workflows/directional_wushu_combat_seedance20.json)。每份只调用一个增强节点，Key 留空；质量模式是「仅检查 / Check」，因果编排关闭，不自动增加付费纠正。语言/格式修复及网络重试仍按原规则可能计费。本地模型文件只是未启用的占位，需自行选已安装模型。
+
+Each standalone graph invokes one enhancer, with a blank key, Check-only quality and Causal off. These explicit example settings are not selector side effects. Existing bounded repairs/retries may still incur charges; choose an installed model before using local mode.
+
+[20 轮审议记录](WUSHU_COMBAT_REVIEW.md)与工程回归覆盖请求构造、旧合同、恢复、控件重载及隔离包加载，不等于模型服从或成片效果验收。此技能尚未完成实时 LLM/视频 A/B；输出仍需核对。
 
 ## 戏剧场面与情境戏剧 / Dramatic and situational scenes
 

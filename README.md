@@ -26,11 +26,13 @@
 
 ## 新增：H3 / Seedance 定向创作 Skill
 
+新增 **Jojocodex-武术打斗 / Wushu combat**：让身体发力、避线/接触、支撑变化与下一动作衔接，跨镜继承未完动作。两个增强节点现有下拉项直接选择，沿用云端/本地渠道与原生格式；不强加三镜、伤害、胜负或 LoRA，不改变旧工作流，默认仍关闭。[用法与边界](docs/directional-skills.md#jojocodex-武术打斗--wushu-combat) · 独立示例：[H3](example_workflows/directional_wushu_combat_h3.json) / [Seedance](example_workflows/directional_wushu_combat_seedance20.json)。已做工程回归，尚未做该技能的真实 LLM/成片效果验收。
+
 新增 **贞贞-POV剧情导演 / Zhenzhen POV**：把第一人称视角、观众参与、人物接收与动作结果组织清楚；不把剧情简化成贴脸、递物和微笑。沿用两节点的云端／本地渠道、语言、时长和原生格式；「贞贞」只作方法署名，不锁人物或渠道，不自动加 LoRA。选择现有定向技能即可，默认仍关闭。[用法与边界](docs/directional-skills.md#贞贞-pov剧情导演--zhenzhen-pov) · 独立示例：[H3](example_workflows/directional_zhenzhen_pov_h3.json) / [Seedance](example_workflows/directional_zhenzhen_pov_seedance20.json)。
 
 新增 **宁版-文武双全 / Ning · Drama & Action**：文戏围绕信息与听者反应安排观看重点，武戏围绕发力、避让与受力变化选择摄影；适合对白转动作的混合场景。支持明确授权的原创创作，保留原句、素材角色、时长、镜数与尾态。选择现有定向技能下拉即可，云端/API兼容接口与本地GGUF共用此方法。[宁版双平台示例](example_workflows/directional_ning_wenwu_comparison.json) · [三组输入及说明](docs/directional-skills.md#宁版-文武双全--ning-drama--action)。默认仍关闭。
 
-原 H3 与 Seedance 2.0 增强节点提供默认关闭的七个独立选项：**Fisher-连续战斗长镜头、土豆-高密度连续攻防、兔子-电影枪战导演、宁版-文武双全、戏剧场面｜关系与潜台词、情境戏剧｜处境与铺垫回收、贞贞-POV剧情导演**。作者署名只改变显示名称，旧名称与稳定技能ID继续兼容。只吸收非官方创作方法，保留两平台原生格式、原有渠道与输出，不需要新增连线。开启时当前请求暂停旧案例/手动模板编排及 H3 可选官方场景，保留原选择，关闭后恢复；长镜头的镜头数 `AUTO` 按一镜处理，固定两镜以上会在付费调用前提示冲突。
+原 H3 与 Seedance 2.0 增强节点提供默认关闭的八个独立选项：**Fisher-连续战斗长镜头、土豆-高密度连续攻防、兔子-电影枪战导演、宁版-文武双全、戏剧场面｜关系与潜台词、情境戏剧｜处境与铺垫回收、贞贞-POV剧情导演、Jojocodex-武术打斗**。作者署名只改变显示名称，旧名称与稳定技能ID继续兼容。只吸收非官方创作方法，保留两平台原生格式、原有渠道与输出，不需要新增连线。开启时当前请求暂停旧案例/手动模板编排及 H3 可选官方场景，保留原选择，关闭后恢复；长镜头的镜头数 `AUTO` 按一镜处理，固定两镜以上会在付费调用前提示冲突。
 
 两项新戏剧技能同一期加入：一项侧重人物目标、说话意图与关系，一项侧重处境、期待与回应；不强制冲突、转折、笑点或角色反应。对白默认原样保留，只有明确要求才补缺句，LOCK/禁止新增仍优先。角色圣经选填，技能不增加规划/评分调用；已有纠正/重试仍可能计费。[中英文授权、格式及使用说明](docs/directional-skills.md#戏剧场面与情境戏剧--dramatic-and-situational-scenes) · 戏剧场面：[H3](example_workflows/directional_drama_scene_h3.json) / [Seedance](example_workflows/directional_drama_scene_seedance20.json) · 情境戏剧：[H3](example_workflows/directional_situational_drama_h3.json) / [Seedance](example_workflows/directional_situational_drama_seedance20.json)。来源是[固定版本的非官方方法改编](directional_skills/SCREENWRITING-NOTICE.md)，不含书籍/剧本摘录。
 

@@ -64,6 +64,17 @@ try {
         check(n.widgets.find(w => w.name === "case_template").label === "原案例", `${target} template label restored`);
       }
     }
+    for (let i = 0; i < 20; i++) {
+      selected.value = "wushu_combat"; selected.callback();
+      check(help.element.textContent.includes("Jojocodex") && help.element.textContent.includes("no forced damage"), `${target} wushu bilingual help`);
+      check(help.element.getBoundingClientRect().height === 120, `${target} wushu actual fixed DOM height`);
+      if (target === "seedance20") check(!help.element.textContent.includes("H3"), "wushu Seedance retains native-only help");
+      selected.value = "none"; selected.callback();
+      check(n.widgets.length === count, `${target} wushu/Off retains widget count`);
+      check(n.widgets.find(w => w.name === "case_template").value === "saved-case", `${target} wushu retains case value`);
+      check(n.widgets.find(w => w.name === "reference_template").value === "saved-template", `${target} wushu retains manual template`);
+      check(n.widgets.find(w => w.name === "case_template").label === "原案例", `${target} wushu restores case label`);
+    }
     selected.value = "zhenzhen_pov"; selected.callback();
     directing.addDirectionalSkillUI(n, selected, { target });
     check(n.widgets.length === count, `${target} directing UI initialization is idempotent`);

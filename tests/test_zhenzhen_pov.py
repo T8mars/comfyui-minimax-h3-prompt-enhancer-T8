@@ -88,7 +88,7 @@ class OfflineGuards:
 
 class PovBaselineTests(OfflineGuards, unittest.TestCase):
     def test_old_options_and_source_family_remain_separate_from_new_capability(self):
-        self.assertEqual(tuple(directing.DIRECTOR_LABELS.values()), (*LEGACY, POV))
+        self.assertEqual(tuple(directing.DIRECTOR_LABELS.values())[:len(LEGACY) + 1], (*LEGACY, POV))
         self.assertEqual(directing.DIRECTOR_LABELS[LABEL], POV)
         self.assertEqual(directing.DRAMA_SKILLS, {"drama_scene", "situational_drama"})
         self.assertEqual(directing.AUTHORING_SKILLS, directing.DRAMA_SKILLS | {POV})

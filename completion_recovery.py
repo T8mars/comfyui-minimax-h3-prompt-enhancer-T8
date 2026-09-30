@@ -76,7 +76,7 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     if not isinstance(values, dict):
         return {}
     allowed = {
-        "director_skill": {"continuous_combat", "high_density_combat", "cinematic_gunfight", "ning_wenwu", "drama_scene", "situational_drama", "zhenzhen_pov"},
+        "director_skill": {"continuous_combat", "high_density_combat", "cinematic_gunfight", "ning_wenwu", "drama_scene", "situational_drama", "zhenzhen_pov", "wushu_combat"},
         "director_revision": {"1.0.0"},
         "authoring_revision": {"1.0.0"},
         "output_language": {"中文", "English"},

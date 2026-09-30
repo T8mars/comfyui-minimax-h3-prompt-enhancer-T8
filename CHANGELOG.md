@@ -3,6 +3,22 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.27.0] - 2026-09-30
+
+### Added
+
+- Add independent **Jojocodex-Wushu combat** to the existing H3 and Seedance
+  directional selector. Adapt body drive, support, response, graded feedback
+  and unfinished-action continuity without importing source formats, fixed
+  shots, forced injuries/winners, LoRA triggers or sampling defaults.
+- Preserve native modes, providers, language, media roles, first/last anchors,
+  camera/acting constraints, original timing and Relay semantics. Keep old
+  choices/messages/resources/workflows frozen and all widget/socket positions.
+- Retain the selection through existing local/cloud budgeting, bounded repairs
+  and recovery metadata. Add pinned provenance/rights notice, 20-round review
+  summary, two blank-key Check-only examples and compatibility/browser/package
+  regressions. These checks are not live LLM or rendered-video acceptance.
+
 ## [1.26.1] - 2026-09-30
 
 ### Fixed

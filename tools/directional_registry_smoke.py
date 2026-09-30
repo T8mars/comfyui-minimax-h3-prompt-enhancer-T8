@@ -67,11 +67,16 @@ assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "combat_camera_co
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
 module = sys.modules[spec.name + ".directional_skills"]
-assert len(module.DIRECTOR_OPTIONS) == 8 and module.DIRECTOR_LABELS[module.DIRECTOR_OPTIONS[0]] == "none"
+assert len(module.DIRECTOR_OPTIONS) == 9 and module.DIRECTOR_LABELS[module.DIRECTOR_OPTIONS[0]] == "none"
 for skill in ("drama_scene", "situational_drama", "zhenzhen_pov"):
     assert module.prepare_director_skill(skill, 2) == (skill, 2)
     assert module.director_metadata(skill, language="中文", mode="Seedance 2.0", shot_count=2)["authoring_revision"] == "1.0.0"
 assert (p / "directional_skills/zhenzhen_pov/NOTICE.md").is_file()
+assert module.prepare_director_skill("wushu_combat", 9) == ("wushu_combat", 9)
+assert "authoring_revision" not in module.director_metadata("wushu_combat", language="中文", mode="Seedance 2.0", shot_count=9)
+for target in ("h3", "seedance20"):
+    assert "Wushu action and continuity" in module.director_instruction("wushu_combat", target)
+assert (p / "directional_skills/wushu_combat/NOTICE.md").is_file()
 for name, loaded in list(sys.modules.items()):
     if name.startswith(spec.name) and getattr(loaded, "__file__", None):
         assert pathlib.Path(loaded.__file__).is_relative_to(p), name

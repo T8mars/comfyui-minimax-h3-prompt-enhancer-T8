@@ -1,0 +1,15 @@
+{
+  "id": "wushu_combat",
+  "version": "1.0.0",
+  "source_name": "武术打斗提示词skill",
+  "source_author": "Jojocodex",
+  "source_version": "2026-09-29b",
+  "source_repository": "Jojocodex/wushu-action-v7-minimax-h3-fl2va-ref2va-lora",
+  "source_commit": "991ddf56ef48badf9018adb2f8b7bdf3f9d5e762",
+  "primary_source": "武术打斗提示词skill.md",
+  "source_url": "https://huggingface.co/Jojocodex/wushu-action-v7-minimax-h3-fl2va-ref2va-lora/blob/991ddf56ef48badf9018adb2f8b7bdf3f9d5e762/%E6%AD%A6%E6%9C%AF%E6%89%93%E6%96%97%E6%8F%90%E7%A4%BA%E8%AF%8Dskill.md",
+  "source_sha256": "ad4661a01089302783d5be35df4c442afa5e6df0afc4d6583930cd403dd529ca",
+  "source_license_observation": "The model repository card declares other; a separate license for this text was not verified.",
+  "relationship": "Independently worded T8 adaptation of martial choreography and continuity methods; non-official. Source text, examples, model weights and output formats are not redistributed.",
+  "rights_notice": "NOTICE.md"
+}
