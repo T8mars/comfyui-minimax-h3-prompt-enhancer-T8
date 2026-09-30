@@ -16,6 +16,27 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### Qwen opt-in edit rules (1.28.0)
+
+Append `rewrite_profile` after every prior input; it is optional, socketless,
+advanced and defaults to Classic. Freeze the previous 22 saved names as the
+prefix; new saves have 23 fields and `t8_qwen_image21_widgets_schema=2`. A
+historical button tail cannot enable Edit-aware. Consistent native named
+metadata supports a host that drops the schema marker. Restore by name
+synchronously even when native widget order differs, linked prompt is omitted,
+key widgets exist or seed-control widgets do not. Every status action is
+nonserializable and idempotent; repeated refreshes recalculate, never accumulate
+height. Existing four outputs/recovery cache strings are frozen.
+After synchronous restoration, the next animation frame performs UI refreshes
+only; it must not replay saved values over a user's immediate new selection.
+
+Tests cover old 20/22 layouts, new marked 23 layouts, extra key before API mode
+or before seed, corrupted named metadata, linked text, seed control and button
+tails. The Chrome harness executes the real extension hooks; it is not a live
+RunningHub publish/reload. Both bundled Qwen examples keep their frozen Classic
+22 layouts; load the edit example and select Edit-aware in advanced settings to
+opt in. New marked 23 saves are tested through the actual frontend hooks.
+
 Combat Camera addition (2026-09-30): `T8CombatCameraConfig` uses only three native
 combos (`mode`, `continuity`, `impact`), no custom buttons or DOM widgets. H3 and
 Seedance append one optional custom-type socket **after** all prior schema inputs;

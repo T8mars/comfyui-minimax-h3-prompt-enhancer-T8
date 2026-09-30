@@ -881,7 +881,7 @@ def check() -> None:
                 )
             if node["type"] in expected_counts:
                 values = node.get("widgets_values", [])
-                counts = (31, 35) if node["type"] == "MiniMaxH3PromptEnhancerT8" else (expected_counts[node["type"]],)
+                counts = (31, 35) if node["type"] == "MiniMaxH3PromptEnhancerT8" else (22, 23) if node["type"] == "QwenImage21PromptEnhancerT8" else (expected_counts[node["type"]],)
                 if len(values) not in counts:
                     raise RuntimeError(f"{path.name}: invalid {node['type']} widget count {len(values)}")
                 local_index = {
@@ -899,6 +899,9 @@ def check() -> None:
                         raise RuntimeError(f"{path.name}: Qwen seed/control values are positionally misaligned")
                     if not isinstance(values[20], str) or values[21] != "normal":
                         raise RuntimeError(f"{path.name}: Qwen recovery values are positionally misaligned")
+                    if len(values) == 23 and (values[22] not in ("经典兼容 / Classic", "编辑专用（T8）/ Edit-aware")
+                            or node.get("properties", {}).get("t8_qwen_image21_widgets_schema") != 2):
+                        raise RuntimeError(f"{path.name}: Qwen edit profile lacks its versioned layout marker")
                     if node.get("title", "").startswith("填写 API Key"):
                         raise RuntimeError(f"{path.name}: misleading Qwen API Key title")
                 if node["type"] == "Seedance20PromptEnhancerT8":

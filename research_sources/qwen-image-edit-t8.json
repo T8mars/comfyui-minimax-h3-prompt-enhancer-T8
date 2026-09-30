@@ -1,0 +1,20 @@
+{
+  "schema_version": "t8-research-provenance/v1",
+  "review_date": "2026-10-01",
+  "upstream_repository": "https://github.com/QwenLM/Qwen-Image-2.1",
+  "reviewed_revision": "6627d87c6433151463ec4b48b8945a24fcf16a35",
+  "reviewed_prompt": "https://github.com/QwenLM/Qwen-Image-2.1/blob/6627d87c6433151463ec4b48b8945a24fcf16a35/prompt_rewrite/prompts/system_prompt_edit.txt",
+  "upstream_license": "Qwen Research License",
+  "license_url": "https://github.com/QwenLM/Qwen-Image-2.1/blob/6627d87c6433151463ec4b48b8945a24fcf16a35/LICENSE",
+  "implementation": "Independently written compact T8 contract for general cloud/local LLMs; not a verbatim official prompt or a dedicated PE runtime.",
+  "bundled_resource": "resources/qwen-image-edit-t8.md",
+  "normalized_utf8_sha256": "97a14a4cd341f19d908164b263e80ba4b15374e2330cd6e9869cd2134e2bbdfa",
+  "contract_version": "edit_t8_v1",
+  "differences": [
+    "Optional advanced profile; Classic and text-to-image remain unchanged.",
+    "Fixed UI ratio has priority; ratio_follow is resolved from original image dimensions into the existing ratio port.",
+    "Single-image canonical tags are accepted, and explicitly unused multi-image sources generate warnings.",
+    "No official PE weights, model loader, inference bridge, canvas, sampler, or automatic remote prompt updates."
+  ],
+  "rights_note": "Upstream materials retain their original terms. T8 authorship does not relicense upstream prompts or weights; a dedicated PE deployment must independently review its applicable terms."
+}

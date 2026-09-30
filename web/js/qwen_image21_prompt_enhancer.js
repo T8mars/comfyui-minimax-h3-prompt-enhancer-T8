@@ -27,6 +27,10 @@ const API_MODES = new Set([
     ...LOCAL_QWEN_API_MODES,
 ]);
 const SEED_CONTROLS = new Set(["fixed", "increment", "decrement", "randomize"]);
+const CLASSIC_PROFILE = "经典兼容 / Classic";
+const EDIT_PROFILE = "编辑专用（T8）/ Edit-aware";
+const PROFILE_OPTIONS = new Set([CLASSIC_PROFILE, EDIT_PROFILE]);
+const PROFILE_SCHEMA = "t8_qwen_image21_widgets_schema";
 // Canonical workflow order has no api_key widget: the backend declares it as
 // force_input. The seed's linked control is a widget on newer frontends.
 const SERIALIZED_WIDGET_NAMES = [
@@ -36,11 +40,12 @@ const SERIALIZED_WIDGET_NAMES = [
     "local_max_tokens", "local_think_mode", "local_reasoning_effort",
     "local_video_sample_fps", "local_unload_policy", "local_comfy_memory_policy",
     "recovery_slot", "recovery_action",
+    "rewrite_profile",
 ];
-const WIDGET_DEFAULTS = { prompt: "", api_key: "", control_after_generate: "randomize", recovery_action: "normal" };
+const WIDGET_DEFAULTS = { prompt: "", api_key: "", control_after_generate: "randomize", recovery_action: "normal", rewrite_profile: CLASSIC_PROFILE };
 
 
-function savedWidgetValueMap(values) {
+function savedWidgetValueMap(values, data = {}) {
     // Some hosts omit a converted, linked prompt widget entirely rather than
     // serializing its empty value. Normalize that historical shape first.
     if (Array.isArray(values) && ["文生图 / Text-to-image", "图像编辑 / Image edit"].includes(values[0])
@@ -61,7 +66,7 @@ function savedWidgetValueMap(values) {
     const seedIndex = hasApiKey || keyBeforeSeed ? 10 : 9;
     if (typeof values[seedIndex] !== "number" || !Number.isFinite(values[seedIndex])) return null;
     const hasSeedControl = SEED_CONTROLS.has(values[seedIndex + 1]);
-    const names = SERIALIZED_WIDGET_NAMES.slice(0, -2);
+    const names = SERIALIZED_WIDGET_NAMES.slice(0, -3);
     if (!hasSeedControl) names.splice(names.indexOf("control_after_generate"), 1);
     if (hasApiKey) names.splice(names.indexOf("api_mode"), 0, "api_key");
     if (keyBeforeSeed) names.splice(names.indexOf("seed"), 0, "api_key");
@@ -73,6 +78,13 @@ function savedWidgetValueMap(values) {
         mapped.set("recovery_slot", recovery[0]);
         if (["normal", "restore_last"].includes(recovery[1])) mapped.set("recovery_action", "normal");
     }
+    // A button tail must never turn on a new contract in a historical workflow.
+    const declared = data.properties?.[PROFILE_SCHEMA] === 2;
+    const named = data.widgets_values_named;
+    const consistentNamed = named && names.every(name => name === "api_key" || named[name] === mapped.get(name));
+    const profile = recovery[2];
+    mapped.set("rewrite_profile", PROFILE_OPTIONS.has(profile) && (declared || consistentNamed && named.rewrite_profile === profile)
+        ? profile : CLASSIC_PROFILE);
     return mapped;
 }
 
@@ -112,6 +124,62 @@ function restoreWidgetValues(node, mapped, restoreSavedSlot = false) {
 
 export function qwenImage21SignUpUrl(apiMode) {
     return apiMode === AI_WORKSHOP_API_MODE ? AI_WORKSHOP_SIGN_UP_URL : SIGN_UP_URL;
+}
+
+
+export function installQwenImage21Status(node) {
+    if (node.t8QwenImage21Status || !node.addWidget) return;
+    let last = null;
+    let stale = false;
+    const find = name => node.widgets?.find(widget => widget.name === name);
+    const active = () => find("input_mode")?.value === "图像编辑 / Image edit" && find("rewrite_profile")?.value === EDIT_PROFILE;
+    let summary = "编辑专用：只改指定部分，其他内容引用原图保留。多图可写‘图1人物放进图2场景’；固定比例优先。";
+    const widget = addAction(node, "编辑结果状态 / Edit status", summary, () => window.alert(summary));
+    const refresh = () => {
+        const visible = active() || last?.profile === "edit_t8_v1" || last?.warning;
+        setActionVisible(widget, Boolean(visible));
+        widget.label = widget.name = stale ? "⚠ 配置已修改，尚未重新执行 / Changed" : last
+            ? `${last.warning ? "⚠" : "✓"} 上次结果：${last.profile === "edit_t8_v1" ? "编辑专用" : "经典"} · ${last.language} · ${last.follow || "固定/建议"} · ${last.ratio || "比例未校验"}`
+            : "编辑专用：待执行（点击查看说明）/ Ready";
+        widget.value = summary;
+        resizeNode(node);
+    };
+    node.t8QwenImage21Status = {
+        refresh,
+        stale() { stale = true; refresh(); },
+        reset() { last = null; stale = false; refresh(); },
+        update(message) {
+            try {
+                const parsed = JSON.parse(message?.t8_qwen_image21_status?.[0]);
+                last = {
+                    profile: parsed.profile === "edit_t8_v1" ? "edit_t8_v1" : "legacy",
+                    language: ["English", "中文"].includes(parsed.language) && parsed.structured ? parsed.language : "未校验",
+                    ratio: /^[1-9]\d{0,6}:[1-9]\d{0,6}$/.test(parsed.ratio) ? parsed.ratio : "",
+                    follow: /^<image(?:[1-9]|10)>$/.test(parsed.follow) ? parsed.follow : "",
+                    warning: Boolean(parsed.warning),
+                };
+                stale = false;
+                summary = `${last.warning ? "⚠ 请核对 / Check" : "结构通过，语义与实际出图效果仍需核对 / Structure checked only"}\n`
+                    + `上次执行 / Last result: ${last.profile}, ${last.language}, ${last.follow || "ratio"}, ${last.ratio || "unknown"}\n`
+                    + (parsed.over_limit ? "字数超限，完整草稿已保留。/ Character limit exceeded.\n" : "")
+                    + (parsed.repair_failed ? "一次纠正未成功，已保留可用草稿。/ One repair failed; draft retained.\n" : "")
+                    + "参考图比例可能不在下游预设列表内，请核对；不会自动裁剪或近似。/ No silent crop or nearest-ratio conversion.";
+                refresh();
+            } catch { /* Older cached runs may not provide a status message. */ }
+        },
+    };
+    for (const input of node.widgets || []) {
+        if (!SERIALIZED_WIDGET_NAMES.includes(input.name) || input.t8QwenStatusWrapped) continue;
+        input.t8QwenStatusWrapped = true;
+        const callback = input.callback;
+        input.callback = function () {
+            const result = callback?.apply(this, arguments);
+            node.t8QwenImage21Status.stale();
+            return result;
+        };
+        input.inputEl?.addEventListener("input", () => node.t8QwenImage21Status.stale());
+    }
+    refresh();
 }
 
 
@@ -199,6 +267,7 @@ export function installQwenImage21Actions(node) {
     }
     node.t8QwenImage21UpdateApiMode = updateApiMode;
     updateApiMode();
+    installQwenImage21Status(node);
 }
 
 
@@ -209,13 +278,15 @@ app.registerExtension({
         const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
         const originalOnConfigure = nodeType.prototype.onConfigure;
         const originalOnSerialize = nodeType.prototype.onSerialize;
+        const originalOnExecuted = nodeType.prototype.onExecuted;
+        const originalOnConnectionsChange = nodeType.prototype.onConnectionsChange;
         nodeType.prototype.onNodeCreated = function () {
             originalOnNodeCreated?.apply(this, arguments);
             installQwenImage21Actions(this);
         };
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
-            const mapped = savedWidgetValueMap(args[0]?.widgets_values);
+            const mapped = savedWidgetValueMap(args[0]?.widgets_values, args[0]);
             if (mapped) args[0] = { ...args[0], widgets_values: projectWidgetValues(this, mapped),
                 widgets_values_named: Object.fromEntries(mapped) };
             const result = originalOnConfigure?.apply(this, args);
@@ -223,7 +294,13 @@ app.registerExtension({
                 this.title = EXAMPLE_TITLE;
             }
             restoreWidgetValues(this, mapped, true);
-            requestAnimationFrame(() => restoreWidgetValues(this, mapped));
+            this.t8QwenImage21Status?.reset();
+            // Values have already been restored synchronously. A second restore
+            // on the next frame would overwrite edits made just after loading.
+            requestAnimationFrame(() => {
+                this.t8QwenImage21UpdateApiMode?.();
+                this.t8QwenImage21Status?.refresh();
+            });
             return result;
         };
         nodeType.prototype.onSerialize = function (serialized) {
@@ -234,6 +311,18 @@ app.registerExtension({
                     : (value === null || value === undefined || value === "") && Object.hasOwn(WIDGET_DEFAULTS, name)
                         ? WIDGET_DEFAULTS[name] : value);
             syncNamedWidgetSerialization(serialized, SERIALIZED_WIDGET_NAMES);
+            serialized.properties ||= {};
+            serialized.properties[PROFILE_SCHEMA] = 2;
+        };
+        nodeType.prototype.onExecuted = function (message) {
+            originalOnExecuted?.apply(this, arguments);
+            installQwenImage21Status(this);
+            this.t8QwenImage21Status?.update(message);
+        };
+        nodeType.prototype.onConnectionsChange = function () {
+            const result = originalOnConnectionsChange?.apply(this, arguments);
+            this.t8QwenImage21Status?.stale();
+            return result;
         };
     },
 });

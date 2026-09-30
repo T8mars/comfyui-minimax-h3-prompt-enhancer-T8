@@ -9,7 +9,7 @@ workflows use the current deterministic widget order.
 | `MiniMaxH3PromptEnhancerT8` | 38 | 16, 17, 19, or 21 values; also 22/31/35/36 | Preserves all prior 36 positions, including Relay and directional Skill. Appends quality Off and creation Original. A removed upload URL is not reused as a video URL. | Slot 0 `enhanced_prompt`; appended global/local/time/length/report |
 | `Seedance20PromptEnhancerT8` | 38 | 23 or 25 values; also both published/runtime 26/35 and current 36 layouts | Maps historical values by name, preserving integer length, provider, seed, model and directional Skill. Appends quality Off and creation Original. A removed `openai_upload_url` is not reused as a video URL. | `enhanced_prompt` |
 | `MiniMaxMusic3PromptEnhancerT8` | 38 | Both published-order and ComfyUI runtime-order 31-value layouts | Detects the old layout from the API-mode position, maps values by widget name, then appends 1.1 local-model controls with defaults. | `lyrics`, `music_caption`, `music3_payload_json`, `enhancement_report_json` |
-| `QwenImage21PromptEnhancerT8` | 22 | 20-value examples, published layouts with an `api_key` placeholder, runtimes without that `force_input` widget or without the linked seed control, and 23+ values with trailing UI buttons | Detects the API-mode and seed-control positions, restores fields by name, discards only unrecognized UI tails, and writes a stable 22-value array excluding the key and buttons. | `rewritten_prompt`, `wh_ratio`, `qwen_image_request_json`, `enhancement_report_json` |
+| `QwenImage21PromptEnhancerT8` | 23 | Historical 20/22 layouts, key placeholders, missing seed controls, linked text and UI tails; new marked 23 layout | Preserves the original 22-field prefix and appends Classic/Edit-aware. A version marker or consistent named metadata distinguishes the new profile from an old button tail. Restores synchronously; deferred UI work cannot overwrite edits. | `rewritten_prompt`, `wh_ratio`, `qwen_image_request_json`, `enhancement_report_json` |
 
 Compatibility invariants:
 
@@ -24,6 +24,13 @@ Compatibility invariants:
   prompts may be unresolved during graph validation, so nonempty-prompt
   validation occurs at execution after upstream nodes finish. Local GGUF mode
   requires no API Key; only the exact misleading legacy example title is renamed.
+  Since 1.28.0, new saves append `rewrite_profile` at position 22 and mark
+  `t8_qwen_image21_widgets_schema=2`. Both bundled examples keep their original
+  Classic 22 values. Old/unmarked arrays never implicitly enable Edit-aware.
+  The profile is optional/advanced and only applies to Image edit. Classic and
+  text-to-image keep the frozen prompt contract; Edit-aware request/report JSON
+  explicitly use v2 while the four output indices and recovery strings stay
+  unchanged. All routes use at most one total logical format/length repair.
 
 - Quality and causal creation are optional, append-only at widget positions 36/37;
   old workflow outputs and connection indices remain stable. Off/Original preserve

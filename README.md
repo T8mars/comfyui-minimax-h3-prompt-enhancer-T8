@@ -60,9 +60,9 @@
 
 ## 新增：Qwen Image 2.1 图像提示词增强
 
-新增独立节点 **Qwen Image 2.1 Prompt Enhancer**：把文字提示词改写为图像生成提示词，也支持连接 1–10 张有序参考图进行图像编辑。它严格使用仓库内冻结的 Image Prompt Rewriting Expert Skill，输出英文画面描述和 `wh_ratio` JSON，并提供最大提示词字数、比例、透明 RGBA 和四类渠道设置。
+独立节点 **Qwen Image 2.1 Prompt Enhancer**：把文字提示词改写为图像生成提示词，也支持连接 1–10 张有序参考图进行图像编辑。默认 **经典兼容 / Classic** 保留冻结 Skill、英文描述与旧工作流。高级设置新增 **编辑规则 → 编辑专用（T8）/ Edit-aware**，仅图像编辑生效：只改指定部分，其他身份/饰品/产品/构图引用原图保留；中文需求默认中文，画内文字不自动翻译。多图使用 `<imageN>` 明确来源，自动比例可跟随目标原图的真实宽高比，固定 UI 比例优先；四个输出端口及原有渠道不变。节点显示上次编辑结果状态，配置改动后会标记尚未重新执行。
 
-默认渠道为贞贞平价小屋，默认模型为 `qwen/qwen3.8-flash-next`。云端请求默认提供 8192 个输出 Token（包含模型思考），共享渠道配置中如果明确填写 `max_tokens` 或 `max_completion_tokens` 则以用户设置为准；这样可避免长 Skill 在思考阶段耗尽默认预算。`auto` 不向模型施加用户比例限制，最终比例单独输出到 `wh_ratio`，不会写入正文；透明模式会要求 RGBA、Alpha 通道和透明背景语义。默认云端已真实验收 0/1/3/10 张不同图片、严格 JSON、固定与自动比例、透明模式和一次长度纠正；AI 工坊、OpenAI 兼容及本地 GGUF 仍需各自环境做真实质量验收。
+默认渠道为贞贞平价小屋，默认模型为 `qwen/qwen3.8-flash-next`。云端默认 8192 个输出 Token（含思考），共享配置明确的 `max_tokens` / `max_completion_tokens` 优先。最多一次格式/长度纠正，失败时保留完整可用原稿并警告，不再额外触发第三次生成。`auto` 不强加预设比例，例如原图 1080×1590 跟随时输出 `36:53`，请确认下游支持，不会近似或裁剪；透明模式只要求 RGBA、Alpha 通道和透明背景的提示词语义，不生成图片。经典模式有历史云端实测记录；新编辑规则的代码/本地浏览器回归不等于真实 API A/B、RunningHub 发布重载或最终出图质量验收。请求 JSON 为元数据，不是可直接提交的渲染 API 请求体。专用 PE 请安装 [独立 Qwen Prompt Rewrite 节点](https://github.com/T8mars/Comfyui-Qwen-Image-Prompt-Rewrite-T8)，这里不重复接入专用模型。
 
 [图像提示词节点说明](web/js/docs/qwen_image21.md) · [文生图工作流](example_workflows/qwen_image21_text_example.json) · [多图编辑工作流](example_workflows/qwen_image21_edit_example.json)
 

@@ -66,3 +66,72 @@ test("Qwen serializer keeps native named and stable positional maps consistent a
     assert.equal(reloaded.widgets.find(w => w.name === "seed").value, 0);
     assert.equal(reloaded.widgets.find(w => w.name === "local_model").value, current[11]);
 });
+
+const classic = "经典兼容 / Classic";
+const editAware = "编辑专用（T8）/ Edit-aware";
+const schemaKey = "t8_qwen_image21_widgets_schema";
+
+test("new profile appends to the frozen 22-field order and survives a versioned reload before RAF", async () => {
+    const { Node, names } = await harness();
+    assert.equal(names.length, 23);
+    assert.equal(names.at(-1), "rewrite_profile");
+    const node = new Node();
+    [...current, editAware].forEach((value, i) => { node.widgets[i].value = value; });
+    const saved = {};
+    node.onSerialize(saved);
+    assert.equal(saved.properties[schemaKey], 2);
+    assert.deepEqual([...saved.widgets_values].slice(0, 22), current);
+    const reload = new Node();
+    reload.widgets.reverse(); // The native runtime order is not the saved order.
+    reload.onConfigure({ ...saved, widgets_values: [...saved.widgets_values, "trailing button"] });
+    assert.equal(reload.widgets.find(w => w.name === "rewrite_profile").value, editAware);
+    assert.equal(reload.widgets.find(w => w.name === "api_mode").value, current[5]);
+    assert.equal(reload.widgets.find(w => w.name === "seed").value, 0);
+});
+
+test("old workflows always default Classic even when a button tail resembles the new choice", async () => {
+    const { Node } = await harness();
+    for (const values of [current, [...current, editAware], current.slice(0, 20),
+                          [...current.slice(0, 20), "tooltip", "normal", editAware]]) {
+        const node = new Node();
+        node.widgets.find(w => w.name === "rewrite_profile").value = editAware;
+        node.onConfigure({ widgets_values: values });
+        assert.equal(node.widgets.find(w => w.name === "rewrite_profile").value, classic);
+        assert.equal(node.widgets.find(w => w.name === "seed").value, 0);
+    }
+});
+
+test("consistent native named metadata retains new choice if host strips schema marker", async () => {
+    const { Node, names } = await harness();
+    const values = [...current, editAware];
+    const node = new Node();
+    node.onConfigure({ widgets_values: values, widgets_values_named: Object.fromEntries(names.map((name, i) => [name, values[i]])) });
+    assert.equal(node.widgets.find(w => w.name === "rewrite_profile").value, editAware);
+});
+
+test("deferred layout work does not overwrite a selection made immediately after loading", async () => {
+    const { Node, frames } = await harness();
+    const node = new Node();
+    node.onConfigure({ widgets_values: current });
+    node.widgets.find(w => w.name === "rewrite_profile").value = editAware;
+    node.widgets.find(w => w.name === "seed").value = 42;
+    frames.splice(0).forEach(callback => callback());
+    assert.equal(node.widgets.find(w => w.name === "rewrite_profile").value, editAware);
+    assert.equal(node.widgets.find(w => w.name === "seed").value, 42);
+});
+
+test("versioned key/omitted linked prompt/seed control migrations preserve new choice", async () => {
+    const { Node } = await harness();
+    for (const location of ["beforeApi", "beforeSeed", "noPrompt", "noControl"]) {
+        const values = [...current, editAware];
+        if (location === "beforeApi") values.splice(5, 0, "");
+        if (location === "beforeSeed") values.splice(9, 0, "");
+        if (location === "noPrompt") values.shift();
+        if (location === "noControl") values.splice(10, 1);
+        const node = new Node();
+        node.onConfigure({ widgets_values: values, properties: { [schemaKey]: 2 } });
+        assert.equal(node.widgets.find(w => w.name === "rewrite_profile").value, editAware, location);
+        assert.equal(node.widgets.find(w => w.name === "local_model").value, current[11], location);
+        assert.equal(node.widgets.find(w => w.name === "seed").value, 0, location);
+    }
+});

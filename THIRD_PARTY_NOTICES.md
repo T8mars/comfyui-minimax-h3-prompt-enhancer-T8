@@ -21,6 +21,23 @@ Those official materials remain copyright MiniMax-AI and are not relicensed by
 the T8 project license. They are bundled solely to implement the corresponding
 official prompt-writing contracts with deterministic provenance.
 
+## Qwen Image edit-rule research
+
+The optional T8 Edit-aware contract (`resources/qwen-image-edit-t8.md`) is
+independently written for general-language-model prompt enhancement, after
+reviewing QwenLM/Qwen-Image-2.1's edit prompt at commit
+`6627d87c6433151463ec4b48b8945a24fcf16a35`. The full official edit prompt,
+dedicated PE model weights, loader and canvas/sampler bridge are not bundled by
+this feature. Provenance and the local resource checksum are recorded in
+`research_sources/qwen-image-edit-t8.json`.
+
+Upstream's [Qwen Research License](https://github.com/QwenLM/Qwen-Image-2.1/blob/6627d87c6433151463ec4b48b8945a24fcf16a35/LICENSE)
+retains its restrictions and notices for upstream materials; this project does
+not relicense them or represent independent T8 wording as permission to use
+upstream PE weights commercially. Review applicable terms separately when using
+that dedicated runtime. The pre-existing Classic Skill resource remains
+unchanged by this feature.
+
 ## Local Qwen provider
 
 The optional local provider installs and runs third-party components that are not

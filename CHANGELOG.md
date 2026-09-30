@@ -3,6 +3,41 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.28.0] - 2026-10-01
+
+### Added
+
+- Add optional advanced T8 Edit-aware rules to Qwen Image 2.1; Classic remains
+  the default and text-to-image retains the original frozen contract. Clarify
+  requested edits, preserve untargeted content by reference, distinguish prose
+  language from lettering, and map up to ten sources/batch members numerically.
+- Resolve a canvas follow decision using original image dimensions without
+  nearest-preset conversion or silent cropping. Keep the four output ports;
+  opt-in request/report v2 records decisions and original dimensions. UI status
+  shows structural checks only and becomes stale on widget/socket changes.
+- Append a versioned 23rd serialized profile field after the frozen 22-field
+  prefix. Keep old layouts, bundled examples and recovery strings compatible;
+  users opt in through advanced settings. Document independent provenance and the
+  separate dedicated PE project, without a new PE loader or dependency.
+
+### Fixed
+
+- Unify format/length handling into at most one logical repair on cloud/local
+  routes. Invalid length repairs no longer cause an unreported third generation;
+  preserve the best complete valid first draft when repair fails, with warnings.
+- Do not expose unclosed thinking blocks as edit prompts, or private provider
+  repair errors in report JSON. Parse strict JSON safely with escaped lettering.
+- Remove a second deferred Qwen value restore that could overwrite a user's
+  selection immediately after workflow loading. Deferred work now updates UI
+  only; status/actions never serialize or cumulatively enlarge the node.
+
+### Verification scope
+
+- Frozen 1.27.1 schema/input/output and Classic-contract comparisons, provider
+  routing/recovery tests and actual-extension local Chrome save/reload tests.
+  These do not claim live API A/B, RunningHub production or rendered-image
+  artistic-quality acceptance for the new rules.
+
 ## [1.27.1] - 2026-10-01
 
 ### Fixed
