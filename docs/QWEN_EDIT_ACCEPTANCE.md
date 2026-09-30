@@ -1,7 +1,13 @@
 # Qwen T8 edit rules: acceptance evidence and boundaries
 
-Date: 2026-10-01. Candidate: 1.28.0. Frozen compatibility baseline:
+Date: 2026-10-01. Candidate: 1.28.1 (feature introduced in 1.28.0). Frozen compatibility baseline:
 `637036b0bd0ef4e966691983c20e82c2435761ea` (1.27.1).
+
+The 1.28.0 publishing gate passed its full suite and Chrome checks. The separate
+minimum/latest ComfyUI matrix failed while retrieving this frozen source because
+its shallow-checkout fetch list omitted the revision (run `36768085170`,
+`git show` exit 128). 1.28.1 adds the same revision to that workflow and checks
+both fetch lists. It changes CI metadata only, not the feature's runtime rules.
 
 ## Reproducible local gates
 

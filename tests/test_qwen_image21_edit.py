@@ -23,6 +23,13 @@ def payload(prompt="把<image1>的背景换成浅灰墙，其他内容保持原�
 
 
 class PureEditContractTests(unittest.TestCase):
+    def test_both_ci_gates_fetch_the_frozen_compatibility_revision(self):
+        for name in ["verify.yml", "publish_action.yml"]:
+            workflow = (PROJECT_ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
+            fetch_line = next(line for line in workflow.splitlines() if "git -C _source fetch" in line)
+            with self.subTest(workflow=name):
+                self.assertIn(FROZEN_REVISION, fetch_line)
+
     def validate(self, data=None, **kwargs):
         return edit.validate(data or payload(), **{
             "brief": "把图1的背景换成浅灰墙", "image_map": image_map(),

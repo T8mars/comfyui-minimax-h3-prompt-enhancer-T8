@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.28.1] - 2026-10-01
+
+### Fixed
+
+- Fetch the pinned 1.27.1 Qwen compatibility baseline in both CI workflows.
+  The 1.28.0 release gate fetched it correctly, but the separate minimum/latest
+  ComfyUI matrix did not; its logs confirmed `git show` failed before the three
+  frozen comparisons could run. Add a regression checking both workflow fetch
+  commands. No runtime contract, widgets, outputs or provider behavior changed.
+
 ## [1.28.0] - 2026-10-01
 
 ### Added
