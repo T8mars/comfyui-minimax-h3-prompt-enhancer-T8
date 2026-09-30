@@ -41,6 +41,33 @@ class ReleaseToolTests(unittest.TestCase):
             with patch.object(verify, "ROOT", root), self.assertRaisesRegex(verify.VerificationError, 'probe.mjs'):
                 verify.verify_secrets([module])
 
+    def test_registry_gate_rejects_observed_semicolon_density_in_python_prose(self):
+        files = verify.tracked_files()
+        read_bytes = Path.read_bytes
+        target = ROOT / "combat_camera.py"
+        for count, rejected in ((4, False), (5, True), (9, True)):
+            payload = ('instruction = "' + ' step;' * count + ' done"\n').encode()
+            def read(path):
+                return payload if path == target else read_bytes(path)
+            with self.subTest(count=count), patch.object(Path, "read_bytes", read):
+                if rejected:
+                    with self.assertRaisesRegex(
+                        verify.VerificationError, r"combat_camera\.py:dense_semicolon_line:1"
+                    ):
+                        verify.verify_registry_package_hygiene(files)
+                else:
+                    verify.verify_registry_package_hygiene(files)
+
+    def test_registry_gate_allows_same_prose_split_across_python_literals(self):
+        files = verify.tracked_files()
+        read_bytes = Path.read_bytes
+        target = ROOT / "combat_camera.py"
+        payload = b'instruction = (\n' + b'    "step; "\n' * 9 + b'    "done"\n)\n'
+        def read(path):
+            return payload if path == target else read_bytes(path)
+        with patch.object(Path, "read_bytes", read):
+            verify.verify_registry_package_hygiene(files)
+
     def test_repository_gate_parses_toml_and_yaml(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

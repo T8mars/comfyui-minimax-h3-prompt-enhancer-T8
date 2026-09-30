@@ -336,6 +336,14 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         for label, pattern in REGISTRY_SCANNER_TRIPWIRES.items():
             if pattern in payload:
                 findings.append(f"{path.relative_to(ROOT).as_posix()}:{label}")
+        # Observed 1.26.0 verdict: a long prompt literal matched $semicolon_5
+        # in python_minified_code. Conservatively guard physical Python lines,
+        # including prose, without claiming to reproduce all Registry rules.
+        for line_number, line in enumerate(payload.splitlines(), start=1):
+            if line.count(b";") >= 5:
+                findings.append(
+                    f"{path.relative_to(ROOT).as_posix()}:dense_semicolon_line:{line_number}"
+                )
     for path in shipped:
         if path.suffix.casefold() not in TEXT_SUFFIXES:
             continue

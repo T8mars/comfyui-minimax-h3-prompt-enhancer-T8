@@ -75,6 +75,24 @@ class CombatCameraTests(unittest.TestCase):
         self.assertEqual(camera.combat_camera_instruction(None), "")
         self.assertEqual(camera.combat_camera_instruction(camera.build_combat_camera_config(mode=camera.CAMERA_OFF)), "")
 
+    def test_registry_source_layout_keeps_exact_camera_mechanism_paragraph(self):
+        expected = "Choose only applicable mechanisms, NOT a ten-step choreography: " + "; ".join((
+            "rush -> low wide tracking/push retaining distance",
+            "crossing/dodge -> reveal the crossing point and transfer attention without losing sides",
+            "low sweep -> low lateral tracking of its path",
+            "leap -> upward tracking from the established takeoff",
+            "contact -> briefly stabilize readable contact, not necessarily stop actors",
+            "recoil -> widen/retreat ONLY along existing displacement",
+            "combo -> matched lateral tracking preserving exchange rhythm",
+            "counterattack -> reorient toward the existing threat",
+            "downward action -> follow its descent while keeping geography",
+            "ending -> inherit the specified final state, never invent a next attack, defeat or charged pose.",
+        ))
+        for target in ("h3", "seedance20"):
+            rule = camera.combat_camera_instruction(enabled(), model_target=target)
+            paragraph = next(line for line in rule.splitlines() if line.startswith("Choose only applicable mechanisms"))
+            self.assertEqual(paragraph, expected)
+
     def test_unconnected_and_off_messages_match_published_baseline(self):
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             old = original_function(filename, "_build_messages", module, BASELINE)

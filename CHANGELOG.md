@@ -3,6 +3,18 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.26.1] - 2026-09-30
+
+### Fixed
+
+- Split a long Combat Camera prompt literal into readable adjacent source
+  literals after Registry 1.26.0 flagged its semicolon density as
+  `python_minified_code`. Preserve the exact runtime instruction and all node,
+  API, widget and workflow behavior; add exact-text and release-gate regressions.
+- Guard shipped Python lines against the observed five-semicolon scan pattern,
+  including prose literals. This conservative local gate is not a substitute
+  for the Registry's full security scan or an assertion of Active status.
+
 ## [1.26.0] - 2026-09-30
 
 ### Added

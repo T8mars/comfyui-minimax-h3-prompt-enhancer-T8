@@ -91,7 +91,19 @@ def combat_camera_instruction(config: Any = None, model_target: str = "h3") -> s
         continuity,
         "Keep spatial landmarks and the travel axis readable. Motivate each camera change by an existing action; no arbitrary roll/orbit or impossible jump through walls. An occlusion is not permission to teleport. Respect fixed-camera requests using framing/focus only. Keep a first-person viewpoint owned by the same observer; never orbit outside that observer's body. Continuous observation does not require actors to move constantly or cancel a requested wait.",
         "For an eye-owned POV, describe natural head/body response, not a handheld camera operator; explicitly requested hands or held objects may remain in view. Do not turn 'no exterior view of my body' into 'hide my visible hand or object'.",
-        "Choose only applicable mechanisms, NOT a ten-step choreography: rush -> low wide tracking/push retaining distance; crossing/dodge -> reveal the crossing point and transfer attention without losing sides; low sweep -> low lateral tracking of its path; leap -> upward tracking from the established takeoff; contact -> briefly stabilize readable contact, not necessarily stop actors; recoil -> widen/retreat ONLY along existing displacement; combo -> matched lateral tracking preserving exchange rhythm; counterattack -> reorient toward the existing threat; downward action -> follow its descent while keeping geography; ending -> inherit the specified final state, never invent a next attack, defeat or charged pose.",
+        (
+            "Choose only applicable mechanisms, NOT a ten-step choreography: "
+            "rush -> low wide tracking/push retaining distance; "
+            "crossing/dodge -> reveal the crossing point and transfer attention without losing sides; "
+            "low sweep -> low lateral tracking of its path; "
+            "leap -> upward tracking from the established takeoff; "
+            "contact -> briefly stabilize readable contact, not necessarily stop actors; "
+            "recoil -> widen/retreat ONLY along existing displacement; "
+            "combo -> matched lateral tracking preserving exchange rhythm; "
+            "counterattack -> reorient toward the existing threat; "
+            "downward action -> follow its descent while keeping geography; "
+            "ending -> inherit the specified final state, never invent a next attack, defeat or charged pose."
+        ),
         impact,
         "Blur may support speed at the background/edges, not obscure limbs or decisive contact. Do not add environment debris absent from the scene. Choose one useful camera information task at a time rather than performing every mechanism. Fit motion within the existing duration and performance beats.",
         "Honor first/last-frame anchors; identity references are not automatically first frames. Edit only the authorized region/time/property, extend from the existing motion, and keep camera unchanged for an explicitly audio-only edit. Do not claim media was inspected if unavailable.",
