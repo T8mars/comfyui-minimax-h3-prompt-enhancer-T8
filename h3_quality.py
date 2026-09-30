@@ -418,6 +418,20 @@ def check_h3(text: str, *, task_type: str = "", duration: float = 0, shot_count:
             "unchecked": unchecked, "detected_shots": len(shots)}
 
 
+def _shot_timecode_edits(masked: str) -> list[tuple[int, int, str]]:
+    return [(match.start("comma"), match.end("comma"), ",") for match in re.finditer(
+        r"\[Shot\s+(?!1\])[1-9]\d*\]\s+At\s+\d{2}:[0-5]\d\.\d{3}(?P<comma>，|(?=[ \t]+[^,]))",
+        masked, re.I,
+    )]
+
+
+def repair_shot_timecodes(text: str) -> str:
+    """Normalize only a located cut comma; preserve timestamps and all literals."""
+    for start, end, replacement in reversed(_shot_timecode_edits(mask_literals(text))):
+        text = text[:start] + replacement + text[end:]
+    return text
+
+
 def repair_protocol(text: str, *, task_type: str = "", duration: float = 0) -> tuple[str, list[str]]:
     """Repair only located protocol; never normalize or rewrite the entire string."""
     edits: list[tuple[int, int, str]] = []
@@ -429,8 +443,7 @@ def repair_protocol(text: str, *, task_type: str = "", duration: float = 0) -> t
         next_shot = SHOT_RE.search(mask_literals(after))
         if first_literal and first_literal.group().lower().startswith("<d") and (not next_shot or first_literal.start() < next_shot.start()):
             edits.append((match.start(), match.end(), "(" + re.sub(r"\s+", "", match.group(1)).replace("，", ",") + ")"))
-    for match in re.finditer(r"\[Shot\s+(?!1\])[1-9]\d*\]\s+At\s+\d{2}:[0-5]\d\.\d{3}(?P<comma>，|(?=[ \t]+[^,]))", masked, re.I):
-        edits.append((match.start("comma"), match.end("comma"), ","))
+    edits.extend(_shot_timecode_edits(masked))
     for start, end, replacement in sorted(edits, reverse=True):
         text = text[:start] + replacement + text[end:]
     changes = ["located_protocol_punctuation"] if edits else []

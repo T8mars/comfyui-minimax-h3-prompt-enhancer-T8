@@ -89,7 +89,20 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     count = values.get("effective_shot_count")
     if isinstance(count, int) and not isinstance(count, bool) and 0 <= count <= 20:
         result["effective_shot_count"] = count
-    return result if "director_skill" in result else {}
+    if "director_skill" not in result:
+        result = {}
+    # Camera selection is independent of the scene Skill. All four fields must
+    # be valid; a partial block must not admit unrelated diagnostic strings.
+    camera_allowed = {
+        "combat_camera_mode": {"auto", "strong"},
+        "combat_camera_continuity": {"follow", "prefer_continuous"},
+        "combat_camera_impact": {"natural", "stylized"},
+        "combat_camera_revision": {"1.0.0"},
+    }
+    if all(isinstance(values.get(key), str) and values[key] in options
+           for key, options in camera_allowed.items()):
+        result.update({key: values[key] for key in camera_allowed})
+    return result
 
 
 def safe_quality_metadata(values: Any) -> dict[str, Any]:

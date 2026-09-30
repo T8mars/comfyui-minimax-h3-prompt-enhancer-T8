@@ -16,6 +16,15 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+Combat Camera addition (2026-09-30): `T8CombatCameraConfig` uses only three native
+combos (`mode`, `continuity`, `impact`), no custom buttons or DOM widgets. H3 and
+Seedance append one optional custom-type socket **after** all prior schema inputs;
+it does not belong in either 38-name widget serializer. Frozen 1.25.0 comparisons
+cover unchanged prior inputs/execute arguments and None/Off messages. All shipped
+H3/Seedance JSONs pass configure/serialize through the actual frontend hooks in
+the Node harness; the DOM/recovery harness also runs in Chrome. These are local
+contracts, not a RunningHub production deployment or real LLM evaluation.
+
 1. Enumerate schema inputs and the **actual** runtime widget names. V3 groups
    required and optional inputs; a `force_input=True` socket may have no widget.
    A linked text widget may be retained, serialized as `null`, or omitted by a

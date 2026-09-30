@@ -99,12 +99,14 @@ class MaintenanceTests(unittest.TestCase):
         with patch.object(sys, "path", [str(ROOT / "tools"), *sys.path]):
             directional_examples = load_tool("t8_directional_examples", "build_directional_skill_workflows.py")
             quality_examples = load_tool("t8_quality_examples", "build_quality_workflows.py")
-        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS)
+            camera_examples = load_tool("t8_combat_camera_examples", "build_combat_camera_workflows.py")
+        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS, *camera_examples.generate())
         self.assertEqual(len(workflows), 20 + len(STEMS))
         extra = [path for path in workflows if path.stem in STEMS]
         self.assertEqual({path.stem for path in extra}, set(STEMS))
         directional_examples.check()
         quality_examples.check()
+        camera_examples.check()
         workflows = [path for path in workflows if path.stem not in STEMS]
         self.assertEqual(len(workflows), 20)  # Original workflows plus the two Qwen Image examples retain checks.
         seen_types = set()

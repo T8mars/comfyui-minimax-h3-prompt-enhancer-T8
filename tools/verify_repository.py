@@ -293,6 +293,7 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "official_skills/h3-prompt-writing/SKILL.md",
         "official_skills/music-caption-rewriter/SKILL.md",
         "directional_skills.py",
+        "combat_camera.py",
         "h3_quality.py",
         "quality_pipeline.py",
         "web/js/h3_quality_ui.mjs",

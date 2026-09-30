@@ -6,6 +6,7 @@ from .h3_quality import (QUALITY_OFF, QUALITY_OPTIONS, CREATION_OFF, CREATION_OP
                          normalize_quality, normalize_creation, creation_instruction)
 from .quality_pipeline import seedance_quality_result, retained_draft_provider
 from comfy_api.latest import io
+from .combat_camera import T8CombatCameraConfigIO, resolve_combat_camera_config, combat_camera_instruction, camera_metadata
 from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
     prepare_director_skill, director_instruction, coordinated_performance_instruction,
     template_fact_lookup, director_metadata, preserve_director_on_repair, is_drama_skill, uses_authoring_contract, drama_authoring_instruction)
@@ -614,6 +615,7 @@ def _build_messages(
     character_performance_bible: Any = None,
     director_skill: Any = DIRECTOR_OFF,
     creation_mode: Any = CREATION_OFF,
+    combat_camera_config: Any = None,
 ) -> list[dict[str, Any]]:
     skill_id, shot_count = prepare_director_skill(director_skill, shot_count)
     directional = skill_id != DIRECTOR_OFF
@@ -692,6 +694,9 @@ def _build_messages(
     causal_rule = creation_instruction("seedance20", creation_mode, **({"requested_dialogue": True} if uses_authoring_contract(skill_id) else {}))
     if causal_rule:
         system_rules.append(causal_rule)
+    camera_rule = combat_camera_instruction(combat_camera_config, "seedance20")
+    if camera_rule:
+        system_rules.append(camera_rule)
     system_content = "\n\n".join(system_rules)
 
     user_lines = [
@@ -779,10 +784,12 @@ def enhance_seedance20_prompt(
     director_skill: Any = DIRECTOR_OFF,
     quality_mode: Any = QUALITY_OFF,
     creation_mode: Any = CREATION_OFF,
+    combat_camera_config: Any = None,
 ) -> str:
     try:
         quality_mode = normalize_quality(quality_mode)
         creation_mode = normalize_creation(creation_mode)
+        combat_camera_config = resolve_combat_camera_config(combat_camera_config)
     except ValueError as error:
         raise Seedance20PromptEnhancerError(str(error)) from error
     task_intent = _canonical_task_intent(task_intent)
@@ -863,6 +870,7 @@ def enhance_seedance20_prompt(
     )
     if progress_callback:
         metadata = director_metadata(director_skill, language=output_language, mode="Seedance 2.0", shot_count=shots)
+        metadata.update(camera_metadata(combat_camera_config))
         progress_callback("input_validated", asset_count=len(media_plan), **({"creation_metadata": metadata} if metadata else {}))
     if is_local_qwen_api_mode(effective_api_mode):
         try:
@@ -903,6 +911,7 @@ def enhance_seedance20_prompt(
                 character_performance_bible,
                 director_skill,
                 creation_mode,
+                combat_camera_config=combat_camera_config,
             ), output_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -945,6 +954,7 @@ def enhance_seedance20_prompt(
                 character_performance_bible,
                 director_skill,
                 creation_mode,
+                combat_camera_config=combat_camera_config,
             ), output_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -966,7 +976,7 @@ def enhance_seedance20_prompt(
                 )
                 if quality_mode == QUALITY_OFF and needs_local_language_repair(result, output_language):
                     result = provider.complete(
-                        preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill),
+                        preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill, combat_camera_config=combat_camera_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -1042,6 +1052,7 @@ def enhance_seedance20_prompt(
             character_performance_bible,
             director_skill,
             creation_mode,
+            combat_camera_config=combat_camera_config,
         ), output_language)
         cloud_attempts: list[int] = []
         result = _request_completion(
@@ -1061,7 +1072,7 @@ def enhance_seedance20_prompt(
             result = _request_completion(
                 session,
                 api_key,
-                preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill),
+                preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill, combat_camera_config=combat_camera_config),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -1423,6 +1434,8 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                                default=QUALITY_OFF, optional=True, tooltip="Check只检查；Repair最多追加1次纠正，失败保留完整稿。沿用Seedance自然语言，不套H3格式。详情见脱敏诊断。"),
                 io.Combo.Input("creation_mode", display_name="动作编排 / Creation", options=CREATION_OPTIONS,
                                default=CREATION_OFF, optional=True, tooltip="默认原有编排；因果优化在同次生成中补动作连接与状态继承，不新增规划调用，不覆盖事实和结束状态。"),
+                T8CombatCameraConfigIO.Input("combat_camera_config", display_name="战斗运镜配置（可选） / Combat camera",
+                                            optional=True, tooltip="连接 T8 战斗运镜配置；未连接保持原逻辑，可与表演导演叠加。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt")],
         )
@@ -1494,6 +1507,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         director_skill=DIRECTOR_OFF,
         quality_mode=QUALITY_OFF,
         creation_mode=CREATION_OFF,
+        combat_camera_config=None,
     ) -> io.NodeOutput:
         if str(recovery_action or RECOVERY_ACTION_NORMAL) == RECOVERY_ACTION_RESTORE:
             try:
@@ -1546,10 +1560,12 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         try:
             quality_mode = normalize_quality(quality_mode)
             creation_mode = normalize_creation(creation_mode)
+            combat_camera_config = resolve_combat_camera_config(combat_camera_config)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
         except (DirectionalSkillError, ValueError) as error:
             raise Seedance20PromptEnhancerError(str(error)) from error
         metadata = director_metadata(director_skill, language=output_language, mode="Seedance 2.0", shot_count=effective_shots)
+        metadata.update(camera_metadata(combat_camera_config))
         begin_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("Seedance20PromptEnhancerT8", api_mode, 4)
         try:
@@ -1597,6 +1613,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                 **({"director_skill": director_skill} if director_skill != DIRECTOR_OFF else {}),
                 **({"quality_mode": quality_mode} if quality_mode != QUALITY_OFF else {}),
                 **({"creation_mode": creation_mode} if creation_mode != CREATION_OFF else {}),
+                **({"combat_camera_config": combat_camera_config} if combat_camera_config is not None else {}),
                 provider_request_options=provider_request_options,
                 progress_callback=diagnostic.advance,
                 recovery_component="Seedance20PromptEnhancerT8",

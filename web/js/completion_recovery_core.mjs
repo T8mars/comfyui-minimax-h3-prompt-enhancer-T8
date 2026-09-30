@@ -42,7 +42,7 @@ export function recoveryMessage(status) {
         const provenance = meta?.director_skill
             ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"}${meta.authoring_revision ? ` · Authoring v${meta.authoring_revision}` : ""} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
             : "";
-        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance;
+        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta);
     }
     if (status.state === "ambiguous_partial") {
         return `上次请求返回途中断开，只收到 ${status.partial_chars || 0} 个字符；为防止把截断提示词当成完整结果，节点不会自动输出这段内容，也不会重新扣费。`;
@@ -88,7 +88,7 @@ export async function restoreCompletionResult({
             alertFn?.(recoveryMessage(status));
             return { queued: false, status };
         }
-        if (status.creation_metadata?.director_skill) alertFn?.(recoveryMessage(status));
+        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
         beforeQueue?.();
         actionWidget.value = RESTORE_ACTION;
         await queuePrompt(0, 1, [String(node.id)]);
@@ -100,4 +100,15 @@ export async function restoreCompletionResult({
         actionWidget.value = NORMAL_ACTION;
         node.setDirtyCanvas?.(true, true);
     }
+}
+
+function cameraSelectionMessage(meta) {
+    if (!["auto", "strong"].includes(meta?.combat_camera_mode)
+        || !["follow", "prefer_continuous"].includes(meta?.combat_camera_continuity)
+        || !["natural", "stylized"].includes(meta?.combat_camera_impact)) return "";
+    const mode = { auto: "AUTO", strong: "强化 / Strong" }[meta?.combat_camera_mode];
+    const continuity = { follow: "沿用原设定 / Follow", prefer_continuous: "偏好连续 / Prefer continuous" }[meta?.combat_camera_continuity];
+    const impact = { natural: "写实 / Natural", stylized: "风格化 / Stylized" }[meta?.combat_camera_impact];
+    if (!mode || !continuity || !impact || meta?.combat_camera_revision !== "1.0.0") return "";
+    return `\n上次战斗运镜选择 / Previous camera selection: ${mode} · ${continuity} · ${impact}。恢复原稿，不按当前配置重新生成；选择记录不代表效果验收。`;
 }

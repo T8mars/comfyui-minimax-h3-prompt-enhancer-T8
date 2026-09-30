@@ -2068,6 +2068,31 @@ class PromptEnhancerTests(unittest.TestCase):
         )
         self.assertEqual(result, expected)
 
+    def test_live_fixed_camera_cut_comma_is_repaired_without_paid_rewrite(self):
+        original = (
+            "integrated_multimodal_description: [Shot 1] 红袖甲在左，蓝袖乙在右，均空手。"
+            "\n[Shot 2] At 00:04.000，沿原轴固定全景，乙后撤一步，甲收拳停在左侧。"
+            "\n\noverall_soundscape: N/A\n\nnon_diegetic_music: N/A"
+        )
+        session = FakeSession(original)
+        result = self.run_enhancer(session, duration_seconds=8, shot_count="2")
+        self.assertEqual(result, original.replace("At 00:04.000，", "At 00:04.000,"))
+        self.assertEqual(len(session.chat_requests), 1)
+
+    def test_cut_comma_normalization_preserves_literal_text_and_field_offsets(self):
+        description = (
+            '[Shot 1] A sign reads "[Shot 2] At 00:04.000，". '
+            'Alice （S1） says: <d>[Chinese] [Shot 2] At 00:04.000，</d> '
+            '[Shot 2] At 00:04.000 fixed wide view.'
+        )
+        original = (f"overall_soundscape: N/A\nnon_diegetic_music: N/A\n"
+                    f"integrated_multimodal_description: {description}")
+        result = self.run_enhancer(FakeSession(original), duration_seconds=8, shot_count="2")
+        expected_description = description.replace("At 00:04.000 fixed", "At 00:04.000, fixed")
+        self.assertEqual(result, (f"integrated_multimodal_description: {expected_description}"
+                                 "\n\noverall_soundscape: N/A\n\nnon_diegetic_music: N/A"))
+        self.assertEqual(nodes._reorder_complete_fields(result, "T2VA"), result)
+
     def test_incomplete_or_duplicate_field_sets_are_returned_unchanged(self):
         expected = basic_output("I2VA")
         missing = expected.replace("overall_soundscape:", "missing_soundscape:")

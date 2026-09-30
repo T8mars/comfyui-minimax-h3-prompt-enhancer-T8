@@ -3,7 +3,25 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
-## [Unreleased]
+## [1.26.0] - 2026-09-30
+
+### Added
+
+- Add optional Combat Camera Config to H3 and Seedance 2.0, with conditional
+  action-path guidance, continuity and impact settings. Preserve native formats,
+  all existing widget/socket positions and exact unconnected/Off messages.
+- Retain camera settings through local/cloud budgeting, language/Relay/quality
+  corrections and recovery provenance; add two blank-key standalone examples.
+  Engineering regressions do not claim live LLM or rendered-video quality.
+
+### Fixed
+
+- Real Combat Camera A/B exposed fullwidth cut commas in both H3 arms. Normalize
+  only located shot-timecode punctuation in complete native outputs, preserving
+  timestamps, speech and visible literals without another model request.
+- Tighten active camera guidance around clothing versus added equipment,
+  eye-owned POV with visible hands, and explicit duration retention. Semantic
+  compliance still depends on the model; text A/B is not rendered-video proof.
 
 ## [1.25.0] - 2026-09-28
 

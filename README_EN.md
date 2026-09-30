@@ -6,6 +6,13 @@
 
 ## New: optional quality workflow and causal creation
 
+**Optional Combat Camera Config:** connect the new utility node to the H3 or Seedance
+enhancer's `combat_camera_config` socket. AUTO/Strong, continuity preference and
+Natural/Stylized impact support existing action without inventing combat. It can coexist
+with Performance Director. Unconnected/Off preserves old behavior; no extra planning
+request. [Guide and validation limits](docs/combat-camera.md) ·
+[H3 example](example_workflows/combat_camera_h3.json) / [Seedance example](example_workflows/combat_camera_seedance20.json).
+
 The existing H3/Seedance nodes offer **Check, one bounded quality correction, and Causal creation**. Off/Original preserve old workflows and native outputs. No extra form or wiring is required. Node guidance and redacted diagnostics show failures and correction counts. Corrections may cost one additional logical request; failures retain the complete draft. Text contracts do not prove complex semantics, physics or rendered video quality.
 
 [Bilingual guide and cost boundaries](docs/h3-quality-creation.md) · [Check example](example_workflows/h3_seedance_quality_check_example.json) · [Causal + repair example](example_workflows/h3_seedance_causal_creation_example.json)

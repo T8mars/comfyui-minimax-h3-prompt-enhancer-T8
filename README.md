@@ -15,6 +15,11 @@
 
 ## 新增：可选质量流程与因果动作优化
 
+**可选战斗运镜配置**：新增 `T8 战斗运镜配置 / Combat Camera Config`，连接 H3 或 Seedance 左侧的可选输入。
+支持 AUTO/强化、连续镜头偏好、写实/风格化，可叠加表演导演；只优化已有动作的拍法，不加敌人、招式或胜负。
+未连接/关闭保持原行为，不新增规划请求。[使用说明与验收边界](docs/combat-camera.md) ·
+[H3 示例](example_workflows/combat_camera_h3.json) / [Seedance 示例](example_workflows/combat_camera_seedance20.json)。
+
 原 H3 / Seedance 节点新增 **质量检查、最多一次质量纠正、因果动作优化**。默认 Off / Original，旧工作流和原生输出保持不变；不需新增表格或连线。检查失败和纠正次数会在节点说明卡与脱敏诊断中显示；追加纠正可能计费，失败保留完整稿。复杂语义、物理可达性及成片仍需人工验收，不把结构分当创作质量。
 
 [简明中英文说明与费用边界](docs/h3-quality-creation.md) · [只检查示例](example_workflows/h3_seedance_quality_check_example.json) · [因果优化＋纠正示例](example_workflows/h3_seedance_causal_creation_example.json)

@@ -800,16 +800,18 @@ def build() -> None:
 def check() -> None:
     from build_directional_skill_workflows import STEMS as directional_stems, check as check_directional
     from build_quality_workflows import STEMS as quality_stems, check as check_quality
+    from build_combat_camera_workflows import STEMS as camera_stems, check as check_camera
 
     check_directional()
     check_quality()
+    check_camera()
     expected_counts = {
         "MiniMaxH3PromptEnhancerT8": 31,
         "Seedance20PromptEnhancerT8": 35,
         "MiniMaxMusic3PromptEnhancerT8": 38,
         "QwenImage21PromptEnhancerT8": 22,
     }
-    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems))
+    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems, *camera_stems))
     if len(workflows) != 20:
         raise RuntimeError(f"Expected 20 example workflows, found {len(workflows)}")
     expected_inputs = {

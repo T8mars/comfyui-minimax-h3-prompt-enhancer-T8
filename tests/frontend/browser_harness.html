@@ -25,6 +25,15 @@ try {
   const capability = await import("../../web/js/provider_capability_ui.mjs");
   const recommendation = await import("../../web/js/template_recommendation.mjs");
   const directing = await import("../../web/js/h3_directional_skill_ui.mjs");
+  const recovery = await import("../../web/js/completion_recovery_core.mjs");
+  const cameraNotice = document.createElement("div");
+  cameraNotice.textContent = recovery.recoveryMessage({ recoverable: true, creation_metadata: {
+    combat_camera_mode: "strong", combat_camera_continuity: "follow", combat_camera_impact: "natural",
+    combat_camera_revision: "1.0.0", prompt: "PRIVATE_CAMERA_SENTINEL",
+  } });
+  document.body.append(cameraNotice);
+  check(cameraNotice.textContent.includes("上次战斗运镜选择") && cameraNotice.textContent.includes("不按当前配置重新生成"), "camera-only recovery shows original selection");
+  check(!cameraNotice.textContent.includes("PRIVATE_CAMERA_SENTINEL"), "camera recovery excludes arbitrary content");
   for (const target of ["h3", "seedance20"]) {
     const host = document.createElement("div");
     host.className = "node";

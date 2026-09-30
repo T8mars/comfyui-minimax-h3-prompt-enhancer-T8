@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 import { addQualityUI, qualityLabel, creationLabel } from "../../web/js/h3_quality_ui.mjs";
@@ -276,6 +276,44 @@ function sampleValues(names) {
     };
     return names.map((name) => concrete[name] ?? `saved ${name}`);
 }
+
+test("all shipped H3/Seedance workflows retain native widget positions with optional combat camera socket", async () => {
+    const directory = new URL("../../example_workflows/", import.meta.url);
+    const harnesses = {
+        MiniMaxH3PromptEnhancerT8: await enhancerHarness("minimax_h3_prompt_enhancer.js", "h3"),
+        Seedance20PromptEnhancerT8: await enhancerHarness("seedance20_prompt_enhancer.js", "seedance20"),
+    };
+    let cameraExamples = 0;
+    let checked = 0;
+    for (const filename of (await readdir(directory)).filter(name => name.endsWith(".json"))) {
+        const graph = JSON.parse(await readFile(new URL(filename, directory), "utf8"));
+        for (const saved of graph.nodes || []) {
+            const harness = harnesses[saved.type];
+            if (!harness) continue;
+            checked++;
+            const node = harness.configure([...saved.widgets_values]);
+            const first = harness.values(node);
+            const serialized = {};
+            node.onSerialize(serialized);
+            assert.equal(serialized.widgets_values.length, 38, filename);
+            assert.deepEqual(harness.values(harness.configure(serialized.widgets_values)), first, filename);
+            assert.ok(!harness.names.includes("combat_camera_config"));
+            if (saved.inputs.some(input => input.name === "combat_camera_config")) {
+                cameraExamples++;
+                assert.equal(saved.inputs.at(-1).name, "combat_camera_config");
+                assert.equal(saved.widgets_values.length, 38);
+                assert.equal(serialized.widgets_values[0], saved.widgets_values[0]);
+                assert.equal(first.api_mode, "贞贞平价小屋（推荐）");
+                assert.equal(first.control_after_generate, "fixed");
+                assert.equal(serialized.widgets_values[35], "none");
+                assert.deepEqual(graph.nodes.find(n => n.type === "T8CombatCameraConfig").widgets_values,
+                    ["强化（明确轨迹与落点）", "沿用原设定 / Follow", "写实 / Natural"]);
+            }
+        }
+    }
+    assert.equal(cameraExamples, 2);
+    assert.ok(checked >= 20);
+});
 
 test("H3 22/31/35/36 workflows preserve every field and fill only appended defaults", async () => {
     const harness = await enhancerHarness("minimax_h3_prompt_enhancer.js", "h3");

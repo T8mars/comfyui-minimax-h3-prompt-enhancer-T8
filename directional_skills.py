@@ -220,9 +220,13 @@ def director_metadata(value: Any, *, language: str, mode: str, shot_count: int) 
     return metadata
 
 
-def preserve_director_on_repair(repair_messages: list[dict[str, Any]], original_messages: list[dict[str, Any]], value: Any) -> list[dict[str, Any]]:
+def preserve_director_on_repair(repair_messages: list[dict[str, Any]], original_messages: list[dict[str, Any]], value: Any, *, combat_camera_config: Any = None) -> list[dict[str, Any]]:
     """Keep the original fact/directing contract in the existing bounded language repair."""
-    if normalize_director_skill(value) == DIRECTOR_OFF:
+    try:
+        from .combat_camera import resolve_combat_camera_config
+    except ImportError:
+        from combat_camera import resolve_combat_camera_config
+    if normalize_director_skill(value) == DIRECTOR_OFF and resolve_combat_camera_config(combat_camera_config) is None:
         return repair_messages
     repaired = [dict(message) for message in repair_messages]
     original_system = "\n".join(str(m["content"]) for m in original_messages if m["role"] == "system")

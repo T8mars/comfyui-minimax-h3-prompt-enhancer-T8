@@ -58,8 +58,12 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 28
-assert [s.node_id for s in schemas[-3:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8"]
+assert len(schemas) == 29
+assert [s.node_id for s in schemas[-4:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig"]
+camera = sys.modules[spec.name + ".combat_camera"]
+assert camera.combat_camera_instruction(None) == ""
+assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3")
+assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "combat_camera_config"
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
 module = sys.modules[spec.name + ".directional_skills"]

@@ -1,0 +1,275 @@
+{
+  "id": "cd59f0b3-c57e-523f-a5a1-699ccda9fa15",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写贞贞 API Key / Your API key (clear before sharing)"
+    },
+    {
+      "id": 3,
+      "type": "Seedance20PromptEnhancerT8",
+      "pos": [
+        1180,
+        40
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "提示词增强 LLM API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        },
+        {
+          "name": "combat_camera_config",
+          "shape": 7,
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Seedance20PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "8秒。两名成年练习者在空旷练功场进行木剑演练，红袖者向前一步挥剑，蓝袖者格挡后退半步，双方仍各持原来的木剑。保持侧面视角，让移动方向与接触清楚，不新增招式、敌人或胜负，无慢动作、定格、对白、字幕或配乐。",
+        "AUTO（根据意图与素材判断）",
+        "AUTO（自动判断）",
+        "8",
+        "AUTO（系统自动判断）",
+        "balanced",
+        "AUTO（按内容判断）",
+        "中文",
+        "官方优化",
+        "无（不使用 T8 案例）",
+        "火山官方（@图片N/@视频N/@音频N）",
+        "AUTO（按用户意图）",
+        "AUTO（按场景添加）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "none",
+        "off",
+        "off"
+      ],
+      "title": "seedance20 · 战斗运镜示例 / Combat camera"
+    },
+    {
+      "id": 5,
+      "type": "T8ShowText",
+      "pos": [
+        1180,
+        1250
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "Seedance 原生提示词 / Native Seedance prompt"
+    },
+    {
+      "id": 6,
+      "type": "T8CombatCameraConfig",
+      "pos": [
+        0,
+        230
+      ],
+      "size": [
+        450,
+        160
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "战斗运镜配置 / Combat camera config",
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CombatCameraConfig"
+      },
+      "widgets_values": [
+        "强化（明确轨迹与落点）",
+        "沿用原设定 / Follow",
+        "写实 / Natural"
+      ]
+    }
+  ],
+  "links": [
+    [
+      2,
+      1,
+      0,
+      3,
+      4,
+      "STRING"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      6,
+      0,
+      3,
+      8,
+      "T8_COMBAT_CAMERA_CONFIG"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

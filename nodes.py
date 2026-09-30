@@ -15,15 +15,20 @@ import numpy as np
 import requests
 try:
     from .h3_quality import (QUALITY_OFF, QUALITY_OPTIONS, CREATION_OFF, CREATION_OPTIONS,
-                             normalize_quality, normalize_creation, creation_instruction)
+                             normalize_quality, normalize_creation, creation_instruction, repair_shot_timecodes)
     from .quality_pipeline import h3_quality_result, retained_draft_provider
 except ImportError:
     from h3_quality import (QUALITY_OFF, QUALITY_OPTIONS, CREATION_OFF, CREATION_OPTIONS,
-                            normalize_quality, normalize_creation, creation_instruction)
+                            normalize_quality, normalize_creation, creation_instruction, repair_shot_timecodes)
     from quality_pipeline import h3_quality_result, retained_draft_provider
 from PIL import Image
 
 from comfy_api.latest import ComfyExtension, io
+
+try:
+    from .combat_camera import T8CombatCameraConfigIO, resolve_combat_camera_config, combat_camera_instruction, camera_metadata
+except ImportError:
+    from combat_camera import T8CombatCameraConfigIO, resolve_combat_camera_config, combat_camera_instruction, camera_metadata
 
 try:
     from .directional_skills import (DIRECTOR_OFF, DIRECTOR_OPTIONS, DirectionalSkillError,
@@ -1355,6 +1360,7 @@ def _build_messages(
     relay_config: dict[str, Any] | None = None,
     director_skill: Any = DIRECTOR_OFF,
     creation_mode: Any = CREATION_OFF,
+    combat_camera_config: Any = None,
 ) -> list[dict[str, Any]]:
     skill_id, shot_count = prepare_director_skill(director_skill, shot_count)
     directional = skill_id != DIRECTOR_OFF
@@ -1413,6 +1419,9 @@ def _build_messages(
     causal_rule = creation_instruction("h3", creation_mode, **({"requested_dialogue": True} if uses_authoring_contract(skill_id) else {}))
     if causal_rule:
         system_rules.append(causal_rule)
+    camera_rule = combat_camera_instruction(combat_camera_config, "h3")
+    if camera_rule:
+        system_rules.append(camera_rule)
     if relay_config:
         system_rules.append(relay_instruction(
             duration_seconds, relay_config["event_count"], relay_config["time_ranges"], task_type,
@@ -1564,6 +1573,12 @@ def _reorder_complete_fields(text: str, task_type: str) -> str:
         matches[field] = field_matches[0]
 
     source_order = sorted(matches, key=lambda field: matches[field].start())
+    # A live OFF/STRONG pair both returned a fullwidth comma after a valid cut
+    # timecode. This is protocol punctuation, not a paid semantic rewrite.
+    # Length may change for a missing comma, so rebuild offsets before ordering.
+    normalized = repair_shot_timecodes(text)
+    if normalized != text:
+        return _reorder_complete_fields(normalized, task_type)
     if source_order == fields:
         return text
 
@@ -1576,10 +1591,10 @@ def _reorder_complete_fields(text: str, task_type: str) -> str:
     return prefix + "\n\n".join(f"{field}: {sections[field]}" for field in fields)
 
 
-def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF):
+def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF, *, combat_camera_config=None):
     messages = local_language_repair_messages(text, language)
     if original_messages is not None:
-        messages = preserve_director_on_repair(messages, original_messages, director_skill)
+        messages = preserve_director_on_repair(messages, original_messages, director_skill, combat_camera_config=combat_camera_config)
     if relay_config:
         messages[0]["content"] += (
             "\nKeep the complete Relay JSON object and its keys, events, weights and end_state fields. "
@@ -1639,6 +1654,7 @@ def _relay_repair_messages(text, duration, config, task_type, messages):
 def _next_relay_correction(
     text, duration, config, task_type, messages, language, *, format_used, language_used, director_skill=DIRECTOR_OFF,
     skip_language=False,
+    combat_camera_config=None,
 ):
     repair = _relay_repair_messages(text, duration, config, task_type, messages)
     if repair:
@@ -1652,7 +1668,7 @@ def _next_relay_correction(
             raise PromptEnhancerError(
                 "Prompt Relay descriptive fields still do not match the selected output language after one correction."
             )
-        return "language", _h3_language_repair_messages(text, language, config, messages, director_skill)
+        return "language", _h3_language_repair_messages(text, language, config, messages, director_skill, combat_camera_config=combat_camera_config)
     return None
 
 
@@ -1702,10 +1718,12 @@ def enhance_prompt(
     director_skill: Any = DIRECTOR_OFF,
     quality_mode: Any = QUALITY_OFF,
     creation_mode: Any = CREATION_OFF,
+    combat_camera_config: Any = None,
 ) -> str:
     try:
         quality_mode = normalize_quality(quality_mode)
         creation_mode = normalize_creation(creation_mode)
+        combat_camera_config = resolve_combat_camera_config(combat_camera_config)
     except ValueError as error:
         raise PromptEnhancerError(str(error)) from error
     task_type = _canonical_task_type(task_type)
@@ -1794,6 +1812,7 @@ def enhance_prompt(
     if progress_callback:
         metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
                                      mode=RELAY if relay_config else NORMAL, shot_count=shot_count)
+        metadata.update(camera_metadata(combat_camera_config))
         progress_callback("input_validated", asset_count=len(media_plan), **({"creation_metadata": metadata} if metadata else {}))
     if is_local_qwen_api_mode(effective_api_mode):
         try:
@@ -1834,6 +1853,7 @@ def enhance_prompt(
                 relay_config,
                 director_skill,
                 creation_mode,
+                combat_camera_config=combat_camera_config,
             ), effective_local_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -1873,6 +1893,7 @@ def enhance_prompt(
                 relay_config,
                 director_skill,
                 creation_mode,
+                combat_camera_config=combat_camera_config,
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -1897,6 +1918,7 @@ def enhance_prompt(
                             effective_local_language, format_used=format_used, language_used=language_used,
                             skip_language=quality_mode != QUALITY_OFF,
                             director_skill=director_skill,
+                            combat_camera_config=combat_camera_config,
                         )
                         if correction is None:
                             break
@@ -1909,7 +1931,7 @@ def enhance_prompt(
                         language_used = language_used or kind == "language"
                 elif quality_mode == QUALITY_OFF and needs_local_language_repair(response_text, effective_local_language):
                     response_text = provider.complete(
-                        _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill),
+                        _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -1982,6 +2004,7 @@ def enhance_prompt(
             relay_config,
             director_skill,
             creation_mode,
+            combat_camera_config=combat_camera_config,
         ), effective_cloud_language)
         cloud_attempts: list[int] = []
         response_text = _request_completion(
@@ -2005,6 +2028,7 @@ def enhance_prompt(
                     effective_cloud_language, format_used=format_used, language_used=language_used,
                     skip_language=quality_mode != QUALITY_OFF,
                     director_skill=director_skill,
+                    combat_camera_config=combat_camera_config,
                 )
                 if correction is None:
                     break
@@ -2022,7 +2046,7 @@ def enhance_prompt(
             response_text = _request_completion(
                 session,
                 api_key,
-                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config, messages, director_skill),
+                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -2370,6 +2394,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                                default=QUALITY_OFF, optional=True, tooltip="Off保留原行为；Check只检查；Repair精确修协议，最多追加1次LLM纠正。失败保留完整稿，详情见脱敏诊断；不代表成片通过。"),
                 io.Combo.Input("creation_mode", display_name="动作编排 / Creation", options=CREATION_OPTIONS,
                                default=CREATION_OFF, optional=True, tooltip="原有编排不变；因果优化在同一次生成中补动作衔接与状态继承，不新增规划请求，不覆盖原事实、台词、镜头数及结束状态。"),
+                T8CombatCameraConfigIO.Input("combat_camera_config", display_name="战斗运镜配置（可选） / Combat camera",
+                                            optional=True, tooltip="连接 T8 战斗运镜配置；未连接保持原逻辑，可与表演导演叠加。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt"),
                      io.String.Output(display_name="global_prompt"),
@@ -2449,6 +2475,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         director_skill=DIRECTOR_OFF,
         quality_mode=QUALITY_OFF,
         creation_mode=CREATION_OFF,
+        combat_camera_config=None,
     ) -> io.NodeOutput:
         if relay_mode not in (NORMAL, RELAY):
             raise PromptEnhancerError("Unsupported Relay output mode.")
@@ -2515,11 +2542,13 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         try:
             quality_mode = normalize_quality(quality_mode)
             creation_mode = normalize_creation(creation_mode)
+            combat_camera_config = resolve_combat_camera_config(combat_camera_config)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
         except (DirectionalSkillError, ValueError) as error:
             raise PromptEnhancerError(str(error)) from error
         metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
                                      mode=relay_mode, shot_count=effective_shots)
+        metadata.update(camera_metadata(combat_camera_config))
         begin_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("MiniMaxH3PromptEnhancerT8", api_mode, 4)
         try:
@@ -2568,6 +2597,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 **({"director_skill": director_skill} if director_skill != DIRECTOR_OFF else {}),
                 **({"quality_mode": quality_mode} if quality_mode != QUALITY_OFF else {}),
                 **({"creation_mode": creation_mode} if creation_mode != CREATION_OFF else {}),
+                **({"combat_camera_config": combat_camera_config} if combat_camera_config is not None else {}),
             )
             if relay_enabled:
                 compiled = compile_relay_response(result, duration_seconds, relay_config["event_count"], relay_config["time_ranges"], _canonical_task_type(task_type), _effective_output_language(output_language, official_skill_profile))

@@ -7,6 +7,7 @@ import {
     RESTORE_ACTION,
     ensureUniqueSlot,
     restoreCompletionResult,
+    recoveryMessage,
 } from "../../web/js/completion_recovery_core.mjs";
 
 
@@ -24,6 +25,28 @@ function fixture(slot = "t8-recovery-test-slot-0001") {
     node.graph._nodes = [node];
     return { node, slotWidget, actionWidget };
 }
+
+test("camera-only recovery discloses historical selection without claiming application or leaking fields", async () => {
+    const metadata = { combat_camera_mode: "strong", combat_camera_continuity: "prefer_continuous",
+        combat_camera_impact: "natural", combat_camera_revision: "1.0.0", prompt: "PRIVATE_SENTINEL" };
+    const status = { recoverable: true, creation_metadata: metadata };
+    assert.match(recoveryMessage(status), /上次战斗运镜选择/);
+    assert.doesNotMatch(recoveryMessage(status), /PRIVATE_SENTINEL/);
+    for (const invalid of ["constructor", "toString", "PRIVATE_SENTINEL", "off"]) {
+        assert.doesNotMatch(recoveryMessage({ ...status, creation_metadata: { ...metadata, combat_camera_mode: invalid } }), /上次战斗运镜选择|PRIVATE_SENTINEL/);
+    }
+    const f = fixture();
+    const alerts = [];
+    let calls = 0;
+    const result = await restoreCompletionResult({ ...f, component: "MiniMaxH3PromptEnhancerT8",
+        fetchFn: async () => ({ ok: true, json: async () => status }), alertFn: text => alerts.push(text),
+        queuePrompt: async () => { calls++; },
+    });
+    assert.equal(result.queued, true);
+    assert.equal(calls, 1);
+    assert.equal(alerts.length, 1);
+    assert.match(alerts[0], /不按当前配置重新生成/);
+});
 
 
 test("complete recovery performs one GET status check and queues only this node", async () => {
