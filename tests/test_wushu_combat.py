@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import re
 import json
 import subprocess
 import sys
@@ -55,13 +56,26 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
             ["git", "ls-tree", "-r", "--name-only", BASELINE, "--", "directional_skills", "example_workflows"],
             cwd=GIT_ROOT, text=True,
         ).splitlines()
-        paths += ["nodes.py", "seedance20.py", "provider_config.py", "combat_camera.py",
-                  "web/js/minimax_h3_prompt_enhancer.js", "web/js/seedance20_prompt_enhancer.js",
-                  "web/js/widget_state.mjs"]
+        paths += ["nodes.py", "seedance20.py", "provider_config.py", "combat_camera.py"]
         for path in paths:
             with self.subTest(path=path):
                 self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"),
                                  frozen_bytes(path).replace(b"\r\n", b"\n"))
+
+    def test_old_widget_order_and_ui_are_frozen_except_reviewed_reload_fixes(self):
+        # #20 changes configure/serialize hooks intentionally. Keep the widget
+        # contract and unrelated node-creation UI frozen, rather than requiring
+        # the broken reload implementation to remain byte-for-byte unchanged.
+        for path in ("web/js/minimax_h3_prompt_enhancer.js", "web/js/seedance20_prompt_enhancer.js"):
+            current = (ROOT / path).read_text(encoding="utf-8")
+            previous = frozen_bytes(path).decode("utf-8").replace("\r\n", "\n")
+            pattern = r"const SERIALIZED_WIDGET_NAMES = \[[\s\S]*?\];"
+            self.assertEqual(re.search(pattern, current).group(), re.search(pattern, previous).group())
+            prefix = current.split("nodeType.prototype.onConfigure = function ()")[0]
+            self.assertEqual(prefix.replace("    syncNamedWidgetSerialization,\n", ""),
+                             previous.split("nodeType.prototype.onConfigure = function ()")[0])
+        self.assertTrue((ROOT / "web/js/widget_state.mjs").read_text(encoding="utf-8").startswith(
+            frozen_bytes("web/js/widget_state.mjs").decode("utf-8").replace("\r\n", "\n")))
 
     def test_old_method_messages_match_frozen_helpers_with_camera_and_acting(self):
         from test_directional_skills import original_function

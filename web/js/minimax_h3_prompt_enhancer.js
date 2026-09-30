@@ -20,6 +20,7 @@ import {
     serializedOpenAIProviderState,
     serializeOpenAIProviderState,
     serializeNamedWidgetValues,
+    syncNamedWidgetSerialization,
 } from "./widget_state.mjs";
 
 
@@ -833,8 +834,7 @@ app.registerExtension({
                 this.t8PendingCaseTemplateValue = args[0].widgets_values[10];
             }
             originalOnConfigure?.apply(this, args);
-            restoreOpenAIProviderState(this, openAIProviderState);
-            requestAnimationFrame(() => {
+            const restoreSchemaValues = () => {
                 const excluded = new Set(["case_template"]);
                 if (hadLegacyUploadUrl) excluded.add("openai_video_urls");
                 restoreNamedWidgetValues(this, restoredValues, excluded);
@@ -842,6 +842,11 @@ app.registerExtension({
                 if (hadLegacyUploadUrl) {
                     setTextWidgetValue(this.widgets?.find((widget) => widget.name === "openai_video_urls"), "");
                 }
+            };
+            // Missing-model detection runs before the next animation frame.
+            restoreSchemaValues();
+            requestAnimationFrame(() => {
+                restoreSchemaValues();
                 this.t8RestoreCaseTemplate?.(this.t8PendingCaseTemplateValue);
                 if (this.t8RestoreCaseTemplate) this.t8PendingCaseTemplateValue = "";
                 this.t8NormalizePromptOptions?.();
@@ -864,6 +869,7 @@ app.registerExtension({
                     ? serializedCaseTemplateValue(this, widget)
                     : name === "director_skill" ? directionalSkillId(value) : value,
             );
+            syncNamedWidgetSerialization(serialized, SERIALIZED_WIDGET_NAMES);
         };
     },
 });

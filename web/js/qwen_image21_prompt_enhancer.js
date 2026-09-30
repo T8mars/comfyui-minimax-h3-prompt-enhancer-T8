@@ -8,7 +8,7 @@ import {
     showLocalQwenStatus,
 } from "./local_qwen_status.js";
 import { showProviderCapability } from "./provider_capability_ui.mjs";
-import { restoreNamedWidgetValues, serializeNamedWidgetValues } from "./widget_state.mjs";
+import { restoreNamedWidgetValues, serializeNamedWidgetValues, syncNamedWidgetSerialization } from "./widget_state.mjs";
 
 
 const NODE_ID = "QwenImage21PromptEnhancerT8";
@@ -53,12 +53,18 @@ function savedWidgetValueMap(values) {
     const hasApiKey = API_MODES.has(values[6]) && !API_MODES.has(values[5]);
     const withoutApiKey = API_MODES.has(values[5]) && !API_MODES.has(values[6]);
     if (!hasApiKey && !withoutApiKey) return null;
-    const seedIndex = hasApiKey ? 10 : 9;
+    // Desktop 1.52.7 exports can retain the force_input key widget after Base
+    // URL rather than before API mode (#21). Require both numeric seed and its
+    // control as discriminators; never shift an arbitrary invalid seed.
+    const keyBeforeSeed = withoutApiKey && (typeof values[9] === "string" || values[9] == null)
+        && typeof values[10] === "number" && SEED_CONTROLS.has(values[11]);
+    const seedIndex = hasApiKey || keyBeforeSeed ? 10 : 9;
     if (typeof values[seedIndex] !== "number" || !Number.isFinite(values[seedIndex])) return null;
     const hasSeedControl = SEED_CONTROLS.has(values[seedIndex + 1]);
     const names = SERIALIZED_WIDGET_NAMES.slice(0, -2);
     if (!hasSeedControl) names.splice(names.indexOf("control_after_generate"), 1);
     if (hasApiKey) names.splice(names.indexOf("api_mode"), 0, "api_key");
+    if (keyBeforeSeed) names.splice(names.indexOf("seed"), 0, "api_key");
     if (values.length < names.length) return null;
     const mapped = new Map(names.map((name, index) => [name, values[index]]));
     if (mapped.get("prompt") == null) mapped.set("prompt", "");
@@ -133,6 +139,7 @@ function resizeNode(node) {
 
 function addAction(node, label, tooltip, callback) {
     const widget = node.addWidget("button", label, tooltip, callback, { serialize: false });
+    widget.serialize = false;
     widget.serializeValue = () => undefined;
     return widget;
 }
@@ -209,7 +216,8 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function () {
             const args = [...arguments];
             const mapped = savedWidgetValueMap(args[0]?.widgets_values);
-            if (mapped) args[0] = { ...args[0], widgets_values: projectWidgetValues(this, mapped) };
+            if (mapped) args[0] = { ...args[0], widgets_values: projectWidgetValues(this, mapped),
+                widgets_values_named: Object.fromEntries(mapped) };
             const result = originalOnConfigure?.apply(this, args);
             if (this.title === LEGACY_EXAMPLE_TITLE || args[0]?.title === LEGACY_EXAMPLE_TITLE) {
                 this.title = EXAMPLE_TITLE;
@@ -225,6 +233,7 @@ app.registerExtension({
                 (name, value) => name === "recovery_action" ? "normal"
                     : (value === null || value === undefined || value === "") && Object.hasOwn(WIDGET_DEFAULTS, name)
                         ? WIDGET_DEFAULTS[name] : value);
+            syncNamedWidgetSerialization(serialized, SERIALIZED_WIDGET_NAMES);
         };
     },
 });

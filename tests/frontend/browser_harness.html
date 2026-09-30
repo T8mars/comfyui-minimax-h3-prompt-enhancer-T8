@@ -507,9 +507,15 @@ try {
     setDirtyCanvas() {}
     onConfigure(data) {
       data.widgets_values?.forEach((value, index) => { if (this.widgets[index]) this.widgets[index].value = value; });
+      for (const widget of this.widgets) {
+        if (Object.hasOwn(data.widgets_values_named || {}, widget.name)) widget.value = data.widgets_values_named[widget.name];
+      }
       if (data.api_mode) this.widgets.find(widget => widget.name === "api_mode").value = data.api_mode;
     }
-    onSerialize(data) { data.widgets_values = this.widgets.map(widget => widget.value); }
+    onSerialize(data) {
+      data.widgets_values = this.widgets.map(widget => widget.value);
+      data.widgets_values_named = Object.fromEntries(this.widgets.map(widget => [widget.name, widget.value]));
+    }
   }
   await qwenExtension.beforeRegisterNodeDef(QwenNode, { name: "QwenImage21PromptEnhancerT8" });
   const qwenNode = new QwenNode();
@@ -563,6 +569,20 @@ try {
   qwenNode.onSerialize(qwenSaved);
   check(qwenSaved.widgets_values.length === 22 && qwenSaved.widgets_values[5] === "OpenAI兼容接口（备用）" && qwenSaved.widgets_values[9] === 12345,
     "Qwen Image saves the 22 named runtime values without API-key or button slots");
+  check(Object.keys(qwenSaved.widgets_values_named).length === 22
+    && qwenSaved.widgets_values_named.seed === 12345 && qwenSaved.widgets_values_named.local_model === "visual.gguf",
+    "Qwen Image native named serialization matches stable positional values (#21)");
+  const desktopQwen = new QwenNode();
+  desktopQwen.onNodeCreated();
+  const desktopValues = [...qwenSaved.widgets_values];
+  desktopValues.splice(9, 0, "");
+  desktopValues.push("provider tooltip", "recovery tooltip");
+  const desktopNamed = Object.fromEntries(Object.keys(qwenSaved.widgets_values_named).map((name, i) => [name, desktopValues[i]]));
+  desktopQwen.onConfigure({ widgets_values: desktopValues, widgets_values_named: desktopNamed });
+  check(desktopQwen.widgets.find(w => w.name === "seed").value === 12345
+    && desktopQwen.widgets.find(w => w.name === "control_after_generate").value === "randomize"
+    && desktopQwen.widgets.find(w => w.name === "local_model").value === "visual.gguf",
+    "Desktop key slot after Base URL and corrupted named map recover synchronously before RAF (#21)");
   const reloadedQwen = new QwenNode();
   reloadedQwen.onNodeCreated();
   reloadedQwen.onConfigure({ widgets_values: [...qwenSaved.widgets_values, "recovery button tooltip"] });

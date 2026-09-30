@@ -12,6 +12,7 @@ import {
     restoreOpenAIProviderState,
     serializedOpenAIProviderState,
     serializeOpenAIProviderState,
+    syncNamedWidgetSerialization,
 } from "./widget_state.mjs";
 
 
@@ -774,8 +775,7 @@ app.registerExtension({
                 };
             }
             originalOnConfigure?.apply(this, args);
-            restoreOpenAIProviderState(this, openAIProviderState);
-            requestAnimationFrame(() => {
+            const restoreSchemaValues = () => {
                 // Restore by stable field name as a second compatibility layer.
                 // Several ComfyUI versions calculate hidden/optional DOM widget
                 // positions differently, so positional remapping alone can still
@@ -787,6 +787,10 @@ app.registerExtension({
                     }
                 }
                 restoreOpenAIProviderState(this, openAIProviderState);
+            };
+            restoreSchemaValues();
+            requestAnimationFrame(() => {
+                restoreSchemaValues();
                 this.music3UpdateConditional?.();
                 this.music3UpdateApiMode?.();
                 this.music3UpdateEstimate?.();
@@ -808,6 +812,7 @@ app.registerExtension({
                 const widget = this.widgets?.find((item) => item.name === name);
                 return widget?.value ?? null;
             });
+            syncNamedWidgetSerialization(serialized, SERIALIZED_WIDGET_NAMES);
         };
     },
 });

@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.27.1] - 2026-10-01
+
+### Fixed
+
+- Restore H3, Seedance and Music widget values synchronously on workflow load,
+  before a missing-model scan can inspect a transiently misplaced GGUF value
+  (#20). Keep deferred UI refreshes and legacy template/upload exclusions.
+- Migrate the Qwen Image Desktop layout with an extra API-key slot between
+  Base URL and seed, including corrupted native named widget metadata (#21).
+  Save consistent positional and named widget values across the four custom
+  serializers; exclude Qwen action/key slots from its canonical 22 fields.
+- Add pre-animation-frame regression checks and a sanitized reproduction of
+  the reporter's exported workflow. Preserve backend schemas, output indices,
+  widget field order and existing examples; no provider or model changes.
+
 ## [1.27.0] - 2026-09-30
 
 ### Added

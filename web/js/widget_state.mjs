@@ -176,3 +176,13 @@ export function serializeNamedWidgetValues(node, names, transform = null) {
         return transform ? transform(name, value, widget) : value;
     });
 }
+
+
+// Newer LiteGraph hosts save both representations. An extension that replaces
+// the positional array must replace the native named map too, otherwise the
+// next load may prefer stale values created from a different runtime order.
+export function syncNamedWidgetSerialization(serialized, names) {
+    serialized.widgets_values_named = Object.fromEntries(
+        names.map((name, index) => [name, serialized.widgets_values[index]]),
+    );
+}

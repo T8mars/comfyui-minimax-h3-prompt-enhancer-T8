@@ -268,8 +268,14 @@ async function enhancerHarness(filename, target) {
             // Reproduce the native UI's positional configure after the director
             // widget was moved beside templates. Named restoration must fix it.
             const director = this.widgets.find((w) => w.name === "director_skill");
-            this.widgets.splice(this.widgets.indexOf(director), 1);
-            this.widgets.splice(this.widgets.findIndex((widget) => widget.name === "case_template") + 1, 0, director);
+            if (director) {
+                this.widgets.splice(this.widgets.indexOf(director), 1);
+                this.widgets.splice(this.widgets.findIndex((widget) => widget.name === "case_template") + 1, 0, director);
+            } else {
+                const model = this.widgets.find((widget) => widget.name === "local_model");
+                this.widgets.splice(this.widgets.indexOf(model), 1);
+                this.widgets.splice(1, 0, model);
+            }
             this.properties = {};
             this.t8NormalizePromptOptions = this.s20NormalizeOptions = () => {
                 director.value = directionalSkillLabel(director.value);
@@ -281,14 +287,16 @@ async function enhancerHarness(filename, target) {
             data.widgets_values.forEach((value, index) => { if (this.widgets[index]) this.widgets[index].value = value; });
         }
     }
-    await extension.beforeRegisterNodeDef(TestNode, { name: target === "h3" ? "MiniMaxH3PromptEnhancerT8" : "Seedance20PromptEnhancerT8" });
+    await extension.beforeRegisterNodeDef(TestNode, { name: target === "h3" ? "MiniMaxH3PromptEnhancerT8"
+        : target === "music3" ? "MiniMaxMusic3PromptEnhancerT8" : "Seedance20PromptEnhancerT8" });
     return {
         names,
         defaults: context.fixture.defaults,
         fixture: context.fixture,
-        configure(values) {
+        configure(values, { beforeFrames } = {}) {
             const node = new TestNode();
             node.onConfigure({ widgets_values: values });
+            beforeFrames?.(node);
             let limit = 10;
             while (frames.length && limit-- > 0) frames.shift()();
             assert.equal(frames.length, 0, "configure animation work must be bounded");
@@ -297,6 +305,31 @@ async function enhancerHarness(filename, target) {
         values(node) { return Object.fromEntries(node.widgets.map((widget) => [widget.name, widget.value])); },
     };
 }
+
+test("H3, Seedance and Music restore models synchronously before missing-model scan (#20)", async () => {
+    for (const [filename, target] of [["minimax_h3_prompt_enhancer.js", "h3"],
+        ["seedance20_prompt_enhancer.js", "seedance20"], ["music3_prompt_enhancer.js", "music3"]]) {
+        const harness = await enhancerHarness(filename, target);
+        const saved = sampleValues(harness.names);
+        saved[harness.names.indexOf("api_mode")] = "本地 GGUF（llama.cpp / Qwen，离线）";
+        const restored = harness.configure(saved, { beforeFrames(node) {
+            const values = harness.values(node);
+            for (const name of ["api_mode", "seed", "local_model", "local_mmproj"]) {
+                if (harness.names.includes(name)) assert.equal(values[name], saved[harness.names.indexOf(name)], `${target}: ${name} before RAF`);
+            }
+            for (const widget of node.widgets) {
+                if (typeof widget.value === "string" && widget.value.endsWith(".gguf")) {
+                    assert.ok(["local_model", "local_mmproj"].includes(widget.name), `${target}: false missing-model candidate ${widget.name}`);
+                }
+            }
+        } });
+        const serialized = {};
+        restored.onSerialize(serialized);
+        assert.deepEqual(Object.keys(serialized.widgets_values_named), harness.names, `${target}: native named fields`);
+        harness.names.forEach((name, index) => assert.equal(serialized.widgets_values_named[name],
+            serialized.widgets_values[index], `${target}: ${name} in both serialized forms`));
+    }
+});
 
 function sampleValues(names) {
     const concrete = {

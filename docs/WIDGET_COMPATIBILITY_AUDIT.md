@@ -25,16 +25,41 @@ H3/Seedance JSONs pass configure/serialize through the actual frontend hooks in
 the Node harness; the DOM/recovery harness also runs in Chrome. These are local
 contracts, not a RunningHub production deployment or real LLM evaluation.
 
+### 2026-10-01 follow-up: Issues #20 and #21
+
+- H3, Seedance and Music had a confirmed timing gap: native positional loading
+  can place a GGUF string in the wrong combo before named restoration in an
+  animation callback. Restore schema values synchronously before returning
+  from `onConfigure`; keep UI/layout work deferred. YuE2 already restores its
+  own named property synchronously; Qwen already has a synchronous restore.
+- #21's attached Desktop workflow has an extra empty API-key slot **after Base
+  URL and before seed**, plus a corrupted `widgets_values_named` map. The
+  historical key-before-API-mode migration alone did not cover this shape.
+  Recognize the additional layout using numeric seed and seed-control markers,
+  project onto runtime widget names and replace the stale named map for loading.
+- Every custom positional serializer (H3, Seedance, Music, Qwen) now writes
+  matching native named metadata. Qwen retains its canonical 22 fields without
+  force-input key or action values. Native order and stored order remain distinct.
+- Regression evidence: actual extension hooks with reordered runtime widgets,
+  assertions **before** flushing animation callbacks, sanitized reporter JSON
+  shape, and Chrome browser contracts. This is not a production deployment on
+  the reporter's Desktop or RunningHub installation; ask for a fresh export if
+  an updated installation still fails. No inference or paid API test is needed
+  to reproduce this workflow-loading failure.
+
 1. Enumerate schema inputs and the **actual** runtime widget names. V3 groups
    required and optional inputs; a `force_input=True` socket may have no widget.
    A linked text widget may be retained, serialized as `null`, or omitted by a
    host. Do not infer the saved array from Python declaration order.
 2. If frontend actions or DOM widgets are appended, mark them non-serializable
-   **and** explicitly serialize stable schema fields by name. Never let a button
+   **and** explicitly serialize stable schema fields by name. Keep native
+   `widgets_values_named` consistent with the stable positional array. Never let a button
    label or tooltip occupy a backend field. Do not persist API keys in examples.
 3. On load, identify historical layouts from validated discriminators such as
    API mode and seed-control position. Project values onto runtime widget names
-   before native positional configuration, then restore by name. Test layouts
+   before native positional configuration, then restore by name synchronously
+   before returning from `onConfigure`. Model scans may run before the next frame.
+   Test layouts
    both with and without a key widget, linked prompt widget, seed control,
    recovery fields, and trailing host-specific UI values.
 4. In `validate_inputs`, treat `None` for a linked STRING as unresolved during
