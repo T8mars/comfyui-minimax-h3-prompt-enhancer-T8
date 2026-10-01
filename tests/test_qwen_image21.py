@@ -356,6 +356,24 @@ class QwenImage21ContractTests(unittest.TestCase):
         self.assertEqual(json.loads(result[3])["correction_calls"], 1)
         self.assertEqual(request.call_count, 2)
 
+    def test_live_classic_failed_alpha_repair_returns_description_not_json(self):
+        first = json.dumps({"rewritten_prompt": "RGBA cutout of woman, transparent bg, no new objects", "wh_ratio": "3:2"})
+        description = "RGBA alpha channel transparent bg cutout woman no new obj"
+        second = json.dumps({"rewritten_prompt": description, "wh_ratio": "3:2"})
+        with patch.object(qwen, "_provider_config", return_value=("test-key", "https://example.test/chat", "", "test")), \
+                patch.object(qwen, "_request_completion", side_effect=[first, second]) as request:
+            output = qwen.QwenImage21PromptEnhancer.execute(
+                prompt="extract subject", transparent_alpha=True, max_output_chars=60,
+            )
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(output[0], description)
+        self.assertEqual(output[1], "")
+        report = json.loads(output[3])
+        self.assertFalse(report["structured_response"])
+        self.assertTrue(report["repair_failed"])
+        self.assertFalse(report["over_limit"])
+        self.assertIn("transparent background", report["error"])
+
     def test_cloud_result_can_be_recovered_without_a_second_request(self):
         valid = json.dumps({"rewritten_prompt": "A recoverable image description.", "wh_ratio": "1:1"})
         slot = "t8-qwen-recovery-0001"

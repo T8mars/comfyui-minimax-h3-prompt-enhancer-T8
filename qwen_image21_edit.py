@@ -178,8 +178,8 @@ def validate(payload: dict, *, brief: str, image_map: list[dict], requested_rati
     if transparent:
         rgba = re.search(r"(?<![A-Za-z])RGBA(?![A-Za-z])", prose, re.I)
         alpha = re.search(r"\balpha\s*channel\b|alpha\s*通道|透明度通道", prose, re.I)
-        background = re.search(r"transparent\s+background|background\s+(?:is\s+)?(?:fully\s+|completely\s+)?transparent|(?:背景|底色)[^。，,;]{0,8}透明", prose, re.I)
-        negative = re.search(r"背景[^。，,;]{0,5}不透明|background\s+(?:is\s+)?(?:not\s+transparent|opaque)|no\s+transparent\s+background", prose, re.I)
+        background = re.search(r"transparent\s+background|background\s+(?:is\s+)?(?:fully\s+|completely\s+)?transparent|(?:背景|底色)[^。，,;]{0,8}透明|(?<!不)透明(?:的)?(?:背景|底色)", prose, re.I)
+        negative = re.search(r"背景[^。，,;]{0,5}不(?:是)?透明|(?:不是|并非|没有|不|非|无)透明(?:的)?(?:背景|底色)|background\s+(?:is\s+)?(?:not\s+transparent|opaque)|no\s+transparent\s+background", prose, re.I)
         if not (rgba and alpha and background) or negative:
             raise EditContractError("RGBA requires explicit alpha channel and transparent background semantics.")
     unused = [tag for tag in image_lookup if tag not in referenced] if len(image_map) > 1 else []

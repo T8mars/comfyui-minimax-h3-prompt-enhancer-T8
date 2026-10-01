@@ -1,6 +1,6 @@
 # Qwen T8 edit rules: acceptance evidence and boundaries
 
-Date: 2026-10-01. Candidate: 1.28.1 (feature introduced in 1.28.0). Frozen compatibility baseline:
+Date: 2026-10-01. Candidate: 1.28.2 (feature introduced in 1.28.0). Frozen compatibility baseline:
 `637036b0bd0ef4e966691983c20e82c2435761ea` (1.27.1).
 
 The 1.28.0 publishing gate passed its full suite and Chrome checks. The separate
@@ -33,15 +33,22 @@ example, expand advanced settings, then choose Edit-aware to opt in. The four
 output indices and cached recovery strings are unchanged. Normal Classic prompt
 messages and validators are frozen against the old revision. The deliberate bug
 fix is one total repair even when a length repair returns an invalid ratio.
+The live follow-up also decodes a parseable but unchecked description on either
+profile rather than sending its JSON envelope to the prompt port. This does not
+relax Classic's validator, promote an unchecked ratio, or add a generation call.
 
-## Live gates still requiring external access
+## Live gates and external boundaries
 
-No new valid API credential or RunningHub test environment was supplied during
-this implementation. There is **no new live A/B score**, no dedicated-PE
-comparison, and no actual rendered-image score in this report. Historical
-Classic cloud tests must not be reused as evidence for the new edit rules.
+No valid API credential was supplied during the initial implementation. After
+the user supplied one, the real 2026-10-01 A/B exposed an unchecked-draft fallback
+and a Chinese transparency false rejection. 1.28.2 fixes both plus incorrect
+fallback length reporting; the live observations, repairs and retest are recorded
+in [the live A/B report](QWEN_EDIT_LIVE_AB.md). Historical Classic cloud tests are
+not reused as evidence for the new edit rules. RunningHub access still has not
+been supplied: neither production-host acceptance nor actual rendered-image
+quality nor a dedicated-PE comparison is claimed.
 
-For the next live A/B, keep identical source files, model, provider, budget and
+For a live A/B, keep identical source files, model, provider, budget and
 supported sampling parameters within each Classic/Edit-aware pair. Record every
 initial request, correction and failure; do not silently discard failed groups.
 Use the following twelve cases with original dimensions recorded before upload:

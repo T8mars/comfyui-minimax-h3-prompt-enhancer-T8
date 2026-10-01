@@ -450,12 +450,18 @@ def _accept_complete_stream(
 
 def _correction_messages(messages: list[dict[str, Any]], draft: str, reason: str, *, edit_mode: bool = False) -> list[dict[str, Any]]:
     fields = "rewritten_prompt, wh_ratio and ratio_follow" if edit_mode else "rewritten_prompt and wh_ratio"
+    edit_rules = (
+        " JSON-escape interior double quotes in the description. Use exact <imageN> source tokens, not natural image numbers."
+        " Keep all canvas ratios and resolutions out of the description except user-fixed quoted visible text."
+        " Obey the original language, transparency and character-limit constraints together, not just the reported error."
+        if edit_mode else ""
+    )
     return [
         *messages,
         {"role": "assistant", "content": draft},
         {"role": "user", "content": (
             "Repair the previous answer once. Return only one valid one-line JSON object with exactly "
-            f"{fields}. Preserve every fixed user fact and visible text. " + reason
+            f"{fields}. Preserve every fixed user fact and visible text. " + reason + edit_rules
         )},
     ]
 
@@ -497,11 +503,17 @@ def _bounded_completion(complete, messages, parse, validate, *, edit_mode=False)
         details = {**best[2], "repair_failed": True, "used_first_draft": True}
         return best[0], best[1], details, 1, problem
     raw = first or repaired
-    if edit_mode:
-        raw = edit.final_content(first) or edit.final_content(repaired)
-        payload = parse(raw)
-        if payload is not None and isinstance(payload.get("rewritten_prompt"), str):
+    # A valid JSON repair may still fail a semantic guard. On either profile,
+    # prefer its decoded description to a raw JSON envelope, but do not
+    # promote its unchecked canvas decision to a verified output.
+    for candidate in (repaired, first):
+        payload = parse(candidate)
+        if payload is not None and isinstance(payload.get("rewritten_prompt"), str) and payload["rewritten_prompt"].strip():
             raw = payload["rewritten_prompt"].strip()
+            break
+    else:
+        if edit_mode:
+            raw = edit.final_content(first) or edit.final_content(repaired)
     if not raw.strip():
         raise QwenImage21PromptEnhancerError("No complete final text is available after one correction.")
     return raw.strip(), "", {"structured_response": False, "repair_failed": True}, 1, problem
@@ -831,12 +843,17 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                 finally:
                     session.close()
             structured = details.get("structured_response", True)
-            over_limit = bool(details.get("over_limit"))
+            over_limit = bool(max_chars and len(rewritten) > max_chars)
+            details["over_limit"] = over_limit
         except (QwenImage21PromptEnhancerError, LocalQwenProviderError, PromptEnhancerError, edit.EditContractError, OSError) as error:
             mark_recovery_failed(NODE_ID, recovery_slot, error)
             raise QwenImage21PromptEnhancerError(str(error)) from error
-        if edit_mode and not structured and ratio != "auto":
-            chosen_ratio = ratio
+        if edit_mode and not structured:
+            chosen_ratio = ratio if ratio != "auto" else edit.explicit_brief_ratio(str(prompt))
+            if chosen_ratio:
+                # This is an explicit user decision, not an inferred or
+                # validated model follow decision. The draft stays flagged.
+                details["canvas_decision"] = "fixed_ui" if ratio != "auto" else "explicit_brief"
         request = {
             "schema_version": "t8-qwen-image-21-request/v1",
             "model": model_id,

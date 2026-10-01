@@ -3,6 +3,30 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.28.2] - 2026-10-01
+
+### Fixed
+
+- Fix a live-reproduced Edit-aware transparency false rejection for normal
+  Chinese wording such as `透明背景RGBA图像`; keep opaque/negated backgrounds
+  rejected. Classic's frozen output validator remains unchanged.
+- When neither answer passes validation but a JSON description is parseable,
+  return that description instead of a raw JSON envelope on either profile.
+  Keep the draft flagged and do not invent a model canvas or source-follow
+  decision. For Edit-aware, an explicit UI/brief ratio remains usable.
+- Measure the actual draft length even on unchecked fallback outputs, so a
+  failed correction cannot incorrectly report an over-limit draft as in-limit.
+- Restate JSON escaping, canonical source tags, canvas/lettering separation and
+  combined constraints in Edit-aware's single correction. No third generation,
+  provider transport changes, new sockets, widget shifts or output-index changes.
+
+### Verification
+
+- Real API A/B runner uses actual production node/upload/chat/recovery paths,
+  stores no credentials or signed URLs, preserves failed observations and
+  resumes only completed arms with identical runtime contracts and inputs.
+  See `docs/QWEN_EDIT_LIVE_AB.md` for results and unverified boundaries.
+
 ## [1.28.1] - 2026-10-01
 
 ### Fixed

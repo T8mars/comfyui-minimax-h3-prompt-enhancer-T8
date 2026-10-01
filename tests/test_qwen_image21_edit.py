@@ -118,9 +118,13 @@ class PureEditContractTests(unittest.TestCase):
 
     def test_alpha_and_language_guards(self):
         self.validate(payload("将<image1>主体提取为RGBA图像，具有alpha通道，背景是透明的。"), transparent=True)
+        self.validate(payload("提取<image1>主体，生成带alpha通道的透明背景RGBA图像。"), transparent=True)
         self.validate(payload("Extract <image1> into an RGBA image with an alpha channel and a transparent background."),
                       brief="Extract the subject with transparency", transparent=True)
-        for bad in ["<image1>是一张RGBA图像。", "<image1>有alpha通道，RGBA，背景不透明。", "Change the wall of <image1> to gray."]:
+        for bad in ["<image1>是一张RGBA图像。", "<image1>有alpha通道，RGBA，背景不透明。",
+                    "<image1>生成带alpha通道的不透明背景RGBA图像。",
+                    "<image1>有alpha通道，但不是透明背景RGBA图像。",
+                    "<image1>有alpha通道，生成没有透明背景的RGBA图像。", "Change the wall of <image1> to gray."]:
             with self.assertRaises(edit.EditContractError):
                 self.validate(payload(bad), transparent=not bad.startswith("Change"))
         with self.assertRaises(edit.EditContractError):
@@ -245,6 +249,38 @@ class EditExecutionTests(unittest.TestCase):
     def test_unclosed_reasoning_is_never_exposed_as_final_draft(self):
         with self.assertRaisesRegex(qwen.QwenImage21PromptEnhancerError, "No complete final text"):
             self.run_cloud(["<think>not closed", "<think>also unfinished"])
+
+    def test_live_invalid_first_and_invalid_repair_preserve_clean_text_and_explicit_canvas(self):
+        # Live 2026-10-01: first answer has unescaped painted lettering;
+        # the repair is valid JSON but still puts a canvas ratio in the prose.
+        first = '{"rewritten_prompt":"招牌文字改为"1:1"，画布为2:3。","wh_ratio":"2:3","ratio_follow":""}'
+        description = '将招牌文字改为 "1:1"，扩展米色背景为2:3比例，不裁切招牌。'
+        second = json.dumps(payload(description, ratio="2:3", follow=""), ensure_ascii=False)
+        output, request = self.run_cloud([first, second], prompt='输出尺寸：1024x1536。招牌文字改为 "1:1"。')
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(output[0], description)
+        self.assertEqual(output[1], "2:3")
+        self.assertIsNone(json.loads(output[2])["decision"])
+        report = json.loads(output[3])
+        self.assertFalse(report["structured_response"])
+        self.assertTrue(report["repair_failed"])
+        self.assertEqual(report["canvas_decision"], "explicit_brief")
+
+    def test_unchecked_fallback_does_not_infer_a_canvas_or_follow_source(self):
+        output, _ = self.run_cloud(["a complete draft", "another complete draft"], max_output_chars=5)
+        self.assertEqual(output[1], "")
+        self.assertIsNone(json.loads(output[2])["decision"])
+        self.assertNotIn("canvas_decision", json.loads(output[3]))
+        self.assertTrue(json.loads(output[3])["over_limit"])
+
+    def test_edit_correction_restates_escape_source_and_canvas_rules_only_for_edit(self):
+        messages = [{"role": "user", "content": "brief"}]
+        classic = qwen._correction_messages(messages, "draft", "failure")[-1]["content"]
+        self.assertEqual(classic, "Repair the previous answer once. Return only one valid one-line JSON object with exactly "
+                         "rewritten_prompt and wh_ratio. Preserve every fixed user fact and visible text. failure")
+        correction = qwen._correction_messages(messages, "draft", "failure", edit_mode=True)[-1]["content"]
+        for expected in ["JSON-escape", "<imageN>", "canvas ratios", "quoted visible text"]:
+            self.assertIn(expected, correction)
 
     def test_recovery_is_exactly_four_strings_without_generation_or_upload(self):
         original, _ = self.run_cloud([json.dumps(payload())], recovery_slot="t8-edit-recovery-regression")
