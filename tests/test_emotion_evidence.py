@@ -56,7 +56,7 @@ class EmotionEvidenceTests(unittest.TestCase):
         review = json.loads((root / "tudou_emotion_review_2026-10-04.json").read_text(encoding="utf-8"))
         attributes = (root.parents[1] / ".gitattributes").read_text(encoding="utf-8")
         for name in ("tudou_emotion_api_2026-10-04.json", "tudou_emotion_review_2026-10-04.json"):
-            self.assertIn("tests/fixtures/" + name + " text eol=lf", attributes)
+            self.assertIn("tests/fixtures/" + name + " -text", attributes)
         self.assertEqual(hashlib.sha256(raw).hexdigest(), review["evidence_sha256"])
         observed = {(r["case_id"], r["repeat"], r["arm"]): r for r in evidence["phases"]["frozen_ab"]["tests"]}
         self.assertEqual(len(review["records"]), 48)

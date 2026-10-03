@@ -1,5 +1,6 @@
 official_skills/** text eol=lf
-tests/fixtures/tudou_emotion_api_2026-10-04.json text eol=lf
-tests/fixtures/tudou_emotion_review_2026-10-04.json text eol=lf
-tests/fixtures/h3_vocal_protocol_api_2026-10-04.json text eol=lf
-tests/fixtures/h3_vocal_protocol_final_api_2026-10-04.json text eol=lf
+# Captured evidence has byte-level hashes; never normalize its original bytes.
+tests/fixtures/tudou_emotion_api_2026-10-04.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tests/fixtures/tudou_emotion_review_2026-10-04.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tests/fixtures/h3_vocal_protocol_api_2026-10-04.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tests/fixtures/h3_vocal_protocol_final_api_2026-10-04.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

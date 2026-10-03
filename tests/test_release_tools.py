@@ -1,4 +1,5 @@
 import importlib.util
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -18,6 +19,43 @@ VERIFY_SPEC.loader.exec_module(verify)
 
 
 class ReleaseToolTests(unittest.TestCase):
+    def test_hashed_evidence_keeps_original_bytes_in_git_on_both_autocrlf_settings(self):
+        names = (
+            "tudou_emotion_api_2026-10-04.json",
+            "tudou_emotion_review_2026-10-04.json",
+            "h3_vocal_protocol_api_2026-10-04.json",
+            "h3_vocal_protocol_final_api_2026-10-04.json",
+        )
+        attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8")
+        for name in names:
+            self.assertIn("tests/fixtures/" + name + " -text", attributes)
+        # Use a private disposable repository, not the user's checkout/index.
+        with tempfile.TemporaryDirectory(prefix="t8-evidence-git-") as temporary:
+            root = Path(temporary)
+            subprocess.run(["git", "init", "-q", str(root)], check=True, capture_output=True)
+            (root / ".gitattributes").write_text(attributes, encoding="utf-8")
+            (root / "tests/fixtures").mkdir(parents=True)
+            payloads = {}
+            for name in names:
+                relative = "tests/fixtures/" + name
+                payloads[relative] = (ROOT / relative).read_bytes()
+                (root / relative).write_bytes(payloads[relative])
+            for autocrlf in ("false", "true"):
+                with self.subTest(autocrlf=autocrlf):
+                    command = ["git", "-C", str(root), "-c", "core.autocrlf=" + autocrlf]
+                    subprocess.run(command + ["add", "--renormalize", "--", ".gitattributes", *payloads],
+                                   check=True, capture_output=True)
+                    # --renormalize updates tracked files only; initialize the index too.
+                    subprocess.run(command + ["add", "--", ".gitattributes", *payloads],
+                                   check=True, capture_output=True)
+                    for relative, original in payloads.items():
+                        stored = subprocess.check_output(command + ["show", ":" + relative])
+                        self.assertEqual(stored, original, relative)
+                    subprocess.run(command + ["checkout-index", "-f", "--", *payloads],
+                                   check=True, capture_output=True)
+                    for relative, original in payloads.items():
+                        self.assertEqual((root / relative).read_bytes(), original, relative)
+
     def test_repository_gate_scans_untracked_release_candidates(self):
         source = (ROOT / "tools" / "verify_repository.py").read_text(encoding="utf-8")
         self.assertIn('"-c", "-o", "--exclude-standard"', source)

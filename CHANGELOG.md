@@ -5,6 +5,16 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.29.1] - 2026-10-04
+
+### Fixed
+
+- Preserve the original bytes of hashed API evidence in Git instead of applying
+  LF conversion. The 1.29.0 Git blobs reproduced four evidence-hash failures
+  despite passing Windows working-tree tests. Keep observations, recorded hashes
+  and runtime code unchanged; add actual Git index/checkout round-trip coverage
+  with both `core.autocrlf` settings. No node or workflow contract change.
+
 ## [1.29.0] - 2026-10-04
 
 ### Added
