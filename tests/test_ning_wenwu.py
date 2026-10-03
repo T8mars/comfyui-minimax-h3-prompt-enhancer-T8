@@ -29,12 +29,15 @@ class NingIntegrationTests(unittest.TestCase):
                     self.assertEqual(director_instruction(label, target), director_instruction(skill, target))
 
     def test_legacy_requests_and_resources_match_current_published_baseline(self):
-        # The two new drama branches may extend builders; legacy requests below
-        # still compare against the actual published function. Transport/acting
-        # implementation remains unchanged bytes.
-        for filename in ("performance_director.py",):
-            old = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:{filename}"], cwd=GIT_ROOT)
-            self.assertEqual((ROOT / filename).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"))
+        # The opt-in emotion branch extends this file, not the four legacy
+        # contracts. Freeze every old mode's actual config and helper output.
+        import performance_director as performance
+        for name in ("build_performance_director_config", "h3_performance_instruction", "seedance_performance_instruction", "storyboard_performance_instruction"):
+            previous = original_function("performance_director.py", name, performance, PRE_NING_COMMIT)
+            for mode in performance.PERFORMANCE_MODES[:4]:
+                cfg = performance.build_performance_director_config(mode)
+                values = (mode,) if name.startswith("build_") else ("MiniMax H3", cfg) if name.startswith("storyboard") else (cfg,)
+                self.assertEqual(getattr(performance, name)(*values), previous(*values))
         historical_director = types.ModuleType("historical_director")
         historical_director.__file__ = str(ROOT / "directional_skills.py")
         source = subprocess.check_output(["git", "show", f"{PRE_NING_COMMIT}:directional_skills.py"], cwd=GIT_ROOT).decode("utf-8")
@@ -87,13 +90,13 @@ class NingIntegrationTests(unittest.TestCase):
         self.assertIn("H3 protocol delimiters are literal ASCII", director_instruction("ning_wenwu", "h3"))
         self.assertNotIn("H3 protocol delimiters are literal ASCII", director_instruction("ning_wenwu", "seedance20"))
 
-    def test_explicit_quality_repair_preserves_ning_and_exact_words_without_an_extra_call(self):
+    def test_automatic_vocal_protocol_preserves_ning_and_exact_words_without_an_extra_call(self):
         draft = ("integrated_multimodal_description: [Shot 1] One eight-second continuous shot. "
                  "Alice （S1） says: <d>[English] Keep （S1） unchanged.</d> She keeps the ticket in her right hand.\n\n"
                  "overall_soundscape: Quiet footsteps.\n\nnon_diegetic_music: N/A")
         expected = draft.replace("Alice （S1）", "Alice (S1)")
         for transport in ("cloud", "local"):
-            for quality, result in (("off", draft), ("repair", expected)):
+            for quality, result in (("off", expected), ("repair", expected)):
                 with self.subTest(transport=transport, quality=quality):
                     inputs = dict(prompt='Alice says "Keep （S1） unchanged." Keep her ticket in her right hand.',
                                   duration_seconds=8, task_type="T2VA", shot_count="1", output_language="English",

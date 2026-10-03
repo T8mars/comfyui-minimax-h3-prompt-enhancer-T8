@@ -15,7 +15,8 @@ export function qualityStatusText(value) {
     const result = RESULTS[value?.result] || "等待运行 / Awaiting run";
     const count = Array.isArray(value?.issue_codes) ? value.issue_codes.filter((s) => typeof s === "string" && /^[a-z_]{1,60}$/.test(s)).length : 0;
     const calls = value?.correction_calls === 1 ? 1 : 0;
-    return `${result}；失败项 ${count}；追加纠正 ${calls} 次。${value?.cleanup_failed === true ? " 本地清理失败，请检查运行时。" : ""}\n文本检查 ≠ 成片验收；待确认项见脱敏诊断 / Text only.`;
+    const unchecked = Array.isArray(value?.unchecked) && value.unchecked.includes("contract_check") ? " 未进行完整质量检查 / Full quality check not run." : "";
+    return `${result}；失败项 ${count}；追加纠正 ${calls} 次。${value?.cleanup_failed === true ? " 本地清理失败，请检查运行时。" : ""}${unchecked}\n文本检查 ≠ 成片验收；待确认项见脱敏诊断 / Text only.`;
 }
 export function addQualityUI(node) {
     if (node.t8QualityUI) return node.t8QualityUI;
@@ -28,7 +29,7 @@ export function addQualityUI(node) {
     const update = () => {
         quality.value = qualityLabel(quality.value);
         creation.value = creationLabel(creation.value);
-        root.textContent = "质量 / Quality：Off 原流程；Check 只检查；Repair 最多1次计费纠正。\n因果 / Causal（实验）：同次优化衔接，不加请求；事实与尾态须复核。\n" + qualityStatusText(node.t8QualityStatus);
+        root.textContent = "H3 说话人格式自动免费修复 / Free vocal formatting（不猜归属）。\n质量 / Quality：Off 不追加；Check 检查；Repair 最多1次计费纠正。\n因果 / Causal（实验）：同次优化衔接，事实与尾态须复核。\n" + qualityStatusText(node.t8QualityStatus);
         node.setDirtyCanvas?.(true, true);
     };
     const widget = node.addDOMWidget("t8_quality_help", "custom", root, {

@@ -26,6 +26,24 @@ function fixture(slot = "t8-recovery-test-slot-0001") {
     return { node, slotWidget, actionWidget };
 }
 
+test("emotion-only recovery shows its stored finite strategy before queue, never a current mode", async () => {
+    const metadata = { emotion_strategy: "tudou_emotion", emotion_revision: "1.0.0", prompt: "PRIVATE_SENTINEL" };
+    const status = { recoverable: true, creation_metadata: metadata };
+    const f = fixture();
+    f.node.widgets.push({ name: "mode", value: "极致（深度表演重构）" });
+    const events = [];
+    await restoreCompletionResult({ ...f, component: "MiniMaxH3PromptEnhancerT8",
+        fetchFn: async () => ({ ok: true, json: async () => status }), alertFn: text => events.push(text),
+        queuePrompt: async () => events.push("queue"),
+    });
+    assert.match(events[0], /上次情绪策略.*土豆-情绪演绎/);
+    assert.doesNotMatch(events[0], /PRIVATE_SENTINEL|极致/);
+    assert.equal(events[1], "queue");
+    for (const invalid of [{ emotion_strategy: "tudou_emotion" }, { ...metadata, emotion_revision: "future" }, { ...metadata, emotion_strategy: "PRIVATE_SENTINEL" }]) {
+        assert.doesNotMatch(recoveryMessage({ ...status, creation_metadata: invalid }), /上次情绪策略|PRIVATE_SENTINEL/);
+    }
+});
+
 test("camera-only recovery discloses historical selection without claiming application or leaking fields", async () => {
     const metadata = { combat_camera_mode: "strong", combat_camera_continuity: "prefer_continuous",
         combat_camera_impact: "natural", combat_camera_revision: "1.0.0", prompt: "PRIVATE_SENTINEL" };

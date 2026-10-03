@@ -61,6 +61,20 @@ schemas = [n.define_schema() for n in node_list]
 assert len(schemas) == 29
 assert [s.node_id for s in schemas[-4:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig"]
 camera = sys.modules[spec.name + ".combat_camera"]
+perf = sys.modules[spec.name + ".performance_director"]
+emotion = sys.modules[spec.name + ".emotion_performance"]
+vocal_protocol = sys.modules[spec.name + ".h3_vocal_protocol"]
+vocal_sample = "integrated_multimodal_description: [Shot 1] Alice says: <d>[English] Wait.</d>\n\noverall_soundscape: N/A\n\nnon_diegetic_music: N/A"
+vocal_result, vocal_changes, vocal_unresolved = vocal_protocol.normalize_h3_vocals(vocal_sample)
+assert "Alice (S1) says:" in vocal_result and vocal_changes and not vocal_unresolved
+assert len(perf.PERFORMANCE_MODES) == 5
+assert perf.PERFORMANCE_MODES[-1] == emotion.EMOTION_MODE
+config = perf.build_performance_director_config(perf.PERFORMANCE_TUDOU)
+assert emotion.EMOTION_MARKER in perf.h3_performance_instruction(config)
+assert emotion.EMOTION_MARKER in perf.seedance_performance_instruction(config)
+assert emotion.EMOTION_MARKER in perf.storyboard_performance_instruction("MiniMax H3", config)
+assert (p / "research_sources/tudou-emotion.lock.json").is_file()
+assert (p / "web/js/docs/T8PerformanceDirectorConfig/zh.md").is_file()
 assert camera.combat_camera_instruction(None) == ""
 assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3")
 assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "combat_camera_config"
@@ -80,7 +94,7 @@ assert (p / "directional_skills/wushu_combat/NOTICE.md").is_file()
 for name, loaded in list(sys.modules.items()):
     if name.startswith(spec.name) and getattr(loaded, "__file__", None):
         assert pathlib.Path(loaded.__file__).is_relative_to(p), name
-print(json.dumps({"node_count":len(schemas), "node_ids":[s.node_id for s in schemas], "native_outputs":True, "new_skills":True, "live_repo_fallback":False}))
+print(json.dumps({"node_count":len(schemas), "node_ids":[s.node_id for s in schemas], "native_outputs":True, "new_skills":True, "emotion_strategy":True, "vocal_format":True, "live_repo_fallback":False}))
 '''
         bootstrap = "import sys; sys.argv_comfy=" + repr(str(ROOT.parents[1])) + "; sys.argv_install=" + repr(str(install)) + ";" + code
         result = subprocess.run([sys.executable, "-c", bootstrap], cwd=temporary, capture_output=True, text=True,

@@ -192,14 +192,21 @@ def template_fact_lookup(prompt: Any, template: Any, reference_context: Any = ""
     ))
 
 
-def coordinated_performance_instruction(config: Any, *, source_prompt: Any, shot_count: int, model_target: str) -> str:
+def coordinated_performance_instruction(config: Any, *, source_prompt: Any, shot_count: int, model_target: str, requested_dialogue: bool = False) -> str:
     try:
-        from .performance_director import resolve_performance_mode, semantic_anchor_instruction, PERFORMANCE_OFF, PERFORMANCE_EXTREME, PERFORMANCE_STRONG
+        from .performance_director import resolve_performance_mode, semantic_anchor_instruction, PERFORMANCE_OFF, PERFORMANCE_EXTREME, PERFORMANCE_STRONG, PERFORMANCE_TUDOU
+        from .emotion_performance import emotion_performance_instruction
     except ImportError:
-        from performance_director import resolve_performance_mode, semantic_anchor_instruction, PERFORMANCE_OFF, PERFORMANCE_EXTREME, PERFORMANCE_STRONG
+        from performance_director import resolve_performance_mode, semantic_anchor_instruction, PERFORMANCE_OFF, PERFORMANCE_EXTREME, PERFORMANCE_STRONG, PERFORMANCE_TUDOU
+        from emotion_performance import emotion_performance_instruction
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
+    if mode == PERFORMANCE_TUDOU:
+        return emotion_performance_instruction(
+            model_target, fixed_shot_count=shot_count, requested_dialogue=requested_dialogue,
+            anchor_instruction=semantic_anchor_instruction(source_prompt),
+        )
     strength = (
         "EXTREME: materially rewrite weak performance-bearing causality and timing; synonym polishing is insufficient. Leave unrelated facts and passages alone."
         if mode == PERFORMANCE_EXTREME else
@@ -230,13 +237,18 @@ def director_metadata(value: Any, *, language: str, mode: str, shot_count: int) 
     return metadata
 
 
-def preserve_director_on_repair(repair_messages: list[dict[str, Any]], original_messages: list[dict[str, Any]], value: Any, *, combat_camera_config: Any = None) -> list[dict[str, Any]]:
+def preserve_director_on_repair(repair_messages: list[dict[str, Any]], original_messages: list[dict[str, Any]], value: Any, *, combat_camera_config: Any = None, performance_director_config: Any = None) -> list[dict[str, Any]]:
     """Keep the original fact/directing contract in the existing bounded language repair."""
     try:
         from .combat_camera import resolve_combat_camera_config
     except ImportError:
         from combat_camera import resolve_combat_camera_config
-    if normalize_director_skill(value) == DIRECTOR_OFF and resolve_combat_camera_config(combat_camera_config) is None:
+    try:
+        from .performance_director import resolve_performance_mode, PERFORMANCE_TUDOU
+    except ImportError:
+        from performance_director import resolve_performance_mode, PERFORMANCE_TUDOU
+    emotion_enabled = resolve_performance_mode(performance_director_config) == PERFORMANCE_TUDOU
+    if normalize_director_skill(value) == DIRECTOR_OFF and resolve_combat_camera_config(combat_camera_config) is None and not emotion_enabled:
         return repair_messages
     repaired = [dict(message) for message in repair_messages]
     original_system = "\n".join(str(m["content"]) for m in original_messages if m["role"] == "system")

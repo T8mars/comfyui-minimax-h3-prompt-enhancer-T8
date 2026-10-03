@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import ast
 import re
 import json
 import subprocess
@@ -56,11 +57,30 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
             ["git", "ls-tree", "-r", "--name-only", BASELINE, "--", "directional_skills", "example_workflows"],
             cwd=GIT_ROOT, text=True,
         ).splitlines()
-        paths += ["nodes.py", "seedance20.py", "provider_config.py", "combat_camera.py"]
+        paths += ["provider_config.py", "combat_camera.py"]
         for path in paths:
             with self.subTest(path=path):
                 self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"),
                                  frozen_bytes(path).replace(b"\r\n", b"\n"))
+        # Emotion opt-in wiring intentionally changes five H3 / two Seedance
+        # functions and execute's preflight/metadata. Freeze other methods and
+        # all native schemas/signatures, rather than the entire extended file.
+        for module, path, allowed in ((h3, "nodes.py", {"_build_messages", "_h3_language_repair_messages", "_next_relay_correction", "enhance_prompt"}),
+                                      (sd, "seedance20.py", {"_build_messages", "enhance_seedance20_prompt"})):
+            previous = ast.parse(frozen_bytes(path))
+            current = ast.parse((ROOT / path).read_text(encoding="utf-8"))
+            current_by_name = {node.name: node for node in current.body if isinstance(node, (ast.FunctionDef, ast.ClassDef))}
+            for old_node in previous.body:
+                if isinstance(old_node, ast.FunctionDef) and old_node.name not in allowed:
+                    self.assertEqual(ast.dump(current_by_name[old_node.name]), ast.dump(old_node), old_node.name)
+                if isinstance(old_node, ast.ClassDef):
+                    new_methods = {node.name: node for node in current_by_name[old_node.name].body if isinstance(node, ast.FunctionDef)}
+                    for method in old_node.body:
+                        if isinstance(method, ast.FunctionDef):
+                            if method.name == "execute":
+                                self.assertEqual(ast.dump(new_methods[method.name].args), ast.dump(method.args))
+                            else:
+                                self.assertEqual(ast.dump(new_methods[method.name]), ast.dump(method), method.name)
 
     def test_old_widget_order_and_ui_are_frozen_except_reviewed_reload_fixes(self):
         # #20 changes configure/serialize hooks intentionally. Keep the widget

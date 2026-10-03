@@ -1,0 +1,322 @@
+{
+  "schema": "t8-emotion-synthetic-evidence/v1",
+  "settings": {
+    "cases_sha256": "edd22e6070b0c4e1656f61c51db8bb54aa6bbbe27006726210d4270b3c7419a8",
+    "code_sha256": {
+      "nodes.py": "6ae6311ab6f2df4268abfb8c0e0a984df18c6ea8b7c47fe148e13acdcae6e862",
+      "seedance20.py": "525e3bbc7c5fb53cb3ad578ffa003b9c5e1ade2515dc1e6ac5bc7d42e2af778e",
+      "performance_director.py": "9d24628dc0e4212e24e1923c0d769b508d4de5d661622fefbf0cb946cf84540e",
+      "emotion_performance.py": "8d73e882227f561f027d6aab2624655d3b1d40305f2eee0520bd8b1791e99a4d",
+      "directional_skills.py": "ec587110e7004fb10134e7351bcb7f4bb32e91a0b9e3c3265b7598087dfc5758",
+      "film_workflow.py": "be04c633fcfa8e6d1e064a41b1f079e7364d3c61e5bbf8b7332822d8d934c956",
+      "h3_quality.py": "dc8bf184f51f87bd90b31f8194810e81632ef0d088d1e660d5c0bbd66b985003",
+      "h3_prompt_relay.py": "e6469fad8693fa9aa9aca4046318d4a6ff7e44c054eec7350747ea33aeab0b90"
+    },
+    "quality": "off",
+    "creation": "off",
+    "requested_model": "bytedance/doubao-seed-evolving",
+    "provider": "贞贞平价小屋（推荐）",
+    "repeats": 1,
+    "duration": 8,
+    "shots": 1,
+    "language": "中文",
+    "rewrite": "balanced",
+    "selected_cases": [
+      "restrained_tears",
+      "two_bibles",
+      "relay_exact_line"
+    ],
+    "arms": "tudou"
+  },
+  "cases": [
+    {
+      "id": "restrained_tears",
+      "target": "h3",
+      "prompt": "8秒一个固定胸部以上镜头，成年女人含泪却尽力保持平静，独自对画外右侧说原句“我知道了。”一次。声音低但清楚，不哭腔、不抽泣、不大声；说完仍有伤心余绪，继续望着画外右侧，不突然微笑。眼泪停在眼眶，不新增电话、信件或人物。没有配乐、字幕或环境声，只允许这句对白。"
+    },
+    {
+      "id": "smiling_threat",
+      "target": "h3",
+      "prompt": "8秒固定近景，成年女人全程保留礼貌微笑，独自低声清楚说“你可以再试一次。”一次。语气有冷静威胁意味，不吼叫、不咬牙、不收起笑容、不加剧情或武器。说完仍微笑看向画外左侧，无字幕、音乐和其他声音，只这句对白。"
+    },
+    {
+      "id": "numb_speech",
+      "target": "h3",
+      "prompt": "8秒固定中近景，疲惫的成年女人麻木而平稳地说原句“明天照常上班。”一次；发音清楚、正常口型，不哭不笑、不屏住呼吸。说完仍麻木站着，不新增道具、同伴、字幕或情节。只有这句对白，其他声音与配乐都没有。"
+    },
+    {
+      "id": "carryover",
+      "target": "h3",
+      "prompt": "8秒连续中近景，成年女人独自在窗前，起初强忍失落；她主动决定继续等待，缓缓把视线从窗外转到已有关闭的门，尝试平静但眼眶的紧绷仍残留；末尾继续等待，门不开。没有新人物、画外消息、敲门声或对白，无字幕；全片完全静音。"
+    },
+    {
+      "id": "heightened",
+      "target": "h3",
+      "prompt": "8秒一个固定中景，成年男人独自明显愤怒，大幅甩开双臂并用响亮但清楚的声音说原句“到此为止！”一次。是明确外放的爆发，不要缩成细微克制。他说完仍紧绷站着，不摔物品、不伤害人、不新增道具或反转。只有这句对白，没有配乐、字幕或其他声音。"
+    },
+    {
+      "id": "crop_and_silence",
+      "target": "h3",
+      "prompt": "8秒固定极近特写，仅成年女人的眼睛和眉毛在画面内，不可重新构图、拉远或切镜。她由紧张逐渐恢复平稳注视，最后仍有轻微警觉，不新增触发情节，不描写可见手脚、肩膀或嘴。完全静音、无字幕无配乐无对白。"
+    },
+    {
+      "id": "two_bibles",
+      "target": "h3",
+      "bibles": true,
+      "prompt": "8秒固定双人中景：红袖Alice右手持钥匙，蓝袖Bob双手空着，门始终关闭。Alice只低声说“等我。”一次，Bob只清楚说“我在这里。”一次，两句依次完整说完。Alice焦急但声音清楚，Bob平稳，不把Alice的情绪和声音复制给Bob。钥匙不交换、不新增人、道具、对白、字幕或开门；只有这两句声音，无配乐环境声。"
+    },
+    {
+      "id": "non_character",
+      "target": "h3",
+      "prompt": "8秒固定镜头，没有脸的红色小玩具车沿已有灰轨向右连续滚动，结束仍滚动，不停车、不变形。纯机械展示，无人物、拟人、眼睛、呼吸、情绪或对白。只有滚轮摩擦声，无字幕无配乐。"
+    },
+    {
+      "id": "relay_wait",
+      "target": "relay",
+      "prompt": "8秒一个连续固定中景，成年女人红色袖口，右手始终拿车票。前4秒安静站着等待、视线固定画外右侧；后4秒自行决定前往已有出口，沿走廊迈步，保留等待时的紧张余绪；最后仍在移动，不定格。没有消息、敲门、其他人物或对白，只有脚步声，无配乐无字幕。"
+    },
+    {
+      "id": "relay_exact_line",
+      "target": "relay",
+      "prompt": "8秒一个固定中近景，成年女人。前4秒仅低声清楚说“等我回来。”一次，后4秒不再发声，凝视画外右侧并保持先前担忧余绪。无切镜，无新增人、道具、事件、回答或下一句。只有这句对白，无配乐、环境声和字幕，末尾仍凝视，不定格。"
+    },
+    {
+      "id": "seedance_subtext",
+      "target": "seedance20",
+      "skill": "drama_scene",
+      "prompt": "8秒一个固定双人中景，Alice右手拿黄票，Bob不接票。Alice平静低声说原句“你先走吧。”一次，情绪依恋但不哭不笑不拉人。Bob全程安静、没有反应，票始终在Alice右手；关系故意开放，不推断分手、不编背景。没有其他声音、配乐或字幕，最后仍面对面站着。"
+    },
+    {
+      "id": "seedance_carryover",
+      "target": "seedance20",
+      "skill": "situational_drama",
+      "prompt": "8秒一个固定中近景，成年女人独自深夜等车，双手不做动作。起初焦急；她主动让自己平静地等待，但眉间仍留轻微紧绷，末尾继续望向画外左侧，不突然笑、不走、不换姿势。不新增车、人、物品、手机、消息或触发声，没有对白、字幕或配乐；全片完全静音。"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "restrained_tears",
+      "repeat": 0,
+      "arm": "tudou",
+      "outcome": "success",
+      "output": "integrated_multimodal_description: [Shot 1] 真人实拍风格，固定的胸部以上近景，一位成年女人独自位于画面中，背景简洁，不出现电话、信件或其他人物。她眼眶含泪，泪水停在眼眶中没有落下，面部肌肉有轻微克制的紧绷，却尽力保持平静；她的视线持续投向画外右侧。镜头全程保持静止。约一秒后，她低声但清楚地对画外右侧开口，声音没有哭腔、没有抽泣，也没有提高音量，成年女人(S1)说：<d>[Chinese] 我知道了。</d> 说完后她轻轻合上嘴唇，仍带着伤心的余绪继续望着画外右侧，眼神没有移开，也没有突然微笑，直到八秒结束。\n\noverall_soundscape: 除这句对白外，全片没有环境声、身体动作声或任何非语言人声。\n\nnon_diegetic_music: N/A",
+      "output_sha256": "983fbd0327015f3c1ae9f294bdeac9856b3d06b1a37d344ac88097f03e841daa",
+      "logical_calls": 1,
+      "elapsed_seconds": 21.515,
+      "contract_check": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "T2VA",
+        "issues": [],
+        "_fact_anchors": [],
+        "_source_vocals": [
+          {
+            "text": "我知道了。",
+            "language": "",
+            "speaker": "",
+            "entity": ""
+          }
+        ],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      },
+      "quality_events": [
+        {
+          "quality_mode": "保持原样 / Off",
+          "correction_calls": 0,
+          "protocol_edits": 1,
+          "result": "corrected",
+          "issue_codes": [],
+          "unchecked": [
+            "contract_check"
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "message_sha256": "f5f8b924a18e449aae3a88b94f7a0a6f9dc83121cf6371242b37cc83728117bf",
+          "model_id": "bytedance/doubao-seed-evolving",
+          "elapsed_seconds": 21.515,
+          "output": "integrated_multimodal_description: [Shot 1] 真人实拍风格，固定的胸部以上近景，一位成年女人独自位于画面中，背景简洁，不出现电话、信件或其他人物。她眼眶含泪，泪水停在眼眶中没有落下，面部肌肉有轻微克制的紧绷，却尽力保持平静；她的视线持续投向画外右侧。镜头全程保持静止。约一秒后，她低声但清楚地对画外右侧开口，声音没有哭腔、没有抽泣，也没有提高音量，成年女人（S1）说：<d>[Chinese] 我知道了。</d> 说完后她轻轻合上嘴唇，仍带着伤心的余绪继续望着画外右侧，眼神没有移开，也没有突然微笑，直到八秒结束。\n\noverall_soundscape: 除这句对白外，全片没有环境声、身体动作声或任何非语言人声。\n\nnon_diegetic_music: N/A",
+          "output_sha256": "89383e5ac1e15e2d1c08a08cfebe140764a2b312488f93055b8491ebaf7e6df3",
+          "http_attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "usage": {
+                "prompt_tokens": 7891,
+                "completion_tokens": 608,
+                "total_tokens": 8499
+              },
+              "response_model": "bytedance/doubao-seed-evolving",
+              "finish_reason": "stop"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "two_bibles",
+      "repeat": 0,
+      "arm": "tudou",
+      "outcome": "success",
+      "output": "integrated_multimodal_description: [Shot 1] 真人实拍风格，固定双人中景，Alice与Bob站在一扇始终关闭的门前，画面中没有字幕或额外道具。穿红袖的Alice右手一直握着钥匙，身体微微前倾，眼神焦急但克制，钥匙不递给Bob，也不接触门锁；她低声而清楚地说：(S1) <d>[Chinese] 等我。</d> 穿蓝袖的Bob双手空置，自然垂在身侧，原地不动，神情平稳，等Alice说完后清楚地回应：(S2) <d>[Chinese] 我在这里。</d> 对白结束后，两人保持原有位置，门依旧关闭，镜头静止直到8秒结束。\n\noverall_soundscape: 全片没有环境声、动作声或其他非语言人声；除两句对白外，其余时间没有声音。\n\nnon_diegetic_music: N/A",
+      "output_sha256": "2bf55857b5ab3a5f08cacbe15a6a1c5e8baeebd509a4ea5663f789195e322812",
+      "logical_calls": 1,
+      "elapsed_seconds": 30.36,
+      "contract_check": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "T2VA",
+        "issues": [],
+        "_fact_anchors": [],
+        "_source_vocals": [
+          {
+            "text": "等我。",
+            "language": "",
+            "speaker": "",
+            "entity": ""
+          },
+          {
+            "text": "我在这里。",
+            "language": "",
+            "speaker": "",
+            "entity": ""
+          }
+        ],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      },
+      "quality_events": [],
+      "requests": [
+        {
+          "message_sha256": "8b948257b06d796bba9db10c9c83c38176e9ca4fd3fa14f80d2b4151ff5b15af",
+          "model_id": "bytedance/doubao-seed-evolving",
+          "elapsed_seconds": 30.36,
+          "output": "integrated_multimodal_description: [Shot 1] 真人实拍风格，固定双人中景，Alice与Bob站在一扇始终关闭的门前，画面中没有字幕或额外道具。穿红袖的Alice右手一直握着钥匙，身体微微前倾，眼神焦急但克制，钥匙不递给Bob，也不接触门锁；她低声而清楚地说：(S1) <d>[Chinese] 等我。</d> 穿蓝袖的Bob双手空置，自然垂在身侧，原地不动，神情平稳，等Alice说完后清楚地回应：(S2) <d>[Chinese] 我在这里。</d> 对白结束后，两人保持原有位置，门依旧关闭，镜头静止直到8秒结束。\n\noverall_soundscape: 全片没有环境声、动作声或其他非语言人声；除两句对白外，其余时间没有声音。\n\nnon_diegetic_music: N/A",
+          "output_sha256": "2bf55857b5ab3a5f08cacbe15a6a1c5e8baeebd509a4ea5663f789195e322812",
+          "http_attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "usage": {
+                "prompt_tokens": 8172,
+                "completion_tokens": 869,
+                "total_tokens": 9041
+              },
+              "response_model": "bytedance/doubao-seed-evolving",
+              "finish_reason": "stop"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "relay_exact_line",
+      "repeat": 0,
+      "arm": "tudou",
+      "outcome": "success",
+      "output": "{\"global_prompt\":\"真人实拍风格；同一名成年女人、服装与简洁无道具背景在全片保持一致；固定中近景，机位与焦距不变，无切镜、无新增人物或道具、无额外事件、无回答、无字幕；光线柔和稳定，表演克制自然，末尾不定格；全片无环境声与非语言人声，无配乐，只允许指定的一次对白。\",\"events\":[{\"prompt\":\"0至4秒内，固定中近景中的成年女人穿着素净深色上衣，站在简洁中性色背景前，视线落向画外右侧，眉尖微蹙；她嘴唇自然开合，(S1)低声清楚地说：<d>[Chinese] 等我回来。</d> 说完后双唇闭合，视线不移动。\",\"end_state\":\"第4秒时对白已经结束，女人双唇闭合，仍凝视画外右侧，脸上保留担忧余绪，固定中近景与场景完全连续。\",\"weight\":1},{\"prompt\":\"4至8秒内，同一固定中近景不切镜，女人不再发声，没有回答或下一句；她持续凝视画外右侧，担忧余绪未散，只有极轻微的自然生理微动，机位、构图与光线保持不变。\",\"end_state\":\"第8秒时女人仍在同一构图中凝视画外右侧并保留担忧余绪，表演处于连续自然状态，没有定格、切镜或新事件。\",\"weight\":1}],\"native_prompt\":\"integrated_multimodal_description: [Shot 1] 真人实拍风格，固定中近景，一名成年女人穿着素净深色上衣，站在简洁中性色背景前。镜头保持静态，机位与焦距全程不变，无切镜。开场时她的视线投向画外右侧，眉尖微蹙，神情带着克制的担忧。0至4秒，她嘴唇自然开合，(S1)低声清楚地说：<d>[Chinese] 等我回来。</d> 说完后双唇闭合。4至8秒，她不再发声，没有回答或下一句，也没有新增人物、道具或事件；她始终凝视画外右侧，担忧余绪留在眼神与微蹙的眉尖间，仅有极轻微的自然生理微动，画面持续流动而不定格，直到8秒末尾仍维持凝视。\\n\\noverall_soundscape: 全片不存在环境声、物理动作声或非语言人声；除前段指定的一次对白外，没有其他声音。\\n\\nnon_diegetic_music: N/A\"}",
+      "output_sha256": "42e77193eb915125bd3e9f71d810740d2d02ac6c94365d91183b29726bc9902b",
+      "logical_calls": 1,
+      "elapsed_seconds": 86.625,
+      "contract_check": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "T2VA",
+        "issues": [],
+        "_fact_anchors": [],
+        "_source_vocals": [
+          {
+            "text": "等我回来。",
+            "language": "",
+            "speaker": "",
+            "entity": ""
+          }
+        ],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      },
+      "quality_events": [],
+      "requests": [
+        {
+          "message_sha256": "ccd9b6d11ee7ce5805907cf9be1ae9c9fa81bc9a2ba81437a71942ac8223514a",
+          "model_id": "bytedance/doubao-seed-evolving",
+          "elapsed_seconds": 86.625,
+          "output": "{\"global_prompt\":\"真人实拍风格；同一名成年女人、服装与简洁无道具背景在全片保持一致；固定中近景，机位与焦距不变，无切镜、无新增人物或道具、无额外事件、无回答、无字幕；光线柔和稳定，表演克制自然，末尾不定格；全片无环境声与非语言人声，无配乐，只允许指定的一次对白。\",\"events\":[{\"prompt\":\"0至4秒内，固定中近景中的成年女人穿着素净深色上衣，站在简洁中性色背景前，视线落向画外右侧，眉尖微蹙；她嘴唇自然开合，(S1)低声清楚地说：<d>[Chinese] 等我回来。</d> 说完后双唇闭合，视线不移动。\",\"end_state\":\"第4秒时对白已经结束，女人双唇闭合，仍凝视画外右侧，脸上保留担忧余绪，固定中近景与场景完全连续。\",\"weight\":1},{\"prompt\":\"4至8秒内，同一固定中近景不切镜，女人不再发声，没有回答或下一句；她持续凝视画外右侧，担忧余绪未散，只有极轻微的自然生理微动，机位、构图与光线保持不变。\",\"end_state\":\"第8秒时女人仍在同一构图中凝视画外右侧并保留担忧余绪，表演处于连续自然状态，没有定格、切镜或新事件。\",\"weight\":1}],\"native_prompt\":\"integrated_multimodal_description: [Shot 1] 真人实拍风格，固定中近景，一名成年女人穿着素净深色上衣，站在简洁中性色背景前。镜头保持静态，机位与焦距全程不变，无切镜。开场时她的视线投向画外右侧，眉尖微蹙，神情带着克制的担忧。0至4秒，她嘴唇自然开合，(S1)低声清楚地说：<d>[Chinese] 等我回来。</d> 说完后双唇闭合。4至8秒，她不再发声，没有回答或下一句，也没有新增人物、道具或事件；她始终凝视画外右侧，担忧余绪留在眼神与微蹙的眉尖间，仅有极轻微的自然生理微动，画面持续流动而不定格，直到8秒末尾仍维持凝视。\\n\\noverall_soundscape: 全片不存在环境声、物理动作声或非语言人声；除前段指定的一次对白外，没有其他声音。\\n\\nnon_diegetic_music: N/A\"}",
+          "output_sha256": "42e77193eb915125bd3e9f71d810740d2d02ac6c94365d91183b29726bc9902b",
+          "http_attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "usage": {
+                "prompt_tokens": 8495,
+                "completion_tokens": 2617,
+                "total_tokens": 11112
+              },
+              "response_model": "bytedance/doubao-seed-evolving",
+              "finish_reason": "stop"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": "Synthetic text-only prompts. Output completion is not a hard-contract pass. Unknown rendered quality, real-image behavior and local-9B compliance. Failures retained; no keys, headers, server IDs, reasoning or original message bundles exported.",
+  "source_sha256": "adcb12d263b16c571f250dd82f0a017826fc2a15d69aed2058ae7a10acc719fc",
+  "post_run_output_code_sha256": {
+    "quality_pipeline.py": "e4527643dfd50270761ee8f5c4dd749cc450e0adb24f5679aad00c58a3224f35",
+    "h3_vocal_protocol.py": "290a682d3a6a4689fef7cacd98b6f929a281a8c48c8953ab2db3de82b3e625bc"
+  }
+}

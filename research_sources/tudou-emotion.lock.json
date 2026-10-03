@@ -1,0 +1,17 @@
+{
+  "schema_version": "t8-local-method-source/v1",
+  "id": "tudou_emotion",
+  "adaptation_revision": "1.0.0",
+  "author_credit": "土豆 / Tudou",
+  "source_kind": "user-provided local material; no public repository supplied",
+  "review_date": "2026-10-04",
+  "discussion_rounds": 20,
+  "license_observation": "No license file was present in the supplied directory. No full source text, glossary or source examples are redistributed. Attribution does not assert redistribution permission.",
+  "files": [
+    {"path": "SKILL.md", "bytes": 26187, "sha256": "4c2e705558c7c9e4bebe59fc26f9829c75f64dba737377ef43b24dfb66fba39b"},
+    {"path": "references/actor-performance.md", "bytes": 13103, "sha256": "d8f9df1e40c854c03fcaa7161ba9f0d07e8b6abf77fab3af7745227d27951058"}
+  ],
+  "relationship": "Independently selected and worded T8 emotion-direction method; not endorsed by the source author, MiniMax or Seedance.",
+  "excluded": ["universal six-field output", "six-second default", "forced one-take policy", "reference-image removal or renumbering", "unverified vocal-tag glossary", "automatic LoRA triggers", "source examples and genre defaults"],
+  "limitations": ["Compiled instruction coverage is not proof of LLM compliance.", "API text observations are not rendered video observations.", "No cross-model, local-9B or universal creative gain is claimed.", "Structural scores do not measure emotional realism."]
+}

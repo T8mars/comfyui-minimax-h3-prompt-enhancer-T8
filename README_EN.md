@@ -13,7 +13,7 @@ with Performance Director. Unconnected/Off preserves old behavior; no extra plan
 request. [Guide and validation limits](docs/combat-camera.md) ·
 [H3 example](example_workflows/combat_camera_h3.json) / [Seedance example](example_workflows/combat_camera_seedance20.json).
 
-The existing H3/Seedance nodes offer **Check, one bounded quality correction, and Causal creation**. Off/Original preserve old workflows and native outputs. No extra form or wiring is required. Node guidance and redacted diagnostics show failures and correction counts. Corrections may cost one additional logical request; failures retain the complete draft. Text contracts do not prove complex semantics, physics or rendered video quality.
+The existing H3/Seedance nodes offer **Check, one bounded quality correction, and Causal creation**. Off/Original preserve old workflows and valid native outputs; confirmed H3 vocal-format errors are automatically corrected for free. No extra form or wiring is required. Node guidance and redacted diagnostics show failures and correction counts. Model corrections may cost one additional logical request; failures retain the complete draft. Text contracts do not prove complex semantics, physics or rendered video quality.
 
 [Bilingual guide and cost boundaries](docs/h3-quality-creation.md) · [Check example](example_workflows/h3_seedance_quality_check_example.json) · [Causal + repair example](example_workflows/h3_seedance_causal_creation_example.json)
 
@@ -118,10 +118,19 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - In-node API-key entry, masked display, workflow save, clear, and registration links; standard `STRING` API-key connections remain supported.
 - OpenAI-compatible Base URL and model ID persist in the workflow and do not need to be re-entered on every run. API keys remain separate.
 - Native progress reporting, memory-only redacted diagnostics, provider capability preflight, local prompt inspection, and a no-resubmit recovery button on all three core enhancers.
-- Optional `T8 Performance Director Config` adds observable acting structure for character, emotion, reaction, and dialogue requests with `AUTO / Strong / Off / Extreme`; it adds no LLM call and is not an official MiniMax Skill.
+- Optional `T8 Performance Director Config` adds observable acting structure with `AUTO / Strong / Off / Extreme`, plus opt-in **Tudou emotion direction** (`土豆-情绪演绎（声画协同）`). The fifth option separates emotion from intensity/volume, carries preceding-state residue and coordinates each line, lip motion and visible cues. It is not a higher intensity tier, adds no planning/scoring call, and preserves exact words, sound permissions and native H3/Seedance/Relay contracts. Existing character Bibles and independent Skills remain usable. See [method and evidence boundaries](./docs/EMOTION_PERFORMANCE.md); text quality is not rendered performance evidence.
 - A searchable T8 template browser with categories, search, favorites, recent items, lazy GIF previews, deterministic Top-3 recommendations, and comparison.
 
 ## T8 Creative Director suite
+
+The [Tudou real-API report](./docs/EMOTION_API_ACCEPTANCE.md) retains failures
+and separates the initial 48-slot A/B from revised follow-ups. It does not show
+a universal advantage over Extreme. H3 now automatically normalizes fullwidth
+speaker IDs, safely bound missing IDs and explicit language-tag aliases, even
+with Quality Off, on local/API paths. This free step preserves actual words.
+Ambiguous multiple voices retain the complete draft and a diagnostic rather
+than guessed identities; optional Quality Repair still allows at most one paid
+correction. See [vocal-format fix and evidence](./docs/H3_VOCAL_PROTOCOL_FIX.md).
 
 The suite adds planning, exploration, revision, and delivery helpers without replacing the three core enhancers. Existing core node IDs, serialized widget order, defaults, and outputs remain unchanged.
 

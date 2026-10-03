@@ -2088,7 +2088,7 @@ class PromptEnhancerTests(unittest.TestCase):
         original = (f"overall_soundscape: N/A\nnon_diegetic_music: N/A\n"
                     f"integrated_multimodal_description: {description}")
         result = self.run_enhancer(FakeSession(original), duration_seconds=8, shot_count="2")
-        expected_description = description.replace("At 00:04.000 fixed", "At 00:04.000, fixed")
+        expected_description = description.replace("At 00:04.000 fixed", "At 00:04.000, fixed").replace("Alice （S1）", "Alice (S1)")
         self.assertEqual(result, (f"integrated_multimodal_description: {expected_description}"
                                  "\n\noverall_soundscape: N/A\n\nnon_diegetic_music: N/A"))
         self.assertEqual(nodes._reorder_complete_fields(result, "T2VA"), result)

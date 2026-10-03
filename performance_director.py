@@ -5,15 +5,21 @@ from typing import Any, Mapping
 
 from comfy_api.latest import io
 
+try:
+    from .emotion_performance import EMOTION_MODE, EMOTION_REVISION, emotion_performance_instruction, emotion_source_metadata
+except ImportError:
+    from emotion_performance import EMOTION_MODE, EMOTION_REVISION, emotion_performance_instruction, emotion_source_metadata
+
 
 PERFORMANCE_CONFIG_SCHEMA = "t8-performance-director-config/v1"
 PERFORMANCE_AUTO = "AUTO（按人物 / 表演意图）"
 PERFORMANCE_STRONG = "强化（明确表演结构）"
 PERFORMANCE_EXTREME = "极致（深度表演重构）"
 PERFORMANCE_OFF = "关闭（保持原编译）"
-# Append the new value so the original three option indexes remain stable for
+PERFORMANCE_TUDOU = EMOTION_MODE
+# Append the new value so the original four option indexes remain stable for
 # hosts or third-party workflow tools that persisted an index instead of text.
-PERFORMANCE_MODES = [PERFORMANCE_AUTO, PERFORMANCE_STRONG, PERFORMANCE_OFF, PERFORMANCE_EXTREME]
+PERFORMANCE_MODES = [PERFORMANCE_AUTO, PERFORMANCE_STRONG, PERFORMANCE_OFF, PERFORMANCE_EXTREME, PERFORMANCE_TUDOU]
 STORYBOARD_SOURCE_REPOSITORY = "https://github.com/phileiny/h3-storyboard-skill"
 STORYBOARD_SOURCE_COMMIT = "ab65851f599435a1ff94ea4931949bd7bcaf069b"
 
@@ -31,7 +37,7 @@ def build_performance_director_config(mode: Any = PERFORMANCE_AUTO) -> dict[str,
     return {
         "schema_version": PERFORMANCE_CONFIG_SCHEMA,
         "mode": normalized,
-        "source": {
+        "source": emotion_source_metadata() if normalized == PERFORMANCE_TUDOU else {
             "relationship": "community research inspiration; not an official MiniMax Skill",
             "repository": STORYBOARD_SOURCE_REPOSITORY,
             "commit": STORYBOARD_SOURCE_COMMIT,
@@ -51,6 +57,13 @@ def resolve_performance_mode(config: Any = None) -> str:
     return mode
 
 
+def performance_metadata(config: Any = None) -> dict[str, str]:
+    """New opt-in provenance only; legacy recovery metadata stays unchanged."""
+    if resolve_performance_mode(config) != PERFORMANCE_TUDOU:
+        return {}
+    return {"emotion_strategy": "tudou_emotion", "emotion_revision": EMOTION_REVISION}
+
+
 def h3_performance_instruction(
     config: Any = None,
     *,
@@ -60,6 +73,11 @@ def h3_performance_instruction(
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
+    if mode == PERFORMANCE_TUDOU:
+        return emotion_performance_instruction(
+            "MiniMax H3", fixed_shot_count=fixed_shot_count,
+            anchor_instruction=semantic_anchor_instruction(source_prompt),
+        )
     if mode == PERFORMANCE_EXTREME:
         strength = " ".join((
             "EXTREME PERFORMANCE REWRITE CONTRACT: this is a deep acting-direction rewrite, not merely an activation flag or a synonym-polish pass.",
@@ -104,6 +122,11 @@ def seedance_performance_instruction(
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
+    if mode == PERFORMANCE_TUDOU:
+        return emotion_performance_instruction(
+            "Seedance 2.0", fixed_shot_count=fixed_shot_count,
+            anchor_instruction=semantic_anchor_instruction(source_prompt),
+        )
     if mode == PERFORMANCE_EXTREME:
         strength = " ".join((
             "EXTREME PERFORMANCE REWRITE CONTRACT: perform a deep native Seedance acting-direction rewrite, not a light paraphrase or activation-only pass.",
@@ -148,6 +171,14 @@ def storyboard_performance_instruction(
     mode = resolve_performance_mode(config)
     if mode == PERFORMANCE_OFF:
         return ""
+    if mode == PERFORMANCE_TUDOU:
+        return " ".join((
+            emotion_performance_instruction(
+                model_target, fixed_shot_count=fixed_shot_count, planning_ir=True,
+                anchor_instruction=semantic_anchor_instruction(source_prompt),
+            ),
+            "For every shot keep the existing dramatic_trigger, reception_beat, primary_performance_beat, observable_cues, gaze_target, speech_span, state_transition_strategy and performance_risks fields. Preserve separate character_performance_beats when present; do not merge characters or expand the compact IR budget.",
+        ))
     mode_rule = (
         "EXTREME STORYBOARD PERFORMANCE CONTRACT: for every performance-bearing shot, use the supplied story facts to fully resolve the dramatic trigger, reception beat, one dominant response, observable cues, gaze target, speech span, transition strategy, and settled residue. Treat an existing plan as an editable draft and materially improve causality or timing; adjective-only changes are insufficient. Never invent characters, plot events, emotions, or dialogue, and leave non-performance shots empty."
         if mode == PERFORMANCE_EXTREME
@@ -491,7 +522,11 @@ class T8PerformanceDirectorConfig(io.ComfyNode):
                     display_name="表演导演模式",
                     options=PERFORMANCE_MODES,
                     default=PERFORMANCE_AUTO,
-                    tooltip="AUTO 条件启用；强化明确套用原有结构；关闭恢复原编译；极致会深度重构表演因果与节拍。",
+                    tooltip=(
+                        "AUTO 条件启用；强化明确套用原有结构；关闭恢复原编译；极致深度重构表演因果与节拍。"
+                        "土豆-情绪演绎协调情绪转换、逐句演法与声画，不是更高强度；无须额外填表，可与戏剧/战斗 Skill 配合。"
+                        "Tudou coordinates emotion carryover, line delivery and visible/audio cues; not a stronger intensity tier."
+                    ),
                 ),
             ],
             outputs=[T8PerformanceDirectorConfigIO.Output(display_name="performance_director_config")],
@@ -510,6 +545,7 @@ __all__ = [
     "PERFORMANCE_MODES",
     "PERFORMANCE_OFF",
     "PERFORMANCE_STRONG",
+    "PERFORMANCE_TUDOU",
     "PerformanceDirectorConfigError",
     "T8PerformanceDirectorConfig",
     "T8PerformanceDirectorConfigIO",
@@ -517,6 +553,7 @@ __all__ = [
     "h3_performance_instruction",
     "normalize_storyboard_performance_fields",
     "performance_risk_warnings",
+    "performance_metadata",
     "resolve_performance_mode",
     "seedance_performance_instruction",
     "storyboard_performance_instruction",

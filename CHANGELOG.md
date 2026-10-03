@@ -3,6 +3,41 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [Unreleased]
+
+## [1.29.0] - 2026-10-04
+
+### Added
+
+- Optional `土豆-情绪演绎（声画协同）` appended to performance director modes;
+  keep all four prior values, default, schema, ports, serializers and outputs.
+  Coordinate emotion quality/intensity, carryover and per-line voice/body cues
+  inside existing H3, Seedance, Relay and compact storyboard contracts.
+- Preserve the opt-in method during bounded language/quality repairs and retain
+  atomic strategy provenance in recovery without regenerating stored results.
+  Independently worded source adaptation and bilingual node help; no automatic
+  LoRA triggers, reference deletion or added planning/scoring provider calls.
+- Frozen-release compatibility tests and opt-in 48-result real API observation
+  runner. Local transport tests and text evaluation do not establish video gains.
+
+### Verification
+
+- Record the initial 48-slot A/B and separate 8/4-result native/quality
+  follow-ups, including failures; no universal superiority or rendered gain
+  claimed. See `docs/EMOTION_API_ACCEPTANCE.md`; follow-up vocal-format evidence
+  is tracked separately from those historical observations.
+- Fetch the frozen 1.28.2 compatibility baseline in both CI workflows; regression
+  checks prevent a release-only missing-baseline failure.
+
+### Fixed
+
+- Automatically normalize H3 fullwidth speaker IDs, safely bound missing IDs
+  and explicit vocal-language aliases on local/API output paths, including
+  Quality Off and Relay native prompts. No extra provider call, dialogue change,
+  guessed multi-speaker ownership or Seedance protocol change. Preserve existing
+  IDs, literal text, metadata and Relay execution/timing/weights; cache the final
+  normalized result for no-rebill restoration.
+
 ## [1.28.2] - 2026-10-01
 
 ### Fixed

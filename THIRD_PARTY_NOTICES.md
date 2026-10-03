@@ -81,6 +81,17 @@ user content are intentionally excluded from this repository.
 
 ## Community performance-directing research
 
+### Tudou emotion directing methods
+
+`emotion_performance.py` independently selects and restates methods from the
+user-provided `tudou-single-h3` and actor-performance reference: emotion quality
+versus intensity, state carryover, per-line delivery and voice/body coordination.
+No license file was supplied. Full source prose, examples, vocal-tag glossary
+and LoRA triggers are not redistributed; attribution is not a claim of permission
+or endorsement. Source hashes and excluded platform policies are recorded in
+`research_sources/tudou-emotion.lock.json`. This opt-in method is non-official
+and does not certify LLM compliance, local model capability or rendered emotion.
+
 ### Ning drama/action directing methods
 
 `directional_skills/ning_wenwu/` independently restates user-supplied Ning

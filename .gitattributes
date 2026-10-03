@@ -1,1 +1,5 @@
 official_skills/** text eol=lf
+tests/fixtures/tudou_emotion_api_2026-10-04.json text eol=lf
+tests/fixtures/tudou_emotion_review_2026-10-04.json text eol=lf
+tests/fixtures/h3_vocal_protocol_api_2026-10-04.json text eol=lf
+tests/fixtures/h3_vocal_protocol_final_api_2026-10-04.json text eol=lf

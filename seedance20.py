@@ -32,6 +32,7 @@ from .provider_config import (
 from .performance_director import (
     PerformanceDirectorConfigError,
     T8PerformanceDirectorConfigIO,
+    performance_metadata,
     resolve_performance_mode,
     seedance_performance_instruction,
 )
@@ -670,7 +671,8 @@ def _build_messages(
     ]
     performance_rule = (
         coordinated_performance_instruction(performance_director_config, source_prompt=prompt,
-                                           shot_count=shot_count, model_target="Seedance 2.0")
+                                           shot_count=shot_count, model_target="Seedance 2.0",
+                                           requested_dialogue=uses_authoring_contract(skill_id))
         if directional else seedance_performance_instruction(
             performance_director_config, fixed_shot_count=shot_count, source_prompt=prompt)
     )
@@ -976,7 +978,8 @@ def enhance_seedance20_prompt(
                 )
                 if quality_mode == QUALITY_OFF and needs_local_language_repair(result, output_language):
                     result = provider.complete(
-                        preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill, combat_camera_config=combat_camera_config),
+                        preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill, combat_camera_config=combat_camera_config,
+                                                    performance_director_config=performance_director_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -1072,7 +1075,8 @@ def enhance_seedance20_prompt(
             result = _request_completion(
                 session,
                 api_key,
-                preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill, combat_camera_config=combat_camera_config),
+                preserve_director_on_repair(local_language_repair_messages(result, output_language), messages, director_skill, combat_camera_config=combat_camera_config,
+                                            performance_director_config=performance_director_config),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -1561,11 +1565,13 @@ class Seedance20PromptEnhancer(io.ComfyNode):
             quality_mode = normalize_quality(quality_mode)
             creation_mode = normalize_creation(creation_mode)
             combat_camera_config = resolve_combat_camera_config(combat_camera_config)
+            resolve_performance_mode(performance_director_config)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
         except (DirectionalSkillError, ValueError) as error:
             raise Seedance20PromptEnhancerError(str(error)) from error
         metadata = director_metadata(director_skill, language=output_language, mode="Seedance 2.0", shot_count=effective_shots)
         metadata.update(camera_metadata(combat_camera_config))
+        metadata.update(performance_metadata(performance_director_config))
         begin_recovery_record("Seedance20PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("Seedance20PromptEnhancerT8", api_mode, 4)
         try:

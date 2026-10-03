@@ -16,6 +16,26 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-04: optional Tudou emotion strategy
+
+Vocal-format follow-up: automatic H3 normalization occurs inside the existing
+public quality/output boundary, with no schema, widgets, inputs/outputs or saved
+values added. Finite existing diagnostics report local fixes/ambiguous drafts.
+Only malformed native speaker/tag annotations change; valid outputs remain
+byte-identical. Local/cloud transport tests check one generation and restoration
+of the normalized cache. Relay execution text and Seedance remain unchanged.
+
+Append a fifth value to `T8PerformanceDirectorConfig.mode`; retain the original
+four values/indexes and AUTO default. This is the same single native combo,
+custom output type and schema, with no additional input, DOM widget, action or
+positional value. H3/Seedance main serializers, signatures and all bundled
+workflow bytes remain frozen against release 1.28.2. Language-repair arguments
+are internal helpers, not workflow fields. Recovery displays the stored finite
+strategy/revision before queuing; it neither serializes a new field nor applies
+the current mode to an old answer. CPU schema/message tests cover old modes and
+native runtime contracts; the real-extension Node/Chrome harnesses cover saved
+and reordered runtime widgets. This is not a live RunningHub deployment.
+
 ### Qwen opt-in edit rules (1.28.0)
 
 Append `rewrite_profile` after every prior input; it is optional, socketless,

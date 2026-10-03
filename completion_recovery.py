@@ -102,6 +102,10 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     if all(isinstance(values.get(key), str) and values[key] in options
            for key, options in camera_allowed.items()):
         result.update({key: values[key] for key in camera_allowed})
+    # An emotion strategy is independent of a scene Skill. Never admit a
+    # partial/arbitrary payload or a source path from the connected config.
+    if values.get("emotion_strategy") == "tudou_emotion" and values.get("emotion_revision") == "1.0.0":
+        result.update({"emotion_strategy": "tudou_emotion", "emotion_revision": "1.0.0"})
     return result
 
 

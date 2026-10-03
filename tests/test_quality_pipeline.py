@@ -126,7 +126,7 @@ class BoundedPipelineTests(unittest.TestCase):
         self.assertEqual(report["correction_calls"], 0)
         complete.assert_not_called()
 
-    def test_quality_candidate_fullwidth_speaker_is_locally_repaired_before_acceptance(self):
+    def test_missing_speaker_is_locally_repaired_without_a_quality_candidate(self):
         words = 'Keep （S1） unchanged in these original words.'
         old = base('[Shot 1] Alice says: <d>[English] ' + words + '</d>')
         candidate = old.replace('Alice says:', 'Alice （S1） says:')
@@ -134,20 +134,21 @@ class BoundedPipelineTests(unittest.TestCase):
         complete = Mock(return_value=candidate)
         result, metrics = self.run_h3(old, complete, source='Alice says "' + words + '".')
         self.assertEqual(result, expected)
-        self.assertEqual(metrics['correction_calls'], 1)
+        self.assertEqual(metrics['correction_calls'], 0)
         self.assertEqual(metrics['result'], 'corrected')
         self.assertGreater(metrics['protocol_edits'], 0)
         self.assertIn('<d>[English] ' + words + '</d>', result)
-        complete.assert_called_once()
+        complete.assert_not_called()
         self.assertEqual(q.repair_protocol(result), (result, []))
 
     def test_candidate_protocol_repair_cannot_normalize_protected_text_or_valid_other_id(self):
-        old = base('[Shot 1] ' + vocal('Keep （S1） in the original words.', language='English') +
+        old = base('[Shot 1] ' + EN_BODY + ' ' + vocal('Keep （S1） in the original words.', language='English') +
                    ' Bob says: <d>[English] Bring the key.</d>')
-        valid_candidate = old.replace('Bob says:', 'Bob （S2） says:')
-        expected = old.replace('Bob says:', 'Bob (S2) says:')
+        valid_candidate = old.replace(EN_BODY, ZH_BODY).replace('Bob says:', 'Bob （S2） says:').replace('Quiet room ambience and footsteps.', '只有房间环境声。')
+        expected = valid_candidate.replace('Bob （S2） says:', 'Bob (S2) says:')
+        normalized_old = old.replace('Bob says:', 'Bob (S2) says:')
         complete = Mock(return_value=valid_candidate)
-        good, metrics = self.run_h3(old, complete)
+        good, metrics = self.run_h3(old, complete, language='中文')
         with self.subTest(candidate='valid candidate normalized locally'):
             self.assertEqual(good, expected)
             self.assertEqual(metrics['result'], 'corrected')
@@ -157,8 +158,8 @@ class BoundedPipelineTests(unittest.TestCase):
                         valid_candidate.replace('Keep （S1）', 'Keep (S1)')):
             with self.subTest(changed=changed[:130]):
                 complete = Mock(return_value=changed)
-                result, report = self.run_h3(old, complete)
-                self.assertEqual(result, old)
+                result, report = self.run_h3(old, complete, language='中文')
+                self.assertEqual(result, normalized_old)
                 self.assertEqual(report['result'], 'candidate_rejected')
                 self.assertEqual(report['correction_calls'], 1)
                 complete.assert_called_once()

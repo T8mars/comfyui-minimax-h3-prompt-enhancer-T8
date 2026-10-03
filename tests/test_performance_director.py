@@ -144,6 +144,7 @@ class PerformanceDirectorTests(unittest.TestCase):
             performance.PERFORMANCE_STRONG,
             performance.PERFORMANCE_OFF,
             performance.PERFORMANCE_EXTREME,
+            performance.PERFORMANCE_TUDOU,
         ])
         config = performance.T8PerformanceDirectorConfig.execute(performance.PERFORMANCE_STRONG)[0]
         self.assertEqual(config["schema_version"], performance.PERFORMANCE_CONFIG_SCHEMA)

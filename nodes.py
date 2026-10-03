@@ -81,6 +81,7 @@ try:
         PerformanceDirectorConfigError,
         T8PerformanceDirectorConfigIO,
         h3_performance_instruction,
+        performance_metadata,
         resolve_performance_mode,
     )
     from .film_workflow import (
@@ -117,6 +118,7 @@ except ImportError:
         PerformanceDirectorConfigError,
         T8PerformanceDirectorConfigIO,
         h3_performance_instruction,
+        performance_metadata,
         resolve_performance_mode,
     )
     from film_workflow import (
@@ -1395,7 +1397,8 @@ def _build_messages(
     ]
     performance_rule = (
         coordinated_performance_instruction(performance_director_config, source_prompt=prompt,
-                                           shot_count=shot_count, model_target="MiniMax H3")
+                                           shot_count=shot_count, model_target="MiniMax H3",
+                                           requested_dialogue=uses_authoring_contract(skill_id))
         if directional else h3_performance_instruction(
             performance_director_config, fixed_shot_count=shot_count, source_prompt=prompt)
     )
@@ -1591,10 +1594,11 @@ def _reorder_complete_fields(text: str, task_type: str) -> str:
     return prefix + "\n\n".join(f"{field}: {sections[field]}" for field in fields)
 
 
-def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF, *, combat_camera_config=None):
+def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF, *, combat_camera_config=None, performance_director_config=None):
     messages = local_language_repair_messages(text, language)
     if original_messages is not None:
-        messages = preserve_director_on_repair(messages, original_messages, director_skill, combat_camera_config=combat_camera_config)
+        messages = preserve_director_on_repair(messages, original_messages, director_skill, combat_camera_config=combat_camera_config,
+                                              performance_director_config=performance_director_config)
     if relay_config:
         messages[0]["content"] += (
             "\nKeep the complete Relay JSON object and its keys, events, weights and end_state fields. "
@@ -1655,6 +1659,7 @@ def _next_relay_correction(
     text, duration, config, task_type, messages, language, *, format_used, language_used, director_skill=DIRECTOR_OFF,
     skip_language=False,
     combat_camera_config=None,
+    performance_director_config=None,
 ):
     repair = _relay_repair_messages(text, duration, config, task_type, messages)
     if repair:
@@ -1668,7 +1673,8 @@ def _next_relay_correction(
             raise PromptEnhancerError(
                 "Prompt Relay descriptive fields still do not match the selected output language after one correction."
             )
-        return "language", _h3_language_repair_messages(text, language, config, messages, director_skill, combat_camera_config=combat_camera_config)
+        return "language", _h3_language_repair_messages(text, language, config, messages, director_skill, combat_camera_config=combat_camera_config,
+                                                       performance_director_config=performance_director_config)
     return None
 
 
@@ -1919,6 +1925,7 @@ def enhance_prompt(
                             skip_language=quality_mode != QUALITY_OFF,
                             director_skill=director_skill,
                             combat_camera_config=combat_camera_config,
+                            performance_director_config=performance_director_config,
                         )
                         if correction is None:
                             break
@@ -1931,7 +1938,8 @@ def enhance_prompt(
                         language_used = language_used or kind == "language"
                 elif quality_mode == QUALITY_OFF and needs_local_language_repair(response_text, effective_local_language):
                     response_text = provider.complete(
-                        _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config),
+                        _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config,
+                                                    performance_director_config=performance_director_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -2029,6 +2037,7 @@ def enhance_prompt(
                     skip_language=quality_mode != QUALITY_OFF,
                     director_skill=director_skill,
                     combat_camera_config=combat_camera_config,
+                    performance_director_config=performance_director_config,
                 )
                 if correction is None:
                     break
@@ -2046,7 +2055,8 @@ def enhance_prompt(
             response_text = _request_completion(
                 session,
                 api_key,
-                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config),
+                _h3_language_repair_messages(response_text, effective_cloud_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config,
+                                            performance_director_config=performance_director_config),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -2543,12 +2553,14 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             quality_mode = normalize_quality(quality_mode)
             creation_mode = normalize_creation(creation_mode)
             combat_camera_config = resolve_combat_camera_config(combat_camera_config)
+            resolve_performance_mode(performance_director_config)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
         except (DirectionalSkillError, ValueError) as error:
             raise PromptEnhancerError(str(error)) from error
         metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
                                      mode=relay_mode, shot_count=effective_shots)
         metadata.update(camera_metadata(combat_camera_config))
+        metadata.update(performance_metadata(performance_director_config))
         begin_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("MiniMaxH3PromptEnhancerT8", api_mode, 4)
         try:

@@ -1,0 +1,549 @@
+{
+  "schema": "t8-emotion-primary-review/v1",
+  "evidence_sha256": "9d2cdcf15e0d99c433755d628533c82b624284bc6821c1f5fd4a254546c41f60",
+  "reviewer": "Primary implementation agent, exploratory text review, not independent human evaluation",
+  "masking": "Texts were initially read under shuffled labels. Initial triage was unmasked and numeric scores were recorded after decoding; this is NOT a preregistered independent blind comparison.",
+  "scale": "0 absent/contradictory; 1 generic; 2 partly concrete; 3 clear; 4 clear and economical",
+  "dimensions": [
+    "emotion_quality",
+    "transition_or_residue",
+    "voice_lip_coordination",
+    "crop_feasible_cues"
+  ],
+  "null_meaning": "not applicable or hard-excluded; never converted to zero or imputed",
+  "policy": "Hard failures receive no creative score. Controls receive no emotion score. No composite or population improvement estimate.",
+  "records": [
+    {
+      "label": "E01",
+      "case_id": "seedance_subtext",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        2,
+        3
+      ],
+      "note": "Exact line and ownership; Bob has no response. Soft delivery is explicit; mouth timing is generic."
+    },
+    {
+      "label": "E02",
+      "case_id": "non_character",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "control",
+      "scores": null,
+      "note": "No face, emotion, speech or stop added; friction only."
+    },
+    {
+      "label": "E03",
+      "case_id": "two_bibles",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing canonical ASCII speaker IDs."
+    },
+    {
+      "label": "E04",
+      "case_id": "heightened",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; explicit large acting retained."
+    },
+    {
+      "label": "E05",
+      "case_id": "seedance_carryover",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Hands and stance remain still; supported calming leaves brow tension. Lighting/background remain elaborations, not proven reference facts."
+    },
+    {
+      "label": "E06",
+      "case_id": "numb_speech",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing speaker and non-English vocal-language tag."
+    },
+    {
+      "label": "E07",
+      "case_id": "numb_speech",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID."
+    },
+    {
+      "label": "E08",
+      "case_id": "smiling_threat",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing canonical speaker ID; smile retained."
+    },
+    {
+      "label": "E09",
+      "case_id": "numb_speech",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing speaker ID; sound-field N/A also leaves dialogue/silence ambiguity."
+    },
+    {
+      "label": "E10",
+      "case_id": "relay_exact_line",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "note": "One protected line in delivery event 1 and separate native envelope; event 2 stays silent with worry residue. No new end-state action."
+    },
+    {
+      "label": "E11",
+      "case_id": "carryover",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Decision is self-originating, eye tension remains, door stays shut; concise."
+    },
+    {
+      "label": "E12",
+      "case_id": "relay_exact_line",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Relay parser succeeds but native speaker ID is fullwidth."
+    },
+    {
+      "label": "E13",
+      "case_id": "seedance_carryover",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Calming breath is visible, complete silence explicit; hands and stance locked."
+    },
+    {
+      "label": "E14",
+      "case_id": "restrained_tears",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing speaker; 'as if receiving information from offscreen right' also introduces an unsupported trigger."
+    },
+    {
+      "label": "E15",
+      "case_id": "seedance_carryover",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Eyes/brow and visible breath convey calming while retaining tension; hand/stance/silence preserved."
+    },
+    {
+      "label": "E16",
+      "case_id": "crop_and_silence",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Eye/brow-only cues and residual alertness; no recrop or sound."
+    },
+    {
+      "label": "E17",
+      "case_id": "restrained_tears",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID."
+    },
+    {
+      "label": "E18",
+      "case_id": "restrained_tears",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; N/A sound field does not establish permitted dialogue versus complete silence."
+    },
+    {
+      "label": "E19",
+      "case_id": "two_bibles",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing canonical speaker IDs; separate role/voice ownership retained in prose."
+    },
+    {
+      "label": "E20",
+      "case_id": "crop_and_silence",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        2,
+        2,
+        null,
+        3
+      ],
+      "note": "Framing/silence retained, but 'breathing-induced eyelid movement' is less concrete than directly observed eye/brow cues."
+    },
+    {
+      "label": "E21",
+      "case_id": "numb_speech",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; breathing/lip sequence otherwise clear."
+    },
+    {
+      "label": "E22",
+      "case_id": "relay_wait",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "First four seconds waiting, then self-started movement; ticket and tension retained; no padding action."
+    },
+    {
+      "label": "E23",
+      "case_id": "relay_wait",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Wait and movement separate in delivery spans; ticket remains owned and final movement continues."
+    },
+    {
+      "label": "E24",
+      "case_id": "smiling_threat",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; N/A sound ambiguity."
+    },
+    {
+      "label": "E25",
+      "case_id": "smiling_threat",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing speaker ID."
+    },
+    {
+      "label": "E26",
+      "case_id": "carryover",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Supported emotion order and closed door; more cue density and unrequested staging, without a new story trigger."
+    },
+    {
+      "label": "E27",
+      "case_id": "non_character",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "control",
+      "scores": null,
+      "note": "Mechanical rolling only; no anthropomorphic cues or new sounds."
+    },
+    {
+      "label": "E28",
+      "case_id": "relay_exact_line",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Relay parser succeeds but fullwidth speaker ID fails native check."
+    },
+    {
+      "label": "E29",
+      "case_id": "relay_wait",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Wait then self-started step, exact ticket ownership and continued end movement; cue density is greater, not scored as benefit."
+    },
+    {
+      "label": "E30",
+      "case_id": "heightened",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; large angry delivery remains, not forced into restraint."
+    },
+    {
+      "label": "E31",
+      "case_id": "relay_exact_line",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Relay parser succeeds but native speaker ID is fullwidth."
+    },
+    {
+      "label": "E32",
+      "case_id": "crop_and_silence",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Direct eye/brow cues retain alertness and fixed crop; silent."
+    },
+    {
+      "label": "E33",
+      "case_id": "non_character",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "control",
+      "scores": null,
+      "note": "No face or feelings; continues rolling with friction only."
+    },
+    {
+      "label": "E34",
+      "case_id": "non_character",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "control",
+      "scores": null,
+      "note": "Pure mechanical movement and permitted friction, no person or emotional arc."
+    },
+    {
+      "label": "E35",
+      "case_id": "restrained_tears",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing speaker ID; N/A sound ambiguity."
+    },
+    {
+      "label": "E36",
+      "case_id": "seedance_carryover",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Unvoiced visible breath, steady stance/hands, ongoing waiting and brow residue."
+    },
+    {
+      "label": "E37",
+      "case_id": "heightened",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; explicit expansive movement retained."
+    },
+    {
+      "label": "E38",
+      "case_id": "two_bibles",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker IDs and non-English vocal-language tags; locked ownership otherwise retained."
+    },
+    {
+      "label": "E39",
+      "case_id": "smiling_threat",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; N/A sound ambiguity."
+    },
+    {
+      "label": "E40",
+      "case_id": "seedance_subtext",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        2,
+        3
+      ],
+      "note": "Exact line, unchanged Bob, no invented relationship; soft voice clear but lip timing not specified."
+    },
+    {
+      "label": "E41",
+      "case_id": "crop_and_silence",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Eye/brow-only change and residue; crop and silence preserved."
+    },
+    {
+      "label": "E42",
+      "case_id": "relay_wait",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "No external trigger; same fixed shot, waiting before movement, ongoing endpoint."
+    },
+    {
+      "label": "E43",
+      "case_id": "heightened",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Fullwidth speaker ID; N/A sound ambiguity."
+    },
+    {
+      "label": "E44",
+      "case_id": "seedance_subtext",
+      "repeat": 0,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "note": "Mouth opens for exact line, lingering gaze afterward, Bob unresponsive, ticket never transferred."
+    },
+    {
+      "label": "E45",
+      "case_id": "carryover",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        null,
+        3
+      ],
+      "note": "Self-decision, eye tension and waiting retained; gentle push is not forbidden by this continuous medium-close input, not evidence of gain."
+    },
+    {
+      "label": "E46",
+      "case_id": "carryover",
+      "repeat": 1,
+      "arm": "extreme",
+      "status": "failed",
+      "scores": null,
+      "note": "No complete output captured; cause unknown. No imputation or retry replacement."
+    },
+    {
+      "label": "E47",
+      "case_id": "two_bibles",
+      "repeat": 1,
+      "arm": "tudou",
+      "status": "excluded_native",
+      "scores": null,
+      "note": "Missing speaker IDs; ownership and voice contrast retained in prose."
+    },
+    {
+      "label": "E48",
+      "case_id": "seedance_subtext",
+      "repeat": 0,
+      "arm": "extreme",
+      "status": "eligible",
+      "scores": [
+        3,
+        3,
+        2,
+        3
+      ],
+      "note": "Exact quiet line, no Bob reaction and open relationship; delivery timing remains generic."
+    }
+  ]
+}

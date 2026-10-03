@@ -9,12 +9,14 @@ try:
                              correction_messages)
     from .h3_prompt_relay import compile_relay_response
     from .directional_skills import DIRECTOR_OFF, is_drama_skill, uses_authoring_contract
+    from .h3_vocal_protocol import normalize_h3_vocals
 except ImportError:
     from h3_quality import (QUALITY_OFF, check_h3, check_seedance, run_quality,
                             repair_protocol, accept_correction, body_for, LITERAL_RE,
                             correction_messages)
     from h3_prompt_relay import compile_relay_response
     from directional_skills import DIRECTOR_OFF, is_drama_skill, uses_authoring_contract
+    from h3_vocal_protocol import normalize_h3_vocals
 
 
 @contextmanager
@@ -48,6 +50,54 @@ def retained_draft_provider(provider, state, *, enabled=False, progress=None):
 def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
                       shot_count, language, source, media_labels=None, relay_config=None,
                       progress=None, budget_used=False, director_skill=DIRECTOR_OFF):
+    # Vocal protocol is an output contract, not an opt-in paid quality feature.
+    # All provider branches use this boundary before caching or returning text.
+    def normalize(text):
+        if not relay_config:
+            return normalize_h3_vocals(text, source=source)
+        try:
+            compile_relay_response(text, duration, relay_config["event_count"],
+                                   relay_config["time_ranges"], task_type, language)
+            data = json.loads(text)
+            native, changes, unresolved = normalize_h3_vocals(data["native_prompt"], source=source)
+            if changes:
+                data["native_prompt"] = native
+                text = json.dumps(data, ensure_ascii=False)
+            # Relay execution prompts/end states are NOT native H3 fields.
+            return text, changes, unresolved
+        except (ValueError, TypeError, KeyError):
+            return text, [], []
+
+    draft, changes, unresolved = normalize(draft)
+    candidate_state = {}
+
+    def completion(values):
+        text, edits, _ = normalize(complete(values))
+        candidate_state.update(text=text, edits=edits)
+        return text
+
+    result, metrics = _checked_h3_quality_result(
+        draft, mode=mode, messages=messages, complete=completion, task_type=task_type,
+        duration=duration, shot_count=shot_count, language=language, source=source,
+        media_labels=media_labels, relay_config=relay_config, progress=None,
+        budget_used=budget_used, director_skill=director_skill)
+    if result == candidate_state.get("text"):
+        changes = sorted(set(changes + candidate_state["edits"]))
+    if changes or unresolved:
+        if not metrics:
+            metrics = dict(quality_mode=mode, correction_calls=0, protocol_edits=0,
+                           result="checked", issue_codes=unresolved, unchecked=["contract_check"])
+        metrics["protocol_edits"] = min(3, metrics.get("protocol_edits", 0) + len(changes))
+        if changes and metrics["result"] == "checked":
+            metrics["result"] = "corrected"
+    if progress and metrics:
+        progress("quality_checked", quality_metadata=metrics)
+    return result, metrics
+
+
+def _checked_h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
+                               shot_count, language, source, media_labels=None, relay_config=None,
+                               progress=None, budget_used=False, director_skill=DIRECTOR_OFF):
     if mode == QUALITY_OFF:
         return draft, {}
     options = dict(task_type=task_type, duration=duration, shot_count=shot_count,
