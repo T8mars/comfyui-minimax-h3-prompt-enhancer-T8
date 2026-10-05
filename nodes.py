@@ -903,19 +903,14 @@ def _validate_inputs(
     if image_count == 0 and not reference_video_values:
         raise PromptEnhancerError("Ref2VA requires at least one reference image or reference video.")
 
-    video_durations = []
     for video in reference_video_values:
         _validate_video_source(
             video,
             allow_trim=allow_trimmed_video,
             max_file_bytes=max_video_bytes,
         )
-        video_durations.append(_video_duration(video, use_active_trim=allow_trimmed_video))
-    for index, duration in enumerate(video_durations, start=1):
-        if not 2 <= duration <= 15:
-            raise PromptEnhancerError(f"<Video {index}> must be between 2 and 15 seconds.")
-    if sum(video_durations) > 15.001:
-        raise PromptEnhancerError("Ref2VA reference videos may total at most 15 seconds.")
+        # Validate metadata/trim safety without imposing generation-service duration caps.
+        _video_duration(video, use_active_trim=allow_trimmed_video)
 
     media_plan: list[dict[str, Any]] = []
     picture_index = 1
@@ -2163,7 +2158,10 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     "reference_videos",
                     optional=True,
                     template=io.Autogrow.TemplatePrefix(
-                        input=io.Video.Input("reference_video", tooltip="Ref2VA temporal reference video (2-15 seconds)."),
+                        input=io.Video.Input(
+                            "reference_video",
+                            tooltip="Ref2VA 参考视频：节点不限制单段或合计时长；渠道和模型资源限制仍适用。 / No per-video or total duration cap in this enhancer; provider/model resource limits still apply.",
+                        ),
                         prefix="reference_video_",
                         min=0,
                         max=3,

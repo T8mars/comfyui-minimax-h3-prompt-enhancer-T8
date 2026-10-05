@@ -42,6 +42,55 @@ def frozen_directing():
 
 
 class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
+    def without_legacy_reference_duration_caps(self, function):
+        """Allow only the reviewed duration fix; freeze every other validator AST."""
+        expected = copy.deepcopy(function)
+        duration_assignment = next(
+            node for node in expected.body if isinstance(node, ast.Assign)
+            and any(isinstance(target, ast.Name) and target.id == "video_durations" for target in node.targets)
+        )
+        source_loop = next(
+            node for node in expected.body if isinstance(node, ast.For)
+            and isinstance(node.iter, ast.Name) and node.iter.id == "reference_video_values"
+        )
+        if function.name == "_validate_inputs":
+            append = source_loop.body[-1].value
+            self.assertEqual(ast.unparse(append.func), "video_durations.append")
+            source_loop.body[-1] = ast.Expr(value=append.args[0])
+        else:
+            self.assertIsInstance(duration_assignment.value, ast.ListComp)
+            source_loop.body.append(ast.Expr(value=duration_assignment.value.elt))
+        removed = []
+        for node in expected.body:
+            if node is duration_assignment:
+                removed.append(node)
+            elif isinstance(node, ast.For) and ast.unparse(node.iter) == "enumerate(video_durations, start=1)":
+                self.assertEqual(ast.unparse(node.body[0].test), "not 2 <= duration <= 15")
+                removed.append(node)
+            elif isinstance(node, ast.If) and ast.unparse(node.test) == "sum(video_durations) > 15.001":
+                removed.append(node)
+        self.assertEqual(len(removed), 3)
+        expected.body = [node for node in expected.body if node not in removed]
+        return expected
+
+    def restore_frozen_reference_tooltip(self, method, path):
+        """Only the reviewed video tooltip may differ inside the native schema."""
+        current = copy.deepcopy(method)
+        changed = 0
+        prefix = ("Ref2VA 参考视频" if path == "nodes.py" else "Seedance 2.0 参考/编辑/延长视频")
+        new_tooltip = prefix + "：节点不限制单段或合计时长；渠道和模型资源限制仍适用。 / No per-video or total duration cap in this enhancer; provider/model resource limits still apply."
+        old_tooltip = ("Ref2VA temporal reference video (2-15 seconds)." if path == "nodes.py"
+                       else "Seedance 2.0 完整参考/编辑/延长视频（2-15 秒）。")
+        for node in ast.walk(current):
+            if isinstance(node, ast.Call) and ast.unparse(node.func) == "io.Video.Input":
+                for keyword in node.keywords:
+                    if keyword.arg == "tooltip" and isinstance(keyword.value, ast.Constant):
+                        self.assertEqual(keyword.value.value, new_tooltip)
+                        keyword.value.value = old_tooltip
+                        changed += 1
+        self.assertEqual(changed, 1)
+        return current
+
     def test_append_only_choices_no_authoring_or_shot_policy_side_effect(self):
         self.assertEqual(tuple(directing.DIRECTOR_LABELS.items()),
                          (*frozen_directing().DIRECTOR_LABELS.items(), (LABEL, SKILL)))
@@ -62,9 +111,10 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"),
                                  frozen_bytes(path).replace(b"\r\n", b"\n"))
-        # Emotion opt-in wiring intentionally changes five H3 / two Seedance
+        # Emotion opt-in wiring intentionally changes H3 / Seedance
         # functions and execute's preflight/metadata. Freeze other methods and
-        # all native schemas/signatures, rather than the entire extended file.
+        # all native schemas/signatures, except the exact reviewed reference
+        # duration guards/tooltips (covered by test_reference_video_duration).
         for module, path, allowed in ((h3, "nodes.py", {"_build_messages", "_h3_language_repair_messages", "_next_relay_correction", "enhance_prompt"}),
                                       (sd, "seedance20.py", {"_build_messages", "enhance_seedance20_prompt"})):
             previous = ast.parse(frozen_bytes(path))
@@ -72,7 +122,9 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
             current_by_name = {node.name: node for node in current.body if isinstance(node, (ast.FunctionDef, ast.ClassDef))}
             for old_node in previous.body:
                 if isinstance(old_node, ast.FunctionDef) and old_node.name not in allowed:
-                    self.assertEqual(ast.dump(current_by_name[old_node.name]), ast.dump(old_node), old_node.name)
+                    expected = (self.without_legacy_reference_duration_caps(old_node)
+                                if old_node.name in {"_validate_inputs", "_validate_media"} else old_node)
+                    self.assertEqual(ast.dump(current_by_name[old_node.name]), ast.dump(expected), old_node.name)
                 if isinstance(old_node, ast.ClassDef):
                     new_methods = {node.name: node for node in current_by_name[old_node.name].body if isinstance(node, ast.FunctionDef)}
                     for method in old_node.body:
@@ -80,7 +132,9 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
                             if method.name == "execute":
                                 self.assertEqual(ast.dump(new_methods[method.name].args), ast.dump(method.args))
                             else:
-                                self.assertEqual(ast.dump(new_methods[method.name]), ast.dump(method), method.name)
+                                current_method = (self.restore_frozen_reference_tooltip(new_methods[method.name], path)
+                                                  if method.name == "define_schema" else new_methods[method.name])
+                                self.assertEqual(ast.dump(current_method), ast.dump(method), method.name)
 
     def test_old_widget_order_and_ui_are_frozen_except_reviewed_reload_fixes(self):
         # #20 changes configure/serialize hooks intentionally. Keep the widget

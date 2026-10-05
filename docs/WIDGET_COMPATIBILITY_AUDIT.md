@@ -16,6 +16,21 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-05: reference video duration validation
+
+Remove only the per-video and aggregate duration bounds in H3 and Seedance;
+retain finite positive duration metadata and existing trim/source/count checks.
+Update reference-video tooltips without changing socket IDs, input order,
+options, defaults, outputs, execution signatures or widget serializers.
+Regression coverage exercises long/short references across provider paths and
+real CPU video decoding, alongside saved/runtime widget contracts. Fake provider
+responses are transport tests, not paid API or real GGUF inference acceptance;
+no RunningHub deployment is claimed.
+The frozen AST gate permits exactly the removed duration guards and replacement
+video tooltips, while continuing to compare all other validator code and native
+schemas. All 769 Python tests completed (two opt-in skips), 51 frontend tests
+and Chrome contracts passed; shipped example workflow bytes are unchanged.
+
 ### 2026-10-04: optional Tudou emotion strategy
 
 Vocal-format follow-up: automatic H3 normalization occurs inside the existing

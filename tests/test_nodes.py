@@ -1764,17 +1764,10 @@ class PromptEnhancerTests(unittest.TestCase):
                 nodes._validate_video_source(video)
             nodes._validate_video_source(video, max_file_bytes=None)
 
-    def test_ref2va_limits_are_checked_before_upload(self):
+    def test_ref2va_asset_limits_are_checked_before_upload(self):
         cases = [
             {"reference_images": {"reference_image_0": torch.zeros((10, 1, 1, 3))}},
             {"reference_videos": {f"reference_video_{i}": FakeVideo() for i in range(4)}},
-            {"reference_videos": {"reference_video_0": FakeVideo(duration=1.9)}},
-            {
-                "reference_videos": {
-                    "reference_video_0": FakeVideo(duration=8),
-                    "reference_video_1": FakeVideo(duration=8),
-                }
-            },
         ]
         for case in cases:
             with self.subTest(case=list(case)):

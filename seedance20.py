@@ -369,15 +369,8 @@ def _validate_media(
             allow_trim=allow_trimmed_video,
             max_file_bytes=max_video_bytes,
         )
-    video_durations = [
+        # Validate metadata/trim safety without imposing generation-service duration caps.
         _video_duration(video, use_active_trim=allow_trimmed_video)
-        for video in reference_video_values
-    ]
-    for index, duration in enumerate(video_durations, start=1):
-        if not 2 <= duration <= 15:
-            raise Seedance20PromptEnhancerError(f"Reference video {index} must be between 2 and 15 seconds.")
-    if sum(video_durations) > 15.001:
-        raise Seedance20PromptEnhancerError("Seedance 2.0 reference videos may total at most 15 seconds.")
 
     media_count = len(image_assets) + len(reference_video_values)
     if media_count > 12:
@@ -1181,7 +1174,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
                     template=io.Autogrow.TemplatePrefix(
                         input=io.Video.Input(
                             "reference_video",
-                            tooltip="Seedance 2.0 完整参考/编辑/延长视频（2-15 秒）。",
+                            tooltip="Seedance 2.0 参考/编辑/延长视频：节点不限制单段或合计时长；渠道和模型资源限制仍适用。 / No per-video or total duration cap in this enhancer; provider/model resource limits still apply.",
                         ),
                         prefix="reference_video_",
                         min=0,

@@ -493,7 +493,7 @@ Recent execution diagnostics are memory-only and redacted. They include node cla
 - Cloud video uses the native ComfyUI `VIDEO` stream. Seedance NZ uploads complete bytes and AI Workshop inlines complete bytes using its verified protocol. OpenAI-compatible mode sends timestamped sampled frames by default, or passes through an explicitly supplied HTTP(S) video URL.
 - Local GGUF mode samples frames at real timestamps and respects the active crop window. It does not upload original video bytes or analyze audio.
 - Supported containers include MP4, AVI, MOV, and MKV, up to 50 MB per file.
-- H3 Ref2VA accepts up to nine images, three videos, and twelve total reference assets. A single reference video must be 2–15 seconds, and multiple reference videos must total no more than 15 seconds.
+- H3 Ref2VA accepts up to nine images, three videos, and twelve total reference assets. Neither the H3 nor Seedance 2.0 enhancer imposes a per-video or total reference duration cap, or a two-second minimum; duration metadata must be valid and positive. Provider upload limits and model context/memory budgets still apply, as do any limits of downstream video-generation services.
 
 ## Output and error behavior
 

@@ -5,6 +5,19 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.29.2] - 2026-10-05
+
+### Fixed
+
+- Remove the historical 2–15-second per-reference and 15-second combined video
+  duration guards from H3 Ref2VA and Seedance 2.0 enhancement, for cloud and
+  local GGUF paths. Preserve valid positive duration metadata, trim safety,
+  reference counts, file-format/upload limits and workflow contracts. Update
+  bilingual help to distinguish enhancer behavior from downstream service limits.
+- Verification: 769 Python tests (767 passed, two skipped), 51 frontend tests,
+  Chrome contracts and repository/secret gates passed. Duration regressions use
+  real 32-second CPU video decoding and fake provider responses, not live inference.
+
 ## [1.29.1] - 2026-10-04
 
 ### Fixed
