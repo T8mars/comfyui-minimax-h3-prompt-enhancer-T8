@@ -80,6 +80,17 @@ assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3
 assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "combat_camera_config"
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
+h3 = sys.modules[spec.name + ".nodes"]
+hybrid = sys.modules[spec.name + ".h3_hybrid"]
+assert h3.TASK_TYPES == ["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA", "Hybrid"]
+assert h3.TASK_TYPE_LABELS["Hybrid"] == hybrid.HYBRID_LABEL
+import numpy as np
+image = np.zeros((1, 16, 16, 3), dtype=np.float32)
+plan = h3._validate_inputs("Preserve geometry.", "Hybrid", 8, "balanced", 0, "中文", "官方增强", "",
+                          image, None, {"reference_image_2": image}, {}, h3.COMPAT_SKILL_PROFILE, h3.NO_CREATIVE_PRESET)
+assert hybrid.asset_roles(plan) == [{"label": "<Picture 1>", "role": "first_frame"}, {"label": "<Picture 2>", "role": "reference_image"}]
+assert (p / "docs/h3-hybrid.md").is_file()
+assert (p / "example_workflows/h3_hybrid_first_last_video.json").is_file()
 module = sys.modules[spec.name + ".directional_skills"]
 assert len(module.DIRECTOR_OPTIONS) == 9 and module.DIRECTOR_LABELS[module.DIRECTOR_OPTIONS[0]] == "none"
 for skill in ("drama_scene", "situational_drama", "zhenzhen_pov"):
@@ -94,7 +105,7 @@ assert (p / "directional_skills/wushu_combat/NOTICE.md").is_file()
 for name, loaded in list(sys.modules.items()):
     if name.startswith(spec.name) and getattr(loaded, "__file__", None):
         assert pathlib.Path(loaded.__file__).is_relative_to(p), name
-print(json.dumps({"node_count":len(schemas), "node_ids":[s.node_id for s in schemas], "native_outputs":True, "new_skills":True, "emotion_strategy":True, "vocal_format":True, "live_repo_fallback":False}))
+print(json.dumps({"node_count":len(schemas), "node_ids":[s.node_id for s in schemas], "native_outputs":True, "new_skills":True, "emotion_strategy":True, "vocal_format":True, "hybrid":True, "live_repo_fallback":False}))
 '''
         bootstrap = "import sys; sys.argv_comfy=" + repr(str(ROOT.parents[1])) + "; sys.argv_install=" + repr(str(install)) + ";" + code
         result = subprocess.run([sys.executable, "-c", bootstrap], cwd=temporary, capture_output=True, text=True,

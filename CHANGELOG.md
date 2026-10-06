@@ -5,6 +5,28 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.30.0] - 2026-10-06
+
+### Added
+
+- Append Hybrid to the existing H3 task choices: first and/or last keyframe plus
+  additional visual references, with ordered roles and the six-field reference
+  format. Preserve the five existing choices/default, 38 saved widget fields,
+  sockets, output types, execution signature and historical examples.
+- Extend existing quality inspection, bounded repair, language correction,
+  Prompt Relay and cached-result provenance to Hybrid without adding planning
+  requests. Preflight unusable media before replacing a paid checkpoint.
+- Add three standalone Hybrid examples, bilingual guidance and regression
+  coverage for cloud/local transport, frozen legacy messages and real frontend
+  configure/serialize hooks. Real API A/B evidence is evaluated separately from
+  structural contracts; no rendered H3 or real GGUF inference claim is made.
+- Verification: 788 Python tests (786 passed, two skipped), 54 frontend tests,
+  Chrome contracts and isolated 29-node candidate loading passed. All 24 real
+  A/B initial requests returned complete Chinese text without correction or
+  retry; captured replay and semantic limitations are documented in
+  `docs/H3_HYBRID_ACCEPTANCE_2026-10-06.md`. Fetch the frozen 1.29.2 baseline in
+  both shallow-checkout CI workflows; preserve evidence bytes through Git.
+
 ## [1.29.2] - 2026-10-05
 
 ### Fixed

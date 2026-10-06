@@ -12,6 +12,11 @@ import re
 from fractions import Fraction
 from typing import Any
 
+try:
+    from .h3_hybrid import HYBRID, HYBRID_ALIASES, is_reference_task
+except ImportError:
+    from h3_hybrid import HYBRID, HYBRID_ALIASES, is_reference_task
+
 
 NORMAL = "普通增强 / Normal"
 RELAY = "Prompt Relay 编排"
@@ -64,7 +69,9 @@ def _request(duration_seconds: Any, event_count: Any, task_type: str) -> tuple[f
         raise _error("event_count must be an integer from 0 (automatic) to 32.")
     if event_count * MIN_EVENT_FRAMES > delivery:
         raise _error("Requested event_count cannot fit: each event needs at least 5 delivery frames.")
-    tasks = {"T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA"}
+    tasks = {"T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA", HYBRID}
+    if isinstance(task_type, str) and task_type in HYBRID_ALIASES:
+        task_type = HYBRID
     if not isinstance(task_type, str) or task_type not in tasks:
         raise _error(f"Unsupported H3 task_type {task_type!r}.")
     return duration, delivery, event_count, task_type
@@ -115,7 +122,7 @@ def relay_instruction(duration, event_count=0, time_ranges="", task_type="T2VA")
     if explicit and count and len(explicit) != count:
         raise _error("event_count does not match the number of explicit time_ranges.")
     count = len(explicit) if explicit else count
-    fields = _REFERENCE_FIELDS if task == "Ref2VA" else _BASIC_FIELDS
+    fields = _REFERENCE_FIELDS if is_reference_task(task) else _BASIC_FIELDS
     count_rule = (
         f"Return exactly {count} events in the supplied order."
         if count else f"Choose 1..{min(MAX_EVENTS, delivery // MIN_EVENT_FRAMES)} events fitting the story, not a fixed three or five."
@@ -213,8 +220,9 @@ def _native(value: Any, task: str) -> str:
     native = _nonempty(value, "native_prompt")
     if native.lstrip().startswith(("{", "[", "```")):
         raise _error("native_prompt must be the original plain official H3 text, not JSON or a code fence.")
-    fields = _REFERENCE_FIELDS if task == "Ref2VA" else _BASIC_FIELDS
-    pattern = re.compile(r"^[ \t]*(" + "|".join(fields) + r")[ \t]*:", re.MULTILINE)
+    fields = _REFERENCE_FIELDS if is_reference_task(task) else _BASIC_FIELDS
+    recognized = tuple(dict.fromkeys((*_BASIC_FIELDS, *_REFERENCE_FIELDS))) if task == HYBRID else fields
+    pattern = re.compile(r"^[ \t]*(" + "|".join(recognized) + r")[ \t]*:", re.MULTILINE)
     matches = list(pattern.finditer(native))
     if [match.group(1) for match in matches] != list(fields):
         raise _error("native_prompt requires each official field once in order: " + ", ".join(fields))

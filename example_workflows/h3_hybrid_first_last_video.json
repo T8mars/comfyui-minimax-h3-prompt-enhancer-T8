@@ -1,0 +1,407 @@
+{
+  "id": "e63c1e95-2a73-50ab-bb7c-46cb90d1ab7f",
+  "revision": 0,
+  "last_node_id": 12,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 10,
+      "type": "MiniMaxH3PromptEnhancerT8",
+      "pos": [
+        460,
+        0
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 2
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": 3,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4,
+          "label": "API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        },
+        {
+          "name": "combat_camera_config",
+          "shape": 7,
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "global_prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "local_prompts",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "time_ranges",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "relay_length",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "relay_report",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "8秒一个连续镜头，结合实际首/尾帧与额外视觉参考；保留素材中的身份、外观与布局，运动路径清晰可达。仅使用已连接素材，不捏造音频分析。无新增台词、文字或配乐。",
+        "Hybrid（关键帧+参考混合生成）",
+        8,
+        "1",
+        "balanced",
+        0,
+        "中文",
+        "官方增强",
+        "现有兼容（保留中英文）",
+        "无（仅核心规则）",
+        "无（不使用 T8 案例）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "普通增强 / Normal",
+        0,
+        0,
+        "",
+        "none",
+        "check",
+        "off"
+      ],
+      "title": "H3 Hybrid · first_last_video"
+    },
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "上传素材 / Upload · first_frame"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        0,
+        340
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "上传素材 / Upload · last_frame"
+    },
+    {
+      "id": 3,
+      "type": "LoadVideo",
+      "pos": [
+        0,
+        680
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadVideo"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "上传素材 / Upload · reference_videos.reference_video_0"
+    },
+    {
+      "id": 4,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        1040
+      ],
+      "size": [
+        400,
+        180
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写 API Key / Clear before sharing"
+    },
+    {
+      "id": 11,
+      "type": "T8ShowText",
+      "pos": [
+        1160,
+        0
+      ],
+      "size": [
+        600,
+        660
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 12,
+      "type": "Note",
+      "pos": [
+        1160,
+        720
+      ],
+      "size": [
+        600,
+        380
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "Hybrid 使用说明 / How to use\n1. 上传首帧和/或尾帧，另上传至少一个参考图/视频。每槽单图，批次请拆开。\n2. 素材编号依次为首帧、尾帧、额外参考图；视频独立从 Video 1 开始。\n3. 默认中文、质量只检查。四种渠道可切换；本地需视觉 GGUF/mmproj，不需要 API Key。\n4. 无音频分析、无视频时长上限（渠道/模型资源限制仍适用）；只写提示词，不生成视频。\n5. 支持 Relay；native 六段描述只覆盖交付时长，补齐区保持已完成末态。\n6. 新 Hybrid 工作流需要支持 Hybrid 的插件版本；勿降级运行。分享前清空密钥。"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      0,
+      10,
+      1,
+      "IMAGE"
+    ],
+    [
+      3,
+      3,
+      0,
+      10,
+      3,
+      "VIDEO"
+    ],
+    [
+      4,
+      4,
+      0,
+      10,
+      4,
+      "STRING"
+    ],
+    [
+      5,
+      10,
+      0,
+      11,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.65,
+      "offset": [
+        30,
+        40
+      ]
+    }
+  },
+  "version": 0.4
+}

@@ -1,5 +1,6 @@
 const SAFE_STAGE_KEYS = new Set(["stage", "duration_ms", "attempts", "asset_count", "cache_hit"]);
 const QUALITY_CODES = new Set("empty_prompt h3_missing_core_fields h3_field_order h3_missing_first_shot shot_sequence shot_count_mismatch h3_shot_timecode non_monotonic_timecodes duration_budget h3_alignment h3_unexpected_prefix h3_unavailable_asset h3_undefined_reference h3_retention_marker h3_duplicate_definition h3_retention_missing h3_vocal_language h3_missing_speaker h3_speaker_identity semantic_exact_text_missing h3_extra_dialogue h3_visible_text_changed h3_dialogue_source_changed h3_vocal_wrong_layer h3_diegetic_music_layer h3_descriptive_language relay_invalid_authoring seedance_h3_protocol_leak".split(" "));
+for (const code of ["h3_hybrid_inputs", "h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "h3_hybrid_summary"]) QUALITY_CODES.add(code);
 export function sanitizeQualityMetadata(value) {
     if (!value || typeof value !== "object") return undefined;
     const result = {};
@@ -8,7 +9,7 @@ export function sanitizeQualityMetadata(value) {
     if ([0, 1].includes(value.correction_calls)) result.correction_calls = value.correction_calls;
     if (Number.isInteger(value.protocol_edits) && value.protocol_edits >= 0 && value.protocol_edits <= 3) result.protocol_edits = value.protocol_edits;
     if (Array.isArray(value.issue_codes)) result.issue_codes = [...new Set(value.issue_codes.filter((s) => QUALITY_CODES.has(s)))];
-    if (Array.isArray(value.unchecked)) result.unchecked = value.unchecked.filter((s) => ["physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending", "descriptive_language", "alignment_duration", "shot_count", "relay_compilation", "relay_semantic_equivalence", "contract_check", "vocal_language"].includes(s));
+    if (Array.isArray(value.unchecked)) result.unchecked = value.unchecked.filter((s) => ["physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending", "descriptive_language", "alignment_duration", "shot_count", "relay_compilation", "relay_semantic_equivalence", "contract_check", "vocal_language", "hybrid_pixel_and_transition_semantics", "hybrid_resolved_asset_roles"].includes(s));
     return result.result || result.quality_mode ? result : undefined;
 }
 

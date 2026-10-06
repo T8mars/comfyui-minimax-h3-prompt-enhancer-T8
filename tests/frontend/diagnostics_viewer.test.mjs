@@ -1,7 +1,15 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { sanitizeDiagnosticRecord, sanitizeDiagnosticSnapshot } from "../../web/js/diagnostics_viewer.mjs";
+import { sanitizeDiagnosticRecord, sanitizeDiagnosticSnapshot, sanitizeQualityMetadata } from "../../web/js/diagnostics_viewer.mjs";
+
+test("Hybrid quality copies finite codes and makes pixel/role unknowns explicit", () => {
+    const actual = sanitizeQualityMetadata({ result: "checked", issue_codes: ["h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "PRIVATE_SENTINEL"],
+        unchecked: ["hybrid_pixel_and_transition_semantics", "hybrid_resolved_asset_roles", "PRIVATE_SENTINEL"], prompt: "PRIVATE_SENTINEL" });
+    assert.deepEqual(actual.issue_codes, ["h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking"]);
+    assert.deepEqual(actual.unchecked, ["hybrid_pixel_and_transition_semantics", "hybrid_resolved_asset_roles"]);
+    assert.ok(!JSON.stringify(actual).includes("PRIVATE_SENTINEL"));
+});
 
 
 test("diagnostic UI copies only the explicit allowlist", () => {

@@ -26,6 +26,30 @@ function fixture(slot = "t8-recovery-test-slot-0001") {
     return { node, slotWidget, actionWidget };
 }
 
+test("Hybrid recovery discloses finite cached roles before queue without applying current task", async () => {
+    const metadata = { h3_task: "Hybrid", h3_family: "reference_six", hybrid_revision: "1.0.0",
+        hybrid_picture_count: 3, hybrid_video_count: 1, prompt: "PRIVATE_HYBRID_SENTINEL" };
+    const status = { recoverable: true, creation_metadata: metadata };
+    const f = fixture();
+    f.node.widgets.push({ name: "task_type", value: "T2VA" });
+    const events = [];
+    await restoreCompletionResult({ ...f, component: "MiniMaxH3PromptEnhancerT8",
+        fetchFn: async () => ({ ok: true, json: async () => status }), alertFn: text => events.push(text),
+        queuePrompt: async () => events.push("queue"),
+    });
+    assert.match(events[0], /Original task: Hybrid.*3 images \/ 1 videos/);
+    assert.doesNotMatch(events[0], /PRIVATE_HYBRID_SENTINEL|T2VA/);
+    assert.equal(events[1], "queue");
+    for (const field of Object.keys(metadata).filter(key => key !== "prompt")) {
+        const invalid = { ...metadata };
+        delete invalid[field];
+        assert.doesNotMatch(recoveryMessage({ ...status, creation_metadata: invalid }), /Original task: Hybrid/);
+    }
+    for (const count of [true, 0, 12, 1.5, "3"]) {
+        assert.doesNotMatch(recoveryMessage({ ...status, creation_metadata: { ...metadata, hybrid_picture_count: count } }), /Original task: Hybrid/);
+    }
+});
+
 test("emotion-only recovery shows its stored finite strategy before queue, never a current mode", async () => {
     const metadata = { emotion_strategy: "tudou_emotion", emotion_revision: "1.0.0", prompt: "PRIVATE_SENTINEL" };
     const status = { recoverable: true, creation_metadata: metadata };

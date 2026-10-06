@@ -89,7 +89,42 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
                         keyword.value.value = old_tooltip
                         changed += 1
         self.assertEqual(changed, 1)
+        if path == "nodes.py":
+            descriptions = {
+                "T2VA, I2VA, FL2VA, L2VA, Ref2VA or T8 Hybrid (keyframes + visual references) format. Cloud channels receive complete videos; local Qwen reads ":
+                    "T2VA, I2VA, FL2VA, L2VA, or Ref2VA format. Cloud channels receive complete videos; local Qwen reads ",
+            }
+            # Constants inside the joined schema description, plus the one
+            # reviewed task tooltip; every other schema/input stays frozen.
+            for node in ast.walk(current):
+                if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                    for new, old in descriptions.items():
+                        node.value = node.value.replace(new, old)
+                if isinstance(node, ast.Call) and ast.unparse(node.func) == "io.Combo.Input" and node.args and isinstance(node.args[0], ast.Constant) and node.args[0].value == "task_type":
+                    tooltip = next(k for k in node.keywords if k.arg == "tooltip")
+                    self.assertEqual(tooltip.value.value, "Hybrid = 首帧和/或尾帧 + 参考图/视频；每槽单图，最多9张额外参考图/3视频，无音频输入。 / Keyframes plus visual references; single images, no audio input.")
+                    node.keywords.remove(tooltip)
         return current
+
+    def project_hybrid_additions(self, function):
+        current = copy.deepcopy(function)
+        if function.name == "_validate_inputs":
+            branches = [n for n in current.body if isinstance(n, ast.If) and ast.unparse(n.test) == "task_type == HYBRID"]
+            self.assertEqual(len(branches), 1)
+            expected = ast.parse("if task_type == HYBRID:\n return _hybrid_media_plan(first_frame, last_frame, reference_images, reference_videos, allow_trimmed_video, max_video_bytes)").body[0]
+            self.assertEqual(ast.dump(branches[0]), ast.dump(expected))
+            current.body.remove(branches[0])
+        families = [n for n in ast.walk(current) if isinstance(n, ast.Call) and ast.unparse(n.func) == "is_reference_task"]
+        expected_counts = {"_official_h3_source_instruction": 1, "_length_target_instruction": 2, "_reorder_complete_fields": 1}
+        self.assertEqual(len(families), expected_counts.get(function.name, 0))
+        class OriginalFamily(ast.NodeTransformer):
+            def visit_Call(self, node):
+                if ast.unparse(node.func) == "is_reference_task":
+                    if ast.unparse(node) != "is_reference_task(task_type)":
+                        raise AssertionError("unexpected reference family projection")
+                    return ast.Compare(left=node.args[0], ops=[ast.Eq()], comparators=[ast.Constant(value="Ref2VA")])
+                return self.generic_visit(node)
+        return OriginalFamily().visit(current)
 
     def test_append_only_choices_no_authoring_or_shot_policy_side_effect(self):
         self.assertEqual(tuple(directing.DIRECTOR_LABELS.items()),
@@ -124,7 +159,8 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
                 if isinstance(old_node, ast.FunctionDef) and old_node.name not in allowed:
                     expected = (self.without_legacy_reference_duration_caps(old_node)
                                 if old_node.name in {"_validate_inputs", "_validate_media"} else old_node)
-                    self.assertEqual(ast.dump(current_by_name[old_node.name]), ast.dump(expected), old_node.name)
+                    actual = self.project_hybrid_additions(current_by_name[old_node.name]) if path == "nodes.py" else current_by_name[old_node.name]
+                    self.assertEqual(ast.dump(actual), ast.dump(expected), old_node.name)
                 if isinstance(old_node, ast.ClassDef):
                     new_methods = {node.name: node for node in current_by_name[old_node.name].body if isinstance(node, ast.FunctionDef)}
                     for method in old_node.body:
@@ -146,6 +182,11 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
             pattern = r"const SERIALIZED_WIDGET_NAMES = \[[\s\S]*?\];"
             self.assertEqual(re.search(pattern, current).group(), re.search(pattern, previous).group())
             prefix = current.split("nodeType.prototype.onConfigure = function ()")[0]
+            if path == "web/js/minimax_h3_prompt_enhancer.js":
+                for addition in ('    Hybrid: "Hybrid（关键帧+参考混合生成）",\n',
+                                 '                if (["hybrid", "Hybrid — 关键帧+参考混合生成"].includes(taskTypeWidget?.value)) taskTypeWidget.value = TASK_TYPE_LABELS.Hybrid;\n'):
+                    self.assertEqual(prefix.count(addition), 1)
+                    prefix = prefix.replace(addition, "")
             self.assertEqual(prefix.replace("    syncNamedWidgetSerialization,\n", ""),
                              previous.split("nodeType.prototype.onConfigure = function ()")[0])
         self.assertTrue((ROOT / "web/js/widget_state.mjs").read_text(encoding="utf-8").startswith(
@@ -209,11 +250,13 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
                 for language in ("中文", "English"):
                     with self.subTest(platform=module.__name__, task=task, language=language):
                         if module is h3:
-                            count = {"T2VA": 0, "I2VA": 1, "FL2VA": 2, "L2VA": 1, "Ref2VA": 2}[task]
+                            count = {"T2VA": 0, "I2VA": 1, "FL2VA": 2, "L2VA": 1, "Ref2VA": 2, "Hybrid": 2}[task]
                             roles = {"I2VA": "first frame", "L2VA": "last frame"}
                             plan = [{"label": f"<Picture {i + 1}>", "kind": "image",
                                      "role": ("first frame" if i == 0 else "last frame") if task == "FL2VA"
                                      else roles.get(task, "identity only")} for i in range(count)]
+                            if task == "Hybrid":
+                                plan[0]["role"], plan[1]["role"] = "first_frame", "reference_image"
                         else:
                             image = {"label": "@图片1", "kind": "image", "role": "user reference"}
                             end = {"label": "@图片2", "kind": "image", "role": "last frame"}

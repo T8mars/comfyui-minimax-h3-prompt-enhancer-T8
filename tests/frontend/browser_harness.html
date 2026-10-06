@@ -34,6 +34,14 @@ try {
   document.body.append(cameraNotice);
   check(cameraNotice.textContent.includes("上次战斗运镜选择") && cameraNotice.textContent.includes("不按当前配置重新生成"), "camera-only recovery shows original selection");
   check(!cameraNotice.textContent.includes("PRIVATE_CAMERA_SENTINEL"), "camera recovery excludes arbitrary content");
+  const hybridNotice = document.createElement("div");
+  hybridNotice.textContent = recovery.recoveryMessage({ recoverable: true, creation_metadata: {
+    h3_task: "Hybrid", h3_family: "reference_six", hybrid_revision: "1.0.0",
+    hybrid_picture_count: 3, hybrid_video_count: 1, prompt: "PRIVATE_HYBRID_SENTINEL",
+  } });
+  document.body.append(hybridNotice);
+  check(hybridNotice.textContent.includes("Original task: Hybrid") && hybridNotice.textContent.includes("3 images / 1 videos"), "Hybrid cached mode/counts visible in real DOM");
+  check(!hybridNotice.textContent.includes("PRIVATE_HYBRID_SENTINEL"), "Hybrid cached notice excludes arbitrary content");
   for (const target of ["h3", "seedance20"]) {
     const host = document.createElement("div");
     host.className = "node";
@@ -90,6 +98,49 @@ try {
   } = await import("../../web/js/case_template_ui.js");
   const { app } = await import("../../scripts/app.js");
   const { configureRelayWidgets } = await import("../../web/js/minimax_h3_prompt_enhancer.js");
+  const h3Extension = app.extensions.find(item => item.name === "T8.MiniMaxH3PromptEnhancer");
+  const h3QualityLabels = await import("../../web/js/h3_quality_ui.mjs");
+  const h3Source = await (await fetch("../../web/js/minimax_h3_prompt_enhancer.js")).text();
+  const savedNames = [...h3Source.match(/const SERIALIZED_WIDGET_NAMES = \[([\s\S]*?)\];/)[1].matchAll(/"([^"]+)"/g)].map(m => m[1]);
+  check(savedNames.length === 38, "Hybrid retains 38 serialized fields in browser");
+  function HybridReloadNode() {
+    this.widgets = savedNames.map(name => ({ name, value: null }));
+    const director = this.widgets.find(w => w.name === "director_skill");
+    this.widgets.splice(this.widgets.indexOf(director), 1);
+    this.widgets.splice(this.widgets.findIndex(w => w.name === "case_template") + 1, 0, director);
+    this.properties = {};
+    this.t8RestoreCaseTemplate = value => { this.widgets.find(w => w.name === "case_template").value = value; };
+  }
+  HybridReloadNode.prototype.onConfigure = function (data) {
+    data.widgets_values.forEach((value,index) => { if (this.widgets[index]) this.widgets[index].value = value; });
+  };
+  await h3Extension.beforeRegisterNodeDef(HybridReloadNode, { name: "MiniMaxH3PromptEnhancerT8" });
+  for (const filename of ["h3_hybrid_first_image", "h3_hybrid_last_image", "h3_hybrid_first_last_video"]) {
+    const graph = await (await fetch(`../../example_workflows/${filename}.json`)).json();
+    const saved = graph.nodes.find(n => n.type === "MiniMaxH3PromptEnhancerT8").widgets_values;
+    for (const linked of [false,true]) {
+      const values = [...saved];
+      if (linked) values[0] = null;
+      const n = new HybridReloadNode();
+      n.onConfigure({ widgets_values: values });
+      check(n.widgets.find(w => w.name === "task_type").value === values[1], "Hybrid task synchronous named restore");
+      check(n.widgets.find(w => w.name === "seed").value === values[savedNames.indexOf("seed")], "Hybrid seed has no positional shift");
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const serialized = {};
+      n.onSerialize(serialized);
+      const expected = [...values];
+      expected[36] = h3QualityLabels.qualityLabel(values[36]);
+      expected[37] = h3QualityLabels.creationLabel(values[37]);
+      check(JSON.stringify(serialized.widgets_values) === JSON.stringify(expected), "Hybrid 38 fields browser configure/serialize with existing quality labels and linked null");
+      check(serialized.widgets_values_named.task_type === values[1], "Hybrid native named map stays consistent");
+      const again = new HybridReloadNode();
+      again.onConfigure(serialized);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const repeated = {};
+      again.onSerialize(repeated);
+      check(JSON.stringify(repeated.widgets_values) === JSON.stringify(serialized.widgets_values), "Hybrid browser second reload byte-identical values");
+    }
+  }
   const relayControls = ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"]
     .map((name, index) => ({ name, value: index === 0 ? "普通增强 / Normal" : 0, type: "number", computeSize: () => [300, 24], element: document.createElement("div") }));
   const relayNode = { widgets: relayControls, size: [600, 200], computeSize() { return [600, 200 + this.widgets.filter(w => !w.hidden).length * 24]; }, setSize(size) { this.size = size; }, setDirtyCanvas() {} };

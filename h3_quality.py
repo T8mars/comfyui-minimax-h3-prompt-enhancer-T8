@@ -10,6 +10,11 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Any
 
+try:
+    from .h3_hybrid import HYBRID, HYBRID_ALIASES, is_reference_task, check_roles
+except ImportError:
+    from h3_hybrid import HYBRID, HYBRID_ALIASES, is_reference_task, check_roles
+
 
 QUALITY_OFF = "保持原样 / Off"
 QUALITY_CHECK = "质量检查 / Check"
@@ -239,6 +244,8 @@ def alignment_sentence(mode: str, duration: float, last_shot: int) -> str:
 
 
 def _mode(text: str, explicit: str) -> str:
+    if str(explicit or "").strip() in HYBRID_ALIASES:
+        return HYBRID
     match = re.match(r"^(Ref2VA|T2VA|I2VA|FL2VA|L2VA)\b", str(explicit or ""), re.I)
     if match:
         return next(m for m in ("Ref2VA", "T2VA", "I2VA", "FL2VA", "L2VA") if m.casefold() == match.group(1).casefold())
@@ -253,12 +260,13 @@ def _mode(text: str, explicit: str) -> str:
 
 
 def check_h3(text: str, *, task_type: str = "", duration: float = 0, shot_count: int = 0,
-             language: str = "AUTO", source: str = "", media_labels: list[str] | None = None) -> dict[str, Any]:
+             language: str = "AUTO", source: str = "", media_labels: list[str] | None = None,
+             asset_roles: list[dict] | None = None) -> dict[str, Any]:
     text = str(text or "")
     mode = _mode(text, task_type)
     parts = sections(text)
     values = {p.name: p.value for p in parts}
-    required = REF_FIELDS if mode == "Ref2VA" else BASE_FIELDS
+    required = REF_FIELDS if is_reference_task(mode) else BASE_FIELDS
     issues: list[dict[str, str]] = []
     if not text.strip():
         issues.append(_issue("empty_prompt", "提示词为空。", severity="error"))
@@ -266,7 +274,7 @@ def check_h3(text: str, *, task_type: str = "", duration: float = 0, shot_count:
         issues.append(_issue("h3_missing_core_fields", "缺少或留空 H3 所选模式的核心字段。"))
     if parts and tuple(p.name for p in parts) != required:
         issues.append(_issue("h3_field_order", "H3 字段重复、顺序不符或混合了不同模式。"))
-    body = values.get("detailed_description" if mode == "Ref2VA" else BASE_FIELDS[0], "")
+    body = values.get("detailed_description" if is_reference_task(mode) else BASE_FIELDS[0], "")
     masked = mask_literals(body)
     shots = list(SHOT_RE.finditer(masked))
     numbers = [int(s.group(1)) for s in shots]
@@ -305,7 +313,7 @@ def check_h3(text: str, *, task_type: str = "", duration: float = 0, shot_count:
         needed = {"<Picture 1>", "<Picture 2>"} if mode == "FL2VA" else {"<Picture 1>"}
         if not needed.issubset(set(media_labels)):
             issues.append(_issue("h3_unavailable_asset", "所选首/尾帧模式的关键帧未传入。"))
-    if mode == "Ref2VA":
+    if is_reference_task(mode):
         definitions = mask_literals(values.get("subject_definitions", ""))
         direct_definitions = [LABEL_RE.match(row.strip()) for row in definitions.splitlines()]
         tracked = [(m.group(1).casefold(), m.group(2)) for m in direct_definitions if m]
@@ -340,6 +348,16 @@ def check_h3(text: str, *, task_type: str = "", duration: float = 0, shot_count:
             sources = {label for label in defined if label[0] in {"picture", "video", "audio"}}
             if sources - available:
                 issues.append(_issue("h3_unavailable_asset", "定义声明了未传入的图片、视频或音频；不应凭空声称已分析素材。"))
+    if mode == HYBRID:
+        for code in check_roles(values, asset_roles, duration, mask_literals):
+            issues.append(_issue(code, {
+                "h3_hybrid_inputs": "Hybrid 缺少真实关键帧或视觉参考。",
+                "h3_hybrid_anchor_roles": "Hybrid 关键帧定义缺失、重复、首尾角色或交付时刻不符。",
+                "h3_hybrid_anchor_tracking": "Hybrid 正文或保留分析未跟踪关键帧。",
+                "h3_hybrid_summary": "Hybrid 摘要缺少 [keyframe completion] 关系。",
+            }[code]))
+        if any(kind.lower() == "audio" for kind, _ in LABEL_RE.findall(mask_literals(text))):
+            issues.append(_issue("h3_unavailable_asset", "本节点 Hybrid 无音频附件，不得声明 Audio 素材分析。"))
     events = vocal_events(body)
     speaker_entities: dict[str, str] = {}
     entity_speakers: dict[str, str] = {}
@@ -402,6 +420,10 @@ def check_h3(text: str, *, task_type: str = "", duration: float = 0, shot_count:
     # Deduplicate findings, not source words or their intended repetition.
     issues = list({item["code"]: item for item in issues}.values())
     unchecked = ["physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending"]
+    if mode == HYBRID:
+        unchecked.append("hybrid_pixel_and_transition_semantics")
+        if asset_roles is None:
+            unchecked.append("hybrid_resolved_asset_roles")
     if prose_language == "unknown":
         unchecked.append("descriptive_language")
     if any(e.language not in KNOWN_VOCAL_LANGUAGES and LANGUAGE_NAME_RE.fullmatch(e.language) for e in events):

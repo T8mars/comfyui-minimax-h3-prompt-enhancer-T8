@@ -49,7 +49,7 @@ def retained_draft_provider(provider, state, *, enabled=False, progress=None):
 
 def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
                       shot_count, language, source, media_labels=None, relay_config=None,
-                      progress=None, budget_used=False, director_skill=DIRECTOR_OFF):
+                      progress=None, budget_used=False, director_skill=DIRECTOR_OFF, asset_roles=None):
     # Vocal protocol is an output contract, not an opt-in paid quality feature.
     # All provider branches use this boundary before caching or returning text.
     def normalize(text):
@@ -80,7 +80,7 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
         draft, mode=mode, messages=messages, complete=completion, task_type=task_type,
         duration=duration, shot_count=shot_count, language=language, source=source,
         media_labels=media_labels, relay_config=relay_config, progress=None,
-        budget_used=budget_used, director_skill=director_skill)
+        budget_used=budget_used, director_skill=director_skill, asset_roles=asset_roles)
     if result == candidate_state.get("text"):
         changes = sorted(set(changes + candidate_state["edits"]))
     if changes or unresolved:
@@ -97,11 +97,13 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
 
 def _checked_h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
                                shot_count, language, source, media_labels=None, relay_config=None,
-                               progress=None, budget_used=False, director_skill=DIRECTOR_OFF):
+                               progress=None, budget_used=False, director_skill=DIRECTOR_OFF, asset_roles=None):
     if mode == QUALITY_OFF:
         return draft, {}
     options = dict(task_type=task_type, duration=duration, shot_count=shot_count,
                    language=language, source=source, media_labels=media_labels)
+    if asset_roles is not None:
+        options["asset_roles"] = asset_roles
     drama = uses_authoring_contract(director_skill)
     def correction(original, text, report):
         return correction_messages(original, text, report, **({"requested_dialogue": True} if drama else {}))

@@ -13,6 +13,17 @@ workflows use the current deterministic widget order.
 
 Compatibility invariants:
 
+- H3 Hybrid appends one task choice without adding inputs, outputs, widget names,
+  a schema revision or a new main node. T2VA remains default; the five old choices
+  and 38 saved fields retain their positions and message behavior. Hybrid requires
+  first and/or last frame plus visual references and uses the existing six-field
+  family. Single-image slots preserve distinct roles; old Ref2VA batch flattening
+  remains unchanged. Language/quality/Relay/cache paths retain resolved roles.
+  Three new examples are checked separately; existing example bytes are frozen.
+  A new Hybrid workflow requires Hybrid-capable software and is not supported
+  by downgrading to a release that does not recognize the task. Browser hooks
+  are tested locally; no RunningHub production deployment is claimed.
+
 - Qwen Image's connection-only `api_key` never occupies a slot in newly saved
   `widgets_values`. Historical arrays that contained its placeholder are read
   by name, so `api_mode`, `seed`, custom model, Base URL, and local GGUF fields

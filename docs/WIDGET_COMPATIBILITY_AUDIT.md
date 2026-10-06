@@ -16,6 +16,29 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-06: additive H3 Hybrid
+
+Append only a task combo option, with T2VA default and all five original indices
+unchanged. Inputs, output ports, execute signature, 38 serialized names, historical
+layout recognizers and original example bytes remain frozen. No button, DOM panel,
+force-input field or native schema revision is added. New Hybrid examples keep
+blank keys and the existing optional socket order; three same-name thumbnails
+and a separate exact generator/checker prevent changes to old workflows.
+
+Actual frontend hooks exercise all three new examples and reordered runtime
+widgets, aliases, linked null text, synchronous named restoration, deferred
+normalization, positional/native named serialization and repeat reload. Chrome
+executes configure/serialize and the finite recovery notice. These are host-boundary
+contracts, not a RunningHub deployment or an inference queue on the user's server.
+Graph validation still permits unresolved upstream inputs; resolved Hybrid media
+is checked before beginning a paid checkpoint or constructing a model/request.
+
+2026-10-06 gates: 788 Python tests (786 passed, two opt-in skips), 54 frontend tests,
+Chrome contracts, example checks, secret/package scans passed. Candidate ZIP CRC
+and isolated CPU loading verify 29 nodes, Hybrid module/examples, eight official
+GIFs, zero T8 GIFs and no live-repository fallback. Pure transport tests are not
+real GGUF or rendered-video acceptance; real API A/B is recorded separately.
+
 ### 2026-10-05: reference video duration validation
 
 Remove only the per-video and aggregate duration bounds in H3 and Seedance;

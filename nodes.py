@@ -23,6 +23,15 @@ except ImportError:
     from quality_pipeline import h3_quality_result, retained_draft_provider
 from PIL import Image
 
+try:
+    from .h3_hybrid import (HYBRID, HYBRID_LABEL, HYBRID_ALIASES, HYBRID_RULES,
+                            is_reference_task, asset_roles, role_instruction,
+                            hybrid_metadata, preserve_hybrid_on_repair)
+except ImportError:
+    from h3_hybrid import (HYBRID, HYBRID_LABEL, HYBRID_ALIASES, HYBRID_RULES,
+                           is_reference_task, asset_roles, role_instruction,
+                           hybrid_metadata, preserve_hybrid_on_repair)
+
 from comfy_api.latest import ComfyExtension, io
 
 try:
@@ -230,15 +239,17 @@ DIRECT_ROUTE_PROXIES = {"http": "", "https": "", "all": ""}
 # bounded retry policy.
 SEEDANCE_CHAT_RETRYABLE_STATUS_CODES = frozenset({500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526, 530})
 
-TASK_TYPES = ["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA"]
+TASK_TYPES = ["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA", HYBRID]
 TASK_TYPE_LABELS = {
     "T2VA": "T2VA（文生音视频）",
     "I2VA": "I2VA（首帧图生音视频）",
     "FL2VA": "FL2VA（首尾帧生音视频）",
     "L2VA": "L2VA（尾帧图生音视频）",
     "Ref2VA": "Ref2VA（参考图/视频生音视频）",
+    HYBRID: HYBRID_LABEL,
 }
 TASK_TYPE_ALIASES = {label: task_type for task_type, label in TASK_TYPE_LABELS.items()}
+TASK_TYPE_ALIASES.update({alias: HYBRID for alias in HYBRID_ALIASES})
 REWRITE_MODES = ["strict", "balanced", "creative"]
 MODE_TEMPERATURES = {"strict": 0.2, "balanced": 0.7, "creative": 1.2}
 OUTPUT_LANGUAGES = ["中文", "English"]
@@ -332,7 +343,7 @@ OFFICIAL_H3_SKILL_ROOT = Path(__file__).resolve().parent / "official_skills" / "
 
 @lru_cache(maxsize=3)
 def _official_h3_source_instruction(task_type: str) -> str:
-    guide_name = "ref-en.txt" if task_type == "Ref2VA" else "base-en.txt"
+    guide_name = "ref-en.txt" if is_reference_task(task_type) else "base-en.txt"
     skill_path = OFFICIAL_H3_SKILL_ROOT / "SKILL.md"
     guide_path = OFFICIAL_H3_SKILL_ROOT / "references" / guide_name
     try:
@@ -530,6 +541,9 @@ summary is one short paragraph in the effective descriptive language beginning w
 retention_analysis uses one line per tracked label. Visible relationships use only fully_preserved, partially_preserved, attribute_transfer, or weak_reference.
 detailed_description establishes style in one or two sentences before [Shot 1], then describes playback order. Generation tasks normally use 350-500 English words or approximately 350-500 Chinese characters unless the requested target says otherwise or complete dialogue requires another length.""",
 }
+
+
+TASK_RULES[HYBRID] = HYBRID_RULES
 
 
 class PromptEnhancerError(RuntimeError):
@@ -810,6 +824,75 @@ def _video_to_bytes(
     return bytes(data), extension, mime_type
 
 
+def _validate_hybrid_video_payload(video, max_file_bytes):
+    """Non-consuming preflight of native files/seekable buffers, without decoding."""
+    source = video.get_stream_source()
+    try:
+        if isinstance(source, (str, os.PathLike)):
+            size = os.path.getsize(source)
+            with open(source, "rb") as handle:
+                first_byte = handle.read(1)
+        else:
+            # Native VIDEO streams are files or seekable buffers. A one-shot
+            # stream cannot be validated and later submitted without data loss.
+            position = source.tell()
+            try:
+                source.seek(0)
+                first_byte = source.read(1)
+                source.seek(0, 2)
+                size = source.tell()
+            finally:
+                source.seek(position)
+    except (AttributeError, OSError, ValueError, TypeError) as error:
+        raise PromptEnhancerError("Hybrid VIDEO requires a readable native file or seekable binary stream.") from error
+    if not isinstance(first_byte, (bytes, bytearray)):
+        raise PromptEnhancerError("Hybrid VIDEO stream did not return binary data.")
+    if not first_byte or size <= 0:
+        raise PromptEnhancerError("Hybrid VIDEO is empty.")
+    if max_file_bytes is not None and size > max_file_bytes:
+        raise PromptEnhancerError("VIDEO exceeds the Seedance 50 MB upload limit.")
+
+
+def _hybrid_media_plan(first_frame, last_frame, reference_images, reference_videos,
+                       allow_trimmed_video=False, max_video_bytes=MAX_FILE_BYTES):
+    def ordered_slots(values):
+        return sorted(((name, value) for name, value in (values or {}).items() if value is not None),
+                      key=lambda pair: (int(re.search(r"(\d+)$", pair[0]).group(1))
+                                        if re.search(r"(\d+)$", pair[0]) else 10_000, pair[0]))
+
+    images, videos = ordered_slots(reference_images), ordered_slots(reference_videos)
+    if first_frame is None and last_frame is None:
+        raise PromptEnhancerError("Hybrid requires first_frame and/or last_frame / 混合模式需要首帧或尾帧。")
+    if not images and not videos:
+        raise PromptEnhancerError("Hybrid also requires visual reference images/videos; audio-only references are not supported here / 还需参考图片或视频；音频混合请使用 H3 音频插件。")
+    if len(images) > 9 or len(videos) > 3:
+        raise PromptEnhancerError("Hybrid supports at most 9 extra image slots and 3 videos (keyframes are separate).")
+    plan = []
+    image_slots = [(role, value, role) for role, value in (("first_frame", first_frame), ("last_frame", last_frame)) if value is not None]
+    image_slots += [(name, value, "reference_image") for name, value in images]
+    for index, (slot, image, role) in enumerate(image_slots, 1):
+        if _image_count(image) != 1:
+            raise PromptEnhancerError(f"Hybrid {slot} requires a single image; split IMAGE batches into separate slots / 请将批次拆成单张图片。")
+        pixels = _image_at(image, 0)
+        if pixels.shape[0] <= 0 or pixels.shape[1] <= 0:
+            raise PromptEnhancerError("Hybrid IMAGE must have positive width and height / 图片尺寸不能为空。")
+        # Confirm usable pixels before execute replaces a paid checkpoint.
+        # Single-item batches can still contain empty/unsupported channel shapes.
+        try:
+            _image_to_png_bytes(pixels)
+        except (ValueError, TypeError) as error:
+            raise PromptEnhancerError("Hybrid IMAGE pixels cannot be encoded / 图片像素格式无效。") from error
+        plan.append({"kind": "image", "label": f"<Picture {index}>", "value": _image_at(image, 0),
+                     "role": role, "source_slot": slot})
+    for index, (slot, video) in enumerate(videos, 1):
+        _validate_video_source(video, allow_trim=allow_trimmed_video, max_file_bytes=max_video_bytes)
+        _video_duration(video, use_active_trim=allow_trimmed_video)
+        _validate_hybrid_video_payload(video, max_video_bytes)
+        plan.append({"kind": "video", "label": f"<Video {index}>", "value": video,
+                     "role": "reference_video", "source_slot": slot})
+    return plan
+
+
 def _validate_inputs(
     prompt: str,
     task_type: str,
@@ -852,6 +935,10 @@ def _validate_inputs(
         raise PromptEnhancerError("duration_seconds must be a positive integer.")
     if description_word_target != 0 and not 80 <= int(description_word_target) <= 1000:
         raise PromptEnhancerError("description_word_target must be 0 (auto) or between 80 and 1000.")
+
+    if task_type == HYBRID:
+        return _hybrid_media_plan(first_frame, last_frame, reference_images, reference_videos,
+                                  allow_trimmed_video, max_video_bytes)
 
     reference_image_values = _ordered_values(reference_images)
     reference_video_values = _ordered_values(reference_videos)
@@ -1259,7 +1346,7 @@ def _length_target_instruction(
     output_language: str,
     official_skill_profile: str = COMPAT_SKILL_PROFILE,
 ) -> str:
-    field = "detailed_description" if task_type == "Ref2VA" else "integrated_multimodal_description"
+    field = "detailed_description" if is_reference_task(task_type) else "integrated_multimodal_description"
     effective_language = _effective_output_language(output_language, official_skill_profile)
     unit = "Chinese characters" if effective_language == "中文" else "English words"
     if description_word_target:
@@ -1267,7 +1354,7 @@ def _length_target_instruction(
             f"Aim to write {field} at approximately {description_word_target} {unit}. "
             "Do not truncate exact dialogue, lyrics, visible text, or required structure to hit the target."
         )
-    if task_type == "Ref2VA":
+    if is_reference_task(task_type):
         return f"Use the automatic length rule: detailed_description is normally 350-500 {unit} for generation tasks."
     return f"Choose a concise but complete length for {field} based on the requested duration and information density."
 
@@ -1443,6 +1530,8 @@ def _build_messages(
         effective_creative_preset,
     )
     user_content: str | list[dict[str, Any]]
+    if task_type == HYBRID:
+        user_text += "\n" + role_instruction(media_plan, duration_seconds)
     if directional:
         fact_lookup = template_fact_lookup(prompt, reference_template, reference_context, constraints)
         if fact_lookup:
@@ -1562,7 +1651,7 @@ def _request_completion(
 
 
 def _reorder_complete_fields(text: str, task_type: str) -> str:
-    fields = REFERENCE_FIELDS if task_type == "Ref2VA" else BASIC_FIELDS
+    fields = REFERENCE_FIELDS if is_reference_task(task_type) else BASIC_FIELDS
     matches: dict[str, re.Match[str]] = {}
     for field in fields:
         field_matches = list(re.finditer(rf"(?m)^{re.escape(field)}:\s*", text))
@@ -1594,6 +1683,7 @@ def _h3_language_repair_messages(text, language, relay_config, original_messages
     if original_messages is not None:
         messages = preserve_director_on_repair(messages, original_messages, director_skill, combat_camera_config=combat_camera_config,
                                               performance_director_config=performance_director_config)
+        messages = preserve_hybrid_on_repair(messages, original_messages)
     if relay_config:
         messages[0]["content"] += (
             "\nKeep the complete Relay JSON object and its keys, events, weights and end_state fields. "
@@ -1814,6 +1904,8 @@ def enhance_prompt(
         metadata = director_metadata(director_skill, language=_effective_output_language(output_language, official_skill_profile),
                                      mode=RELAY if relay_config else NORMAL, shot_count=shot_count)
         metadata.update(camera_metadata(combat_camera_config))
+        if task_type == HYBRID:
+            metadata.update(hybrid_metadata(media_plan))
         progress_callback("input_validated", asset_count=len(media_plan), **({"creation_metadata": metadata} if metadata else {}))
     if is_local_qwen_api_mode(effective_api_mode):
         try:
@@ -1945,6 +2037,7 @@ def enhance_prompt(
                     task_type=task_type, duration=duration_seconds, shot_count=shot_count,
                     language=effective_local_language, source="\n".join((str(prompt), reference_context, constraints)),
                     media_labels=[asset["label"] for asset in media_plan], relay_config=relay_config, progress=progress_callback,
+                    **({"asset_roles": asset_roles(media_plan)} if task_type == HYBRID else {}),
                     **({"director_skill": director_skill} if uses_authoring_contract(director_skill) else {}),
                 )
                 local_attempts += quality_metrics.get("correction_calls", 0)
@@ -2071,6 +2164,7 @@ def enhance_prompt(
             task_type=task_type, duration=duration_seconds, shot_count=shot_count,
             language=effective_cloud_language, source="\n".join((str(prompt), reference_context, constraints)),
             media_labels=[asset["label"] for asset in media_plan], relay_config=relay_config, progress=progress_callback,
+            **({"asset_roles": asset_roles(media_plan)} if task_type == HYBRID else {}),
             **({"director_skill": director_skill} if uses_authoring_contract(director_skill) else {}),
         )
         if progress_callback:
@@ -2093,7 +2187,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             category="T8/MiniMax H3",
             description=(
                 "Uses one selected cloud or local visual LLM channel to rewrite a prompt into the official MiniMax-H3 "
-                "T2VA, I2VA, FL2VA, L2VA, or Ref2VA format. Cloud channels receive complete videos; local Qwen reads "
+                "T2VA, I2VA, FL2VA, L2VA, Ref2VA or T8 Hybrid (keyframes + visual references) format. Cloud channels receive complete videos; local Qwen reads "
                 "ordered timestamped visual samples and never claims to analyze the video audio track."
             ),
             inputs=[
@@ -2110,6 +2204,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     display_name="生成类型",
                     options=list(TASK_TYPE_LABELS.values()),
                     default=TASK_TYPE_LABELS["T2VA"],
+                    tooltip="Hybrid = 首帧和/或尾帧 + 参考图/视频；每槽单图，最多9张额外参考图/3视频，无音频输入。 / Keyframes plus visual references; single images, no audio input.",
                 ),
                 io.Int.Input(
                     "duration_seconds",
@@ -2559,6 +2654,15 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                                      mode=relay_mode, shot_count=effective_shots)
         metadata.update(camera_metadata(combat_camera_config))
         metadata.update(performance_metadata(performance_director_config))
+        if _canonical_task_type(task_type) == HYBRID:
+            # Validate resolved Hybrid inputs before replacing any paid checkpoint.
+            hybrid_plan = _validate_inputs(
+                prompt, HYBRID, duration_seconds, rewrite_mode, description_word_target,
+                output_language, "官方增强" if director_skill != DIRECTOR_OFF else prompt_mode,
+                reference_template, first_frame, last_frame, reference_images, reference_videos,
+                official_skill_profile, NO_CREATIVE_PRESET if director_skill != DIRECTOR_OFF else _canonical_creative_preset(creative_preset),
+                is_local_qwen_api_mode(api_mode), MAX_FILE_BYTES if api_mode == SEEDANCE_API_MODE else None)
+            metadata.update(hybrid_metadata(hybrid_plan))
         begin_recovery_record("MiniMaxH3PromptEnhancerT8", recovery_slot, api_mode, **({"metadata": metadata} if metadata else {}))
         diagnostic = DiagnosticsRun("MiniMaxH3PromptEnhancerT8", api_mode, 4)
         try:

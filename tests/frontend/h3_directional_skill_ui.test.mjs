@@ -240,7 +240,7 @@ test("20 skill/off cycles retain saved templates and fixed geometry without extr
 
 // Run the actual registration/configure/serialize hooks with only ComfyUI's
 // host/import boundaries stubbed. This tests migrations, not a copied algorithm.
-async function enhancerHarness(filename, target) {
+async function enhancerHarness(filename, target, { realNormalizer = false } = {}) {
     const source = await readFile(new URL(`../../web/js/${filename}`, import.meta.url), "utf8");
     const frames = [];
     let extension;
@@ -261,6 +261,13 @@ async function enhancerHarness(filename, target) {
         ? ", published: PUBLISHED_WIDGET_NAMES, publishedV1: PUBLISHED_V1_WIDGET_NAMES, runtimeV1: RUNTIME_V1_WIDGET_NAMES"
         : "";
     vm.runInContext(`${noImports}\nglobalThis.fixture = { names: SERIALIZED_WIDGET_NAMES, defaults: LOCAL_WIDGET_DEFAULTS${extra} };`, context);
+    if (realNormalizer) {
+        // Execute the actual onNodeCreated closure, not a copied task migration.
+        const declarations = source.match(/            const promptWidget = [\s\S]*?            const seedWidget = [^\n]+;/)?.[0];
+        const normalizer = source.match(/            this\.t8NormalizePromptOptions = \(\) => \{[\s\S]*?\n            \};/)?.[0];
+        assert.ok(declarations && normalizer, "actual widget bindings and normalizer are present");
+        vm.runInContext(`globalThis.attachNormalizer = function () { ${declarations}\n${normalizer} };`, context);
+    }
     const names = [...context.fixture.names];
     class TestNode {
         constructor() {
@@ -280,6 +287,7 @@ async function enhancerHarness(filename, target) {
             this.t8NormalizePromptOptions = this.s20NormalizeOptions = () => {
                 director.value = directionalSkillLabel(director.value);
             };
+            if (realNormalizer) context.attachNormalizer.call(this);
             this.t8RestoreCaseTemplate = (value) => { this.widgets.find((widget) => widget.name === "case_template").value = value; };
         }
         onConfigure(data) {
@@ -305,6 +313,36 @@ async function enhancerHarness(filename, target) {
         values(node) { return Object.fromEntries(node.widgets.map((widget) => [widget.name, widget.value])); },
     };
 }
+
+test("Hybrid aliases and linked prompts survive actual H3 normalizer and 38-field hooks", async () => {
+    const harness = await enhancerHarness("minimax_h3_prompt_enhancer.js", "h3", { realNormalizer: true });
+    assert.equal(harness.names.length, 38);
+    for (const filename of ["h3_hybrid_first_image.json", "h3_hybrid_last_image.json", "h3_hybrid_first_last_video.json"]) {
+        const graph = JSON.parse(await readFile(new URL(`../../example_workflows/${filename}`, import.meta.url), "utf8"));
+        const original = graph.nodes.find(n => n.type === "MiniMaxH3PromptEnhancerT8").widgets_values;
+        for (const alias of ["Hybrid", "hybrid", "Hybrid — 关键帧+参考混合生成", "Hybrid（关键帧+参考混合生成）"]) {
+            for (const linkedPrompt of [false, true]) {
+                const saved = [...original];
+                saved[1] = alias;
+                if (linkedPrompt) saved[0] = null;
+                const restored = harness.configure(saved, { beforeFrames(node) {
+                    const values = harness.values(node);
+                    assert.equal(values.task_type, alias, "named task restored before RAF normalization");
+                    assert.equal(values.prompt, saved[0]);
+                    assert.equal(values.api_mode, original[harness.names.indexOf("api_mode")]);
+                    assert.equal(values.seed, original[harness.names.indexOf("seed")]);
+                } });
+                assert.equal(harness.values(restored).task_type, "Hybrid（关键帧+参考混合生成）");
+                const data = {};
+                restored.onSerialize(data);
+                assert.equal(data.widgets_values.length, 38);
+                assert.equal(data.widgets_values_named.task_type, "Hybrid（关键帧+参考混合生成）");
+                assert.equal(data.widgets_values[0], saved[0]);
+                assert.deepEqual(harness.values(harness.configure(data.widgets_values)), harness.values(restored));
+            }
+        }
+    }
+});
 
 test("H3, Seedance and Music restore models synchronously before missing-model scan (#20)", async () => {
     for (const [filename, target] of [["minimax_h3_prompt_enhancer.js", "h3"],
@@ -368,7 +406,7 @@ test("all shipped H3/Seedance workflows retain native widget positions with opti
             assert.equal(serialized.widgets_values.length, 38, filename);
             assert.deepEqual(harness.values(harness.configure(serialized.widgets_values)), first, filename);
             assert.ok(!harness.names.includes("combat_camera_config"));
-            if (saved.inputs.some(input => input.name === "combat_camera_config")) {
+            if (saved.inputs.some(input => input.name === "combat_camera_config" && input.link != null)) {
                 cameraExamples++;
                 assert.equal(saved.inputs.at(-1).name, "combat_camera_config");
                 assert.equal(saved.widgets_values.length, 38);

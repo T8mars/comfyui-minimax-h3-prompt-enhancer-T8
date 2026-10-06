@@ -25,6 +25,7 @@ class ReleaseToolTests(unittest.TestCase):
             "tudou_emotion_review_2026-10-04.json",
             "h3_vocal_protocol_api_2026-10-04.json",
             "h3_vocal_protocol_final_api_2026-10-04.json",
+            "h3_hybrid_api_2026-10-06.json",
         )
         attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8")
         for name in names:

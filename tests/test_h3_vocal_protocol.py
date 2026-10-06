@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import ast
 import hashlib
 import json
 import re
@@ -134,8 +135,37 @@ class VocalProtocolTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), 'b6bbaab47f016ef35f6d71c62b435dbb2c33f643a5b9c5439fcfd299994e4673')
         data = json.loads(path.read_text(encoding='utf-8'))
         self.assertEqual(len(data['tests']), 2)
+        from test_directional_skills import GIT_ROOT
+        import subprocess
         for name in ('h3_vocal_protocol.py', 'quality_pipeline.py'):
-            actual = hashlib.sha256((ROOT / name).read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+            current=(ROOT / name).read_bytes().replace(b'\r\n', b'\n')
+            evidence_code=current
+            if name == 'quality_pipeline.py':
+                # Historical evidence is immutable, not a claim that new Hybrid
+                # code was API-tested on October 4. Project only the reviewed
+                # internal role argument; every other adapter AST remains frozen.
+                evidence_code=subprocess.check_output(['git','show','d6ad140020f39da6182fe4dfd3e2ded11c5f5557:quality_pipeline.py'],cwd=GIT_ROOT).replace(b'\r\n',b'\n')
+                tree=ast.parse(current)
+                for node in tree.body:
+                    if isinstance(node,ast.FunctionDef) and node.name in {'h3_quality_result','_checked_h3_quality_result'}:
+                        self.assertEqual(node.args.kwonlyargs[-1].arg,'asset_roles')
+                        self.assertIsNone(node.args.kw_defaults[-1].value)
+                        node.args.kwonlyargs.pop(); node.args.kw_defaults.pop()
+                additions=[]
+                for node in ast.walk(tree):
+                    if isinstance(node,ast.Call):
+                        for keyword in list(node.keywords):
+                            if keyword.arg=='asset_roles':
+                                self.assertEqual(ast.unparse(keyword.value),'asset_roles')
+                                node.keywords.remove(keyword); additions.append('argument')
+                    if isinstance(node,ast.FunctionDef) and node.name=='_checked_h3_quality_result':
+                        branch=next(n for n in node.body if isinstance(n,ast.If) and ast.unparse(n.test)=='asset_roles is not None')
+                        expected=ast.parse('if asset_roles is not None:\n options["asset_roles"] = asset_roles').body[0]
+                        self.assertEqual(ast.dump(branch),ast.dump(expected))
+                        node.body.remove(branch); additions.append('options')
+                self.assertEqual(sorted(additions),['argument','options'])
+                self.assertEqual(ast.dump(tree),ast.dump(ast.parse(evidence_code)))
+            actual = hashlib.sha256(evidence_code).hexdigest()
             self.assertEqual(actual, data['settings']['code_sha256'][name])
             self.assertEqual(actual, data['post_run_output_code_sha256'][name])
         modified = 0

@@ -1,0 +1,2183 @@
+{
+  "schema": "t8-hybrid-acceptance/v1",
+  "scope": "Real uploaded synthetic media, text contracts only; no rendered H3 video or real GGUF inference.",
+  "source_sha256": "96744d0468eea342c3b65f1a780955e88b233c4ea5e977025470928d18f5adcc",
+  "tests": [
+    {
+      "case": "first_image",
+      "repeat": 0,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "8c905651adea23ced4b47fa6ddb5b06cfc02505fd9efe47dcd658e89ac8368b2",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12024,
+                "completion_tokens": 8255,
+                "total_tokens": 20279
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是红色实心圆片，外观来自<Picture 1>与<Picture 2>：正圆形、纯红平涂、边缘整齐，圆心位于灰色直轨轴线上；在目标视频中仅水平改变位置，大小、形状与朝向保持不变。\n<Subject 2> 是蓝色空心方框，外观来自<Picture 1>与<Picture 2>：等粗蓝色描边、内部留白，固定在画面右侧，灰色直轨水平穿过其中部。\n<Subject 3> 是灰色水平直轨，外观来自<Picture 1>与<Picture 2>：细长、平直、纯灰色，横贯白底画面，位置与粗细全程不变。\n<Picture 1> 是[Shot 1]的实际首帧锚点，0秒时严格对齐：红片在左、蓝框在右，灰轨横贯其间。\n<Picture 2> 是仅提供物体外观的参考图，用于核对红片、蓝框与灰轨的颜色、形状和线条样式；图中红片位置不作为首尾关键帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒单镜头平面几何动画：以<Picture 1>作为0秒严格对齐的实际首帧，<Subject 1>红色圆片沿<Subject 3>灰色直轨向右连续平移并近似匀减速，第8秒在<Subject 2>固定蓝框左侧趋近停止；<Picture 2>仅提供几何物体的外观参考，不承担首尾帧角色，全片无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红片的正圆外形、纯红填充、直径大小与朝向全程不变，仅按要求沿轨道水平改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝框的蓝色描边、方框形状、大小及右侧固定位置全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的水平走向、粗细、颜色与横贯画面的位置全程不变。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧的构图、物体位置与外观严格对齐，作为唯一起始关键帧。\n<Picture 2> (appearance reference): partially_preserved - 仅沿用图中红片、蓝框、灰轨的颜色与外形样式，图中红片的中间位置不作为关键帧或运动终点。\n\ndetailed_description:\n本视频采用简洁的二维平面几何动画风格，纯白背景、平涂色彩，无阴影、渐变与透视；摄像机在8秒内保持完全固定的水平构图，无任何运镜或切换。\n[Shot 1] 0秒时画面严格从<Picture 1>起幅：纯白底上，<Subject 3>灰色水平直轨横贯画面，<Subject 1>红色实心圆片位于画面左侧、圆心落在轨道轴线上，画面右侧固定<Subject 2>蓝色空心方框，直轨水平穿过方框中部。起幅后，圆片沿直轨向右连续平移，圆心始终贴合轨道中线，运动方向始终向右；滑动呈近似匀减速节奏，起步速度适中，随后速度平滑持续降低，前半程位移较大，后半程单位时间位移逐步收窄，全程无瞬移、跳动、回弹或中途停顿。圆片的直径、正圆外形、纯红填充与朝向全程不变，不旋转、不变形、不拖影；蓝框与灰轨的位置、大小、粗细、颜色完全固定，画面不增加任何物体，也不出现文字或标记。第8秒时，圆片恰好滑动到从起点到蓝框左边框之间约五分之三路程处，与蓝框保持明显间隔，速度同时趋近于零并稳稳停住，构成严格对齐8秒的实际尾帧；<Picture 2>仅用于核对各几何物体的外观，其圆片位置不作为首尾帧或运动终点的锚点。轻微细密的滑动摩擦声随运动持续，音量随减速逐渐减弱，至圆片停住时消失。\n\noverall_soundscape:\n全片为安静的白底平面动画环境，无环境底噪与人声；唯一声音是红色圆片沿灰色直轨滑动时轻微、细密的连续摩擦声，音量随圆片减速而平滑减弱，并在第8秒圆片停住时随之消失。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 183.86
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是红色实心圆片，外观来自<Picture 1>与<Picture 2>：正圆形、纯红平涂、边缘整齐，圆心位于灰色直轨轴线上；在目标视频中仅水平改变位置，大小、形状与朝向保持不变。\n<Subject 2> 是蓝色空心方框，外观来自<Picture 1>与<Picture 2>：等粗蓝色描边、内部留白，固定在画面右侧，灰色直轨水平穿过其中部。\n<Subject 3> 是灰色水平直轨，外观来自<Picture 1>与<Picture 2>：细长、平直、纯灰色，横贯白底画面，位置与粗细全程不变。\n<Picture 1> 是[Shot 1]的实际首帧锚点，0秒时严格对齐：红片在左、蓝框在右，灰轨横贯其间。\n<Picture 2> 是仅提供物体外观的参考图，用于核对红片、蓝框与灰轨的颜色、形状和线条样式；图中红片位置不作为首尾关键帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒单镜头平面几何动画：以<Picture 1>作为0秒严格对齐的实际首帧，<Subject 1>红色圆片沿<Subject 3>灰色直轨向右连续平移并近似匀减速，第8秒在<Subject 2>固定蓝框左侧趋近停止；<Picture 2>仅提供几何物体的外观参考，不承担首尾帧角色，全片无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红片的正圆外形、纯红填充、直径大小与朝向全程不变，仅按要求沿轨道水平改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝框的蓝色描边、方框形状、大小及右侧固定位置全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的水平走向、粗细、颜色与横贯画面的位置全程不变。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧的构图、物体位置与外观严格对齐，作为唯一起始关键帧。\n<Picture 2> (appearance reference): partially_preserved - 仅沿用图中红片、蓝框、灰轨的颜色与外形样式，图中红片的中间位置不作为关键帧或运动终点。\n\ndetailed_description:\n本视频采用简洁的二维平面几何动画风格，纯白背景、平涂色彩，无阴影、渐变与透视；摄像机在8秒内保持完全固定的水平构图，无任何运镜或切换。\n[Shot 1] 0秒时画面严格从<Picture 1>起幅：纯白底上，<Subject 3>灰色水平直轨横贯画面，<Subject 1>红色实心圆片位于画面左侧、圆心落在轨道轴线上，画面右侧固定<Subject 2>蓝色空心方框，直轨水平穿过方框中部。起幅后，圆片沿直轨向右连续平移，圆心始终贴合轨道中线，运动方向始终向右；滑动呈近似匀减速节奏，起步速度适中，随后速度平滑持续降低，前半程位移较大，后半程单位时间位移逐步收窄，全程无瞬移、跳动、回弹或中途停顿。圆片的直径、正圆外形、纯红填充与朝向全程不变，不旋转、不变形、不拖影；蓝框与灰轨的位置、大小、粗细、颜色完全固定，画面不增加任何物体，也不出现文字或标记。第8秒时，圆片恰好滑动到从起点到蓝框左边框之间约五分之三路程处，与蓝框保持明显间隔，速度同时趋近于零并稳稳停住，构成严格对齐8秒的实际尾帧；<Picture 2>仅用于核对各几何物体的外观，其圆片位置不作为首尾帧或运动终点的锚点。轻微细密的滑动摩擦声随运动持续，音量随减速逐渐减弱，至圆片停住时消失。\n\noverall_soundscape:\n全片为安静的白底平面动画环境，无环境底噪与人声；唯一声音是红色圆片沿灰色直轨滑动时轻微、细密的连续摩擦声，音量随圆片减速而平滑减弱，并在第8秒圆片停住时随之消失。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_image",
+      "repeat": 0,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "684b2e2e2e7d15ed9dd53da5e9289f2b963f73bf5e9d06f0609b9cfa98ad6805",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12330,
+                "completion_tokens": 3896,
+                "total_tokens": 16226
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上的平面几何画面：一条粗细均匀的水平灰色直轨横贯画面中部，纯红色实心圆片位于轨道左侧且圆心落在轨道上，画面右侧固定一个蓝色空心方框，灰色直轨水平穿过方框两侧。\n<Picture 2>: reference_image - 与<Picture 1>相同的白底、灰色直轨、红色实心圆片与右侧蓝色空心方框，圆片位于轨道中部；该图仅用于确认各物体的外观、颜色与层次关系，不作为首帧、尾帧或停留位置。\n<Subject 1> 是来自<Picture 1>与<Picture 2>的纯红色实心圆片，正圆形，边缘光滑，圆心始终位于灰色直轨中线上。\n<Subject 2> 是来自<Picture 1>与<Picture 2>的水平灰色直轨，粗细均匀，横贯白色画面。\n<Subject 3> 是来自<Picture 1>与<Picture 2>的蓝色空心方框，固定在画面右侧，直轨水平穿过其左右两边。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒单镜头平面几何动画，0秒严格从<Picture 1>首帧出发：<Subject 1>沿<Subject 2>向右侧做连续水平平移并平滑减速，<Subject 3>与<Subject 2>全程固定不动；<Picture 2>仅作为物体外观与颜色的参考，不提供位置与节奏锚点。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒画面与其严格对齐，白底、灰色直轨、左侧红色圆片与右侧蓝色方框的位置和外观全部保留。\n<Picture 2>: partially_preserved - 仅保留红色圆片、灰色直轨与蓝色方框的外观、颜色和构成关系，圆片位于轨道中部的画面位置不作为目标帧或停留点。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、大小与光滑边缘全程保持不变，仅按要求沿轨道改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的粗细、颜色、水平位置与长度全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的位置、大小、线宽与颜色全程固定不变。\n\ndetailed_description:\n[Shot 1] 0秒画面严格从<Picture 1>开始：纯白背景上，<Subject 2>水平灰色直轨横贯画面中部，<Subject 1>纯红色实心圆片位于轨道左侧，圆心落在轨道中线上；<Subject 3>蓝色空心方框固定在画面右侧，直轨水平穿过方框两侧。镜头为完全静止的正面平视构图，无推拉摇移，整体呈干净的平面矢量风格，光照均匀、无色差与阴影。开始后，<Subject 1>沿<Subject 2>向右侧方框做连续水平平移，运动轨迹严格贴合轨道中线，没有任何跳动、瞬移或角度偏转；圆片始终保持正圆，不缩放、不变形、不旋转，红色不变，途中不产生拖影，也不增加任何物体，<Subject 2>与<Subject 3>同样不发生任何变化。圆片以较明显的速度启动，随后平滑、持续地减速，相邻时间间隔内的位移均匀收窄，呈现先快后慢的滑动节奏；接近蓝色方框时速度已经很低，至8秒时在蓝色方框左侧附近缓慢停稳，圆片仍在轨道上，未进入方框、未与方框重叠。全片无对白、无文字、无音乐，仅有与移动同步的轻微滑动摩擦声，声音随减速同步变轻，停稳时消失。\n\noverall_soundscape:\n全片环境极为安静，仅有红色圆片沿灰色直轨滑行时发出的轻微连续摩擦声；摩擦声随圆片速度降低而逐渐变轻，圆片停稳后声音完全消失，无对白、无人声及其他物理音效。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 92.219
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 2,
+            "hybrid_video_count": 0
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上的平面几何画面：一条粗细均匀的水平灰色直轨横贯画面中部，纯红色实心圆片位于轨道左侧且圆心落在轨道上，画面右侧固定一个蓝色空心方框，灰色直轨水平穿过方框两侧。\n<Picture 2>: reference_image - 与<Picture 1>相同的白底、灰色直轨、红色实心圆片与右侧蓝色空心方框，圆片位于轨道中部；该图仅用于确认各物体的外观、颜色与层次关系，不作为首帧、尾帧或停留位置。\n<Subject 1> 是来自<Picture 1>与<Picture 2>的纯红色实心圆片，正圆形，边缘光滑，圆心始终位于灰色直轨中线上。\n<Subject 2> 是来自<Picture 1>与<Picture 2>的水平灰色直轨，粗细均匀，横贯白色画面。\n<Subject 3> 是来自<Picture 1>与<Picture 2>的蓝色空心方框，固定在画面右侧，直轨水平穿过其左右两边。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒单镜头平面几何动画，0秒严格从<Picture 1>首帧出发：<Subject 1>沿<Subject 2>向右侧做连续水平平移并平滑减速，<Subject 3>与<Subject 2>全程固定不动；<Picture 2>仅作为物体外观与颜色的参考，不提供位置与节奏锚点。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒画面与其严格对齐，白底、灰色直轨、左侧红色圆片与右侧蓝色方框的位置和外观全部保留。\n<Picture 2>: partially_preserved - 仅保留红色圆片、灰色直轨与蓝色方框的外观、颜色和构成关系，圆片位于轨道中部的画面位置不作为目标帧或停留点。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、大小与光滑边缘全程保持不变，仅按要求沿轨道改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的粗细、颜色、水平位置与长度全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的位置、大小、线宽与颜色全程固定不变。\n\ndetailed_description:\n[Shot 1] 0秒画面严格从<Picture 1>开始：纯白背景上，<Subject 2>水平灰色直轨横贯画面中部，<Subject 1>纯红色实心圆片位于轨道左侧，圆心落在轨道中线上；<Subject 3>蓝色空心方框固定在画面右侧，直轨水平穿过方框两侧。镜头为完全静止的正面平视构图，无推拉摇移，整体呈干净的平面矢量风格，光照均匀、无色差与阴影。开始后，<Subject 1>沿<Subject 2>向右侧方框做连续水平平移，运动轨迹严格贴合轨道中线，没有任何跳动、瞬移或角度偏转；圆片始终保持正圆，不缩放、不变形、不旋转，红色不变，途中不产生拖影，也不增加任何物体，<Subject 2>与<Subject 3>同样不发生任何变化。圆片以较明显的速度启动，随后平滑、持续地减速，相邻时间间隔内的位移均匀收窄，呈现先快后慢的滑动节奏；接近蓝色方框时速度已经很低，至8秒时在蓝色方框左侧附近缓慢停稳，圆片仍在轨道上，未进入方框、未与方框重叠。全片无对白、无文字、无音乐，仅有与移动同步的轻微滑动摩擦声，声音随减速同步变轻，停稳时消失。\n\noverall_soundscape:\n全片环境极为安静，仅有红色圆片沿灰色直轨滑行时发出的轻微连续摩擦声；摩擦声随圆片速度降低而逐渐变轻，圆片停稳后声音完全消失，无对白、无人声及其他物理音效。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_image",
+      "repeat": 1,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "c0ef426f99ccfa2baa589483169ff67f79dd148c3cb992e4821502bf72570317",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12024,
+                "completion_tokens": 5580,
+                "total_tokens": 17604
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是红色实心圆片，外观来自 <Picture 1> 与 <Picture 2>：正圆形、纯红色平涂、边缘略带像素感，圆心位于灰轨上，运动中大小与形状保持不变。\n<Subject 2> 是蓝色空心方框，外观来自 <Picture 1> 与 <Picture 2>：等粗蓝色描边、内部透明留白，固定在画面右侧，灰轨水平穿过其中部。\n<Subject 3> 是灰色水平直轨，外观来自 <Picture 1> 与 <Picture 2>：细长直线、纯灰色，横贯画面中部且位置固定。\n<Picture 1> 是目标视频 [Shot 1] 在0秒的实际首帧，给出白底、灰轨、右侧蓝框与左侧红圆片的初始构图。\n<Picture 2> 是物体外观参考图，仅确认红圆片、蓝框与灰轨的形状和配色；图中圆片的中间位置不作为目标视频的关键帧或尾帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒单镜头平面几何动画：<Picture 1> 作为0秒严格对齐的实际首帧，<Subject 1> 红色圆片沿固定的 <Subject 3> 灰色直轨向右侧连续平移并平滑减速，<Subject 2> 蓝色方框始终固定在右侧；<Picture 2> 仅提供物体外观参考，不承担尾帧角色，全程无对白、文字与音乐，只有轻微摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的正圆外形、纯红配色、大小与运动方向全程保持不变，仅位置沿灰轨连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的描边、尺寸与右侧固定位置完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的粗细、颜色与横贯构图完全保留且静止。\n<Picture 1> ([Shot 1] first frame at 00:00.000): fully_preserved - 首帧构图与各物体位置在0秒被严格复刻。\n<Picture 2> (appearance reference only): partially_preserved - 仅沿用其中物体的形状与配色，圆片在图中的中间位置不作为关键帧或终点。\n\ndetailed_description:\n影片采用极简平面几何动画风格：纯白背景、纯色平涂、无透视、无阴影，图形边缘锐利清晰，镜头为静止的正面平视构图。\n[Shot 1] 画面从 <Picture 1> 严格对齐的实际首帧开始：一条细的 <Subject 3> 灰色水平直轨横贯画面中部并保持完全固定；画面右侧是 <Subject 2> 蓝色空心方框，灰轨水平穿过方框中部，蓝框的大小与位置自始至终不变；<Subject 1> 红色圆片位于画面左侧，圆心落在灰轨上，其形状与配色同时参考 <Picture 2>，而 <Picture 2> 中圆片的位置不作为关键帧。开场后，红圆片沿灰轨向右侧做方向不变的连续平移，节奏为平滑减速：起步稍快，随后速度持续均匀放缓，全程无瞬移、无跳帧、无停顿、无回弹。圆片始终保持原有大小、正圆外形与朝向，不旋转、不变形、不缩放；灰轨与蓝框始终静止，画面不增加任何物体、标记或文字。临近蓝框时圆片已移动得很缓慢，最终在第8秒与实际尾帧严格对齐的瞬间恰好停止，圆片右缘与蓝框左缘之间保留一小段清晰间隙，始终未接触、未进入蓝框；与之同步，轻微的滑动摩擦声随速度逐渐减弱并在停止时消失。\n\noverall_soundscape:\n全程只有红色圆片沿灰色直轨滑动的轻微摩擦声，声音细腻、偏低频，随圆片速度由略明显逐渐减弱，到第8秒停止时归于安静；纯白平面空间没有环境底噪，也没有对白、提示音或其他动作声。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 118.359
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是红色实心圆片，外观来自 <Picture 1> 与 <Picture 2>：正圆形、纯红色平涂、边缘略带像素感，圆心位于灰轨上，运动中大小与形状保持不变。\n<Subject 2> 是蓝色空心方框，外观来自 <Picture 1> 与 <Picture 2>：等粗蓝色描边、内部透明留白，固定在画面右侧，灰轨水平穿过其中部。\n<Subject 3> 是灰色水平直轨，外观来自 <Picture 1> 与 <Picture 2>：细长直线、纯灰色，横贯画面中部且位置固定。\n<Picture 1> 是目标视频 [Shot 1] 在0秒的实际首帧，给出白底、灰轨、右侧蓝框与左侧红圆片的初始构图。\n<Picture 2> 是物体外观参考图，仅确认红圆片、蓝框与灰轨的形状和配色；图中圆片的中间位置不作为目标视频的关键帧或尾帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒单镜头平面几何动画：<Picture 1> 作为0秒严格对齐的实际首帧，<Subject 1> 红色圆片沿固定的 <Subject 3> 灰色直轨向右侧连续平移并平滑减速，<Subject 2> 蓝色方框始终固定在右侧；<Picture 2> 仅提供物体外观参考，不承担尾帧角色，全程无对白、文字与音乐，只有轻微摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的正圆外形、纯红配色、大小与运动方向全程保持不变，仅位置沿灰轨连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的描边、尺寸与右侧固定位置完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的粗细、颜色与横贯构图完全保留且静止。\n<Picture 1> ([Shot 1] first frame at 00:00.000): fully_preserved - 首帧构图与各物体位置在0秒被严格复刻。\n<Picture 2> (appearance reference only): partially_preserved - 仅沿用其中物体的形状与配色，圆片在图中的中间位置不作为关键帧或终点。\n\ndetailed_description:\n影片采用极简平面几何动画风格：纯白背景、纯色平涂、无透视、无阴影，图形边缘锐利清晰，镜头为静止的正面平视构图。\n[Shot 1] 画面从 <Picture 1> 严格对齐的实际首帧开始：一条细的 <Subject 3> 灰色水平直轨横贯画面中部并保持完全固定；画面右侧是 <Subject 2> 蓝色空心方框，灰轨水平穿过方框中部，蓝框的大小与位置自始至终不变；<Subject 1> 红色圆片位于画面左侧，圆心落在灰轨上，其形状与配色同时参考 <Picture 2>，而 <Picture 2> 中圆片的位置不作为关键帧。开场后，红圆片沿灰轨向右侧做方向不变的连续平移，节奏为平滑减速：起步稍快，随后速度持续均匀放缓，全程无瞬移、无跳帧、无停顿、无回弹。圆片始终保持原有大小、正圆外形与朝向，不旋转、不变形、不缩放；灰轨与蓝框始终静止，画面不增加任何物体、标记或文字。临近蓝框时圆片已移动得很缓慢，最终在第8秒与实际尾帧严格对齐的瞬间恰好停止，圆片右缘与蓝框左缘之间保留一小段清晰间隙，始终未接触、未进入蓝框；与之同步，轻微的滑动摩擦声随速度逐渐减弱并在停止时消失。\n\noverall_soundscape:\n全程只有红色圆片沿灰色直轨滑动的轻微摩擦声，声音细腻、偏低频，随圆片速度由略明显逐渐减弱，到第8秒停止时归于安静；纯白平面空间没有环境底噪，也没有对白、提示音或其他动作声。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_image",
+      "repeat": 1,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "29ecda0f9bf5b7a98b70984957b8c664bd85354f720d7940ac947b184184cf11",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12330,
+                "completion_tokens": 5355,
+                "total_tokens": 17685
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上，一条灰色水平直轨贯穿画面中部，红色实心圆片停在轨道左侧且圆心压在轨道中线上，蓝色空心方框固定在轨道右侧，轨道从方框中心穿过。\n<Subject 1> 是红色实心圆片，外观依据<Picture 1>与<Picture 2>，正圆形、纯红填充、边缘整齐，运动中大小、形状与朝向保持不变。\n<Subject 2> 是灰色水平直轨，外观依据<Picture 1>与<Picture 2>，线条粗细均匀，贯穿画面并从蓝框中心穿过，全程静止。\n<Subject 3> 是右侧固定的蓝色空心方框，外观依据<Picture 1>与<Picture 2>，正方形蓝色描边、内部留白，位置与大小全程不变。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒单镜头平面几何动画，以<Picture 1>作为0.00秒实际首帧，<Picture 2>仅用于印证红色圆片、灰色直轨与蓝色方框的外观及中途位置；红色圆片沿固定灰轨向右连续平移并单调减速，8.00秒停入右侧固定蓝框中心，全程物体数量、大小、方向与蓝框位置不变，无对白、文字与音乐。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 白底、灰色直轨、左侧红色圆片与右侧固定蓝框的构图、颜色和位置在0.00秒首帧严格保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的大小、正圆外形、纯红填充与朝向全程不变，仅沿轨道连续平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的位置、长度、粗细与水平方向全程保持静止。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的位置、尺寸与蓝色描边全程固定。\n\ndetailed_description:\n简洁的平面几何动画风格：纯白背景，图形为无渐变、无阴影的纯色填充与描边，采用固定不动的正交正面视角，画面稳定无晃动。\n[Shot 1] 0.00秒首帧严格对应<Picture 1>：<Subject 2>灰色直轨水平贯穿画面中部，<Subject 1>红色实心圆片位于轨道左侧，圆心恰好压在轨道中线上，<Subject 3>蓝色空心方框固定在画面右侧，轨道从方框正中水平穿过。起步后，圆片沿灰轨向右做连续平移，运动为单调减速：初期位移较快，随后速度平稳、持续地减小，逐帧位置连续衔接，没有任何瞬移、停顿或回弹。全过程中圆片的直径、正圆外形、纯红填充和朝向完全不变，圆心始终贴合轨道中线，不缩放、不变形、不旋转；灰轨与蓝框的位置、长短、粗细、颜色保持固定，画面中始终只有这三件物体，不增不减。运动途中，圆片经过<Picture 2>所印证的外观与中途位置状态。临近结尾，圆片滑入蓝框开口，速度趋近于零；在00:08.000的尾帧，圆片恰好停稳，圆心与蓝框中心重合，完整停在蓝色方框内部，轨道依旧水平贯穿。全程伴随轻微、干燥的滑动摩擦声，音量随速度同步渐弱，并在圆片停稳瞬间消失。\n\noverall_soundscape:\n全片仅有圆片沿直轨滑动时发出的轻微、干燥的摩擦声，声音随圆片减速持续变弱，在8.00秒圆片停稳时同步终止；除此之外没有环境声、人声或其他物理声响。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 120.453
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 2,
+            "hybrid_video_count": 0
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上，一条灰色水平直轨贯穿画面中部，红色实心圆片停在轨道左侧且圆心压在轨道中线上，蓝色空心方框固定在轨道右侧，轨道从方框中心穿过。\n<Subject 1> 是红色实心圆片，外观依据<Picture 1>与<Picture 2>，正圆形、纯红填充、边缘整齐，运动中大小、形状与朝向保持不变。\n<Subject 2> 是灰色水平直轨，外观依据<Picture 1>与<Picture 2>，线条粗细均匀，贯穿画面并从蓝框中心穿过，全程静止。\n<Subject 3> 是右侧固定的蓝色空心方框，外观依据<Picture 1>与<Picture 2>，正方形蓝色描边、内部留白，位置与大小全程不变。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒单镜头平面几何动画，以<Picture 1>作为0.00秒实际首帧，<Picture 2>仅用于印证红色圆片、灰色直轨与蓝色方框的外观及中途位置；红色圆片沿固定灰轨向右连续平移并单调减速，8.00秒停入右侧固定蓝框中心，全程物体数量、大小、方向与蓝框位置不变，无对白、文字与音乐。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 白底、灰色直轨、左侧红色圆片与右侧固定蓝框的构图、颜色和位置在0.00秒首帧严格保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的大小、正圆外形、纯红填充与朝向全程不变，仅沿轨道连续平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的位置、长度、粗细与水平方向全程保持静止。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的位置、尺寸与蓝色描边全程固定。\n\ndetailed_description:\n简洁的平面几何动画风格：纯白背景，图形为无渐变、无阴影的纯色填充与描边，采用固定不动的正交正面视角，画面稳定无晃动。\n[Shot 1] 0.00秒首帧严格对应<Picture 1>：<Subject 2>灰色直轨水平贯穿画面中部，<Subject 1>红色实心圆片位于轨道左侧，圆心恰好压在轨道中线上，<Subject 3>蓝色空心方框固定在画面右侧，轨道从方框正中水平穿过。起步后，圆片沿灰轨向右做连续平移，运动为单调减速：初期位移较快，随后速度平稳、持续地减小，逐帧位置连续衔接，没有任何瞬移、停顿或回弹。全过程中圆片的直径、正圆外形、纯红填充和朝向完全不变，圆心始终贴合轨道中线，不缩放、不变形、不旋转；灰轨与蓝框的位置、长短、粗细、颜色保持固定，画面中始终只有这三件物体，不增不减。运动途中，圆片经过<Picture 2>所印证的外观与中途位置状态。临近结尾，圆片滑入蓝框开口，速度趋近于零；在00:08.000的尾帧，圆片恰好停稳，圆心与蓝框中心重合，完整停在蓝色方框内部，轨道依旧水平贯穿。全程伴随轻微、干燥的滑动摩擦声，音量随速度同步渐弱，并在圆片停稳瞬间消失。\n\noverall_soundscape:\n全片仅有圆片沿直轨滑动时发出的轻微、干燥的摩擦声，声音随圆片减速持续变弱，在8.00秒圆片停稳时同步终止；除此之外没有环境声、人声或其他物理声响。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_video",
+      "repeat": 0,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "12f1eab10838c523597db4cfd859e842f004886bd43f532b5860cdd9cb1c0f7f",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12002,
+                "completion_tokens": 4932,
+                "total_tokens": 16934
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1> 是目标动画在0秒的实际首帧，也是[Shot 1]的构图锚点；白底上有灰色水平直轨、左侧红色圆片和右侧蓝色空心框，直轨横向穿过圆片中心与蓝框。\n<Video 1> 是滑动节奏参考，提供红色圆片向右连续平移、末段逐渐减速并收束进蓝框的节奏曲线；不替换<Picture 1>的物体外观，也不作为被剪辑或续写的源视频。\n<Subject 1> 是外观取自<Picture 1>的红色实心圆片，边缘平整、尺寸固定，圆心始终落在灰色直轨上。\n<Subject 2> 是外观取自<Picture 1>的右侧固定蓝框，为蓝色空心方框，位置、大小和方向全程不变。\n<Subject 3> 是外观取自<Picture 1>的平面几何场景，包含纯白色背景与一条细长灰色水平直轨，直轨横贯画面并穿过蓝框。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一条8秒单镜头平面几何动画，0秒严格从<Picture 1>开始。<Subject 1>沿<Subject 3>的灰色直轨向右侧连续平移并逐渐减速，<Subject 2>始终固定在右侧；8秒实际尾帧时圆片停入蓝框中央。<Video 1>仅提供滑动与减速节奏参考，不复制其画面比例或剪辑结构。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒实际首帧严格对齐，白底、灰色直轨、红色圆片与右侧蓝框的外观和构图全部保留。\n<Video 1> (sliding-rhythm reference): partially_preserved - 保留连续右移、末段减速和收束进框的节奏，但时间长度重新适配为8秒，不沿用其物体比例或剪辑。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、大小、形状和方向保持不变，仅沿灰色直轨水平平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 右侧蓝框的颜色、空心边框形态、大小和位置全程固定。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 白色背景与灰色水平直轨保持不变，不新增物体、文字或阴影。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白色背景，无透视、无阴影、无纹理，画面光线均匀。\n[Shot 1] 镜头静止不动，0秒实际首帧严格对齐<Picture 1>：一条细长灰色水平直轨横贯白底，<Subject 1>红色实心圆片位于左侧，圆心压在直轨上；<Subject 2>蓝色空心方框固定在右侧，直轨从框内水平穿过。开始后，<Subject 1>沿直轨向右侧做连续平移，初段滑动平顺，随后在接近蓝框时逐步减速。整个过程中圆片不瞬移、不跳动、不缩放、不变形，<Subject 2>与<Subject 3>的位置、尺寸和颜色均不改变，也没有任何新增物体。圆片从蓝框左侧进入框内，制动越来越柔和，运动轨迹始终与灰色直轨重合；到第8秒实际尾帧时，<Subject 1>完全停稳，圆心与蓝框中心重合，红色圆片完整位于蓝色空心框内。全程伴随轻微滑动摩擦声，声音随速度降低而自然减弱。\n\noverall_soundscape:\n全片环境近乎安静，只有红色圆片沿灰色直轨移动时发出的轻微、干燥、连续的摩擦声。摩擦声随圆片起步轻柔出现，随临近停止而逐渐变弱，到第8秒圆片停稳时自然收束，没有其他动作声或人声。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 128.469
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1> 是目标动画在0秒的实际首帧，也是[Shot 1]的构图锚点；白底上有灰色水平直轨、左侧红色圆片和右侧蓝色空心框，直轨横向穿过圆片中心与蓝框。\n<Video 1> 是滑动节奏参考，提供红色圆片向右连续平移、末段逐渐减速并收束进蓝框的节奏曲线；不替换<Picture 1>的物体外观，也不作为被剪辑或续写的源视频。\n<Subject 1> 是外观取自<Picture 1>的红色实心圆片，边缘平整、尺寸固定，圆心始终落在灰色直轨上。\n<Subject 2> 是外观取自<Picture 1>的右侧固定蓝框，为蓝色空心方框，位置、大小和方向全程不变。\n<Subject 3> 是外观取自<Picture 1>的平面几何场景，包含纯白色背景与一条细长灰色水平直轨，直轨横贯画面并穿过蓝框。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一条8秒单镜头平面几何动画，0秒严格从<Picture 1>开始。<Subject 1>沿<Subject 3>的灰色直轨向右侧连续平移并逐渐减速，<Subject 2>始终固定在右侧；8秒实际尾帧时圆片停入蓝框中央。<Video 1>仅提供滑动与减速节奏参考，不复制其画面比例或剪辑结构。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒实际首帧严格对齐，白底、灰色直轨、红色圆片与右侧蓝框的外观和构图全部保留。\n<Video 1> (sliding-rhythm reference): partially_preserved - 保留连续右移、末段减速和收束进框的节奏，但时间长度重新适配为8秒，不沿用其物体比例或剪辑。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、大小、形状和方向保持不变，仅沿灰色直轨水平平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 右侧蓝框的颜色、空心边框形态、大小和位置全程固定。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 白色背景与灰色水平直轨保持不变，不新增物体、文字或阴影。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白色背景，无透视、无阴影、无纹理，画面光线均匀。\n[Shot 1] 镜头静止不动，0秒实际首帧严格对齐<Picture 1>：一条细长灰色水平直轨横贯白底，<Subject 1>红色实心圆片位于左侧，圆心压在直轨上；<Subject 2>蓝色空心方框固定在右侧，直轨从框内水平穿过。开始后，<Subject 1>沿直轨向右侧做连续平移，初段滑动平顺，随后在接近蓝框时逐步减速。整个过程中圆片不瞬移、不跳动、不缩放、不变形，<Subject 2>与<Subject 3>的位置、尺寸和颜色均不改变，也没有任何新增物体。圆片从蓝框左侧进入框内，制动越来越柔和，运动轨迹始终与灰色直轨重合；到第8秒实际尾帧时，<Subject 1>完全停稳，圆心与蓝框中心重合，红色圆片完整位于蓝色空心框内。全程伴随轻微滑动摩擦声，声音随速度降低而自然减弱。\n\noverall_soundscape:\n全片环境近乎安静，只有红色圆片沿灰色直轨移动时发出的轻微、干燥、连续的摩擦声。摩擦声随圆片起步轻柔出现，随临近停止而逐渐变弱，到第8秒圆片停稳时自然收束，没有其他动作声或人声。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_video",
+      "repeat": 0,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "f7b7f57bd138af0fe22500d4272ef7557fa3ffe757764a63219ba245b5af21c0",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12308,
+                "completion_tokens": 2551,
+                "total_tokens": 14859
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白色背景上，一条灰色水平直轨横贯画面，红色实心圆片位于画面左侧且圆心落在轨道上，画面右侧有一个蓝色空心方框，轨道水平穿过方框中部。\n<Subject 1> 是 <Picture 1> 中的红色实心圆片，圆片直径、红色填充与边缘形态保持不变。\n<Subject 2> 是 <Picture 1> 中右侧固定的蓝色空心正方形线框，蓝色线宽均匀，框内为空白，位置始终不动。\n<Subject 3> 是 <Picture 1> 中的纯白色背景与灰色水平直轨，直轨粗细均匀、水平贯穿画面且保持静止。\n<Video 1> 是节奏参考视频，提供圆片沿灰色直轨向右连续平移、逐渐减速并滑入蓝框的时间节奏；不采用其末尾的彩色粒子效果，物体外观与比例以 <Picture 1> 为准。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒的平面几何动画，首帧在0.00秒严格对齐 <Picture 1>。<Subject 1> 沿 <Subject 3> 的灰色直轨向固定在右侧的 <Subject 2> 连续平移并减速，最终在8.00秒停于蓝框中心；<Video 1> 仅作为滑动与减速节奏参考，不提供首尾帧，也不引入额外物体。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒的白底、灰色直轨、左侧红色圆片与右侧蓝色方框的构图、颜色和位置严格保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的大小、形状、颜色与运动方向保持不变，仅沿直轨水平平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的尺寸、线宽、颜色和右侧固定位置完整保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 白色背景与灰色水平直轨全程保持静止，粗细和颜色不变。\n<Video 1> (滑动与减速节奏): weak_reference - 仅借鉴连续向右平移、临近蓝框时减速并滑入框内的节奏，不复制粒子效果，也不改变参考图规定的物体外观。\n\ndetailed_description:\n目标视频为简洁的平面几何动画风格，使用纯白背景、平涂色彩与固定正面构图，无光影渐变、无文字、无对白。\n[Shot 1] 镜头固定不动，0.00秒首帧严格对应 <Picture 1>：<Subject 3> 的灰色水平直轨横贯画面，<Subject 1> 红色实心圆片位于画面左侧，圆心落在轨道上；<Subject 2> 蓝色空心方框固定在画面右侧，轨道水平穿过框身中部。开始后，<Subject 1> 沿灰色直轨向右连续平移，运动轨迹始终与轨道重合，没有任何瞬移、跳动或旋转。前段位移较平稳，约5.5秒后速度明显降低，圆片保持原有直径和红色填充继续滑行；约6.0秒时圆片接近蓝框左边缘，随后缓慢进入框内。整个过程中 <Subject 2> 与 <Subject 3> 完全静止，不新增任何物体、标记或特效。临近8秒时，圆片以极低速度滑到蓝框中央，8.00秒尾帧中其圆心与蓝色方框中心重合，轨道同时穿过圆片与方框中心，圆片完全停稳；其大小、形状、方向与蓝框位置均与首帧保持一致。同步的轻微滑动摩擦声随速度持续减弱，并在圆片停稳时干净消失。\n\noverall_soundscape:\n全程仅有红色圆片与灰色直轨接触产生的轻微滑动摩擦声，声音随圆片减速而平稳变弱，圆片停稳时摩擦声自然收束；没有环境底噪、人声、碰撞声或其他音效。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 64.094
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 1,
+            "hybrid_video_count": 1
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白色背景上，一条灰色水平直轨横贯画面，红色实心圆片位于画面左侧且圆心落在轨道上，画面右侧有一个蓝色空心方框，轨道水平穿过方框中部。\n<Subject 1> 是 <Picture 1> 中的红色实心圆片，圆片直径、红色填充与边缘形态保持不变。\n<Subject 2> 是 <Picture 1> 中右侧固定的蓝色空心正方形线框，蓝色线宽均匀，框内为空白，位置始终不动。\n<Subject 3> 是 <Picture 1> 中的纯白色背景与灰色水平直轨，直轨粗细均匀、水平贯穿画面且保持静止。\n<Video 1> 是节奏参考视频，提供圆片沿灰色直轨向右连续平移、逐渐减速并滑入蓝框的时间节奏；不采用其末尾的彩色粒子效果，物体外观与比例以 <Picture 1> 为准。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒的平面几何动画，首帧在0.00秒严格对齐 <Picture 1>。<Subject 1> 沿 <Subject 3> 的灰色直轨向固定在右侧的 <Subject 2> 连续平移并减速，最终在8.00秒停于蓝框中心；<Video 1> 仅作为滑动与减速节奏参考，不提供首尾帧，也不引入额外物体。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒的白底、灰色直轨、左侧红色圆片与右侧蓝色方框的构图、颜色和位置严格保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的大小、形状、颜色与运动方向保持不变，仅沿直轨水平平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的尺寸、线宽、颜色和右侧固定位置完整保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 白色背景与灰色水平直轨全程保持静止，粗细和颜色不变。\n<Video 1> (滑动与减速节奏): weak_reference - 仅借鉴连续向右平移、临近蓝框时减速并滑入框内的节奏，不复制粒子效果，也不改变参考图规定的物体外观。\n\ndetailed_description:\n目标视频为简洁的平面几何动画风格，使用纯白背景、平涂色彩与固定正面构图，无光影渐变、无文字、无对白。\n[Shot 1] 镜头固定不动，0.00秒首帧严格对应 <Picture 1>：<Subject 3> 的灰色水平直轨横贯画面，<Subject 1> 红色实心圆片位于画面左侧，圆心落在轨道上；<Subject 2> 蓝色空心方框固定在画面右侧，轨道水平穿过框身中部。开始后，<Subject 1> 沿灰色直轨向右连续平移，运动轨迹始终与轨道重合，没有任何瞬移、跳动或旋转。前段位移较平稳，约5.5秒后速度明显降低，圆片保持原有直径和红色填充继续滑行；约6.0秒时圆片接近蓝框左边缘，随后缓慢进入框内。整个过程中 <Subject 2> 与 <Subject 3> 完全静止，不新增任何物体、标记或特效。临近8秒时，圆片以极低速度滑到蓝框中央，8.00秒尾帧中其圆心与蓝色方框中心重合，轨道同时穿过圆片与方框中心，圆片完全停稳；其大小、形状、方向与蓝框位置均与首帧保持一致。同步的轻微滑动摩擦声随速度持续减弱，并在圆片停稳时干净消失。\n\noverall_soundscape:\n全程仅有红色圆片与灰色直轨接触产生的轻微滑动摩擦声，声音随圆片减速而平稳变弱，圆片停稳时摩擦声自然收束；没有环境底噪、人声、碰撞声或其他音效。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_video",
+      "repeat": 1,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "f4dc74b67d6fa2a576e18c679affc3d3d194da7c107ce8c251afad88446300e6",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12002,
+                "completion_tokens": 4070,
+                "total_tokens": 16072
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是来自 <Picture 1> 的红色实心圆片，呈正圆形、纯红填充，圆心落在灰色直轨上；<Video 1> 仅为其提供平移减速的运动节奏。\n<Subject 2> 是来自 <Picture 1> 的灰色水平直轨，一条细直线横贯画面，并水平穿过蓝色方框左右两边的中点。\n<Subject 3> 是来自 <Picture 1> 的蓝色空心方框，只有蓝色描边、内部留白，固定在画面右侧。\n<Picture 1> 是 [Shot 1] 的实际首帧，呈现白色背景上左侧红色圆片、横贯画面的灰色直轨与右侧蓝色方框的初始构图。\n<Video 1> 是滑动节奏参考，提供圆片向右平稳滑动、逐渐减速并滑入蓝框停稳的时间节奏；它不是被剪辑或续写的源视频，其末段出现的彩色杂点不沿用。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒单镜头平面几何动画，以 <Picture 1> 作为0秒实际首帧，让 <Subject 1> 沿固定的 <Subject 2> 向 <Subject 3> 连续平移并持续减速，于8秒整端正停入蓝框中心；<Video 1> 仅提供滑动减速节奏，物体外观与构图以 <Picture 1> 为准，全程无对白、无文字、无音乐，只有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形与直径全程保持不变，仅沿直轨改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度与粗细始终固定。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的位置、大小与蓝色描边保持固定。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧严格对齐该图的白底、灰轨、红色圆片与右侧蓝框构图。\n<Video 1> (slowing rhythm): partially_preserved - 沿用平稳起步、逐渐减速并滑入蓝框停稳的节奏曲线，但时间重新映射到8秒，不复制其画面内容与末段彩色杂点。\n\ndetailed_description:\n全片采用极简二维平面几何动画风格，纯白色背景，画面无渐变、无阴影、无文字，镜头固定不动。\n[Shot 1] 0秒处，画面严格从 <Picture 1> 开始：<Subject 2> 灰色水平直轨横贯画面，<Subject 3> 蓝色空心方框固定在右侧，直轨水平穿过方框左右边的中点；<Subject 1> 红色实心圆片位于画面左侧，圆心落在直轨上。开始后，圆片沿灰色直轨向正右方连续平移，运动节奏参照 <Video 1>：起步平稳，随后持续减速，相邻时刻的位移增量逐渐变小，全程无瞬移、无跳跃。圆片始终保持原有直径、正圆形状与红色填充，朝向不变，不旋转、不拉伸、不变形；灰色直轨与右侧蓝框始终固定，画面中不增加任何物体、光效或杂点。约第6秒，圆片抵达蓝框左边缘，随后继续减速滑入框内；第8秒整，圆片圆心与蓝框中心精确重合，圆片端正停在蓝色方框中央，画面严格对齐尾帧并完全静止。整个镜头保持同一固定构图，无推拉摇移，也无任何切换。圆片移动期间伴随轻微、连续的滑动摩擦声，音量随速度降低而减弱，停稳时摩擦声收束为安静。\n\noverall_soundscape:\n全片声音极简，仅在圆片移动时出现圆片与直轨接触产生的轻微连续摩擦声，质感细密，音量随减速逐渐变小；圆片停稳瞬间声音收尽，之后保持安静。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 96.922
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是来自 <Picture 1> 的红色实心圆片，呈正圆形、纯红填充，圆心落在灰色直轨上；<Video 1> 仅为其提供平移减速的运动节奏。\n<Subject 2> 是来自 <Picture 1> 的灰色水平直轨，一条细直线横贯画面，并水平穿过蓝色方框左右两边的中点。\n<Subject 3> 是来自 <Picture 1> 的蓝色空心方框，只有蓝色描边、内部留白，固定在画面右侧。\n<Picture 1> 是 [Shot 1] 的实际首帧，呈现白色背景上左侧红色圆片、横贯画面的灰色直轨与右侧蓝色方框的初始构图。\n<Video 1> 是滑动节奏参考，提供圆片向右平稳滑动、逐渐减速并滑入蓝框停稳的时间节奏；它不是被剪辑或续写的源视频，其末段出现的彩色杂点不沿用。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒单镜头平面几何动画，以 <Picture 1> 作为0秒实际首帧，让 <Subject 1> 沿固定的 <Subject 2> 向 <Subject 3> 连续平移并持续减速，于8秒整端正停入蓝框中心；<Video 1> 仅提供滑动减速节奏，物体外观与构图以 <Picture 1> 为准，全程无对白、无文字、无音乐，只有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形与直径全程保持不变，仅沿直轨改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度与粗细始终固定。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的位置、大小与蓝色描边保持固定。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧严格对齐该图的白底、灰轨、红色圆片与右侧蓝框构图。\n<Video 1> (slowing rhythm): partially_preserved - 沿用平稳起步、逐渐减速并滑入蓝框停稳的节奏曲线，但时间重新映射到8秒，不复制其画面内容与末段彩色杂点。\n\ndetailed_description:\n全片采用极简二维平面几何动画风格，纯白色背景，画面无渐变、无阴影、无文字，镜头固定不动。\n[Shot 1] 0秒处，画面严格从 <Picture 1> 开始：<Subject 2> 灰色水平直轨横贯画面，<Subject 3> 蓝色空心方框固定在右侧，直轨水平穿过方框左右边的中点；<Subject 1> 红色实心圆片位于画面左侧，圆心落在直轨上。开始后，圆片沿灰色直轨向正右方连续平移，运动节奏参照 <Video 1>：起步平稳，随后持续减速，相邻时刻的位移增量逐渐变小，全程无瞬移、无跳跃。圆片始终保持原有直径、正圆形状与红色填充，朝向不变，不旋转、不拉伸、不变形；灰色直轨与右侧蓝框始终固定，画面中不增加任何物体、光效或杂点。约第6秒，圆片抵达蓝框左边缘，随后继续减速滑入框内；第8秒整，圆片圆心与蓝框中心精确重合，圆片端正停在蓝色方框中央，画面严格对齐尾帧并完全静止。整个镜头保持同一固定构图，无推拉摇移，也无任何切换。圆片移动期间伴随轻微、连续的滑动摩擦声，音量随速度降低而减弱，停稳时摩擦声收束为安静。\n\noverall_soundscape:\n全片声音极简，仅在圆片移动时出现圆片与直轨接触产生的轻微连续摩擦声，质感细密，音量随减速逐渐变小；圆片停稳瞬间声音收尽，之后保持安静。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "first_video",
+      "repeat": 1,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "dd5ff532d7eebd2750632f7b1f4a2fc85d84b6393f4df41dd6f880418d6e9737",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12308,
+                "completion_tokens": 4437,
+                "total_tokens": 16745
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上，一条等粗灰色水平直轨横贯画面中部，红色实心圆片位于轨道左侧且圆心落在轨道上，蓝色空心方框固定在轨道右侧，直轨水平穿过方框中线。\n<Subject 1> 是 <Picture 1> 中的红色实心圆片，正圆形、纯红色平涂填充，圆心始终位于灰色直轨上。\n<Subject 2> 是 <Picture 1> 中的灰色水平直轨，等粗细长直线，横贯画面并水平穿过蓝色方框中线。\n<Subject 3> 是 <Picture 1> 中右侧固定的蓝色空心方框，等粗蓝色描边、内部透明露出白底，位置始终不变。\n<Subject 4> 是 <Picture 1> 的纯白色背景环境，无渐变、无阴影、无纹理。\n<Video 1> 是节奏参考视频，仅提供圆片沿直轨向右连续平移、逐渐减速并在末段缓停入框的滑动节奏，不提供物体外观与尺寸。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒极简平面几何动画，以 <Picture 1> 严格锚定0秒首帧：<Subject 1> 红色圆片沿 <Subject 2> 灰色直轨向正右方连续平移并平滑减速，<Subject 3> 蓝色方框与轨道全程固定，圆片最终在8秒时停于蓝框正中央；<Video 1> 只用于参考滑动减速节奏，不沿用其尺寸差异与末尾杂色闪烁。全片一个固定连续镜头，无对白、无文字、无音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧严格对齐参考图，白底、灰轨、左侧红圆片、右侧蓝方框的外观、尺寸与构图全部保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 圆片保持正圆形、纯红色与原有尺寸，仅沿轨道连续平移，不缩放、不旋转、不变形、不瞬移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、粗细与颜色全程不变，始终穿过圆片圆心与方框中线。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框始终固定在右侧，描边粗细、大小与位置均不改变。\n<Subject 4> (appears in [Shot 1]): fully_preserved - 纯白背景全程保持干净，不增加任何物体或纹理。\n<Video 1> (sliding and deceleration rhythm): partially_preserved - 保留连续右移、前段较快、持续减速、末段缓停入框的节奏关系，但时间轴适配为8秒，并舍弃参考视频中较小的圆片比例与末尾彩色闪烁杂讯。\n\ndetailed_description:\n画面采用极简二维平面几何动画风格，纯色平涂，无渐变、无阴影、无透视变化。\n[Shot 1] 0秒首帧严格从 <Picture 1> 开始：纯白画面上，<Subject 2> 灰色水平直轨横贯中部，<Subject 1> 红色实心圆片停在轨道左侧，圆心落在轨道中线上，<Subject 3> 蓝色空心方框固定在画面右侧，直轨水平穿过方框中线，框内透出 <Subject 4> 白底。起步后，圆片沿灰色直轨向正右方连续平移，节奏参考 <Video 1>：起步速度适中，位置随时间平滑变化，全程不跳跃、不瞬移；圆片始终保持正圆形状、纯红色填充与原有尺寸，不旋转、不缩放、不变形。随着圆片右移，其速度持续而平滑地减小。约00:02.000至00:05.000，圆片经过轨道中段，灰轨始终从其圆心水平穿过；约00:06.000，圆片右缘接近蓝色方框左缘，随后缓缓进入框内，蓝框描边与轨道位置自始至终纹丝不动。末段圆片仅做极慢蠕移，约00:07.500时圆心接近方框中心；到00:08.000，圆片恰好停稳在蓝色方框正中央，圆心、轨道中线与方框中心重合，画面中仍只有白底、灰轨、蓝框、红圆片，没有任何新增物体。镜头全程固定，为一个连续镜头；伴随移动的只有轻微滑动摩擦声，声音随速度降低而渐弱，停稳时归于安静。\n\noverall_soundscape:\n全片仅有圆片沿轨道平移产生的轻微滑动摩擦声，摩擦声随起步出现，随持续减速均匀变弱，在8秒圆片停稳时完全消失；无环境底噪、无人声、无碰撞声或其他音效。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 107.453
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 1,
+            "hybrid_video_count": 1
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上，一条等粗灰色水平直轨横贯画面中部，红色实心圆片位于轨道左侧且圆心落在轨道上，蓝色空心方框固定在轨道右侧，直轨水平穿过方框中线。\n<Subject 1> 是 <Picture 1> 中的红色实心圆片，正圆形、纯红色平涂填充，圆心始终位于灰色直轨上。\n<Subject 2> 是 <Picture 1> 中的灰色水平直轨，等粗细长直线，横贯画面并水平穿过蓝色方框中线。\n<Subject 3> 是 <Picture 1> 中右侧固定的蓝色空心方框，等粗蓝色描边、内部透明露出白底，位置始终不变。\n<Subject 4> 是 <Picture 1> 的纯白色背景环境，无渐变、无阴影、无纹理。\n<Video 1> 是节奏参考视频，仅提供圆片沿直轨向右连续平移、逐渐减速并在末段缓停入框的滑动节奏，不提供物体外观与尺寸。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒极简平面几何动画，以 <Picture 1> 严格锚定0秒首帧：<Subject 1> 红色圆片沿 <Subject 2> 灰色直轨向正右方连续平移并平滑减速，<Subject 3> 蓝色方框与轨道全程固定，圆片最终在8秒时停于蓝框正中央；<Video 1> 只用于参考滑动减速节奏，不沿用其尺寸差异与末尾杂色闪烁。全片一个固定连续镜头，无对白、无文字、无音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧严格对齐参考图，白底、灰轨、左侧红圆片、右侧蓝方框的外观、尺寸与构图全部保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 圆片保持正圆形、纯红色与原有尺寸，仅沿轨道连续平移，不缩放、不旋转、不变形、不瞬移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、粗细与颜色全程不变，始终穿过圆片圆心与方框中线。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框始终固定在右侧，描边粗细、大小与位置均不改变。\n<Subject 4> (appears in [Shot 1]): fully_preserved - 纯白背景全程保持干净，不增加任何物体或纹理。\n<Video 1> (sliding and deceleration rhythm): partially_preserved - 保留连续右移、前段较快、持续减速、末段缓停入框的节奏关系，但时间轴适配为8秒，并舍弃参考视频中较小的圆片比例与末尾彩色闪烁杂讯。\n\ndetailed_description:\n画面采用极简二维平面几何动画风格，纯色平涂，无渐变、无阴影、无透视变化。\n[Shot 1] 0秒首帧严格从 <Picture 1> 开始：纯白画面上，<Subject 2> 灰色水平直轨横贯中部，<Subject 1> 红色实心圆片停在轨道左侧，圆心落在轨道中线上，<Subject 3> 蓝色空心方框固定在画面右侧，直轨水平穿过方框中线，框内透出 <Subject 4> 白底。起步后，圆片沿灰色直轨向正右方连续平移，节奏参考 <Video 1>：起步速度适中，位置随时间平滑变化，全程不跳跃、不瞬移；圆片始终保持正圆形状、纯红色填充与原有尺寸，不旋转、不缩放、不变形。随着圆片右移，其速度持续而平滑地减小。约00:02.000至00:05.000，圆片经过轨道中段，灰轨始终从其圆心水平穿过；约00:06.000，圆片右缘接近蓝色方框左缘，随后缓缓进入框内，蓝框描边与轨道位置自始至终纹丝不动。末段圆片仅做极慢蠕移，约00:07.500时圆心接近方框中心；到00:08.000，圆片恰好停稳在蓝色方框正中央，圆心、轨道中线与方框中心重合，画面中仍只有白底、灰轨、蓝框、红圆片，没有任何新增物体。镜头全程固定，为一个连续镜头；伴随移动的只有轻微滑动摩擦声，声音随速度降低而渐弱，停稳时归于安静。\n\noverall_soundscape:\n全片仅有圆片沿轨道平移产生的轻微滑动摩擦声，摩擦声随起步出现，随持续减速均匀变弱，在8秒圆片停稳时完全消失；无环境底噪、无人声、无碰撞声或其他音效。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_image",
+      "repeat": 0,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "953345b3c5b6e7e2cf8afc3a75494d886affd10ea1f6e9fef0063788d9046acf",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12024,
+                "completion_tokens": 7430,
+                "total_tokens": 19454
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是 <Picture 1> 与 <Picture 2> 共同呈现的纯白色平面背景，无渐变、无阴影、无纹理。\n<Subject 2> 是 <Picture 1> 与 <Picture 2> 中的灰色水平直轨，为一条粗细均匀的细长直线，横贯画面并固定在画面垂直中线附近。\n<Subject 3> 是 <Picture 1> 与 <Picture 2> 中位于右侧的蓝色空心方框，蓝色边框粗细均匀、框内透出白底，位置在全程保持固定。\n<Subject 4> 是 <Picture 1> 与 <Picture 2> 中的红色实心圆片，边缘呈像素化锯齿，圆心始终落在灰色直轨上。\n<Picture 1> 是目标视频 [Shot 1] 的实际尾帧：00:08.000 时红色圆片已停在蓝色方框内部居中位置，灰色直轨横穿方框与圆片。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒的白底平面几何动画：灰色直轨与右侧蓝色空心方框全程固定，<Subject 4> 从轨道左段沿直线向正右方连续平移并持续减速，于00:08.000 恰好停入 <Subject 3> 内部，严格收敛于实际尾帧 <Picture 1>；<Picture 2> 仅用于统一各几何物体的形状、颜色与边缘外观，不作为首帧或关键帧，全程不瞬移、不变形、不增加物体，也没有对白、文字或音乐。\n\nretention_analysis:\n<Subject 1> (出现在 [Shot 1]): fully_preserved - 纯白、无纹理、无阴影的平面背景贯穿全程。\n<Subject 2> (出现在 [Shot 1]): fully_preserved - 灰色水平直轨的颜色、粗细与位置全程固定不变。\n<Subject 3> (出现在 [Shot 1]): fully_preserved - 右侧蓝色空心方框的尺寸、边框粗细与位置全程保持固定。\n<Subject 4> (出现在 [Shot 1]): fully_preserved - 红色圆片的颜色、大小、圆形轮廓、像素化边缘与朝向全程不变，仅按要求沿轨道连续改变位置。\n<Picture 1> ([Shot 1] 尾帧): fully_preserved - 00:08.000 的最终画面与该图严格一致，圆片停在蓝框内部居中位置。\n\ndetailed_description:\n画面采用极简平面几何动画风格：纯白背景搭配均匀平涂色块，无透视、无阴影，镜头为正面平视的固定构图。\n[Shot 1] 0秒时，<Subject 2> 灰色水平直轨横贯白色画面，<Subject 3> 蓝色空心方框固定在右侧，<Subject 4> 红色实心圆片位于直轨左段、方框左侧，圆心压在轨道线上；该开场沿用 <Picture 2> 中的物体外观与相对布局，但 <Picture 2> 仅作外观参考，不承担关键帧角色。圆片随即沿灰色直轨向正右方连续平移，运动连贯无跳跃、无瞬移，红色圆片的直径、圆形轮廓、像素化边缘和朝向始终保持不变，蓝色方框与灰色直轨则完全静止。圆片在接近方框的过程中持续减速：前段位移较快，越靠近方框速度越低，圆片右缘先进入方框，随后整体滑入框内，灰色轨道线始终穿过圆心。到00:08.000，圆片速度恰好降为零，停在蓝色方框内部居中位置，画面与 <Picture 1> 逐元素严格对齐并定格：白底、灰轨、右侧蓝框、框内红色圆片，物体数量没有任何增减。整个镜头保持静止，无推拉摇移或任何剪辑点。\n\noverall_soundscape:\n全程仅有红色圆片沿灰色直轨滑动时发出的轻微、干燥的摩擦声；声响在圆片初段较快移动时略明显，随后随减速持续变弱，圆片停稳时归于安静，无环境音、无脚步声或其他人声。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 164.516
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是 <Picture 1> 与 <Picture 2> 共同呈现的纯白色平面背景，无渐变、无阴影、无纹理。\n<Subject 2> 是 <Picture 1> 与 <Picture 2> 中的灰色水平直轨，为一条粗细均匀的细长直线，横贯画面并固定在画面垂直中线附近。\n<Subject 3> 是 <Picture 1> 与 <Picture 2> 中位于右侧的蓝色空心方框，蓝色边框粗细均匀、框内透出白底，位置在全程保持固定。\n<Subject 4> 是 <Picture 1> 与 <Picture 2> 中的红色实心圆片，边缘呈像素化锯齿，圆心始终落在灰色直轨上。\n<Picture 1> 是目标视频 [Shot 1] 的实际尾帧：00:08.000 时红色圆片已停在蓝色方框内部居中位置，灰色直轨横穿方框与圆片。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒的白底平面几何动画：灰色直轨与右侧蓝色空心方框全程固定，<Subject 4> 从轨道左段沿直线向正右方连续平移并持续减速，于00:08.000 恰好停入 <Subject 3> 内部，严格收敛于实际尾帧 <Picture 1>；<Picture 2> 仅用于统一各几何物体的形状、颜色与边缘外观，不作为首帧或关键帧，全程不瞬移、不变形、不增加物体，也没有对白、文字或音乐。\n\nretention_analysis:\n<Subject 1> (出现在 [Shot 1]): fully_preserved - 纯白、无纹理、无阴影的平面背景贯穿全程。\n<Subject 2> (出现在 [Shot 1]): fully_preserved - 灰色水平直轨的颜色、粗细与位置全程固定不变。\n<Subject 3> (出现在 [Shot 1]): fully_preserved - 右侧蓝色空心方框的尺寸、边框粗细与位置全程保持固定。\n<Subject 4> (出现在 [Shot 1]): fully_preserved - 红色圆片的颜色、大小、圆形轮廓、像素化边缘与朝向全程不变，仅按要求沿轨道连续改变位置。\n<Picture 1> ([Shot 1] 尾帧): fully_preserved - 00:08.000 的最终画面与该图严格一致，圆片停在蓝框内部居中位置。\n\ndetailed_description:\n画面采用极简平面几何动画风格：纯白背景搭配均匀平涂色块，无透视、无阴影，镜头为正面平视的固定构图。\n[Shot 1] 0秒时，<Subject 2> 灰色水平直轨横贯白色画面，<Subject 3> 蓝色空心方框固定在右侧，<Subject 4> 红色实心圆片位于直轨左段、方框左侧，圆心压在轨道线上；该开场沿用 <Picture 2> 中的物体外观与相对布局，但 <Picture 2> 仅作外观参考，不承担关键帧角色。圆片随即沿灰色直轨向正右方连续平移，运动连贯无跳跃、无瞬移，红色圆片的直径、圆形轮廓、像素化边缘和朝向始终保持不变，蓝色方框与灰色直轨则完全静止。圆片在接近方框的过程中持续减速：前段位移较快，越靠近方框速度越低，圆片右缘先进入方框，随后整体滑入框内，灰色轨道线始终穿过圆心。到00:08.000，圆片速度恰好降为零，停在蓝色方框内部居中位置，画面与 <Picture 1> 逐元素严格对齐并定格：白底、灰轨、右侧蓝框、框内红色圆片，物体数量没有任何增减。整个镜头保持静止，无推拉摇移或任何剪辑点。\n\noverall_soundscape:\n全程仅有红色圆片沿灰色直轨滑动时发出的轻微、干燥的摩擦声；声响在圆片初段较快移动时略明显，随后随减速持续变弱，圆片停稳时归于安静，无环境音、无脚步声或其他人声。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_image",
+      "repeat": 0,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "7892970fb81210970b7388476bd0c2ed16ba2bfc5edfea9a4caf1526cf30b38f",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12330,
+                "completion_tokens": 4654,
+                "total_tokens": 16984
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 纯白背景上，一条灰色水平直轨横向贯穿画面中部；画面右侧固定一个蓝色空心方框，红色实心圆片静止于蓝框内部正中央，圆心落在灰轨上。\n<Picture 2> 是物体外观与起始构图参考图：白底、灰色水平直轨、右侧固定的蓝色空心方框均与尾帧一致，红色实心圆片位于蓝框左侧的轨道上，尚未进入框内。\n<Subject 1> 是横向贯穿画面中部的灰色水平直轨，外观来自 <Picture 1> 与 <Picture 2>，轨身细长平直，位置全程不变。\n<Subject 2> 是画面右侧固定的蓝色空心方框，外观来自 <Picture 1> 与 <Picture 2>，呈正方形蓝色描边、内部透白，大小与位置全程不变。\n<Subject 3> 是红色实心圆片，外观来自 <Picture 1> 与 <Picture 2>，正圆形、纯红填充，圆心始终落在灰色直轨上。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒极简平面几何动画：以 <Picture 2> 提供的物体外观与起始构图为参考，红色圆片 <Subject 3> 从灰色直轨 <Subject 1> 上蓝色方框 <Subject 2> 左侧的位置出发，沿轨道向右侧连续平移并平滑减速，全程保持大小、形状与方向不变，蓝框始终固定，最终在第8秒严格停入 <Picture 1> 所示的蓝框正中央；全片为一个连续镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame @8.00s): fully_preserved - 第8秒尾帧严格保留白底、横贯灰轨、右侧蓝框以及红色圆片停在框内正中央的构图。\n<Picture 2> (物体外观与起始构图参考): fully_preserved - 白底、灰轨、蓝框、圆片的外观以及圆片起始时位于蓝框左侧的关系被完整沿用，但该图仅作参考，不承担首帧锚点角色。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的形态、粗细与位置全程保持不变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的描边、尺寸与固定位置全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆形状与尺寸全程不变，仅沿灰轨水平平移。\n\ndetailed_description:\n本视频采用极简平面几何动画风格，纯白背景，无阴影、无渐变，全程为一个固定不动的连续镜头。\n[Shot 1] 开场画面与 <Picture 2> 的参考构图一致：一条灰色水平直轨 <Subject 1> 横向贯穿画面中部，画面右侧固定着一个内部透白的蓝色空心方框 <Subject 2>，红色实心圆片 <Subject 3> 位于蓝框左侧的灰轨上，圆心正对轨道。从0秒起，圆片沿灰色直轨向右侧连续平移，起步较快，随后速度平滑、持续地减小，呈现明显的减速滑行；运动过程中圆片始终保持正圆形状、纯红颜色与原有尺寸，方向不变，没有任何跳动、瞬移、变形或遮挡。灰色直轨与蓝色方框全程静止，蓝框位置、大小与描边粗细始终一致。随着滑行，圆片逐渐接近蓝框，右缘先进入方框，随后继续缓慢滑入框内；临近8秒时速度趋近于零，最终圆心与蓝框中心重合并平稳停住。第8秒画面严格收敛到 <Picture 1>：白底、灰轨横贯，右侧蓝框完整，红色圆片静止于蓝框正中央，不出现任何新增物体或文字。圆片移动期间持续传来轻微的滑动摩擦声，声音随减速逐渐变轻，并在圆片停稳时同步消失。\n\noverall_soundscape:\n环境几乎完全安静，仅有红色圆片沿灰色直轨滑行时发出的轻微摩擦声；摩擦声随移动持续，随减速逐渐变弱，圆片在第8秒停稳时同步消失。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 104.11
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 2,
+            "hybrid_video_count": 0
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 纯白背景上，一条灰色水平直轨横向贯穿画面中部；画面右侧固定一个蓝色空心方框，红色实心圆片静止于蓝框内部正中央，圆心落在灰轨上。\n<Picture 2> 是物体外观与起始构图参考图：白底、灰色水平直轨、右侧固定的蓝色空心方框均与尾帧一致，红色实心圆片位于蓝框左侧的轨道上，尚未进入框内。\n<Subject 1> 是横向贯穿画面中部的灰色水平直轨，外观来自 <Picture 1> 与 <Picture 2>，轨身细长平直，位置全程不变。\n<Subject 2> 是画面右侧固定的蓝色空心方框，外观来自 <Picture 1> 与 <Picture 2>，呈正方形蓝色描边、内部透白，大小与位置全程不变。\n<Subject 3> 是红色实心圆片，外观来自 <Picture 1> 与 <Picture 2>，正圆形、纯红填充，圆心始终落在灰色直轨上。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒极简平面几何动画：以 <Picture 2> 提供的物体外观与起始构图为参考，红色圆片 <Subject 3> 从灰色直轨 <Subject 1> 上蓝色方框 <Subject 2> 左侧的位置出发，沿轨道向右侧连续平移并平滑减速，全程保持大小、形状与方向不变，蓝框始终固定，最终在第8秒严格停入 <Picture 1> 所示的蓝框正中央；全片为一个连续镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame @8.00s): fully_preserved - 第8秒尾帧严格保留白底、横贯灰轨、右侧蓝框以及红色圆片停在框内正中央的构图。\n<Picture 2> (物体外观与起始构图参考): fully_preserved - 白底、灰轨、蓝框、圆片的外观以及圆片起始时位于蓝框左侧的关系被完整沿用，但该图仅作参考，不承担首帧锚点角色。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的形态、粗细与位置全程保持不变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的描边、尺寸与固定位置全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆形状与尺寸全程不变，仅沿灰轨水平平移。\n\ndetailed_description:\n本视频采用极简平面几何动画风格，纯白背景，无阴影、无渐变，全程为一个固定不动的连续镜头。\n[Shot 1] 开场画面与 <Picture 2> 的参考构图一致：一条灰色水平直轨 <Subject 1> 横向贯穿画面中部，画面右侧固定着一个内部透白的蓝色空心方框 <Subject 2>，红色实心圆片 <Subject 3> 位于蓝框左侧的灰轨上，圆心正对轨道。从0秒起，圆片沿灰色直轨向右侧连续平移，起步较快，随后速度平滑、持续地减小，呈现明显的减速滑行；运动过程中圆片始终保持正圆形状、纯红颜色与原有尺寸，方向不变，没有任何跳动、瞬移、变形或遮挡。灰色直轨与蓝色方框全程静止，蓝框位置、大小与描边粗细始终一致。随着滑行，圆片逐渐接近蓝框，右缘先进入方框，随后继续缓慢滑入框内；临近8秒时速度趋近于零，最终圆心与蓝框中心重合并平稳停住。第8秒画面严格收敛到 <Picture 1>：白底、灰轨横贯，右侧蓝框完整，红色圆片静止于蓝框正中央，不出现任何新增物体或文字。圆片移动期间持续传来轻微的滑动摩擦声，声音随减速逐渐变轻，并在圆片停稳时同步消失。\n\noverall_soundscape:\n环境几乎完全安静，仅有红色圆片沿灰色直轨滑行时发出的轻微摩擦声；摩擦声随移动持续，随减速逐渐变弱，圆片在第8秒停稳时同步消失。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_image",
+      "repeat": 1,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "5e0a886f9e70f20af0d96f5c12c5faff107a1e90afcac823dca71831672c7d48",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12024,
+                "completion_tokens": 5209,
+                "total_tokens": 17233
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是红色圆形圆片，外观来自 <Picture 1> 与 <Picture 2>，纯红色填充、边缘略带像素锯齿，圆心始终落在灰色直轨上。\n<Subject 2> 是蓝色空心方框，外观来自 <Picture 1> 与 <Picture 2>，蓝色粗边框、内部为透明白底，固定在画面右侧。\n<Subject 3> 是灰色水平直轨，外观来自 <Picture 1> 与 <Picture 2>，一条细灰线横向贯穿画面，高度穿过方框与圆片的中心。\n<Picture 1> 是目标视频第 8 秒的实际尾帧锚点：红色圆片静止于蓝色方框内部中央，灰轨水平穿过圆心。\n<Picture 2> 是物体外观与开场构图参考：红色圆片位于蓝色方框左侧的灰轨上，圆片与方框之间留有明显空隙。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为 8 秒平面几何动画：纯白背景上 <Subject 3> 横向固定，<Subject 2> 固定在右侧，<Subject 1> 从 <Picture 2> 所示的左侧位置沿灰轨向右连续平移并持续减速，于第 8 秒精准停入 <Picture 1> 所示的方框中央；全程一个固定镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (出现在 [Shot 1]): fully_preserved - 红色圆片的颜色、大小、形状与圆心贴轨关系全程不变，仅水平位置发生改变。\n<Subject 2> (出现在 [Shot 1]): fully_preserved - 蓝色方框的边框颜色、尺寸与右侧固定位置完全保留。\n<Subject 3> (出现在 [Shot 1]): fully_preserved - 灰色直轨的粗细、颜色与水平位置全程保持不变。\n<Picture 1> ([Shot 1] 尾帧): fully_preserved - 第 8 秒画面与 <Picture 1> 严格对齐，圆片停在方框内部中央。\n<Picture 2> (外观与开场构图参考): fully_preserved - 各物体外观完全沿用，0 秒开场布局与其一致；圆片随后按要求滑离该位置，不构成外观损失。\n\ndetailed_description:\n整体采用极简平面几何动画风格，纯白背景，无渐变、阴影与装饰元素，画面光照均匀且无变化。\n[Shot 1] 镜头为完全固定的水平构图，全程不发生推拉摇移或变焦。0 秒时画面严格呈现 <Picture 2> 的布局：细灰色直轨 <Subject 3> 水平横贯白色画面，轨道高度与右侧蓝色空心方框 <Subject 2> 的中心齐平；<Subject 2> 以蓝色粗边框固定在画面右侧，框内为空白白底；纯红色圆片 <Subject 1> 位于方框左侧的灰轨上，圆心正对轨道，与方框之间留有明显空隙。起滑后，<Subject 1> 沿灰轨向右做连续平移，轨迹严格水平，没有任何跳动、瞬移或角度偏转；圆片的直径、红色填充、边缘形态与垂直高度始终不变，<Subject 2> 与 <Subject 3> 全程完全静止。滑动速度随时间平滑衰减：前段位移较快，随后逐渐放缓，圆片接近方框时速度已明显降低，最终在第 8 秒精准停入 <Subject 2> 内部中央，圆心仍落在灰轨上，画面与尾帧锚点 <Picture 1> 严格对齐。全程伴随轻微的滑动摩擦声，音量随圆片减速同步变弱，停止时声音自然收束，无对白、无文字、无音乐。\n\noverall_soundscape:\n全程仅有红色圆片贴轨滑动的轻微摩擦声，声音细密平稳，随圆片减速而逐渐减弱，至第 8 秒圆片停稳时自然收束；空间安静，无环境声、人声或其他提示音。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 114.109
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是红色圆形圆片，外观来自 <Picture 1> 与 <Picture 2>，纯红色填充、边缘略带像素锯齿，圆心始终落在灰色直轨上。\n<Subject 2> 是蓝色空心方框，外观来自 <Picture 1> 与 <Picture 2>，蓝色粗边框、内部为透明白底，固定在画面右侧。\n<Subject 3> 是灰色水平直轨，外观来自 <Picture 1> 与 <Picture 2>，一条细灰线横向贯穿画面，高度穿过方框与圆片的中心。\n<Picture 1> 是目标视频第 8 秒的实际尾帧锚点：红色圆片静止于蓝色方框内部中央，灰轨水平穿过圆心。\n<Picture 2> 是物体外观与开场构图参考：红色圆片位于蓝色方框左侧的灰轨上，圆片与方框之间留有明显空隙。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为 8 秒平面几何动画：纯白背景上 <Subject 3> 横向固定，<Subject 2> 固定在右侧，<Subject 1> 从 <Picture 2> 所示的左侧位置沿灰轨向右连续平移并持续减速，于第 8 秒精准停入 <Picture 1> 所示的方框中央；全程一个固定镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (出现在 [Shot 1]): fully_preserved - 红色圆片的颜色、大小、形状与圆心贴轨关系全程不变，仅水平位置发生改变。\n<Subject 2> (出现在 [Shot 1]): fully_preserved - 蓝色方框的边框颜色、尺寸与右侧固定位置完全保留。\n<Subject 3> (出现在 [Shot 1]): fully_preserved - 灰色直轨的粗细、颜色与水平位置全程保持不变。\n<Picture 1> ([Shot 1] 尾帧): fully_preserved - 第 8 秒画面与 <Picture 1> 严格对齐，圆片停在方框内部中央。\n<Picture 2> (外观与开场构图参考): fully_preserved - 各物体外观完全沿用，0 秒开场布局与其一致；圆片随后按要求滑离该位置，不构成外观损失。\n\ndetailed_description:\n整体采用极简平面几何动画风格，纯白背景，无渐变、阴影与装饰元素，画面光照均匀且无变化。\n[Shot 1] 镜头为完全固定的水平构图，全程不发生推拉摇移或变焦。0 秒时画面严格呈现 <Picture 2> 的布局：细灰色直轨 <Subject 3> 水平横贯白色画面，轨道高度与右侧蓝色空心方框 <Subject 2> 的中心齐平；<Subject 2> 以蓝色粗边框固定在画面右侧，框内为空白白底；纯红色圆片 <Subject 1> 位于方框左侧的灰轨上，圆心正对轨道，与方框之间留有明显空隙。起滑后，<Subject 1> 沿灰轨向右做连续平移，轨迹严格水平，没有任何跳动、瞬移或角度偏转；圆片的直径、红色填充、边缘形态与垂直高度始终不变，<Subject 2> 与 <Subject 3> 全程完全静止。滑动速度随时间平滑衰减：前段位移较快，随后逐渐放缓，圆片接近方框时速度已明显降低，最终在第 8 秒精准停入 <Subject 2> 内部中央，圆心仍落在灰轨上，画面与尾帧锚点 <Picture 1> 严格对齐。全程伴随轻微的滑动摩擦声，音量随圆片减速同步变弱，停止时声音自然收束，无对白、无文字、无音乐。\n\noverall_soundscape:\n全程仅有红色圆片贴轨滑动的轻微摩擦声，声音细密平稳，随圆片减速而逐渐减弱，至第 8 秒圆片停稳时自然收束；空间安静，无环境声、人声或其他提示音。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_image",
+      "repeat": 1,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "0e7f9a6229d74efeb5da3494bc3b6490942ff529da16c7bfe341b2037ffefa1d",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12330,
+                "completion_tokens": 6121,
+                "total_tokens": 18451
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 白色背景中，灰色水平直轨横穿位于右侧的蓝色空心方框，红色实心圆片静止在方框正中央，圆心与灰轨重合。\n<Subject 1> 是横贯画面的细窄灰色水平直轨，外观依据 <Picture 2>，呈平直、等宽的灰色线段，动画中位置与走向始终固定。\n<Subject 2> 是位于画面右侧的蓝色空心方框，外观依据 <Picture 2>，蓝色边框粗细均匀，灰轨从方框中部水平穿过，动画中位置与尺寸始终固定。\n<Subject 3> 是纯红色实心圆片，外观依据 <Picture 2>，边缘带轻微像素锯齿；动画中其直径、形状、颜色与朝向保持不变，仅沿灰轨平移。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒平面几何动画，以 <Picture 1> 作为8.00秒的尾帧锚点，<Picture 2> 仅提供白色背景、灰色直轨、右侧蓝色空心方框与红色圆片的物体外观。<Subject 3> 从蓝框左侧沿 <Subject 1> 向右连续平移并平滑减速，<Subject 1> 与 <Subject 2> 全程固定，最终圆片停入蓝框正中央，画面严格收束于 <Picture 1>；全片一个连续镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame): fully_preserved - 8.00秒画面与尾帧严格一致，红色圆片居中停在蓝色方框内，灰轨横穿，白底上无其他物体。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 灰色直轨的颜色、粗细、水平走向与位置全程保持不变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的边框、尺寸与右侧固定位置全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、直径、形状与朝向全程不变，仅按要求发生连续位置平移，并在8.00秒居中停入蓝框。\n\ndetailed_description:\n目标视频为纯白背景上的平面几何动画，色块边缘清晰，采用固定不动的正面平视构图。\n[Shot 1] 0.00秒开场时，细窄的灰色水平直轨 <Subject 1> 横贯画面，右侧固定着蓝色空心方框 <Subject 2>，灰轨水平穿过方框中部；纯红色实心圆片 <Subject 3> 位于蓝框左侧的轨道上，圆心落在灰轨中线上，各物体的外观与布局依据 <Picture 2>。圆片以较快的初速度沿灰轨向右连续平移，随后速度沿平滑的减速曲线持续减小，全程无瞬移、无跳动；圆片的直径、形状、红色填充与朝向保持不变，灰轨与蓝框的位置、尺寸也始终固定。约第4秒，圆片右缘进入蓝框，随后圆片在框内继续缓慢右移；最后阶段速度明显放缓，以极慢幅度趋近方框中心。第8.00秒，圆片恰好停在蓝色方框正中央，圆心同时对齐灰轨与方框几何中心，画面严格收束于尾帧 <Picture 1>，全程不新增任何物体，也不出现旋转、形变或文字。与动作同步的只有轻微连续的滑动摩擦声，声音随速度降低而减弱，圆片停稳时消失。\n\noverall_soundscape:\n全片仅有圆片沿灰色直轨滑动时发出的轻微摩擦声，质地细腻、连续不断，音量随滑行速度平滑减弱，圆片停稳时声音随之消失；无环境底噪、人声或其他音效。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 137.453
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 2,
+            "hybrid_video_count": 0
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 白色背景中，灰色水平直轨横穿位于右侧的蓝色空心方框，红色实心圆片静止在方框正中央，圆心与灰轨重合。\n<Subject 1> 是横贯画面的细窄灰色水平直轨，外观依据 <Picture 2>，呈平直、等宽的灰色线段，动画中位置与走向始终固定。\n<Subject 2> 是位于画面右侧的蓝色空心方框，外观依据 <Picture 2>，蓝色边框粗细均匀，灰轨从方框中部水平穿过，动画中位置与尺寸始终固定。\n<Subject 3> 是纯红色实心圆片，外观依据 <Picture 2>，边缘带轻微像素锯齿；动画中其直径、形状、颜色与朝向保持不变，仅沿灰轨平移。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒平面几何动画，以 <Picture 1> 作为8.00秒的尾帧锚点，<Picture 2> 仅提供白色背景、灰色直轨、右侧蓝色空心方框与红色圆片的物体外观。<Subject 3> 从蓝框左侧沿 <Subject 1> 向右连续平移并平滑减速，<Subject 1> 与 <Subject 2> 全程固定，最终圆片停入蓝框正中央，画面严格收束于 <Picture 1>；全片一个连续镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame): fully_preserved - 8.00秒画面与尾帧严格一致，红色圆片居中停在蓝色方框内，灰轨横穿，白底上无其他物体。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 灰色直轨的颜色、粗细、水平走向与位置全程保持不变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的边框、尺寸与右侧固定位置全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、直径、形状与朝向全程不变，仅按要求发生连续位置平移，并在8.00秒居中停入蓝框。\n\ndetailed_description:\n目标视频为纯白背景上的平面几何动画，色块边缘清晰，采用固定不动的正面平视构图。\n[Shot 1] 0.00秒开场时，细窄的灰色水平直轨 <Subject 1> 横贯画面，右侧固定着蓝色空心方框 <Subject 2>，灰轨水平穿过方框中部；纯红色实心圆片 <Subject 3> 位于蓝框左侧的轨道上，圆心落在灰轨中线上，各物体的外观与布局依据 <Picture 2>。圆片以较快的初速度沿灰轨向右连续平移，随后速度沿平滑的减速曲线持续减小，全程无瞬移、无跳动；圆片的直径、形状、红色填充与朝向保持不变，灰轨与蓝框的位置、尺寸也始终固定。约第4秒，圆片右缘进入蓝框，随后圆片在框内继续缓慢右移；最后阶段速度明显放缓，以极慢幅度趋近方框中心。第8.00秒，圆片恰好停在蓝色方框正中央，圆心同时对齐灰轨与方框几何中心，画面严格收束于尾帧 <Picture 1>，全程不新增任何物体，也不出现旋转、形变或文字。与动作同步的只有轻微连续的滑动摩擦声，声音随速度降低而减弱，圆片停稳时消失。\n\noverall_soundscape:\n全片仅有圆片沿灰色直轨滑动时发出的轻微摩擦声，质地细腻、连续不断，音量随滑行速度平滑减弱，圆片停稳时声音随之消失；无环境底噪、人声或其他音效。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_video",
+      "repeat": 0,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "c478341a46fd2e0ae136c77c6b8c4908bf31e12c21e711b8812775345f4682d6",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12002,
+                "completion_tokens": 5745,
+                "total_tokens": 17747
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是 <Picture 1> 与 <Video 1> 中的红色实心圆片，平涂正红色，边缘清晰，直径与形状在目标视频中保持不变，只沿轨道改变位置。\n<Subject 2> 是 <Picture 1> 与 <Video 1> 中的蓝色空心方框，为粗细均匀的蓝色正方形描边、内部透出白色背景，在画面右侧固定不动。\n<Subject 3> 是 <Picture 1> 与 <Video 1> 中的灰色直轨，一条水平横贯画面的细长灰色直线，位置、长度与粗细固定。\n<Picture 1> 是目标视频第8秒的实际尾帧锚点：白底上灰轨横贯，蓝框固定右侧，红色圆片已进入方框并停在框内中央，构成最终构图。\n<Video 1> 是滑动节奏参考：圆片从画面左侧沿灰轨向右平移，速度先快后慢、持续减速，最终缓停入右侧蓝框；目标视频只参考其减速节奏与时间分配，不照搬其具体尺寸与末尾杂色闪烁。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒白底平面几何动画，<Subject 1> 沿固定的 <Subject 3> 从画面左侧向右连续平移并平滑减速，<Subject 2> 始终固定在右侧；圆片大小、方向与蓝框位置全程不变，不瞬移、不变形、不增加物体。<Picture 1> 作为第8秒实际尾帧锚点，圆片最终停在蓝框中央；<Video 1> 仅提供先快后慢的滑动节奏。全片一个连续固定镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的正红平涂外观、正圆形状与固定直径全程保留，仅沿灰轨连续改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的描边、尺寸与右侧固定位置全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度与粗细全程保持不变。\n<Picture 1> ([Shot 1] last frame at 00:08.000): fully_preserved - 第8秒尾帧严格对齐该图，圆片停在蓝框内中央，灰轨与蓝框构图一致。\n<Video 1> (sliding and deceleration rhythm): partially_preserved - 保留从左向右、先快后慢并缓停入框的运动节奏，但时间轴重新对齐为8秒，物体外观与最终构图以 <Picture 1> 为准，不保留其末尾杂色闪烁。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格：纯白色背景，图形为平涂色块与清晰描边，无阴影、无渐变、无纹理；全片固定机位，仅一个连续镜头。\n[Shot 1] 水平正面构图中，<Subject 3> 灰色直轨横贯白色画面中部，<Subject 2> 蓝色空心方框固定在轨道右侧，蓝色描边粗细均匀，框内透出白底，方框的位置与大小在8秒内始终不变。第0秒的实际首帧里，<Subject 1> 红色实心圆片位于画面最左侧，圆心恰好压在灰色直轨上，右侧蓝框空置。圆片随即沿灰轨向右连续平移，滑动节奏参考 <Video 1>：起步较快，之后速度平滑、持续地减小，全程保持正圆形状、固定直径与原有方向，圆心始终贴在轨道中线上，没有瞬移、跳动、拉伸、旋转或变形，画面也不增加任何物体、文字与特效。临近右侧蓝框时圆片已很慢，左缘缓缓进入框内并继续向框中滑行，接近第8秒时几乎停止。第8秒的实际尾帧严格对齐 <Picture 1>：<Subject 1> 完全进入 <Subject 2>，静止在方框中央，圆心仍落在灰色直轨上，灰轨与蓝框保持原位。整段镜头机位固定，无推拉摇移；声音上仅有圆片接触轨道的轻微滑动摩擦声，随减速逐渐变轻，停稳时消失，无对白、无文字、无音乐。\n\noverall_soundscape:\n全片环境近乎安静，只有红色圆片沿灰色直轨平移时发出的轻微连续摩擦声；摩擦声随圆片减速而逐渐变轻，在第8秒停稳时消失。没有对白、人声或其他物体动作声。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 121.547
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是 <Picture 1> 与 <Video 1> 中的红色实心圆片，平涂正红色，边缘清晰，直径与形状在目标视频中保持不变，只沿轨道改变位置。\n<Subject 2> 是 <Picture 1> 与 <Video 1> 中的蓝色空心方框，为粗细均匀的蓝色正方形描边、内部透出白色背景，在画面右侧固定不动。\n<Subject 3> 是 <Picture 1> 与 <Video 1> 中的灰色直轨，一条水平横贯画面的细长灰色直线，位置、长度与粗细固定。\n<Picture 1> 是目标视频第8秒的实际尾帧锚点：白底上灰轨横贯，蓝框固定右侧，红色圆片已进入方框并停在框内中央，构成最终构图。\n<Video 1> 是滑动节奏参考：圆片从画面左侧沿灰轨向右平移，速度先快后慢、持续减速，最终缓停入右侧蓝框；目标视频只参考其减速节奏与时间分配，不照搬其具体尺寸与末尾杂色闪烁。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒白底平面几何动画，<Subject 1> 沿固定的 <Subject 3> 从画面左侧向右连续平移并平滑减速，<Subject 2> 始终固定在右侧；圆片大小、方向与蓝框位置全程不变，不瞬移、不变形、不增加物体。<Picture 1> 作为第8秒实际尾帧锚点，圆片最终停在蓝框中央；<Video 1> 仅提供先快后慢的滑动节奏。全片一个连续固定镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的正红平涂外观、正圆形状与固定直径全程保留，仅沿灰轨连续改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的描边、尺寸与右侧固定位置全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度与粗细全程保持不变。\n<Picture 1> ([Shot 1] last frame at 00:08.000): fully_preserved - 第8秒尾帧严格对齐该图，圆片停在蓝框内中央，灰轨与蓝框构图一致。\n<Video 1> (sliding and deceleration rhythm): partially_preserved - 保留从左向右、先快后慢并缓停入框的运动节奏，但时间轴重新对齐为8秒，物体外观与最终构图以 <Picture 1> 为准，不保留其末尾杂色闪烁。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格：纯白色背景，图形为平涂色块与清晰描边，无阴影、无渐变、无纹理；全片固定机位，仅一个连续镜头。\n[Shot 1] 水平正面构图中，<Subject 3> 灰色直轨横贯白色画面中部，<Subject 2> 蓝色空心方框固定在轨道右侧，蓝色描边粗细均匀，框内透出白底，方框的位置与大小在8秒内始终不变。第0秒的实际首帧里，<Subject 1> 红色实心圆片位于画面最左侧，圆心恰好压在灰色直轨上，右侧蓝框空置。圆片随即沿灰轨向右连续平移，滑动节奏参考 <Video 1>：起步较快，之后速度平滑、持续地减小，全程保持正圆形状、固定直径与原有方向，圆心始终贴在轨道中线上，没有瞬移、跳动、拉伸、旋转或变形，画面也不增加任何物体、文字与特效。临近右侧蓝框时圆片已很慢，左缘缓缓进入框内并继续向框中滑行，接近第8秒时几乎停止。第8秒的实际尾帧严格对齐 <Picture 1>：<Subject 1> 完全进入 <Subject 2>，静止在方框中央，圆心仍落在灰色直轨上，灰轨与蓝框保持原位。整段镜头机位固定，无推拉摇移；声音上仅有圆片接触轨道的轻微滑动摩擦声，随减速逐渐变轻，停稳时消失，无对白、无文字、无音乐。\n\noverall_soundscape:\n全片环境近乎安静，只有红色圆片沿灰色直轨平移时发出的轻微连续摩擦声；摩擦声随圆片减速而逐渐变轻，在第8秒停稳时消失。没有对白、人声或其他物体动作声。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_video",
+      "repeat": 0,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "1e85e4866956f6aeede4fb2a31eeb57823f76996fd1227f88bf63b9667282d23",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12308,
+                "completion_tokens": 3242,
+                "total_tokens": 15550
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 纯白背景上的最终构图：一条水平灰色直轨横贯画面，右侧固定一个蓝色空心方框，红色实心圆片停在蓝框中央，灰轨从圆片中心水平穿过。\n<Subject 1> 是红色实心圆片，外观来自 <Picture 1> 与 <Video 1>：正圆形、纯红色、边缘带有轻微像素锯齿，尺寸与朝向全程不变。\n<Subject 2> 是蓝色空心方框，外观来自 <Picture 1> 与 <Video 1>：等粗蓝色描边、内部透明白底，位置固定在画面右侧。\n<Subject 3> 是灰色水平直轨，外观来自 <Picture 1> 与 <Video 1>：细长灰色直线，水平横贯画面并穿过蓝框与圆片中心。\n<Video 1> 是节奏参考视频，仅提供红色圆片从左向右沿直轨持续滑动、临近蓝框时减速滑入的运动节奏，不作为被编辑或续写的源视频。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒白底平面几何动画：<Subject 1> 沿 <Subject 3> 从画面左侧向右侧连续平移并逐渐减速，最终停入固定在右侧的 <Subject 2> 中央。<Picture 1> 作为第8秒尾帧锚点，严格规定最终构图；<Video 1> 仅提供滑动节奏参考，物体外观以 <Picture 1> 为准。全程为一个连续镜头，无对白、文字与音乐。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame): fully_preserved - 尾帧严格呈现白底、灰色直轨、右侧蓝框与居中红色圆片，相对位置、颜色与大小完全保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与朝向全程保持不变，仅位置沿轨道平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的描边粗细、颜色、尺寸与右侧固定位置完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的颜色、粗细与水平贯穿构图完全保留且静止不动。\n<Video 1> (sliding rhythm): weak_reference - 仅保留圆片从左向右持续滑动并减速进入蓝框的大致节奏，不沿用其精确时长、起止位置与画面尺寸。\n\ndetailed_description:\n画面为极简平面几何动画风格，纯白背景，无阴影、无渐变、无任何文字，镜头为完全静止的固定正面构图，8秒内不切换、不推拉。\n[Shot 1] 开场时，<Subject 3> 灰色水平直轨横贯画面中部，<Subject 2> 蓝色空心方框固定在画面右侧，直轨水平穿过框体中心；<Subject 1> 红色实心圆片位于直轨靠左的起始位置，圆心始终落在灰轨上。0秒起，圆片沿灰轨向右侧做连续平移，初段速度较明显，随后平滑减速，运动轨迹严格水平，没有任何瞬移、跳动、回弹、旋转、缩放或形变。蓝框与灰轨全程纹丝不动，画面中始终只有这三个图形，不增加任何物体或标记。约第6秒，圆片抵达蓝框左侧描边并继续滑入，灰色直轨在圆片穿过时保持连续；圆片在框内进一步减速，最终在第8.00秒稳稳停在蓝框正中央，圆心与灰轨重合，画面与 <Picture 1> 尾帧严格对齐。运动全程伴随轻微滑动摩擦声，音量随速度降低而减弱，圆片停定时声音消失。\n\noverall_soundscape:\n全程仅有圆片沿直轨滑动的轻微摩擦声，声音细密低弱，随圆片减速逐渐变轻，停定时完全消失；无环境音、人声或其他动作声。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 69.234
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 1,
+            "hybrid_video_count": 1
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 纯白背景上的最终构图：一条水平灰色直轨横贯画面，右侧固定一个蓝色空心方框，红色实心圆片停在蓝框中央，灰轨从圆片中心水平穿过。\n<Subject 1> 是红色实心圆片，外观来自 <Picture 1> 与 <Video 1>：正圆形、纯红色、边缘带有轻微像素锯齿，尺寸与朝向全程不变。\n<Subject 2> 是蓝色空心方框，外观来自 <Picture 1> 与 <Video 1>：等粗蓝色描边、内部透明白底，位置固定在画面右侧。\n<Subject 3> 是灰色水平直轨，外观来自 <Picture 1> 与 <Video 1>：细长灰色直线，水平横贯画面并穿过蓝框与圆片中心。\n<Video 1> 是节奏参考视频，仅提供红色圆片从左向右沿直轨持续滑动、临近蓝框时减速滑入的运动节奏，不作为被编辑或续写的源视频。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒白底平面几何动画：<Subject 1> 沿 <Subject 3> 从画面左侧向右侧连续平移并逐渐减速，最终停入固定在右侧的 <Subject 2> 中央。<Picture 1> 作为第8秒尾帧锚点，严格规定最终构图；<Video 1> 仅提供滑动节奏参考，物体外观以 <Picture 1> 为准。全程为一个连续镜头，无对白、文字与音乐。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame): fully_preserved - 尾帧严格呈现白底、灰色直轨、右侧蓝框与居中红色圆片，相对位置、颜色与大小完全保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与朝向全程保持不变，仅位置沿轨道平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的描边粗细、颜色、尺寸与右侧固定位置完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的颜色、粗细与水平贯穿构图完全保留且静止不动。\n<Video 1> (sliding rhythm): weak_reference - 仅保留圆片从左向右持续滑动并减速进入蓝框的大致节奏，不沿用其精确时长、起止位置与画面尺寸。\n\ndetailed_description:\n画面为极简平面几何动画风格，纯白背景，无阴影、无渐变、无任何文字，镜头为完全静止的固定正面构图，8秒内不切换、不推拉。\n[Shot 1] 开场时，<Subject 3> 灰色水平直轨横贯画面中部，<Subject 2> 蓝色空心方框固定在画面右侧，直轨水平穿过框体中心；<Subject 1> 红色实心圆片位于直轨靠左的起始位置，圆心始终落在灰轨上。0秒起，圆片沿灰轨向右侧做连续平移，初段速度较明显，随后平滑减速，运动轨迹严格水平，没有任何瞬移、跳动、回弹、旋转、缩放或形变。蓝框与灰轨全程纹丝不动，画面中始终只有这三个图形，不增加任何物体或标记。约第6秒，圆片抵达蓝框左侧描边并继续滑入，灰色直轨在圆片穿过时保持连续；圆片在框内进一步减速，最终在第8.00秒稳稳停在蓝框正中央，圆心与灰轨重合，画面与 <Picture 1> 尾帧严格对齐。运动全程伴随轻微滑动摩擦声，音量随速度降低而减弱，圆片停定时声音消失。\n\noverall_soundscape:\n全程仅有圆片沿直轨滑动的轻微摩擦声，声音细密低弱，随圆片减速逐渐变轻，停定时完全消失；无环境音、人声或其他动作声。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_video",
+      "repeat": 1,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "777ee2c11dccc0d540bae9343983d52eae0b436ee3049dbcf1614a57a464c3e9",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12002,
+                "completion_tokens": 4732,
+                "total_tokens": 16734
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是纯白色平面背景，来自 <Picture 1>，无渐变、无阴影、无纹理。\n<Subject 2> 是一条水平灰色直轨，来自 <Picture 1>，线条粗细恒定，横向贯穿画面，并从蓝色方框内部水平穿过。\n<Subject 3> 是位于画面右侧的蓝色空心方框，来自 <Picture 1>，边框颜色与粗细恒定，位置全程固定不动。\n<Subject 4> 是正红色圆形薄片，来自 <Picture 1>，直径恒定、边缘规整，圆心始终落在灰色直轨的中线上。\n<Picture 1> 是目标视频第 8 秒的实际尾帧，呈现红色圆片静止于蓝色方框正中央、圆心与灰轨重合的构图。\n<Video 1> 是节奏参考视频，仅提供圆片自左向右沿轨滑动、临近方框时逐渐减速并入框的时间节奏，不复制其具体画面与末段彩色边缘伪影。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为 8 秒平面几何动画：<Subject 4> 从 <Subject 2> 左端出发，沿轨向右连续平移并持续减速，最终在第 8 秒恰好停入固定于右侧的 <Subject 3> 中央，尾帧严格对齐 <Picture 1>；<Video 1> 仅用于参考滑动节奏，全程不新增物体、不发生形变或瞬移，并伴随轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (出现在 [Shot 1]): fully_preserved - 纯白、无纹理的平面背景保持不变。\n<Subject 2> (出现在 [Shot 1]): fully_preserved - 灰色水平直轨的颜色、粗细、位置与贯穿关系保持不变。\n<Subject 3> (出现在 [Shot 1]): fully_preserved - 右侧蓝色空心方框的颜色、尺寸与固定位置保持不变。\n<Subject 4> (出现在 [Shot 1]): fully_preserved - 红色圆片的颜色、直径、正圆形状与朝向全程恒定，仅按要求改变水平位置。\n<Picture 1> ([Shot 1] 尾帧): fully_preserved - 第 8 秒画面与 <Picture 1> 严格对齐，圆片居中于蓝框、圆心与灰轨重合。\n<Video 1> (滑动节奏): weak_reference - 仅保留自左向右连续滑动、临近方框减速并入框的节奏关系，不复制其具体画面、彩色伪影与精确时长。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，正面正交视角，纯白背景上只有灰色直轨、右侧蓝色空心方框与红色圆片，色块平涂均匀，无阴影、无渐变。\n[Shot 1] 这是一个持续 8 秒的固定镜头，机位、景别与画面边界全程不变。0 秒的实际首帧中，<Subject 4> 红色圆片位于 <Subject 2> 灰色直轨的最左端，圆心压在轨道中线上；<Subject 3> 蓝色空心方框固定在画面右侧，灰轨水平穿过方框中部，圆片与方框之间隔着整段轨道。开始后，圆片沿灰轨向右做连续平移，初段速度较快、运行平稳，随后速度持续而均匀地减小，呈现明确的减速过程；运动期间圆片的直径、正圆形状、红色填充与朝向完全不变，圆心始终不离开灰轨，没有任何跳跃、瞬移、拖影或形变。灰色直轨与蓝色方框自始至终静止，画面中不出现其他物体、文字或光效，也不出现参考视频末段的彩色边缘伪影。圆片先让右侧边缘进入蓝框，再继续缓慢滑入，轻微摩擦声随速度降低而逐渐变轻。至第 8 秒，圆片恰好停在蓝色方框正中央，圆心与灰轨重合，实际尾帧严格对齐 <Picture 1>，随后画面静止。\n\noverall_soundscape:\n全程仅有圆片沿灰色直轨滑动时发出的轻微摩擦声，声音细密平稳，随圆片持续减速而逐渐变轻，至第 8 秒圆片停稳时归于安静；无环境声、无人声、无其他音效。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 97.703
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是纯白色平面背景，来自 <Picture 1>，无渐变、无阴影、无纹理。\n<Subject 2> 是一条水平灰色直轨，来自 <Picture 1>，线条粗细恒定，横向贯穿画面，并从蓝色方框内部水平穿过。\n<Subject 3> 是位于画面右侧的蓝色空心方框，来自 <Picture 1>，边框颜色与粗细恒定，位置全程固定不动。\n<Subject 4> 是正红色圆形薄片，来自 <Picture 1>，直径恒定、边缘规整，圆心始终落在灰色直轨的中线上。\n<Picture 1> 是目标视频第 8 秒的实际尾帧，呈现红色圆片静止于蓝色方框正中央、圆心与灰轨重合的构图。\n<Video 1> 是节奏参考视频，仅提供圆片自左向右沿轨滑动、临近方框时逐渐减速并入框的时间节奏，不复制其具体画面与末段彩色边缘伪影。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为 8 秒平面几何动画：<Subject 4> 从 <Subject 2> 左端出发，沿轨向右连续平移并持续减速，最终在第 8 秒恰好停入固定于右侧的 <Subject 3> 中央，尾帧严格对齐 <Picture 1>；<Video 1> 仅用于参考滑动节奏，全程不新增物体、不发生形变或瞬移，并伴随轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (出现在 [Shot 1]): fully_preserved - 纯白、无纹理的平面背景保持不变。\n<Subject 2> (出现在 [Shot 1]): fully_preserved - 灰色水平直轨的颜色、粗细、位置与贯穿关系保持不变。\n<Subject 3> (出现在 [Shot 1]): fully_preserved - 右侧蓝色空心方框的颜色、尺寸与固定位置保持不变。\n<Subject 4> (出现在 [Shot 1]): fully_preserved - 红色圆片的颜色、直径、正圆形状与朝向全程恒定，仅按要求改变水平位置。\n<Picture 1> ([Shot 1] 尾帧): fully_preserved - 第 8 秒画面与 <Picture 1> 严格对齐，圆片居中于蓝框、圆心与灰轨重合。\n<Video 1> (滑动节奏): weak_reference - 仅保留自左向右连续滑动、临近方框减速并入框的节奏关系，不复制其具体画面、彩色伪影与精确时长。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，正面正交视角，纯白背景上只有灰色直轨、右侧蓝色空心方框与红色圆片，色块平涂均匀，无阴影、无渐变。\n[Shot 1] 这是一个持续 8 秒的固定镜头，机位、景别与画面边界全程不变。0 秒的实际首帧中，<Subject 4> 红色圆片位于 <Subject 2> 灰色直轨的最左端，圆心压在轨道中线上；<Subject 3> 蓝色空心方框固定在画面右侧，灰轨水平穿过方框中部，圆片与方框之间隔着整段轨道。开始后，圆片沿灰轨向右做连续平移，初段速度较快、运行平稳，随后速度持续而均匀地减小，呈现明确的减速过程；运动期间圆片的直径、正圆形状、红色填充与朝向完全不变，圆心始终不离开灰轨，没有任何跳跃、瞬移、拖影或形变。灰色直轨与蓝色方框自始至终静止，画面中不出现其他物体、文字或光效，也不出现参考视频末段的彩色边缘伪影。圆片先让右侧边缘进入蓝框，再继续缓慢滑入，轻微摩擦声随速度降低而逐渐变轻。至第 8 秒，圆片恰好停在蓝色方框正中央，圆心与灰轨重合，实际尾帧严格对齐 <Picture 1>，随后画面静止。\n\noverall_soundscape:\n全程仅有圆片沿灰色直轨滑动时发出的轻微摩擦声，声音细密平稳，随圆片持续减速而逐渐变轻，至第 8 秒圆片停稳时归于安静；无环境声、无人声、无其他音效。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "last_video",
+      "repeat": 1,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "556780bb882b67875e90d86cdd94629d184c513239c5b629161d531dc8bbee97",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 12308,
+                "completion_tokens": 3200,
+                "total_tokens": 15508
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 白色背景上的平面几何尾帧，灰色水平直轨横穿画面，右侧固定蓝色空心方框，红色实心圆片停在方框中心，圆心落在直轨上。\n<Subject 1> 是来自 <Picture 1> 的灰色水平直轨，线条平直、粗细均匀，横贯白色画面并穿过蓝色方框中心。\n<Subject 2> 是来自 <Picture 1> 的蓝色空心方框，位于画面右侧，边框粗细和位置全程固定。\n<Subject 3> 是来自 <Picture 1> 的红色实心圆片，保持正圆外形、尺寸和红色填充；其向右滑动并减速的节奏参考 <Video 1>。\n<Video 1> 是参考视频，仅用于提供圆片沿直线向右连续滑动、逐渐减速并进入方框的运动节奏，不作为首尾帧或新增物体来源。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一个8秒白底平面几何动画，以 <Picture 1> 作为8.00秒的严格尾帧锚点。<Subject 3> 从左侧沿 <Subject 1> 向右连续平移并减速，最终停入固定在右侧的 <Subject 2> 中心；<Video 1> 只提供滑动节奏，物体外观与最终构图以 <Picture 1> 为准。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame): fully_preserved - 白色背景、灰色直轨、右侧蓝色空心方框及红色圆片居中的尾帧构图在8.00秒完整呈现。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度、粗细和方向全程保持不变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框始终固定在右侧，外形、尺寸和位置不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、实心填充和尺寸全程保持，仅按要求沿直轨连续改变位置。\n<Video 1> (sliding rhythm): weak_reference - 仅参考圆片右移、逐渐减速并入框停止的节奏，不复制其具体时长、压缩痕迹或额外视觉效果。\n\ndetailed_description:\n[Shot 1] 纯白背景上的平面几何动画，镜头固定为正面平视构图，全程不切换、不移动。0秒时，<Subject 1> 灰色水平直轨横贯画面，<Subject 2> 蓝色空心方框固定在右侧，方框中心与直轨中线重合；<Subject 3> 红色实心圆片位于画面左侧的直轨上，圆心贴合轨道，尺寸与尾帧一致。圆片从0秒开始沿直轨向右连续平移，运动过程中没有瞬移、跳跃、旋转、缩放或形变，灰色直轨与蓝色方框始终静止。其起始滑动顺畅，接近右侧蓝框时按照 <Video 1> 的节奏持续减速；圆片先靠近蓝框左边缘，随后平滑进入框内，红色圆片与蓝色边框、灰色轨道的上下相对关系保持不变。最后阶段速度降到极低，圆片在蓝框内继续连续滑向中心，到8.00秒时圆心与蓝框中心、灰色直轨中线完全重合，画面严格到达 <Picture 1> 的尾帧状态。运动全程伴随轻微滑动摩擦声，无对白、文字或音乐。\n\noverall_soundscape:\n整体几乎安静，只有红色圆片沿灰色直轨平移时发出的轻微摩擦声。摩擦声随圆片速度降低而逐渐变轻，并在8.00秒圆片停稳时消失。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 84.016
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 2,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 1,
+            "hybrid_video_count": 1
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 2
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: last_frame @8.00s - 白色背景上的平面几何尾帧，灰色水平直轨横穿画面，右侧固定蓝色空心方框，红色实心圆片停在方框中心，圆心落在直轨上。\n<Subject 1> 是来自 <Picture 1> 的灰色水平直轨，线条平直、粗细均匀，横贯白色画面并穿过蓝色方框中心。\n<Subject 2> 是来自 <Picture 1> 的蓝色空心方框，位于画面右侧，边框粗细和位置全程固定。\n<Subject 3> 是来自 <Picture 1> 的红色实心圆片，保持正圆外形、尺寸和红色填充；其向右滑动并减速的节奏参考 <Video 1>。\n<Video 1> 是参考视频，仅用于提供圆片沿直线向右连续滑动、逐渐减速并进入方框的运动节奏，不作为首尾帧或新增物体来源。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一个8秒白底平面几何动画，以 <Picture 1> 作为8.00秒的严格尾帧锚点。<Subject 3> 从左侧沿 <Subject 1> 向右连续平移并减速，最终停入固定在右侧的 <Subject 2> 中心；<Video 1> 只提供滑动节奏，物体外观与最终构图以 <Picture 1> 为准。\n\nretention_analysis:\n<Picture 1> ([Shot 1] last frame): fully_preserved - 白色背景、灰色直轨、右侧蓝色空心方框及红色圆片居中的尾帧构图在8.00秒完整呈现。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度、粗细和方向全程保持不变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框始终固定在右侧，外形、尺寸和位置不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、实心填充和尺寸全程保持，仅按要求沿直轨连续改变位置。\n<Video 1> (sliding rhythm): weak_reference - 仅参考圆片右移、逐渐减速并入框停止的节奏，不复制其具体时长、压缩痕迹或额外视觉效果。\n\ndetailed_description:\n[Shot 1] 纯白背景上的平面几何动画，镜头固定为正面平视构图，全程不切换、不移动。0秒时，<Subject 1> 灰色水平直轨横贯画面，<Subject 2> 蓝色空心方框固定在右侧，方框中心与直轨中线重合；<Subject 3> 红色实心圆片位于画面左侧的直轨上，圆心贴合轨道，尺寸与尾帧一致。圆片从0秒开始沿直轨向右连续平移，运动过程中没有瞬移、跳跃、旋转、缩放或形变，灰色直轨与蓝色方框始终静止。其起始滑动顺畅，接近右侧蓝框时按照 <Video 1> 的节奏持续减速；圆片先靠近蓝框左边缘，随后平滑进入框内，红色圆片与蓝色边框、灰色轨道的上下相对关系保持不变。最后阶段速度降到极低，圆片在蓝框内继续连续滑向中心，到8.00秒时圆心与蓝框中心、灰色直轨中线完全重合，画面严格到达 <Picture 1> 的尾帧状态。运动全程伴随轻微滑动摩擦声，无对白、文字或音乐。\n\noverall_soundscape:\n整体几乎安静，只有红色圆片沿灰色直轨平移时发出的轻微摩擦声。摩擦声随圆片速度降低而逐渐变轻，并在8.00秒圆片停稳时消失。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_image",
+      "repeat": 0,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "a9e7ef4d4416ec62160a0af9e5985e54061aceb2805906a3539f11f5d0fb5ab4",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13324,
+                "completion_tokens": 4169,
+                "total_tokens": 17493
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是红色圆片，外观取自 <Picture 1>、<Picture 2> 与 <Picture 3>：纯白色背景上的正圆形纯红色填充图形，边缘带有轻微像素锯齿，直径全程保持不变。\n<Subject 2> 是灰色直轨，为水平贯穿画面的中性灰细直线，其位置、长度与粗细全程保持不变。\n<Subject 3> 是固定在画面右侧的蓝色方框，仅蓝色描边、内部空白，水平轨道从其左右边框中部穿过，位置全程不动。\n<Picture 1> 是目标视频 [Shot 1] 的实际首帧：0 秒时 <Subject 1> 位于轨道左侧，<Subject 3> 位于右侧且框内为空。\n<Picture 2> 是目标视频 [Shot 1] 的实际尾帧：8 秒时 <Subject 1> 停在 <Subject 3> 内部。\n<Picture 3> 是 [Shot 1] 的物体外观与平面构图参考，提供圆片、轨道与蓝框的造型样式，图中圆片的中间位置不作为停顿关键帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一条 8 秒的极简平面几何动画，以单个连续镜头呈现 <Subject 1> 沿 <Subject 2> 从左侧向右侧固定的 <Subject 3> 连续平移并平滑减速、最终停入框内的过程；<Picture 1> 与 <Picture 2> 分别作为 0 秒实际首帧和 8 秒实际尾帧严格对齐，<Picture 3> 仅提供物体外观参考。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与方向全程不变，仅水平位置连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度、粗细与颜色全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色方框的位置、尺寸、描边与内部空白状态全程保持不变。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0 秒画面与 <Picture 1> 严格对齐，圆片在左、蓝框在右且框内为空。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8 秒画面与 <Picture 2> 严格对齐，圆片静止于蓝框内部。\n<Picture 3> (appearance reference for [Shot 1]): weak_reference - 仅沿用其物体外观与平面构图风格，不将图中圆片的中间位置作为停顿关键帧。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白色背景，无透视、无阴影，色彩平涂、光线均匀，画面中始终只有灰色直轨、红色圆片与右侧蓝色方框三个图形，不出现任何文字。\n[Shot 1] 镜头从与 <Picture 1> 严格对齐的首帧开始：<Subject 2> 灰色直轨水平贯穿画面，<Subject 3> 蓝色方框固定在画面右侧，轨道从方框左右边框中部穿过，框内空白；<Subject 1> 红色圆片位于轨道左侧，圆心落在轨道上。镜头保持完全静止，无推拉摇移。0 秒起，<Subject 1> 沿 <Subject 2> 向右连续平移，初速较快，随后以平滑的减速曲线持续放缓；运动中圆片始终保持正圆外形、原有尺寸与方向，圆心始终贴合轨道，不瞬移、不跳动、不旋转、不缩放、不变形，<Subject 2> 与 <Subject 3> 的位置和外观也始终不变，画面中不增加任何物体。圆片中途经过 <Picture 3> 所示的中间外观位置后继续向右滑行，后半程速度明显变慢，最终在 8 秒时恰好停入 <Subject 3> 内部，尾帧与 <Picture 2> 严格对齐：圆片静止于蓝框中，轨道、蓝框与白底均无变化。全程伴随与圆片运动同步的轻微、干燥的滑动摩擦声，音量随速度放缓而持续减弱，圆片停稳时声音归于安静。\n\noverall_soundscape:\n全程仅有红色圆片沿灰色直轨滑动时发出的轻微、干燥的摩擦声，声音随圆片减速而逐渐变轻，8 秒圆片停稳时完全消失；除此之外没有环境声、人声或其他动作声响。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 84.828
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是红色圆片，外观取自 <Picture 1>、<Picture 2> 与 <Picture 3>：纯白色背景上的正圆形纯红色填充图形，边缘带有轻微像素锯齿，直径全程保持不变。\n<Subject 2> 是灰色直轨，为水平贯穿画面的中性灰细直线，其位置、长度与粗细全程保持不变。\n<Subject 3> 是固定在画面右侧的蓝色方框，仅蓝色描边、内部空白，水平轨道从其左右边框中部穿过，位置全程不动。\n<Picture 1> 是目标视频 [Shot 1] 的实际首帧：0 秒时 <Subject 1> 位于轨道左侧，<Subject 3> 位于右侧且框内为空。\n<Picture 2> 是目标视频 [Shot 1] 的实际尾帧：8 秒时 <Subject 1> 停在 <Subject 3> 内部。\n<Picture 3> 是 [Shot 1] 的物体外观与平面构图参考，提供圆片、轨道与蓝框的造型样式，图中圆片的中间位置不作为停顿关键帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一条 8 秒的极简平面几何动画，以单个连续镜头呈现 <Subject 1> 沿 <Subject 2> 从左侧向右侧固定的 <Subject 3> 连续平移并平滑减速、最终停入框内的过程；<Picture 1> 与 <Picture 2> 分别作为 0 秒实际首帧和 8 秒实际尾帧严格对齐，<Picture 3> 仅提供物体外观参考。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与方向全程不变，仅水平位置连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度、粗细与颜色全程保持不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色方框的位置、尺寸、描边与内部空白状态全程保持不变。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0 秒画面与 <Picture 1> 严格对齐，圆片在左、蓝框在右且框内为空。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8 秒画面与 <Picture 2> 严格对齐，圆片静止于蓝框内部。\n<Picture 3> (appearance reference for [Shot 1]): weak_reference - 仅沿用其物体外观与平面构图风格，不将图中圆片的中间位置作为停顿关键帧。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白色背景，无透视、无阴影，色彩平涂、光线均匀，画面中始终只有灰色直轨、红色圆片与右侧蓝色方框三个图形，不出现任何文字。\n[Shot 1] 镜头从与 <Picture 1> 严格对齐的首帧开始：<Subject 2> 灰色直轨水平贯穿画面，<Subject 3> 蓝色方框固定在画面右侧，轨道从方框左右边框中部穿过，框内空白；<Subject 1> 红色圆片位于轨道左侧，圆心落在轨道上。镜头保持完全静止，无推拉摇移。0 秒起，<Subject 1> 沿 <Subject 2> 向右连续平移，初速较快，随后以平滑的减速曲线持续放缓；运动中圆片始终保持正圆外形、原有尺寸与方向，圆心始终贴合轨道，不瞬移、不跳动、不旋转、不缩放、不变形，<Subject 2> 与 <Subject 3> 的位置和外观也始终不变，画面中不增加任何物体。圆片中途经过 <Picture 3> 所示的中间外观位置后继续向右滑行，后半程速度明显变慢，最终在 8 秒时恰好停入 <Subject 3> 内部，尾帧与 <Picture 2> 严格对齐：圆片静止于蓝框中，轨道、蓝框与白底均无变化。全程伴随与圆片运动同步的轻微、干燥的滑动摩擦声，音量随速度放缓而持续减弱，圆片停稳时声音归于安静。\n\noverall_soundscape:\n全程仅有红色圆片沿灰色直轨滑动时发出的轻微、干燥的摩擦声，声音随圆片减速而逐渐变轻，8 秒圆片停稳时完全消失；除此之外没有环境声、人声或其他动作声响。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_image",
+      "repeat": 0,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "991fdf8a924862642d0431561081837a205018a7a37e98c338b028d95404ceb6",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13644,
+                "completion_tokens": 5260,
+                "total_tokens": 18904
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上一条水平灰色直轨横贯画面，红色实心圆片位于轨道左侧，蓝色空心方框固定在轨道右侧。\n<Picture 2>: last_frame @8.00s - 同一白底、灰色直轨与右侧蓝色方框，红色圆片已沿轨移入方框内部并居中停稳。\n<Subject 1> 是红色实心圆片，外观依据 <Picture 1>、<Picture 2> 和 <Picture 3>，为正圆形、纯红色、边缘带轻微像素锯齿，运动时圆心始终落在灰色直轨上。\n<Subject 2> 是水平灰色直轨，外观依据 <Picture 1>、<Picture 2> 和 <Picture 3>，为粗细均匀的灰色直线，横贯画面并穿过蓝色方框左右边中点。\n<Subject 3> 是蓝色空心方框，外观依据 <Picture 1>、<Picture 2> 和 <Picture 3>，为等粗纯蓝色描边正方形，内部留白，固定在画面右侧。\n<Picture 3> 是物体外观参考图，仅用于确认 <Subject 1>、<Subject 2>、<Subject 3> 的颜色、形状与轨道关系，不作为首帧、尾帧或时间锚点。\n\nsummary:\n[keyframe completion + reference generation] 目标视频在 <Picture 1> 与 <Picture 2> 之间完成一段8秒平面几何动画：<Subject 1> 沿 <Subject 2> 从左向右连续平移并持续减速，最终居中停入固定不动的 <Subject 3>；<Picture 3> 仅提供物体外观参考。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒白底、灰色直轨、左侧红色圆片与右侧蓝色方框的构图和位置被严格保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒红色圆片居中停在蓝色方框内、蓝框与灰轨位置不变的状态被严格保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 圆片的正圆外形、纯红色、尺寸与方向保持不变，仅沿轨道连续改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的水平走向、粗细、长度与位置全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的形状、颜色、粗细及右侧固定位置全程不变。\n<Picture 3> (appearance reference): weak_reference - 仅借用其确认三件物体的外观与轨道关系，不把该中间位置画面作为首尾关键帧。\n\ndetailed_description:\n目标视频为极简平面几何动画风格，纯白背景，平涂色彩，无透视、无阴影、无粒子，镜头全程锁定不动。\n[Shot 1] 0秒时画面严格对齐 <Picture 1>：一条粗细均匀的水平灰色直轨 <Subject 2> 横贯白底，两端略伸出画面；红色实心圆片 <Subject 1> 位于画面左侧，圆心被直轨水平穿过，圆片压住其覆盖范围内的轨段，边缘带有与参考图一致的轻微像素锯齿；蓝色空心方框 <Subject 3> 固定在画面右侧，直轨从其左右两条边的中点穿过。开始后，<Subject 1> 沿 <Subject 2> 向右连续平移，初速平稳，随后速度持续而均匀地减小，呈现明显的减速滑行感。运动过程中圆片始终保持原有大小、正圆形状与纯红色，圆心不离开灰轨，不瞬移、不变形、不弹跳，方向也不改变；<Subject 2> 与 <Subject 3> 全程静止，蓝框位置、描边粗细和内部留白均不变化。圆片行经轨道中段时外观与 <Picture 3> 所示一致，随后继续减速接近右侧蓝框，从方框左边平滑进入框内，进入后速度进一步放低。至8.00秒，圆片恰好在 <Subject 3> 内部居中停稳，灰色直轨仍穿过其圆心，画面严格对齐 <Picture 2>。全程伴随轻微滑动摩擦声，声音随速度降低而变轻，停稳时同步消失；无对白、无文字、无音乐。\n\noverall_soundscape:\n全程只有红色圆片沿灰色直轨滑行的轻微摩擦声，起滑时轻细平稳，随圆片减速逐渐减弱，8.00秒停稳时同步消失，除此之外没有其他环境声或音效。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 112.985
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 3,
+            "hybrid_video_count": 0
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上一条水平灰色直轨横贯画面，红色实心圆片位于轨道左侧，蓝色空心方框固定在轨道右侧。\n<Picture 2>: last_frame @8.00s - 同一白底、灰色直轨与右侧蓝色方框，红色圆片已沿轨移入方框内部并居中停稳。\n<Subject 1> 是红色实心圆片，外观依据 <Picture 1>、<Picture 2> 和 <Picture 3>，为正圆形、纯红色、边缘带轻微像素锯齿，运动时圆心始终落在灰色直轨上。\n<Subject 2> 是水平灰色直轨，外观依据 <Picture 1>、<Picture 2> 和 <Picture 3>，为粗细均匀的灰色直线，横贯画面并穿过蓝色方框左右边中点。\n<Subject 3> 是蓝色空心方框，外观依据 <Picture 1>、<Picture 2> 和 <Picture 3>，为等粗纯蓝色描边正方形，内部留白，固定在画面右侧。\n<Picture 3> 是物体外观参考图，仅用于确认 <Subject 1>、<Subject 2>、<Subject 3> 的颜色、形状与轨道关系，不作为首帧、尾帧或时间锚点。\n\nsummary:\n[keyframe completion + reference generation] 目标视频在 <Picture 1> 与 <Picture 2> 之间完成一段8秒平面几何动画：<Subject 1> 沿 <Subject 2> 从左向右连续平移并持续减速，最终居中停入固定不动的 <Subject 3>；<Picture 3> 仅提供物体外观参考。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒白底、灰色直轨、左侧红色圆片与右侧蓝色方框的构图和位置被严格保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒红色圆片居中停在蓝色方框内、蓝框与灰轨位置不变的状态被严格保留。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 圆片的正圆外形、纯红色、尺寸与方向保持不变，仅沿轨道连续改变位置。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的水平走向、粗细、长度与位置全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的形状、颜色、粗细及右侧固定位置全程不变。\n<Picture 3> (appearance reference): weak_reference - 仅借用其确认三件物体的外观与轨道关系，不把该中间位置画面作为首尾关键帧。\n\ndetailed_description:\n目标视频为极简平面几何动画风格，纯白背景，平涂色彩，无透视、无阴影、无粒子，镜头全程锁定不动。\n[Shot 1] 0秒时画面严格对齐 <Picture 1>：一条粗细均匀的水平灰色直轨 <Subject 2> 横贯白底，两端略伸出画面；红色实心圆片 <Subject 1> 位于画面左侧，圆心被直轨水平穿过，圆片压住其覆盖范围内的轨段，边缘带有与参考图一致的轻微像素锯齿；蓝色空心方框 <Subject 3> 固定在画面右侧，直轨从其左右两条边的中点穿过。开始后，<Subject 1> 沿 <Subject 2> 向右连续平移，初速平稳，随后速度持续而均匀地减小，呈现明显的减速滑行感。运动过程中圆片始终保持原有大小、正圆形状与纯红色，圆心不离开灰轨，不瞬移、不变形、不弹跳，方向也不改变；<Subject 2> 与 <Subject 3> 全程静止，蓝框位置、描边粗细和内部留白均不变化。圆片行经轨道中段时外观与 <Picture 3> 所示一致，随后继续减速接近右侧蓝框，从方框左边平滑进入框内，进入后速度进一步放低。至8.00秒，圆片恰好在 <Subject 3> 内部居中停稳，灰色直轨仍穿过其圆心，画面严格对齐 <Picture 2>。全程伴随轻微滑动摩擦声，声音随速度降低而变轻，停稳时同步消失；无对白、无文字、无音乐。\n\noverall_soundscape:\n全程只有红色圆片沿灰色直轨滑行的轻微摩擦声，起滑时轻细平稳，随圆片减速逐渐减弱，8.00秒停稳时同步消失，除此之外没有其他环境声或音效。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_image",
+      "repeat": 1,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "007fb39dbbc25e2062f822d1f913e38b6c7bdf97eba490f28d7bbe4ad94bda5d",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13324,
+                "completion_tokens": 5516,
+                "total_tokens": 18840
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是 <Picture 1>、<Picture 2> 与 <Picture 3> 中共同出现的实心红色圆片，鲜红色填充，直径保持不变，边缘带轻微像素化锯齿，圆心始终落在灰色直轨上。\n<Subject 2> 是三张参考图中的灰色水平直轨，线条细而平直，横贯白色画面，位置、长度与粗细全程固定。\n<Subject 3> 是三张参考图中位于画面右侧的蓝色空心方框，蓝色描边、内部留白，直轨水平穿过其左右边中点，方框全程固定不动。\n<Subject 4> 是三张参考图共有的纯白色平面背景，无纹理、无阴影、无渐变。\n<Picture 1> 是目标视频 [Shot 1] 的实际首帧，0秒时红色圆片位于画面左侧，蓝色方框位于右侧。\n<Picture 2> 是目标视频 [Shot 1] 的实际尾帧，第8秒红色圆片停在蓝色方框内部。\n<Picture 3> 仅作为物体外观参考图，不作为首帧、尾帧或位置关键帧；其中圆片处于轨道中段的构图不进入目标时间线。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒白底平面几何动画，以一个固定镜头展示 <Subject 1> 沿 <Subject 2> 向右连续平移并平滑减速，最终停入固定在右侧的 <Subject 3>；<Picture 1> 与 <Picture 2> 分别严格锚定0秒首帧与8秒尾帧，<Picture 3> 仅提供物体外观参考，全程不增加物体、无文字、无对白、无音乐。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、直径、实心填充、像素化边缘和圆心贴轨关系完全保留，仅按要求发生连续水平平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的水平走向、粗细、长度和位置全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的颜色、线宽、大小和右侧固定位置完全保留。\n<Subject 4> (appears in [Shot 1]): fully_preserved - 纯白色平面背景贯穿全片，无任何添加。\n<Picture 1> ([Shot 1] first frame at 00:00.000): fully_preserved - 0秒画面严格对齐该首帧，各物体位置与外观一致。\n<Picture 2> ([Shot 1] last frame at 00:08.000): fully_preserved - 第8秒画面严格对齐该尾帧，圆片停在蓝框内部。\n<Picture 3>: weak_reference - 仅参考红色圆片、灰色直轨与蓝色方框的外观、颜色和扁平风格，圆片位于中段的构图不作为关键帧或时间位置。\n\ndetailed_description:\n这是一段纯白色背景上的平面几何动画，采用颜色纯净、边缘清晰的扁平位图风格，无透视、无光影、无纹理。\n[Shot 1] 镜头为水平正面固定构图，全程不移动、不切换。0秒时画面严格对齐 <Picture 1>：<Subject 4> 纯白背景之上，<Subject 2> 细灰色水平直轨自画面左侧平直延伸至右侧；<Subject 3> 蓝色空心方框位于画面右侧，框线粗细均匀，直轨水平穿过方框左右边的中点，方框的位置与大小在整段视频中完全固定；<Subject 1> 实心红色圆片位于画面左侧，鲜红色填充、边缘带轻微像素锯齿，外观同 <Picture 3>，圆心落在直轨上。自0秒起，<Subject 1> 沿 <Subject 2> 向右连续平移，运动方向严格水平并与轨道同轴；圆片直径、形状、红色填充与自身方向始终不变，灰轨与蓝框保持静止。运动为先快后慢的平滑减速：起步速度最明显，随后持续均匀衰减，期间无停顿、无跳变、无瞬移。圆片经过画面中部后继续滑向右侧，进入蓝框范围时速度已显著降低，最终在第8秒精确停稳，画面严格对齐 <Picture 2>：<Subject 1> 完全位于 <Subject 3> 蓝色方框内部，圆心仍在灰色直轨上。全程不增加任何物体，圆片不缩放、不旋转、不变形，画面无文字、无对白。\n\noverall_soundscape:\n全程仅能听到红色圆片沿灰色直轨滑动时发出的轻微摩擦声，细碎而连续；声音随圆片减速由相对清晰逐渐变弱，到第8秒圆片停稳时近乎消失。除此之外没有环境声、人声或其他物理声响。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 125.094
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是 <Picture 1>、<Picture 2> 与 <Picture 3> 中共同出现的实心红色圆片，鲜红色填充，直径保持不变，边缘带轻微像素化锯齿，圆心始终落在灰色直轨上。\n<Subject 2> 是三张参考图中的灰色水平直轨，线条细而平直，横贯白色画面，位置、长度与粗细全程固定。\n<Subject 3> 是三张参考图中位于画面右侧的蓝色空心方框，蓝色描边、内部留白，直轨水平穿过其左右边中点，方框全程固定不动。\n<Subject 4> 是三张参考图共有的纯白色平面背景，无纹理、无阴影、无渐变。\n<Picture 1> 是目标视频 [Shot 1] 的实际首帧，0秒时红色圆片位于画面左侧，蓝色方框位于右侧。\n<Picture 2> 是目标视频 [Shot 1] 的实际尾帧，第8秒红色圆片停在蓝色方框内部。\n<Picture 3> 仅作为物体外观参考图，不作为首帧、尾帧或位置关键帧；其中圆片处于轨道中段的构图不进入目标时间线。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒白底平面几何动画，以一个固定镜头展示 <Subject 1> 沿 <Subject 2> 向右连续平移并平滑减速，最终停入固定在右侧的 <Subject 3>；<Picture 1> 与 <Picture 2> 分别严格锚定0秒首帧与8秒尾帧，<Picture 3> 仅提供物体外观参考，全程不增加物体、无文字、无对白、无音乐。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、直径、实心填充、像素化边缘和圆心贴轨关系完全保留，仅按要求发生连续水平平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的水平走向、粗细、长度和位置全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的颜色、线宽、大小和右侧固定位置完全保留。\n<Subject 4> (appears in [Shot 1]): fully_preserved - 纯白色平面背景贯穿全片，无任何添加。\n<Picture 1> ([Shot 1] first frame at 00:00.000): fully_preserved - 0秒画面严格对齐该首帧，各物体位置与外观一致。\n<Picture 2> ([Shot 1] last frame at 00:08.000): fully_preserved - 第8秒画面严格对齐该尾帧，圆片停在蓝框内部。\n<Picture 3>: weak_reference - 仅参考红色圆片、灰色直轨与蓝色方框的外观、颜色和扁平风格，圆片位于中段的构图不作为关键帧或时间位置。\n\ndetailed_description:\n这是一段纯白色背景上的平面几何动画，采用颜色纯净、边缘清晰的扁平位图风格，无透视、无光影、无纹理。\n[Shot 1] 镜头为水平正面固定构图，全程不移动、不切换。0秒时画面严格对齐 <Picture 1>：<Subject 4> 纯白背景之上，<Subject 2> 细灰色水平直轨自画面左侧平直延伸至右侧；<Subject 3> 蓝色空心方框位于画面右侧，框线粗细均匀，直轨水平穿过方框左右边的中点，方框的位置与大小在整段视频中完全固定；<Subject 1> 实心红色圆片位于画面左侧，鲜红色填充、边缘带轻微像素锯齿，外观同 <Picture 3>，圆心落在直轨上。自0秒起，<Subject 1> 沿 <Subject 2> 向右连续平移，运动方向严格水平并与轨道同轴；圆片直径、形状、红色填充与自身方向始终不变，灰轨与蓝框保持静止。运动为先快后慢的平滑减速：起步速度最明显，随后持续均匀衰减，期间无停顿、无跳变、无瞬移。圆片经过画面中部后继续滑向右侧，进入蓝框范围时速度已显著降低，最终在第8秒精确停稳，画面严格对齐 <Picture 2>：<Subject 1> 完全位于 <Subject 3> 蓝色方框内部，圆心仍在灰色直轨上。全程不增加任何物体，圆片不缩放、不旋转、不变形，画面无文字、无对白。\n\noverall_soundscape:\n全程仅能听到红色圆片沿灰色直轨滑动时发出的轻微摩擦声，细碎而连续；声音随圆片减速由相对清晰逐渐变弱，到第8秒圆片停稳时近乎消失。除此之外没有环境声、人声或其他物理声响。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_image",
+      "repeat": 1,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "c21d0379f4ac0170057df3388b8acbeeb06cdbaba5a889321bfb80b94ef608f6",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13644,
+                "completion_tokens": 4664,
+                "total_tokens": 18308
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 白色背景上的平面几何画面：一条细灰色水平直轨横贯画面中部，<Subject 1> 位于画面左侧且圆心压在轨道上，<Subject 3> 固定在右侧，轨道水平穿过其中心。\n<Picture 2>: last_frame @8.00s - 与首帧相同的白底、灰轨与右侧蓝框；<Subject 1> 已沿轨道平移到 <Subject 3> 内部正中，圆心仍与轨道重合，画面静止。\n<Subject 1> 是 <Picture 1>、<Picture 2>、<Picture 3> 中共同出现的纯红色实心圆片，无描边，直径固定，圆心始终落在灰色直轨上；全程只改变水平位置，不改变大小、形状与朝向。\n<Subject 2> 是三张图中一致的细灰色水平直线轨道，从画面左侧延伸至右侧，水平穿过 <Subject 3> 的中心，位置、长度与粗细保持不变。\n<Subject 3> 是三张图中一致的蓝色空心方框，位于画面右侧，只有均匀蓝色描边、内部透白；其位置与尺寸全程固定。\n<Picture 3> 是运动节奏参考图，显示 <Subject 1> 滑行到起点与蓝框中心之间约一半略多的中间位置；仅用于约束连续减速的滑动节奏与物体外观，不作为首帧或尾帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒平面几何动画：从 <Picture 1>（0.00秒）出发，<Subject 1> 沿固定的 <Subject 2> 向右连续平移并持续减速，途经 <Picture 3> 所示的中间位置，最终在8.00秒恰好停入固定不动的 <Subject 3> 正中央，严格收束于 <Picture 2>。全片为一个连续镜头，不新增物体、不瞬移、不变形，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒画面严格对齐首帧，白底、灰轨、左侧红色圆片与右侧蓝框的相对位置完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒画面严格对齐尾帧，红色圆片静止于蓝框正中，其余元素位置不变。\n<Picture 3> (运动节奏参考): weak_reference - 仅参考其所示的中间位置关系与减速滑动节奏，该图本身不作为固定帧锚点。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、直径、形状与朝向全程不变，仅水平位置连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的位置、长度、粗细与水平方向完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的位置、尺寸与描边外观完全保留并保持静止。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白背景，正面平视的固定构图，镜头全程静止，无任何切换。\n[Shot 1] 0.00秒，画面严格从 <Picture 1> 开始：细灰色直轨 <Subject 2> 水平横贯画面中部，纯红色实心圆片 <Subject 1> 位于画面左侧，圆心与轨道重合；右侧的蓝色空心方框 <Subject 3> 固定不动，轨道从其中心水平穿过。起步后，<Subject 1> 沿 <Subject 2> 向右做连续平移，初段速度较明显，随后速度持续、平滑地减小，呈现稳定的减速滑行；圆片始终保持原有大小、形状与朝向，圆心不离开轨道，没有任何跳跃、瞬移、拉伸或旋转。约在行程中段，圆片经过与 <Picture 3> 一致的中间位置，随后继续以越来越慢的速度接近蓝框并平稳进入框内。最后阶段，圆片以极慢的残余速度滑向蓝框中心，在8.00秒恰好停住，圆心与方框中心、灰色轨道完全重合，画面严格收束于 <Picture 2>。全程蓝框、灰轨与白底保持静止，不出现任何新增物体、文字或标识。伴随圆片移动的只有轻微而干燥的滑动摩擦声，音量随速度同步减弱，停稳时摩擦声消失。\n\noverall_soundscape:\n环境极度安静，无环境杂音；红色圆片沿灰色直轨滑动时发出轻微、干燥的摩擦声，声音随滑行速度持续减弱，圆片停稳后摩擦声完全消失。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 93.14
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 3,
+            "hybrid_video_count": 0
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 白色背景上的平面几何画面：一条细灰色水平直轨横贯画面中部，<Subject 1> 位于画面左侧且圆心压在轨道上，<Subject 3> 固定在右侧，轨道水平穿过其中心。\n<Picture 2>: last_frame @8.00s - 与首帧相同的白底、灰轨与右侧蓝框；<Subject 1> 已沿轨道平移到 <Subject 3> 内部正中，圆心仍与轨道重合，画面静止。\n<Subject 1> 是 <Picture 1>、<Picture 2>、<Picture 3> 中共同出现的纯红色实心圆片，无描边，直径固定，圆心始终落在灰色直轨上；全程只改变水平位置，不改变大小、形状与朝向。\n<Subject 2> 是三张图中一致的细灰色水平直线轨道，从画面左侧延伸至右侧，水平穿过 <Subject 3> 的中心，位置、长度与粗细保持不变。\n<Subject 3> 是三张图中一致的蓝色空心方框，位于画面右侧，只有均匀蓝色描边、内部透白；其位置与尺寸全程固定。\n<Picture 3> 是运动节奏参考图，显示 <Subject 1> 滑行到起点与蓝框中心之间约一半略多的中间位置；仅用于约束连续减速的滑动节奏与物体外观，不作为首帧或尾帧。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒平面几何动画：从 <Picture 1>（0.00秒）出发，<Subject 1> 沿固定的 <Subject 2> 向右连续平移并持续减速，途经 <Picture 3> 所示的中间位置，最终在8.00秒恰好停入固定不动的 <Subject 3> 正中央，严格收束于 <Picture 2>。全片为一个连续镜头，不新增物体、不瞬移、不变形，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒画面严格对齐首帧，白底、灰轨、左侧红色圆片与右侧蓝框的相对位置完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒画面严格对齐尾帧，红色圆片静止于蓝框正中，其余元素位置不变。\n<Picture 3> (运动节奏参考): weak_reference - 仅参考其所示的中间位置关系与减速滑动节奏，该图本身不作为固定帧锚点。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、直径、形状与朝向全程不变，仅水平位置连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色直轨的位置、长度、粗细与水平方向完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的位置、尺寸与描边外观完全保留并保持静止。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白背景，正面平视的固定构图，镜头全程静止，无任何切换。\n[Shot 1] 0.00秒，画面严格从 <Picture 1> 开始：细灰色直轨 <Subject 2> 水平横贯画面中部，纯红色实心圆片 <Subject 1> 位于画面左侧，圆心与轨道重合；右侧的蓝色空心方框 <Subject 3> 固定不动，轨道从其中心水平穿过。起步后，<Subject 1> 沿 <Subject 2> 向右做连续平移，初段速度较明显，随后速度持续、平滑地减小，呈现稳定的减速滑行；圆片始终保持原有大小、形状与朝向，圆心不离开轨道，没有任何跳跃、瞬移、拉伸或旋转。约在行程中段，圆片经过与 <Picture 3> 一致的中间位置，随后继续以越来越慢的速度接近蓝框并平稳进入框内。最后阶段，圆片以极慢的残余速度滑向蓝框中心，在8.00秒恰好停住，圆心与方框中心、灰色轨道完全重合，画面严格收束于 <Picture 2>。全程蓝框、灰轨与白底保持静止，不出现任何新增物体、文字或标识。伴随圆片移动的只有轻微而干燥的滑动摩擦声，音量随速度同步减弱，停稳时摩擦声消失。\n\noverall_soundscape:\n环境极度安静，无环境杂音；红色圆片沿灰色直轨滑动时发出轻微、干燥的摩擦声，声音随滑行速度持续减弱，圆片停稳后摩擦声完全消失。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_video",
+      "repeat": 0,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "a7e515181f0b69d361568c4c0b28b2decd6d52a048318240cf91f5fb4668e2b1",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13302,
+                "completion_tokens": 4358,
+                "total_tokens": 17660
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是红色圆片，来自 <Picture 1> 与 <Picture 2>，为纯红色正圆形，边缘略带像素锯齿，圆心落在灰轨上，运动中保持大小、形状与方向不变。\n<Subject 2> 是灰色直轨，来自 <Picture 1> 与 <Picture 2>，为一条水平、粗细均匀的灰色直线，横贯画面并从蓝色方框左右边框的中部穿过。\n<Subject 3> 是右侧固定的蓝色方框，来自 <Picture 1> 与 <Picture 2>，为纯蓝色空心正方形描边，位置在整段视频中固定不动，灰轨水平穿过其中心。\n<Picture 1> 是目标视频的实际首帧，白底上 <Subject 1> 位于画面左侧并套在 <Subject 2> 上，<Subject 3> 位于画面右侧。\n<Picture 2> 是目标视频的实际尾帧，<Subject 1> 已停在 <Subject 3> 的正中央，其余物体位置与首帧一致。\n<Video 1> 是滑动节奏参考，提供圆片向右平移、逐渐减速并最终滑入方框的时间节奏，不提供目标画面的物体外观与构图。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒白底平面几何动画：<Subject 1> 沿固定的 <Subject 2> 从 <Picture 1> 的左侧位置连续向右平移，按 <Video 1> 的滑动与减速节奏滑入全程静止的 <Subject 3>，最终在第8秒严格对齐 <Picture 2>，圆片停在方框中央；全程一个固定镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与运动方向全程保持不变，仅水平位置连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度、粗细与颜色全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的位置、尺寸、描边粗细与颜色全程固定。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧与 <Picture 1> 严格对齐，物体外观与相对位置完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8秒尾帧与 <Picture 2> 严格对齐，圆片精确停在方框中央。\n<Video 1> (sliding rhythm reference): weak_reference - 仅参考其向右滑动、逐渐减速并滑入方框的节奏，不沿用其画面尺寸、色彩偏差或任何视觉元素。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白背景，色彩平涂，无阴影、无渐变，镜头与画面边界全程固定。\n[Shot 1] 0秒时画面严格从 <Picture 1> 开始：白色背景上，<Subject 2> 灰色水平直轨横贯画面，<Subject 1> 红色圆片位于画面左侧、圆心落在灰轨上，<Subject 3> 蓝色空心方框固定在画面右侧，灰轨水平穿过方框左右边框的中部。圆片随即沿灰轨向正右方连续平移，起步顺滑、速度较快，运动节奏参照 <Video 1>：0至约6秒，圆片以接近均匀的速度平稳滑过灰轨中段，红色外形、直径和朝向始终不变，灰轨与蓝色方框保持完全静止。约第6秒，圆片右缘接近方框左边框，随后持续减速并进入方框内部，减速感逐渐增强但运动从不中断，没有任何瞬移、跳动、变形或额外物体出现。6至8秒，圆片在方框内继续缓滑，位置逐步趋近方框中心。第8秒画面严格收束于 <Picture 2>：<Subject 1> 完全静止在 <Subject 3> 的正中央，圆心仍位于灰轨上，蓝框与灰轨位置和首帧一致。全程伴随轻微、低频的滑动摩擦声，声音随圆片起步出现，随减速逐渐变轻，并在圆片停稳时同步消失。\n\noverall_soundscape:\n全程空间安静、无环境杂音；唯一的声音是红色圆片沿灰色直轨滑动时发出的轻微低频摩擦声，声音随滑动持续，音量随圆片减速而逐渐减弱，在第8秒圆片停稳时同步消失。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 96.969
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是红色圆片，来自 <Picture 1> 与 <Picture 2>，为纯红色正圆形，边缘略带像素锯齿，圆心落在灰轨上，运动中保持大小、形状与方向不变。\n<Subject 2> 是灰色直轨，来自 <Picture 1> 与 <Picture 2>，为一条水平、粗细均匀的灰色直线，横贯画面并从蓝色方框左右边框的中部穿过。\n<Subject 3> 是右侧固定的蓝色方框，来自 <Picture 1> 与 <Picture 2>，为纯蓝色空心正方形描边，位置在整段视频中固定不动，灰轨水平穿过其中心。\n<Picture 1> 是目标视频的实际首帧，白底上 <Subject 1> 位于画面左侧并套在 <Subject 2> 上，<Subject 3> 位于画面右侧。\n<Picture 2> 是目标视频的实际尾帧，<Subject 1> 已停在 <Subject 3> 的正中央，其余物体位置与首帧一致。\n<Video 1> 是滑动节奏参考，提供圆片向右平移、逐渐减速并最终滑入方框的时间节奏，不提供目标画面的物体外观与构图。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒白底平面几何动画：<Subject 1> 沿固定的 <Subject 2> 从 <Picture 1> 的左侧位置连续向右平移，按 <Video 1> 的滑动与减速节奏滑入全程静止的 <Subject 3>，最终在第8秒严格对齐 <Picture 2>，圆片停在方框中央；全程一个固定镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与运动方向全程保持不变，仅水平位置连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的位置、长度、粗细与颜色全程不变。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 右侧蓝色空心方框的位置、尺寸、描边粗细与颜色全程固定。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧与 <Picture 1> 严格对齐，物体外观与相对位置完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8秒尾帧与 <Picture 2> 严格对齐，圆片精确停在方框中央。\n<Video 1> (sliding rhythm reference): weak_reference - 仅参考其向右滑动、逐渐减速并滑入方框的节奏，不沿用其画面尺寸、色彩偏差或任何视觉元素。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格，纯白背景，色彩平涂，无阴影、无渐变，镜头与画面边界全程固定。\n[Shot 1] 0秒时画面严格从 <Picture 1> 开始：白色背景上，<Subject 2> 灰色水平直轨横贯画面，<Subject 1> 红色圆片位于画面左侧、圆心落在灰轨上，<Subject 3> 蓝色空心方框固定在画面右侧，灰轨水平穿过方框左右边框的中部。圆片随即沿灰轨向正右方连续平移，起步顺滑、速度较快，运动节奏参照 <Video 1>：0至约6秒，圆片以接近均匀的速度平稳滑过灰轨中段，红色外形、直径和朝向始终不变，灰轨与蓝色方框保持完全静止。约第6秒，圆片右缘接近方框左边框，随后持续减速并进入方框内部，减速感逐渐增强但运动从不中断，没有任何瞬移、跳动、变形或额外物体出现。6至8秒，圆片在方框内继续缓滑，位置逐步趋近方框中心。第8秒画面严格收束于 <Picture 2>：<Subject 1> 完全静止在 <Subject 3> 的正中央，圆心仍位于灰轨上，蓝框与灰轨位置和首帧一致。全程伴随轻微、低频的滑动摩擦声，声音随圆片起步出现，随减速逐渐变轻，并在圆片停稳时同步消失。\n\noverall_soundscape:\n全程空间安静、无环境杂音；唯一的声音是红色圆片沿灰色直轨滑动时发出的轻微低频摩擦声，声音随滑动持续，音量随圆片减速而逐渐减弱，在第8秒圆片停稳时同步消失。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_video",
+      "repeat": 0,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "b55730861d3dd77c96868a71a0dfb6b0e4e643b600bf402d909cc8399f194a3f",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13622,
+                "completion_tokens": 3373,
+                "total_tokens": 16995
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上的平面几何构图：一条灰色水平直轨横贯画面，红色实心圆片位于左侧、圆心被直轨穿过，右侧固定一个蓝色空心方框，直轨水平穿过方框中线。\n<Picture 2>: last_frame @8.00s - 与首帧相同的白底、灰色直轨与右侧蓝色空心方框；红色实心圆片已平移至方框内部正中，圆心仍落在直轨上。\n<Subject 1> 是来自 <Picture 1> 与 <Picture 2> 的红色实心圆片，其大小、形状与颜色在全程保持不变。\n<Subject 2> 是来自 <Picture 1> 与 <Picture 2> 的蓝色空心方框，线宽一致，固定在画面右侧不动。\n<Subject 3> 是来自 <Picture 1> 与 <Picture 2> 的灰色水平直轨，平直贯穿画面，位置与粗细恒定。\n<Video 1> 仅作为圆片向右滑动并减速停止的节奏参考，不提供首尾帧，也不增减任何物体。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒平面几何动画，从 <Picture 1> 严格起始，在 <Picture 2> 严格结束；<Subject 1> 沿固定的 <Subject 3> 向右连续平移并逐渐减速，最终停在 <Subject 2> 内正中，<Subject 2>、<Subject 3> 与白底全程保持不动；<Video 1> 只提供连续滑动、先快后慢的减速节奏参考。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒画面与首帧严格一致，白底、灰轨、左侧红圆、右侧蓝框的相对位置完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒画面与尾帧严格一致，红圆停在蓝框内正中，圆心位于灰轨上。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的直径、形状、颜色与朝向全程不变，仅水平位置发生改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色方框的尺寸、线宽、颜色与右侧固定位置完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的位置、长度、粗细与水平方向全程不变。\n<Video 1> (sliding rhythm): weak_reference - 仅参考其连续右移、先快后慢并减速停止的节奏，不复制其时长、构图尺寸或任何附加效果。\n\ndetailed_description:\n目标视频为极简平面几何动画风格，纯白背景，无透视、无阴影，色彩平涂，机位固定。\n[Shot 1] 0.000秒，画面严格从 <Picture 1> 开始：纯白背景上，<Subject 3> 灰色水平直轨横贯画面，<Subject 1> 红色实心圆片位于画面左侧，圆心被直轨穿过；<Subject 2> 蓝色空心方框固定在画面右侧，直轨水平穿过方框中线。镜头全程保持静止的正面平视构图，不推拉、不摇移、不变焦。圆片随即沿灰轨向右做连续平移，起步较快，0至3秒内以偏快速度平滑越过画面中段，圆片直径、形状与红色始终不变，灰轨与蓝框也纹丝不动。3秒后圆片开始明显减速，单位时间位移逐段变小；约5.8秒时圆片右缘贴近蓝框左边，随后平滑进入框内，经过蓝框边线时不被遮挡变形、不发生弹跳。6.5至7.5秒，圆片以很慢的速度继续向框内中心靠拢，边缘与蓝框始终保持清晰的平面图层关系。最后0.5秒圆片近乎滑行收尾，在8.000秒恰好停稳，画面严格对齐 <Picture 2>：红圆位于蓝框内正中，圆心仍落在灰色直轨上。全程无任何瞬移、变形、旋转或新增物体。伴随圆片移动的只有轻微滑动摩擦声，声音随速度同步减弱，停稳时消失。\n\noverall_soundscape:\n纯白平面场景无环境底噪；全程仅有圆片沿灰轨滑动的轻微摩擦声，初段较明显，随圆片减速逐渐变轻，8.00秒停稳时完全消失，无任何人声或其他物理声响。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 68.265
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 2,
+            "hybrid_video_count": 1
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景上的平面几何构图：一条灰色水平直轨横贯画面，红色实心圆片位于左侧、圆心被直轨穿过，右侧固定一个蓝色空心方框，直轨水平穿过方框中线。\n<Picture 2>: last_frame @8.00s - 与首帧相同的白底、灰色直轨与右侧蓝色空心方框；红色实心圆片已平移至方框内部正中，圆心仍落在直轨上。\n<Subject 1> 是来自 <Picture 1> 与 <Picture 2> 的红色实心圆片，其大小、形状与颜色在全程保持不变。\n<Subject 2> 是来自 <Picture 1> 与 <Picture 2> 的蓝色空心方框，线宽一致，固定在画面右侧不动。\n<Subject 3> 是来自 <Picture 1> 与 <Picture 2> 的灰色水平直轨，平直贯穿画面，位置与粗细恒定。\n<Video 1> 仅作为圆片向右滑动并减速停止的节奏参考，不提供首尾帧，也不增减任何物体。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒平面几何动画，从 <Picture 1> 严格起始，在 <Picture 2> 严格结束；<Subject 1> 沿固定的 <Subject 3> 向右连续平移并逐渐减速，最终停在 <Subject 2> 内正中，<Subject 2>、<Subject 3> 与白底全程保持不动；<Video 1> 只提供连续滑动、先快后慢的减速节奏参考。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0.00秒画面与首帧严格一致，白底、灰轨、左侧红圆、右侧蓝框的相对位置完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒画面与尾帧严格一致，红圆停在蓝框内正中，圆心位于灰轨上。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的直径、形状、颜色与朝向全程不变，仅水平位置发生改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色方框的尺寸、线宽、颜色与右侧固定位置完全保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的位置、长度、粗细与水平方向全程不变。\n<Video 1> (sliding rhythm): weak_reference - 仅参考其连续右移、先快后慢并减速停止的节奏，不复制其时长、构图尺寸或任何附加效果。\n\ndetailed_description:\n目标视频为极简平面几何动画风格，纯白背景，无透视、无阴影，色彩平涂，机位固定。\n[Shot 1] 0.000秒，画面严格从 <Picture 1> 开始：纯白背景上，<Subject 3> 灰色水平直轨横贯画面，<Subject 1> 红色实心圆片位于画面左侧，圆心被直轨穿过；<Subject 2> 蓝色空心方框固定在画面右侧，直轨水平穿过方框中线。镜头全程保持静止的正面平视构图，不推拉、不摇移、不变焦。圆片随即沿灰轨向右做连续平移，起步较快，0至3秒内以偏快速度平滑越过画面中段，圆片直径、形状与红色始终不变，灰轨与蓝框也纹丝不动。3秒后圆片开始明显减速，单位时间位移逐段变小；约5.8秒时圆片右缘贴近蓝框左边，随后平滑进入框内，经过蓝框边线时不被遮挡变形、不发生弹跳。6.5至7.5秒，圆片以很慢的速度继续向框内中心靠拢，边缘与蓝框始终保持清晰的平面图层关系。最后0.5秒圆片近乎滑行收尾，在8.000秒恰好停稳，画面严格对齐 <Picture 2>：红圆位于蓝框内正中，圆心仍落在灰色直轨上。全程无任何瞬移、变形、旋转或新增物体。伴随圆片移动的只有轻微滑动摩擦声，声音随速度同步减弱，停稳时消失。\n\noverall_soundscape:\n纯白平面场景无环境底噪；全程仅有圆片沿灰轨滑动的轻微摩擦声，初段较明显，随圆片减速逐渐变轻，8.00秒停稳时完全消失，无任何人声或其他物理声响。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_video",
+      "repeat": 1,
+      "group": "Ref2VA_control",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "746e73de507616d604a48ae841bcd7bd0674795ee47ed4516c75de4104b52b35",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13302,
+                "completion_tokens": 4048,
+                "total_tokens": 17350
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Subject 1> 是来自 <Picture 1> 与 <Picture 2> 的红色圆片，纯红色填充的正圆形，边缘带有轻微像素锯齿，直径与外形在全程保持不变，仅沿轨道改变位置。\n<Subject 2> 是来自 <Picture 1> 与 <Picture 2> 的蓝色空心方框，蓝色描边粗细均匀，固定在画面右侧，灰色直轨水平穿过其左右边框中点。\n<Subject 3> 是来自 <Picture 1> 与 <Picture 2> 的灰色直轨，一条粗细均匀、横贯画面的水平直线，位置全程固定。\n<Picture 1> 是 [Shot 1] 的实际首帧，0秒时红色圆片位于画面左侧，圆心落在灰色直轨上。\n<Picture 2> 是 [Shot 1] 的实际尾帧，8秒时红色圆片停在右侧蓝色方框的内部中央。\n<Video 1> 仅作为滑动节奏参考，提供圆片持续向右平移并逐渐减速的时间结构，不复制其画面末段的彩色闪烁等效果。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒的白底平面几何动画，以 <Picture 1> 为0秒实际首帧、<Picture 2> 为8秒实际尾帧：<Subject 1> 沿固定的 <Subject 3> 从画面左侧连续向右平移，按照 <Video 1> 的减速节奏逐渐变慢，最终停在固定的 <Subject 2> 内部中央；全程为一个连续镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与像素化边缘全程保持不变，仅位置沿直轨平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的颜色、线宽、尺寸与右侧固定位置全程保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的粗细、长度与位置全程固定。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧严格对齐，白底、灰轨、左侧红圆片与右侧蓝框的构图完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8秒尾帧严格对齐，红圆片准确停在蓝框内部中央。\n<Video 1> (sliding rhythm): weak_reference - 仅借鉴圆片向右连续平移并逐渐减速的节奏，不复制其末段彩色闪烁及方框变动等画面效果。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格：纯白背景，颜色平涂，无阴影、无渐变、无透视，镜头全程完全固定。\n[Shot 1] 0秒时画面严格对齐 <Picture 1>：一条粗细均匀的灰色水平直轨 <Subject 3> 横贯白色画面，<Subject 2> 蓝色空心方框固定在右侧，直轨水平穿过其左右边框中点；<Subject 1> 红色正圆圆片位于画面左侧，圆心落在直轨上，边缘带有与参考图一致的轻微像素锯齿。起幅后圆片立即沿直轨向右连续平移，运动遵循 <Video 1> 的减速节奏：前段速度较快且平稳，圆片顺滑滑过轨道中段的空白区域；越过画面中部后速度持续、均匀地降低，全程无停顿、跳变或瞬移。约6秒后圆片接近蓝色方框左边框，随后保持同一减速趋势滑入框内；圆片始终保持水平，尺寸不变、方向不变，灰色直轨与蓝色方框也始终固定不动。最后阶段圆片以极慢速度趋近方框中心，滑动摩擦随之放缓；至8.000秒时圆片圆心与方框中心重合，运动完全停止，画面严格对齐 <Picture 2>。全程仅一个连续镜头，无剪切、无文字、无对白；圆片移动时伴有轻微滑动摩擦声，声音随减速逐渐变轻，停定时消失。\n\noverall_soundscape:\n纯白画面的环境几乎无声，仅红色圆片沿灰色直轨滑动时发出轻微、连续、均匀的摩擦声；摩擦声随圆片移动速度自然起伏，减速时逐渐变轻，圆片在8秒停定的瞬间完全消失，全程无人声或其他声响。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 94.141
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Subject 1> 是来自 <Picture 1> 与 <Picture 2> 的红色圆片，纯红色填充的正圆形，边缘带有轻微像素锯齿，直径与外形在全程保持不变，仅沿轨道改变位置。\n<Subject 2> 是来自 <Picture 1> 与 <Picture 2> 的蓝色空心方框，蓝色描边粗细均匀，固定在画面右侧，灰色直轨水平穿过其左右边框中点。\n<Subject 3> 是来自 <Picture 1> 与 <Picture 2> 的灰色直轨，一条粗细均匀、横贯画面的水平直线，位置全程固定。\n<Picture 1> 是 [Shot 1] 的实际首帧，0秒时红色圆片位于画面左侧，圆心落在灰色直轨上。\n<Picture 2> 是 [Shot 1] 的实际尾帧，8秒时红色圆片停在右侧蓝色方框的内部中央。\n<Video 1> 仅作为滑动节奏参考，提供圆片持续向右平移并逐渐减速的时间结构，不复制其画面末段的彩色闪烁等效果。\n\nsummary:\n[keyframe completion + reference generation] 目标视频是一段8秒的白底平面几何动画，以 <Picture 1> 为0秒实际首帧、<Picture 2> 为8秒实际尾帧：<Subject 1> 沿固定的 <Subject 3> 从画面左侧连续向右平移，按照 <Video 1> 的减速节奏逐渐变慢，最终停在固定的 <Subject 2> 内部中央；全程为一个连续镜头，无对白、文字与音乐，仅有轻微滑动摩擦声。\n\nretention_analysis:\n<Subject 1> (appears in [Shot 1]): fully_preserved - 红色圆片的颜色、正圆外形、尺寸与像素化边缘全程保持不变，仅位置沿直轨平移。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的颜色、线宽、尺寸与右侧固定位置全程保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色水平直轨的粗细、长度与位置全程固定。\n<Picture 1> ([Shot 1] first frame): fully_preserved - 0秒首帧严格对齐，白底、灰轨、左侧红圆片与右侧蓝框的构图完全保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8秒尾帧严格对齐，红圆片准确停在蓝框内部中央。\n<Video 1> (sliding rhythm): weak_reference - 仅借鉴圆片向右连续平移并逐渐减速的节奏，不复制其末段彩色闪烁及方框变动等画面效果。\n\ndetailed_description:\n目标视频采用极简平面几何动画风格：纯白背景，颜色平涂，无阴影、无渐变、无透视，镜头全程完全固定。\n[Shot 1] 0秒时画面严格对齐 <Picture 1>：一条粗细均匀的灰色水平直轨 <Subject 3> 横贯白色画面，<Subject 2> 蓝色空心方框固定在右侧，直轨水平穿过其左右边框中点；<Subject 1> 红色正圆圆片位于画面左侧，圆心落在直轨上，边缘带有与参考图一致的轻微像素锯齿。起幅后圆片立即沿直轨向右连续平移，运动遵循 <Video 1> 的减速节奏：前段速度较快且平稳，圆片顺滑滑过轨道中段的空白区域；越过画面中部后速度持续、均匀地降低，全程无停顿、跳变或瞬移。约6秒后圆片接近蓝色方框左边框，随后保持同一减速趋势滑入框内；圆片始终保持水平，尺寸不变、方向不变，灰色直轨与蓝色方框也始终固定不动。最后阶段圆片以极慢速度趋近方框中心，滑动摩擦随之放缓；至8.000秒时圆片圆心与方框中心重合，运动完全停止，画面严格对齐 <Picture 2>。全程仅一个连续镜头，无剪切、无文字、无对白；圆片移动时伴有轻微滑动摩擦声，声音随减速逐渐变轻，停定时消失。\n\noverall_soundscape:\n纯白画面的环境几乎无声，仅红色圆片沿灰色直轨滑动时发出轻微、连续、均匀的摩擦声；摩擦声随圆片移动速度自然起伏，减速时逐渐变轻，圆片在8秒停定的瞬间完全消失，全程无人声或其他声响。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Ref2VA",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending"
+        ],
+        "detected_shots": 1
+      }
+    },
+    {
+      "case": "both_video",
+      "repeat": 1,
+      "group": "Hybrid",
+      "requests": [
+        {
+          "kind": "initial",
+          "message_sha256": "36f01ae25a7ccac6fbeeeb77a4eee424e3a1e5717ad4968c36df4699d85b5dff",
+          "model": "bytedance/doubao-seed-evolving",
+          "attempts": [
+            {
+              "parameters": {
+                "model": "bytedance/doubao-seed-evolving",
+                "stream": true,
+                "temperature": 0.7
+              },
+              "status": 200,
+              "response_model": "bytedance/doubao-seed-evolving",
+              "usage": {
+                "prompt_tokens": 13622,
+                "completion_tokens": 4840,
+                "total_tokens": 18462
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景，一条灰色水平直轨横贯画面中部，红色实心圆片位于左侧且圆心落在轨道上，右侧固定一个蓝色空心方框，轨道从方框左右竖边中点穿过。\n<Picture 2>: last_frame @8.00s - 白底、灰色直轨与右侧蓝色空心方框的位置完全不变，红色圆片已沿轨道移入方框内部，圆心与方框中心重合。\n<Subject 1> 是红色实心圆片，外观取自<Picture 1>与<Picture 2>，正圆形、纯红填充、边缘清晰，运动时保持大小与形状不变。\n<Subject 2> 是蓝色空心方框，外观取自<Picture 1>与<Picture 2>，蓝色描边、内部留白，固定在画面右侧且位置不变。\n<Subject 3> 是灰色水平直轨，外观取自<Picture 1>与<Picture 2>，纤细平直，横贯画面并穿过方框左右边中点。\n<Video 1> 是节奏参考视频，其中红色圆片沿灰轨向右滑动、持续减速并最终进入方框；目标视频只参考这一滑动节奏，不沿用其画面比例与物体位置。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒平面几何动画，以<Picture 1>作为0.00秒首帧、<Picture 2>作为8.00秒尾帧，<Subject 1>红色圆片沿<Subject 3>灰色直轨向固定在右侧的<Subject 2>蓝色方框连续平移并平滑减速，最终停在方框中心；<Video 1>仅提供滑动减速的节奏参考。全程一个固定镜头，无对白、文字与音乐，仅有轻微摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 白底、灰色直轨、左侧红色圆片与右侧蓝色方框的构图、颜色和位置在0.00秒严格保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒时轨道与方框位置不变，红色圆片准确停在方框中心，与尾帧严格对齐。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 圆片的正圆形状、纯红填充、尺寸和水平朝向全程不变，仅位置沿轨道连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的外观与右侧固定位置全程保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的形态、位置与贯穿方框的关系全程保留。\n<Video 1> (slowing rhythm): weak_reference - 仅保留圆片向右滑动并持续减速的节奏，不沿用参考视频的构图、物体尺寸与具体位置。\n\ndetailed_description:\n平面几何动画风格，纯白背景，画面干净无阴影、无渐变，所有图形边缘锐利清晰。\n[Shot 1] 镜头固定不动，画面从<Picture 1>开始：白色背景中央横贯一条<Subject 3>灰色水平直轨；<Subject 2>蓝色空心方框固定在画面右侧，直轨从方框左右两条竖边的中点水平穿过，方框位置在全程中保持不变；<Subject 1>红色实心圆片位于画面左侧，圆心落在直轨上。0秒起，圆片沿直轨向右侧做连续平移，滑动节奏参考<Video 1>：起步阶段速度较快，随后持续、平滑地减速。整个过程中圆片始终保持正圆形状、原有尺寸、纯红填充与水平朝向，圆心不离开轨道，没有瞬移、跳动、旋转或变形，画面中也不出现任何新增物体。约第6秒，圆片右缘接近蓝色方框左边，随后减速感进一步增强，缓慢滑入方框内部；临近8秒时仅以极低速度移动，最终在00:08.00恰好停稳，圆心与方框中心重合，画面与<Picture 2>严格对齐。伴随移动的是轻微滑动摩擦声，随速度减慢而渐弱，停稳时消失。\n\noverall_soundscape:\n全程空间安静，无环境音与人声；唯一声响是圆片沿轨道移动时轻微的滑动摩擦声，声音随移动速度由略可闻逐渐变弱，圆片在8.00秒停稳时摩擦声同步消失。\n\nnon_diegetic_music:\nN/A",
+          "elapsed_seconds": 95.812
+        }
+      ],
+      "progress": [
+        {
+          "stage": "input_validated",
+          "asset_count": 3,
+          "creation_metadata": {
+            "h3_task": "Hybrid",
+            "h3_family": "reference_six",
+            "hybrid_revision": "1.0.0",
+            "hybrid_picture_count": 2,
+            "hybrid_video_count": 1
+          }
+        },
+        {
+          "stage": "media_prepared",
+          "asset_count": 3
+        },
+        {
+          "stage": "quality_checked",
+          "quality_metadata": {
+            "quality_mode": "质量纠正（最多追加1次） / Repair",
+            "correction_calls": 0,
+            "protocol_edits": 0,
+            "result": "checked",
+            "issue_codes": [],
+            "unchecked": [
+              "physical_plausibility",
+              "rendered_video_quality",
+              "semantic_ownership_wait_and_ending",
+              "hybrid_pixel_and_transition_semantics"
+            ]
+          }
+        },
+        {
+          "stage": "llm_completed",
+          "attempts": 1
+        },
+        {
+          "stage": "output_finalized"
+        }
+      ],
+      "outcome": "success",
+      "output": "subject_definitions:\n<Picture 1>: first_frame @0.00s - 纯白背景，一条灰色水平直轨横贯画面中部，红色实心圆片位于左侧且圆心落在轨道上，右侧固定一个蓝色空心方框，轨道从方框左右竖边中点穿过。\n<Picture 2>: last_frame @8.00s - 白底、灰色直轨与右侧蓝色空心方框的位置完全不变，红色圆片已沿轨道移入方框内部，圆心与方框中心重合。\n<Subject 1> 是红色实心圆片，外观取自<Picture 1>与<Picture 2>，正圆形、纯红填充、边缘清晰，运动时保持大小与形状不变。\n<Subject 2> 是蓝色空心方框，外观取自<Picture 1>与<Picture 2>，蓝色描边、内部留白，固定在画面右侧且位置不变。\n<Subject 3> 是灰色水平直轨，外观取自<Picture 1>与<Picture 2>，纤细平直，横贯画面并穿过方框左右边中点。\n<Video 1> 是节奏参考视频，其中红色圆片沿灰轨向右滑动、持续减速并最终进入方框；目标视频只参考这一滑动节奏，不沿用其画面比例与物体位置。\n\nsummary:\n[keyframe completion + reference generation] 目标视频为8秒平面几何动画，以<Picture 1>作为0.00秒首帧、<Picture 2>作为8.00秒尾帧，<Subject 1>红色圆片沿<Subject 3>灰色直轨向固定在右侧的<Subject 2>蓝色方框连续平移并平滑减速，最终停在方框中心；<Video 1>仅提供滑动减速的节奏参考。全程一个固定镜头，无对白、文字与音乐，仅有轻微摩擦声。\n\nretention_analysis:\n<Picture 1> ([Shot 1] first frame): fully_preserved - 白底、灰色直轨、左侧红色圆片与右侧蓝色方框的构图、颜色和位置在0.00秒严格保留。\n<Picture 2> ([Shot 1] last frame): fully_preserved - 8.00秒时轨道与方框位置不变，红色圆片准确停在方框中心，与尾帧严格对齐。\n<Subject 1> (appears in [Shot 1]): fully_preserved - 圆片的正圆形状、纯红填充、尺寸和水平朝向全程不变，仅位置沿轨道连续改变。\n<Subject 2> (appears in [Shot 1]): fully_preserved - 蓝色空心方框的外观与右侧固定位置全程保留。\n<Subject 3> (appears in [Shot 1]): fully_preserved - 灰色直轨的形态、位置与贯穿方框的关系全程保留。\n<Video 1> (slowing rhythm): weak_reference - 仅保留圆片向右滑动并持续减速的节奏，不沿用参考视频的构图、物体尺寸与具体位置。\n\ndetailed_description:\n平面几何动画风格，纯白背景，画面干净无阴影、无渐变，所有图形边缘锐利清晰。\n[Shot 1] 镜头固定不动，画面从<Picture 1>开始：白色背景中央横贯一条<Subject 3>灰色水平直轨；<Subject 2>蓝色空心方框固定在画面右侧，直轨从方框左右两条竖边的中点水平穿过，方框位置在全程中保持不变；<Subject 1>红色实心圆片位于画面左侧，圆心落在直轨上。0秒起，圆片沿直轨向右侧做连续平移，滑动节奏参考<Video 1>：起步阶段速度较快，随后持续、平滑地减速。整个过程中圆片始终保持正圆形状、原有尺寸、纯红填充与水平朝向，圆心不离开轨道，没有瞬移、跳动、旋转或变形，画面中也不出现任何新增物体。约第6秒，圆片右缘接近蓝色方框左边，随后减速感进一步增强，缓慢滑入方框内部；临近8秒时仅以极低速度移动，最终在00:08.00恰好停稳，圆心与方框中心重合，画面与<Picture 2>严格对齐。伴随移动的是轻微滑动摩擦声，随速度减慢而渐弱，停稳时消失。\n\noverall_soundscape:\n全程空间安静，无环境音与人声；唯一声响是圆片沿轨道移动时轻微的滑动摩擦声，声音随移动速度由略可闻逐渐变弱，圆片在8.00秒停稳时摩擦声同步消失。\n\nnon_diegetic_music:\nN/A",
+      "report": {
+        "schema_version": "t8-h3-quality/v1",
+        "mode": "Hybrid",
+        "issues": [],
+        "deterministic_status": "passed_checked_scope",
+        "language_status": "match",
+        "checked": [
+          "schema",
+          "timeline",
+          "alignment",
+          "protected_text",
+          "reference_syntax",
+          "vocal_layers"
+        ],
+        "unchecked": [
+          "physical_plausibility",
+          "rendered_video_quality",
+          "semantic_ownership_wait_and_ending",
+          "hybrid_pixel_and_transition_semantics"
+        ],
+        "detected_shots": 1
+      }
+    }
+  ],
+  "initial_calls": 24,
+  "correction_calls": 0,
+  "http_chat_attempts": 24,
+  "uploads": 56
+}

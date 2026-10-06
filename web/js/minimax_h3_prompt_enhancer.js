@@ -77,6 +77,7 @@ const TASK_TYPE_LABELS = {
     FL2VA: "FL2VA（首尾帧生音视频）",
     L2VA: "L2VA（尾帧图生音视频）",
     Ref2VA: "Ref2VA（参考图/视频生音视频）",
+    Hybrid: "Hybrid（关键帧+参考混合生成）",
 };
 const LEGACY_UI_VALUES = new Set(["展开", "收起", "提交当前工作流", "打开 Seedance 注册页面"]);
 const API_KEY_PATTERN = /^sk-[A-Za-z0-9_-]{16,}$/;
@@ -628,6 +629,7 @@ app.registerExtension({
                 addMvPresetBehavior(this, creativePresetWidget, promptWidget, referenceContextWidget, constraintsWidget, referenceTemplateWidget);
             }
             this.t8NormalizePromptOptions = () => {
+                if (["hybrid", "Hybrid — 关键帧+参考混合生成"].includes(taskTypeWidget?.value)) taskTypeWidget.value = TASK_TYPE_LABELS.Hybrid;
                 if (TASK_TYPE_LABELS[taskTypeWidget?.value]) taskTypeWidget.value = TASK_TYPE_LABELS[taskTypeWidget.value];
                 normalizeChoice(taskTypeWidget, Object.values(TASK_TYPE_LABELS), TASK_TYPE_LABELS.T2VA);
                 normalizeChoice(shotCountWidget, SHOT_COUNT_OPTIONS, AUTO_SHOT_COUNT);

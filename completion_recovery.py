@@ -106,6 +106,13 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     # partial/arbitrary payload or a source path from the connected config.
     if values.get("emotion_strategy") == "tudou_emotion" and values.get("emotion_revision") == "1.0.0":
         result.update({"emotion_strategy": "tudou_emotion", "emotion_revision": "1.0.0"})
+    hybrid_keys = ("h3_task", "h3_family", "hybrid_revision", "hybrid_picture_count", "hybrid_video_count")
+    pictures, videos = values.get("hybrid_picture_count"), values.get("hybrid_video_count")
+    if (values.get("h3_task") == "Hybrid" and values.get("h3_family") == "reference_six"
+            and values.get("hybrid_revision") == "1.0.0"
+            and type(pictures) is int and 1 <= pictures <= 11
+            and type(videos) is int and 0 <= videos <= 3):
+        result.update({key: values[key] for key in hybrid_keys})
     return result
 
 
@@ -123,10 +130,12 @@ def safe_quality_metadata(values: Any) -> dict[str, Any]:
              "h3_duplicate_definition", "h3_retention_missing", "h3_vocal_language", "h3_missing_speaker",
              "h3_speaker_identity", "semantic_exact_text_missing", "h3_extra_dialogue", "h3_visible_text_changed",
              "h3_dialogue_source_changed", "h3_vocal_wrong_layer", "h3_diegetic_music_layer", "h3_descriptive_language",
-             "relay_invalid_authoring", "seedance_h3_protocol_leak"}
+             "relay_invalid_authoring", "seedance_h3_protocol_leak", "h3_hybrid_inputs",
+             "h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "h3_hybrid_summary"}
     unchecked = {"physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending",
                  "descriptive_language", "alignment_duration", "shot_count", "relay_compilation",
-                 "relay_semantic_equivalence", "contract_check", "vocal_language"}
+                 "relay_semantic_equivalence", "contract_check", "vocal_language",
+                 "hybrid_pixel_and_transition_semantics", "hybrid_resolved_asset_roles"}
     result = {}
     for key, vocabulary in (("result", results), ("quality_mode", modes)):
         if isinstance(values.get(key), str) and values[key] in vocabulary:

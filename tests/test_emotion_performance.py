@@ -233,7 +233,14 @@ class EmotionPerformanceTests(unittest.TestCase):
         for path in paths:
             if path.endswith((".json", ".js")):
                 old = subprocess.check_output(["git", "show", f"{BASELINE}:{path}"], cwd=GIT_ROOT).replace(b"\r\n", b"\n")
-                self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"), old, path)
+                current=(ROOT / path).read_bytes().replace(b"\r\n", b"\n")
+                if path == "web/js/minimax_h3_prompt_enhancer.js":
+                    for addition in ('    Hybrid: "Hybrid（关键帧+参考混合生成）",\n',
+                                     '                if (["hybrid", "Hybrid — 关键帧+参考混合生成"].includes(taskTypeWidget?.value)) taskTypeWidget.value = TASK_TYPE_LABELS.Hybrid;\n'):
+                        encoded=addition.encode("utf8")
+                        self.assertEqual(current.count(encoded),1)
+                        current=current.replace(encoded,b"")
+                self.assertEqual(current, old, path)
 
 
 if __name__ == "__main__":

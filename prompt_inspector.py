@@ -85,6 +85,8 @@ def _h3_sections(text: str) -> tuple[dict[str, str], list[str]]:
 
 def _h3_required_fields(sections: dict[str, str], task_intent: str) -> tuple[str, ...]:
     task = str(task_intent or "").strip()
+    if task in {"Hybrid", "hybrid", "Hybrid（关键帧+参考混合生成）", "Hybrid — 关键帧+参考混合生成"}:
+        return H3_REFERENCE_FIELDS
     explicit = re.match(r"^(Ref2VA|T2VA|I2VA|FL2VA|L2VA)\b", task, re.IGNORECASE)
     if explicit:
         return H3_REFERENCE_FIELDS if explicit.group(1).lower() == "ref2va" else H3_FIELDS

@@ -13,6 +13,12 @@
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## 新增：H3 Hybrid 关键帧＋参考混合
+
+在原 H3 节点的「生成类型」选择 **Hybrid**，连接首帧和/或尾帧，再连接至少一个额外参考图或视频。首尾锁定目标边界，额外素材提供外观、身份或指定运动参考；采用 H3 六段参考格式，支持原有四种渠道、本地 GGUF 与 Prompt Relay。旧五种模式、默认 T2VA、38 个保存字段和旧工作流不变。
+
+每槽单图，最多 9 张额外参考图＋2 张关键帧、3 个视频；节点不限制视频时长，不分析音轨。需要音频混合请用 H3 音频插件。结构检查不等于像素/成片验收。[使用说明与边界](docs/h3-hybrid.md) · 示例：[首帧＋图](example_workflows/h3_hybrid_first_image.json) / [尾帧＋图](example_workflows/h3_hybrid_last_image.json) / [首尾＋视频](example_workflows/h3_hybrid_first_last_video.json)。
+
 ## 新增：可选质量流程与因果动作优化
 
 **可选战斗运镜配置**：新增 `T8 战斗运镜配置 / Combat Camera Config`，连接 H3 或 Seedance 左侧的可选输入。
@@ -92,7 +98,7 @@
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
-| `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
+| `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | 生成 MiniMax-H3 提示词 | T2VA / I2VA / FL2VA / L2VA / Ref2VA / Hybrid |
 | `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | 生成 Seedance 2.0 提示词 | T2V、首帧、首尾帧、多模态参考、编辑、延长、轨道补齐和组合任务 |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | 生成 Music 3 歌词与音乐描述 | AUTO、生成歌词、严格保留、局部润色、纯器乐 |
 | `YuE2 音乐提示词与歌词创作（T8）` | 生成 YuE2 风格与歌词 | 原创、保留原词、定向改词、纯器乐、可选 ABC 准备 |
@@ -291,7 +297,7 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 1. 添加 `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)`。
 2. 在“视频创意 / 提示词”中输入基础意图。
 3. 选择生成类型、时长、镜头数量、改写模式、输出语言、官方 Skill 协议和 MiniMax 官方创意预设；需要时再选择一个非官方案例或社区 Skill 模板。
-4. I2VA / FL2VA / L2VA / Ref2VA 按任务要求连接图片或视频。
+4. I2VA / FL2VA / L2VA / Ref2VA / Hybrid 按任务要求连接图片或视频。
 5. 云端渠道填写 API Key；本地 Qwen 渠道不需要 Key。
 6. 点击节点底部的“运行提示词优化”。
 7. 从 `enhanced_prompt` 获取最终字符串。
@@ -409,6 +415,7 @@ Music 3 节点内置的是 MiniMax 官方 `music-caption-rewriter` 完整快照�
 | `FL2VA（首尾帧生音视频）` | 在首尾帧之间设计运动 | 必须连接 `first_frame` 和 `last_frame` |
 | `L2VA（尾帧图生音视频）` | 从合理前态收束到尾帧 | 必须连接 `last_frame` |
 | `Ref2VA（参考图/视频生音视频）` | 完整参考生成或编辑 | 至少一张参考图或一个参考视频 |
+| `Hybrid（关键帧+参考混合生成）` | 首尾边界＋额外视觉参考 | 首帧和/或尾帧，另需至少一张参考图或一个参考视频 |
 
 ## 提示词模式
 
@@ -648,7 +655,7 @@ MV 规则按以下方式工作：
 | 输入 | 说明 |
 | --- | --- |
 | `prompt` | 用户基础视频意图，不能为空 |
-| `task_type` | T2VA / I2VA / FL2VA / L2VA / Ref2VA |
+| `task_type` | T2VA / I2VA / FL2VA / L2VA / Ref2VA / Hybrid |
 | `duration_seconds` | 目标时长，任意正整数秒数，节点不设上限；下游模型限制仍然有效 |
 | `shot_count` | `AUTO` 由模型按内容、素材、时长和节奏判断；也可固定为 1–20 个镜头 |
 | `rewrite_mode` | `strict / balanced / creative` |
@@ -659,10 +666,10 @@ MV 规则按以下方式工作：
 | `creative_preset` | 界面显示为“MiniMax 官方场景 Skill（8 个可选）”；`无 / AUTO / 8 个官方场景写作预设`，选择具体项后显示详情卡和官方 GIF；与 T8 非官方模板同时选择时暂不生效 |
 | `case_template` | `无 / 275 个非官方模板`：273 个 T8 案例 selector + 2 个独立社区 Skill；显示中文名称，工作流保存稳定 ID，H3 与 Seedance 2.0 使用独立原生适配规则；H3 中与官方场景 Skill 同选时优先生效 |
 | `reference_template` | 仅参考模板融合使用 |
-| `first_frame` | I2VA / FL2VA 首帧 |
-| `last_frame` | FL2VA / L2VA 尾帧 |
-| `reference_images` | Ref2VA 参考图，Autogrow，最多 9 张 |
-| `reference_videos` | Ref2VA 参考视频，Autogrow，最多 3 个 |
+| `first_frame` | I2VA / FL2VA / Hybrid 首帧 |
+| `last_frame` | FL2VA / L2VA / Hybrid 尾帧 |
+| `reference_images` | Ref2VA / Hybrid 额外参考图，Autogrow，最多 9 张；Hybrid 每槽单图 |
+| `reference_videos` | Ref2VA / Hybrid 参考视频，Autogrow，最多 3 个 |
 | `reference_context` | 高级可选；补充画面无法判断的身份或关系 |
 | `constraints` | 高级可选；必须保留或禁止改变的内容 |
 | `seed` | 随机种子，配合运行后状态控制缓存和变体 |

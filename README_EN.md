@@ -4,6 +4,22 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: H3 Hybrid keyframes + references
+
+Select **Hybrid** in the existing H3 task combo. Connect first and/or last frame,
+plus at least one additional reference image/video. Keyframes anchor the target
+boundaries; other assets supply requested identity, appearance or motion evidence.
+Hybrid uses H3's six reference fields and the existing four cloud/local providers
+and Prompt Relay. The five old modes, T2VA default, 38 saved fields and old workflows
+are unchanged. Each Hybrid image slot must contain one image; up to nine extra
+images plus two keyframes and three videos. There is no enhancer-imposed video
+duration cap. No audio track is analyzed; use the H3 audio plugin for audio Hybrid.
+Text checks are not pixel or rendered-video acceptance.
+
+[Guide and limits](docs/h3-hybrid.md) · [First + image](example_workflows/h3_hybrid_first_image.json) /
+[Last + image](example_workflows/h3_hybrid_last_image.json) /
+[First/last + video](example_workflows/h3_hybrid_first_last_video.json).
+
 ## New: optional quality workflow and causal creation
 
 **Optional Combat Camera Config:** connect the new utility node to the H3 or Seedance
@@ -94,7 +110,7 @@ All five core nodes can use ZhenZhen Affordable AI Shop, ZhenZhen AI Workshop, a
 
 | Node | Purpose | Main modes |
 | --- | --- | --- |
-| `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | Generate MiniMax H3 prompts | T2VA, I2VA, FL2VA, L2VA, Ref2VA |
+| `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)` | Generate MiniMax H3 prompts | T2VA, I2VA, FL2VA, L2VA, Ref2VA, Hybrid |
 | `Seedance 2.0 Prompt Enhancer (Cloud / Local GGUF)` | Generate Seedance 2.0 prompts | Text-to-video, first frame, first/last frame, multimodal reference, edit, extend, track completion, combined tasks |
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | Prepare Music 3 lyrics and captions | AUTO, new lyrics, preserve, scoped rewrite, instrumental |
 | `YuE2 音乐提示词与歌词创作（T8）` | Prepare native YuE2 style and lyrics | Original lyrics, preserve/restyle, section edits, instrumental, optional ABC preparation |
@@ -217,7 +233,7 @@ Restart ComfyUI after installation. If the frontend still shows an older node la
 1. Add `MiniMax H3 Prompt Enhancer (Cloud / Local GGUF)`.
 2. Enter a basic idea in the video concept/prompt field.
 3. Select the generation type, duration, shot count, rewrite mode, output language, core Skill protocol, and optional official or T8 template. The H3 duration field accepts any positive whole number of seconds; the node imposes no maximum, although downstream generators may still do so.
-4. Connect the images or videos required by I2VA, FL2VA, L2VA, or Ref2VA.
+4. Connect the images or videos required by I2VA, FL2VA, L2VA, Ref2VA or Hybrid.
 5. Supply the selected cloud provider's API key, or choose local GGUF mode without a key.
 6. Click the run button at the bottom of the node.
 7. Read the final `STRING` from `enhanced_prompt`.
@@ -231,6 +247,7 @@ H3 generation types:
 | `FL2VA` | Design motion between first and last frames | `first_frame` and `last_frame` |
 | `L2VA` | Build a plausible lead-in that resolves at the last frame | `last_frame` |
 | `Ref2VA` | Reference-based generation or editing | At least one reference image or video |
+| `Hybrid` | Keyframe boundaries + visual references | First and/or last frame, plus an additional reference image/video |
 
 Import [`example_workflows/minimax_h3_prompt_enhancer_example.json`](./example_workflows/minimax_h3_prompt_enhancer_example.json) for a ready-to-use cloud example.
 
