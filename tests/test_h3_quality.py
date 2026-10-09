@@ -6,6 +6,7 @@ always correct. Semantic/physical feasibility remains explicitly unverified.
 from __future__ import annotations
 
 import copy
+import json
 import re
 import subprocess
 import sys
@@ -38,6 +39,50 @@ def vocal(words, *, speaker="S1", entity="Alice", language="Chinese"):
 
 
 class H3QualityTests(unittest.TestCase):
+    def test_reasoning_preambles_are_removed_from_native_and_json_outputs(self):
+        native = base()
+        raw = json.dumps({part.name: part.value.strip() for part in quality.sections(native)})
+        for prefix in ('<think>Planning.</think>\n', 'Planning.\n</think>\n',
+                       'Final check. Now let me produce the final output: </think>.\n',
+                       '<analysis>Planning.</analysis>\n'):
+            for output in (native, raw, '```json\n' + raw + '\n```'):
+                with self.subTest(prefix=prefix, json=output != native):
+                    self.assertEqual(quality.normalize_h3_output(prefix + output, 'T2VA', 8), native)
+
+    def test_reasoning_cleanup_preserves_prompt_literals_and_keyframe_alignment(self):
+        native = base('[Shot 1] Alice (S1) says: <d>[English] Thinking Process: </think></d> A sign reads "</analysis>".')
+        self.assertEqual(quality.normalize_h3_output(native, 'T2VA', 8), native)
+        aligned = quality.alignment_sentence('I2VA', 8, 1) + '\n\n' + native
+        self.assertEqual(quality.normalize_h3_output('Planning.</think>\n' + aligned, 'I2VA', 8), aligned)
+        for text in ('Planning.</think>', 'Final check. Now let me produce the final output: </think>.',
+                     '<analysis>Planning.</analysis>\nunfinished'):
+            with self.assertRaisesRegex(ValueError, 'H3 returned reasoning'):
+                quality.normalize_h3_output(text, 'T2VA', 8)
+
+    def test_json_output_preserves_literals_fields_and_keyframe_alignment(self):
+        body = '[Shot 1] Alice (S1) says: <d>[Chinese] 等我。 "{x}" \\path</d>\n[Shot 2] At 00:04.000, Alice stops.'
+        for task, native in [('T2VA', base(body)), ('Ref2VA', reference()), ('Hybrid', reference()),
+                             *[(mode, base(body)) for mode in ('I2VA', 'FL2VA', 'L2VA')]]:
+            fields = {part.name: part.value.strip() for part in quality.sections(native)}
+            expected = '\n\n'.join(f'{key}: {value}' for key, value in fields.items())
+            if task in {'I2VA', 'FL2VA', 'L2VA'}:
+                expected = quality.alignment_sentence(task, 8, 2) + '\n\n' + expected
+            raw = json.dumps(dict(reversed(list(fields.items()))), ensure_ascii=True)
+            for text in (raw, '```json\n' + raw + '\n```'):
+                with self.subTest(task=task, fenced=text.startswith('```')):
+                    self.assertEqual(quality.normalize_h3_output(text, task, 8), expected)
+                    self.assertEqual(quality.normalize_h3_output(expected, task, 8), expected)
+            self.assertEqual(quality.normalize_h3_output(native, task, 8), native)
+
+    def test_json_output_rejects_ambiguous_or_incomplete_fields(self):
+        fields = {part.name: part.value.strip() for part in quality.sections(base())}
+        raw = json.dumps(fields)
+        for text in ('{}', raw[:-1], raw[:-1] + ', "non_diegetic_music": "different"}',
+                     json.dumps({**fields, 'extra': 'Do not discard'}),
+                     *[json.dumps({**fields, 'overall_soundscape': value}) for value in (None, [], {}, '')]):
+            with self.subTest(text=text), self.assertRaisesRegex(ValueError, 'H3 returned unsupported JSON'):
+                quality.normalize_h3_output(text, 'T2VA', 8)
+
     def inspect(self, text, **kwargs):
         report = quality.check_h3(text, **kwargs)
         self.assertEqual(report["schema_version"], "t8-h3-quality/v1")

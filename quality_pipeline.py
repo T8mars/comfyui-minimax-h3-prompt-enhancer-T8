@@ -10,6 +10,7 @@ try:
     from .h3_prompt_relay import compile_relay_response
     from .directional_skills import DIRECTOR_OFF, is_drama_skill, uses_authoring_contract
     from .h3_vocal_protocol import normalize_h3_vocals
+    from .h3_quality import normalize_h3_output
 except ImportError:
     from h3_quality import (QUALITY_OFF, check_h3, check_seedance, run_quality,
                             repair_protocol, accept_correction, body_for, LITERAL_RE,
@@ -17,6 +18,7 @@ except ImportError:
     from h3_prompt_relay import compile_relay_response
     from directional_skills import DIRECTOR_OFF, is_drama_skill, uses_authoring_contract
     from h3_vocal_protocol import normalize_h3_vocals
+    from h3_quality import normalize_h3_output
 
 
 @contextmanager
@@ -54,6 +56,7 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
     # All provider branches use this boundary before caching or returning text.
     def normalize(text):
         if not relay_config:
+            text = normalize_h3_output(text, task_type, duration)
             return normalize_h3_vocals(text, source=source)
         try:
             compile_relay_response(text, duration, relay_config["event_count"],

@@ -22,6 +22,26 @@ ZH_BODY = "爱丽丝站在车站窗边查看时间，右手握紧折叠车票，
 
 
 class BoundedPipelineTests(unittest.TestCase):
+    def test_json_is_normalized_in_every_quality_mode_without_provider_calls(self):
+        native = base('[Shot 1] ' + EN_BODY)
+        raw = json.dumps({part.name: part.value.strip() for part in q.sections(native)})
+        for mode in q.QUALITY_OPTIONS:
+            complete = Mock(side_effect=AssertionError('JSON conversion must be local'))
+            for draft in (raw, 'Final check. Now let me produce the final output: </think>.\n' + raw,
+                          'Final check. Now let me produce the final output: </think>.\n' + native):
+                result, _ = self.run_h3(draft, complete, mode=mode)
+                self.assertEqual(result, native)
+            complete.assert_not_called()
+
+    def test_json_quality_candidate_is_decoded_before_acceptance(self):
+        old = base('[Shot 1] ' + EN_BODY)
+        fixed = base('[Shot 1] ' + ZH_BODY, sound='安静房间环境声与脚步。')
+        complete = Mock(return_value=json.dumps({part.name: part.value.strip() for part in q.sections(fixed)}))
+        result, metrics = self.run_h3(old, complete, language='中文')
+        self.assertEqual(result, fixed)
+        self.assertEqual(metrics['result'], 'corrected')
+        complete.assert_called_once()
+
     def run_h3(self, draft, complete, **kwargs):
         values = dict(mode=q.QUALITY_REPAIR, messages=[{"role": "user", "content": "Keep the red coat."}],
                       complete=complete, task_type="T2VA", duration=8, shot_count=1,

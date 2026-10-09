@@ -5,6 +5,7 @@ Semantic/physical plausibility is deliberately not a deterministic pass claim.
 """
 from __future__ import annotations
 
+import json
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -241,6 +242,42 @@ def alignment_sentence(mode: str, duration: float, last_shot: int) -> str:
         return (f"How the reference pictures align with the target video — <Picture 1> (from [Shot {last_shot}]) "
                 f"aligns with the {duration:.2f}-second mark of the target video.")
     return ""
+
+
+def normalize_h3_output(text: str, task_type: str, duration: float) -> str:
+    """Remove explicit reasoning preambles and decode complete JSON field objects."""
+    candidate = text.strip()
+    fields = REF_FIELDS if is_reference_task(task_type) else BASE_FIELDS
+    end = re.search(r"</(?:think|analysis|reasoning)\s*>", mask_literals(candidate), re.I)
+    if end and not sections(candidate[:end.start()]) and not candidate.startswith(("{", "```")):
+        # A chat template may consume the opening tag but return the closing one.
+        candidate = candidate[end.end():].lstrip(" \t\r\n.。")
+    fence = re.fullmatch(r"```(?:json)?\s*\n(.*?)\n```", candidate, re.I | re.S)
+    if fence:
+        candidate = fence.group(1).strip()
+    if not candidate.startswith("{"):
+        if candidate != text.strip():
+            if tuple(part.name for part in sections(candidate)) != fields:
+                raise ValueError("H3 returned reasoning without a complete final prompt. Please retry.")
+            return candidate
+        return text
+    try:
+        # Pairs preserve duplicate keys, which must not silently overwrite prose.
+        pairs = json.loads(candidate, object_pairs_hook=list)
+        if (len(pairs) != len(fields) or {key for key, _ in pairs} != set(fields)
+                or any(not isinstance(value, str) or not value.strip() for _, value in pairs)):
+            raise ValueError("Unexpected H3 fields")
+        values = dict(pairs)
+        result = "\n\n".join(f"{field}: {values[field]}" for field in fields)
+        if task_type in {"I2VA", "FL2VA", "L2VA"}:
+            shots = [int(m.group(1)) for m in SHOT_RE.finditer(mask_literals(values[BASE_FIELDS[0]]))]
+            if not shots or shots != list(range(1, len(shots) + 1)):
+                raise ValueError("Cannot determine keyframe alignment")
+            result = alignment_sentence(task_type, duration, shots[-1]) + "\n\n" + result
+        return result
+    except (ValueError, TypeError, RecursionError) as error:
+        raise ValueError("H3 returned unsupported JSON; expected complete string-valued H3 fields. "
+                         "Select plain-text output in the provider settings and retry.") from error
 
 
 def _mode(text: str, explicit: str) -> str:
