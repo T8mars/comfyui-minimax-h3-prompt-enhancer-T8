@@ -113,7 +113,8 @@ def _integer(value, name, low, high):
 
 
 def _number(value, name, low, high):
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not low <= value <= high:
+    # Check bounds before converting unusually large JSON integers to float.
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not low <= value <= high or not math.isfinite(value):
         raise StrataProviderError(f"Strata {name} must be a finite number in {low}..{high}.", "configuration")
     return float(value)
 
@@ -136,7 +137,7 @@ class StrataSettings:
     def from_values(cls, values: Any = None):
         if isinstance(values, cls):
             values = asdict(values)
-        values = values or {}
+        values = {} if values is None else values
         if not isinstance(values, Mapping):
             raise StrataProviderError("Strata settings must be an object.", "configuration")
         defaults = asdict(cls())
@@ -169,7 +170,7 @@ class StrataSettings:
 def validate_endpoint(settings: StrataSettings):
     try:
         parsed = urlsplit(settings.url)
-        port = parsed.port or (443 if parsed.scheme == "https" else 80)
+        port = parsed.port if parsed.port is not None else (443 if parsed.scheme == "https" else 80)
     except ValueError:
         raise StrataProviderError("Invalid Strata service address.", "configuration") from None
     host = (parsed.hostname or "").lower()
@@ -286,7 +287,7 @@ class StrataClient:
         timeout = _number(timeout, "request timeout", .001, 86400)
         encoded = request_bytes(body)
         check and check()
-        if self.settings.url.startswith("https:"):
+        if urlsplit(self.settings.url).scheme == "https":
             conn = _PinnedHTTPS(self.host, self.port, self.pinned, min(5, timeout))
         else:
             conn = http.client.HTTPConnection(self.pinned, self.port, timeout=min(5, timeout))
@@ -336,8 +337,10 @@ class StrataClient:
                         pass
                     if response.status == 400:
                         try:
-                            error = strict_json(raw).get("error", {})
+                            error_body = strict_json(raw)
+                            error = error_body.get("error", {}) if isinstance(error_body, dict) else {}
                             message = error.get("message", "") if isinstance(error, dict) else ""
+                            message = message if isinstance(message, str) else ""
                             category = "context_budget" if "context" in message.lower() else "invalid_request"
                         except StrataProviderError:
                             category = "invalid_request"
@@ -390,7 +393,7 @@ class StrataClient:
             raise
 
 
-def validate_status(data):
+def validate_status(data, *, require_ready=True):
     try:
         if data["service"] != "strata" or type(data["protocol_version"]) is not int or data["protocol_version"] != 1:
             raise ValueError
@@ -406,7 +409,21 @@ def validate_status(data):
         _integer(data["started"], "service start identity", 1, 2**63 - 1)
         if data.get("instance_id") is not None and (not isinstance(data["instance_id"],str) or len(data["instance_id"])>256):
             raise ValueError
-        if not data["loaded"] and not data["auto_load"]:
+        capabilities = data.get("capabilities", {})
+        if not isinstance(capabilities, dict):
+            raise ValueError
+        video = capabilities.get("video", {})
+        if not isinstance(video, dict) or not isinstance(video.get("limits", {}), dict):
+            raise ValueError
+        if "modes" in video and (not isinstance(video["modes"], list) or any(not isinstance(mode, str) for mode in video["modes"])):
+            raise ValueError
+        if "contract_version" in video and type(video["contract_version"]) is not int:
+            raise ValueError
+        if "native_verified" in video and type(video["native_verified"]) is not bool:
+            raise ValueError
+        if "max_frames" in video.get("limits", {}):
+            _integer(video["limits"]["max_frames"], "service frame limit", 1, 100000)
+        if require_ready and not data["loaded"] and not data["auto_load"]:
             raise StrataProviderError("请先在 Strata 加载模型 / Load the model in Strata first.", "not_ready")
         return data
     except (KeyError, TypeError, ValueError):
@@ -440,12 +457,14 @@ class StrataRun:
     @property
     def client(self):
         if self._client is None:
-            self._client = StrataClient(self.settings)
+            interrupted()
+            client = StrataClient(self.settings)
             with _LOCK_GUARD:
-                self._lock = _LOCKS.setdefault((self._client.pinned, self._client.port), threading.RLock())
+                self._lock = _LOCKS.setdefault((client.pinned, client.port), threading.RLock())
             while not self._lock.acquire(timeout=min(.1, self.remaining())):
                 interrupted()
             self._lock_owned = True
+            self._client = client
         return self._client
 
     def identity(self):
@@ -488,15 +507,17 @@ class StrataRun:
 
     def complete(self, messages, *, temperature, seed=None, response_format=None):
         interrupted()
-        if not isinstance(messages, list) or not messages or any(not isinstance(m, dict) or m.get("role") not in {"system", "user", "assistant"}
+        if not isinstance(messages, list) or not messages or any(not isinstance(m, dict) or not isinstance(m.get("role"), str) or m["role"] not in {"system", "user", "assistant"}
             or not isinstance(m.get("content"), (str, list)) for m in messages):
             raise StrataProviderError("Invalid Strata chat messages.", "media")
         data = self.identity()
         parts = [part for message in messages if isinstance(message.get("content"), list) for part in message["content"]]
         frame_count = 0
         for part in parts:
-            if not isinstance(part, dict) or part.get("type") not in {"text", "image_url", "strata_video"}:
+            if not isinstance(part, dict) or not isinstance(part.get("type"), str) or part["type"] not in {"text", "image_url", "strata_video"}:
                 raise StrataProviderError("Strata 仅支持文字/图片/显式视频，不支持音频或 video_url / Unsupported media part.", "media")
+            if part["type"] == "text" and not isinstance(part.get("text"), str):
+                raise StrataProviderError("Strata text parts require a text string.", "media")
             if part["type"] == "image_url":
                 field = part.get("image_url")
                 source = field.get("url", "") if isinstance(field, dict) else ""
@@ -544,7 +565,10 @@ class StrataRun:
         if response.get("model") != self.snapshot["model"]:
             raise StrataProviderError("Strata 返回了不同模型；结果未提交 / Response model mismatch.", "identity_changed")
         try:
-            choice = response["choices"][0]
+            choices = response["choices"]
+            if not isinstance(choices, list) or not choices or not isinstance(choices[0], dict):
+                raise ValueError
+            choice = choices[0]
             if choice.get("finish_reason") != "stop":
                 raise StrataProviderError("Strata 输出截断或未完成；请检查上下文、Token及思考设置 / Incomplete final answer.", "truncated")
             text = choice["message"]["content"]
@@ -565,6 +589,8 @@ class StrataRun:
         if self._lock_owned:
             self._lock.release()
             self._lock_owned = False
+        self._client = None
+        self._lock = None
         self.media_cache.clear()
         self.video_cache.clear()
 
@@ -575,7 +601,7 @@ class StrataRun:
                 "credential_hash": hashlib.sha256(self.client.key.encode("utf-8")).hexdigest()}
 
     def summary(self):
-        model = self.snapshot.get("model", "") if self.snapshot else ""
+        model = self.snapshot.get("model", "") if self.snapshot else "not-used"
         if not re.fullmatch(r"[A-Za-z0-9._/+\-]{1,128}", model) or re.search(r"sk-[A-Za-z0-9_-]{16,}", model):
             model = "[redacted-model]"
         return {"provider": "Strata", "model": model, "context": self.snapshot.get("context") if self.snapshot else None,

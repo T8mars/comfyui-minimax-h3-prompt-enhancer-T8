@@ -185,7 +185,9 @@ class T8LyricWriter(io.ComfyNode):
             "status": "success",
             "mode": mode,
             "provider": values.get("api_mode"),
-            "model": require_strata_run().snapshot["model"] if is_strata_mode(values.get("api_mode")) else values.get("local_model") if values.get("api_mode") == LOCAL_QWEN_API_MODE else values.get("custom_model") or values.get("ai_workshop_model"),
+            # Preserve is deterministic: no request, metadata lookup or model
+            # loading is needed merely to describe the successful output.
+            "model": (require_strata_run().snapshot or {}).get("model", "") if is_strata_mode(values.get("api_mode")) else values.get("local_model") if values.get("api_mode") == LOCAL_QWEN_API_MODE else values.get("custom_model") or values.get("ai_workshop_model"),
             "stages": stages,
             "text_review": review,
             "audio_verified": False,

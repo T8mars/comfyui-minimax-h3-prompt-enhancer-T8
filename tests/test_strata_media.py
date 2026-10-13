@@ -154,6 +154,14 @@ class StrataMediaTests(unittest.TestCase):
             shared.sample_video(io.BytesIO(encoded_video()),cancel=lambda:True)
         with self.assertRaises(sp.StrataProviderError): media._image(np.full((1,16,16,3),float("nan")))
 
+    def test_oversized_or_invalid_tensor_is_rejected_before_cpu_transfer(self):
+        class InvalidTensor:
+            def __init__(self, shape): self.shape = shape
+            def detach(self): raise AssertionError("Known-invalid tensor must not be transferred or converted")
+        for shape in ((1,8192,8192,3), (2,16,16,3), (1,16,16,2), (1,0,16,3)):
+            with self.subTest(shape=shape), self.assertRaises(sp.StrataProviderError):
+                media._image(InvalidTensor(shape))
+
     def test_video_contract_aggregate_guard_prevents_post(self):
         self.run.close(); sp._RUN.reset(self.token)
         with http_fixture() as (url,seen):

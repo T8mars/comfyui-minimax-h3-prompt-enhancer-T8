@@ -6,6 +6,28 @@ const IDS = new Set(["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", 
     "T8DirectedRevision", "T8LongFormPlanner", "T8ReferenceRoleMapper", "T8CreativeCandidateLab", "T8StoryboardPack",
     "T8MusicCreativeLab", "T8MusicVideoBeatSheet"]);
 
+const GRAPH_OBSERVER = Symbol("t8StrataGraphObserver");
+function observeConnections(graph) {
+    if (!graph || graph[GRAPH_OBSERVER]) return;
+    const state = { pending: false };
+    graph[GRAPH_OBSERVER] = state;
+    const original = graph.onNodeConnectionChange;
+    graph.onNodeConnectionChange = function () {
+        const result = original?.apply(this, arguments);
+        // Changing a reroute's input does not notify the distant enhancer.
+        // Refresh once after the host finishes updating the graph, preserving
+        // its callback and avoiding a frame per affected link.
+        if (!state.pending) {
+            state.pending = true;
+            requestAnimationFrame(() => {
+                state.pending = false;
+                for (const item of graph._nodes || []) if (!item.t8StrataRemoved) item.t8RefreshStrata?.();
+            });
+        }
+        return result;
+    };
+}
+
 function refresh(node) {
     restoreStrataVisibility(node);
     updateStrataVisibility(node);
@@ -26,6 +48,7 @@ function refresh(node) {
 }
 
 function install(node) {
+    observeConnections(node.graph);
     if (node.t8StrataUIInstalled) return;
     node.t8StrataUIInstalled = true;
     const notice = node.addWidget("button", "Strata 桥接：使用已启动服务", "",
@@ -60,6 +83,7 @@ app.registerExtension({
         const executed = nodeType.prototype.onExecuted;
         const connected = nodeType.prototype.onConnectionsChange;
         const removed = nodeType.prototype.onRemoved;
+        const added = nodeType.prototype.onAdded;
         nodeType.prototype.onNodeCreated = function () { created?.apply(this, arguments); install(this); };
         nodeType.prototype.onConfigure = function () {
             restoreStrataVisibility(this);
@@ -84,6 +108,13 @@ app.registerExtension({
             this.t8StrataRemoved = true;
             this.t8StrataProbeGeneration = (this.t8StrataProbeGeneration || 0) + 1;
             return removed?.apply(this, arguments);
+        };
+        nodeType.prototype.onAdded = function () {
+            const result = added?.apply(this, arguments);
+            this.t8StrataRemoved = false;
+            observeConnections(this.graph);
+            requestAnimationFrame(() => { if (!this.t8StrataRemoved) refresh(this); });
+            return result;
         };
     },
 });

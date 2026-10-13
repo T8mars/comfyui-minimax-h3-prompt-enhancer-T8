@@ -16,6 +16,17 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-13 follow-up: Strata cross-review
+
+No node inputs/outputs/defaults, main widget arrays, config 16/27-field names
+or example bytes change. Shared configuration is resolved through bounded,
+cycle-safe Reroute traversal, accepting object/Map link containers. A coalesced
+graph connection observer preserves the host callback/return and refreshes
+distant consumers when a reroute changes; original values and inactive sizes
+remain intact. Existing buttons remain nonserializable. Node and Chrome
+contracts cover reroute switching and saved-key retention, old/new named
+reload and host callback preservation. This is not a RunningHub deployment.
+
 ### 2026-10-13: Strata existing-service provider
 
 Append the provider choice; retain old main-node sockets/defaults/signatures

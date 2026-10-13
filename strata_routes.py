@@ -13,14 +13,16 @@ _REGISTERED = False
 def probe_strata(values=None):
     settings = StrataSettings.from_values(values)
     client = StrataClient(settings)
-    status = validate_status(client.request("/v1/status", timeout=5, check=None))
+    status = validate_status(client.request("/v1/status", timeout=5, check=None), require_ready=False)
     model = status["model"]
     import re
     if not re.fullmatch(r"[A-Za-z0-9._/+\-]{1,128}", model) or re.search(r"sk-[A-Za-z0-9_-]{16,}", model):
         model = "[redacted-model]"
     capability = (status.get("capabilities") or {}).get("video", {})
     return {"connected": True, "provider": "Strata", "model": model, "context": status["context"]["native"],
-            "loaded": status["loaded"], "vision_enabled": status["vision"]["enabled"],
+            "loaded": status["loaded"], "auto_load": status["auto_load"],
+            "ready": status["loaded"] or status["auto_load"],
+            "vision_enabled": status["vision"]["enabled"], "vision_available": status["vision"]["available"],
             "video_modes": [mode for mode in capability.get("modes", []) if mode in {"frames", "native"}],
             "native_verified": capability.get("native_verified") is True, "checked_at": int(time.time()),
             "read_only": True, "generation_requests": 0}

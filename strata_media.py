@@ -112,19 +112,32 @@ def sample_asset(video):
     return cache["samples"]
 
 
+def _check_image_shape(shape):
+    shape = tuple(shape)
+    if len(shape) == 4:
+        if shape[0] != 1:
+            raise StrataProviderError("Strata image part requires one image.", "media")
+        shape = shape[1:]
+    if len(shape) != 3 or shape[-1] not in (3, 4) or min(shape[:2]) < 1 or shape[0] * shape[1] > 16_777_216:
+        raise StrataProviderError("Invalid or oversized Strata IMAGE.", "media")
+
+
 def _image(value):
     import numpy as np
     from PIL import Image
     interrupted()
+    # Comfy tensors/NumPy arrays expose dimensions without a device transfer.
+    # Reject invalid batches and source sizes before allocating a CPU float copy.
+    if hasattr(value, "shape"):
+        _check_image_shape(value.shape)
     if hasattr(value, "detach"):
         array = value.detach().to("cpu").float().numpy()
     else:
         array = np.asarray(value)
+    _check_image_shape(array.shape)
     if array.ndim == 4:
-        if array.shape[0] != 1:
-            raise StrataProviderError("Strata image part requires one image.", "media")
         array = array[0]
-    if array.ndim != 3 or array.shape[-1] not in (3, 4) or min(array.shape[:2]) < 1 or array.shape[0] * array.shape[1] > 16_777_216 or not np.isfinite(array).all():
+    if not np.isfinite(array).all():
         raise StrataProviderError("Invalid or oversized Strata IMAGE.", "media")
     image = Image.fromarray((np.clip(array, 0, 1) * 255).round().astype(np.uint8))
     return shared.bounded_image(image, 1048576)

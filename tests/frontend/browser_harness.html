@@ -35,6 +35,17 @@ try {
   strataNode.widgets[0].value="Strata";strataNode.widgets[1].value="AUTO（兼容策略）";
   const strataSave={};strataUI.serializeConfig(strataNode,strataSave);
   check(strataSave.widgets_values.length===27 && strataUI.configSavedValues(strataSave).get("strata_max_tokens")===0,"Strata browser named config reload");
+  const strataRelay = {type:"Reroute",inputs:[{link:7}]};
+  const strataGraph = {links:new Map([[7,{origin_id:1}],[8,{origin_id:2}]]),getNodeById:id=>id===1?strataNode:strataRelay};
+  const strataConsumer = {widgets:[{name:"api_mode",value:"cloud"},{name:"api_key",value:"retained-local-value",type:"text"}],
+    inputs:[{name:"provider_config",link:8}],graph:strataGraph};
+  check(strataUI.effectiveStrata(strataConsumer),"Strata shared mode follows a browser Reroute chain");
+  strataUI.updateStrataVisibility(strataConsumer);
+  check(strataConsumer.widgets[1].hidden && strataConsumer.widgets[1].value==="retained-local-value","Rerouted Strata hides irrelevant key without clearing saved value");
+  strataUI.restoreStrataVisibility(strataConsumer);
+  strataNode.widgets[0].value="Local Qwen";
+  check(!strataUI.effectiveStrata(strataConsumer),"Rerouted non-Strata config restores original mode display");
+  strataNode.widgets[0].value="Strata";
   const cameraNotice = document.createElement("div");
   cameraNotice.textContent = recovery.recoveryMessage({ recoverable: true, creation_metadata: {
     combat_camera_mode: "strong", combat_camera_continuity: "follow", combat_camera_impact: "natural",

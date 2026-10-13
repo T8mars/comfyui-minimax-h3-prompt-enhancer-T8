@@ -84,16 +84,32 @@ export async function probeStrata(node, overrides = {}, fetchFn = (...args) => g
 
 export function statusText(status) {
     if (!status?.connected) return `Strata 连接未通过：${status?.category || "connection"}（没有生成请求）`;
-    return `Strata 只读检查：${status.model} · 上下文 ${status.context}\n视觉：${status.vision_enabled ? "已启用" : "未启用"} · native：${status.native_verified ? "已核验" : "尚未核验"}\n模型${status.loaded ? "已加载" : "由服务按配置自动加载"}；桥接不控制起停/卸载。`;
+    const vision = !status.vision_enabled ? "未启用" : status.vision_available === false ? "已启用但尚不可用" : "已启用";
+    const model = status.loaded ? "已加载" : status.auto_load === false ? "未加载；请先在 Strata 手动加载模型" : "由服务按配置自动加载";
+    return `Strata 只读检查：${status.model} · 上下文 ${status.context}\n视觉：${vision} · native：${status.native_verified ? "已核验" : "尚未核验"}\n模型${model}；桥接不控制起停/卸载。`;
 }
 
 export function effectiveStrata(node) {
     if (node.comfyClass === "T8LLMProviderConfig" || node.type === "T8LLMProviderConfig") return node.widgets?.find(w => w.name === "provider")?.value === STRATA_PROVIDER;
     const input = node.inputs?.find(item => item.name === "provider_config");
     if (input?.link != null && node.graph) {
-        const link = node.graph.links?.get?.(input.link) || node.graph.links?.[input.link];
-        const source = node.graph.getNodeById?.(link?.origin_id);
-        if (source) return source.widgets?.find(w => w.name === "provider")?.value === STRATA_PROVIDER;
+        let linkId = input.link;
+        const visited = new Set();
+        // Reroute is transparent to execution. Resolve it without assuming a
+        // particular host's links container or looping on malformed graphs.
+        for (let depth = 0; linkId != null && depth < 128 && !visited.has(linkId); depth++) {
+            visited.add(linkId);
+            const link = node.graph.links?.get?.(linkId) || node.graph.links?.[linkId];
+            const source = node.graph.getNodeById?.(link?.origin_id);
+            if (!source) break;
+            if (source.type === "Reroute" || source.comfyClass === "Reroute") {
+                linkId = source.inputs?.[0]?.link;
+                continue;
+            }
+            const provider = source.widgets?.find(w => w.name === "provider");
+            if (provider) return provider.value === STRATA_PROVIDER;
+            break;
+        }
     }
     return node.widgets?.find(w => w.name === "api_mode")?.value === STRATA_API_MODE;
 }

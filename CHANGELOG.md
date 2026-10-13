@@ -5,6 +5,23 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.31.1] - 2026-10-13
+
+### Fixed
+
+- Keep case-insensitive HTTPS Strata URLs on TLS and reject explicit port zero.
+  Reject malformed settings, oversized numeric values and malformed upstream
+  response/capability containers with safe, classified errors.
+- Cache Strata clients only after acquiring their service lock; preserve
+  cancellation, bounded deadlines and the no-blind-POST-retry policy.
+- Distinguish a connected but unloaded Strata service from a failed connection
+  in the read-only probe. Show manual loading and unavailable vision accurately.
+- Resolve shared Strata configuration through Reroute nodes and refresh distant
+  consumers after connection changes without altering saved widget order/values.
+- Reject known invalid/oversized image tensors before CPU float conversion.
+- Keep the lyric writer's Preserve mode entirely deterministic under Strata:
+  return the original lyrics and report without requiring service metadata.
+
 ## [1.31.0] - 2026-10-13
 
 - Add an opt-in existing Strata protocol-1 service bridge across video, image,
