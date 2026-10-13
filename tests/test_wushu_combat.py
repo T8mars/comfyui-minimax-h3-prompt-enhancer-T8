@@ -16,6 +16,7 @@ from unittest.mock import patch
 
 import numpy as np
 import directional_skills as directing
+from strata_baseline_projection import project_strata_guard, project_strata_ui
 from test_directional_skills import GIT_ROOT, ROOT, execute_inputs, h3, h3_args, sd, sd_args
 from test_zhenzhen_pov import OfflineGuards
 from combat_camera import CAMERA_STRONG, build_combat_camera_config
@@ -141,7 +142,7 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
             ["git", "ls-tree", "-r", "--name-only", BASELINE, "--", "directional_skills", "example_workflows"],
             cwd=GIT_ROOT, text=True,
         ).splitlines()
-        paths += ["provider_config.py", "combat_camera.py"]
+        paths += ["combat_camera.py"]
         for path in paths:
             with self.subTest(path=path):
                 self.assertEqual((ROOT / path).read_bytes().replace(b"\r\n", b"\n"),
@@ -159,7 +160,7 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
                 if isinstance(old_node, ast.FunctionDef) and old_node.name not in allowed:
                     expected = (self.without_legacy_reference_duration_caps(old_node)
                                 if old_node.name in {"_validate_inputs", "_validate_media"} else old_node)
-                    actual = self.project_hybrid_additions(current_by_name[old_node.name]) if path == "nodes.py" else current_by_name[old_node.name]
+                    actual = project_strata_guard(self.project_hybrid_additions(current_by_name[old_node.name]) if path == "nodes.py" else current_by_name[old_node.name])
                     self.assertEqual(ast.dump(actual), ast.dump(expected), old_node.name)
                 if isinstance(old_node, ast.ClassDef):
                     new_methods = {node.name: node for node in current_by_name[old_node.name].body if isinstance(node, ast.FunctionDef)}
@@ -177,7 +178,7 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
         # contract and unrelated node-creation UI frozen, rather than requiring
         # the broken reload implementation to remain byte-for-byte unchanged.
         for path in ("web/js/minimax_h3_prompt_enhancer.js", "web/js/seedance20_prompt_enhancer.js"):
-            current = (ROOT / path).read_text(encoding="utf-8")
+            current = project_strata_ui((ROOT / path).read_text(encoding="utf-8"))
             previous = frozen_bytes(path).decode("utf-8").replace("\r\n", "\n")
             pattern = r"const SERIALIZED_WIDGET_NAMES = \[[\s\S]*?\];"
             self.assertEqual(re.search(pattern, current).group(), re.search(pattern, previous).group())

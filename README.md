@@ -2,6 +2,12 @@
   <strong>简体中文</strong> | <a href="./README_EN.md">English</a>
 </p>
 
+## 新增：Strata 本地服务桥接
+
+API 模式选 **Strata 本地服务（桥接）**，使用已经启动的 Strata 服务当前模型；默认连接 ComfyUI 后端本机 `http://127.0.0.1:8080`。无需云端 API Key 或另装 Strata ComfyUI 插件。可选接入 **T8 LLM Provider Config → Strata** 设置地址、模型、思考和采样参数，连接后共享配置优先。
+
+支持文本、图片和视频视觉样本，不读取音频。沿用原提示词格式、质量检查和输出，原 API / GGUF 工作流不变。桥接不会启动、停止、切换或卸载 Strata 模型。[使用说明、限制与排错](docs/strata-bridge.md)
+
 ## 入口导航
 
 | 入口 | 适合用户 | 说明 | 打开 |

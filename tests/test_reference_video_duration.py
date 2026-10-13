@@ -76,7 +76,7 @@ class ReferenceVideoDurationTests(unittest.TestCase):
 
     def test_real_long_videos_reach_all_four_provider_paths(self):
         for module in (nodes, seedance20):
-            for api_mode in nodes.API_MODES:
+            for api_mode in nodes.API_MODES[:4]:  # Frozen original transports; Strata has dedicated real-VIDEO tests.
                 with self.subTest(node=module.__name__, provider=api_mode):
                     videos = [NativeVideo(self.video_bytes, 32.0) for _ in range(2)]
                     response = self.completion(module)
@@ -121,7 +121,7 @@ class ReferenceVideoDurationTests(unittest.TestCase):
 
     def test_invalid_duration_still_fails_before_every_provider(self):
         for module in (nodes, seedance20):
-            for api_mode in nodes.API_MODES:
+            for api_mode in nodes.API_MODES[:4]:
                 for duration in (0, -1, float("nan"), float("inf"), -float("inf"), "invalid"):
                     with self.subTest(node=module.__name__, provider=api_mode, duration=duration):
                         session = FakeSession(self.completion(module))
@@ -166,7 +166,7 @@ class ReferenceVideoDurationTests(unittest.TestCase):
                 pairs, duration = media.sample_video_as_data_urls(video, frames_per_second=0.25)
                 self.assertEqual(duration, 20.0)
                 self.assertEqual(pairs[-1][0], 16.0)
-                for api_mode in nodes.API_MODES[:-1]:
+                for api_mode in nodes.API_MODES[:3]:
                     session = FakeSession(response)
                     with self.assertRaisesRegex(nodes.PromptEnhancerError, "Trimmed VIDEO inputs cannot be uploaded safely"):
                         self.enhance(module, [video], session=session, api_mode=api_mode)

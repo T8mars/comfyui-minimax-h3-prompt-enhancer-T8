@@ -268,7 +268,8 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         check=False,
     )
     if completed.returncode not in {0, 1}:
-        raise VerificationError("git could not evaluate .comfyignore")
+        detail = completed.stderr.decode("utf-8", errors="replace").strip()[-1200:]
+        raise VerificationError(f"git could not evaluate .comfyignore (exit {completed.returncode}): {detail}")
     ignored = {
         item.decode("utf-8") for item in completed.stdout.split(b"\0") if item
     }
@@ -276,6 +277,16 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
     shipped_relative = {path.relative_to(ROOT).as_posix() for path in shipped}
     required = {
         "__init__.py",
+        "strata_provider.py",
+        "strata_media.py",
+        "strata_routes.py",
+        "strata_vendor/core.py",
+        "strata_vendor/video.py",
+        "strata_vendor/video_shared.py",
+        "strata_vendor/LICENSE.txt",
+        "strata_vendor/NOTICE.md",
+        "web/js/strata_bridge_ui.js",
+        "web/js/strata_ui.mjs",
         "nodes.py",
         "seedance20.py",
         "music3.py",

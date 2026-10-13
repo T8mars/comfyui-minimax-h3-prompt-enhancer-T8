@@ -7,6 +7,11 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import Any
 
+try:
+    from .strata_provider import current_strata_run
+except ImportError:
+    from strata_provider import current_strata_run
+
 
 RECOVERY_ACTION_NORMAL = "normal"
 RECOVERY_ACTION_RESTORE = "restore_last"
@@ -155,6 +160,10 @@ def begin_recovery_record(component: Any, slot: Any, provider: Any, *, metadata:
     slot_name = _safe_slot(slot)
     if not slot_name:
         return False
+    run = current_strata_run()
+    if run is not None and not run.committing_recovery:
+        run.defer_recovery(component_name, slot_name, provider, metadata)
+        return True
     record = RecoveryRecord(component=component_name, slot=slot_name, provider=_safe_provider(provider),
                             metadata=safe_director_metadata(metadata))
     with _LOCK:
@@ -199,6 +208,9 @@ def complete_recovery_record(component: Any, slot: Any, outputs: Any) -> bool:
     values = tuple(str(value) for value in outputs)
     if not values:
         return False
+    run = current_strata_run()
+    if run is not None:
+        run.commit_recovery()
     with _LOCK:
         record = _RECORDS.get((component_name, slot_name))
         if record is None:
@@ -244,6 +256,9 @@ def mark_recovery_failed(component: Any, slot: Any, error: BaseException) -> Non
     component_name = _safe_component(component)
     slot_name = _safe_slot(slot)
     if not slot_name:
+        return
+    run = current_strata_run()
+    if run is not None and (component_name, slot_name) not in run.started_recovery:
         return
     with _LOCK:
         record = _RECORDS.get((component_name, slot_name))

@@ -1,5 +1,6 @@
 import { app } from "../../scripts/app.js";
 import { copyLocalModelDirectory, showLocalQwenStatus } from "./local_qwen_status.js";
+import { STRATA_PROVIDER, configureConfig, serializeConfig, probeStrata, statusText } from "./strata_ui.mjs";
 
 
 const NODE_ID = "T8LLMProviderConfig";
@@ -33,8 +34,9 @@ function field(label, type = "text") {
 
 
 async function openCredentialManager(node) {
-    const aliasWidget = node.widgets?.find((widget) => widget.name === "credential_alias");
     const providerWidget = node.widgets?.find((widget) => widget.name === "provider");
+    const strata = providerWidget?.value === STRATA_PROVIDER;
+    const aliasWidget = node.widgets?.find((widget) => widget.name === (strata ? "strata_credential_alias" : "credential_alias"));
     const baseUrlWidget = node.widgets?.find((widget) => widget.name === "openai_base_url");
     const customModelWidget = node.widgets?.find((widget) => widget.name === "custom_model");
     const workshopModelWidget = node.widgets?.find((widget) => widget.name === "ai_workshop_model");
@@ -49,6 +51,7 @@ async function openCredentialManager(node) {
     title.style.margin = "0 0 8px";
     const notice = document.createElement("p");
     notice.textContent = "真实 Key 只写入 ComfyUI 用户目录；工作流只保存别名。现有 API Key STRING 接线仍具有最高优先级。";
+    if (strata) notice.textContent = "Strata 使用独立别名或 STRATA_API_KEY；未启用服务认证可留空，不读取旧云端 Key。";
     const alias = field("别名（字母、数字、点、下划线、短横线）");
     const secret = field("API Key / Token", "password");
     alias.input.value = String(aliasWidget?.value || "");
@@ -67,6 +70,7 @@ async function openCredentialManager(node) {
     const use = makeButton("使用所选别名");
     const check = makeButton("检查别名已配置");
     const testConnection = makeButton("测试云端连接（1次请求）");
+    if (strata) testConnection.textContent = "只读检查 Strata（不生成）";
     const remove = makeButton("删除");
     const close = makeButton("关闭");
     const status = document.createElement("div");
@@ -108,7 +112,18 @@ async function openCredentialManager(node) {
         } catch (_error) { status.textContent = "该别名未配置或凭据库不可用。"; }
     };
     testConnection.onclick = async () => {
+        if ((providerWidget?.value === STRATA_PROVIDER) !== strata) {
+            status.textContent = "渠道已改变，请关闭并重新打开凭据窗口。未发送生成请求。";
+            return;
+        }
         const selectedAlias = aliases.value || alias.input.value.trim();
+        if (strata) {
+            try {
+                const result = await probeStrata(node, { strata_credential_alias: selectedAlias });
+                if (result) status.textContent = statusText(result);
+            } catch (_error) { status.textContent = "Strata 只读检查失败；没有发送生成请求。"; }
+            return;
+        }
         if (!selectedAlias) { status.textContent = "请先选择凭据别名。"; return; }
         if (providerWidget?.value === "Local Qwen") {
             status.textContent = "本地 Qwen 请使用节点内运行状态检查，不需要云端凭据。";
@@ -158,6 +173,16 @@ app.registerExtension({
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== NODE_ID) return;
         const original = nodeType.prototype.onNodeCreated;
+        const configured = nodeType.prototype.onConfigure;
+        const serialized = nodeType.prototype.onSerialize;
+        nodeType.prototype.onConfigure = function () {
+            return configureConfig(this, arguments[0], configured, [...arguments]);
+        };
+        nodeType.prototype.onSerialize = function (saved) {
+            const result = serialized?.apply(this, arguments);
+            serializeConfig(this, saved);
+            return result;
+        };
         nodeType.prototype.onNodeCreated = function () {
             original?.apply(this, arguments);
             const manager = this.addWidget(
@@ -186,6 +211,14 @@ app.registerExtension({
                 { serialize: false },
             );
             localPath.serializeValue = () => undefined;
+            const probe = this.addWidget("button", "🔎 只读检查 Strata / 刷新服务模型与能力", "不会启动/加载/卸载模型，也不生成",
+                async () => {
+                    try {
+                        const result = await probeStrata(this);
+                        if (result) window.alert(statusText(result));
+                    } catch (_error) { window.alert("Strata 只读检查失败；请确认服务地址和认证。没有发送生成请求。"); }
+                }, { serialize: false });
+            probe.serializeValue = () => undefined;
         };
     },
 });

@@ -64,7 +64,7 @@ class P0P1FeatureTests(unittest.TestCase):
         config_info = config_schema.get_v1_info(provider_config.T8LLMProviderConfig)
         config_names = config_info.input_order["required"] + config_info.input_order["optional"]
         self.assertEqual(
-            config_names,
+            config_names[:16],  # Original example stays byte-frozen; new optional Strata fields default on load.
             [
                 "provider", "temperature_policy", "local_model", "local_mmproj", "local_context_size",
                 "local_max_tokens", "local_think_mode", "local_reasoning_effort", "local_video_sample_fps",
@@ -72,7 +72,7 @@ class P0P1FeatureTests(unittest.TestCase):
                 "custom_model", "ai_workshop_model", "extra_parameters_json",
             ],
         )
-        config_values = dict(zip(config_names, by_type["T8LLMProviderConfig"]["widgets_values"], strict=True))
+        config_values = dict(zip(config_names[:16], by_type["T8LLMProviderConfig"]["widgets_values"], strict=True))
         self.assertEqual(config_values["provider"], provider_config.PROVIDER_LOCAL)
         self.assertEqual(config_values["local_model"], core_nodes.DEFAULT_MODEL_FILENAME)
         self.assertEqual(config_values["local_mmproj"], core_nodes.AUTO_MMPROJ)

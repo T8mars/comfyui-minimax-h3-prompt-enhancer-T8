@@ -1,3 +1,8 @@
+try:
+    from .strata_provider import STRATA_API_MODE, STRATA_CHAT_URL, is_strata_mode, strata_execution, current_strata_run, require_strata_run, StrataProviderError
+except ImportError:
+    from strata_provider import STRATA_API_MODE, STRATA_CHAT_URL, is_strata_mode, strata_execution, current_strata_run, require_strata_run, StrataProviderError
+
 import base64
 import io as python_io
 import json
@@ -284,7 +289,7 @@ SHOT_COUNT_OPTIONS = [AUTO_SHOT_COUNT] + [str(count) for count in range(1, 21)]
 SEEDANCE_API_MODE = "贞贞平价小屋（推荐）"
 AI_WORKSHOP_API_MODE = "贞贞的AI工坊（图片/视频）"
 OPENAI_API_MODE = "OpenAI兼容接口（备用）"
-API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE]
+API_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, STRATA_API_MODE]
 LEGACY_UI_VALUES = {"展开", "收起", "提交当前工作流", "打开 Seedance 注册页面"}
 API_KEY_PATTERN = re.compile(r"\bsk-[A-Za-z0-9_-]{16,}\b")
 
@@ -592,6 +597,8 @@ def _provider_config(
     openai_base_url: str,
 ) -> tuple[str, str, str, str]:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
+    if is_strata_mode(api_mode):
+        return "", STRATA_CHAT_URL, "", "Strata"
     if is_local_qwen_api_mode(api_mode):
         return "", "", "", "Local llama.cpp GGUF"
     if api_mode == SEEDANCE_API_MODE:
@@ -620,6 +627,8 @@ def _provider_config(
 
 def _resolve_llm_model(api_mode: str, ai_workshop_model: str, custom_model: str) -> str:
     api_mode = str(api_mode or SEEDANCE_API_MODE)
+    if is_strata_mode(api_mode):
+        return require_strata_run().identity()["model"]
     if is_local_qwen_api_mode(api_mode):
         return "local-gguf"
     if api_mode == OPENAI_API_MODE:
@@ -714,6 +723,12 @@ def _video_format(video: Any, source: Any) -> tuple[str, str]:
 
 
 def _video_duration(video: Any, *, use_active_trim: bool = False) -> float:
+    if current_strata_run() is not None:
+        try:
+            from .strata_media import video_info
+        except ImportError:
+            from strata_media import video_info
+        return video_info(video)["duration"]
     if not hasattr(video, "get_duration"):
         raise PromptEnhancerError("VIDEO input does not expose duration metadata.")
     try:
@@ -766,6 +781,13 @@ def _validate_video_source(
     allow_trim: bool = False,
     max_file_bytes: int | None = MAX_FILE_BYTES,
 ):
+    if current_strata_run() is not None:
+        try:
+            from .strata_media import video_info
+        except ImportError:
+            from strata_media import video_info
+        video_info(video)
+        return
     if not hasattr(video, "get_stream_source"):
         raise PromptEnhancerError("VIDEO input must come from a native ComfyUI video node.")
     if not allow_trim:
@@ -826,6 +848,13 @@ def _video_to_bytes(
 
 def _validate_hybrid_video_payload(video, max_file_bytes):
     """Non-consuming preflight of native files/seekable buffers, without decoding."""
+    if current_strata_run() is not None:
+        try:
+            from .strata_media import video_info
+        except ImportError:
+            from strata_media import video_info
+        video_info(video)
+        return
     source = video.get_stream_source()
     try:
         if isinstance(source, (str, os.PathLike)):
@@ -1562,6 +1591,14 @@ def _request_completion(
     temperature_override: float | None = None,
     stream_acceptor: Any = None,
 ) -> str:
+    if chat_url == STRATA_CHAT_URL:
+        try:
+            text = require_strata_run().complete(messages, temperature=float(temperature_override) if temperature_override is not None else MODE_TEMPERATURES[rewrite_mode])
+        except StrataProviderError as error:
+            raise PromptEnhancerError(str(error)) from error
+        if attempts_callback:
+            attempts_callback(1)
+        return text
     is_seedance = _is_seedance_chat_endpoint(chat_url)
     temperature = (
         float(temperature_override)
@@ -1763,6 +1800,7 @@ def _next_relay_correction(
     return None
 
 
+@strata_execution
 def enhance_prompt(
     prompt: str,
     task_type: str = "T2VA",
@@ -2064,6 +2102,12 @@ def enhance_prompt(
     try:
         if effective_api_mode == AI_WORKSHOP_API_MODE:
             media_parts = _inline_media_plan(media_plan)
+        elif is_strata_mode(effective_api_mode):
+            try:
+                from .strata_media import build_strata_media_parts
+            except ImportError:
+                from strata_media import build_strata_media_parts
+            media_parts = build_strata_media_parts(media_plan)
         elif effective_api_mode == OPENAI_API_MODE:
             media_parts = _openai_media_plan(
                 media_plan,
@@ -2530,6 +2574,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         prompt,

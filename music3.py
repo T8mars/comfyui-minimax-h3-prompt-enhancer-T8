@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from .strata_provider import STRATA_API_MODE, STRATA_CHAT_URL, strata_execution, require_strata_run, StrataProviderError
+
 import hashlib
 import json
 import re
@@ -130,7 +132,7 @@ LYRICS_MODES = [
 ]
 
 MUSIC_AI_WORKSHOP_API_MODE = "贞贞的AI工坊（文本 LLM）"
-MUSIC_API_MODES = [SEEDANCE_API_MODE, MUSIC_AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE]
+MUSIC_API_MODES = [SEEDANCE_API_MODE, MUSIC_AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, STRATA_API_MODE]
 
 FAST_QUALITY_MODE = "快速核心（1–2次请求）"
 FULL_QUALITY_MODE = "官方完整（2–4次请求，推荐）"
@@ -622,7 +624,7 @@ def _stage_cache_key(
     provider_request_options: Any = None,
 ) -> str:
     credential = hashlib.sha256(_STAGE_CACHE_SALT + api_key.encode("utf-8")).hexdigest()
-    effective_request_options = apply_chat_request_options(
+    effective_request_options = require_strata_run().cache_identity() if chat_url == STRATA_CHAT_URL else apply_chat_request_options(
         {},
         chat_url=chat_url,
         temperature=temperature,
@@ -753,6 +755,11 @@ def _request_music_completion(
     recovery_component: str = "",
     recovery_slot: str = "",
 ) -> str:
+    if chat_url == STRATA_CHAT_URL:
+        try:
+            return require_strata_run().complete(messages, temperature=temperature)
+        except StrataProviderError as error:
+            raise Music3PromptEnhancerError(str(error)) from error
     is_seedance = _is_seedance_chat_endpoint(chat_url)
     payload = apply_chat_request_options({
         "model": model_id,
@@ -1830,6 +1837,7 @@ def _collect_quality_warnings(
         report.warn("music3_5000_token_budget_near_limit")
 
 
+@strata_execution
 def enhance_music3_prompt(
     music_idea: str,
     lyrics_mode: str = AUTO_LYRICS_MODE,
@@ -2514,6 +2522,7 @@ class MiniMaxMusic3PromptEnhancer(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         music_idea,

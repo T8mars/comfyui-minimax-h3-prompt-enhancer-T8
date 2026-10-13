@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from .strata_provider import strata_execution, is_strata_mode
+from .strata_media import build_strata_media_parts
+
 import difflib
 import json
 import math
@@ -241,6 +244,7 @@ def _messages(system: str, user: str, media_parts: Sequence[dict[str, Any]] | No
     ]
 
 
+@strata_execution
 def _run_completion(
     *,
     system: str,
@@ -313,6 +317,8 @@ def _run_completion(
     try:
         if media_plan and api_mode == h3.AI_WORKSHOP_API_MODE:
             media_parts = h3._inline_media_plan(media_plan)
+        elif is_strata_mode(api_mode):
+            media_parts = build_strata_media_parts(media_plan)
         elif media_plan and api_mode == h3.OPENAI_API_MODE:
             media_parts = h3._openai_media_plan(media_plan, "")
         elif media_plan:
@@ -461,6 +467,7 @@ class T8CreativeDirector(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(cls, **kwargs: Any) -> io.NodeOutput:
         brief, text = build_creative_brief(**kwargs)
         return io.NodeOutput(brief, text, _json_text(brief))
@@ -488,6 +495,7 @@ class T8CreativeContextAssembler(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         creative_brief=None,
@@ -554,6 +562,7 @@ class T8DirectedRevision(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         original_prompt,
@@ -923,6 +932,7 @@ class T8LongFormPlanner(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         concept,
@@ -1071,6 +1081,7 @@ class T8ReferenceRoleMapper(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         project_intent,
@@ -1252,6 +1263,7 @@ class T8CreativeCandidateLab(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         concept,
@@ -1313,6 +1325,7 @@ class T8CreativeCandidateSelector(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(cls, candidates_json, candidate_index=1) -> io.NodeOutput:
         parsed = _extract_json(_clean_text(candidates_json))
         if not isinstance(parsed, Mapping) or not isinstance(parsed.get("candidates"), list):
@@ -1596,6 +1609,7 @@ class T8StoryboardPack(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         concept,
@@ -1773,6 +1787,7 @@ class T8CreativeDNAMixer(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         instance_intent,
@@ -1856,6 +1871,7 @@ class T8PersonalCreativePreset(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         preset_name,
@@ -2011,6 +2027,7 @@ class T8MusicCreativeLab(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         operation=MUSIC_LAB_MODES[0],
@@ -2137,6 +2154,7 @@ class T8CreativeVersionStack(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(cls, base_version, versions=None, selected_version=1, version_notes="") -> io.NodeOutput:
         base = _clean_text(base_version)
         if not base:
@@ -2198,6 +2216,7 @@ class T8MusicVideoBeatSheet(io.ComfyNode):
         )
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         video_intent,

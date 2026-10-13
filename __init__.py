@@ -10,6 +10,7 @@ from .case_library_routes import register_routes
 from .local_qwen_routes import register_local_qwen_routes
 from .diagnostics_routes import register_diagnostics_routes
 from .provider_config import T8LLMProviderConfig
+from .strata_routes import register_strata_routes
 from .credential_routes import register_credential_routes
 from .completion_recovery_routes import register_completion_recovery_routes
 from .prompt_inspector import T8PromptInspector
@@ -30,6 +31,7 @@ register_local_qwen_routes()
 register_diagnostics_routes()
 register_credential_routes()
 register_completion_recovery_routes()
+register_strata_routes()
 
 
 class T8PromptEnhancerExtension(ComfyExtension):

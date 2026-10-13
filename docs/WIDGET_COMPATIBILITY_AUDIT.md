@@ -16,6 +16,22 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-13: Strata existing-service provider
+
+Append the provider choice; retain old main-node sockets/defaults/signatures
+and serialized names. Shared config adds eleven optional advanced fields after
+its original sixteen native widgets. Named configure/serialize covers old
+native/declaration layouts, new 27-value saves, missing markers, reordered host
+widgets and action tails. Buttons are nonserializable. Linked STRING None still
+validates; resolved blank text fails before inference. Shared Strata overrides
+stale cloud settings without reading their credential, URL or model.
+
+Actual isolated ComfyUI 0.39.0 object_info confirms native config order:
+required eleven, then optional five original fields plus eleven Strata fields.
+Regressions compare old messages/branches and unchanged example bytes, Node
+and Chrome contracts, plus real local queue execution. Inactive Strata does not
+recalculate old saved/manual main-node sizes. This is not RunningHub deployment.
+
 ### 2026-10-06: additive H3 Hybrid
 
 Append only a task combo option, with T2VA default and all five original indices

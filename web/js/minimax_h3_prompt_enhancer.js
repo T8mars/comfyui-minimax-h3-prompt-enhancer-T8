@@ -643,7 +643,7 @@ app.registerExtension({
                 if (directorSkillWidget) directorSkillWidget.value = directionalSkillLabel(directorSkillWidget.value);
                 normalizeChoice(
                     apiModeWidget,
-                    [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE],
+                    [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE, "Strata 本地服务（桥接）"],
                     SEEDANCE_API_MODE,
                 );
                 normalizeChoice(

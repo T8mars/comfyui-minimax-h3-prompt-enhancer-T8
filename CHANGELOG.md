@@ -5,6 +5,18 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.31.0] - 2026-10-13
+
+- Add an opt-in existing Strata protocol-1 service bridge across video, image,
+  music and creative text nodes, with independent settings/credentials,
+  bounded image/video input and cancellation, read-only status, no POST retry
+  and no service lifecycle control. Keep old API/GGUF defaults and workflows.
+- Append advanced shared config fields with synchronous named reload for old
+  16/new 27-value layouts. Preserve source roles, actual video PTS/trim/list
+  clocks and endpoint samples; disclose sampling gaps and no audio analysis.
+- Retain minimum ComfyUI 0.33 file/component video layouts and pin the frozen
+  provider baseline in both CI workflows instead of comparing against HEAD.
+
 ## [1.30.0] - 2026-10-06
 
 ### Added

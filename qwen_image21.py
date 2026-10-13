@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from .strata_provider import strata_execution, is_strata_mode
+from .strata_media import build_strata_media_parts
+
 import hashlib
 import json
 import re
@@ -671,6 +674,7 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         prompt="",
@@ -824,6 +828,8 @@ class QwenImage21PromptEnhancer(io.ComfyNode):
                 try:
                     if api_mode == AI_WORKSHOP_API_MODE:
                         media_parts = _inline_media_plan(media_plan)
+                    elif is_strata_mode(api_mode):
+                        media_parts = build_strata_media_parts(media_plan)
                     elif api_mode == OPENAI_API_MODE:
                         media_parts = _openai_media_plan(media_plan, "", video_sample_fps=float(current["local_video_sample_fps"]))
                     else:

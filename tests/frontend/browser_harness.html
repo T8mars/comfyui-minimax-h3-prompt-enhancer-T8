@@ -26,6 +26,15 @@ try {
   const recommendation = await import("../../web/js/template_recommendation.mjs");
   const directing = await import("../../web/js/h3_directional_skill_ui.mjs");
   const recovery = await import("../../web/js/completion_recovery_core.mjs");
+  const strataUI = await import("../../web/js/strata_ui.mjs");
+  const strataStatus = document.createElement("pre");
+  strataStatus.textContent = strataUI.statusText({connected:true,model:"model-test",context:32768,loaded:true,vision_enabled:true,native_verified:false});
+  document.body.append(strataStatus);
+  check(strataStatus.textContent.includes("只读检查") && strataStatus.textContent.includes("尚未核验"), "Strata metadata status is explicit and plain text");
+  const strataNode = { widgets: strataUI.CONFIG_NAMES.map(name => ({name,value:strataUI.STRATA_DEFAULTS[name]??null})), properties:{} };
+  strataNode.widgets[0].value="Strata";strataNode.widgets[1].value="AUTO（兼容策略）";
+  const strataSave={};strataUI.serializeConfig(strataNode,strataSave);
+  check(strataSave.widgets_values.length===27 && strataUI.configSavedValues(strataSave).get("strata_max_tokens")===0,"Strata browser named config reload");
   const cameraNotice = document.createElement("div");
   cameraNotice.textContent = recovery.recoveryMessage({ recoverable: true, creation_metadata: {
     combat_camera_mode: "strong", combat_camera_continuity: "follow", combat_camera_impact: "natural",

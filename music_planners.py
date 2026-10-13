@@ -6,6 +6,8 @@ remain the platform-specific compilers and keep their existing contracts.
 
 from __future__ import annotations
 
+from .strata_provider import STRATA_API_MODE, strata_execution, is_strata_mode, require_strata_run
+
 import json
 from contextlib import ExitStack
 from typing import Any
@@ -32,7 +34,7 @@ from .nodes import (
 )
 
 
-NODE_PROVIDER_OPTIONS = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE]
+NODE_PROVIDER_OPTIONS = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, STRATA_API_MODE]
 QUALITY_OPTIONS = ["标准 / Standard", "仅文本审校 / Text review"]
 LYRIC_MODES = ["新写 / New", "严格保留 / Preserve", "整首改写 / Rewrite"]
 SONG_TYPES = ["AUTO", "态度型 / Attitudinal", "情境型 / Situational", "叙事型 / Narrative", "说理型 / Expository"]
@@ -128,6 +130,7 @@ class T8LyricWriter(io.ComfyNode):
         return True if str(music_idea or "").strip() else "请填写创作主题 / Music idea。"
 
     @classmethod
+    @strata_execution
     def execute(cls, music_idea="", provider_config=None, **kwargs):
         idea = clean_text(music_idea)
         if not idea:
@@ -182,7 +185,7 @@ class T8LyricWriter(io.ComfyNode):
             "status": "success",
             "mode": mode,
             "provider": values.get("api_mode"),
-            "model": values.get("local_model") if values.get("api_mode") == LOCAL_QWEN_API_MODE else values.get("custom_model") or values.get("ai_workshop_model"),
+            "model": require_strata_run().snapshot["model"] if is_strata_mode(values.get("api_mode")) else values.get("local_model") if values.get("api_mode") == LOCAL_QWEN_API_MODE else values.get("custom_model") or values.get("ai_workshop_model"),
             "stages": stages,
             "text_review": review,
             "audio_verified": False,
@@ -238,6 +241,7 @@ class T8ArrangementPlanner(io.ComfyNode):
         return True if str(music_idea or "").strip() else "请填写音乐创意 / Music idea。"
 
     @classmethod
+    @strata_execution
     def execute(cls, music_idea="", provider_config=None, **kwargs):
         idea = clean_text(music_idea)
         if not idea:
@@ -279,7 +283,7 @@ class T8ArrangementPlanner(io.ComfyNode):
             "schema_version": "t8-arrangement-planner-report/v1",
             "status": "success",
             "provider": values.get("api_mode"),
-            "model": values.get("local_model") if values.get("api_mode") == LOCAL_QWEN_API_MODE else values.get("custom_model") or values.get("ai_workshop_model"),
+            "model": require_strata_run().snapshot["model"] if is_strata_mode(values.get("api_mode")) else values.get("local_model") if values.get("api_mode") == LOCAL_QWEN_API_MODE else values.get("custom_model") or values.get("ai_workshop_model"),
             "stages": stages,
             "text_review": review,
             "audio_verified": False,

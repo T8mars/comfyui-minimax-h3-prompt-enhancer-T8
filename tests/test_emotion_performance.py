@@ -240,6 +240,9 @@ class EmotionPerformanceTests(unittest.TestCase):
                         encoded=addition.encode("utf8")
                         self.assertEqual(current.count(encoded),1)
                         current=current.replace(encoded,b"")
+                if path.startswith("web/js/"):
+                    from strata_baseline_projection import project_strata_ui
+                    current = project_strata_ui(current.decode("utf-8")).encode("utf-8")
                 self.assertEqual(current, old, path)
 
 

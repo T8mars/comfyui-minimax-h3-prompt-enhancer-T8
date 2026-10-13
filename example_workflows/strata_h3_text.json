@@ -1,0 +1,269 @@
+{
+  "id": "b4bd3455-87ef-5f1d-bf49-477fd5795839",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8LLMProviderConfig",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        440,
+        520
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8LLMProviderConfig",
+        "t8_provider_config_widgets_schema": 1
+      },
+      "widgets_values": [
+        "Strata",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        4096,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
+        "",
+        "http://127.0.0.1:8080",
+        "AUTO",
+        "",
+        "none",
+        0,
+        0,
+        "frames",
+        1.0,
+        8,
+        1800.0,
+        false
+      ],
+      "widgets_values_named": {
+        "provider": "Strata",
+        "temperature_policy": "AUTO（兼容策略）",
+        "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+        "local_mmproj": "AUTO（自动匹配）",
+        "local_context_size": 32768,
+        "local_max_tokens": 4096,
+        "local_think_mode": "关闭（推荐，速度优先）",
+        "local_reasoning_effort": "medium",
+        "local_video_sample_fps": 2.0,
+        "local_unload_policy": "执行后卸载（推荐）",
+        "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+        "credential_alias": "",
+        "openai_base_url": "",
+        "custom_model": "",
+        "ai_workshop_model": "gemini-3.5-flash",
+        "extra_parameters_json": "",
+        "strata_url": "http://127.0.0.1:8080",
+        "strata_model": "AUTO",
+        "strata_credential_alias": "",
+        "strata_reasoning_effort": "none",
+        "strata_max_tokens": 0,
+        "strata_reasoning_budget_tokens": 0,
+        "strata_video_mode": "frames",
+        "strata_video_sample_fps": 1.0,
+        "strata_video_max_frames": 8,
+        "strata_timeout_s": 1800.0,
+        "strata_allow_private_network": false
+      }
+    },
+    {
+      "id": 2,
+      "type": "MiniMaxH3PromptEnhancerT8",
+      "pos": [
+        550,
+        0
+      ],
+      "size": [
+        620,
+        980
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": null,
+          "label": "API Key"
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 1,
+          "label": "共享 LLM 渠道配置（可选）"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "黄色陶瓷杯静置木桌，镜头缓慢推进；无人物、无台词。",
+        "T2VA（文生音视频）",
+        8,
+        "AUTO（系统自动判断）",
+        "balanced",
+        0,
+        "中文",
+        "官方增强",
+        "现有兼容（保留中英文）",
+        "无（仅核心规则）",
+        "无（不使用 T8 案例）",
+        "Strata 本地服务（桥接）",
+        "gemini-3.5-flash",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "普通增强 / Normal",
+        0,
+        0,
+        "",
+        "none",
+        "off",
+        "off"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "T8ShowText",
+      "pos": [
+        1250,
+        120
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      5,
+      "T8_LLM_PROVIDER_CONFIG"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

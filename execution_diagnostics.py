@@ -110,6 +110,13 @@ class DiagnosticsRun:
         if error is not None:
             record["error_type"] = type(error).__name__
             record["error_category"] = _error_category(error)
+        try:
+            from .strata_provider import current_strata_run
+        except ImportError:
+            from strata_provider import current_strata_run
+        strata_run = current_strata_run()
+        if strata_run is not None:
+            record["strata_bridge"] = strata_run.summary()
         with _LOCK:
             _RECENT.appendleft(record)
 

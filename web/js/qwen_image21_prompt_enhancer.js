@@ -25,6 +25,7 @@ const LOCAL_QWEN_API_MODES = new Set([
 const API_MODES = new Set([
     "贞贞平价小屋（推荐）", AI_WORKSHOP_API_MODE, OPENAI_API_MODE,
     ...LOCAL_QWEN_API_MODES,
+    "Strata 本地服务（桥接）",
 ]);
 const SEED_CONTROLS = new Set(["fixed", "increment", "decrement", "randomize"]);
 const CLASSIC_PROFILE = "经典兼容 / Classic";

@@ -5,6 +5,11 @@ from typing import Any, Mapping
 from comfy_api.latest import io
 
 try:
+    from .strata_provider import PROVIDER_STRATA, STRATA_API_MODE, StrataSettings, StrataProviderError
+except ImportError:
+    from strata_provider import PROVIDER_STRATA, STRATA_API_MODE, StrataSettings, StrataProviderError
+
+try:
     from .credential_store import CredentialStoreError, get_credential
     from .local_qwen_provider import (
         DEFAULT_CONTEXT_SIZE,
@@ -67,7 +72,7 @@ PROVIDER_SEEDANCE = "Seedance NZ"
 PROVIDER_WORKSHOP = "T8 AI Workshop"
 PROVIDER_OPENAI = "OpenAI Compatible"
 PROVIDER_LOCAL = "Local Qwen"
-PROVIDER_OPTIONS = [PROVIDER_SEEDANCE, PROVIDER_WORKSHOP, PROVIDER_OPENAI, PROVIDER_LOCAL]
+PROVIDER_OPTIONS = [PROVIDER_SEEDANCE, PROVIDER_WORKSHOP, PROVIDER_OPENAI, PROVIDER_LOCAL, PROVIDER_STRATA]
 TEMPERATURE_LABELS = {
     "AUTO（兼容策略）": TEMPERATURE_AUTO,
     "发送 temperature": TEMPERATURE_SEND,
@@ -95,6 +100,15 @@ def build_provider_config(**values: Any) -> dict[str, Any]:
     provider = _clean_text(values.get("provider"), limit=64)
     if provider not in PROVIDER_OPTIONS:
         raise ProviderConfigError(f"Unsupported shared provider: {provider}")
+    if provider == PROVIDER_STRATA:
+        try:
+            # These flat schema values also contain the old cloud alias. Only
+            # the independently named Strata fields belong to this backend.
+            settings = StrataSettings.from_values({key:value for key,value in values.items() if key.startswith("strata_")}).public_values()
+        except StrataProviderError as exc:
+            raise ProviderConfigError(str(exc)) from exc
+        return {"schema_version": PROVIDER_CONFIG_SCHEMA, "provider": PROVIDER_STRATA,
+                "strata_settings": settings, "provider_request_options": {"strata_settings": settings}}
     policy_label = _clean_text(values.get("temperature_policy") or next(iter(TEMPERATURE_LABELS)), limit=64)
     if policy_label not in TEMPERATURE_LABELS:
         raise ProviderConfigError(f"Unsupported temperature policy: {policy_label}")
@@ -142,6 +156,15 @@ def merge_provider_config(
     if not isinstance(provider_config, Mapping) or provider_config.get("schema_version") != PROVIDER_CONFIG_SCHEMA:
         raise ProviderConfigError("Connected provider_config has an unsupported schema.")
     provider = str(provider_config.get("provider", ""))
+    if provider == PROVIDER_STRATA:
+        try:
+            settings = StrataSettings.from_values(provider_config.get("strata_settings")).public_values()
+        except StrataProviderError as exc:
+            raise ProviderConfigError(str(exc)) from exc
+        result["api_mode"] = STRATA_API_MODE
+        result["provider_request_options"] = {"strata_settings": settings}
+        result["strata_settings"] = settings
+        return result
     if provider not in api_mode_map:
         raise ProviderConfigError(f"Connected provider is unsupported by this node: {provider}")
     result["api_mode"] = api_mode_map[provider]
@@ -227,6 +250,17 @@ class T8LLMProviderConfig(io.ComfyNode):
                 io.Float.Input("local_video_sample_fps", display_name="本地视频采样率", default=DEFAULT_VIDEO_SAMPLE_FPS, min=0.25, max=8.0, step=0.25, advanced=True),
                 io.Combo.Input("local_unload_policy", display_name="本地卸载策略", options=LOCAL_UNLOAD_POLICIES, default=LOCAL_UNLOAD_AFTER_RUN, advanced=True),
                 io.Combo.Input("local_comfy_memory_policy", display_name="本地显存策略", options=LOCAL_COMFY_MEMORY_POLICIES, default=LOCAL_COMFY_MEMORY_POLICIES[0], advanced=True),
+                io.String.Input("strata_url", display_name="Strata 服务地址（ComfyUI 后端视角）", optional=True, default="http://127.0.0.1:8080", advanced=True, socketless=True),
+                io.String.Input("strata_model", display_name="Strata 模型 ID / AUTO 当前模型", optional=True, default="AUTO", advanced=True, socketless=True),
+                io.String.Input("strata_credential_alias", display_name="Strata 独立凭据别名（认证才需）", optional=True, default="", advanced=True, socketless=True),
+                io.Combo.Input("strata_reasoning_effort", display_name="Strata 思考 / none=关闭", options=["none", "low", "medium", "high"], optional=True, default="none", advanced=True),
+                io.Int.Input("strata_max_tokens", display_name="Strata 生成 Token（0=剩余上下文，含思考）", optional=True, default=0, min=0, max=2147483647, advanced=True),
+                io.Int.Input("strata_reasoning_budget_tokens", display_name="Strata 思考预算（0=无额外硬预算）", optional=True, default=0, min=0, max=2147483647, advanced=True),
+                io.Combo.Input("strata_video_mode", display_name="Strata 视频编码（native 需服务核验）", options=["frames", "native"], optional=True, default="frames", advanced=True),
+                io.Float.Input("strata_video_sample_fps", display_name="Strata 名义采样率（实际覆盖见报告）", optional=True, default=1.0, min=0.25, max=30., step=.25, advanced=True),
+                io.Int.Input("strata_video_max_frames", display_name="Strata 每视频样本上限（全请求≤64）", optional=True, default=8, min=2, max=64, advanced=True),
+                io.Float.Input("strata_timeout_s", display_name="Strata 整个任务超时（秒，含排队/纠正）", optional=True, default=1800., min=5., max=86400., advanced=True),
+                io.Boolean.Input("strata_allow_private_network", display_name="显式允许私网/容器（需独立认证）", optional=True, default=False, advanced=True),
             ],
             outputs=[T8ProviderConfigIO.Output(display_name="provider_config")],
         )
@@ -249,6 +283,7 @@ __all__ = [
     "PROVIDER_OPENAI",
     "PROVIDER_SEEDANCE",
     "PROVIDER_WORKSHOP",
+    "PROVIDER_STRATA",
     "ProviderConfigError",
     "T8LLMProviderConfig",
     "T8ProviderConfigIO",

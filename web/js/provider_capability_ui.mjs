@@ -7,6 +7,12 @@ const LEGACY_LOCAL_QWEN_API_MODE = "本地 Qwen3.8-27B（GGUF，离线）";
 
 export function providerCapabilitySummary(apiMode, baseUrl = "", { textOnly = false } = {}) {
     const mode = String(apiMode || "");
+    if (mode === "Strata 本地服务（桥接）") return {
+        profile: "strata-protocol-1", image: textOnly ? "此节点无媒体输入" : "需服务启用视觉；桥接发送内联图片",
+        video_data_url: textOnly ? "此节点无媒体输入" : "显式 strata_video 时间戳采样协议；frames 默认，native 需核验",
+        video_url: "不发送普通 video_url（服务会忽略）", audio: "不读取或分析音轨",
+        optional_parameters: "独立 Strata 配置；上下文由服务决定。实时状态请在共享渠道配置中只读检查。",
+    };
     if ([LOCAL_QWEN_API_MODE, LEGACY_LOCAL_QWEN_API_MODE].includes(mode)) {
         return {
             profile: "local-qwen-verified",

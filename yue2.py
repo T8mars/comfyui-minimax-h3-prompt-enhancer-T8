@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from .strata_provider import STRATA_API_MODE, strata_execution, is_strata_mode, require_strata_run, StrataProviderError
+
 import hashlib
 import json
 import math
@@ -60,7 +62,7 @@ ABC_KEEP = "保留 / Preserve"
 ABC_STRIP = "去和弦，保留双声部旋律 / Strip chords"
 ABC_GENERATE = "自动创作 ABC（T8 LLM）/ Compose"
 ABC_DOWNSTREAM = "交给下游 YuE2 规划（ABC 留空）/ Downstream"
-PROVIDER_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE]
+PROVIDER_MODES = [SEEDANCE_API_MODE, AI_WORKSHOP_API_MODE, OPENAI_API_MODE, LOCAL_QWEN_API_MODE, STRATA_API_MODE]
 SECTION_RE = re.compile(r"(?m)^\[[^\]\r\n]+\][ \t]*\r?$")
 RUBRIC = ["theme_and_story", "singability", "chorus_hook", "section_development", "style_lyrics_coherence"]
 REVIEW_SCHEMA = {
@@ -266,6 +268,15 @@ class YuE2Runner:
             text = self.local.complete(messages, temperature=temperature, seed=self.values["seed"],
                                        require_complete=True, response_format={"type": "json_object", "schema": schema})
             attempts = 1
+        elif is_strata_mode(self.values["api_mode"]):
+            try:
+                # Match the existing cloud path: YuE2 owns JSON extraction and
+                # its bounded ABC repair. Strata's prompt-and-validate JSON gate
+                # is not constrained decoding and can reject a recoverable draft.
+                text = require_strata_run().complete(messages, temperature=temperature, seed=self.values["seed"])
+            except StrataProviderError as error:
+                raise YuE2PromptError(str(error)) from error
+            attempts = 1
         else:
             payload = apply_chat_request_options(
                 {"model": self.model, "messages": messages, "stream": _is_seedance_chat_endpoint(self.url)},
@@ -447,6 +458,7 @@ def compose_abc(runner: YuE2Runner, brief: dict, style: str, lyrics: str, cot: s
     raise AssertionError("ABC composition loop did not return")
 
 
+@strata_execution
 def enhance_yue2_prompt(*, session=None, **kwargs) -> tuple[str, str, str, str, str]:
     values = {**DEFAULTS, **kwargs}
     # Old positional workflows can map a nonserialized UI button to this new field.
@@ -688,6 +700,7 @@ class YuE2MusicPromptEnhancer(io.ComfyNode):
         return io.NodeOutput(*result, ui={"t8_yue2_status": [status], "t8_yue2_partial": [failed]})
 
     @classmethod
+    @strata_execution
     def execute(cls, music_idea="", provider_config=None, **kwargs):
         values = {**DEFAULTS, **kwargs, "music_idea": music_idea}
         if values["recovery_action"] == RECOVERY_ACTION_RESTORE:

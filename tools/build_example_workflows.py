@@ -802,18 +802,20 @@ def check() -> None:
     from build_quality_workflows import STEMS as quality_stems, check as check_quality
     from build_combat_camera_workflows import STEMS as camera_stems, check as check_camera
     from build_h3_hybrid_workflows import STEMS as hybrid_stems, check as check_hybrid
+    from build_strata_workflows import STEMS as strata_stems, check as check_strata
 
     check_directional()
     check_quality()
     check_camera()
     check_hybrid()
+    check_strata()
     expected_counts = {
         "MiniMaxH3PromptEnhancerT8": 31,
         "Seedance20PromptEnhancerT8": 35,
         "MiniMaxMusic3PromptEnhancerT8": 38,
         "QwenImage21PromptEnhancerT8": 22,
     }
-    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems, *camera_stems, *hybrid_stems))
+    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems, *camera_stems, *hybrid_stems, *strata_stems))
     if len(workflows) != 20:
         raise RuntimeError(f"Expected 20 example workflows, found {len(workflows)}")
     expected_inputs = {

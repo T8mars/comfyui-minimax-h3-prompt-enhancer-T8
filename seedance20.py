@@ -1,3 +1,6 @@
+from .strata_provider import strata_execution, is_strata_mode
+from .strata_media import build_strata_media_parts
+
 import json
 from typing import Any
 
@@ -730,6 +733,7 @@ def _build_messages(
     ]
 
 
+@strata_execution
 def enhance_seedance20_prompt(
     prompt: str,
     task_intent: str = TASK_INTENT_LABELS["AUTO"],
@@ -1006,6 +1010,8 @@ def enhance_seedance20_prompt(
     try:
         if effective_api_mode == AI_WORKSHOP_API_MODE:
             media_parts = _inline_media_plan(media_plan)
+        elif is_strata_mode(effective_api_mode):
+            media_parts = build_strata_media_parts(media_plan)
         elif effective_api_mode == OPENAI_API_MODE:
             media_parts = _openai_media_plan(
                 media_plan,
@@ -1456,6 +1462,7 @@ class Seedance20PromptEnhancer(io.ComfyNode):
         return True
 
     @classmethod
+    @strata_execution
     def execute(
         cls,
         prompt,
