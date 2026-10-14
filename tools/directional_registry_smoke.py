@@ -17,6 +17,7 @@ from verify_repository import ROOT, tracked_files, verify_registry_package_hygie
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--comfy-root", type=Path, default=ROOT.parents[1], help="Explicit ComfyUI source for CPU schema compatibility checks.")
     args = parser.parse_args()
     output = args.output_dir.resolve()
     if output == ROOT or ROOT in output.parents:
@@ -58,8 +59,14 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 29
-assert [s.node_id for s in schemas[-4:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig"]
+assert len(schemas) == 30
+assert [s.node_id for s in schemas[-5:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
+speech = sys.modules[spec.name + ".speech_reference"]
+assert speech.T8SpeechReference.execute().result == (None, "", "", "")
+assert len(speech.T8SpeechReference.define_schema().outputs) == 4
+assert (p / "speech_output.py").is_file()
+assert (p / "web/js/speech_reference.js").is_file()
+assert (p / "docs/speech-reference.md").is_file()
 camera = sys.modules[spec.name + ".combat_camera"]
 perf = sys.modules[spec.name + ".performance_director"]
 emotion = sys.modules[spec.name + ".emotion_performance"]
@@ -77,7 +84,9 @@ assert (p / "research_sources/tudou-emotion.lock.json").is_file()
 assert (p / "web/js/docs/T8PerformanceDirectorConfig/zh.md").is_file()
 assert camera.combat_camera_instruction(None) == ""
 assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3")
-assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "combat_camera_config"
+assert schemas[0].inputs[-2].id == schemas[1].inputs[-2].id == "combat_camera_config"
+assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "speech_reference"
+assert schemas[0].inputs[-1].lazy and schemas[1].inputs[-1].lazy
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
 h3 = sys.modules[spec.name + ".nodes"]
@@ -107,7 +116,7 @@ for name, loaded in list(sys.modules.items()):
         assert pathlib.Path(loaded.__file__).is_relative_to(p), name
 print(json.dumps({"node_count":len(schemas), "node_ids":[s.node_id for s in schemas], "native_outputs":True, "new_skills":True, "emotion_strategy":True, "vocal_format":True, "hybrid":True, "live_repo_fallback":False}))
 '''
-        bootstrap = "import sys; sys.argv_comfy=" + repr(str(ROOT.parents[1])) + "; sys.argv_install=" + repr(str(install)) + ";" + code
+        bootstrap = "import sys; sys.argv_comfy=" + repr(str(args.comfy_root.resolve())) + "; sys.argv_install=" + repr(str(install)) + ";" + code
         result = subprocess.run([sys.executable, "-c", bootstrap], cwd=temporary, capture_output=True, text=True,
                                 encoding="utf-8", errors="replace", timeout=60, check=False,
                                 env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"})

@@ -182,9 +182,17 @@ def _checked_h3_quality_result(draft, *, mode, messages, complete, task_type, du
 
 
 def seedance_quality_result(draft, *, mode, messages, complete, language, source,
-                            shot_count=0, progress=None, director_skill=DIRECTOR_OFF):
+                            shot_count=0, progress=None, director_skill=DIRECTOR_OFF, speech_reference=None):
+    if speech_reference is not None:
+        try:
+            from .speech_output import check_speech_seedance
+        except ImportError:
+            from speech_output import check_speech_seedance
+        checker = check_speech_seedance
+    else:
+        checker = check_seedance
     return run_quality(draft, mode=mode, messages=messages, complete=complete,
-                       check=lambda text: check_seedance(text, language=language, source=source, shot_count=shot_count),
+                       check=lambda text: checker(text, language=language, source=source, shot_count=shot_count),
                        **({"build_correction": lambda original, text, report: correction_messages(original, text, report, requested_dialogue=True)}
                           if uses_authoring_contract(director_skill) else {}),
                        **({"accept": lambda old, new, before, after: accept_correction(old, new, before, after, protect_generated_vocals=True)}

@@ -69,7 +69,10 @@ class EmotionPerformanceTests(unittest.TestCase):
             self.assertEqual(direction.coordinated_performance_instruction(**values), old_coordinated(**values))
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             old = original_function(filename, "_build_messages", module, BASELINE)
-            self.assertEqual(inspect.signature(module._build_messages), inspect.signature(old))
+            signature = inspect.signature(module._build_messages)
+            self.assertEqual(list(signature.parameters)[-1], "speech_reference")
+            self.assertIsNone(signature.parameters["speech_reference"].default)
+            self.assertEqual(signature.replace(parameters=list(signature.parameters.values())[:-1]), inspect.signature(old))
             for mode in (None, *[perf.build_performance_director_config(m) for m in perf.PERFORMANCE_MODES[:4]]):
                 for skill in direction.DIRECTOR_LABELS:
                     values = args(director_skill=skill, performance_director_config=mode)

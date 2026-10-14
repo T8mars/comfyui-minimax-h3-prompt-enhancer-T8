@@ -143,9 +143,19 @@ class VocalProtocolTests(unittest.TestCase):
             if name == 'quality_pipeline.py':
                 # Historical evidence is immutable, not a claim that new Hybrid
                 # code was API-tested on October 4. Project only the reviewed
-                # internal role argument; every other adapter AST remains frozen.
+                # internal role argument and exact active-only speech adapter;
+                # every other AST and historical evidence hash remain frozen.
                 evidence_code=subprocess.check_output(['git','show','d6ad140020f39da6182fe4dfd3e2ded11c5f5557:quality_pipeline.py'],cwd=GIT_ROOT).replace(b'\r\n',b'\n')
                 tree=ast.parse(current)
+                from speech_baseline_projection import project_seedance_speech_quality
+                for index, node in enumerate(tree.body):
+                    if isinstance(node, ast.FunctionDef) and node.name == 'seedance_quality_result':
+                        tree.body[index] = project_seedance_speech_quality(node)
+                        # A changed inactive branch is never projected away.
+                        changed = copy.deepcopy(node)
+                        changed.body[0].orelse[0].value.id = 'check_speech_seedance'
+                        with self.assertRaises(AssertionError):
+                            project_seedance_speech_quality(changed)
                 for node in tree.body:
                     if isinstance(node,ast.FunctionDef) and node.name in {'h3_quality_result','_checked_h3_quality_result'}:
                         self.assertEqual(node.args.kwonlyargs[-1].arg,'asset_roles')

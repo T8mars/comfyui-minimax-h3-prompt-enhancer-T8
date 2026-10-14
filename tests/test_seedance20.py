@@ -159,7 +159,7 @@ class Seedance20PromptEnhancerTests(unittest.TestCase):
         )
         self.assertEqual(registered[7], "T8PerformanceDirectorConfig")
         self.assertEqual(
-            registered[8:-5],
+            registered[8:-6],
             [
                 "T8FilmProjectRouter",
                 "T8CharacterPerformanceBible",

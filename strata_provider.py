@@ -239,6 +239,10 @@ class _PinnedHTTPS(http.client.HTTPSConnection):
 
 class StrataClient:
     """Direct bounded HTTP. There are no proxies, redirects or POST retries."""
+    STATUS_CATEGORIES = {}
+    GET_PATHS = frozenset({"/health", "/v1/status", "/v1/models", "/v1/chat/completions"})
+    POST_PATHS = frozenset({"/v1/chat/completions"})
+    RESPONSE_LIMIT = MAX_RESPONSE_BYTES
     def __init__(self, settings, key=None):
         self.settings = StrataSettings.from_values(settings)
         self.host, self.port = validate_endpoint(self.settings)
@@ -282,7 +286,7 @@ class StrataClient:
         self.pinned = addresses[0]
 
     def request(self, path, body=None, *, timeout=5, check=interrupted, on_submit=None):
-        if path not in {"/health", "/v1/status", "/v1/models", "/v1/chat/completions"} or (body is not None and path != "/v1/chat/completions"):
+        if path not in (self.POST_PATHS if body is not None else self.GET_PATHS):
             raise StrataProviderError("Strata bridge does not expose lifecycle or arbitrary endpoints.")
         timeout = _number(timeout, "request timeout", .001, 86400)
         encoded = request_bytes(body)
@@ -320,15 +324,15 @@ class StrataClient:
                 transfers = [v.strip().lower() for k, v in response.getheaders() if k.lower() == "transfer-encoding"]
                 if len(lengths) > 1 or len(transfers) > 1 or (lengths and transfers) or (transfers and transfers != ["chunked"]):
                     raise StrataProviderError("Ambiguous Strata response framing.", "invalid_response")
-                if lengths and (not re.fullmatch(r"[0-9]{1,10}", lengths[0]) or int(lengths[0]) > MAX_RESPONSE_BYTES):
+                if lengths and (not re.fullmatch(r"[0-9]{1,10}", lengths[0]) or int(lengths[0]) > self.RESPONSE_LIMIT):
                     raise StrataProviderError("Strata response exceeds its size limit.", "response_budget")
                 expected = getattr(response, "length", None)
-                raw = response.read(MAX_RESPONSE_BYTES + 1)
-                if len(raw) > MAX_RESPONSE_BYTES or (type(expected) is int and len(raw) != expected):
+                raw = response.read(self.RESPONSE_LIMIT + 1)
+                if len(raw) > self.RESPONSE_LIMIT or (type(expected) is int and len(raw) != expected):
                     raise StrataProviderError("Strata response is oversized or incomplete.", "invalid_response")
                 if response.status != 200:
                     categories = {401: "authentication", 403: "authentication", 404: "not_found", 413: "request_budget", 422: "structured_output", 502: "service_error", 503: "service_busy"}
-                    category = categories.get(response.status, "service_error")
+                    category = self.STATUS_CATEGORIES.get(response.status, categories.get(response.status, "service_error"))
                     try:
                         error_code = strict_json(raw).get("error", {}).get("code")
                         if error_code == "structured_output_failed":

@@ -318,7 +318,7 @@ class CombatCameraTests(unittest.TestCase):
                 old = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == function)
                 names = [arg.arg for arg in old.args.args]
                 current = list(inspect.signature(getattr(module, function)).parameters)
-                self.assertEqual(current, names + ["combat_camera_config"])
+                self.assertEqual(current, names + ["combat_camera_config", "speech_reference"])
             old_cls = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == cls.__name__)
             old_schema = next(node for node in old_cls.body if isinstance(node, ast.FunctionDef) and node.name == "define_schema")
             old_schema.decorator_list = []
@@ -326,7 +326,7 @@ class CombatCameraTests(unittest.TestCase):
             exec(compile(ast.Module(body=[old_schema], type_ignores=[]), filename, "exec"), namespace)
             old_inputs = [item.id for item in namespace["define_schema"](cls).inputs]
             current_inputs = [item.id for item in cls.define_schema().inputs]
-            self.assertEqual(current_inputs, old_inputs + ["combat_camera_config"])
+            self.assertEqual(current_inputs, old_inputs + ["combat_camera_config", "speech_reference"])
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         current_ids = [cls.define_schema().node_id for cls in asyncio.run(extension.get_node_list())]
@@ -338,7 +338,7 @@ class CombatCameraTests(unittest.TestCase):
         exec(compile(ast.Module(body=[method], type_ignores=[]), "__init__.py", "exec"), namespace)
         old_ids = [cls.define_schema().node_id for cls in asyncio.run(namespace["get_node_list"](extension))]
         self.assertEqual(len(old_ids), 28)
-        self.assertEqual(current_ids, old_ids + ["T8CombatCameraConfig"])
+        self.assertEqual(current_ids, old_ids + ["T8CombatCameraConfig", "T8SpeechReference"])
 
 
 if __name__ == "__main__":

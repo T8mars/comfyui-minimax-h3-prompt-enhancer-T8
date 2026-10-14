@@ -117,6 +117,42 @@ try {
     TEMPLATE_DETAIL_MAX_HEIGHT,
   } = await import("../../web/js/case_template_ui.js");
   const { app } = await import("../../scripts/app.js");
+  const speechUI = await import("../../web/js/speech_reference_ui.mjs");
+  await import("../../web/js/speech_reference.js");
+  check(!speechUI.speechStatusText({connected:true,supported:true,device:"cuda",cpu_guard:true}).includes("就绪 / Ready"),"CUDA component readiness cannot promise CPU-safe automatic speech");
+  class SpeechReferenceNode {
+    constructor() {
+      this.widgets = speechUI.SPEECH_NAMES.map(name => ({name, type:"text", value: ({mode:"Enabled",source_mode:"Provided text",purpose:"reference",provided_text:"字幕原词 \u003cscript>不是HTML\u003c/script>",provided_format:"auto",speaker_map_json:"{}",partial_policy:"reject",failure_policy:"stop",start_s:0,duration_s:0,language:"Auto",context:"",audio_track:0,channel:"mean",offset_ms:0,timeout_s:1800})[name]}));
+      this.size=[440,300];this.inputs=[];this.properties={};
+    }
+    addWidget(type,name,value,callback,options){const w={type,name,value,callback,options};this.widgets.push(w);return w;}
+    setDirtyCanvas(){} setSize(value){this.size=value;} computeSize(){return [440,this.widgets.filter(w=>!w.hidden).length*24];}
+    onConfigure(data){data.widgets_values.forEach((value,index)=>{if(this.widgets[index])this.widgets[index].value=value;});}
+  }
+  const speechExtension = app.extensions.find(e=>e.name==="T8.SpeechReference");
+  await speechExtension.beforeRegisterNodeDef(SpeechReferenceNode,{name:"T8SpeechReference"});
+  const speechNode=new SpeechReferenceNode();speechNode.onNodeCreated();const speechSize=[...speechNode.size];
+  const speechSerialized={};speechNode.onSerialize(speechSerialized);
+  check(speechSerialized.widgets_values.length===16,"Speech helper excludes frontend actions from its sixteen native values");
+  speechNode.widgets.reverse();speechNode.onConfigure(speechSerialized);
+  check(speechNode.widgets.find(w=>w.name==="provided_text").value.includes("字幕原词"),"Speech helper restores named external text synchronously despite runtime reordering");
+  for(let i=0;i<8;i++){speechNode.t8SpeechAdvanced=true;speechUI.refreshSpeech(speechNode);speechNode.t8SpeechAdvanced=false;speechUI.refreshSpeech(speechNode);}
+  check(speechNode.size[1]===speechSize[1],"Speech advanced toggles do not accumulate height");
+  check(speechNode.widgets.filter(w=>w.type==="button").every(w=>w.options.serialize===false&&w.serializeValue()===undefined),"Speech check/help/preview actions are nonserializable");
+    for(const target of ["h3","seedance20"]){
+      const graph=await(await fetch(`../../example_workflows/speech_reference_${target}.json`)).json();
+      const saved=graph.nodes.find(n=>n.type==="T8SpeechReference");
+      const damaged=new SpeechReferenceNode();damaged.onNodeCreated();damaged.onConfigure({widgets_values:saved.widgets_values,widgets_values_named:{},properties:{t8_speech_widgets_v1:{}}});
+      check(damaged.widgets.find(w=>w.name==="purpose").value==="keep_dialogue"&&damaged.widgets.find(w=>w.name==="provided_format").value==="srt","Empty named metadata cannot erase valid speech settings in Chrome");
+      const n=new SpeechReferenceNode();n.onNodeCreated();n.onConfigure(saved);
+      n.inputs=[{name:"provided_text",link:99}];
+      n.widgets=n.widgets.filter(w=>w.name!=="provided_text");
+      const serial={};n.onSerialize(serial);
+      check(serial.widgets_values.length===16&&serial.widgets_values[3]===null,"Linked subtitle omission retains fixed null slot in Chrome");
+      const restored=new SpeechReferenceNode();restored.onNodeCreated();restored.inputs=n.inputs;
+      restored.onConfigure({widgets_values:[...serial.widgets_values.slice(0,3),...serial.widgets_values.slice(4),"host-action"]});
+      check(restored.widgets.find(w=>w.name==="purpose").value==="keep_dialogue"&&restored.widgets.find(w=>w.name==="provided_format").value==="srt","Chrome migrates only the known linked-text omission without shifting later fields");
+    }
   const { configureRelayWidgets } = await import("../../web/js/minimax_h3_prompt_enhancer.js");
   const h3Extension = app.extensions.find(item => item.name === "T8.MiniMaxH3PromptEnhancer");
   const h3QualityLabels = await import("../../web/js/h3_quality_ui.mjs");

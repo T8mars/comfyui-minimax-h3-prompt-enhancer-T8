@@ -16,6 +16,7 @@ from .completion_recovery_routes import register_completion_recovery_routes
 from .prompt_inspector import T8PromptInspector
 from .performance_director import T8PerformanceDirectorConfig
 from .combat_camera import T8CombatCameraConfig
+from .speech_reference import T8SpeechReference
 from .film_workflow import (
     T8CharacterPerformanceBible,
     T8CharacterPerformanceBibleStack,
@@ -54,6 +55,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8ArrangementPlanner,
             QwenImage21PromptEnhancer,
             T8CombatCameraConfig,
+            T8SpeechReference,
         ]
 
 
@@ -72,6 +74,7 @@ __all__ = [
     "T8PromptInspector",
     "T8PerformanceDirectorConfig",
     "T8CombatCameraConfig",
+    "T8SpeechReference",
     "T8FilmProjectRouter",
     "T8CharacterPerformanceBible",
     "T8CharacterPerformanceBibleStack",

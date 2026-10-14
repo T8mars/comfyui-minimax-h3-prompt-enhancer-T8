@@ -4,11 +4,15 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: optional speech/subtitle reference
+
+The default-Off **T8 Speech Reference** helper reuses provided text/subtitles offline, or transcribes AUDIO/file-VIDEO through an already running CPU-guarded Strata. H3/Seedance append one optional socket. Semantic reference is distinct from explicitly mapped, verbatim dialogue. Original providers/workflows and service lifecycle are retained. [Guide, privacy and correction costs](docs/speech-reference.md) · [H3](example_workflows/speech_reference_h3.json) / [Seedance](example_workflows/speech_reference_seedance20.json).
+
 ## New: existing Strata service bridge
 
 Select **Strata 本地服务（桥接）** to use an already running Strata service. The default is `http://127.0.0.1:8080` **from the ComfyUI backend**, not the browser. No cloud API key or separate Strata plugin is needed. Connect **T8 LLM Provider Config → Strata** for advanced address/model/thinking/sampling settings; shared configuration takes precedence.
 
-Text, images and sampled visual video input are supported, not audio analysis. Original prompt formats, quality checks, outputs and API/GGUF workflows are retained. The bridge never starts, stops, switches or unloads the service model. [Usage and troubleshooting](docs/strata-bridge.md).
+The original chat bridge supports text, images and sampled visual video, without listening to audio. The separate optional speech helper supplies transcribed text, not native chat audio. Original prompt formats, quality checks, outputs and API/GGUF workflows are retained. The bridge never starts, stops, switches or unloads the service model. [Usage and troubleshooting](docs/strata-bridge.md).
 
 ## New: H3 Hybrid keyframes + references
 

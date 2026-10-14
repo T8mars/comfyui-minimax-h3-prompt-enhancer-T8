@@ -1,0 +1,390 @@
+{
+  "id": "98e49217-d770-5546-b2b0-c812e25b8aec",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写贞贞 API Key / Your API key (clear before sharing)"
+    },
+    {
+      "id": 2,
+      "type": "MiniMaxH3PromptEnhancerT8",
+      "pos": [
+        480,
+        40
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 1,
+          "label": "API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        },
+        {
+          "name": "combat_camera_config",
+          "shape": 7,
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "link": null
+        },
+        {
+          "name": "speech_reference",
+          "type": "T8_SPEECH_REFERENCE",
+          "shape": 7,
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "global_prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "local_prompts",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "time_ranges",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "relay_length",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "relay_report",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "一名成年女子在车站门边停下，把车票收入口袋，说出已指定的原句，然后转身离开。只有她一个角色，不新增对白或字幕。",
+        "T2VA（文生音视频）",
+        5,
+        "1",
+        "balanced",
+        0,
+        "中文",
+        "官方增强",
+        "现有兼容（保留中英文）",
+        "无（仅核心规则）",
+        "无（不使用 T8 案例）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "普通增强 / Normal",
+        0,
+        0,
+        "",
+        "none",
+        "off",
+        "off"
+      ],
+      "title": "已有字幕参考 / Provided subtitle · h3"
+    },
+    {
+      "id": 4,
+      "type": "T8ShowText",
+      "pos": [
+        480,
+        1250
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 3,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "H3 原生提示词 / Native H3 prompt"
+    },
+    {
+      "id": 6,
+      "type": "T8SpeechReference",
+      "pos": [
+        0,
+        280
+      ],
+      "size": [
+        460,
+        480
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "title": "离线字幕 · 已显式指派角色 / Offline subtitle + role map",
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "shape": 7,
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "speech_reference",
+          "type": "T8_SPEECH_REFERENCE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "speech_text",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "timed_transcript_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "subtitles_srt",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8SpeechReference",
+        "t8_speech_widgets_v1": {
+          "mode": "Enabled",
+          "source_mode": "Provided text",
+          "purpose": "keep_dialogue",
+          "provided_text": "1\n00:00:00,000 --> 00:00:02,000\n等我回来。",
+          "provided_format": "srt",
+          "speaker_map_json": "{\"default\":\"<Subject 1> / S1\"}",
+          "partial_policy": "reject",
+          "failure_policy": "stop",
+          "start_s": 0.0,
+          "duration_s": 0.0,
+          "language": "Auto",
+          "context": "",
+          "audio_track": 0,
+          "channel": "mean",
+          "offset_ms": 0,
+          "timeout_s": 1800.0
+        }
+      },
+      "widgets_values": [
+        "Enabled",
+        "Provided text",
+        "keep_dialogue",
+        "1\n00:00:00,000 --> 00:00:02,000\n等我回来。",
+        "srt",
+        "{\"default\":\"<Subject 1> / S1\"}",
+        "reject",
+        "stop",
+        0.0,
+        0.0,
+        "Auto",
+        "",
+        0,
+        "mean",
+        0,
+        1800.0
+      ],
+      "widgets_values_named": {
+        "mode": "Enabled",
+        "source_mode": "Provided text",
+        "purpose": "keep_dialogue",
+        "provided_text": "1\n00:00:00,000 --> 00:00:02,000\n等我回来。",
+        "provided_format": "srt",
+        "speaker_map_json": "{\"default\":\"<Subject 1> / S1\"}",
+        "partial_policy": "reject",
+        "failure_policy": "stop",
+        "start_s": 0.0,
+        "duration_s": 0.0,
+        "language": "Auto",
+        "context": "",
+        "audio_track": 0,
+        "channel": "mean",
+        "offset_ms": 0,
+        "timeout_s": 1800.0
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      4,
+      "STRING"
+    ],
+    [
+      3,
+      2,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      6,
+      0,
+      2,
+      9,
+      "T8_SPEECH_REFERENCE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

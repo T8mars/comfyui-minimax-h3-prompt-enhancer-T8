@@ -1,0 +1,365 @@
+{
+  "id": "ea9f53c6-dd78-5f53-a651-5c140843945e",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写贞贞 API Key / Your API key (clear before sharing)"
+    },
+    {
+      "id": 3,
+      "type": "Seedance20PromptEnhancerT8",
+      "pos": [
+        1180,
+        40
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "提示词增强 LLM API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        },
+        {
+          "name": "combat_camera_config",
+          "shape": 7,
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "link": null
+        },
+        {
+          "name": "speech_reference",
+          "type": "T8_SPEECH_REFERENCE",
+          "shape": 7,
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Seedance20PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "一名成年女子在车站门边停下，把车票收入口袋，说出已指定的原句，然后转身离开。只有她一个角色，不新增对白或字幕。",
+        "AUTO（根据意图与素材判断）",
+        "AUTO（自动判断）",
+        "5",
+        "1",
+        "balanced",
+        "AUTO（按内容判断）",
+        "中文",
+        "官方优化",
+        "无（不使用 T8 案例）",
+        "火山官方（@图片N/@视频N/@音频N）",
+        "AUTO（按用户意图）",
+        "AUTO（按场景添加）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "none",
+        "off",
+        "off"
+      ],
+      "title": "已有字幕参考 / Provided subtitle · seedance20"
+    },
+    {
+      "id": 5,
+      "type": "T8ShowText",
+      "pos": [
+        1180,
+        1250
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "Seedance 原生提示词 / Native Seedance prompt"
+    },
+    {
+      "id": 6,
+      "type": "T8SpeechReference",
+      "pos": [
+        0,
+        280
+      ],
+      "size": [
+        460,
+        480
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "title": "离线字幕 · 已显式指派角色 / Offline subtitle + role map",
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "shape": 7,
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "shape": 7,
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "speech_reference",
+          "type": "T8_SPEECH_REFERENCE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "speech_text",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "timed_transcript_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "subtitles_srt",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8SpeechReference",
+        "t8_speech_widgets_v1": {
+          "mode": "Enabled",
+          "source_mode": "Provided text",
+          "purpose": "keep_dialogue",
+          "provided_text": "1\n00:00:00,000 --> 00:00:02,000\n等我回来。",
+          "provided_format": "srt",
+          "speaker_map_json": "{\"default\":\"讲解者\"}",
+          "partial_policy": "reject",
+          "failure_policy": "stop",
+          "start_s": 0.0,
+          "duration_s": 0.0,
+          "language": "Auto",
+          "context": "",
+          "audio_track": 0,
+          "channel": "mean",
+          "offset_ms": 0,
+          "timeout_s": 1800.0
+        }
+      },
+      "widgets_values": [
+        "Enabled",
+        "Provided text",
+        "keep_dialogue",
+        "1\n00:00:00,000 --> 00:00:02,000\n等我回来。",
+        "srt",
+        "{\"default\":\"讲解者\"}",
+        "reject",
+        "stop",
+        0.0,
+        0.0,
+        "Auto",
+        "",
+        0,
+        "mean",
+        0,
+        1800.0
+      ],
+      "widgets_values_named": {
+        "mode": "Enabled",
+        "source_mode": "Provided text",
+        "purpose": "keep_dialogue",
+        "provided_text": "1\n00:00:00,000 --> 00:00:02,000\n等我回来。",
+        "provided_format": "srt",
+        "speaker_map_json": "{\"default\":\"讲解者\"}",
+        "partial_policy": "reject",
+        "failure_policy": "stop",
+        "start_s": 0.0,
+        "duration_s": 0.0,
+        "language": "Auto",
+        "context": "",
+        "audio_track": 0,
+        "channel": "mean",
+        "offset_ms": 0,
+        "timeout_s": 1800.0
+      }
+    }
+  ],
+  "links": [
+    [
+      2,
+      1,
+      0,
+      3,
+      4,
+      "STRING"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      6,
+      0,
+      3,
+      9,
+      "T8_SPEECH_REFERENCE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

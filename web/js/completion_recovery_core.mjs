@@ -42,7 +42,7 @@ export function recoveryMessage(status) {
         const provenance = meta?.director_skill
             ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"}${meta.authoring_revision ? ` · Authoring v${meta.authoring_revision}` : ""} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
             : "";
-        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta);
+        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta);
     }
     if (status.state === "ambiguous_partial") {
         return `上次请求返回途中断开，只收到 ${status.partial_chars || 0} 个字符；为防止把截断提示词当成完整结果，节点不会自动输出这段内容，也不会重新扣费。`;
@@ -88,7 +88,7 @@ export async function restoreCompletionResult({
             alertFn?.(recoveryMessage(status));
             return { queued: false, status };
         }
-        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
+        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
         beforeQueue?.();
         actionWidget.value = RESTORE_ACTION;
         await queuePrompt(0, 1, [String(node.id)]);
@@ -123,4 +123,11 @@ function hybridSelectionMessage(meta) {
         || !Number.isInteger(meta?.hybrid_picture_count) || meta.hybrid_picture_count < 1 || meta.hybrid_picture_count > 11
         || !Number.isInteger(meta?.hybrid_video_count) || meta.hybrid_video_count < 0 || meta.hybrid_video_count > 3) return "";
     return `\n原结果模式 / Original task: Hybrid · 六段参考格式 / Six fields · ${meta.hybrid_picture_count} images / ${meta.hybrid_video_count} videos。恢复原稿，不按当前模式重新生成；非成片效果验收。`;
+}
+
+function speechSelectionMessage(meta) {
+    const speech = meta?.speech_reference;
+    if (speech?.schema_version !== "t8-speech-reference/v1" || !["reference", "keep_dialogue"].includes(speech.purpose)
+        || !Number.isInteger(speech.cue_count) || speech.cue_count < 0 || speech.cue_count > 10000) return "";
+    return `\n原语音参考 / Original speech: ${speech.purpose === "keep_dialogue" ? "用户指派保留对白" : "仅参考理解"} · ${speech.cue_count} 条段级语句。恢复原稿，不重新识别，也不套用当前字幕或角色映射。`;
 }

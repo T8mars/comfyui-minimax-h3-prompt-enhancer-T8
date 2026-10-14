@@ -5,6 +5,35 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.32.0] - 2026-10-14
+
+### Added
+
+- Add the default-Off T8 Speech Reference helper: reuse reviewed text,
+  SRT/VTT/JSON offline, or transcribe AUDIO/file VIDEO through an existing
+  Strata CPU-guarded ASR service. Automatic transcription requires an updated
+  Strata service advertising the atomic CPU guard; this plugin never changes
+  its devices, downloads models or controls its lifecycle.
+- Append an optional lazy speech-reference socket to H3 and Seedance. Keep
+  semantic reference distinct from explicitly role-mapped, exact-word dialogue;
+  preserve API/GGUF/visual-Strata defaults, old widget arrays and workflows.
+- Add bounded active-output checking, at most one extra speech correction,
+  finite diagnostics and original-result recovery without re-transcription.
+  Include bilingual help, two independent workflows and measured acceptance
+  reports distinguishing real inference, historical replay and test doubles.
+
+### Fixed
+
+- Preserve partial/review flags, subtitle cue IDs, selected-source behavior,
+  source clocks and manual offsets. Reject ambiguous/malformed subtitles and
+  bound structured input and decompressed read-only probe bodies.
+- Correct vocal occurrence/authorization, descriptive-language separation,
+  Relay dialogue placement and cancellation propagation. Restore helper values
+  by validated names with positional fallback; keep UI actions nonserializable.
+- Verification: 971 Python tests (969 passed, two opt-in skips), 73 frontend
+  tests, Chrome contracts and isolated 30-node candidate loading on current
+  and minimum-supported ComfyUI sources. No rendered-media quality claim.
+
 ## [1.31.1] - 2026-10-13
 
 ### Fixed

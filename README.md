@@ -19,6 +19,12 @@ API 模式选 **Strata 本地服务（桥接）**，使用已经启动的 Strata
 
 # ComfyUI MiniMax-H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## 新增：可选语音／字幕参考
+
+新增默认关闭的 **T8 语音参考**：已有文字、SRT/VTT/JSON 离线复用，或通过已启动 Strata 的 CPU 语音组件转写 AUDIO／视频音轨。H3、Seedance 增加可选入口；默认只理解内容，明确选“保留对白”并指派角色才锁定原词。原 API、GGUF、视觉 Strata 及旧工作流保留，不改服务设备或模型生命周期。
+
+[接线、角色映射、资源与费用说明](docs/speech-reference.md) · [H3 字幕示例](example_workflows/speech_reference_h3.json) · [Seedance 字幕示例](example_workflows/speech_reference_seedance20.json)。这不是音乐／环境音理解，也不代表已完成成片口型验收。
+
 ## 新增：H3 Hybrid 关键帧＋参考混合
 
 在原 H3 节点的「生成类型」选择 **Hybrid**，连接首帧和/或尾帧，再连接至少一个额外参考图或视频。首尾锁定目标边界，额外素材提供外观、身份或指定运动参考；采用 H3 六段参考格式，支持原有四种渠道、本地 GGUF 与 Prompt Relay。旧五种模式、默认 T2VA、38 个保存字段和旧工作流不变。

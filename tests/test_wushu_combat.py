@@ -17,6 +17,7 @@ from unittest.mock import patch
 import numpy as np
 import directional_skills as directing
 from strata_baseline_projection import project_strata_guard, project_strata_ui
+from speech_baseline_projection import project_speech_signature, project_speech_schema
 from test_directional_skills import GIT_ROOT, ROOT, execute_inputs, h3, h3_args, sd, sd_args
 from test_zhenzhen_pov import OfflineGuards
 from combat_camera import CAMERA_STRONG, build_combat_camera_config
@@ -167,9 +168,9 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
                     for method in old_node.body:
                         if isinstance(method, ast.FunctionDef):
                             if method.name == "execute":
-                                self.assertEqual(ast.dump(new_methods[method.name].args), ast.dump(method.args))
+                                self.assertEqual(ast.dump(project_speech_signature(new_methods[method.name].args)), ast.dump(method.args))
                             else:
-                                current_method = (self.restore_frozen_reference_tooltip(new_methods[method.name], path)
+                                current_method = (self.restore_frozen_reference_tooltip(project_speech_schema(new_methods[method.name]), path)
                                                   if method.name == "define_schema" else new_methods[method.name])
                                 self.assertEqual(ast.dump(current_method), ast.dump(method), method.name)
 

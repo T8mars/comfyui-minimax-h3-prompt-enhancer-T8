@@ -2,6 +2,8 @@
 
 适用于 H3、Seedance 2.0、Qwen Image 2.1、Music 3、YuE2、作词和编曲节点，以及现有调用 LLM 的创作工具。它是第三类后端，不替换原 API 或直接 GGUF 路径，不生成视频或音频。
 
+原聊天／视觉路径仍不读取音轨。需要对白文字时，可显式接入默认关闭的独立 [语音／字幕参考辅助节点](speech-reference.md)，先进行 CPU 转写再作为引用文字交给增强器；不改变本节原生图文／视频协议或服务生命周期边界。
+
 ## 怎么用
 
 独立示例：[H3 文本＋共享配置](../example_workflows/strata_h3_text.json)、[Qwen 图像编辑](../example_workflows/strata_qwen_image_edit.json)、[H3 首尾帧＋视频 Hybrid](../example_workflows/strata_h3_hybrid_video.json)。图片/视频占位文件需换成自己的素材，示例没有密钥。
@@ -45,4 +47,4 @@
 
 The provider choice is appended. Old defaults, node IDs, main widget arrays, linked-input validation and old workflow bytes remain unchanged. Shared provider config appends eleven optional fields with named old-16/new-27 restoration and host action-tail handling. Old workflows load in the new plugin; new Strata workflows are not promised to work in an older plugin. RunningHub deployment has not been independently verified.
 
-The bridge calls only GET status/models and non-streaming chat POST. It does not own the service lifecycle, download/load GGUF models itself, or analyze audio. Acceptance proves transport/native text/JSON and node queue behavior, not rendered video/music quality. MIT CPU helper provenance and license are included in `strata_vendor`.
+The original chat bridge calls only GET status/models and non-streaming chat POST. It does not own the service lifecycle, download/load GGUF models itself, or analyze audio. The separate opt-in speech helper has a closed ASR endpoint allowlist and supplies quoted text evidence. Acceptance proves transport/native text/JSON and node queue behavior, not rendered video/music quality. MIT CPU helper provenance and license are included in `strata_vendor`.

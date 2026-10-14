@@ -118,6 +118,18 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
             and type(pictures) is int and 1 <= pictures <= 11
             and type(videos) is int and 0 <= videos <= 3):
         result.update({key: values[key] for key in hybrid_keys})
+    speech = values.get("speech_reference")
+    if (isinstance(speech, dict) and all(isinstance(speech.get(key), str) for key in ("schema_version", "purpose", "source", "status"))
+            and speech.get("schema_version") == "t8-speech-reference/v1"
+            and speech.get("purpose") in {"reference", "keep_dialogue"}
+            and speech.get("source") in {"provided_plain", "provided_subtitle", "provided_json", "provided_confucius", "strata_audio", "strata_video"}
+            and speech.get("status") in {"complete", "partial", "no_track", "silence", "no_speech", "unavailable"}
+            and type(speech.get("cue_count")) is int and 0 <= speech["cue_count"] <= 10000
+            and type(speech.get("timed")) is bool and type(speech.get("requires_review")) is bool):
+        # Never persist subtitle text, role names, model paths, arbitrary errors
+        # or raw provenance in recovery/diagnostics.
+        result["speech_reference"] = {key: speech[key] for key in (
+            "schema_version", "purpose", "source", "status", "cue_count", "timed", "requires_review")}
     return result
 
 
@@ -136,7 +148,10 @@ def safe_quality_metadata(values: Any) -> dict[str, Any]:
              "h3_speaker_identity", "semantic_exact_text_missing", "h3_extra_dialogue", "h3_visible_text_changed",
              "h3_dialogue_source_changed", "h3_vocal_wrong_layer", "h3_diegetic_music_layer", "h3_descriptive_language",
              "relay_invalid_authoring", "seedance_h3_protocol_leak", "h3_hybrid_inputs",
-             "h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "h3_hybrid_summary"}
+             "h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "h3_hybrid_summary",
+             "speech_missing_words", "speech_wrong_order", "speech_word_count", "speech_reference_copied",
+             "speech_description_language", "speech_invalid_output", "speech_relay_invalid", "speech_role_mismatch",
+             "speech_extra_words", "speech_vocal_language_changed", "speech_native_dialogue"}
     unchecked = {"physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending",
                  "descriptive_language", "alignment_duration", "shot_count", "relay_compilation",
                  "relay_semantic_equivalence", "contract_check", "vocal_language",

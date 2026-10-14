@@ -388,6 +388,7 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
 
 
 def run_optional_checks() -> None:
+    subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run(
         [sys.executable, "tools/build_example_workflows.py", "--check"],
         cwd=ROOT,

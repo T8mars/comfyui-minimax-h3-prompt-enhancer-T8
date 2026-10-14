@@ -16,6 +16,31 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-14: optional speech reference
+
+H3 and Seedance append exactly one optional lazy custom-type `speech_reference`
+socket after `combat_camera_config`; old schema prefixes, outputs, defaults,
+38-field widget arrays and shipped example bytes remain frozen against 1.31.1.
+Unconnected/Off messages remain identical. Recovery skips the new dependency's
+execution, not ComfyUI's whole-graph static validation.
+
+Second cross-review: accept helper named metadata only when all sixteen fields
+have a valid layout; empty/corrupt metadata must fall back to the validated
+positional array. Both Node and Chrome execute this with reordered runtime
+widgets. Active-only language/quality adapters ignore locked vocal data when
+checking descriptive prose, without changing schema/defaults, old 38-field
+arrays or None/Off paths. See [second review evidence](SPEECH_REFERENCE_SECOND_REVIEW_2026-10-14.md).
+
+The new helper saves its sixteen native fields explicitly by name. Configure
+restores synchronously onto actual runtime names, not declaration positions;
+four actions are nonserializable and idempotent. Off and provided-text sources
+skip irrelevant media/config execution. Linked text None is unresolved during
+validation; resolved values are checked before transport. Node/Chrome contracts
+exercise reordered widgets, action tails, show/hide value retention and repeated
+resize; real isolated queues exercise linked text, normal H3/Seedance and cached
+recovery with a deliberately invalid runtime ASR dependency. These are local
+contracts, not a RunningHub deployment.
+
 ### 2026-10-13 follow-up: Strata cross-review
 
 No node inputs/outputs/defaults, main widget arrays, config 16/27-field names
