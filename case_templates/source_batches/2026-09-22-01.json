@@ -8,10 +8,10 @@
       "template_id": "t8-case-familiar-object-interior-world-descent-return-v1",
       "label": "熟悉物件内藏世界｜透明揭示、下潜进入与来源回证",
       "summary": "先把普通物件作为尺度基线，再让局部透明揭示内部世界；镜头沿同一开口下潜、在内部完成空间证明，最后用原物件结构回证来源。",
-      "case_sha256": "9c40b1acd5d424f295e66ebedf72fe989e0bf9e95ccdb095b953a0586a4fae6e",
+      "case_sha256": "ca148d32e7bbfbedfe80c73bb8d7a505444b31716a660b045f98f3a745d255a8",
       "creative_dna_sha256": "038012ccfe1ddb7eb9d714285fb48a3b2f9aab952fff4aa730454b9628f94015",
-      "h3_adapter_sha256": "95ea6539419510770bd0c84a221856e178e843b5eacc95964b520050460b5cad",
-      "seedance20_adapter_sha256": "6e265b885fb1ee11ff58c9ecf4d5c933f90eec1087cf590693eedf724b0884a0",
+      "h3_adapter_sha256": "bc7e254e004bcff60cf46fedeb8ceaf44e52c752094becf9f212b376e9b60f61",
+      "seedance20_adapter_sha256": "aa9c5a1702cc42ccd4a509b06c8e5fbe269bc7d2611b77684e940166d32dd2cf",
       "mechanism_fingerprint": "7bca71ed6cbea186e6a4e77b3876eb8e72057a44bd38bf82a1efd37ede31ce6a"
     },
     {
@@ -19,10 +19,10 @@
       "template_id": "t8-case-interface-character-trigger-disruption-recovery-v1",
       "label": "界面角色触发扰动｜生理动作、图标失序与恢复",
       "summary": "先建立角色与原创界面的稳定关系，一次明确生理动作触发图标和窗口失序；角色主动追踪并回收关键元素，最终回到可辨工作状态。",
-      "case_sha256": "1c2d61b03be757eef2eb404aa68a40c7bc7c4c1f43a0136c0ff5a5b8aee76bbc",
+      "case_sha256": "f967687e46d4737cb86e5609e478ce4f25442bb1e7482b6f5725f8116f6a3923",
       "creative_dna_sha256": "1f18a4e459ac032c29539978a28c2c3e8a1ac1645989946163b2088509b8f9ac",
-      "h3_adapter_sha256": "a30d8bd40999f216e22e15d5923620925c791f1faea97ae4e53f2dbd4ef1a356",
-      "seedance20_adapter_sha256": "17fa1f7ad2842a9b3f5c53dce4e0d2df273b9a9c2414d0c7d0a55b17a18f6b75",
+      "h3_adapter_sha256": "7307095b92377f3cc171a7d00c15c73c3969dc842743c09d500b74ac11427cfd",
+      "seedance20_adapter_sha256": "592a0f8fcb5d21b92dbc016bcbddb5c3bbf2c63bf8fb7108cc11fbc6b7bdff9b",
       "mechanism_fingerprint": "3e0028ec77c77c9581239bbd20af7a9302412cbb6715bdcf762d4a4bb2e9fb48"
     },
     {
@@ -30,10 +30,10 @@
       "template_id": "t8-case-whole-machine-component-activation-energy-proof-v1",
       "label": "整机激活证明｜总览、部件旋转与能量回证",
       "summary": "以完整装置建立结构基线，再依次进入齿环、管线与核心的局部动作；能量只在机械接触和旋转之后出现，最终回到整机证明所有变化属于同一设备。",
-      "case_sha256": "b129250ea62b5c1794be9c999ee3dce26e5268988f9c530140b207065ed94000",
+      "case_sha256": "87fc1bc8f153816c2f6e33395e712adbac49ba02d53d3a38be66869a926d5c79",
       "creative_dna_sha256": "402aa224ed4d2d7f28805e07b15eaed280b39f185bd04aa9770ad421f355cbae",
-      "h3_adapter_sha256": "4460792315772c21c747ac18543e9c94e7934e202cc65c3555ecb292c764fff5",
-      "seedance20_adapter_sha256": "2cc972a030c11489bd6b207563a222d21f59d9df882a99c0457f0d265de02ddc",
+      "h3_adapter_sha256": "05bbd453e99f69dd97849cecb2e47aaec67c6e1671b406d64c102adc0da051aa",
+      "seedance20_adapter_sha256": "1c292e6387b517010627d15b970c6f744eb551ea0830bd1020110d9cad102861",
       "mechanism_fingerprint": "da67ebf227359118e594a35659821a3c42ea2545dd1b4afcb4f747ba46ad743b"
     },
     {
@@ -41,10 +41,10 @@
       "template_id": "t8-case-registered-look-card-outfit-motion-roster-v1",
       "label": "时装定版卡｜同一模特、造型轮换与动作证明",
       "summary": "锁定同一成年模特和注册版式，每套造型先以全身卡建立，再用一步或转身证明衣物运动；卡片编号只承担比较，终局把多套造型汇成同一系列。",
-      "case_sha256": "454358e21e697f8c53e274e7a0eb0c9e7dfaa0ed02257150a793bacf3a277f7f",
+      "case_sha256": "14bfb80634daa8dfacdfa560ab04de79b3b4681014dad401ff392375f8b61547",
       "creative_dna_sha256": "3c796a0fe4ed49dcba1a11bf2af3a7a5f03d95a491c510d21a64e1eda4f00af5",
-      "h3_adapter_sha256": "25f89d176400a06a75e4aa5c89a903cb5faf9b02f4d8ca4ca54b080d4ebf3caf",
-      "seedance20_adapter_sha256": "b1884f9b471effc6d7d03adc773987c7261aa9d1a9aad4801d77f73c8e81787e",
+      "h3_adapter_sha256": "f306abbf86f6307475c645d764ff08c76032a2ff3b0d4b18e1440ae621156d37",
+      "seedance20_adapter_sha256": "691ab62743d638a51a2787eb2cccd47365adcb29dd54fd6fed31ac8af49931ab",
       "mechanism_fingerprint": "a3fc9b193f5c86476fb9024808f3785a50f412207338d64cffb1fd49e3c515e9"
     },
     {
@@ -52,10 +52,10 @@
       "template_id": "t8-case-impossible-task-base-lift-witness-reaction-v1",
       "label": "不可能任务改解｜受阻尝试、整体抬起与见证反应",
       "summary": "先建立物件与底座不可分的挑战规则，角色完成一次失败尝试；随后不改变规则而改用整体抬起的解决方式，独立见证者用近景反应确认反差。",
-      "case_sha256": "605d8d7b8dbcbb676964aa4afc17f086943522460104947be5a3df998c52f2e8",
+      "case_sha256": "5dd5758b15ab07980f66590e5e7dcf63bafa857f3caa40289b5f811aa96fab89",
       "creative_dna_sha256": "b14cc2e641f644c1f379f1b526b1f0120afdfee1f9937e1c52b6c4bd92f43626",
-      "h3_adapter_sha256": "f811e59fb4dedd23a7e36f4fe7d7f07f103813fb117af39a7fceb05ea32b968f",
-      "seedance20_adapter_sha256": "4e199a0e3d9dc86ef68bcb89eea0b30aef5c164b9c5deef2f5020271e55ce000",
+      "h3_adapter_sha256": "ba55b7cc08fd097fbacf2aac26100423c9aee3c570a8b9bf83767a2c185347e5",
+      "seedance20_adapter_sha256": "a7b590ce8f964d868198a0aaabbfaee892c928ee8867e35912d03086ffc84405",
       "mechanism_fingerprint": "50cec92bc573b1f9aa81ab1b48b1d392ab501a76ecb9ca18d1aff3dd6581fd0a"
     },
     {
@@ -63,10 +63,10 @@
       "template_id": "t8-case-flat-avatar-world-crossing-return-v1",
       "label": "平面角色越界｜桌面基线、实体世界互动与来源回归",
       "summary": "先锁定平面界面、角色和图标关系，再让同一角色跨越屏幕边界进入具纵深的实体世界；互动结束后沿可辨路径回归原界面，身份与布局均得到回证。",
-      "case_sha256": "eb10fd1f69b46685f6603badfdec4366f4bde2ddbcf9262633c3b6b9a498cf4e",
+      "case_sha256": "a59830113734b85d68963caae3fb82e5ad32eddae96ff6de533844bcca818eac",
       "creative_dna_sha256": "cf40cb6cfed64c88b01a8b522b1cbea252beb71711b3b136ff5d1d5255a2bab3",
-      "h3_adapter_sha256": "24aff756df6f257cbef5e841f5856400cc0d878d2f750b6e19ebae16d2966668",
-      "seedance20_adapter_sha256": "f5b898e3c8ecc73975a72b9d9333c1e2651edb36989611989e7c405b4695f9b3",
+      "h3_adapter_sha256": "bf692f9e58ae533c8607001444f6788e4ca5769f2d8c1d7d9f7f44ca3e3dc28b",
+      "seedance20_adapter_sha256": "5d185e14fb55b7d4e4343cb2280af158fc23593d647d6b7b00ed958f694e8ce3",
       "mechanism_fingerprint": "4876b402fa35638b105bc8ed0ce489bd4d874f9d6768435241f62463062064e9"
     },
     {
@@ -74,10 +74,10 @@
       "template_id": "t8-case-linear-threat-contact-redirection-residue-v1",
       "label": "直线威胁改道｜接触截获、轨迹弯折与残留确认",
       "summary": "先建立攻击者、目标与直线威胁路径，被攻击者必须在可见接触点截获能量并连续弯折轨迹；威胁离开目标后以烟尘或灼痕证明改道结果。",
-      "case_sha256": "dc8e5b54b4bac931f0d23680537630bc0b9816a49637d0e55cd88ad7f667dd17",
+      "case_sha256": "ff6aecb12bbe6fad9d08f7beabd701c370e3678bf76aa8b5c133d09b18ee20d5",
       "creative_dna_sha256": "90e8c36dda551bb95af23a627cd4e5174f8b8a91ac0b88a29beb6c65f7679f69",
-      "h3_adapter_sha256": "5db16f494eea0a287c016b9bce7dde65d5bf125bbda818a87799184560c3d376",
-      "seedance20_adapter_sha256": "e84d9557525e8f414da3be1c40b2a8eb864254e973fa3662090e1bc59e5e229a",
+      "h3_adapter_sha256": "d574865c4b0c31250a0a7f6c74e6cb2782c7f331adbbe448828371c9464e83bf",
+      "seedance20_adapter_sha256": "50f7d2363a1ad6e3dd7a1d01ea142fa017c98ff1b615d9448e2900476eb4b741",
       "mechanism_fingerprint": "081d51afc6ab94a47d9a2743efc7bbc43f504817eca8cd8526e93ac5c83b3611"
     },
     {
@@ -85,10 +85,10 @@
       "template_id": "t8-case-performer-physical-letterform-stage-relay-v1",
       "label": "实体字台表演｜人物接触、标点搬运与新词接力",
       "summary": "把巨型原创字形作为真实舞台结构，成年人必须以倚靠、穿越或搬运标点证明物理接触；一个可拆组件完成转场后，人物和造型变化但字形规则保持。",
-      "case_sha256": "08b2f9fc3b7ab19a7c8404d7c0400de41b10cc26289ac2b4b237cfd5f4bb84fc",
+      "case_sha256": "294e37ac7b9c29524f4997cb022ed1ffccf0dbe37c0a72841a2049c137da7219",
       "creative_dna_sha256": "759138fb72bee2b8dee6520b4874dc54779d341d209daca25afca146e1b25ac4",
-      "h3_adapter_sha256": "a2b9ec0f38810fb550d80ef0319dc69ee6eb2af2c2c72dab783396beaccaac21",
-      "seedance20_adapter_sha256": "4a87a01a82c3228a19b0ab16f41cf7142987ce1fce0eb2fdcb9068395ea2daf3",
+      "h3_adapter_sha256": "237bc808b592bcaac236c55f8e142a2a4dbd66d109dea1bd648614db76559c59",
+      "seedance20_adapter_sha256": "3f3cb7416a551d99778523b7e0540cf6baed722961443e008ba2ba7a0597877f",
       "mechanism_fingerprint": "28661eb9fba98a25ba1cab8cbc7ccf9046f90c05a8975aa591d86f1c9afc17a5"
     },
     {
@@ -96,10 +96,10 @@
       "template_id": "t8-case-fixed-display-body-ordered-garment-layering-v1",
       "label": "固定人台逐层着装｜衣物投送、层级闭合与触感验收",
       "summary": "锁定一个无身份人台，衣物按下装、内搭、外套和配件的功能层级依次到位；第一人称双手只负责投送或整理，最终用触摸和全身轮廓证明完成。",
-      "case_sha256": "97303a5c70558cdff3bcb48d685080c80bbbe08786a60746bc4f8e9e6d3e7b22",
+      "case_sha256": "e3c70e83ca560d86e2513127898e321b57b9f24ce89be27f3da8dda75542c541",
       "creative_dna_sha256": "2d12933bd5f7dc63529bf1405e53e627f5360917b7319acd08a25c76277aab3d",
-      "h3_adapter_sha256": "c1a7a5c165d37384ad65f19c27183301225e18ce3552fba1b4048630293d36a7",
-      "seedance20_adapter_sha256": "2ca215816bd2dd8640059f42eabe275450ce78e7b55691f9a2d09cc4a5200ec8",
+      "h3_adapter_sha256": "7993fdc4f4240b6b5639c465f39024807dfcea1af0140e1886a7eccba84c7df2",
+      "seedance20_adapter_sha256": "d3e36c81210f304a2fcd951cc61bf2822a16fe624cc840bda9fd73dabd48ec1f",
       "mechanism_fingerprint": "58e58f01224eaf4e753e8174dbd8094f3df7aee072e3b488e3faf7b448fc004d"
     },
     {
@@ -107,10 +107,10 @@
       "template_id": "t8-case-fatigue-location-prop-pose-relay-v1",
       "label": "疲惫姿态接力｜地点物件承接同一身体状态",
       "summary": "锁定同一明确成年人物与疲惫身体状态，让多个地点物件依次成为支撑面；每次换地点都保留服装、包袋和下坠姿态，最终在最意外容器中安静停住。",
-      "case_sha256": "8296e3c9ed9ecc7fd7b5518dc2e5bc2d71a45468e95674a746e4d6b9e1dd3445",
+      "case_sha256": "eb8646c2f96f37a16a829dee786a3be500675947457a82e059dce2d1cff9a8a6",
       "creative_dna_sha256": "8372e7df84fa0b6c06b4fd0d107ded64213364691e6ce27c7a94cc89ba3ebde3",
-      "h3_adapter_sha256": "f402411170406a7f06632558704db1fa1f32310c10e8e3b1ef657b8a04dc94c0",
-      "seedance20_adapter_sha256": "3edb0d28a007e53806804925bb716eabce6f630e7964ba64634903939bd404f7",
+      "h3_adapter_sha256": "bd88c232388ed40685fd0451728594d77454fb2a9921b9126df4775379e12ead",
+      "seedance20_adapter_sha256": "5df7c53b794c13564123c6a1b6dbccf98f10a09c8b1068a2e0faf9a0772781a8",
       "mechanism_fingerprint": "142416fb537eb248c27f6caa3de82fdd968805cdb30d041283843ed7ed07a5fc"
     },
     {
@@ -118,10 +118,10 @@
       "template_id": "t8-case-window-display-garment-transfer-result-proof-v1",
       "label": "橱窗造型接管｜凝视触发、服装转移与街头结果证明",
       "summary": "先让成年行人与橱窗成衣建立清楚对应，一次凝视或手势触发服装沿可见载体转移；转变完成后以连续街头行走和日常动作证明新造型稳定。",
-      "case_sha256": "7fc5c9aeb4dd27ef515f2a2706934746df3dbae9b11a3326555004720fbec874",
+      "case_sha256": "d37535837d6e9d5af1e3fedadd36136dd8dad108d4db617ded14e580687aa89f",
       "creative_dna_sha256": "49b97a701b5bb8429593c68f7750bd2d30ab36aa0c4b038fabf48e77dd855fba",
-      "h3_adapter_sha256": "0d25eaef0771c643ae068973792d7b9a54293abed3de0f580e4c2da54c5ca85a",
-      "seedance20_adapter_sha256": "11c8c50067aa2483e06891f00e39e94eacfc2d4de3b427c0dd54cec083f4eb5d",
+      "h3_adapter_sha256": "c293f7f06774ca265a8523e04ecb06e77bedc78b71bf326865027f3d4258e5f5",
+      "seedance20_adapter_sha256": "8679be1840cc311419485eb731fbd01f4620d32ec3fa723b9d39b2b5cae19daf",
       "mechanism_fingerprint": "22d98cf58f4eba50225f615480527ae54410b1287d658710a13f704a25fe5c91"
     },
     {
@@ -129,10 +129,10 @@
       "template_id": "t8-case-weather-listening-touch-snack-micro-ritual-v1",
       "label": "天气微仪式｜听觉准备、触雨确认与食物收束",
       "summary": "固定同一成年人物与雨棚边界，用帽檐、耳机、伸手接雨和一次咬食组成由听觉到触觉再到味觉的微仪式；镜头只在关键接触后收近。",
-      "case_sha256": "941f5d4215ed605b0d03030fd70215dc14ccfd998693c06f5a59eb8bc183c8e7",
+      "case_sha256": "a41d59787f4d69dfd7fbd40fe06e372e398978415bc8e9e9a658b4411b41c619",
       "creative_dna_sha256": "95b7ad2543ef6459e5507d2e8ebcfed3a4220f5a7ab4293853ea68afcf118c58",
-      "h3_adapter_sha256": "657557f74018776d08866ee295d087c4d38f092447a4f913b40d6ff501d0b0a6",
-      "seedance20_adapter_sha256": "911ba6d778917750436bb45943366432597365f4ac1c94c59aa3f3fb5c023b31",
+      "h3_adapter_sha256": "1ba25610c74d5ab5e833ee875cf2c3f463d0d90dbadab12a659c23f1ce7af23b",
+      "seedance20_adapter_sha256": "1ab55a8ceba67fda3f8e72c467f1f9a687211fd5bdc53ec02bde21aef432b9e5",
       "mechanism_fingerprint": "50733fd6737f35b265411a7fc24e5dd2853df26b49c122d037c65026b8cd984a"
     },
     {
@@ -140,10 +140,10 @@
       "template_id": "t8-case-empty-room-ordered-construction-furnishing-proof-v1",
       "label": "毛坯房顺序完工｜表面施工、木作、家具与照明验收",
       "summary": "锁定同一房间几何与机位，装修按墙面、地板、固定木作、家具和灯光的依赖顺序逐层出现；前一阶段必须保持为后一阶段的基础，最终用完整可用空间收束。",
-      "case_sha256": "dec368e23172823d7fb4ce0b3f39127989dde7507c71a4da25a41659f9c4ddce",
+      "case_sha256": "c90a952761251c0f3f42ec327b165342fd75caed30baddd510cd3d96f851ab6e",
       "creative_dna_sha256": "b51525878c4ab203e8f2f06e4d2aa4bffa50b3138d48811bf509bb040b367c1a",
-      "h3_adapter_sha256": "9be56d74e27aec45e03858cec53550538b9f350f10226a88ffb979d08319ace1",
-      "seedance20_adapter_sha256": "de03f1d6f562b15d44956836a3fc4cb83582efcf17c90eaf3af364f2722ffcac",
+      "h3_adapter_sha256": "f50a8113a91245e8f8a803005e14906c407e45ea5f6a905bee68f71f1d0e66c2",
+      "seedance20_adapter_sha256": "860f7c771705551f14c2d604a97cd1cf0dcd36f38d9d71d27c91ab0ef574d5af",
       "mechanism_fingerprint": "1299f430e5486345499dc0af8af00e1b4273eeac128569f4edacd6dbd51b227c"
     }
   ]

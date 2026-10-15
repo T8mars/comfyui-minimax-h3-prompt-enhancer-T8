@@ -5,6 +5,19 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.32.1] - 2026-10-15
+
+- Import completion addendum `batch-2026-10-15-02` without double-counting its
+  original increment: 15 new case selectors and five evidence variants, totaling
+  633 source cases, 288 case selectors, two community Skills and 635 previews.
+  Refresh historical timestamp-correction provenance without changing old
+  selector names or creative rules; distribute dynamic assets `2026.10.15.1`.
+- Keep the 377-GIF offline baseline unchanged and distribute all 635 T8 previews
+  through 16 independently verified dynamic shards rather than the Registry ZIP.
+- Verification: 972 Python tests (970 passed, two opt-in skips), 73 frontend
+  tests, Chrome contracts, 30-node isolated package loading and an offline
+  production-manager installation of all 635 previews; no paid model calls.
+
 ## [1.32.0] - 2026-10-14
 
 ### Added

@@ -1,0 +1,172 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-10-15-02",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-just-anika-here-2109495486138999114-browser-2109495486138999114-video-1",
+      "template_id": "t8-case-curiosity-lookdown-environment-burst-reaction-v1",
+      "label": "好奇低头触发反应｜环境插镜、聚集升级与人物回证",
+      "summary": "先建立人物对画外小事物的好奇，再用视线方向一致的环境插镜解释反应；局部活动升级为群体聚集，最后回到同一人物与现场共同确认。",
+      "case_sha256": "7b0854457a9c885f9f0ece2ae4612884d41ac933e74de7c3a22d98e285f7db5a",
+      "creative_dna_sha256": "e57cca34192893ad76831acf8d6279fb2fa92d6a719f06856fd967403d7d295b",
+      "h3_adapter_sha256": "ce0461a22c4692063e4f57cdd44c0d25468d1e60ccf4d54c1f8461ef3534abd4",
+      "seedance20_adapter_sha256": "fc902ab8c6981c6afee54cdb1550a5e001b3759b64a90f2cadeeead318a79ef3",
+      "mechanism_fingerprint": "bca8a09b890f02adcd5e0fe04d863bc05e4e72d907955dcad07b46176a2b479c"
+    },
+    {
+      "case_id": "x-laviniavelle-2108851182244606445-browser-2108851182244606445-video-1",
+      "template_id": "t8-case-shared-resource-competition-container-burst-reaction-v1",
+      "label": "共享物失控喜剧｜试探索取、多人牵扯与余波回证",
+      "summary": "在封闭空间先明确多人共享同一容器；小份索取引出争抢，施力集中到容器口后一次爆散，终局必须保留散落物和各方不同反应。",
+      "case_sha256": "4964ed272f1c085c9fca8c019a133877b74fa2329813c5597c3327bb3c5ef651",
+      "creative_dna_sha256": "261081e50ab2942673ff404f208c878086a9888583f494b165f3b16dfd2a9837",
+      "h3_adapter_sha256": "d79f22fbaa8b20f116c7a34019959c1025f15edbc331a7462ea54b3dc6f3c8e7",
+      "seedance20_adapter_sha256": "efd02ef94e18dc4ef8d37eea86db4de642039a96bf3b14768b9d9611c4585d3b",
+      "mechanism_fingerprint": "a81e87cef00f9f2ae4752d97e255738ac63e48046ddbae3ddca4b5be6bc5d490"
+    },
+    {
+      "case_id": "x-lettyvesper-2108843102417113181-browser-2108843102417113181-video-1",
+      "template_id": "t8-case-size-threat-disarm-mutual-contact-v1",
+      "label": "威胁转亲近｜尺度悬殊、解除防备与双向触碰",
+      "summary": "先以大小悬殊和武器建立冲突预期；小者主动放下武器，大者降低头部，双方通过持续可见的接触把威胁关系改写为亲近。",
+      "case_sha256": "61a60f9a3e6e883b396ab9ccdd7bfd665edb29ac3b712badb0a0015f44091ea3",
+      "creative_dna_sha256": "815a0e7486901f5aa451317b64eceb8e62fbce6d2f30104f7ca1763d2cdc2aac",
+      "h3_adapter_sha256": "b203ee80ae4e5fb28543a0abda0f25cb0ee1a444a2e4e29a1a87dbc75e3303c0",
+      "seedance20_adapter_sha256": "8fe8f46813a599e31418d139f38b4793da6e0ad3f84a6b8363bc3bce4b6987db",
+      "mechanism_fingerprint": "59d75b511571b9d47b317b107f1b2e9508572997a566bd172ca2e9568024debf"
+    },
+    {
+      "case_id": "x-superfang119-2108921025098584072-browser-2108921025098584072-video-1",
+      "template_id": "t8-case-private-signal-object-relay-public-reaction-v1",
+      "label": "私密信号公开化｜近距离示意、器物传递与双人反应",
+      "summary": "双人近距离示意建立秘密预期，信号却沿共享器物向远处传播；镜头证明传播路径后回到原双人，靠对视与停顿完成关系反转，不臆断未经听证的台词。",
+      "case_sha256": "5495c951b3d1d81ec9a22a7e8a74adecbafd3bec9358fde43bc8afedcc9e46ab",
+      "creative_dna_sha256": "e34ce8618de3388839dd9fa536058dc823715d256008fc54e7fd50e7d108d687",
+      "h3_adapter_sha256": "01add57a588bc952964ef84360dbe302eb70fcb02bf49e7ca1beb4dfade73df8",
+      "seedance20_adapter_sha256": "8da6a9d335c95b769036cda92de4b604bfc4c722516010e6ddf56b7660e75831",
+      "mechanism_fingerprint": "bdfce2f50e2c236b087e6b0561cbc599fbe9a5d9d032938d5c00edf0236cd2fa"
+    },
+    {
+      "case_id": "x-aurora-valentii-2109513370693161214-browser-2109513370693161214-video-1",
+      "template_id": "t8-case-fog-pursuit-light-counter-unresolved-hold-v1",
+      "label": "雾中追逼反击｜稳定通道、群影迫近与短暂清空",
+      "summary": "先给孤立主体和唯一街道轴线，威胁从同一深度逐渐密集并迫使转身；一次可见发光反击短暂清空近处压力，终局仍保留警觉而非宣布胜利。",
+      "case_sha256": "f39c18f93ffb6c5ab475eb7adc5af75aab9ae130120f428478cd97df007df75c",
+      "creative_dna_sha256": "988e2c7811ded6407943bd59d78cd6aa9e68ea18ba54d5f0bd1523879cb2167e",
+      "h3_adapter_sha256": "35277816c0de0ec47d62e2d33c0577da3d085e75554c8e216180919e0bc9ce8a",
+      "seedance20_adapter_sha256": "446d6bc514772f209ed32183517de6950249d816b275db6f1aed454804c519f3",
+      "mechanism_fingerprint": "49fe68a986288edea8bc6fba60a54113e35c7d38e0762afa103e47a767ea89f2"
+    },
+    {
+      "case_id": "x-maybeegreen-2109509159620354530-browser-2109509159620354530-video-1",
+      "template_id": "t8-case-unresolved-approach-threshold-detail-return-v1",
+      "label": "靠近未解入口｜人物凝视、路径细节与同场悬置",
+      "summary": "把人物凝视与远处空建筑先放在同一关系中，再用路径、脚步和入口细节缩短距离；回到脸部与入口共同停留，只增强进入前的未知，不编造内部事件。",
+      "case_sha256": "ab93c398da1b6dc37498583537adcd9ad7e42c4a81ba76ed400b9d948dc04f25",
+      "creative_dna_sha256": "bda9fd89d7efd947f04dcf1a636bfafad9799b7c17de60abff05eb5dc0225d89",
+      "h3_adapter_sha256": "e32bb4f87eecb5d4a11032531763a301fe77049cabbade287626c5047aaf6c2b",
+      "seedance20_adapter_sha256": "45125e729f3b9645022eb0ce234ede9fd6e1c4456049e5997fbeb944c3e32e6b",
+      "mechanism_fingerprint": "674922b8a190e504833e08e1350f35dc6036244ab8497afdf07feedc2e846d3b"
+    },
+    {
+      "case_id": "x-maybeegreen-2109147544408530963-browser-2109147544408530963-video-1",
+      "template_id": "t8-case-sensory-attention-insert-microexpression-return-v1",
+      "label": "感官注意转移｜日常任务停顿、环境插镜与微表情",
+      "summary": "日常步行或感官小动作先建立平静基线；视线变化引出近处自然运动与环境细节，最后以同一人物更细微的表情回收，不把切镜误写成完整追随路线。",
+      "case_sha256": "ab07a4ce6d394fddfc8314f30054a539a62f2e5a6ebfa9e713c21fe5ee6fb554",
+      "creative_dna_sha256": "e816fbc914eff3d5b2551ba328cc7c3fbe0aee25ffd04ffd8325e3210b0c686a",
+      "h3_adapter_sha256": "14c5e7a0362830ee21ec9582badaf7ea91cade6b630b1c9ca94838eb68ff3447",
+      "seedance20_adapter_sha256": "f4d2fc4a0a421c37cc125bbf8a7e4a11347d622f26b256ce02be0047382b1ec5",
+      "mechanism_fingerprint": "0c179e2f0632bf7825d5f9b8f717ab7883b703217520fdb9a359ad3fb59bf953"
+    },
+    {
+      "case_id": "x-dave392750-2109494918733508840-browser-2109494918733508840-video-1",
+      "template_id": "t8-case-landmark-orbit-trail-route-return-v1",
+      "label": "地标绕行光迹｜同一飞行体、固定尺度与路径证明",
+      "summary": "固定地标先提供尺度，同一飞行体从近处起飞、沿地标转弯并留下连续光迹；回到正面人物时，先前路线仍可被地标和光迹验证。",
+      "case_sha256": "3adb3adcebc7f4b7dc21fc9a2cbd7257a9918220df04c9bc715392a35f89ac39",
+      "creative_dna_sha256": "048470ad266713f1666aa6a877420faf730227e5d93312babead36571b38d5bc",
+      "h3_adapter_sha256": "df8c7f71f5ccc87b577112ee47955114fe867d1da18db9960d37c6618ef69713",
+      "seedance20_adapter_sha256": "44013a99cc6baaa5eaf6ac7de6ea6abec80df7fcc45a70d373adaf063b1a3858",
+      "mechanism_fingerprint": "1f6c5fbf710ea3f01f4783cab4a5a6ff5455748f460ec79bfaf1146104261ce8"
+    },
+    {
+      "case_id": "x-aiwithaayat-2109123171408560343-browser-2109123171408560343-video-1",
+      "template_id": "t8-case-mounted-skill-companion-parallel-return-arrival-v1",
+      "label": "人物技能与伴飞回连｜方向匹配、伙伴归臂与抵达",
+      "summary": "同一骑手和载体穿行，技能动作给出明确方向；方向匹配的飞行物与伙伴插镜后，伙伴回到骑手手臂，再以抵达群体证明旅程连续。箭与鸟并飞不等于鸟接住箭。",
+      "case_sha256": "924e439c0da3b6a309f864e06671f3a92de28944e9a4f1f3c35f4fc1faf8bc09",
+      "creative_dna_sha256": "95797959187c88be25f5a67aab6f3da67aba8f57228c6647cded30966b83fff7",
+      "h3_adapter_sha256": "0d821900b6ff43e40d6ff5b1d77ba1940eef983b0705736a717c1c2e94923724",
+      "seedance20_adapter_sha256": "5b56b7f37f65538ab0f0264e3ad18bda3ba08d3433139d6243b55c7e0c55e06d",
+      "mechanism_fingerprint": "53aa9cff097c1ebae7bbbd89ff5aedfba1d89bea940a5c819906859e65e41424"
+    },
+    {
+      "case_id": "x-nai-station-2109241610190168550-browser-2109241610190168550-video-1",
+      "template_id": "t8-case-fictional-game-hero-playplay-title-return-v1",
+      "label": "虚构游戏广告｜角色包装、玩法变奏与标题闭环",
+      "summary": "先用高规格角色镜头与短标题建立游戏承诺，再把同一角色的多个玩法状态逐级展示；材质特写作换挡，最后回到同一标题，不把作者技术文案当成片内教程。",
+      "case_sha256": "56b20fcee214525a0672ec1f07836324dead583aafb34feb9f25745d6c25be74",
+      "creative_dna_sha256": "8e852ea9167cb671e5e6ff29f47c9e66d5089876caa627a990feb93873e5c125",
+      "h3_adapter_sha256": "35d4e973299b714c0a0c2dffe29ae9e93e042f5b1d6fe1ca5816971be1934b28",
+      "seedance20_adapter_sha256": "15514b14a165ed2035a0666acb75dbe3fb953e3452bfe543966caf7f5426dd4a",
+      "mechanism_fingerprint": "04b5779ac9a15814a69af7f9f99568634cefd387342d22f0e98181f694eaeab0"
+    },
+    {
+      "case_id": "x-empjellok-2109452502525464945-browser-2109452502525464945-video-1",
+      "template_id": "t8-case-occluding-vortex-silhouette-identity-reveal-v1",
+      "label": "遮挡壳显形｜空场旋流、主体轮廓与近景确认",
+      "summary": "先证明空场，再让局部旋流长成遮挡壳；人物从壳内逐层可辨，壳消退后保持同一身体与姿态，最后近景确认身份。",
+      "case_sha256": "b3dfc3cbf8ecf211c3df7d9054a44f6a4ea77bf31222100367d9e606fb265a0a",
+      "creative_dna_sha256": "31a92207aef59fdc78529a4c2b45c641c23870f9ca73b970403d5e2b2e5e11f5",
+      "h3_adapter_sha256": "8a187bef6d6c360ed7b3cf6d127cbeef2e070d610a4e25dde057052d4e87c4f5",
+      "seedance20_adapter_sha256": "e512d4f4f9ac3c1deb33dfab161e5dee88ea2decc426283c68cb23f16115a4ce",
+      "mechanism_fingerprint": "ac61f58bba10c6a03876d11e6cd1147dd305a96575a992701d709a051298cd48"
+    },
+    {
+      "case_id": "x-wowsomevisual-2109018897588326443-browser-2109018897588326443-video-1",
+      "template_id": "t8-case-solo-owned-object-hand-activation-face-light-return-v1",
+      "label": "器物仪式增幅｜持物入场、环绕激活与人物回证",
+      "summary": "持有小发光物的人先建立器物归属，空间总览交代仪式位置；双手围绕同一器物操作使光结构增长，最终让增长后的光照回同一人的脸。",
+      "case_sha256": "5ee7174fb02f18033bd2dc3f1f0125e17dd03162f7e079b54cd35b8e7eb5ffe2",
+      "creative_dna_sha256": "455116a460b45b9a82f2fc62a57f70245ca9d070c1c5f76f6b3d2824b2965e33",
+      "h3_adapter_sha256": "ff36f98cb4bfdc0225ae925c0a566b4ce139db251732db2fd6aa53c5b1a35990",
+      "seedance20_adapter_sha256": "42ef38fefcaae8563e781e556d8f217a25ac821f828f3e80ea2cb5ea7a54004b",
+      "mechanism_fingerprint": "34f74e7121beee946bdc3d51b715dcd8dbed9648eb5b5a7bb1cb6100d8907279"
+    },
+    {
+      "case_id": "x-wowsomevisual-2109377503554846805-browser-2109377503554846805-video-1",
+      "template_id": "t8-case-ground-residue-route-distant-force-reveal-v1",
+      "label": "遗留物回溯空间｜地面证据、空场扩张与远因揭示",
+      "summary": "镜头先贴近遗留物而不展示事件本身，沿同一空场逐步放宽；小物线索仍留在前景时，远端力量进入视野，形成由后果到环境原因的阅读，而不冒充真实新闻。",
+      "case_sha256": "ec02f50d0b5942095b9629aa0521db1b52c1b7f65a0c2ee6ff89f438bdeedaa7",
+      "creative_dna_sha256": "b447987c34b7de18289b2d18fb98e690be619c113aed372b51e207b2093eb9cb",
+      "h3_adapter_sha256": "ae79f2ab1c31eee5aaac0d50acad1ef2c0fdb5eff3301bd4560d7313d3cbed15",
+      "seedance20_adapter_sha256": "2c8e0613505ea0d87d2e77083bd6854acb8b429e7ae0966f5aedcc161b0d7683",
+      "mechanism_fingerprint": "20832d4e3c803fac8421bc1e31ec9a269ac55b7e256b0180dc9355c857d696a6"
+    },
+    {
+      "case_id": "x-yourplugai-2109571455075680315-browser-2109571455075680315-video-1",
+      "template_id": "t8-case-occupational-tool-counter-disruption-routine-return-v1",
+      "label": "职业工具反转｜威胁显现、道具改用与日常复归",
+      "summary": "在冲突场面内把职业身份、工具和工作空间绑定清楚，再让同一人物把职业工具用于动作反制；余波证明对手失去行动优势后，人物整理工具并回到原本职业动作，以克制收尾反转预期。",
+      "case_sha256": "1a17a799b2651ac86334a1ba593ff4b4a37882d6222e25d9d8b40b211dd2f7e7",
+      "creative_dna_sha256": "1280d5e8376491b935100d2fd9e80660487a89ef11a0fbf56d883697243ef453",
+      "h3_adapter_sha256": "15b988334f8d3a3ac63478bf8e3f38c1fccfa892a870960f23407f3e22553daf",
+      "seedance20_adapter_sha256": "31709e14e365b42ed84a4e81a6962f0fb214be4ec75e8b0986dc7c6bcfc0cabb",
+      "mechanism_fingerprint": "e24c3e10aa62d80d73d175758cc4536cfe5771590d7c3a16f05c3a7cf603c049"
+    },
+    {
+      "case_id": "x-onyibekee-2109499433805136133-browser-2109499433805136133-video-1",
+      "template_id": "t8-case-unnoticed-container-mishap-witness-innocent-residue-v1",
+      "label": "未注意的小事故｜主线工作、旁支失控与无辜残留",
+      "summary": "先把主角色注意力留在日常工作，另一个角色接触同一空间中的容器造成一次物质爆散；主角色随后才看见，结尾用肇事者身上的残留和无辜表情完成笑点。",
+      "case_sha256": "5c2f96c0b2f03b151d8ccf744eeafde6399f1604d1bedf16c0d1ea9648087df4",
+      "creative_dna_sha256": "4765a1bece8ba8aff360ef2ef734724865828cecfa1e00fdec2e3019d427d988",
+      "h3_adapter_sha256": "26b0c778255b920603d65138b198d9c84d1ea9cc6fac36ea1172dbacbb9d820c",
+      "seedance20_adapter_sha256": "0182b05cde27f7059e2e28881a2cedd0424fda66b60ef3cbc2d5f00e48a723d5",
+      "mechanism_fingerprint": "3dd2b22e31dada2870aebcfefc211f579c1f80377da5f28926797848e6480117"
+    }
+  ]
+}
