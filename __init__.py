@@ -5,6 +5,8 @@ from .music3 import MiniMaxMusic3PromptEnhancer
 from .yue2 import YuE2MusicPromptEnhancer
 from .music_planners import T8LyricWriter, T8ArrangementPlanner
 from .qwen_image21 import QwenImage21PromptEnhancer
+from .moss_image import MOSSImagePromptEnhancer
+from .moss_image_routes import register_moss_image_routes
 from .seedance20 import Seedance20PromptEnhancer
 from .case_library_routes import register_routes
 from .local_qwen_routes import register_local_qwen_routes
@@ -33,6 +35,7 @@ register_diagnostics_routes()
 register_credential_routes()
 register_completion_recovery_routes()
 register_strata_routes()
+register_moss_image_routes()
 
 
 class T8PromptEnhancerExtension(ComfyExtension):
@@ -56,6 +59,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             QwenImage21PromptEnhancer,
             T8CombatCameraConfig,
             T8SpeechReference,
+            MOSSImagePromptEnhancer,
         ]
 
 
@@ -70,6 +74,7 @@ __all__ = [
     "T8LyricWriter",
     "T8ArrangementPlanner",
     "QwenImage21PromptEnhancer",
+    "MOSSImagePromptEnhancer",
     "T8LLMProviderConfig",
     "T8PromptInspector",
     "T8PerformanceDirectorConfig",

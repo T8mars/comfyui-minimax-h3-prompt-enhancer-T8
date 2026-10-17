@@ -280,7 +280,7 @@ class PromptEnhancerTests(unittest.TestCase):
         self.assertEqual(creative_preset.display_name, "MiniMax 官方创意预设")
         self.assertEqual(case_template.default, nodes.NO_CASE_TEMPLATE)
         self.assertEqual(case_template.options, nodes.CASE_TEMPLATE_OPTIONS)
-        self.assertEqual(len(case_template.options), 291)
+        self.assertEqual(len(case_template.options), 308)
         self.assertEqual(case_template.display_name, "非官方模板（案例 / 社区 Skill）")
         self.assertEqual(task_type.default, "T2VA（文生音视频）")
         self.assertEqual(task_type.options, list(nodes.TASK_TYPE_LABELS.values()))
@@ -704,8 +704,8 @@ class PromptEnhancerTests(unittest.TestCase):
 
     def test_non_official_case_catalog_is_separate_dual_model_safe_and_injected(self):
         self.assertEqual(nodes.CASE_TEMPLATE_OPTIONS[0], nodes.NO_CASE_TEMPLATE)
-        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 291)
-        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 291)
+        self.assertEqual(len(nodes.CASE_TEMPLATE_OPTIONS), 308)
+        self.assertEqual(len(set(nodes.CASE_TEMPLATE_OPTIONS)), 308)
 
         no_case_session = FakeSession(basic_output())
         self.run_enhancer(no_case_session)
@@ -817,12 +817,12 @@ class PromptEnhancerTests(unittest.TestCase):
         catalog_path = NODES_PATH.parent / "case_templates" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "t8-case-template-catalog/v2")
-        self.assertEqual(len(catalog["templates"]), 290)
-        self.assertEqual(catalog["source_case_count"], 633)
-        self.assertEqual(catalog["case_selector_template_count"], 288)
+        self.assertEqual(len(catalog["templates"]), 307)
+        self.assertEqual(catalog["source_case_count"], 652)
+        self.assertEqual(catalog["case_selector_template_count"], 305)
         self.assertEqual(catalog["community_skill_count"], 2)
-        self.assertEqual(catalog["selector_template_count"], 290)
-        self.assertEqual(catalog["evidence_variant_count"], 345)
+        self.assertEqual(catalog["selector_template_count"], 307)
+        self.assertEqual(catalog["evidence_variant_count"], 347)
         self.assertEqual(catalog["pending_completion_count"], 0)
         self.assertFalse(catalog["official_minimax_skills_included"])
         by_id = {template["id"]: template for template in catalog["templates"]}
@@ -1004,7 +1004,7 @@ class PromptEnhancerTests(unittest.TestCase):
             self.assertTrue(template["previews"])
             self.assertTrue(all(preview["human_preview_only"] for preview in template["previews"]))
             preview_count += len(template["previews"])
-        self.assertEqual(preview_count, 635)
+        self.assertEqual(preview_count, 654)
         controller_case = by_id["t8-case-visible-four-axis-controller-same-beat-response-v1"]
         self.assertEqual(controller_case["label"], "指尖控制｜四向同拍全身响应")
         self.assertEqual(len(controller_case["required_anchors"]), 4)
@@ -1093,7 +1093,7 @@ class PromptEnhancerTests(unittest.TestCase):
             batch = json.loads(source)
             self.assertEqual(batch["schema_version"], "t8-case-template-batch/v1")
             source_cases.extend(batch["cases"])
-        self.assertEqual(len(source_cases), 288)
+        self.assertEqual(len(source_cases), 305)
         self.assertEqual({item["case_id"] for item in source_cases}, set(catalog_by_case))
         for item in source_cases:
             template = catalog_by_case[item["case_id"]]
@@ -1144,7 +1144,49 @@ class PromptEnhancerTests(unittest.TestCase):
                 self.assertNotEqual(template["source"]["case_id"], case_id)
         preview_ids = [p["case_id"] for t in catalog["templates"] for p in t["previews"]]
         self.assertEqual(len(preview_ids), len(set(preview_ids)))
-        self.assertEqual(len(preview_ids), 635)
+        self.assertEqual(len(preview_ids), 654)
+
+    def test_october_increment_adds_seventeen_selectors_and_two_variants(self):
+        root = NODES_PATH.parent
+        catalog = json.loads((root / "case_templates/catalog.json").read_text(encoding="utf-8"))
+        batch = json.loads((root / "case_templates/source_batches/2026-10-15-03.json").read_text(encoding="utf-8"))
+        expected = [
+            ("x-nexus-to-nova-2110338618439164088-browser-2110338618439164088-video-1", "t8-case-allied-attack-convergence-barrier-scale-reveal-v1", "selector"),
+            ("x-liluocheng13-2110199825149120775-browser-2110199825149120775-video-1", "t8-case-performance-environment-pullback-v1", "evidence_variant"),
+            ("x-futurevibesai-2110312518157832314-browser-2110312518157832314-video-1", "t8-case-route-bound-pursuit-lateral-intrusion-gap-landing-v1", "selector"),
+            ("x-liluocheng13-2109938421871661159-browser-2109938421871661159-video-1", "t8-case-intimate-detail-hidden-partner-shared-pose-reveal-v1", "selector"),
+            ("x-dhythm-dev-2110627437889651035-browser-2110627437889651035-video-1", "t8-case-familiar-task-anomalous-material-tool-recovery-presentation-v1", "selector"),
+            ("x-mxcaptures-2110627164093575400-browser-2110627164093575400-video-1", "t8-case-tool-trail-toss-catch-still-pose-graphic-accent-v1", "selector"),
+            ("x-popcraftai-2110626886758056105-browser-2110626886758056105-video-1", "t8-case-material-use-product-return-v1", "evidence_variant"),
+            ("x-mylodailey-2110614204201975833-browser-2110614204201975833-video-1", "t8-case-collective-attention-denial-empty-view-unresolved-v1", "selector"),
+            ("x-caliraval-2110604934039454000-browser-2110604934039454000-video-1", "t8-case-individual-route-effort-shared-readiness-v1", "selector"),
+            ("x-hey-am-cherry-2110591304795410797-browser-2110591304795410797-video-1", "t8-case-first-prop-theft-attention-second-target-interruption-v1", "selector"),
+            ("x-imastudio-ai-2110575753461149848-browser-2110575753461149848-video-1", "t8-case-small-courier-pursuit-counteraction-task-return-v1", "selector"),
+            ("x-popcraftai-2110536290232045985-browser-2110536290232045985-video-1", "t8-case-public-display-subject-confirmation-camera-acknowledgment-v1", "selector"),
+            ("x-hugues617999995-2110528558757999039-browser-2110528558757999039-video-1", "t8-case-landmark-platform-liftoff-separation-wide-return-v1", "selector"),
+            ("x-hugues617999995-2110524060564349085-browser-2110524060564349085-video-1", "t8-case-carrier-speed-proof-passenger-calm-moving-background-v1", "selector"),
+            ("x-sorastg524-2110506365504631244-browser-2110506365504631244-video-1", "t8-case-personal-transformation-street-rewrite-return-performance-v1", "selector"),
+            ("x-hathibel-2110453389947764801-browser-2110453389947764801-video-1", "t8-case-fixed-foreground-dance-match-handoff-performer-change-v1", "selector"),
+            ("x-sorastg524-2110443838104031675-browser-2110443838104031675-video-1", "t8-case-outline-attire-headpiece-tool-assembly-reveal-v1", "selector"),
+            ("x-veynmotion-2110453085361643679-browser-2110453085361643679-video-1", "t8-case-task-selection-sensory-pause-viewer-offer-v1", "selector"),
+            ("x-isekaibardguild-2110435226845601842-browser-2110435226845601842-video-1", "t8-case-grounded-solo-phrase-attached-secondary-motion-settle-v1", "selector"),
+        ]
+        by_id = {item["id"]: item for item in catalog["templates"]}
+        source_cases = {item["case_id"] for item in batch["cases"]}
+        self.assertEqual(len(batch["cases"]), 17)
+        self.assertEqual(source_cases, {case_id for case_id, _, action in expected if action == "selector"})
+        self.assertEqual(sum(action == "evidence_variant" for _, _, action in expected), 2)
+        for case_id, template_id, action in expected:
+            template = by_id[template_id]
+            self.assertIn(case_id, {preview["case_id"] for preview in template["previews"]})
+            if action == "selector":
+                self.assertEqual(template["source"]["case_id"], case_id)
+            else:
+                self.assertNotEqual(template["source"]["case_id"], case_id)
+        preview_ids = [p["case_id"] for t in catalog["templates"] for p in t["previews"]]
+        self.assertEqual(len(preview_ids), 654)
+        self.assertEqual(len(set(preview_ids)), 654)
+        self.assertFalse(any("2110462694495224182" in case_id for case_id in preview_ids))
 
     def test_completed_addendum_releases_previous_pending_cases(self):
         root = NODES_PATH.parent

@@ -5,6 +5,31 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.33.0] - 2026-10-17
+
+- Add independent MOSS Image prompt authoring with pinned official Caption/Layout
+  compilation, five existing provider routes, optional image context, exact-copy
+  locks, fixed canvas outputs, bounded correction and offline compile-only.
+  Original 30 node schemas/workflows remain unchanged. Add typed last-good recovery,
+  explicit failed-draft inspection, named widget persistence and bilingual help.
+  Cross-review fixes linked-input blank space/labels and reload layout on native
+  Comfy, copy-lock edge cases, safe failure retention, Strata hard-error handling
+  and pre-load GGUF capacity checks. Existing node modules remain unchanged.
+  Accept 8-pixel canvas multiples without rounding, including 1256x1672, across
+  generation, Layout compilation, widget persistence and typed recovery. Keep
+  pinned upstream sources unchanged and surface downstream canvas alignment.
+
+- Import `batch-2026-10-15-03`: 17 new case selectors and two evidence variants;
+  exclude one explicitly closed duplicate video. Inventory now contains 652
+  source cases, 305 case selectors, two community Skills and 654 T8 previews.
+- Update dynamic-preview channel `2026.10.16.1` with 16 verified shards while
+  keeping the bundled offline GIF baseline and existing workflow IDs unchanged.
+- Verification: 1030 Python tests (1028 passed, two existing opt-in skips),
+  92 frontend tests, actual Chrome contracts, current/minimum ComfyUI 0.33
+  isolated 31-node loading, and secret/package checks. All 17 published preview
+  assets match local SHA-256 hashes; the Registry package keeps eight official
+  GIFs and excludes all T8 GIFs.
+
 ## [1.32.1] - 2026-10-15
 
 - Import completion addendum `batch-2026-10-15-02` without double-counting its

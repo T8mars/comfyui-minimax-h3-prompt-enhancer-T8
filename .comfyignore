@@ -4,6 +4,7 @@
 .gitignore
 .comfyignore
 tests/
+/moss_vendor/scripts/test_compile_prompt.py
 tools/
 case_templates/source_batches/
 *_smoke.py

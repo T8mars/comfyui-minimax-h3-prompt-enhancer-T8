@@ -49,6 +49,8 @@ def main():
             assert sum(n.endswith(".gif") for n in members) == 8
             assert not any(n.startswith("web/js/assets/t8-case-previews/") and n.endswith(".gif") for n in members)
             assert not any(n.endswith(".gguf") or n == "roadmap.md" for n in members)
+            assert "moss_vendor/LICENSE" in members
+            assert "moss_vendor/scripts/test_compile_prompt.py" not in members
             archive.extractall(install)
         code = r'''
 import asyncio, importlib.util, json, pathlib, sys
@@ -59,8 +61,14 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 30
-assert [s.node_id for s in schemas[-5:]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
+assert len(schemas) == 31
+assert [s.node_id for s in schemas[-6:-1]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
+assert schemas[-1].node_id == "MOSSImagePromptEnhancerT8"
+moss = sys.modules[spec.name + ".moss_image"]
+compiled = moss.MOSSImagePromptEnhancer.execute(operation=moss.contract.COMPILE, draft_json='{"caption":"A quiet ceramic cup."}').result
+assert compiled[:4] == ("A quiet ceramic cup.", 1024, 1024, "caption")
+assert type(compiled[1]) is type(compiled[2]) is int
+assert json.loads(compiled[5])["logical_generation_calls"] == 0
 speech = sys.modules[spec.name + ".speech_reference"]
 assert speech.T8SpeechReference.execute().result == (None, "", "", "")
 assert len(speech.T8SpeechReference.define_schema().outputs) == 4

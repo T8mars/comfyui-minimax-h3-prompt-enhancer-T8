@@ -1,0 +1,36 @@
+{
+  "schema_version": "t8-moss-image-source/v1",
+  "repository": "OpenMOSS/MOSS-Image",
+  "commit": "c1355e6b1986dfe8fba3c0455783a05899212342",
+  "license": "Apache-2.0",
+  "files": [
+    {
+      "path": "SKILL.md",
+      "upstream_path": "skills/moss-image-prompt-enhancer/SKILL.md",
+      "sha256": "72cd39883af0b6c6997038b068af2d858dcd968ca43466ebf93fea21833878a0"
+    },
+    {
+      "path": "references/layout.md",
+      "upstream_path": "skills/moss-image-prompt-enhancer/references/layout.md",
+      "sha256": "e3d74ded6ab402ef69131fc7609117affff5ee1c6d14a49752d44c865b79525c"
+    },
+    {
+      "path": "scripts/compile_prompt.py",
+      "upstream_path": "skills/moss-image-prompt-enhancer/scripts/compile_prompt.py",
+      "sha256": "1d75780cf9f22f9ebed1a33d8100158f8d73ebfe59a5d435c1cc8c8e1374a8a3"
+    },
+    {
+      "path": "scripts/test_compile_prompt.py",
+      "development_only": true,
+      "upstream_path": "skills/moss-image-prompt-enhancer/scripts/test_compile_prompt.py",
+      "sha256": "2ef6ec435575bfaa9797008a2ffd30790b291eefbc190de00274a74b0de34d5c"
+    },
+    {
+      "path": "LICENSE",
+      "upstream_path": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    }
+  ],
+  "adapter_revision": "1.0.0",
+  "scope": "Prompt enhancement and deterministic compilation only. No image-generation model or service."
+}

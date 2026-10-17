@@ -16,6 +16,54 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-17: independent MOSS Image authoring
+
+Append `MOSSImagePromptEnhancerT8` after the original thirty nodes; no existing
+node schema, widget order or shipped example changes. The new node stores 27
+stable fields with matching native named metadata and `t8_moss_widgets_v1`.
+Configure projects onto actual runtime names synchronously, before model scans.
+Regressions include linked null/omitted text, optional key/control widgets,
+action tails, corrupted metadata and reordered runtime widgets. API keys and
+actions are never serialized by this extension. Mode/provider visibility keeps
+values intact; repeated cycles do not grow the node.
+
+Compile-only and last-good recovery skip irrelevant lazy dependencies. Resolved
+text/drafts are checked again before model/transport calls. Recovery restores
+the two INT outputs through a MOSS-only codec, preserving old cache behavior.
+Node tests and the actual Chrome extension hooks cover these contracts. This
+is not a RunningHub deployment; live queue/model evidence is recorded separately.
+
+Cross-review: distinguish a real legacy conversion (`origType` /
+`origComputeSize`) from the new host's coexisting but unconnected widget sockets.
+Never resurrect a native converted widget or discard its serialization hook.
+On coexisting-socket hosts, connected controls need a native compact suppressed
+row, not extension-hidden/converted controls: otherwise their `y` becomes stale
+and sockets overlap. DOM multiline rows need a MOSS-only bilingual draw label.
+Reproduce external prompt + two INT links through real host save/reload,
+disconnect/reconnect and repeated mode cycles, including actual API graph values.
+MOSS additionally observes all connected shared-config fields without changing
+old consumer callbacks, node schemas or output formats.
+
+Also queue real computed INT producers, not only frontend Primitive constants:
+Primitive may be folded into literals, hiding the validation boundary. Connected
+MOSS canvas controls arrive as `None` during validation; defer those values only,
+retain known-literal checks, then validate the resolved canvas before inference.
+
+8-pixel compatibility follow-up: width/height now accept 8-pixel multiples in
+16..16384 in both Python and named/positional widget maps. Keep all 27 field
+names, defaults, sockets and output types unchanged. Test the reporter's actual
+ResolutionSelector (3:4, 2 MP, multiple 8), not just 1024 defaults, and native
+save/reload/reconnect of 1256x1672 without rounding. Layout compilation and typed
+cache recovery use the same real dimensions; downstream latent alignment is
+reported separately, never silently substituted into the prompt's canvas.
+
+The real MOSS queue reproduced a further V3-specific failure: dynamic lazy image
+fields reached `check_lazy_status` as `(value, original_graph_key)`, not plain
+`None`. Failing to unwrap that tuple silently skipped connected upstream images.
+Resolve unresolved dynamic tuples by their original graph keys, while retaining
+older nested-None/flat forms. Every future lazy Autogrow node must test this with
+two distinct images through an actual host queue, not just direct `execute()`.
+
 ### 2026-10-14: optional speech reference
 
 H3 and Seedance append exactly one optional lazy custom-type `speech_reference`

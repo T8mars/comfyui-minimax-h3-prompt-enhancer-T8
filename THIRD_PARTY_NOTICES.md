@@ -122,3 +122,21 @@ T8's adaptation removes the ABC helper's CLI/file operations and retains its
 native parser, reports, chord stripping and symbolic invariants. No model weights
 are distributed or downloaded by the new node. Their separate licenses do not
 change the license of this text adapter.
+
+## MOSS Image prompt-enhancer Skill and compiler
+
+`moss_vendor/` pins OpenMOSS/MOSS-Image commit
+`c1355e6b1986dfe8fba3c0455783a05899212342`, including the original Skill,
+Layout reference and compiler. These files retain their upstream Apache-2.0
+license, reproduced in `moss_vendor/LICENSE`; T8's project license does not
+replace it. Provenance and per-file hashes are in `moss_vendor/source.json`.
+The unchanged upstream test is development-only, excluded from Registry ZIPs.
+T8 converts the agent/file workflow into an in-memory chat contract and invokes
+only the local compiler. No MOSS weights, rendering service, tool execution or
+automatic downloads are bundled. See `moss_vendor/NOTICE.md`.
+
+The T8 runtime additionally accepts 8-pixel canvas multiples. For non-16-aligned
+Layouts it validates the unchanged official schema using a temporary envelope,
+then rechecks and centers each box on the real canvas with the official box
+function. It does not modify or re-sign the upstream compiler, round the user's
+dimensions or permit boxes in the envelope's padding.

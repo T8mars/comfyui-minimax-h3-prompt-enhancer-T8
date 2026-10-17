@@ -293,6 +293,19 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "yue2.py",
         "yue2_abc.py",
         "qwen_image21.py",
+        "moss_image.py",
+        "moss_image_contract.py",
+        "moss_image_state.py",
+        "moss_image_routes.py",
+        "moss_vendor/SKILL.md",
+        "moss_vendor/references/layout.md",
+        "moss_vendor/scripts/compile_prompt.py",
+        "moss_vendor/source.json",
+        "moss_vendor/LICENSE",
+        "moss_vendor/NOTICE.md",
+        "web/js/moss_image_prompt_enhancer.js",
+        "web/js/moss_image_ui.mjs",
+        "docs/moss-image.md",
         "qwen_image21_edit.py",
         "resources/qwen-image-edit-t8.md",
         "research_sources/qwen-image-edit-t8.json",
@@ -388,6 +401,7 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
 
 
 def run_optional_checks() -> None:
+    subprocess.run([sys.executable, "tools/build_moss_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run(
         [sys.executable, "tools/build_example_workflows.py", "--check"],

@@ -1,0 +1,194 @@
+{
+  "schema_version": "t8-case-template-batch/v1",
+  "batch_id": "2026-10-15-03",
+  "authority": "T8 精选案例（非官方）",
+  "cases": [
+    {
+      "case_id": "x-nexus-to-nova-2110338618439164088-browser-2110338618439164088-video-1",
+      "template_id": "t8-case-allied-attack-convergence-barrier-scale-reveal-v1",
+      "label": "双人攻势交接｜分别起势、共同突进与屏障尺度揭示",
+      "summary": "两个可区分主体先分别起势，再沿同一进攻方向合流；后段以大尺度阻隔显露改写攻势，不虚构胜负。",
+      "case_sha256": "e33416cace0dc0a4ba8ed0201ff3367f5e54bbeb4df4e4c1b4c7d7cc9a77c1a9",
+      "creative_dna_sha256": "2be91afd6eec90d409eea3d16405d93c1cb81a1dec5a22e0a383d48b8436c81d",
+      "h3_adapter_sha256": "20c8edf34d28bcaeb825de9cd1cfe821ab183887a6e4c00ed39cd2ce814934cc",
+      "seedance20_adapter_sha256": "39ee10c75f2b1f4b6bc19c2568d310453e77b0692fff113ab1094a93760f4273",
+      "mechanism_fingerprint": "a6aebf6bff24ca9284cc10cd7815407523495774b39398280cf40fd96fe5e497"
+    },
+    {
+      "case_id": "x-futurevibesai-2110312518157832314-browser-2110312518157832314-video-1",
+      "template_id": "t8-case-route-bound-pursuit-lateral-intrusion-gap-landing-v1",
+      "label": "路线威胁同屏｜追车、横向障碍与缺口落地",
+      "summary": "后跟视点持续交代同一载具和路线，侧向大威胁侵入；路线缺口迫使一次可见跃越与落地，最后更大威胁仍未解除。",
+      "case_sha256": "1bc1e3d5e180079c43bc65e8914ed143ff5bc4d52da2f22a871fb5ffa2774d11",
+      "creative_dna_sha256": "8f1f88b4deff1ec6432ebfa0c877ea8d3d7c6547da20554a5846d57cae89b753",
+      "h3_adapter_sha256": "e226e441fe163a86c3ba12256a951f3f39270656b7ee0f8e79b4505e16add2cb",
+      "seedance20_adapter_sha256": "0750f9c25179c9376875fabfce0941873d028404137079570a85f0619c138d48",
+      "mechanism_fingerprint": "1cb57b4f4d41749294dfc4960754a14134818e44156212943cef7f16e40ea87f"
+    },
+    {
+      "case_id": "x-liluocheng13-2109938421871661159-browser-2109938421871661159-video-1",
+      "template_id": "t8-case-intimate-detail-hidden-partner-shared-pose-reveal-v1",
+      "label": "亲密关系拉远揭示｜局部情绪、隐藏同伴与共享终姿",
+      "summary": "先用局部情绪细节隐藏另一参与者，逐步拉远揭示既有接触，再展示完整共享轮廓；不补造此前未见的靠近或救援。",
+      "case_sha256": "d9bac9c7c816e12e118e85b4f17226e95960efde06bcc747c3690e3144c41d95",
+      "creative_dna_sha256": "d9b37bad6c926ef5c373c66298aacafc1f07954886a0b05e788ca1b5824a331f",
+      "h3_adapter_sha256": "a58952fbc9630e5c9ee584fa0029be035dc4bbef57118e81a35fca06bd5624b5",
+      "seedance20_adapter_sha256": "fcdf007144e4b16908372f6bd0fadca3b402ae6ee945db7dbeb9d3c05c55cbca",
+      "mechanism_fingerprint": "ad91979becc585e323bf85e74208a4b500bde6d5b3a4a8242f3014e06624f58f"
+    },
+    {
+      "case_id": "x-dhythm-dev-2110627437889651035-browser-2110627437889651035-video-1",
+      "template_id": "t8-case-familiar-task-anomalous-material-tool-recovery-presentation-v1",
+      "label": "熟悉操作遇异常物理｜工具介入、材料回收与成果呈递",
+      "summary": "先建立工具、材料和容器的熟悉操作，材料出现可见悬浮异常；同一操作者用原工具收回，再呈递恢复后的成果，环境设定不是异常的唯一证据。",
+      "case_sha256": "519374ba5a3ee372fc17b2a031b79867a91e8aefb6b69542b5f9b3debd7c0007",
+      "creative_dna_sha256": "8b2615b50b49052a5c967e44fd3a6507311e4047cb5950edbc4a3c0a7aca99fb",
+      "h3_adapter_sha256": "f09efa548380bb359881b9542825525e858efae63cab89e7babf9d92095fe4b3",
+      "seedance20_adapter_sha256": "f7e3686261d6dd878657f0967e09f1be78fd705de646680355159995a2180851",
+      "mechanism_fingerprint": "49d87c27d72a56a6222d8f0dccb20cf4309b58b84211649f100d82094b25fa36"
+    },
+    {
+      "case_id": "x-mxcaptures-2110627164093575400-browser-2110627164093575400-video-1",
+      "template_id": "t8-case-tool-trail-toss-catch-still-pose-graphic-accent-v1",
+      "label": "高速道具抛接｜轨迹、接稳、静姿与图形爆点",
+      "summary": "高速圆形道具运动经过一次释放轨迹和接稳，人物随后定姿，背景图形爆点扩张，再回到面部确认；不把未见命中的爆点写成武器伤害。",
+      "case_sha256": "0eb5468f1591c37043c208c8f2ab708cdce7273e3c789ab6432d45e57c95671e",
+      "creative_dna_sha256": "91d78814ef1771c1893d01bc20ed4ce2c71e364a6b476dafbf04ee348a635942",
+      "h3_adapter_sha256": "d6674bf695f17d12f8720e3871c47e521b1775de35e528292ccfdca5ed71f9ec",
+      "seedance20_adapter_sha256": "c7717701ab0aff1afa7709fccce766b32051b1b86385d1bbf10ada957994964a",
+      "mechanism_fingerprint": "e5a30401d1fd4df2421f498e212b4c716ac34c4a64135f4878ecf4242651445e"
+    },
+    {
+      "case_id": "x-mylodailey-2110614204201975833-browser-2110614204201975833-video-1",
+      "template_id": "t8-case-collective-attention-denial-empty-view-unresolved-v1",
+      "label": "共同注视悬念｜群体异样、局部回应与空景未决",
+      "summary": "新来者遇到共同朝边界外注视的群体，交谈反应没有消解异样，最后越过同一边界看去仍无决定性解释；不补怪物或记录设备证据。",
+      "case_sha256": "53d8424a6dbc945c38e7fad1b7462c22d0dca2e9d01b9ff6d68b49e3b9303f3b",
+      "creative_dna_sha256": "451387c892bfe7aff8d5afed426866f5bc4bbb77706c2a683f01f559f52d0bf7",
+      "h3_adapter_sha256": "2ea52d8603c75324d1d83243a1d5dbacea6d95a0fa4e27dfaa01227656f11c58",
+      "seedance20_adapter_sha256": "42ef110b68f46b037d39be9056e8579d9152a632b250cad612024a720686f6a7",
+      "mechanism_fingerprint": "c1f55be8c3d766a053b384797dafa33b0f3483c039d415213ec899ec615e08b9"
+    },
+    {
+      "case_id": "x-caliraval-2110604934039454000-browser-2110604934039454000-video-1",
+      "template_id": "t8-case-individual-route-effort-shared-readiness-v1",
+      "label": "个人路线转共同准备｜身份锚点、跨场动作与双人终姿",
+      "summary": "先私密确认主角，再以随身物进入公共移动，转为身体投入，最后与另一人共同准备活动；终点是两人就位，不虚构比赛或胜绩。",
+      "case_sha256": "a264c16594701c6f24f9fd7bd480603d59cd998efbbf3d904749899e7d52319e",
+      "creative_dna_sha256": "80fcf5a51c1c687d02bdab18ce68a21c1e2075e16d59e2d077f2beb199d04e9d",
+      "h3_adapter_sha256": "d21f0953085b14f24f50361147d646d65327842f924a02b472fe1878b534bcbf",
+      "seedance20_adapter_sha256": "814306b57fea3f74313e35505d8ba3774be567766085ecca6244d997c034ad1f",
+      "mechanism_fingerprint": "8966fb333db9cc84830e70fa70caed53713bff90cdd0c6fbbe38b6cd724a2469"
+    },
+    {
+      "case_id": "x-hey-am-cherry-2110591304795410797-browser-2110591304795410797-video-1",
+      "template_id": "t8-case-first-prop-theft-attention-second-target-interruption-v1",
+      "label": "双重夺物｜首个损失吸走注意、第二目标乘隙介入",
+      "summary": "先夺走可见道具吸住主人注意，在反应或恢复过程中第二个闯入者再动另一随身物；同场内的第二次打断来自首次分心。",
+      "case_sha256": "3fcbd8200f38de9098c14bcbbc4aa1d460f6ef44ad5bfea2a78d4593b986c67f",
+      "creative_dna_sha256": "64390a559b733b022ddb5153ba37f1eb20a7c6c1f93c1f9f2f5f404e23fca1fb",
+      "h3_adapter_sha256": "44b29fa928f470023e4a09760b4778ef7c40a1ffe1968bd0b82d9f741da88661",
+      "seedance20_adapter_sha256": "997e98442626bb5605a79a2efbde47fd331841ceb5f471530427078abc55d540",
+      "mechanism_fingerprint": "ddb3fefcb25201ce3417d37b53149b6c3b5aff0f7839224eb3017d2e5eb68516"
+    },
+    {
+      "case_id": "x-imastudio-ai-2110575753461149848-browser-2110575753461149848-video-1",
+      "template_id": "t8-case-small-courier-pursuit-counteraction-task-return-v1",
+      "label": "任务载体反制｜低位追逐、能力升级与原目标回归",
+      "summary": "小型递送者以任务物定义，普通移动被遭遇转为追逐，再反制获得主动权，最终回归最初递送目标；源片物件连续缺口明确保留，不当作已见证据补齐。",
+      "case_sha256": "ffbb6206b7858e30a1e7ba74f312f26f3b36bb22638ee030118519bed81023bd",
+      "creative_dna_sha256": "6a485a60b19828eea56e2801f8bd3854c837ff4c0fbdb5931b5dcd3f87d8c20a",
+      "h3_adapter_sha256": "734670245b5730e65a4a6e7228c17d4410e4acb56155ca159d2eff40e68b7a6f",
+      "seedance20_adapter_sha256": "b01696ffee4e69a2ea6abce1a16917469ad12ae01c5fd2ef5dcdb104cab1d08c",
+      "mechanism_fingerprint": "0fc33578d3dd0e75107793b50a6ff73ad1791808b6eef8a84bc681a3cbac7d91"
+    },
+    {
+      "case_id": "x-popcraftai-2110536290232045985-browser-2110536290232045985-video-1",
+      "template_id": "t8-case-public-display-subject-confirmation-camera-acknowledgment-v1",
+      "label": "公共转播选中角色｜场域、屏幕确认与镜头回应",
+      "summary": "先建立写实公共场域与屏上异媒介人物，再定位到实体观众席中同一人物，由其对镜头回应和邻近反应确认参与；是取景与识别接力，不是角色穿屏。",
+      "case_sha256": "a12e1505df3972f82af9cbdef3798e3b5302f1f32789672e24ebab72c5da3853",
+      "creative_dna_sha256": "0159f360bd4b43844aa266b046262229c47ba63e5900ef2bfdba7f5c2727e01f",
+      "h3_adapter_sha256": "e0b78418b1df29ac4323d3ddaf1b67f391b14aebca2bd5c04a156e96760cb6b0",
+      "seedance20_adapter_sha256": "ca22e80d91cb6fa05b393411d232d4028ff7710b11ac7f9e99a689660dfc9e20",
+      "mechanism_fingerprint": "58418faf31917aab75074c67876c04fefb64661e6aea37dcaa3be68567037455"
+    },
+    {
+      "case_id": "x-hugues617999995-2110528558757999039-browser-2110528558757999039-video-1",
+      "template_id": "t8-case-landmark-platform-liftoff-separation-wide-return-v1",
+      "label": "地标起飞见证｜接触基线、可见分离与全貌回证",
+      "summary": "载具先与地标平台接触，镜头靠近见证可见分离，再退回全貌让载具、平台和整体结构共同证明尺度；不把起飞倒写为降落，也不虚构远程离场。",
+      "case_sha256": "2149d8f74597bb9afa734ab7995cefb36e582a8c1f6b1425f7838126d77498f9",
+      "creative_dna_sha256": "07620251778ab8ccb738f977482d3cfe667324551d4b5e10e8ab9fd4a4cb0220",
+      "h3_adapter_sha256": "833c346e15f13caa7cec3c580169361ecc5b8e6f844df68989130d0bfaa9adf3",
+      "seedance20_adapter_sha256": "9b5faaa7f5c3e5f2baa490ba1ecba04a6d847d32409f6ac04379cf19d90e1c82",
+      "mechanism_fingerprint": "de70abadfba5d38c3c0de55eb62dabdcd86648017039515be05a0a2824af86a7"
+    },
+    {
+      "case_id": "x-hugues617999995-2110524060564349085-browser-2110524060564349085-video-1",
+      "template_id": "t8-case-carrier-speed-proof-passenger-calm-moving-background-v1",
+      "label": "速度外证转内静｜载具反馈、乘客微动与持续背景",
+      "summary": "外部以路线痕迹和接触反馈证明载具移动，再转到载具上的松弛乘客，用持续运动的背景衬托小动作；舒适只是视觉情绪，不是实测性能宣称。",
+      "case_sha256": "5dbeaa011a3d8d80378c483eb1e806b11a1c97dc7a6a75596b6a4f008fffc0b9",
+      "creative_dna_sha256": "5f820fd4d9914ff611948098c3c22391dfb5fc944ee0488893be832490cb0052",
+      "h3_adapter_sha256": "a7c1a80f4aed6c98c5fe963bc27fbb092ab1e357ade50a849913c1691ceb73f4",
+      "seedance20_adapter_sha256": "03d052e28ffc8bc0c9492b5f92fcc6f3b9044eaac6d8657d4ecfd1c46dee1d24",
+      "mechanism_fingerprint": "b78c339e2d75ca1c28e06dfff7c6b1f45dfdd6c20cf3b49fe63e1a3ea3b95cc5"
+    },
+    {
+      "case_id": "x-sorastg524-2110506365504631244-browser-2110506365504631244-video-1",
+      "template_id": "t8-case-personal-transformation-street-rewrite-return-performance-v1",
+      "label": "个人换态扩成街区｜局部触发、环境回证与终态表演",
+      "summary": "局部手势先改写人物造型，再用较宽环境视图回证场所也换态，最后回到新环境中的人物表演；仅核对光效前后身份，不把遮挡期冒充连续验真。",
+      "case_sha256": "156d27493407ca206732a0fb8734c63c99e5579e65079d704b2619cfcc055e24",
+      "creative_dna_sha256": "753dd51d51382dca43d7953dd371b79adb85b730cc4be99b5fa18ea03785b2dd",
+      "h3_adapter_sha256": "f67da653a78ab25c11a849bc352df336b49738173f9ed5733d37869b3e679e4b",
+      "seedance20_adapter_sha256": "c465c30b45918309981713664adecdd14875ae5b7f0a56e52c86ecf7cf3e19af",
+      "mechanism_fingerprint": "05e8ca4cf13ee35346252312b47c48a1e239e743c8d00384086adbf0566515cc"
+    },
+    {
+      "case_id": "x-hathibel-2110453389947764801-browser-2110453389947764801-video-1",
+      "template_id": "t8-case-fixed-foreground-dance-match-handoff-performer-change-v1",
+      "label": "定机位动作接力｜固定前景、匹配重心与新表演者延续",
+      "summary": "固定低视点与静止前景物登记地面，第一表演者的接地动作经匹配动作交给另一表演者，后者延续身体节奏并靠近镜头；明确换人，不假称同一身份连续。",
+      "case_sha256": "2d750eed434ece12146fd4fcba5c32a048a33a8336e8c88b69afb9be2633d253",
+      "creative_dna_sha256": "4e508d2c6054ec29d1162a6be93eec5a3f2f0eba575ed74e4049a6da00a69c92",
+      "h3_adapter_sha256": "396f6c1a004f885b92cdd4212b736a030fe2443321aecfea9d895c252f69af13",
+      "seedance20_adapter_sha256": "6a4a9cee2b0b3568680f6d3c87b735943c74b4c96dc39e779e157370bb8aab6f",
+      "mechanism_fingerprint": "8e99d3d1ca5486c9b7d0cd829979f30597fa73083012bc26dbe50023bcb47a03"
+    },
+    {
+      "case_id": "x-sorastg524-2110443838104031675-browser-2110443838104031675-video-1",
+      "template_id": "t8-case-outline-attire-headpiece-tool-assembly-reveal-v1",
+      "label": "轮廓到附件成形｜主体换装、头部确认与道具终态",
+      "summary": "先建素装人物，以对齐轮廓引出新服装；另行确认面部与头饰，再补一个道具并显出完整形象；是分组件显露，不假称每个扫描边界或机械安装都可见。",
+      "case_sha256": "aa141217c390da94ce6a3d39649cbf0381666242a99f774aa4e221f9f2fb9fb7",
+      "creative_dna_sha256": "e260be1d1d5f74dead81a05ec2acd7318b0ce86503cd9122f863ab647efc3ef6",
+      "h3_adapter_sha256": "cadf88cdf22a0c8348b97538f2c6fe0e019cc83e48eff379dcecdf5cb3030fab",
+      "seedance20_adapter_sha256": "61708a0c565dee331828c4462a22f40995382023845a57942d31300a8b16c0ed",
+      "mechanism_fingerprint": "09780f1c57ee18822d63b7fd77a68a09b13b7d19e235775d466c99c4f353eb59"
+    },
+    {
+      "case_id": "x-veynmotion-2110453085361643679-browser-2110453085361643679-video-1",
+      "template_id": "t8-case-task-selection-sensory-pause-viewer-offer-v1",
+      "label": "从手中选择到邀请｜任务、感官停顿与对镜头递物",
+      "summary": "从可识别的手工任务中选出一件，短暂感官停顿改变注意，随后把同一选中物递向镜头；只到邀请，不补观众接下或交付完成。",
+      "case_sha256": "22244af0022e2426e6e5a24c29e89ccd92c303f38698e1d71474dc20636b3341",
+      "creative_dna_sha256": "b57868e81a107fda664c249ebdca360fdc0ea0da479a030477f0b56b94d64ac5",
+      "h3_adapter_sha256": "3bfb37754cc69a7b1788a4c701d1de68344d760db1a9c91393ceca117bb02fc3",
+      "seedance20_adapter_sha256": "ff993f080f68f80c9acc7ecbe8074539afc448450a6b05b50ad5ee937f54d140",
+      "mechanism_fingerprint": "7b6fabf82008840ea42169f2d17ccfc787f2dac358c670e8fd7ed05fc459fc6a"
+    },
+    {
+      "case_id": "x-isekaibardguild-2110435226845601842-browser-2110435226845601842-video-1",
+      "template_id": "t8-case-grounded-solo-phrase-attached-secondary-motion-settle-v1",
+      "label": "身体主动作与附属跟随｜全身脚点、柔性连接与终姿",
+      "summary": "在简洁背景中看清单人接地全身动作，让附着的柔性部件随身体转向改变而非独立抢动作，最后收成明确终姿；源片只支持可见关联，不声称测出了延迟毫秒。",
+      "case_sha256": "5d75bbcfd285ccb273c5e3d4ac6ca3a7d195e591c14c215c955202e1b87643b2",
+      "creative_dna_sha256": "e84e30ce36112ae20064f20b436716ad045aaf47106ed5aac5f840c7a8ff6147",
+      "h3_adapter_sha256": "2a0d1463667725b53b4996dfd00127b760737613df5ffc686fa1c26bda0856c4",
+      "seedance20_adapter_sha256": "dccaa8c43a32ead7a12c9074f074396dfbb50b3a915639efa3f90115c0ef290b",
+      "mechanism_fingerprint": "85f336570fee3346316152dfcd7933214552414e00291353c0f852a5ae811255"
+    }
+  ]
+}

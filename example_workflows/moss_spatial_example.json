@@ -1,0 +1,257 @@
+{
+  "id": "f44cda83-d96b-5803-8937-60b33e07aa18",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MOSSImagePromptEnhancerT8",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        540,
+        760
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "title": "MOSS · spatial_example",
+      "inputs": [
+        {
+          "name": "api_key",
+          "type": "STRING",
+          "link": 2,
+          "shape": 7
+        },
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive_prompt",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "resolved_format",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "draft_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSImagePromptEnhancerT8",
+        "t8_moss_widgets_v1": {
+          "prompt": "Exactly two toy robots: red on the left foreground, blue on the right background. One low fence partly occludes both robots' feet. No text, no extra robots.",
+          "operation": "生成 / Generate",
+          "output_format": "Layout / 空间排版",
+          "width": 1536,
+          "height": 1024,
+          "output_language": "按需求（默认英文）/ Auto",
+          "api_mode": "贞贞平价小屋（推荐）",
+          "locked_text": "",
+          "max_output_chars": 0,
+          "max_corrections": 1,
+          "llm_max_tokens": 16384,
+          "draft_json": "",
+          "ai_workshop_model": "gemini-3.5-flash",
+          "custom_model": "qwen/qwen3.8-flash-next",
+          "openai_base_url": "",
+          "seed": 0,
+          "control_after_generate": "randomize",
+          "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+          "local_mmproj": "AUTO（自动匹配）",
+          "local_context_size": 32768,
+          "local_max_tokens": 16384,
+          "local_think_mode": "关闭（推荐，速度优先）",
+          "local_reasoning_effort": "medium",
+          "local_unload_policy": "执行后卸载（推荐）",
+          "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+          "recovery_slot": "",
+          "recovery_action": "normal"
+        }
+      },
+      "widgets_values": [
+        "Exactly two toy robots: red on the left foreground, blue on the right background. One low fence partly occludes both robots' feet. No text, no extra robots.",
+        "生成 / Generate",
+        "Layout / 空间排版",
+        1536,
+        1024,
+        "按需求（默认英文）/ Auto",
+        "贞贞平价小屋（推荐）",
+        "",
+        0,
+        1,
+        16384,
+        "",
+        "gemini-3.5-flash",
+        "qwen/qwen3.8-flash-next",
+        "",
+        0,
+        "randomize",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "normal"
+      ],
+      "widgets_values_named": {
+        "prompt": "Exactly two toy robots: red on the left foreground, blue on the right background. One low fence partly occludes both robots' feet. No text, no extra robots.",
+        "operation": "生成 / Generate",
+        "output_format": "Layout / 空间排版",
+        "width": 1536,
+        "height": 1024,
+        "output_language": "按需求（默认英文）/ Auto",
+        "api_mode": "贞贞平价小屋（推荐）",
+        "locked_text": "",
+        "max_output_chars": 0,
+        "max_corrections": 1,
+        "llm_max_tokens": 16384,
+        "draft_json": "",
+        "ai_workshop_model": "gemini-3.5-flash",
+        "custom_model": "qwen/qwen3.8-flash-next",
+        "openai_base_url": "",
+        "seed": 0,
+        "control_after_generate": "randomize",
+        "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+        "local_mmproj": "AUTO（自动匹配）",
+        "local_context_size": 32768,
+        "local_max_tokens": 16384,
+        "local_think_mode": "关闭（推荐，速度优先）",
+        "local_reasoning_effort": "medium",
+        "local_unload_policy": "执行后卸载（推荐）",
+        "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+        "recovery_slot": "",
+        "recovery_action": "normal"
+      }
+    },
+    {
+      "id": 2,
+      "type": "T8ShowText",
+      "pos": [
+        620,
+        0
+      ],
+      "size": [
+        520,
+        500
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 3,
+      "type": "T8PromptText",
+      "pos": [
+        -420,
+        0
+      ],
+      "size": [
+        380,
+        200
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "title": "API Key（本地无需；推荐环境变量；勿分享密钥）",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      3,
+      0,
+      1,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

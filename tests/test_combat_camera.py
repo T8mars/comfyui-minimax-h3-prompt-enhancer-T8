@@ -338,7 +338,7 @@ class CombatCameraTests(unittest.TestCase):
         exec(compile(ast.Module(body=[method], type_ignores=[]), "__init__.py", "exec"), namespace)
         old_ids = [cls.define_schema().node_id for cls in asyncio.run(namespace["get_node_list"](extension))]
         self.assertEqual(len(old_ids), 28)
-        self.assertEqual(current_ids, old_ids + ["T8CombatCameraConfig", "T8SpeechReference"])
+        self.assertEqual(current_ids, old_ids + ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8"])
 
 
 if __name__ == "__main__":

@@ -8,6 +8,14 @@
 
 The default-Off **T8 Speech Reference** helper reuses provided text/subtitles offline, or transcribes AUDIO/file-VIDEO through an already running CPU-guarded Strata. H3/Seedance append one optional socket. Semantic reference is distinct from explicitly mapped, verbatim dialogue. Original providers/workflows and service lifecycle are retained. [Guide, privacy and correction costs](docs/speech-reference.md) · [H3](example_workflows/speech_reference_h3.json) / [Seedance](example_workflows/speech_reference_seedance20.json).
 
+## New: MOSS Image prompt authoring
+
+The independent **MOSS Image Prompt Enhancer T8** creates native Caption or Layout drafts. A pinned official compiler converts pixel boxes locally. Fixed canvas dimensions, exact visible-copy locks and up to ten expanded reference images work with the existing cloud/GGUF/running-Strata providers. References inform the enhancement LLM; this is **not native MOSS image editing**.
+
+T8 accepts 8-pixel canvas multiples in 16–16384, including 1256×1672, without rounding generation, Layout or restored dimensions. Upstream sources stay unchanged; the compatibility adapter validates and centers boxes against the real canvas. Downstream latent nodes may align dimensions independently.
+
+Compile-only is offline. At most one additional correction is allowed; a hard-valid first draft survives a failed optional correction. Hard-invalid drafts stop downstream execution and remain available for explicit inspection. The native 4096-token budget is unmeasured, not guaranteed by a character count. [Guide and examples](docs/moss-image.md). Existing nodes/workflows are unchanged.
+
 ## New: existing Strata service bridge
 
 Select **Strata 本地服务（桥接）** to use an already running Strata service. The default is `http://127.0.0.1:8080` **from the ComfyUI backend**, not the browser. No cloud API key or separate Strata plugin is needed. Connect **T8 LLM Provider Config → Strata** for advanced address/model/thinking/sampling settings; shared configuration takes precedence.
@@ -135,7 +143,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - Supports first frame, last frame, first-and-last-frame, multiple reference images, and multiple reference videos.
 - Includes the pinned official MiniMax H3 core prompt-writing Skill and all eight optional official scene Skills.
 - Includes the complete pinned MiniMax Music 3 `music-caption-rewriter` snapshot: 18 family indexes and 1,000 templates with progressive disclosure.
-- Includes 633 released T8 case records consolidated into 288 stable selectors, including 345 evidence variants, plus two independent community Skills. All 290 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and lightweight GIF previews.
+- Includes 652 released T8 case records consolidated into 305 stable selectors, including 347 evidence variants, plus two independent community Skills. All 307 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and lightweight GIF previews.
 - Chinese and English prompt output.
 - `strict`, `balanced`, and `creative` rewrite levels.
 - `AUTO` or fixed 1–20 shot control.
@@ -232,9 +240,9 @@ Or install with Comfy CLI:
 comfy node install minimax-h3-seedance-music3-prompt-enhancer-t8
 ```
 
-The Registry package contains the node runtime code, pinned official Skills, the non-official case library, eight official GIFs, and a small preview-channel manifest. The 635 T8 GIFs are not embedded in the Registry ZIP. When a user opens a T8 case, the node downloads only its small release shard and caches it under `ComfyUI/user/t8_prompt_enhancer/preview_assets`. The package still excludes API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, and GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
+The Registry package contains the node runtime code, pinned official Skills, the non-official case library, eight official GIFs, and a small preview-channel manifest. The 654 T8 GIFs are not embedded in the Registry ZIP. When a user opens a T8 case, the node downloads only its small release shard and caches it under `ComfyUI/user/t8_prompt_enhancer/preview_assets`. The package still excludes API keys, tests, source delivery batches, the standalone `llama-server` runtime, install/download scripts, and GGUF weights. Local GGUF mode in a Manager install uses `llama-cpp-python` from the active ComfyUI Python environment. Use the recommended full GitHub install when you need the pinned `llama-server`, PATH fallback, environment defaults, or the explicit credential connection probe.
 
-All 643 official/T8 previews remain available. The main repository retains the eight official GIFs and the previous 377 T8 GIFs as an offline baseline; all 635 T8 previews, including new additions, are updated through the versioned [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) release channel. Shards, individual GIFs, catalog identities, and source hashes are verified before cache installation. Offline or failed preview downloads never stop prompt enhancement.
+All 662 official/T8 previews remain available. The main repository retains the eight official GIFs and the previous 377 T8 GIFs as an offline baseline; all 654 T8 previews, including new additions, are updated through the versioned [`comfyui-minimax-h3-prompt-enhancer-T8-assets`](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8-assets) release channel. Shards, individual GIFs, catalog identities, and source hashes are verified before cache installation. Offline or failed preview downloads never stop prompt enhancement.
 
 Restart ComfyUI after installation. If the frontend still shows an older node layout, refresh the browser with `Ctrl+F5`.
 

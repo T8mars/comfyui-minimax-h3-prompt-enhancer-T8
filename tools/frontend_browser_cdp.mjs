@@ -14,7 +14,7 @@ const chrome = spawn(browser, [
   "--remote-debugging-port=0", "--remote-allow-origins=*",
   `--user-data-dir=${profile}`, url,
 ], { stdio: "ignore" });
-const deadline = Date.now() + (mode === "comfy-strata" ? 60000 : 30000);
+const deadline = Date.now() + (mode.startsWith("comfy-") ? 75000 : 30000);
 const pause = ms => new Promise(done => setTimeout(done, ms));
 let socket;
 
@@ -59,6 +59,85 @@ async function connect() {
 
 try {
   const send = await connect();
+  if (mode === "comfy-moss") {
+    await send("Emulation.setDeviceMetricsOverride", { width: 1700, height: 1400, deviceScaleFactor: 1, mobile: false });
+    let ready = false;
+    while (Date.now() < deadline && !ready) {
+      const check = await send("Runtime.evaluate", { expression: "!!globalThis.LiteGraph?.registered_node_types?.MOSSImagePromptEnhancerT8", returnByValue: true });
+      ready = check.result?.value === true;
+      if (!ready) await pause(200);
+    }
+    if (!ready) throw new Error("Real Comfy frontend did not register MOSS");
+    const check = await send("Runtime.evaluate", { awaitPromise: true, returnByValue: true, expression: `(async()=>{
+      const {app}=await import('/scripts/app.js');
+      const core=await import('/extensions/comfyui-minimax-h3-prompt-enhancer-T8/moss_image_ui.mjs');
+      const wi=await import('/extensions/core/widgetInputs.js');
+      for(const close of document.querySelectorAll('.p-dialog-close-button,.p-dialog-header-close,[data-pc-section="closebutton"]'))close.click();
+      app.graph.clear();
+      let node=LiteGraph.createNode(core.MOSS_ID);node.pos=[600,50];app.graph.add(node);
+      const widget=name=>node.widgets.find(w=>w.name===name);
+      widget('width').value=1256;widget('height').value=1672;
+      const snapshot=()=>({size:[...node.size],minimum:[...node.computeSize()],inputs:node.inputs.map(i=>({name:i.name,label:i.label,localized_name:i.localized_name,link:i.link,widget:i.widget?.name})),
+        widgets:node.widgets.filter(w=>['prompt','width','height','operation','api_mode'].includes(w.name)).map(w=>({name:w.name,type:w.type,hidden:w.hidden,connectionSuppressed:w.connectionSuppressed,size:w.computeSize?.(540),computedHeight:w.computedHeight,y:w.y,domHidden:w.element?.hidden,domDisplay:w.element?.style.display}))});
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      const before=snapshot();
+      for(const [index,name] of ['prompt','width','height'].entries()){
+        if(!node.inputs.some(i=>i.name===name))wi.convertToInput(node,widget(name));
+        const source=LiteGraph.createNode(name==='prompt'?'T8PromptText':'PrimitiveNode');
+        source.pos=[50,50+index*250];app.graph.add(source);
+        if(name==='prompt')source.widgets[0].value='One ivory cup, no visible copy.';
+        const slot=node.inputs.findIndex(i=>i.name===name);
+        if(slot<0||!source.connect(0,node,slot))throw new Error('Cannot connect '+name);
+      }
+      core.refreshMoss(node);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      const connected=snapshot();
+      const saved=node.serialize();
+      if(saved.widgets_values.length!==27)throw new Error('Native save includes action tails');
+      const output=await app.graphToPrompt();
+      const request=Object.values(output.output).find(n=>n.class_type===core.MOSS_ID);
+      if(!Array.isArray(request?.inputs.prompt)||![request?.inputs.width,request?.inputs.height].every(Number.isInteger))throw new Error('External inputs were lost in API prompt: '+JSON.stringify(request?.inputs));
+      if(request.inputs.width!==1256||request.inputs.height!==1672)throw new Error('Eight-pixel canvas was rounded during native serialization');
+      for(let i=0;i<50;i++){widget('operation').value=core.COMPILE;core.refreshMoss(node);widget('operation').value=core.GENERATE;core.refreshMoss(node);}
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      core.refreshMoss(node,true);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      const final=snapshot();
+      const workflow=app.graph.serialize();
+      await app.loadGraphData(workflow,false,true);
+      node=app.graph._nodes.find(n=>n.comfyClass===core.MOSS_ID);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      const reloaded=snapshot();
+      if(reloaded.size[1]>final.size[1]+1)throw new Error('Linked reload increased height');
+      const after=await app.graphToPrompt();
+      const afterInputs=Object.values(after.output).find(n=>n.class_type===core.MOSS_ID)?.inputs;
+      if(!Array.isArray(afterInputs?.prompt)||afterInputs.width!==request.inputs.width||afterInputs.height!==request.inputs.height)throw new Error('Reload lost actual external values');
+      const slot=node.inputs.findIndex(i=>i.name==='prompt');
+      const promptLink=app.graph.links.get?.(node.inputs[slot].link)||app.graph.links[node.inputs[slot].link];
+      const source=app.graph.getNodeById(promptLink.origin_id);
+      node.disconnectInput(slot);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      core.refreshMoss(node,true);
+      if(widget('prompt').hidden)throw new Error('Disconnect did not restore prompt editor');
+      source.connect(0,node,slot);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      core.refreshMoss(node,true);
+      const reconnected=snapshot();
+      if(!(widget('prompt').hidden||widget('prompt').connectionSuppressed)||reconnected.size[1]>final.size[1]+1)throw new Error('Reconnect expanded hidden prompt');
+      if(app.canvas?.ds){app.canvas.ds.scale=.85;app.canvas.ds.offset[0]=80;app.canvas.ds.offset[1]=30;app.canvas.setDirty?.(true,true);}
+      const p=document.createElement('pre');p.id='result';p.dataset.status='pass';p.textContent='PASS: real MOSS frontend external STRING/INT wiring and named serialization measured';document.body.append(p);
+      return {before,connected,final,reloaded,reconnected,api_inputs:request.inputs,frontend_version:app.frontendVersion||null};
+    })()` });
+    if (check.exceptionDetails) throw new Error(JSON.stringify(check.exceptionDetails));
+    process.stdout.write(JSON.stringify(check.result.value) + "\n");
+    await send("Input.dispatchKeyEvent", {type:"keyDown",key:"Escape",code:"Escape",windowsVirtualKeyCode:27});
+    await send("Input.dispatchKeyEvent", {type:"keyUp",key:"Escape",code:"Escape",windowsVirtualKeyCode:27});
+    await pause(200);
+    // The welcome template browser can appear asynchronously on a clean profile.
+    // Close only its observed header action, never alter graph data for the shot.
+    const dialogs=await send("Runtime.evaluate",{returnByValue:true,expression:"Array.from(document.querySelectorAll('button')).filter(b=>b.getBoundingClientRect().x>1450&&b.getBoundingClientRect().x<1540&&b.getBoundingClientRect().y>140&&b.getBoundingClientRect().y<200).map(b=>({text:b.textContent,aria:b.getAttribute('aria-label'),class:b.className,html:b.outerHTML.slice(0,500)}))"});
+    process.stdout.write(JSON.stringify({welcome_close_actions:dialogs.result?.value})+"\n");
+  }
   if (mode === "comfy-strata") {
     const workflows = await Promise.all(["strata_h3_text", "strata_qwen_image_edit", "strata_h3_hybrid_video"].map(async stem=>
       JSON.parse(await readFile(resolve(import.meta.dirname,"../example_workflows/"+stem+".json"),"utf8"))));
