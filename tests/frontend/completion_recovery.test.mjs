@@ -26,6 +26,24 @@ function fixture(slot = "t8-recovery-test-slot-0001") {
     return { node, slotWidget, actionWidget };
 }
 
+test("storyboard-only recovery reports stored finite method before queue, never current switch", async () => {
+    const f = fixture();
+    const metadata = { storyboard_strategy: "v20_storyboard", storyboard_revision: "1.0.0", path: "PRIVATE_SOURCE" };
+    const events = [];
+    await restoreCompletionResult({ ...f, component: "MiniMaxH3PromptEnhancerT8",
+        fetchFn: async () => ({ ok: true, json: async () => ({ recoverable: true, creation_metadata: metadata }) }),
+        alertFn: value => events.push(value), queuePrompt: async () => events.push("queue"),
+    });
+    assert.match(events[0], /Previous storyboard strategy.*v1\.0\.0/);
+    assert.match(events[0], /恢复原稿，不套用当前开关/);
+    assert.doesNotMatch(events[0], /PRIVATE_SOURCE/);
+    assert.equal(events[1], "queue");
+    assert.equal(f.actionWidget.value, NORMAL_ACTION);
+    for (const invalid of [{}, { storyboard_strategy: "v20_storyboard" }, { ...metadata, storyboard_revision: "future" }, { ...metadata, storyboard_strategy: "unknown" }]) {
+        assert.doesNotMatch(recoveryMessage({ recoverable: true, creation_metadata: invalid }), /Previous storyboard strategy/);
+    }
+});
+
 test("Hybrid recovery discloses finite cached roles before queue without applying current task", async () => {
     const metadata = { h3_task: "Hybrid", h3_family: "reference_six", hybrid_revision: "1.0.0",
         hybrid_picture_count: 3, hybrid_video_count: 1, prompt: "PRIVATE_HYBRID_SENTINEL" };

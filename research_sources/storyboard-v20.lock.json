@@ -1,0 +1,13 @@
+{
+  "schema_version": "t8-local-method-source/v1",
+  "id": "v20_storyboard",
+  "adaptation_revision": "1.0.0",
+  "source_kind": "user-provided local Markdown; no public repository or author attribution supplied",
+  "review_date": "2026-10-18",
+  "discussion_rounds": 20,
+  "files": [{"path": "seedance2.5电影级分镜生成超强skill_v20自动分镜增强.md", "sha256": "7726176b5145d8f114fbc709eae054b902825237d8229009ab312a7754f4a712"}],
+  "license_observation": "No explicit redistribution license was supplied. Original text, templates and examples are not bundled; attribution does not imply permission.",
+  "relationship": "Independently selected and worded experimental directing method, not an official MiniMax or Seedance Skill.",
+  "excluded": ["runtime loading of the source file", "universal Chinese output template", "duration caps", "automatic segmentation", "default CG/music/silence/subtitle policies", "interactive approval flow", "new model capabilities or version upgrade", "source examples"],
+  "limitations": ["No additional planner or deterministic semantic verifier.", "Instruction delivery is not proof of LLM compliance.", "Text contracts do not establish rendered improvement.", "Existing Seedance 2.0 protocol is not silently upgraded to 2.5."]
+}

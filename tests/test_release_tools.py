@@ -72,6 +72,18 @@ class ReleaseToolTests(unittest.TestCase):
         runtime_shim = (ROOT / "local_qwen_runtime.py").read_text(encoding="utf-8")
         self.assertNotIn("importlib.import_module(", runtime_shim)
 
+    def test_registry_requires_complete_storyboard_delivery(self):
+        files = verify.tracked_files()
+        names = ["storyboard_director.py", "docs/storyboard-director.md",
+                 "research_sources/storyboard-v20.lock.json",
+                 "web/js/docs/T8StoryboardDirectorConfig/zh.md",
+                 "web/js/docs/T8StoryboardDirectorConfig/en.md"]
+        names.extend(f"example_workflows/storyboard_director_{target}_comparison.{extension}"
+                     for target in ("h3", "seedance20") for extension in ("json", "jpg"))
+        for name in names:
+            with self.subTest(name=name), self.assertRaisesRegex(verify.VerificationError, "missing runtime files"):
+                verify.verify_registry_package_hygiene([path for path in files if path != ROOT / name])
+
     def test_repository_secret_gate_includes_mjs_modules(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

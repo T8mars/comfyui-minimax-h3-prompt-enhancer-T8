@@ -54,6 +54,12 @@ try {
   document.body.append(cameraNotice);
   check(cameraNotice.textContent.includes("上次战斗运镜选择") && cameraNotice.textContent.includes("不按当前配置重新生成"), "camera-only recovery shows original selection");
   check(!cameraNotice.textContent.includes("PRIVATE_CAMERA_SENTINEL"), "camera recovery excludes arbitrary content");
+  const storyboardNotice = document.createElement("div");
+  storyboardNotice.textContent = recovery.recoveryMessage({recoverable:true,creation_metadata:{
+    storyboard_strategy:"v20_storyboard",storyboard_revision:"1.0.0",path:"PRIVATE_STORYBOARD_SOURCE"}});
+  document.body.append(storyboardNotice);
+  check(storyboardNotice.textContent.includes("Previous storyboard strategy") && storyboardNotice.textContent.includes("不套用当前开关"), "Storyboard stored-method recovery notice in real DOM");
+  check(!storyboardNotice.textContent.includes("PRIVATE_STORYBOARD_SOURCE"), "Storyboard recovery excludes source paths");
   const hybridNotice = document.createElement("div");
   hybridNotice.textContent = recovery.recoveryMessage({ recoverable: true, creation_metadata: {
     h3_task: "Hybrid", h3_family: "reference_six", hybrid_revision: "1.0.0",
@@ -195,6 +201,33 @@ try {
       const repeated = {};
       again.onSerialize(repeated);
       check(JSON.stringify(repeated.widgets_values) === JSON.stringify(serialized.widgets_values), "Hybrid browser second reload byte-identical values");
+    }
+  }
+  for (const target of ["h3", "seedance20"]) {
+    const filename = target === "h3" ? "minimax_h3_prompt_enhancer.js" : "seedance20_prompt_enhancer.js";
+    await import(`../../web/js/${filename}`);
+    const extension = app.extensions.find(e => e.name === (target === "h3" ? "T8.MiniMaxH3PromptEnhancer" : "T8.Seedance20PromptEnhancer"));
+    const source = await (await fetch(`../../web/js/${filename}`)).text();
+    const names = [...source.match(/const SERIALIZED_WIDGET_NAMES = \[([\s\S]*?)\];/)[1].matchAll(/"([^"]+)"/g)].map(m => m[1]);
+    function StoryboardReloadNode() {
+      this.widgets = [...names].reverse().map(name => ({name,value:null})); this.properties={};
+      this.t8RestoreCaseTemplate=value=>{this.widgets.find(w=>w.name==="case_template").value=value;};
+    }
+    StoryboardReloadNode.prototype.onConfigure=function(data){data.widgets_values.forEach((v,i)=>{if(this.widgets[i])this.widgets[i].value=v;});};
+    const type=target==="h3"?"MiniMaxH3PromptEnhancerT8":"Seedance20PromptEnhancerT8";
+    await extension.beforeRegisterNodeDef(StoryboardReloadNode,{name:type});
+    const graph=await(await fetch(`../../example_workflows/storyboard_director_${target}_comparison.json`)).json();
+    for(const saved of graph.nodes.filter(n=>n.type===type)){
+      const n=new StoryboardReloadNode();n.inputs=saved.inputs;n.onConfigure(structuredClone(saved));
+      check(n.widgets.find(w=>w.name==="duration_seconds").value===(target==="h3"?60:"60"),"Storyboard pair duration restored synchronously in reordered runtime");
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      const serialized={};n.onSerialize(serialized);
+      check(serialized.widgets_values.length===38&&!Object.hasOwn(serialized.widgets_values_named,"storyboard_director_config"),"Storyboard socket does not become a 39th widget");
+      check(n.inputs.at(-1).name==="storyboard_director_config"&&n.inputs.at(-1).link!==null,"Storyboard link retained by actual hooks");
+      const again=new StoryboardReloadNode();again.inputs=n.inputs;again.onConfigure(serialized);
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      const repeated={};again.onSerialize(repeated);
+      check(JSON.stringify(serialized.widgets_values)===JSON.stringify(repeated.widgets_values),"Storyboard pair repeated browser save/reload stable");
     }
   }
   const relayControls = ["relay_mode", "relay_event_count", "relay_duration_seconds", "relay_time_ranges"]

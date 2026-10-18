@@ -2,6 +2,10 @@
   <strong>简体中文</strong> | <a href="./README_EN.md">English</a>
 </p>
 
+## 新增：独立分镜强化（实验）
+
+`T8 Storyboard Director Config` 独立连接 H3 / Seedance，默认关闭；与既有导演、情感演绎协同，**不限制时长、不截断、不自动拆片**，不增加独立规划请求。未连接/关闭保持旧行为，不给 MOSS 添加此功能。效果尚待 A/B 验证：[使用与验收说明](docs/storyboard-director.md) · [H3 对照](example_workflows/storyboard_director_h3_comparison.json) / [Seedance 对照](example_workflows/storyboard_director_seedance20_comparison.json)。
+
 ## 新增：MOSS Image 提示词增强
 
 独立 **MOSS Image Prompt Enhancer T8** 节点，生成 MOSS 原生 Caption 或 Layout；自动格式默认开启。Layout 使用官方固定版本编译器转换像素坐标，不让模型猜最终坐标。支持固定宽高、锁定画面文案、可选参考图（批次展开合计最多 10 张），沿用多渠道 API / 本地 GGUF / 已启动 Strata。参考图仅供增强语言模型理解，**不是 MOSS 原生图像编辑**。

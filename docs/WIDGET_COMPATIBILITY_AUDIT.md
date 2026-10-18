@@ -16,6 +16,20 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-18: independent experimental storyboard config
+
+Append `T8StoryboardDirectorConfig` after all 31 existing nodes. One native combo
+defaults to Off; no buttons, hidden fields or custom serializer. H3 and Seedance
+append only an optional lazy `storyboard_director_config` after `speech_reference`.
+Their 38 saved widget fields, output ports, prior schema prefixes and shipped
+workflow bytes remain frozen. MOSS receives no new socket or prompt rule.
+
+Linked dependencies resolve before normal execution but are skipped for cached
+restore. Resolved malformed config fails before a new checkpoint/provider request.
+The cached finite method/revision is displayed without applying today's switch.
+Tests must distinguish real host queue/wiring with loopback responses from real
+LLM or video-benefit acceptance; neither the method nor the UI adds a duration cap.
+
 ### 2026-10-17: independent MOSS Image authoring
 
 Append `MOSSImagePromptEnhancerT8` after the original thirty nodes; no existing

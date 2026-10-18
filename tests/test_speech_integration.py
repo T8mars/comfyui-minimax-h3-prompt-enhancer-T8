@@ -47,18 +47,18 @@ class SpeechIntegrationTests(unittest.TestCase):
             for name in (fn, "_build_messages"):
                 old = original_function(filename, name, module, BASELINE)
                 current = inspect.signature(getattr(module, name))
-                self.assertEqual(list(current.parameters)[-1], "speech_reference")
+                self.assertEqual(list(current.parameters)[-2:], ["speech_reference", "storyboard_director_config"])
                 self.assertIsNone(current.parameters["speech_reference"].default)
-                self.assertEqual(current.replace(parameters=list(current.parameters.values())[:-1]), inspect.signature(old))
+                self.assertEqual(current.replace(parameters=list(current.parameters.values())[:-2]), inspect.signature(old))
             klass = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == cls.__name__)
             method = next(n for n in klass.body if isinstance(n, ast.FunctionDef) and n.name == "define_schema")
             method.decorator_list = []
             namespace = dict(vars(module)); exec(compile(ast.Module(body=[method], type_ignores=[]), filename, "exec"), namespace)
             old_schema, now = namespace["define_schema"](cls), cls.define_schema()
-            self.assertEqual([x.as_dict() for x in now.inputs[:-1]], [x.as_dict() for x in old_schema.inputs])
+            self.assertEqual([x.as_dict() for x in now.inputs[:-2]], [x.as_dict() for x in old_schema.inputs])
             self.assertEqual([x.as_dict() for x in now.outputs], [x.as_dict() for x in old_schema.outputs])
-            self.assertEqual(now.inputs[-1].id, "speech_reference")
-            self.assertTrue(now.inputs[-1].optional); self.assertTrue(now.inputs[-1].lazy)
+            self.assertEqual(now.inputs[-2].id, "speech_reference")
+            self.assertTrue(now.inputs[-2].optional); self.assertTrue(now.inputs[-2].lazy)
         paths = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", BASELINE, "--", "example_workflows"], cwd=GIT_ROOT, text=True).splitlines()
         for path in paths:
             old = subprocess.check_output(["git", "show", BASELINE + ":" + path], cwd=GIT_ROOT)

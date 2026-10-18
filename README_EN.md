@@ -4,6 +4,10 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: experimental storyboard direction
+
+The independent `T8 Storyboard Director Config` connects to H3 / Seedance only, default Off. It cooperates with existing directors and acting, with **no duration cap, truncation or automatic splitting**, and no separate planning request. None/Off retains old behavior. No MOSS integration; benefit remains unverified. [Guide and evaluation](docs/storyboard-director.md) · [H3 pair](example_workflows/storyboard_director_h3_comparison.json) / [Seedance pair](example_workflows/storyboard_director_seedance20_comparison.json).
+
 ## New: optional speech/subtitle reference
 
 The default-Off **T8 Speech Reference** helper reuses provided text/subtitles offline, or transcribes AUDIO/file-VIDEO through an already running CPU-guarded Strata. H3/Seedance append one optional socket. Semantic reference is distinct from explicitly mapped, verbatim dialogue. Original providers/workflows and service lifecycle are retained. [Guide, privacy and correction costs](docs/speech-reference.md) · [H3](example_workflows/speech_reference_h3.json) / [Seedance](example_workflows/speech_reference_seedance20.json).

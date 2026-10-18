@@ -5,6 +5,24 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.34.0] - 2026-10-18
+
+- Add an independent, default-Off experimental storyboard configuration for H3
+  and Seedance. Preserve old workflow inputs, 38 saved widget values, native
+  outputs, existing directors and acting; do not integrate with MOSS. No added
+  duration cap, automatic splitting or separate planning request.
+- Retain the selected method through existing cloud/local/Strata correction and
+  recovery paths. Require explicit activation during language repair, prevent
+  duplicate speech evidence, and distinguish single-shot from multi-shot locks.
+- Add bilingual help, same-input Off/On examples, finite provenance metadata and
+  offline A/B planning/blinding with complete pairs, integer counts and shared
+  review criteria. Model compliance and rendered benefit remain unverified.
+- Verification after 20 cross-review rounds: 1063 Python tests (1061 passed,
+  two existing opt-in skips), 93 frontend tests, real Chrome contracts and 11
+  isolated CPU Comfy queue cases. Native reload preserves all 38 saved values;
+  current and minimum ComfyUI 0.33 candidate packages load all 32 nodes without
+  live-source fallback. No paid inference or rendered-video evaluation.
+
 ## [1.33.0] - 2026-10-17
 
 - Add independent MOSS Image prompt authoring with pinned official Caption/Layout

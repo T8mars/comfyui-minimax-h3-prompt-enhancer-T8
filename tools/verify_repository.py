@@ -325,6 +325,13 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "official_skills/music-caption-rewriter/SKILL.md",
         "directional_skills.py",
         "combat_camera.py",
+        "storyboard_director.py",
+        "docs/storyboard-director.md",
+        "research_sources/storyboard-v20.lock.json",
+        "web/js/docs/T8StoryboardDirectorConfig/zh.md",
+        "web/js/docs/T8StoryboardDirectorConfig/en.md",
+        *{f"example_workflows/storyboard_director_{target}_comparison.{extension}"
+          for target in ("h3", "seedance20") for extension in ("json", "jpg")},
         "emotion_performance.py",
         "research_sources/tudou-emotion.lock.json",
         "web/js/docs/T8PerformanceDirectorConfig/zh.md",
@@ -401,6 +408,7 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
 
 
 def run_optional_checks() -> None:
+    subprocess.run([sys.executable, "tools/build_storyboard_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run(

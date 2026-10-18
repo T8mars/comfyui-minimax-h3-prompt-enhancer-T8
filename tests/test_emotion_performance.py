@@ -70,9 +70,9 @@ class EmotionPerformanceTests(unittest.TestCase):
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             old = original_function(filename, "_build_messages", module, BASELINE)
             signature = inspect.signature(module._build_messages)
-            self.assertEqual(list(signature.parameters)[-1], "speech_reference")
+            self.assertEqual(list(signature.parameters)[-2:], ["speech_reference", "storyboard_director_config"])
             self.assertIsNone(signature.parameters["speech_reference"].default)
-            self.assertEqual(signature.replace(parameters=list(signature.parameters.values())[:-1]), inspect.signature(old))
+            self.assertEqual(signature.replace(parameters=list(signature.parameters.values())[:-2]), inspect.signature(old))
             for mode in (None, *[perf.build_performance_director_config(m) for m in perf.PERFORMANCE_MODES[:4]]):
                 for skill in direction.DIRECTOR_LABELS:
                     values = args(director_skill=skill, performance_director_config=mode)

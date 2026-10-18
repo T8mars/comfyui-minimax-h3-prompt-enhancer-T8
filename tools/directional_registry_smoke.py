@@ -61,9 +61,17 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 31
-assert [s.node_id for s in schemas[-6:-1]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
-assert schemas[-1].node_id == "MOSSImagePromptEnhancerT8"
+assert len(schemas) == 32
+assert [s.node_id for s in schemas[-7:-2]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
+assert schemas[-2].node_id == "MOSSImagePromptEnhancerT8"
+assert schemas[-1].node_id == "T8StoryboardDirectorConfig"
+story = sys.modules[spec.name + ".storyboard_director"]
+assert story.T8StoryboardDirectorConfig.execute()[0]["mode"] == story.STORYBOARD_OFF
+assert story.storyboard_instruction(None) == ""
+assert story.MARKER in story.storyboard_instruction(story.build_storyboard_director_config(story.STORYBOARD_ON))
+assert (p / "docs/storyboard-director.md").is_file()
+assert (p / "research_sources/storyboard-v20.lock.json").is_file()
+assert "storyboard_director_config" not in [i.id for i in schemas[-2].inputs]
 moss = sys.modules[spec.name + ".moss_image"]
 compiled = moss.MOSSImagePromptEnhancer.execute(operation=moss.contract.COMPILE, draft_json='{"caption":"A quiet ceramic cup."}').result
 assert compiled[:4] == ("A quiet ceramic cup.", 1024, 1024, "caption")
@@ -92,8 +100,9 @@ assert (p / "research_sources/tudou-emotion.lock.json").is_file()
 assert (p / "web/js/docs/T8PerformanceDirectorConfig/zh.md").is_file()
 assert camera.combat_camera_instruction(None) == ""
 assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3")
-assert schemas[0].inputs[-2].id == schemas[1].inputs[-2].id == "combat_camera_config"
-assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "speech_reference"
+assert schemas[0].inputs[-3].id == schemas[1].inputs[-3].id == "combat_camera_config"
+assert schemas[0].inputs[-2].id == schemas[1].inputs[-2].id == "speech_reference"
+assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "storyboard_director_config"
 assert schemas[0].inputs[-1].lazy and schemas[1].inputs[-1].lazy
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1

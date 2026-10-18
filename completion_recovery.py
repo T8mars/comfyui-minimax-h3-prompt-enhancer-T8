@@ -111,6 +111,8 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
     # partial/arbitrary payload or a source path from the connected config.
     if values.get("emotion_strategy") == "tudou_emotion" and values.get("emotion_revision") == "1.0.0":
         result.update({"emotion_strategy": "tudou_emotion", "emotion_revision": "1.0.0"})
+    if values.get("storyboard_strategy") == "v20_storyboard" and values.get("storyboard_revision") == "1.0.0":
+        result.update({"storyboard_strategy": "v20_storyboard", "storyboard_revision": "1.0.0"})
     hybrid_keys = ("h3_task", "h3_family", "hybrid_revision", "hybrid_picture_count", "hybrid_video_count")
     pictures, videos = values.get("hybrid_picture_count"), values.get("hybrid_video_count")
     if (values.get("h3_task") == "Hybrid" and values.get("h3_family") == "reference_six"

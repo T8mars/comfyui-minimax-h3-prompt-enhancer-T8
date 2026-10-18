@@ -346,8 +346,8 @@ class PerformanceDirectorTests(unittest.TestCase):
     def test_core_schemas_preserve_performance_and_provider_order_before_new_character_socket(self):
         for cls in (nodes.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
             schema = cls.define_schema()
-            self.assertEqual([i.id for i in schema.inputs[-5:]], ["director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference"])
-            inputs = schema.inputs[:-9] if cls is nodes.MiniMaxH3PromptEnhancer else schema.inputs[:-5]
+            self.assertEqual([i.id for i in schema.inputs[-6:]], ["director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
+            inputs = schema.inputs[:-10] if cls is nodes.MiniMaxH3PromptEnhancer else schema.inputs[:-6]
             self.assertEqual(inputs[-3].id, "performance_director_config")
             self.assertEqual(inputs[-2].id, "provider_config")
             self.assertEqual(inputs[-1].id, "character_performance_bible")

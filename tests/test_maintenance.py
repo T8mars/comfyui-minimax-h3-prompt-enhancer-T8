@@ -104,7 +104,8 @@ class MaintenanceTests(unittest.TestCase):
             strata_examples = load_tool("t8_strata_examples", "build_strata_workflows.py")
             speech_examples = load_tool("t8_speech_examples", "build_speech_workflows.py")
             moss_examples = load_tool("t8_moss_examples", "build_moss_workflows.py")
-        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS, *camera_examples.generate(), *hybrid_examples.STEMS, *strata_examples.STEMS, *speech_examples.STEMS, *moss_examples.STEMS)
+            storyboard_examples = load_tool("t8_storyboard_examples", "build_storyboard_workflows.py")
+        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS, *camera_examples.generate(), *hybrid_examples.STEMS, *strata_examples.STEMS, *speech_examples.STEMS, *moss_examples.STEMS, *storyboard_examples.STEMS)
         self.assertEqual(len(workflows), 20 + len(STEMS))
         extra = [path for path in workflows if path.stem in STEMS]
         self.assertEqual({path.stem for path in extra}, set(STEMS))
@@ -115,6 +116,7 @@ class MaintenanceTests(unittest.TestCase):
         strata_examples.check()
         speech_examples.check()
         moss_examples.check()
+        storyboard_examples.check()
         workflows = [path for path in workflows if path.stem not in STEMS]
         self.assertEqual(len(workflows), 20)  # Original workflows plus the two Qwen Image examples retain checks.
         seen_types = set()

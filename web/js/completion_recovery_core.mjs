@@ -42,7 +42,7 @@ export function recoveryMessage(status) {
         const provenance = meta?.director_skill
             ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"}${meta.authoring_revision ? ` · Authoring v${meta.authoring_revision}` : ""} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
             : "";
-        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta);
+        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta) + storyboardSelectionMessage(meta);
     }
     if (status.state === "ambiguous_partial") {
         return `上次请求返回途中断开，只收到 ${status.partial_chars || 0} 个字符；为防止把截断提示词当成完整结果，节点不会自动输出这段内容，也不会重新扣费。`;
@@ -88,7 +88,7 @@ export async function restoreCompletionResult({
             alertFn?.(recoveryMessage(status));
             return { queued: false, status };
         }
-        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
+        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata) || storyboardSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
         beforeQueue?.();
         actionWidget.value = RESTORE_ACTION;
         await queuePrompt(0, 1, [String(node.id)]);
@@ -116,6 +116,11 @@ function cameraSelectionMessage(meta) {
 function emotionSelectionMessage(meta) {
     if (meta?.emotion_strategy !== "tudou_emotion" || meta?.emotion_revision !== "1.0.0") return "";
     return "\n上次情绪策略 / Previous emotion strategy: 土豆-情绪演绎 v1.0.0。恢复原稿，不按当前模式重新生成；选择记录不代表成片效果验收。";
+}
+
+function storyboardSelectionMessage(meta) {
+    if (meta?.storyboard_strategy !== "v20_storyboard" || meta?.storyboard_revision !== "1.0.0") return "";
+    return "\n上次分镜策略 / Previous storyboard strategy: 分镜强化（实验） v1.0.0。恢复原稿，不套用当前开关；仅记录方法，不代表分镜或成片已通过验收。";
 }
 
 function hybridSelectionMessage(meta) {

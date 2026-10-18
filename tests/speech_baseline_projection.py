@@ -5,6 +5,11 @@ import copy
 
 def project_speech_signature(arguments):
     args = copy.deepcopy(arguments)
+    if not args.args or args.args[-1].arg != "storyboard_director_config":
+        raise AssertionError("Storyboard must be the final optional argument")
+    if not isinstance(args.defaults[-1], ast.Constant) or args.defaults[-1].value is not None:
+        raise AssertionError("Storyboard default must remain None")
+    args.args.pop(); args.defaults.pop()
     if not args.args or args.args[-1].arg != "speech_reference":
         raise AssertionError("Speech must be the final optional argument")
     if not args.defaults or not isinstance(args.defaults[-1], ast.Constant) or args.defaults[-1].value is not None:
@@ -23,6 +28,15 @@ def project_speech_schema(method):
             if keyword.arg != "inputs" or not isinstance(keyword.value, ast.List):
                 continue
             values = keyword.value.elts
+            if not values or not isinstance(values[-1], ast.Call) or ast.unparse(values[-1].func) != "T8StoryboardDirectorConfigIO.Input":
+                raise AssertionError("Storyboard schema input must be appended after speech")
+            storyboard = values[-1]
+            if not storyboard.args or ast.literal_eval(storyboard.args[0]) != "storyboard_director_config":
+                raise AssertionError("Unexpected storyboard input ID")
+            options = {item.arg: item.value for item in storyboard.keywords}
+            if ast.literal_eval(options["optional"]) is not True or ast.literal_eval(options["lazy"]) is not True:
+                raise AssertionError("Storyboard must stay optional and lazy")
+            values.pop()
             if not values or not isinstance(values[-1], ast.Call) or ast.unparse(values[-1].func) != "SpeechReferenceIO.Input":
                 raise AssertionError("Speech schema input must be appended")
             speech = values[-1]

@@ -59,6 +59,86 @@ async function connect() {
 
 try {
   const send = await connect();
+  if (mode === "comfy-storyboard") {
+    const workflows = await Promise.all(["h3", "seedance20"].map(async target => JSON.parse(await readFile(
+      new URL(`../example_workflows/storyboard_director_${target}_comparison.json`, import.meta.url), "utf8"))));
+    await send("Emulation.setDeviceMetricsOverride", { width: 1800, height: 1350, deviceScaleFactor: 1, mobile: false });
+    let ready = false;
+    while (Date.now() < deadline && !ready) {
+      const check = await send("Runtime.evaluate", {expression:"!!globalThis.LiteGraph?.registered_node_types?.T8StoryboardDirectorConfig && !document.getElementById('splash-loader') && !!document.querySelector('canvas')",returnByValue:true});
+      ready = check.result?.value === true;
+      if (!ready) await pause(200);
+    }
+    if (!ready) throw new Error("Real Comfy frontend did not register storyboard config");
+    const check = await send("Runtime.evaluate", {awaitPromise:true,returnByValue:true,expression:`(async()=>{
+      const {app}=await import('/scripts/app.js');
+      const assert=(condition,message)=>{if(!condition)throw new Error(message);};
+      for(const close of document.querySelectorAll('.p-dialog-close-button,.p-dialog-header-close,[data-pc-section="closebutton"]'))close.click();
+      app.graph.clear();
+      const helper=LiteGraph.createNode('T8StoryboardDirectorConfig');app.graph.add(helper);
+      const nativeNames=helper.widgets.map(w=>w.name);
+      assert(JSON.stringify(nativeNames)==='["mode"]','Only one native config widget');
+      assert(helper.widgets[0].value==='关闭 / Off','Native default must be Off');
+      const observations=[];
+      for(const workflow of ${JSON.stringify(workflows)}){
+        await app.loadGraphData(workflow,false,true);
+        await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+        const mains=app.graph._nodes.filter(n=>['MiniMaxH3PromptEnhancerT8','Seedance20PromptEnhancerT8'].includes(n.comfyClass));
+        const configs=app.graph._nodes.filter(n=>n.comfyClass==='T8StoryboardDirectorConfig');
+        assert(mains.length===2&&configs.length===2,'Paired native workflow loaded');
+        const before=await app.graphToPrompt();
+        const beforeSaved=new Map(mains.map(n=>[n.id,structuredClone(n.serialize().widgets_values)]));
+        for(const node of mains){
+          assert(node.serialize().widgets_values.length===38,'No extra main serialized widget');
+          const slot=node.inputs.findIndex(i=>i.name==='storyboard_director_config');
+          assert(slot>=0&&node.inputs[slot].link!=null,'Typed socket linked');
+          assert(Number(before.output[node.id].inputs.duration_seconds)===60,'Actual API graph duration retained');
+          assert(Array.isArray(before.output[node.id].inputs.storyboard_director_config),'API graph keeps typed config edge');
+          const cfg=configs.find(c=>c.id===before.output[node.id].inputs.storyboard_director_config[0]);
+          const savedMode=cfg.widgets[0].value;
+          node.disconnectInput(slot);
+          assert(node.inputs[slot].link==null,'Disconnect applied');
+          cfg.connect(0,node,slot);
+          assert(cfg.widgets[0].value===savedMode&&node.inputs[slot].link!=null,'Reconnect keeps mode');
+          const size=[...node.size];
+          for(let i=0;i<8;i++){cfg.widgets[0].value=i%2?'关闭 / Off':'开启（实验） / On (experimental)';cfg.widgets[0].callback?.(cfg.widgets[0].value);}
+          cfg.widgets[0].value=savedMode;
+          assert(node.size[1]===size[1],'Config cycles cannot grow consumer');
+        }
+        const saved=app.graph.serialize();await app.loadGraphData(saved,false,true);
+        await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+        const reloaded=mains.map(n=>app.graph.getNodeById(n.id));
+        assert(reloaded.every(Boolean),'Reloaded main nodes exist in current graph');
+        const after=await app.graphToPrompt();
+        for(const node of reloaded){
+          assert(JSON.stringify(node.serialize().widgets_values)===JSON.stringify(beforeSaved.get(node.id)),'All 38 saved values survive native reload');
+          const values=after.output[node.id].inputs;
+          for(const key of ['prompt','seed','api_mode','rewrite_mode','quality_mode','creation_mode','output_language']){
+            assert(key in values&&JSON.stringify(values[key])===JSON.stringify(before.output[node.id].inputs[key]),'Native API reload retains '+key);
+          }
+          assert(Number(values.duration_seconds)===60&&String(values.shot_count)==='3','Native reload retains duration and shots');
+          assert(JSON.stringify(values.storyboard_director_config)===JSON.stringify(before.output[node.id].inputs.storyboard_director_config),'Native reload keeps links');
+          const cfg=values.storyboard_director_config[0];
+          assert(after.output[cfg].inputs.mode===before.output[cfg].inputs.mode,'Native mode reload');
+        }
+        observations.push({target:reloaded[0].comfyClass,main_widgets:reloaded[0].serialize().widgets_values.length,all_saved_values_equal:true,config_widgets:nativeNames,links:true});
+      }
+      app.canvas.ds.scale=0.65;app.canvas.ds.offset=[80,80];app.canvas.setDirty(true,true);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      const p=document.createElement('pre');p.id='result';p.dataset.status='pass';p.textContent='PASS: native storyboard combo, paired workflow API values, save/reload, reconnect and stable heights';document.body.append(p);
+      return observations;
+    })()`});
+    if(check.exceptionDetails)throw new Error(JSON.stringify(check.exceptionDetails));
+    process.stdout.write(JSON.stringify(check.result.value)+"\n");
+    // First-run template discovery can open after the graph is ready. Dismiss
+    // through the normal keyboard path before capturing the actual canvas.
+    await pause(400);
+    for (let i=0;i<2;i++) {
+      await send("Input.dispatchKeyEvent", {type:"keyDown",key:"Escape",code:"Escape",windowsVirtualKeyCode:27});
+      await send("Input.dispatchKeyEvent", {type:"keyUp",key:"Escape",code:"Escape",windowsVirtualKeyCode:27});
+      await pause(200);
+    }
+  }
   if (mode === "comfy-moss") {
     await send("Emulation.setDeviceMetricsOverride", { width: 1700, height: 1400, deviceScaleFactor: 1, mobile: false });
     let ready = false;
