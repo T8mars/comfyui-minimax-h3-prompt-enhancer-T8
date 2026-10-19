@@ -26,6 +26,23 @@ function fixture(slot = "t8-recovery-test-slot-0001") {
     return { node, slotWidget, actionWidget };
 }
 
+test("H3 marker recovery shows historical finite evidence only, before queue", async () => {
+    const f = fixture();
+    const marker = {revision:"1.0.0", status:"enhancer_reference_matched", picture:4, marker_count:3,
+        relation_count:2, downstream_verified:false, semantic_verified:false, private:"PRIVATE_MARKER"};
+    const events=[];
+    await restoreCompletionResult({...f, component:"MiniMaxH3PromptEnhancerT8",
+        fetchFn:async()=>({ok:true,json:async()=>({recoverable:true,creation_metadata:{h3_visual_marker:marker}})}),
+        alertFn:text=>events.push(text), queuePrompt:async()=>events.push("queue")});
+    assert.match(events[0], /Previous visual marker.*Picture 4/);
+    assert.match(events[0], /未认证下游绑定/);
+    assert.doesNotMatch(events[0], /PRIVATE_MARKER/);
+    assert.equal(events[1], "queue");
+    for (const extra of [{revision:"future"},{picture:true},{picture:12},{marker_count:0},{downstream_verified:true},{semantic_verified:true}]) {
+        assert.doesNotMatch(recoveryMessage({recoverable:true,creation_metadata:{h3_visual_marker:{...marker,...extra}}}), /Previous visual marker/);
+    }
+});
+
 test("storyboard-only recovery reports stored finite method before queue, never current switch", async () => {
     const f = fixture();
     const metadata = { storyboard_strategy: "v20_storyboard", storyboard_revision: "1.0.0", path: "PRIVATE_SOURCE" };

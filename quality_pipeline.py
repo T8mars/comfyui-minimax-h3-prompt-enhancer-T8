@@ -49,7 +49,7 @@ def retained_draft_provider(provider, state, *, enabled=False, progress=None):
 
 def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
                       shot_count, language, source, media_labels=None, relay_config=None,
-                      progress=None, budget_used=False, director_skill=DIRECTOR_OFF, asset_roles=None):
+                      progress=None, budget_used=False, director_skill=DIRECTOR_OFF, asset_roles=None, extra_contract=None):
     # Vocal protocol is an output contract, not an opt-in paid quality feature.
     # All provider branches use this boundary before caching or returning text.
     def normalize(text):
@@ -80,7 +80,8 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
         draft, mode=mode, messages=messages, complete=completion, task_type=task_type,
         duration=duration, shot_count=shot_count, language=language, source=source,
         media_labels=media_labels, relay_config=relay_config, progress=None,
-        budget_used=budget_used, director_skill=director_skill, asset_roles=asset_roles)
+        budget_used=budget_used, director_skill=director_skill, asset_roles=asset_roles,
+        extra_contract=extra_contract)
     if result == candidate_state.get("text"):
         changes = sorted(set(changes + candidate_state["edits"]))
     if changes or unresolved:
@@ -97,7 +98,7 @@ def h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
 
 def _checked_h3_quality_result(draft, *, mode, messages, complete, task_type, duration,
                                shot_count, language, source, media_labels=None, relay_config=None,
-                               progress=None, budget_used=False, director_skill=DIRECTOR_OFF, asset_roles=None):
+                               progress=None, budget_used=False, director_skill=DIRECTOR_OFF, asset_roles=None, extra_contract=None):
     if mode == QUALITY_OFF:
         return draft, {}
     options = dict(task_type=task_type, duration=duration, shot_count=shot_count,
@@ -109,10 +110,12 @@ def _checked_h3_quality_result(draft, *, mode, messages, complete, task_type, du
         return correction_messages(original, text, report, **({"requested_dialogue": True} if drama else {}))
     if not relay_config:
         return run_quality(draft, mode=mode, messages=messages, complete=complete,
-                           check=lambda text: check_h3(text, **options),
+                           check=lambda text: extra_contract.quality_report(text, check_h3(text, **options)) if extra_contract is not None else check_h3(text, **options),
                            repair=lambda text: repair_protocol(text, task_type=task_type, duration=duration),
                            **({"build_correction": correction} if drama else {}),
-                           **({"accept": lambda old, new, before, after: accept_correction(old, new, before, after, protect_generated_vocals=True)} if drama else {}),
+                           **({"accept": lambda old, new, before, after: extra_contract.accept_candidate(old, new, before, after, protect_generated_vocals=drama)}
+                              if extra_contract is not None else
+                              {"accept": lambda old, new, before, after: accept_correction(old, new, before, after, protect_generated_vocals=True)} if drama else {}),
                            progress=progress, budget_used=budget_used)
 
     def compile_text(text):

@@ -129,6 +129,9 @@ class StoryboardDirectorTests(unittest.TestCase):
             for name in (function, "_build_messages"):
                 previous = original_function(filename, name, module, BASELINE)
                 current = inspect.signature(getattr(module, name))
+                if module is h3:
+                    self.assertEqual(list(current.parameters)[-1], "visual_marker_config")
+                    current = current.replace(parameters=list(current.parameters.values())[:-1])
                 self.assertEqual(list(current.parameters)[-1], SOCKET)
                 self.assertIsNone(current.parameters[SOCKET].default)
                 self.assertEqual(current.replace(parameters=list(current.parameters.values())[:-1]), inspect.signature(previous))
@@ -139,14 +142,19 @@ class StoryboardDirectorTests(unittest.TestCase):
             namespace = dict(vars(module))
             exec(compile(ast.Module(body=[method], type_ignores=[]), filename, "exec"), namespace)
             old_schema = namespace["define_schema"](cls)
-            self.assertEqual([x.id for x in cls.define_schema().inputs], [x.id for x in old_schema.inputs] + [SOCKET])
-            self.assertEqual([x.as_dict() for x in cls.define_schema().inputs[:-1]], [x.as_dict() for x in old_schema.inputs])
+            inputs = cls.define_schema().inputs
+            if module is h3:
+                self.assertEqual(inputs[-1].id, "visual_marker_config")
+                inputs = inputs[:-1]
+            self.assertEqual([x.id for x in inputs], [x.id for x in old_schema.inputs] + [SOCKET])
+            self.assertEqual([x.as_dict() for x in inputs[:-1]], [x.as_dict() for x in old_schema.inputs])
             self.assertEqual([x.as_dict() for x in cls.define_schema().outputs], [x.as_dict() for x in old_schema.outputs])
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         ids = [cls.define_schema().node_id for cls in asyncio.run(extension.get_node_list())]
-        self.assertEqual(len(ids), 32)
-        self.assertEqual(ids[-2:], ["MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig"])
+        self.assertEqual(len(ids), 33)
+        self.assertEqual(ids[-1], "T8H3VisualMarkerConfig")
+        self.assertEqual(ids[30:32], ["MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig"])
 
     def test_lazy_input_resolves_only_for_normal_execution(self):
         for cls in (h3.MiniMaxH3PromptEnhancer, sd.Seedance20PromptEnhancer):

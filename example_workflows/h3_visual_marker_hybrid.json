@@ -1,0 +1,433 @@
+{
+  "id": "3152d397-e6ba-5e88-8299-27079bc05add",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        430,
+        280
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1,
+            5
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "h3-marker-demo-source.png",
+        "image"
+      ],
+      "title": "① 上传教程配套 PNG / Upload demo PNG"
+    },
+    {
+      "id": 2,
+      "type": "MiniMaxH3VisualMarkerPrepareEXPT8",
+      "pos": [
+        470,
+        40
+      ],
+      "size": [
+        430,
+        280
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "marked_image",
+          "type": "IMAGE",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "marker_plan",
+          "type": "T8_H3_VISUAL_MARKER_PLAN",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3VisualMarkerPrepareEXPT8"
+      },
+      "widgets_values": [
+        "render_rectangles",
+        "{\"markers\": [{\"marker_id\": \"walker\", \"kind\": \"actor\", \"role_id\": \"A\", \"color\": \"cyan\", \"description\": \"the woman in the red coat\", \"xyxy\": [0.1, 0.1, 0.4, 0.9]}, {\"marker_id\": \"door\", \"kind\": \"target\", \"color\": \"yellow\", \"description\": \"the doorway on the right\", \"xyxy\": [0.65, 0.2, 0.95, 0.95]}], \"relations\": [{\"actor_marker_id\": \"walker\", \"target_marker_id\": \"door\", \"action\": \"walk through the doorway and keep moving, without stopping\"}]}",
+        3,
+        ""
+      ],
+      "title": "现有 audio Prepare（需已安装）"
+    },
+    {
+      "id": 3,
+      "type": "T8H3VisualMarkerConfig",
+      "pos": [
+        470,
+        500
+      ],
+      "size": [
+        500,
+        170
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "marker_plan",
+          "shape": 7,
+          "type": "T8_H3_VISUAL_MARKER_PLAN",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "visual_marker_config",
+          "type": "T8_H3_VISUAL_MARKER_CONFIG",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8H3VisualMarkerConfig"
+      },
+      "widgets_values": [
+        "关闭 / Off",
+        0
+      ],
+      "title": "本项目入口 · 默认 Off / Opt in explicitly"
+    },
+    {
+      "id": 4,
+      "type": "MiniMaxH3PromptEnhancerT8",
+      "pos": [
+        1000,
+        40
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 4,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": null,
+          "label": "API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        },
+        {
+          "name": "combat_camera_config",
+          "shape": 7,
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "link": null
+        },
+        {
+          "name": "speech_reference",
+          "shape": 7,
+          "type": "T8_SPEECH_REFERENCE",
+          "link": null
+        },
+        {
+          "name": "storyboard_director_config",
+          "shape": 7,
+          "type": "T8_STORYBOARD_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "visual_marker_config",
+          "shape": 7,
+          "type": "T8_H3_VISUAL_MARKER_CONFIG",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "global_prompt",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "local_prompts",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "time_ranges",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "relay_length",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "relay_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "红衣人物从画面左侧走向右侧门口，穿过后继续前进，不停下。一个连续镜头，保留人物、场景，不新增对白、人物或音乐；青框标记人物，黄框标记门口，彩色框只是参考注释。",
+        "Hybrid（关键帧+参考混合生成）",
+        60,
+        "1",
+        "balanced",
+        0,
+        "中文",
+        "官方增强",
+        "现有兼容（保留中英文）",
+        "无（仅核心规则）",
+        "无（不使用 T8 案例）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "普通增强 / Normal",
+        0,
+        0,
+        "",
+        "none",
+        "off",
+        "off"
+      ],
+      "title": "H3 · Hybrid"
+    },
+    {
+      "id": 5,
+      "type": "T8ShowText",
+      "pos": [
+        1740,
+        40
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 6,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [
+        0,
+        550
+      ],
+      "size": [
+        450,
+        440
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "入门：点击空间配置节点的【示例与接线】按钮，下载配套 PNG，再上传到 Load Image。\n需先安装现有 audio 插件，才能找到 H3 Marker · Prepare。\n青框人物 walker → 黄框门口 door：走过去、穿过、继续前进。\nmarkers 定义人物/目标，xyxy 为源图0..1左上/右下坐标；relations 用ID配对动作。换图时修改标记。\nPrepare.marked_image → H3参考图；marker_plan → 空间配置 → H3.visual_marker_config。\n配置默认Off，手动切On启用。selector=0自动；Ref2VA标记Picture1，Hybrid首帧后标记Picture2。\nHybrid首帧用干净源图；配置自己的增强渠道，再运行获取提示词。\n接生成：enhanced_prompt → 现有 Prompt.base_prompt [manual_original] → recipe → Bind。\n保持上下游图序一致，marker只插一次；不保证硬轨迹或去框。"
+      ],
+      "title": "② 接线与运行步骤 / Quick start"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      1,
+      3,
+      0,
+      "T8_H3_VISUAL_MARKER_PLAN"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      11,
+      "T8_H3_VISUAL_MARKER_CONFIG"
+    ],
+    [
+      4,
+      2,
+      0,
+      4,
+      2,
+      "IMAGE"
+    ],
+    [
+      5,
+      1,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      0,
+      5,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

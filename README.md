@@ -2,6 +2,10 @@
   <strong>简体中文</strong> | <a href="./README_EN.md">English</a>
 </p>
 
+## 新增：H3 空间标记增强（实验）
+
+搜索 `T8H3VisualMarkerConfig` / `Visual Marker Config`。只给 H3 添加可选入口，默认关闭；读取现有 Marker Prepare 的计划和同一标记参考图，完善角色—目标—动作描述。两个参考项目无需改动。普通 Ref2VA / Hybrid 额外参考图，不新增时长限制或独立 LLM 调用；不保证硬轨迹、去框或成片收益。[接线与边界](docs/h3-visual-marker.md) · [Ref2VA 示例](example_workflows/h3_visual_marker_ref2va.json) · [Hybrid 示例](example_workflows/h3_visual_marker_hybrid.json)
+
 ## 新增：独立分镜强化（实验）
 
 `T8 Storyboard Director Config` 独立连接 H3 / Seedance，默认关闭；与既有导演、情感演绎协同，**不限制时长、不截断、不自动拆片**，不增加独立规划请求。未连接/关闭保持旧行为，不给 MOSS 添加此功能。效果尚待 A/B 验证：[使用与验收说明](docs/storyboard-director.md) · [H3 对照](example_workflows/storyboard_director_h3_comparison.json) / [Seedance 对照](example_workflows/storyboard_director_seedance20_comparison.json)。
@@ -356,6 +360,8 @@ MiniMax Music 3 Prompt & Lyrics Enhancer (T8)
 
 | 示例 | 用途 |
 | --- | --- |
+| [`h3_visual_marker_ref2va.json`](./example_workflows/h3_visual_marker_ref2va.json) | H3空间入门：青框人物走向黄框门口；在空间配置节点点「示例与接线」下载配套PNG |
+| [`h3_visual_marker_hybrid.json`](./example_workflows/h3_visual_marker_hybrid.json) | 干净首帧＋标记参考图；标记为Picture 2，含完整接线与操作说明 |
 | [`minimax_h3_prompt_enhancer_example.json`](./example_workflows/minimax_h3_prompt_enhancer_example.json) | H3 云端基础示例 |
 | [`seedance20_prompt_enhancer_example.json`](./example_workflows/seedance20_prompt_enhancer_example.json) | Seedance 2.0 云端基础示例 |
 | [`music3_prompt_lyrics_enhancer_example.json`](./example_workflows/music3_prompt_lyrics_enhancer_example.json) | Music 3 云端基础示例 |

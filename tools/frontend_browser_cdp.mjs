@@ -5,7 +5,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const [browser, url, screenshotPath = "", mode = "harness"] = process.argv.slice(2);
+const [browser, url, screenshotPath = "", mode = "harness", markerProviderBase = ""] = process.argv.slice(2);
 if (!browser || !url) throw new Error("Usage: node frontend_browser_cdp.mjs BROWSER URL [SCREENSHOT]");
 const profile = await mkdtemp(join(tmpdir(), "t8-browser-cdp-"));
 const chrome = spawn(browser, [
@@ -59,6 +59,224 @@ async function connect() {
 
 try {
   const send = await connect();
+  if (mode === "comfy-marker") {
+    const markerWorkflows = await Promise.all(["ref2va","hybrid"].map(async target=>JSON.parse(await readFile(
+      new URL(`../example_workflows/h3_visual_marker_${target}.json`,import.meta.url),"utf8"))));
+    await send("Emulation.setDeviceMetricsOverride", {width:1800,height:1400,deviceScaleFactor:1,mobile:false});
+    let ready=false;
+    while(Date.now()<deadline&&!ready){
+      const check=await send("Runtime.evaluate",{expression:"!!globalThis.LiteGraph?.registered_node_types?.T8H3VisualMarkerConfig && !document.getElementById('splash-loader')",returnByValue:true});
+      ready=check.result?.value===true;
+      if(!ready)await pause(200);
+    }
+    if(!ready)throw new Error("Native marker config unavailable");
+    const check=await send("Runtime.evaluate",{awaitPromise:true,returnByValue:true,expression:`(async()=>{
+      const {app}=await import('/scripts/app.js');
+      const wi=await import('/extensions/core/widgetInputs.js');
+      const assert=(ok,text)=>{if(!ok)throw new Error(text)};
+      const providerBase=${JSON.stringify(markerProviderBase)};
+      if(providerBase)assert(new URL(providerBase).hostname==='127.0.0.1','Owned loopback provider required');
+      const queueResults=[];
+      const setValue=(node,name,value)=>{
+        const w=node.widgets.find(w=>w.name===name);assert(w,'Missing widget '+name);
+        w.value=value;
+        if(w.inputEl)w.inputEl.value=value;
+        if(w.element?.matches?.('input,textarea'))w.element.value=value;
+        const input=w.element?.querySelector?.('input,textarea');if(input)input.value=value;
+        w.callback?.(value);
+      };
+      const nativeQueue=async(label,node)=>{
+        if(!providerBase)return;
+        setValue(node,'openai_base_url',providerBase);
+        setValue(node,'custom_model','marker-fixture');
+        setValue(node,'api_mode','OpenAI兼容接口（备用）');
+        setValue(node,'output_language','English');
+        if(node.widgets.some(w=>w.name==='api_key'))setValue(node,'api_key','test-placeholder');
+        else {
+          const slot=node.inputs.findIndex(i=>i.name==='api_key');
+          if(node.inputs[slot].link==null){
+            const key=LiteGraph.createNode('T8PromptText');app.graph.add(key);key.pos=[30,1100];setValue(key,'text','test-placeholder');
+            assert(key.connect(0,node,slot),'Native linked credential fixture');
+          }
+        }
+        const output=await app.graphToPrompt();
+        assert(output.output[node.id].inputs.openai_base_url===providerBase,'Actual native provider URL');
+        const response=await fetch('/prompt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:output.output})});
+        const ack=await response.json();assert(response.ok,label+' native graph rejected: '+JSON.stringify(ack));
+        const until=Date.now()+45000;
+        while(Date.now()<until){
+          const history=(await(await fetch('/history/'+ack.prompt_id)).json())[ack.prompt_id];
+          if(history){assert(history.status.status_str==='success',label+' native queue failed: '+JSON.stringify(history.status));queueResults.push({label,success:true});return;}
+          await new Promise(done=>setTimeout(done,100));
+        }
+        throw new Error(label+' native queue outcome unknown');
+      };
+      for(const close of document.querySelectorAll('.p-dialog-close-button,.p-dialog-header-close,[data-pc-section="closebutton"]'))close.click();
+      app.graph.clear();
+      let helper=LiteGraph.createNode('T8H3VisualMarkerConfig');
+      let main=LiteGraph.createNode('MiniMaxH3PromptEnhancerT8');
+      let source=LiteGraph.createNode('T8MarkerRuntimeFixture');
+      for(const n of [source,helper,main])app.graph.add(n);
+      source.pos=[20,30];helper.pos=[400,40];main.pos=[900,40];
+      const names=helper.widgets.filter(w=>w.options?.serialize!==false&&w.serialize!==false).map(w=>w.name);
+      assert(JSON.stringify(names)==='["mode","picture_selector"]','Two native widgets only');
+      assert(helper.widgets[0].value==='关闭 / Off'&&helper.widgets[1].value===0,'Native defaults');
+      const guide=await import('/extensions/'+${JSON.stringify("comfyui-minimax-h3-prompt-enhancer-T8")}+'/h3_visual_marker.js');
+      const guideButton=helper.widgets.find(w=>w.name===guide.MARKER_HELP_BUTTON);
+      assert(guideButton&&guideButton.options.serialize===false,'Visible nonserializing example button');
+      guide.attachMarkerGuide(helper);guide.attachMarkerGuide(helper);
+      assert(helper.widgets.filter(w=>w.name===guide.MARKER_HELP_BUTTON).length===1,'Guide attachment is idempotent');
+      // The existing asynchronous case-library UI adds buttons after its
+      // catalog arrives. Wait for initialization, not merely quiet frames.
+      const caseReadyUntil=Date.now()+30000;
+      while(!main.widgets.some(w=>w.name==='管理 / 更新 T8 动态预览')&&Date.now()<caseReadyUntil)
+        await new Promise(done=>setTimeout(done,100));
+      assert(main.widgets.some(w=>w.name==='管理 / 更新 T8 动态预览'),'Existing H3 case-library initialization completed');
+      const stableNodes=async()=>{
+        let previous='',unchanged=0;
+        for(let i=0;i<40;i++){
+          await new Promise(done=>setTimeout(done,150));
+          const current=JSON.stringify(app.graph.serialize().nodes);
+          unchanged=current===previous?unchanged+1:0;
+          if(unchanged>=8)return current;
+          previous=current;
+        }
+        throw new Error('Native graph did not stabilize before guide comparison');
+      };
+      const graphBeforeGuide=await stableNodes();
+      const sizeEvents=[];const originalSetSize=main.setSize;
+      main.setSize=function(...args){sizeEvents.push({size:args[0],stack:new Error().stack});return originalSetSize.apply(this,args);};
+      guideButton.callback();
+      guideButton.callback();
+      assert(document.querySelectorAll('[data-t8-marker-guide]').length===1,'Reopening keeps a single guide');
+      const dialog=document.querySelector('[data-t8-marker-guide]');
+      assert(dialog?.textContent.includes('marker_plan')&&dialog.textContent.includes('selector=0'),'Concrete wiring tutorial');
+      assert(dialog.querySelectorAll('button[data-marker-action]').length===4,'PNG, two JSON downloads and close');
+      const downloads=[];
+      const originalApiFetch= (await import('/scripts/api.js')).api.fetchApi;
+      const apiModule=(await import('/scripts/api.js')).api;
+      let failTemplateOnce=true;
+      apiModule.fetchApi=async function(route,...args){
+        if(route==='/workflow_templates'&&failTemplateOnce){failTemplateOnce=false;return new Response('',{status:500});}
+        const response=await originalApiFetch.call(this,route,...args);
+        if(route==='/workflow_templates'&&response.ok){
+          const catalog=await response.json();
+          catalog['disabled-marker-backup']=['h3_visual_marker_ref2va','h3_visual_marker_hybrid'];
+          return new Response(JSON.stringify(catalog),{status:200,headers:{'Content-Type':'application/json'}});
+        }
+        return response;
+      };
+      const originalClick=HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click=function(){if(this.download)downloads.push({name:this.download,url:this.href});else originalClick.call(this);};
+      try {
+        const retryButton=dialog.querySelector('[data-marker-action="h3_visual_marker_ref2va"]');
+        await retryButton.onclick();
+        assert(!retryButton.disabled&&downloads.length===0&&dialog.querySelector('[role="status"]').textContent.includes('Cannot read'),'Failed download restores action for retry');
+        for(const action of ['image','h3_visual_marker_ref2va','h3_visual_marker_hybrid']){
+          await dialog.querySelector('[data-marker-action="'+action+'"]').onclick();
+          const item=downloads.at(-1);assert(item,'Download produced '+action);
+          const blob=await(await fetch(item.url)).blob();
+          if(action==='image'){
+            const bitmap=await createImageBitmap(blob);assert(bitmap.width===1440&&bitmap.height===960,'Companion PNG dimensions');bitmap.close();
+            const upload=new FormData();upload.append('image',blob,'h3-marker-demo-source.png');upload.append('overwrite','true');upload.append('type','input');
+            assert((await fetch('/upload/image',{method:'POST',body:upload})).ok,'Companion PNG uploaded to owned test input');
+          } else {
+            const workflow=JSON.parse(await blob.text());
+            const expected=${JSON.stringify(markerWorkflows)}[action.endsWith('hybrid')?1:0];
+            assert(JSON.stringify(workflow)===JSON.stringify(expected),'Downloaded exact bundled workflow');
+            const config=workflow.nodes.find(n=>n.type==='T8H3VisualMarkerConfig');
+            const h3=workflow.nodes.find(n=>n.type==='MiniMaxH3PromptEnhancerT8');
+            assert(JSON.stringify(config.widgets_values)==='["关闭 / Off",0]'&&h3.widgets_values.length===38,'Download preserves Off/two helper values and 38 H3 values');
+            assert(!h3.properties?.widgets_values_named?.api_key,'Downloaded example has no embedded credential');
+          }
+        }
+      } finally {HTMLAnchorElement.prototype.click=originalClick;apiModule.fetchApi=originalApiFetch;}
+      assert(downloads.length===3,'All tutorial downloads succeeded');
+      const graphAfterGuide=await stableNodes();
+      if(graphAfterGuide!==graphBeforeGuide){
+        const before=JSON.parse(graphBeforeGuide),after=JSON.parse(graphAfterGuide);
+        const difference=before.flatMap((node,i)=>Object.keys({...node,...after[i]}).filter(key=>JSON.stringify(node[key])!==JSON.stringify(after[i]?.[key])).map(key=>({node:node.id,key,before:node[key],after:after[i]?.[key]})));
+        throw new Error('Tutorial mutated saved canvas fields: '+JSON.stringify({difference,sizeEvents}));
+      }
+      main.setSize=originalSetSize;
+      dialog.querySelector('[data-marker-action="close"]').click();
+      assert(helper.serialize().widgets_values.length===2,'Help action is not a third saved value');
+      helper.widgets[0].value='开启（实验） / On (experimental)';helper.widgets[1].value=2;
+      for(const [name,value] of Object.entries({prompt:'Walk through the doorway, then keep moving.',task_type:'Ref2VA（参考图/视频生音视频）',duration_seconds:3600,shot_count:'1',output_language:'English'})){
+        const w=main.widgets.find(w=>w.name===name);w.value=value;w.callback?.(value);
+      }
+      if(!helper.inputs.some(i=>i.name==='picture_selector'))wi.convertToInput(helper,helper.widgets.find(w=>w.name==='picture_selector'));
+      source.connect(0,helper,helper.inputs.findIndex(i=>i.name==='marker_plan'));
+      source.connect(2,helper,helper.inputs.findIndex(i=>i.name==='picture_selector'));
+      helper.connect(0,main,main.inputs.findIndex(i=>i.name==='visual_marker_config'));
+      const imageSlot=main.inputs.findIndex(i=>i.name.startsWith('reference_images.'));
+      assert(imageSlot>=0&&source.connect(1,main,imageSlot),'Fresh native reference image connection');
+      const show=LiteGraph.createNode('T8ShowText');app.graph.add(show);show.pos=[1600,40];main.connect(0,show,0);
+      const before=await app.graphToPrompt();
+      assert(Array.isArray(before.output[helper.id].inputs.picture_selector),'Real computed INT link retained');
+      const savedMain=main.serialize().widgets_values;
+      assert(savedMain.length===38,'H3 keeps 38 saved values');
+      const ids=[source.id,helper.id,main.id];
+      const saved=app.graph.serialize();await app.loadGraphData(saved,false,true);
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+      [source,helper,main]=ids.map(id=>app.graph.getNodeById(id));
+      const after=await app.graphToPrompt();
+      const reloadValues=main.serialize().widgets_values;
+      assert(JSON.stringify(reloadValues)===JSON.stringify(savedMain),'H3 38 values survive reload: '+JSON.stringify(savedMain.map((v,i)=>[i,v,reloadValues[i]]).filter(([i,a,b])=>JSON.stringify(a)!==JSON.stringify(b))));
+      assert(JSON.stringify(after.output[helper.id].inputs)===JSON.stringify(before.output[helper.id].inputs),'Helper mode/plan/computed selector reload');
+      assert(JSON.stringify(after.output[main.id].inputs.visual_marker_config)===JSON.stringify(before.output[main.id].inputs.visual_marker_config),'H3 config link reload');
+      const heights=[helper.size[1],main.size[1]];
+      const edgeState=()=>JSON.stringify([helper.inputs.map(i=>[i.name,i.link]),main.inputs.filter(i=>['visual_marker_config'].includes(i.name)||i.name.startsWith('reference_images.')).map(i=>[i.name,i.link])]);
+      const initialEdges=edgeState();
+      for(let i=0;i<8;i++){helper.widgets[0].value=i%2?'关闭 / Off':'开启（实验） / On (experimental)';helper.widgets[0].callback?.(helper.widgets[0].value);assert(helper.widgets[1].value===2&&edgeState()===initialEdges,'Mode cycles preserve selector and links');}
+      helper.widgets[0].value='开启（实验） / On (experimental)';
+      for(const [node,name,from,output] of [[helper,'picture_selector',source,2],[helper,'marker_plan',source,0],[main,'visual_marker_config',helper,0]]){
+        const slot=node.inputs.findIndex(i=>i.name===name);node.disconnectInput(slot);assert(node.inputs[slot].link==null,'Disconnect');
+        if(name==='picture_selector'){
+          assert(helper.widgets.find(w=>w.name==='picture_selector').value===2,'Disconnect retains offline selector');
+          assert((await app.graphToPrompt()).output[helper.id].inputs.picture_selector===2,'Disconnected API selector value');
+        }
+        assert(from.connect(output,node,slot),'Reconnect');
+      }
+      assert(helper.size[1]===heights[0]&&main.size[1]===heights[1],'Repeated cycles do not grow nodes');
+      await nativeQueue('fresh-computed-selector-after-reload-reconnect',main);
+      const examples=[];
+      for(const graph of ${JSON.stringify(markerWorkflows)}){
+        await app.loadGraphData(graph,false,true);
+        await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+        const original=await app.graphToPrompt();
+        const consumer=app.graph._nodes.find(n=>n.comfyClass==='MiniMaxH3PromptEnhancerT8');
+        const fields=consumer.serialize().widgets_values;
+        assert(fields.length===38,'Example has 38 fields');
+        assert(new Set(consumer.inputs.map(i=>i.name)).size===consumer.inputs.length,'No duplicate input names');
+        const inputs=original.output[consumer.id].inputs;
+        assert(Array.isArray(inputs.visual_marker_config)&&Array.isArray(inputs['reference_images.reference_image_0']),'Example typed and IMAGE edges');
+        assert(original.output[inputs.visual_marker_config[0]].inputs.mode==='关闭 / Off','Example default Off');
+        await app.loadGraphData(app.graph.serialize(),false,true);
+        await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+        const again=await app.graphToPrompt();
+        const restored=app.graph.getNodeById(consumer.id);
+        assert(JSON.stringify(restored.serialize().widgets_values)===JSON.stringify(fields),'Example values reload');
+        for(const key of ['visual_marker_config','reference_images.reference_image_0','first_frame']){
+          assert(JSON.stringify(again.output[consumer.id].inputs[key])===JSON.stringify(inputs[key]),'Example links reload: '+key);
+        }
+        await nativeQueue('example-'+inputs.task_type+'-off',restored);
+        const cfg=app.graph.getNodeById(inputs.visual_marker_config[0]);
+        setValue(cfg,'mode','开启（实验） / On (experimental)');
+        await nativeQueue('example-'+inputs.task_type+'-on',restored);
+        examples.push(inputs.task_type);
+      }
+      await new Promise(done=>setTimeout(done,500));
+      app.canvas.ds.scale=.65;app.canvas.ds.offset[0]=120;app.canvas.ds.offset[1]=180;app.canvas.setDirty(true,true);
+      const p=document.createElement('pre');p.id='result';p.dataset.status='pass';p.textContent='PASS: real H3 marker native widgets, linked computed INT, 38 saved values, reload/reconnect';document.body.append(p);
+      return {config_native_widgets:names,h3_saved_widgets:savedMain.length,computed_int_link:true,reload:true,reconnect:true,examples,native_queue:queueResults,tutorial_downloads:downloads.map(x=>x.name)};
+    })()`});
+    if(check.exceptionDetails)throw new Error(JSON.stringify(check.exceptionDetails));
+    process.stdout.write(JSON.stringify(check.result.value)+"\n");
+    await pause(300);
+    await send("Input.dispatchKeyEvent", {type:"keyDown",key:"Escape",code:"Escape",windowsVirtualKeyCode:27});
+    await send("Input.dispatchKeyEvent", {type:"keyUp",key:"Escape",code:"Escape",windowsVirtualKeyCode:27});
+  }
   if (mode === "comfy-storyboard") {
     const workflows = await Promise.all(["h3", "seedance20"].map(async target => JSON.parse(await readFile(
       new URL(`../example_workflows/storyboard_director_${target}_comparison.json`, import.meta.url), "utf8"))));
@@ -275,6 +493,11 @@ try {
   if (screenshotPath) {
     const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
     await writeFile(resolve(screenshotPath), Buffer.from(shot.data, "base64"));
+    if(mode==='comfy-marker'){
+      await send('Runtime.evaluate',{awaitPromise:true,expression:`(async()=>{const guide=await import('/extensions/comfyui-minimax-h3-prompt-enhancer-T8/h3_visual_marker.js');guide.showMarkerGuide();await new Promise(done=>setTimeout(done,300));})()`});
+      const guideShot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+      await writeFile(resolve(screenshotPath.replace(/\.png$/,'-guide.png')),Buffer.from(guideShot.data,'base64'));
+    }
   }
   process.stdout.write(result.text + "\n");
 } catch (error) {

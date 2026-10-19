@@ -3,6 +3,20 @@ import test from "node:test";
 
 import { sanitizeDiagnosticRecord, sanitizeDiagnosticSnapshot, sanitizeQualityMetadata } from "../../web/js/diagnostics_viewer.mjs";
 
+test("marker diagnostics are H3-only, finite and never authenticate downstream or semantics", () => {
+    assert.deepEqual(sanitizeQualityMetadata({result:"checked",issue_codes:["h3_marker_literal_missing","PRIVATE"]}).issue_codes,["h3_marker_literal_missing"]);
+    const marker={revision:"1.0.0",status:"enhancer_reference_matched",picture:2,marker_count:3,relation_count:2,
+        warning_codes:["overlap","PRIVATE_MARKER"],downstream_verified:false,semantic_verified:false,coordinates:"PRIVATE_MARKER"};
+    const record={component:"MiniMaxH3PromptEnhancerT8",stages:[{stage:"input_validated",creation_metadata:{h3_visual_marker:marker}}]};
+    const clean=sanitizeDiagnosticRecord(record);
+    assert.deepEqual(clean.stages[0].h3_visual_marker.warning_codes,["overlap"]);
+    assert.equal(clean.stages[0].h3_visual_marker.semantic_verified,false);
+    assert.doesNotMatch(JSON.stringify(clean),/PRIVATE_MARKER/);
+    for(const component of ["MOSSImagePromptEnhancerT8","Seedance20PromptEnhancerT8"]){
+        assert.equal(sanitizeDiagnosticRecord({...record,component}).stages[0].h3_visual_marker,undefined);
+    }
+});
+
 test("Hybrid quality copies finite codes and makes pixel/role unknowns explicit", () => {
     const actual = sanitizeQualityMetadata({ result: "checked", issue_codes: ["h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "PRIVATE_SENTINEL"],
         unchecked: ["hybrid_pixel_and_transition_semantics", "hybrid_resolved_asset_roles", "PRIVATE_SENTINEL"], prompt: "PRIVATE_SENTINEL" });

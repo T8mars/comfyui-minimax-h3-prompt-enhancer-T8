@@ -1,6 +1,19 @@
 const SAFE_STAGE_KEYS = new Set(["stage", "duration_ms", "attempts", "asset_count", "cache_hit"]);
+const MARKER_WARNINGS = new Set("hand_drawn_unobserved hand_drawn_declared overlap shared_actor_color shared_role shared_target small_marker marker_also_keyframe".split(" "));
+export function sanitizeVisualMarkerMetadata(value) {
+    if (value?.revision !== "1.0.0" || value.status !== "enhancer_reference_matched"
+        || !Number.isInteger(value.picture) || value.picture < 1 || value.picture > 11
+        || !Number.isInteger(value.marker_count) || value.marker_count < 2 || value.marker_count > 64
+        || !Number.isInteger(value.relation_count) || value.relation_count < 1 || value.relation_count > 128
+        || value.downstream_verified !== false || value.semantic_verified !== false) return undefined;
+    return {revision:"1.0.0",status:"enhancer_reference_matched",picture:value.picture,
+        marker_count:value.marker_count,relation_count:value.relation_count,
+        warning_codes:Array.isArray(value.warning_codes) ? [...new Set(value.warning_codes.filter(x=>MARKER_WARNINGS.has(x)))].sort() : [],
+        downstream_verified:false,semantic_verified:false};
+}
 const QUALITY_CODES = new Set("empty_prompt h3_missing_core_fields h3_field_order h3_missing_first_shot shot_sequence shot_count_mismatch h3_shot_timecode non_monotonic_timecodes duration_budget h3_alignment h3_unexpected_prefix h3_unavailable_asset h3_undefined_reference h3_retention_marker h3_duplicate_definition h3_retention_missing h3_vocal_language h3_missing_speaker h3_speaker_identity semantic_exact_text_missing h3_extra_dialogue h3_visible_text_changed h3_dialogue_source_changed h3_vocal_wrong_layer h3_diegetic_music_layer h3_descriptive_language relay_invalid_authoring seedance_h3_protocol_leak".split(" "));
 for (const code of ["h3_hybrid_inputs", "h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "h3_hybrid_summary"]) QUALITY_CODES.add(code);
+QUALITY_CODES.add("h3_marker_literal_missing");
 export function sanitizeQualityMetadata(value) {
     if (!value || typeof value !== "object") return undefined;
     const result = {};
@@ -47,6 +60,10 @@ export function sanitizeDiagnosticRecord(record) {
             }
             const quality = sanitizeQualityMetadata(stage.quality_metadata);
             if (quality) safe.quality_metadata = quality;
+            if (record.component === "MiniMaxH3PromptEnhancerT8") {
+                const marker = sanitizeVisualMarkerMetadata(stage.creation_metadata?.h3_visual_marker);
+                if (marker) safe.h3_visual_marker = marker;
+            }
             return safe;
         })
         : [];

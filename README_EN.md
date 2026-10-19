@@ -4,6 +4,16 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: H3 visual marker authoring (experimental)
+
+H3 also has an independent, default-Off **T8H3VisualMarkerConfig / Visual Marker Config** entry.
+It reads the existing audio plugin's MarkerPlan and matches the actual marked reference image; neither reference project needs modification.
+Normal Ref2VA/Hybrid extra references only, no duration cap or extra planner. This is soft prompt guidance, not a trajectory/removal guarantee.
+Click **📖 空间标记：示例与接线 / Examples** on the spatial helper for the wiring diagram,
+companion reference PNG and two ready-wired JSON downloads. Save your current graph, import a sample,
+upload the PNG, configure your enhancer provider and switch the sample from Off to On.
+[Marker wiring and limits](docs/h3-visual-marker.md) · [Ref2VA](example_workflows/h3_visual_marker_ref2va.json) / [Hybrid](example_workflows/h3_visual_marker_hybrid.json).
+
 ## New: experimental storyboard direction
 
 The independent `T8 Storyboard Director Config` connects to H3 / Seedance only, default Off. It cooperates with existing directors and acting, with **no duration cap, truncation or automatic splitting**, and no separate planning request. None/Off retains old behavior. No MOSS integration; benefit remains unverified. [Guide and evaluation](docs/storyboard-director.md) · [H3 pair](example_workflows/storyboard_director_h3_comparison.json) / [Seedance pair](example_workflows/storyboard_director_seedance20_comparison.json).

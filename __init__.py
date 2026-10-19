@@ -19,6 +19,7 @@ from .prompt_inspector import T8PromptInspector
 from .performance_director import T8PerformanceDirectorConfig
 from .combat_camera import T8CombatCameraConfig
 from .storyboard_director import T8StoryboardDirectorConfig
+from .h3_visual_marker import T8H3VisualMarkerConfig
 from .speech_reference import T8SpeechReference
 from .film_workflow import (
     T8CharacterPerformanceBible,
@@ -62,6 +63,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8SpeechReference,
             MOSSImagePromptEnhancer,
             T8StoryboardDirectorConfig,
+            T8H3VisualMarkerConfig,
         ]
 
 
@@ -82,6 +84,7 @@ __all__ = [
     "T8PerformanceDirectorConfig",
     "T8CombatCameraConfig",
     "T8StoryboardDirectorConfig",
+    "T8H3VisualMarkerConfig",
     "T8SpeechReference",
     "T8FilmProjectRouter",
     "T8CharacterPerformanceBible",

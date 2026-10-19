@@ -42,7 +42,7 @@ export function recoveryMessage(status) {
         const provenance = meta?.director_skill
             ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"}${meta.authoring_revision ? ` · Authoring v${meta.authoring_revision}` : ""} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
             : "";
-        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta) + storyboardSelectionMessage(meta);
+        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta) + storyboardSelectionMessage(meta) + visualMarkerSelectionMessage(meta);
     }
     if (status.state === "ambiguous_partial") {
         return `上次请求返回途中断开，只收到 ${status.partial_chars || 0} 个字符；为防止把截断提示词当成完整结果，节点不会自动输出这段内容，也不会重新扣费。`;
@@ -88,7 +88,7 @@ export async function restoreCompletionResult({
             alertFn?.(recoveryMessage(status));
             return { queued: false, status };
         }
-        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata) || storyboardSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
+        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata) || storyboardSelectionMessage(status.creation_metadata) || visualMarkerSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
         beforeQueue?.();
         actionWidget.value = RESTORE_ACTION;
         await queuePrompt(0, 1, [String(node.id)]);
@@ -100,6 +100,16 @@ export async function restoreCompletionResult({
         actionWidget.value = NORMAL_ACTION;
         node.setDirtyCanvas?.(true, true);
     }
+}
+
+function visualMarkerSelectionMessage(meta) {
+    const m = meta?.h3_visual_marker;
+    if (m?.revision !== "1.0.0" || m.status !== "enhancer_reference_matched"
+        || !Number.isInteger(m.picture) || m.picture < 1 || m.picture > 11
+        || !Number.isInteger(m.marker_count) || m.marker_count < 2 || m.marker_count > 64
+        || !Number.isInteger(m.relation_count) || m.relation_count < 1 || m.relation_count > 128
+        || m.downstream_verified !== false || m.semantic_verified !== false) return "";
+    return `\n上次 H3 空间标记 / Previous visual marker: v1.0.0 · Picture ${m.picture} · ${m.marker_count} markers · ${m.relation_count} relations。仅验证增强器附件，未认证下游绑定、角色语义或成片；恢复原稿，不套用今天的标记配置。`;
 }
 
 function cameraSelectionMessage(meta) {

@@ -70,6 +70,9 @@ class EmotionPerformanceTests(unittest.TestCase):
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             old = original_function(filename, "_build_messages", module, BASELINE)
             signature = inspect.signature(module._build_messages)
+            if module is h3:
+                self.assertEqual(list(signature.parameters)[-1], "visual_marker_config")
+                signature = signature.replace(parameters=list(signature.parameters.values())[:-1])
             self.assertEqual(list(signature.parameters)[-2:], ["speech_reference", "storyboard_director_config"])
             self.assertIsNone(signature.parameters["speech_reference"].default)
             self.assertEqual(signature.replace(parameters=list(signature.parameters.values())[:-2]), inspect.signature(old))

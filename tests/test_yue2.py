@@ -72,8 +72,8 @@ class YuE2Tests(unittest.TestCase):
         self.assertEqual(yue.official_snapshot()["commit"], yue.SOURCE_COMMIT)
         extension = asyncio.run(package.comfy_entrypoint())
         ids = [n.define_schema().node_id for n in asyncio.run(extension.get_node_list())]
-        self.assertEqual(ids[-8], yue.NODE_ID)
-        self.assertEqual(ids[-4:], ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig"])
+        self.assertEqual(ids[24], yue.NODE_ID)
+        self.assertEqual(ids[28:], ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig", "T8H3VisualMarkerConfig"])
         self.assertEqual(len(ids), len(set(ids)))
         schema = yue.YuE2MusicPromptEnhancer.define_schema()
         self.assertEqual(len(schema.outputs), 5)

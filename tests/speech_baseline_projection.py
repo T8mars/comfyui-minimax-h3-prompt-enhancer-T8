@@ -5,6 +5,10 @@ import copy
 
 def project_speech_signature(arguments):
     args = copy.deepcopy(arguments)
+    if args.args and args.args[-1].arg == "visual_marker_config":
+        if not isinstance(args.defaults[-1], ast.Constant) or args.defaults[-1].value is not None:
+            raise AssertionError("Visual marker default must remain None")
+        args.args.pop(); args.defaults.pop()
     if not args.args or args.args[-1].arg != "storyboard_director_config":
         raise AssertionError("Storyboard must be the final optional argument")
     if not isinstance(args.defaults[-1], ast.Constant) or args.defaults[-1].value is not None:
@@ -28,6 +32,14 @@ def project_speech_schema(method):
             if keyword.arg != "inputs" or not isinstance(keyword.value, ast.List):
                 continue
             values = keyword.value.elts
+            if values and isinstance(values[-1], ast.Call) and ast.unparse(values[-1].func) == "VisualMarkerConfigIO.Input":
+                marker = values[-1]
+                if len(marker.args) != 1 or ast.literal_eval(marker.args[0]) != "visual_marker_config":
+                    raise AssertionError("Unexpected visual marker input")
+                options = {item.arg: item.value for item in marker.keywords}
+                if ast.literal_eval(options["optional"]) is not True or ast.literal_eval(options["lazy"]) is not True:
+                    raise AssertionError("Visual marker must stay optional and lazy")
+                values.pop()
             if not values or not isinstance(values[-1], ast.Call) or ast.unparse(values[-1].func) != "T8StoryboardDirectorConfigIO.Input":
                 raise AssertionError("Storyboard schema input must be appended after speech")
             storyboard = values[-1]

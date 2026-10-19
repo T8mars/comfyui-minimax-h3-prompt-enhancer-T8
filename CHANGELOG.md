@@ -5,6 +5,31 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.35.0] - 2026-10-19
+
+- Add default-Off `T8H3VisualMarkerConfig` for Normal H3 Ref2VA / Hybrid extra
+  references. Read the existing v1 MarkerPlan without importing or modifying the
+  audio plugin; match actual reference pixels and freeze the request image.
+- Preserve H3's 38 saved fields, six outputs and old None/Off behavior; other
+  model node implementations and existing workflows remain unchanged. No added
+  duration cap, automatic splitting, standalone planner or active Relay support.
+- Carry structured evidence through existing correction paths, protect only
+  user-authored literals (not JSON syntax), and show finite historical metadata
+  on recovery. Attachment matching does not authenticate downstream binding,
+  semantic identity, marker removal or rendered-video benefit.
+- Add independent examples, bilingual help, source lock, producer interoperability,
+  owned CPU queue/browser contracts and minimum/current Comfy package gates.
+- Add a non-serializing spatial-helper tutorial button with a wiring diagram,
+  downloadable companion PNG and both ready-wired Ref2VA / Hybrid JSON examples.
+- Keep marker literals separate from main speech counts/order; exclude explicit
+  prohibited examples, allow exact missing words in existing corrections, and
+  recheck them after speech correction without weakening original literal locks.
+- Verification after 20 cross-review rounds: 1097 Python tests (1093 passed,
+  four opt-in skips), 95 frontend tests, 13 owned CPU queue scenarios and five
+  browser-exported graphs queued successfully. Current/minimum candidate packages
+  load 33 nodes without the audio plugin or live-source fallback. Actual LLM
+  compliance and rendered-video benefit remain unverified.
+
 ## [1.34.0] - 2026-10-18
 
 - Add an independent, default-Off experimental storyboard configuration for H3

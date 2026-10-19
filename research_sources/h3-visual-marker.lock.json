@@ -1,0 +1,17 @@
+{
+  "schema_version": "t8-local-method-source/v1",
+  "id": "h3_visual_marker",
+  "adaptation_revision": "1.0.0",
+  "review_date": "2026-10-19",
+  "discussion_rounds": 20,
+  "sources": [
+    {"repository": "https://github.com/RK-BoilingPoint/H3-Visual-Marker-Control", "commit": "0f0274f5f07c0e8dda0bb8cd0286256587f4e959", "role": "soft annotated-image plus text method"},
+    {"repository": "https://github.com/T8mars/comfyui-minimax-h3-audio-T8", "commit": "f8f90836c018c0ea509b29831d0aeb0a4c415730", "role": "existing visual-marker-plan/v1 interoperability contract"}
+  ],
+  "boundary": "Both references are read-only. Only this prompt-enhancer repository implements the adapter. Cross-project changes require a user-delivered handoff, never direct modification.",
+  "scope": "Opt-in Normal H3 Ref2VA/Hybrid extra-reference authoring; one plan; no new model call.",
+  "record_budget_bytes": 1048576,
+  "producer_extreme_observation": {"raw_spec_bytes": 65535, "derived_record_bytes": 362021, "overlap_pairs": 2016, "warnings": 2082},
+  "relationship": "Independently worded adapter and rules, not official MiniMax spatial control. No upstream long prompt or media redistribution.",
+  "limitations": ["No downstream media binding or semantic verification", "No guaranteed marker removal or video benefit", "No active Relay or keyframe-only marker support", "No other model node changes", "No duration cap or automatic segmentation"]
+}

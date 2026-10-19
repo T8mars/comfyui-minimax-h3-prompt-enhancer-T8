@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430">
+  <rect width="900" height="430" rx="12" fill="#f1f4f5"/>
+  <g transform="translate(22 22)">
+    <rect width="480" height="320" fill="#e9e3d6"/>
+    <rect y="280" width="480" height="40" fill="#c2ae91"/>
+    <rect x="329" y="65" width="116" height="215" fill="#514439"/>
+    <rect x="340" y="77" width="94" height="203" fill="#32444f"/>
+    <circle cx="125" cy="72" r="23" fill="#dfb18c"/>
+    <path d="M98 107Q124 92 150 106L164 218H85Z" fill="#b93831"/>
+    <path d="M111 218L108 271M140 218L148 271" stroke="#35414e" stroke-width="13"/>
+    <path d="M99 114L82 169M148 115L173 158" stroke="#b93831" stroke-width="13"/>
+    <rect x="48" y="32" width="144" height="256" fill="none" stroke="#00b9d4" stroke-width="5"/>
+    <rect x="312" y="64" width="144" height="240" fill="none" stroke="#d9aa00" stroke-width="5"/>
+    <text x="53" y="25" font-family="sans-serif" font-size="17" fill="#007e92">actor: walker</text>
+    <text x="316" y="56" font-family="sans-serif" font-size="17" fill="#876400">target: door</text>
+    <path d="M200 210H402L391 200M402 210L391 220" fill="none" stroke="#354e5f" stroke-width="4"/>
+    <text x="200" y="241" font-family="sans-serif" font-size="14" fill="#354e5f">walk through, keep moving</text>
+  </g>
+  <g font-family="sans-serif" fill="#243b49">
+    <text x="540" y="67" font-size="21" font-weight="bold">H3 Marker Prepare</text>
+    <path d="M540 94H838" stroke="#a7bbc7"/>
+    <text x="540" y="131" font-size="18">marked_image</text>
+    <text x="560" y="160" font-size="17">→ H3 reference_images</text>
+    <text x="540" y="205" font-size="18">marker_plan</text>
+    <text x="560" y="234" font-size="17">→ Spatial Config (On)</text>
+    <text x="560" y="263" font-size="17">→ H3 visual_marker_config</text>
+    <text x="540" y="312" font-size="16">Ref2VA: Picture 1</text>
+    <text x="540" y="337" font-size="16">Hybrid first + marker: Picture 2</text>
+    <text x="24" y="382" font-size="18">1. Download PNG + JSON   2. Import + upload   3. Enable On   4. Configure enhancer</text>
+    <text x="24" y="410" font-size="15">Teaching diagram. Source xyxy is soft reference evidence, not a hard video trajectory.</text>
+  </g>
+</svg>

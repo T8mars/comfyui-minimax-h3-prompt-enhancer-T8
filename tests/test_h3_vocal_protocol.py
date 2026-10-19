@@ -147,6 +147,8 @@ class VocalProtocolTests(unittest.TestCase):
                 # every other AST and historical evidence hash remain frozen.
                 evidence_code=subprocess.check_output(['git','show','d6ad140020f39da6182fe4dfd3e2ded11c5f5557:quality_pipeline.py'],cwd=GIT_ROOT).replace(b'\r\n',b'\n')
                 tree=ast.parse(current)
+                from marker_baseline_projection import project_marker_quality_hooks
+                tree=project_marker_quality_hooks(tree)
                 from speech_baseline_projection import project_seedance_speech_quality
                 for index, node in enumerate(tree.body):
                     if isinstance(node, ast.FunctionDef) and node.name == 'seedance_quality_result':

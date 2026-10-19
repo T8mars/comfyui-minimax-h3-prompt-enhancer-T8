@@ -326,6 +326,15 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "directional_skills.py",
         "combat_camera.py",
         "storyboard_director.py",
+        "h3_visual_marker.py",
+        "web/js/h3_visual_marker.js",
+        "web/js/assets/h3-marker-demo-source.svg",
+        "web/js/assets/h3-marker-quickstart.svg",
+        "docs/h3-visual-marker.md",
+        "research_sources/h3-visual-marker.lock.json",
+        "web/js/docs/T8H3VisualMarkerConfig/zh.md",
+        "web/js/docs/T8H3VisualMarkerConfig/en.md",
+        *{f"example_workflows/h3_visual_marker_{target}.{ext}" for target in ("ref2va", "hybrid") for ext in ("json", "jpg")},
         "docs/storyboard-director.md",
         "research_sources/storyboard-v20.lock.json",
         "web/js/docs/T8StoryboardDirectorConfig/zh.md",
@@ -408,6 +417,7 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
 
 
 def run_optional_checks() -> None:
+    subprocess.run([sys.executable, "tools/build_marker_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_storyboard_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)

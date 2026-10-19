@@ -113,6 +113,20 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
         result.update({"emotion_strategy": "tudou_emotion", "emotion_revision": "1.0.0"})
     if values.get("storyboard_strategy") == "v20_storyboard" and values.get("storyboard_revision") == "1.0.0":
         result.update({"storyboard_strategy": "v20_storyboard", "storyboard_revision": "1.0.0"})
+    marker = values.get("h3_visual_marker")
+    marker_codes = {"hand_drawn_unobserved", "hand_drawn_declared", "overlap", "shared_actor_color",
+                    "shared_role", "shared_target", "small_marker", "marker_also_keyframe"}
+    if (type(marker) is dict and marker.get("revision") == "1.0.0"
+            and marker.get("status") == "enhancer_reference_matched"
+            and type(marker.get("picture")) is int and 1 <= marker["picture"] <= 11
+            and type(marker.get("marker_count")) is int and 2 <= marker["marker_count"] <= 64
+            and type(marker.get("relation_count")) is int and 1 <= marker["relation_count"] <= 128
+            and marker.get("downstream_verified") is False and marker.get("semantic_verified") is False
+            and type(marker.get("warning_codes")) is list and len(marker["warning_codes"]) <= len(marker_codes)
+            and all(type(code) is str and code in marker_codes for code in marker["warning_codes"])):
+        result["h3_visual_marker"] = {key: marker[key] for key in ("revision", "status", "picture",
+            "marker_count", "relation_count", "downstream_verified", "semantic_verified")}
+        result["h3_visual_marker"]["warning_codes"] = sorted(set(marker["warning_codes"]))
     hybrid_keys = ("h3_task", "h3_family", "hybrid_revision", "hybrid_picture_count", "hybrid_video_count")
     pictures, videos = values.get("hybrid_picture_count"), values.get("hybrid_video_count")
     if (values.get("h3_task") == "Hybrid" and values.get("h3_family") == "reference_six"
@@ -153,7 +167,7 @@ def safe_quality_metadata(values: Any) -> dict[str, Any]:
              "h3_hybrid_anchor_roles", "h3_hybrid_anchor_tracking", "h3_hybrid_summary",
              "speech_missing_words", "speech_wrong_order", "speech_word_count", "speech_reference_copied",
              "speech_description_language", "speech_invalid_output", "speech_relay_invalid", "speech_role_mismatch",
-             "speech_extra_words", "speech_vocal_language_changed", "speech_native_dialogue"}
+             "speech_extra_words", "speech_vocal_language_changed", "speech_native_dialogue", "h3_marker_literal_missing"}
     unchecked = {"physical_plausibility", "rendered_video_quality", "semantic_ownership_wait_and_ending",
                  "descriptive_language", "alignment_duration", "shot_count", "relay_compilation",
                  "relay_semantic_equivalence", "contract_check", "vocal_language",

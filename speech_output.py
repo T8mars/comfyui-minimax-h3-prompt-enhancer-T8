@@ -432,7 +432,7 @@ def _progress(callback, codes, calls, *, passed, edits=0):
 
 
 def finish_speech_output(draft, reference, *, target, language, original_prompt, messages, complete,
-                         progress=None, relay_config=None, task_type="", duration=0, shot_count=0) -> str:
+                         progress=None, relay_config=None, task_type="", duration=0, shot_count=0, extra_contract=None) -> str:
     reference = resolve_speech_reference(reference)
     if reference is None:
         return draft
@@ -444,6 +444,8 @@ def finish_speech_output(draft, reference, *, target, language, original_prompt,
                    task_type=task_type, duration=duration, shot_count=shot_count)
     initial, edits = _local_protocol(draft, target=target, relay_config=relay_config, task_type=task_type, duration=duration, reference=reference, language=language)
     issues = _check(initial, reference, **options)
+    if extra_contract is not None and target == "h3":
+        issues = list(dict.fromkeys([*issues, *extra_contract.issue_codes(initial)]))
     if not issues:
         _progress(progress, [], 0, passed=True, edits=len(edits))
         return initial
@@ -490,6 +492,8 @@ def finish_speech_output(draft, reference, *, target, language, original_prompt,
         raise SpeechOutputError("Active speech output correction failed (category=" + safe_category + "); no successful output was committed. Provider details were hidden and the request was not automatically repeated.", safe_category) from None
     candidate, next_edits = _local_protocol(candidate, target=target, relay_config=relay_config, task_type=task_type, duration=duration, reference=reference, language=language)
     remaining = _check(candidate, reference, **options)
+    if extra_contract is not None and target == "h3":
+        remaining = list(dict.fromkeys([*remaining, *extra_contract.issue_codes(candidate)]))
     _progress(progress, remaining, 1, passed=not remaining, edits=len(edits) + len(next_edits))
     if remaining:
         safe_codes = [code for code in remaining if re.fullmatch(r"[a-z0-9_]{1,64}", code)]

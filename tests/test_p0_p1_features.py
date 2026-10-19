@@ -109,7 +109,7 @@ class P0P1FeatureTests(unittest.TestCase):
         )
         self.assertEqual(schemas[7].node_id, "T8PerformanceDirectorConfig")
         self.assertEqual(
-            [schema.node_id for schema in schemas[8:-8]],
+            [schema.node_id for schema in schemas[8:24]],
             [
                 "T8FilmProjectRouter",
                 "T8CharacterPerformanceBible",
@@ -130,8 +130,12 @@ class P0P1FeatureTests(unittest.TestCase):
             ],
         )
         for schema in schemas[:2]:
-            self.assertEqual([i.id for i in schema.inputs[-6:]], ["director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
-            inputs = schema.inputs[:-10] if schema.node_id == "MiniMaxH3PromptEnhancerT8" else schema.inputs[:-6]
+            prior_inputs = schema.inputs
+            if schema.node_id == "MiniMaxH3PromptEnhancerT8":
+                self.assertEqual(prior_inputs[-1].id, "visual_marker_config")
+                prior_inputs = prior_inputs[:-1]
+            self.assertEqual([i.id for i in prior_inputs[-6:]], ["director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
+            inputs = prior_inputs[:-10] if schema.node_id == "MiniMaxH3PromptEnhancerT8" else prior_inputs[:-6]
             self.assertEqual(inputs[-2].id, "provider_config")
             self.assertEqual(inputs[-1].id, "character_performance_bible")
         self.assertEqual(schemas[2].inputs[-3].id, "provider_config")
@@ -161,6 +165,7 @@ class P0P1FeatureTests(unittest.TestCase):
 
     def test_new_request_options_are_appended_after_existing_function_parameters(self):
         h3_names = list(inspect.signature(core_nodes.enhance_prompt).parameters)
+        self.assertEqual(h3_names.pop(), "visual_marker_config")
         seedance_names = list(inspect.signature(seedance20.enhance_seedance20_prompt).parameters)
         self.assertEqual(h3_names[-9:], ["progress_callback", "provider_request_options", "relay_config", "director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
         self.assertEqual(seedance_names[-8:], ["progress_callback", "provider_request_options", "director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])

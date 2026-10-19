@@ -61,7 +61,33 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 32
+assert len(schemas) == 33
+assert schemas[-1].node_id == "T8H3VisualMarkerConfig"
+marker = sys.modules[spec.name + ".h3_visual_marker"]
+assert marker.resolve_visual_marker_config(marker.T8H3VisualMarkerConfig.execute()[0]) is None
+assert [i.id for i in schemas[-1].inputs] == ["mode", "picture_selector", "marker_plan"]
+assert schemas[0].inputs[-1].id == "visual_marker_config" and schemas[0].inputs[-1].lazy
+assert all("visual_marker_config" not in [i.id for i in s.inputs] for s in schemas[1:])
+assert (p / "docs/h3-visual-marker.md").is_file()
+assert (p / "research_sources/h3-visual-marker.lock.json").is_file()
+for asset in ("web/js/h3_visual_marker.js", "web/js/assets/h3-marker-demo-source.svg",
+              "web/js/assets/h3-marker-quickstart.svg", "web/js/docs/T8H3VisualMarkerConfig/zh.md",
+              "web/js/docs/T8H3VisualMarkerConfig/en.md"):
+    assert (p / asset).is_file(), asset
+assert "serialize:false" in (p / "web/js/h3_visual_marker.js").read_text(encoding="utf-8")
+for target in ("ref2va", "hybrid"):
+    sample = p / ("example_workflows/h3_visual_marker_" + target + ".json")
+    graph = json.loads(sample.read_text(encoding="utf-8"))
+    assert sample.with_suffix(".jpg").is_file()
+    config = next(n for n in graph["nodes"] if n["type"] == "T8H3VisualMarkerConfig")
+    assert config["widgets_values"] == ["关闭 / Off", 0]
+    h3_sample = next(n for n in graph["nodes"] if n["type"] == "MiniMaxH3PromptEnhancerT8")
+    assert len(h3_sample["widgets_values"]) == 38
+    assert not h3_sample["properties"].get("widgets_values_named", {}).get("api_key")
+assert not any(name.startswith("h3_t8") for name in sys.modules)
+# Old 32-node order and input prefixes remain under their original gates.
+all_schemas = schemas
+schemas = schemas[:-1]
 assert [s.node_id for s in schemas[-7:-2]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
 assert schemas[-2].node_id == "MOSSImagePromptEnhancerT8"
 assert schemas[-1].node_id == "T8StoryboardDirectorConfig"
@@ -100,10 +126,10 @@ assert (p / "research_sources/tudou-emotion.lock.json").is_file()
 assert (p / "web/js/docs/T8PerformanceDirectorConfig/zh.md").is_file()
 assert camera.combat_camera_instruction(None) == ""
 assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3")
-assert schemas[0].inputs[-3].id == schemas[1].inputs[-3].id == "combat_camera_config"
-assert schemas[0].inputs[-2].id == schemas[1].inputs[-2].id == "speech_reference"
-assert schemas[0].inputs[-1].id == schemas[1].inputs[-1].id == "storyboard_director_config"
-assert schemas[0].inputs[-1].lazy and schemas[1].inputs[-1].lazy
+assert schemas[0].inputs[-4].id == schemas[1].inputs[-3].id == "combat_camera_config"
+assert schemas[0].inputs[-3].id == schemas[1].inputs[-2].id == "speech_reference"
+assert schemas[0].inputs[-2].id == schemas[1].inputs[-1].id == "storyboard_director_config"
+assert schemas[0].inputs[-2].lazy and schemas[1].inputs[-1].lazy
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
 h3 = sys.modules[spec.name + ".nodes"]
@@ -131,7 +157,7 @@ assert (p / "directional_skills/wushu_combat/NOTICE.md").is_file()
 for name, loaded in list(sys.modules.items()):
     if name.startswith(spec.name) and getattr(loaded, "__file__", None):
         assert pathlib.Path(loaded.__file__).is_relative_to(p), name
-print(json.dumps({"node_count":len(schemas), "node_ids":[s.node_id for s in schemas], "native_outputs":True, "new_skills":True, "emotion_strategy":True, "vocal_format":True, "hybrid":True, "live_repo_fallback":False}))
+print(json.dumps({"node_count":len(all_schemas), "node_ids":[s.node_id for s in all_schemas], "native_outputs":True, "new_skills":True, "emotion_strategy":True, "vocal_format":True, "hybrid":True, "h3_visual_marker":True, "live_repo_fallback":False}))
 '''
         bootstrap = "import sys; sys.argv_comfy=" + repr(str(args.comfy_root.resolve())) + "; sys.argv_install=" + repr(str(install)) + ";" + code
         result = subprocess.run([sys.executable, "-c", bootstrap], cwd=temporary, capture_output=True, text=True,

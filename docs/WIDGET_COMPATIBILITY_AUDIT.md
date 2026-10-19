@@ -16,6 +16,32 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-19: H3-only visual marker config
+
+Append `T8H3VisualMarkerConfig` after the old 32 nodes. Two native controls,
+mode (Off) and picture_selector (0), plus optional lazy marker_plan. Only H3
+appends an optional lazy visual_marker_config; freeze its existing schema
+prefix, six outputs, 38 saved fields and old examples against 1.34.0.
+No other model node gains a socket. Linked INT None is deferred at validation;
+the resolved selector and source pixels are checked before provider calls.
+
+The helper's bilingual example button uses both `serialize:false` flags and is
+idempotent. It is not a third saved value and never loads/replaces the canvas.
+Its local guide downloads a reference PNG and the two bundled JSON templates;
+template resolution prefers this node's python_module over backup installations.
+No provider settings or credentials are read by the guide.
+
+Owned Comfy queues exercise a real read-only producer, computed INT links,
+cache/source changes, ambiguous matches, preflight preservation and restore.
+Off/restore skip only new lazy dependencies, not pre-existing non-lazy IMAGE
+branches or static graph checks. Native Chrome exercises two controls, all 38
+H3 saved values, reconnect, stable sizes and both new examples. Five graphs
+exported by the actual browser are queued on the owned CPU host, then inspected
+for On/Off evidence, Picture ordinals and image counts. Tutorial download/retry,
+two-value helper serialization and current-graph preservation are tested too. Native task
+labels must be used when comparing runtime values: legacy Ref2VA aliases
+intentionally normalize on load. Loopback replies are not model/video proof.
+
 ### 2026-10-18: independent experimental storyboard config
 
 Append `T8StoryboardDirectorConfig` after all 31 existing nodes. One native combo
