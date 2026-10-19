@@ -1,5 +1,30 @@
 # H3 空间标记提示词增强（实验） / Visual marker authoring
 
+## 推荐：直接手动画框，无需 audio 插件
+
+搜索 `T8H3SpatialMarkerCanvas` / “手动空间画框”。在新节点上传图片，点击 **🖱 手动画框 / Edit spatial regions**：
+
+1. 点“＋人物框”再拖矩形；点“＋目标框”再拖矩形。选择状态可拖框内部移动、拖八个控制点缩放。
+2. 填描述、颜色，添加人物→目标动作关系；ID自动分配，无需手写JSON。可撤销/重做，删除框会清理关联动作。
+3. “预览实际标记图”走与执行相同的本地CPU绘框，不运行模型。ID、控制点等仅是编辑辅助，不写进输出图。
+4. “应用并完成”，再保存工作流。关闭未应用草稿会确认；换图需重新读取并核对框选。
+5. `marked_image` → H3参考图，`marker_plan` → 原空间配置 → H3.visual_marker_config。配置手动On，再配置增强渠道。
+
+独立手动示例：[Ref2VA](../example_workflows/h3_spatial_canvas_ref2va.json) / [Hybrid](../example_workflows/h3_spatial_canvas_hybrid.json)。
+示例已填教学框，点击编辑器即可拖动修改；也可删框从空白开始。Hybrid首帧接`source_image`，它是上传原图，不自动去框。
+五个保存字段不包含上传/编辑按钮，旧H3的38字段、旧空间配置的2字段及旧示例保持不变。
+
+本节点只叠加矩形，不裁切、缩图或改变源图尺寸；单张静态RGB≤4MP是既有v1图片合同，不是视频时长限制。
+预览和执行共用CPU/EXIF/RGB读取路径，应用会绑定源RGB摘要；真正执行前图已变化会拒绝，不悄悄把旧框套在新图上。
+预览只读本机Comfy input目录，无第三方上传/模型调用；后续云增强仍沿原渠道发送标记图和文字。
+外部连线驱动控件时，编辑器不会拆线或覆写隐藏的旧值，需先由用户决定来源。
+
+新`marker_plan`用于本项目增强配置；audio的Prompt/Bind要求它自己的精确Python计划类型，不能直接冒充。
+要接它们，可将`source_image`和`markers_json`送入原有Prepare，匹配模式/线宽重建那边计划；再用`manual_original`保留增强稿。
+本项目不修改两个参考项目，不直接复制GPL编辑器代码；依据已支持的v1数据协议独立实现手工操作。
+
+## 兼容：接入原有 audio Prepare
+
 在节点搜索框输入 `T8H3VisualMarkerConfig`、`Visual Marker Config` 或“空间标记增强”。
 这是当前提示词增强插件的新配置节点，**默认关闭，仅供 MiniMax H3 使用**。
 不用修改或替换 audio 插件的 Prepare / Prompt / Bind；不接入 Seedance、MOSS 或音乐节点。
@@ -24,7 +49,7 @@ Ref2VA 或 Hybrid JSON。先保存当前工作流，再将JSON拖入ComfyUI、�
 
 该编号**不是**下游 Bind 的 `marker_position`。Hybrid 的首、尾帧先占 Picture 编号。
 不自动插图、重排、缩放、裁切或猜测编号。错误图、已改像素、未知 schema、坏摘要、缺失关系、歧义会在请求前报错。
-只支持一份现有 v1 MarkerPlan，不接受手工报告字符串代替计划。未安装 audio 插件仍能加载本插件；含缺失 Prepare 节点的示例则不能运行。
+只支持一份 v1 MarkerPlan，不接受手工报告字符串代替计划。独立手动画框示例无需 audio；下面两份旧兼容示例仍需要其原 Prepare。
 
 独立示例：[普通参考](../example_workflows/h3_visual_marker_ref2va.json) / [Hybrid 首帧＋额外标记图](../example_workflows/h3_visual_marker_hybrid.json)。
 它们是新文件，未改旧示例；先替换 LoadImage 占位图、按真实图调整框和角色、配置自己的增强渠道。

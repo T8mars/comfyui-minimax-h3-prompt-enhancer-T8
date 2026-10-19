@@ -4,6 +4,8 @@
 
 ## 新增：H3 空间标记增强（实验）
 
+新增 `T8H3SpatialMarkerCanvas` / “手动空间画框”：直接上传图片、拖人物/目标框、填写描述与动作，应用后保存，**无需手写JSON或安装audio插件**。[手动画框说明](docs/h3-visual-marker.md) · [独立Ref2VA](example_workflows/h3_spatial_canvas_ref2va.json) / [独立Hybrid](example_workflows/h3_spatial_canvas_hybrid.json)。原有空间配置与旧示例仍兼容。
+
 搜索 `T8H3VisualMarkerConfig` / `Visual Marker Config`。只给 H3 添加可选入口，默认关闭；读取现有 Marker Prepare 的计划和同一标记参考图，完善角色—目标—动作描述。两个参考项目无需改动。普通 Ref2VA / Hybrid 额外参考图，不新增时长限制或独立 LLM 调用；不保证硬轨迹、去框或成片收益。[接线与边界](docs/h3-visual-marker.md) · [Ref2VA 示例](example_workflows/h3_visual_marker_ref2va.json) · [Hybrid 示例](example_workflows/h3_visual_marker_hybrid.json)
 
 ## 新增：独立分镜强化（实验）

@@ -5,6 +5,21 @@ Semantic Versioning and match the versions published to the Comfy Registry.
 
 ## [Unreleased]
 
+## [1.36.0] - 2026-10-19
+
+- Fix `T8ShowText` previews disappearing after workflow switches or history
+  output restoration. Resolve root/subgraph-scoped IDs without mixing results;
+  keep the node interface and nonserialized preview unchanged. Copy the raw
+  result (including CRLF), fall back when Clipboard API is unavailable/denied,
+  and reset rapid-copy feedback safely without overlapping pending requests.
+- Add independent `T8H3SpatialMarkerCanvas`: upload a still image, draw/move/resize
+  actor and target boxes, edit descriptions/colors/actions, undo/redo, preview
+  actual CPU-rendered pixels and apply/save without writing JSON or installing
+  the audio plugin. Old node schemas and workflows remain unchanged.
+- Bind editor previews to source RGB, preserve connected-field ownership and
+  five named saved fields. Preview stays same-origin/local and never queues or
+  calls a model. Add two standalone Ref2VA/Hybrid examples and manual-canvas help.
+
 ## [1.35.0] - 2026-10-19
 
 - Add default-Off `T8H3VisualMarkerConfig` for Normal H3 Ref2VA / Hybrid extra

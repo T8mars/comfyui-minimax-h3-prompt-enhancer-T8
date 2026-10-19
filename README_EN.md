@@ -6,6 +6,8 @@
 
 ## New: H3 visual marker authoring (experimental)
 
+`T8H3SpatialMarkerCanvas` now provides upload, actor/target drawing, move/resize, descriptions/actions, undo/redo and local preview. No handwritten JSON or audio plugin is required. [Standalone Ref2VA](example_workflows/h3_spatial_canvas_ref2va.json) / [Hybrid](example_workflows/h3_spatial_canvas_hybrid.json); the previous helper and examples remain compatible.
+
 H3 also has an independent, default-Off **T8H3VisualMarkerConfig / Visual Marker Config** entry.
 It reads the existing audio plugin's MarkerPlan and matches the actual marked reference image; neither reference project needs modification.
 Normal Ref2VA/Hybrid extra references only, no duration cap or extra planner. This is soft prompt guidance, not a trajectory/removal guarantee.

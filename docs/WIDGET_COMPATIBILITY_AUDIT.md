@@ -16,6 +16,57 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-19: Show Text output restoration and copying
+
+`T8ShowText` keeps its existing STRING input/output and read-only DOM preview.
+Live `onExecuted` and the host's snapshot `onNodeOutputsUpdated` share one updater.
+Bare node IDs address the root graph only; locator UUIDs address their registered
+subgraph, with encoded locators and legacy container execution paths handled
+explicitly. Never resolve a bare ID against the active subgraph, or strip a
+scoped ID to its last segment. Missing outputs in a restored snapshot clear old
+previews. No output is placed in properties, named widget metadata or saved
+`widgets_values`; the DOM widget has both serialization flags disabled.
+
+Copy uses runtime-only raw text, not the textarea's LF-normalized value. The
+fallback writes the raw string through a native copy event, restores focus and
+selection, and reports failure if neither path succeeds. Pending clicks are
+coalesced; subsequent copies restart one timer with a fixed reset label. Changed
+outputs/removal cannot receive stale success feedback; reattached nodes remain
+usable. Preserve original node callbacks and return values, and install once.
+
+Node tests exercise same local IDs in root/sibling/nested graphs, snapshot resets,
+CRLF, denial/missing APIs, failure, pending copies, removal and serialization.
+The owned CPU/Chrome harness uses real execution, native workflow/change-tracker
+switches and history-style output restoration, actual subgraphs and copy events.
+This does not persist results into exported workflow JSON or promise restoration
+when the host itself no longer retains outputs.
+
+### 2026-10-19: independent manual spatial canvas
+
+Append `T8H3SpatialMarkerCanvas` after the existing 33 nodes. Freeze all old
+node schemas, H3's 38 fields and the config's 2 fields; do not reuse another
+plugin's node ID or edit its frontend hooks. Five saved fields are explicitly
+named: image, mode, markers_json, line_width, expected_source_sha256. Upload and
+editor buttons cannot become saved fields. Restore synchronously by validated
+named data or the exact five-value positional layout, including reordered host
+widgets and null placeholders for missing linked widgets.
+
+Linked values are None during static validation, resolved values are checked
+again before CPU rendering. Editing connected fields is read-only, with no
+implicit disconnect or hidden offline write. Preview and execute share the
+same source loader; apply rechecks source/draft identity after asynchronous
+requests. The same-origin, bounded route reads only Comfy input files, follows
+no escaping symlinks and invokes no provider. RGB digest binding does not
+authenticate semantic identity, downstream foreign plan classes or video quality.
+
+Real Chromium pointer events cover create/move/eight-handle resize, undo/redo,
+apply, native five-field save/reopen and a computed external STRING queue in an
+owned CPU Comfy host with no audio plugin. Explicit pointer-events:auto is
+required because host global modal/widget styles can otherwise swallow drags.
+Two independent manual examples retain default Off and must load/reload and
+queue Off/On using the actual browser export. A dynamic-prompt text source is
+not an identity JSON producer: use a raw STRING producer for linked JSON tests.
+
 ### 2026-10-19: H3-only visual marker config
 
 Append `T8H3VisualMarkerConfig` after the old 32 nodes. Two native controls,

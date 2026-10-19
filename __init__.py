@@ -20,6 +20,8 @@ from .performance_director import T8PerformanceDirectorConfig
 from .combat_camera import T8CombatCameraConfig
 from .storyboard_director import T8StoryboardDirectorConfig
 from .h3_visual_marker import T8H3VisualMarkerConfig
+from .h3_spatial_editor import T8H3SpatialMarkerCanvas
+from .h3_spatial_editor_routes import register_spatial_editor_routes
 from .speech_reference import T8SpeechReference
 from .film_workflow import (
     T8CharacterPerformanceBible,
@@ -38,6 +40,7 @@ register_credential_routes()
 register_completion_recovery_routes()
 register_strata_routes()
 register_moss_image_routes()
+register_spatial_editor_routes()
 
 
 class T8PromptEnhancerExtension(ComfyExtension):
@@ -64,6 +67,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             MOSSImagePromptEnhancer,
             T8StoryboardDirectorConfig,
             T8H3VisualMarkerConfig,
+            T8H3SpatialMarkerCanvas,
         ]
 
 
@@ -85,6 +89,7 @@ __all__ = [
     "T8CombatCameraConfig",
     "T8StoryboardDirectorConfig",
     "T8H3VisualMarkerConfig",
+    "T8H3SpatialMarkerCanvas",
     "T8SpeechReference",
     "T8FilmProjectRouter",
     "T8CharacterPerformanceBible",

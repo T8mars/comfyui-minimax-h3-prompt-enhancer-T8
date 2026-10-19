@@ -2,7 +2,7 @@ import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
 export const MARKER_HELP_BUTTON = "📖 空间标记：示例与接线 / Examples";
-const STEMS = ["h3_visual_marker_ref2va", "h3_visual_marker_hybrid"];
+const STEMS = ["h3_spatial_canvas_ref2va", "h3_spatial_canvas_hybrid", "h3_visual_marker_ref2va", "h3_visual_marker_hybrid"];
 const DEMO_NAME = "h3-marker-demo-source.png";
 
 function element(tag, text, parent) {
@@ -56,7 +56,7 @@ export function showMarkerGuide(moduleHint = "") {
     document.querySelector("[data-t8-marker-guide]")?.remove();
     const overlay = element("div", "", document.body);
     overlay.dataset.t8MarkerGuide = "true";
-    overlay.style.cssText = "position:fixed;inset:0;z-index:100000;background:#0009;display:flex;align-items:center;justify-content:center;padding:20px";
+    overlay.style.cssText = "position:fixed;inset:0;z-index:100000;pointer-events:auto;background:#0009;display:flex;align-items:center;justify-content:center;padding:20px";
     const panel = element("section", "", overlay);
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-label", "空间标记接线教程与示例 / Spatial examples");
@@ -69,15 +69,15 @@ export function showMarkerGuide(moduleHint = "") {
     image.style.cssText = "display:block;width:100%;max-height:430px;object-fit:contain;background:#f1f4f5;border-radius:8px";
     const steps = element("ol", "", panel);
     for (const text of [
-        "先安装已有的 comfyui-minimax-h3-audio-T8；示例使用它的 H3 Marker · Prepare。",
-        "下载配套 PNG 与一个工作流 JSON。先保存当前工作流，再把 JSON 拖入 ComfyUI；在 Load Image 中上传刚下载的 PNG。",
-        "Prepare.marked_image → H3 的参考图；Prepare.marker_plan → 空间配置；空间配置输出 → H3.visual_marker_config。两条 Prepare 输出都要接。",
-        "Prepare 的 markers_json 定义谁和目标：marker_id 是唯一名字；xyxy 是源图归一化左上、右下坐标；relations 写谁向哪个目标做什么。示例已填好，换图时按新图改框与角色。",
+        "推荐下载本项目的【手动画框】示例，无需安装audio插件。原audio Prepare两份示例仍保留。",
+        "下载配套 PNG 与一个工作流 JSON。先保存当前工作流，再把 JSON 拖入 ComfyUI；在手动空间画框节点上传刚下载的 PNG。",
+        "手动画框.marked_image → H3 的参考图；marker_plan → 空间配置；空间配置输出 → H3.visual_marker_config。两条输出都要接。",
+        "点击【手动画框】，用人物框/目标框按钮拖矩形，填写描述、颜色及动作关系，再应用并保存；无需手写JSON。坐标属于源图，不裁切图片。",
         "普通示例用 Ref2VA；Hybrid 示例另将干净源图接首帧。配置默认关闭，需要手动切 On 才使用空间信息。selector=0 自动唯一匹配；本例普通标记是 Picture 1，Hybrid 标记是 Picture 2。它不是 Bind.marker_position。",
         "在 H3 配置自己的文本增强渠道或共享配置，再运行。这里只生成增强提示词，不生成视频，也不增加独立规划请求。",
-        "继续接视频工作流时：enhanced_prompt → 现有 Marker Prompt.base_prompt，选 manual_original，再将 recipe 接 Bind。上下游参考图顺序一致，marker 只插入一次。"
+        "接audio生成时，用本节点source_image和markers_json送入原audio Prepare，匹配模式/线宽重建它自己的计划，再给Prompt/Bind；不要把本项目计划冒充其Python对象。enhanced_prompt接base_prompt并选manual_original，参考图顺序一致、marker只插一次。"
     ]) element("li", text, steps);
-    element("p", "English: download the sample PNG and JSON, save your current graph, import JSON and upload PNG. Connect both Prepare outputs. Enable On, configure your enhancer provider, then queue. Hybrid anchors count before the marker Picture. Soft guidance; actual video results need review.", panel);
+    element("p", "English: choose the standalone manual-canvas JSON (no audio plugin), upload PNG, draw actor/target rectangles and fill descriptions/actions. Apply and save. Connect both outputs, enable the config and choose your enhancer provider. Legacy audio examples remain available. Soft guidance; video results need review.", panel);
     const actions = element("div", "", panel);
     actions.style.cssText = "display:flex;flex-wrap:wrap;gap:10px;margin:16px 0";
     const status = element("p", "", panel);
@@ -94,8 +94,9 @@ export function showMarkerGuide(moduleHint = "") {
         };
     };
     action("① 下载配套参考图 PNG", "image", demoImage);
-    for (const [index, stem] of STEMS.entries()) {
-        action(index ? "② 下载 Hybrid 空间示例 JSON" : "② 下载 Ref2VA 空间示例 JSON", stem, async () => {
+    for (const stem of STEMS) {
+        const label=(stem.startsWith('h3_spatial_canvas_')?'② 手动画框 · ':'兼容旧audio · ')+(stem.endsWith('hybrid')?'Hybrid':'Ref2VA')+' JSON';
+        action(label, stem, async () => {
             const data = await workflow(stem, moduleHint);
             saveBlob(new Blob([JSON.stringify(data, null, 2)], {type:"application/json"}), stem + ".json");
         });

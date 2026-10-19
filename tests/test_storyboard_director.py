@@ -152,8 +152,8 @@ class StoryboardDirectorTests(unittest.TestCase):
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         ids = [cls.define_schema().node_id for cls in asyncio.run(extension.get_node_list())]
-        self.assertEqual(len(ids), 33)
-        self.assertEqual(ids[-1], "T8H3VisualMarkerConfig")
+        self.assertEqual(len(ids), 34)
+        self.assertEqual(ids[-2:], ["T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas"])
         self.assertEqual(ids[30:32], ["MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig"])
 
     def test_lazy_input_resolves_only_for_normal_execution(self):

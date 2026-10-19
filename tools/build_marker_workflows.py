@@ -7,7 +7,9 @@ from build_storyboard_workflows import generate as storyboard_examples
 from build_example_workflows import _workflow, _socket, _show_text_node
 
 ROOT = Path(__file__).resolve().parents[1]
-STEMS = ("h3_visual_marker_ref2va", "h3_visual_marker_hybrid")
+LEGACY_STEMS = ("h3_visual_marker_ref2va", "h3_visual_marker_hybrid")
+MANUAL_STEMS = ("h3_spatial_canvas_ref2va", "h3_spatial_canvas_hybrid")
+STEMS = (*LEGACY_STEMS, *MANUAL_STEMS)
 SPEC = {"markers":[
     {"marker_id":"walker","kind":"actor","role_id":"A","color":"cyan","description":"the woman in the red coat","xyxy":[.1,.1,.4,.9]},
     {"marker_id":"door","kind":"target","color":"yellow","description":"the doorway on the right","xyxy":[.65,.2,.95,.95]}],
@@ -63,8 +65,41 @@ def generate():
     return result
 
 
+def generate_manual():
+    result={}
+    for old_stem,base in generate().items():
+        graph=copy.deepcopy(base)
+        graph["nodes"]=[n for n in graph["nodes"] if n["id"]!=1]
+        nodes={n["id"]:n for n in graph["nodes"]}
+        canvas=node(2,"T8H3SpatialMarkerCanvas",[0,40],[],[
+            ("marked_image","IMAGE"),("marker_plan","T8_H3_VISUAL_MARKER_PLAN"),
+            ("source_image","IMAGE"),("markers_json","STRING"),("report_json","STRING")],
+            ["h3-marker-demo-source.png","render_rectangles",json.dumps(SPEC,ensure_ascii=False),3,""],
+            "① 上传图片 → 点击手动画框 / No audio dependency")
+        canvas["size"]=[520,850]
+        graph["nodes"][0]=canvas
+        nodes[3]["pos"]=[550,40]
+        nodes[6]["pos"]=[0,1050]
+        nodes[6]["widgets_values"]=["无需安装audio插件。\n① 在手动空间画框节点上传配套PNG或自己的图片。\n② 点击【手动画框】，用【人物框】【目标框】拖矩形；拖内部移动，八个控制点缩放。\n③ 填描述和颜色，添加人物→目标动作关系，无需手写JSON。\n④ 点【应用并完成】，再保存工作流。换图需重新核对框选与动作。\nmarked_image → H3参考图；marker_plan → 原空间配置 → H3.visual_marker_config。\nHybrid的source_image接首帧；它是原始输入，不自动去框。\n空间配置默认Off，请手动On；配置自己的增强渠道后运行。\n这里只生成增强提示词，不含视频采样器、不保证硬轨迹或去框。\n接audio生成：该插件的Prompt要求其自己的Prepare计划，不能直接把本节点计划当其Python对象。可复用本节点markers_json及source_image重建其Prepare；不要重复插图/动作。"]
+        links=[]
+        for _,src,out,dst,inp,kind in graph["links"]:
+            if dst==2: continue
+            if src==1: src,out=2,2
+            links.append([len(links)+1,src,out,dst,inp,kind])
+        indexed={n["id"]:n for n in graph["nodes"]}
+        for n in graph["nodes"]:
+            for output in n["outputs"]: output["links"]=[]
+            for item in n["inputs"]: item["link"]=None
+        for lid,src,out,dst,inp,kind in links:
+            indexed[src]["outputs"][out]["links"].append(lid)
+            indexed[dst]["inputs"][inp]["link"]=lid
+        stem=old_stem.replace("h3_visual_marker_","h3_spatial_canvas_")
+        result[stem]=_workflow(stem,graph["nodes"],links)
+    return result
+
+
 def check():
-    for stem,data in generate().items():
+    for stem,data in {**generate(),**generate_manual()}.items():
         assert json.loads((ROOT/"example_workflows"/(stem+".json")).read_text(encoding="utf-8"))==data
         nodes={n["id"]:n for n in data["nodes"]}
         assert nodes[3]["widgets_values"]==["关闭 / Off",0]
@@ -74,7 +109,10 @@ def check():
         for lid,src,out,dst,inp,kind in data["links"]:
             assert kind==nodes[src]["outputs"][out]["type"]==nodes[dst]["inputs"][inp]["type"]
             assert lid in nodes[src]["outputs"][out]["links"] and nodes[dst]["inputs"][inp]["link"]==lid
-    print("H3 marker examples: two new Off-default workflows, native 38+2 fields, existing Prepare references only.")
+        if stem in MANUAL_STEMS:
+            assert len(nodes[2]["widgets_values"])==5
+            assert not any(n["type"]=="MiniMaxH3VisualMarkerPrepareEXPT8" for n in nodes.values())
+    print("H3 marker examples: two original audio-compatible and two standalone manual workflows; 38+2+5 stable fields.")
 
 
 if __name__=="__main__":
@@ -82,7 +120,8 @@ if __name__=="__main__":
     if args.check: check()
     else:
         from generate_workflow_thumbnails import make_card
-        for stem,data in generate().items():
+        for stem,data in {**generate(),**generate_manual()}.items():
+            if stem in LEGACY_STEMS: continue  # Published examples stay byte-for-byte unchanged.
             (ROOT/"example_workflows"/(stem+".json")).write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
             make_card("H3 · 空间标记（实验）","Hybrid" if "hybrid" in stem else "Ref2VA",(40,120,130)).save(
                 ROOT/"example_workflows"/(stem+".jpg"),"JPEG",quality=88,optimize=True,progressive=True)

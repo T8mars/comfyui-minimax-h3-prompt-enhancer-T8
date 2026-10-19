@@ -53,3 +53,23 @@ class ActualMarkerProducerTests(unittest.TestCase):
         self.assertIn("overlap", evidence.warning_codes)
         self.assertEqual(len(json.loads(evidence.evidence_json)["relations"]), 128)
         print("Actual producer budget:", len(raw.encode()), len(plan.record_json.encode()), len(record["warnings"]))
+
+    def test_standalone_canvas_pixels_can_rebuild_original_foreign_plan(self):
+        import importlib
+        from test_h3_spatial_editor import SPEC
+        from test_h3_visual_marker import h3
+        editor=importlib.import_module(h3.__package__+'.h3_spatial_editor')
+        source=torch.linspace(0,1,48*32*3,dtype=torch.float32).reshape(1,32,48,3)
+        for mode in ('render_rectangles','provided_marked'):
+            for width in (1,3,32):
+                raw=json.dumps(SPEC)
+                marked,local,record,_=editor.prepare_spatial_image(source,raw,mode,width)
+                foreign,plan,other=self.producer.prepare_markers(source,raw,mode=mode,line_width=width)
+                self.assertTrue(torch.equal(marked,foreign))
+                self.assertEqual(record['spec'],other['spec'])
+                self.assertEqual(record['marked_rgb'],other['marked_rgb'])
+                # Rebuild its real plan, rather than pretending our Python class
+                # passes its strict class identity check.
+                recipe=self.producer.prepare_marker_prompt(plan,'Native enhanced text',mode='manual_original')
+                self.assertIn('Native enhanced text',str(recipe))
+                vm.build_visual_marker_config(vm.ON,0,local)

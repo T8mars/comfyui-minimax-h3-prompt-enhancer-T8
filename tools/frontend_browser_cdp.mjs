@@ -59,9 +59,19 @@ async function connect() {
 
 try {
   const send = await connect();
+  if(mode==='comfy-text'){
+    const {runTextBrowser}=await import('./text_browser_acceptance.mjs');
+    await runTextBrowser({send});
+  }
+  if(mode==='comfy-spatial'){
+    const {runSpatialBrowser}=await import('./spatial_browser_acceptance.mjs');
+    await runSpatialBrowser({send,providerBase:markerProviderBase,screenshotPath});
+  }
   if (mode === "comfy-marker") {
     const markerWorkflows = await Promise.all(["ref2va","hybrid"].map(async target=>JSON.parse(await readFile(
       new URL(`../example_workflows/h3_visual_marker_${target}.json`,import.meta.url),"utf8"))));
+    const spatialWorkflows = await Promise.all(["ref2va","hybrid"].map(async target=>JSON.parse(await readFile(
+      new URL(`../example_workflows/h3_spatial_canvas_${target}.json`,import.meta.url),"utf8"))));
     await send("Emulation.setDeviceMetricsOverride", {width:1800,height:1400,deviceScaleFactor:1,mobile:false});
     let ready=false;
     while(Date.now()<deadline&&!ready){
@@ -151,7 +161,7 @@ try {
       assert(document.querySelectorAll('[data-t8-marker-guide]').length===1,'Reopening keeps a single guide');
       const dialog=document.querySelector('[data-t8-marker-guide]');
       assert(dialog?.textContent.includes('marker_plan')&&dialog.textContent.includes('selector=0'),'Concrete wiring tutorial');
-      assert(dialog.querySelectorAll('button[data-marker-action]').length===4,'PNG, two JSON downloads and close');
+      assert(dialog.querySelectorAll('button[data-marker-action]').length===6,'PNG, four JSON downloads and close');
       const downloads=[];
       const originalApiFetch= (await import('/scripts/api.js')).api.fetchApi;
       const apiModule=(await import('/scripts/api.js')).api;
@@ -161,7 +171,7 @@ try {
         const response=await originalApiFetch.call(this,route,...args);
         if(route==='/workflow_templates'&&response.ok){
           const catalog=await response.json();
-          catalog['disabled-marker-backup']=['h3_visual_marker_ref2va','h3_visual_marker_hybrid'];
+          catalog['disabled-marker-backup']=['h3_visual_marker_ref2va','h3_visual_marker_hybrid','h3_spatial_canvas_ref2va','h3_spatial_canvas_hybrid'];
           return new Response(JSON.stringify(catalog),{status:200,headers:{'Content-Type':'application/json'}});
         }
         return response;
@@ -172,7 +182,7 @@ try {
         const retryButton=dialog.querySelector('[data-marker-action="h3_visual_marker_ref2va"]');
         await retryButton.onclick();
         assert(!retryButton.disabled&&downloads.length===0&&dialog.querySelector('[role="status"]').textContent.includes('Cannot read'),'Failed download restores action for retry');
-        for(const action of ['image','h3_visual_marker_ref2va','h3_visual_marker_hybrid']){
+        for(const action of ['image','h3_spatial_canvas_ref2va','h3_spatial_canvas_hybrid','h3_visual_marker_ref2va','h3_visual_marker_hybrid']){
           await dialog.querySelector('[data-marker-action="'+action+'"]').onclick();
           const item=downloads.at(-1);assert(item,'Download produced '+action);
           const blob=await(await fetch(item.url)).blob();
@@ -182,7 +192,7 @@ try {
             assert((await fetch('/upload/image',{method:'POST',body:upload})).ok,'Companion PNG uploaded to owned test input');
           } else {
             const workflow=JSON.parse(await blob.text());
-            const expected=${JSON.stringify(markerWorkflows)}[action.endsWith('hybrid')?1:0];
+            const expected=(action.startsWith('h3_spatial_canvas_')?${JSON.stringify(spatialWorkflows)}:${JSON.stringify(markerWorkflows)})[action.endsWith('hybrid')?1:0];
             assert(JSON.stringify(workflow)===JSON.stringify(expected),'Downloaded exact bundled workflow');
             const config=workflow.nodes.find(n=>n.type==='T8H3VisualMarkerConfig');
             const h3=workflow.nodes.find(n=>n.type==='MiniMaxH3PromptEnhancerT8');
@@ -191,7 +201,7 @@ try {
           }
         }
       } finally {HTMLAnchorElement.prototype.click=originalClick;apiModule.fetchApi=originalApiFetch;}
-      assert(downloads.length===3,'All tutorial downloads succeeded');
+      assert(downloads.length===5,'All tutorial downloads succeeded');
       const graphAfterGuide=await stableNodes();
       if(graphAfterGuide!==graphBeforeGuide){
         const before=JSON.parse(graphBeforeGuide),after=JSON.parse(graphAfterGuide);
@@ -501,6 +511,16 @@ try {
   }
   process.stdout.write(result.text + "\n");
 } catch (error) {
+  // Keep visual evidence for failed owned browser tests as well as successes.
+  if(socket?.readyState===WebSocket.OPEN&&screenshotPath){
+    try{
+      const id=900000;
+      const capture=new Promise(resolve=>{const listener=event=>{const value=JSON.parse(event.data);if(value.id===id){socket.removeEventListener('message',listener);resolve(value.result);}};socket.addEventListener('message',listener);});
+      socket.send(JSON.stringify({id,method:'Page.captureScreenshot',params:{format:'png',captureBeyondViewport:false}}));
+      const image=await Promise.race([capture,pause(2000)]);
+      if(image?.data)await writeFile(resolve(screenshotPath.replace(/\.png$/,'-failure.png')),Buffer.from(image.data,'base64'));
+    }catch{/* Preserve the original failure. */}
+  }
   process.stderr.write(`${error.stack || error}\n`);
   process.exitCode = 1;
 } finally {

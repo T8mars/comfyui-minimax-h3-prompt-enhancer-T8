@@ -30,6 +30,8 @@ jobs:
         run: git -C _source fetch --no-tags --depth=1 origin 4d67f1a0508337d38909515de194ae8636b6c834
       - name: Fetch frozen H3 marker compatibility baseline
         run: git -C _source fetch --no-tags --depth=1 origin 794e4b2bfde346df41d5a4459bf7172319007110
+      - name: Fetch frozen manual spatial canvas baseline
+        run: git -C _source fetch --no-tags --depth=1 origin 25cc889b8d5d9edb9366995a6f0e5d09ceabae1f
       - name: Check out minimum supported ComfyUI
         uses: actions/checkout@v4
         with:

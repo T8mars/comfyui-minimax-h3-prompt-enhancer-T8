@@ -43,6 +43,13 @@ class TextUtilitiesTests(unittest.TestCase):
         self.assertIn("serialize: false", source)
         self.assertNotIn("innerHTML", source)
 
+    def test_show_text_keeps_empty_unicode_and_original_line_endings(self):
+        for value in ("", "中文\r\nsecond line\r\n", "a\rb\n<script>literal</script>"):
+            with self.subTest(value=value):
+                result = text_utilities.T8ShowText.execute(value)
+                self.assertEqual(result[0], value)
+                self.assertEqual(result.ui, {"text": [value]})
+
 
 if __name__ == "__main__":
     unittest.main()
