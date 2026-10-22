@@ -3,6 +3,12 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.37.1] - 2026-10-23
+
+- Fix the old-workflow fingerprint test on Linux: compare frozen Git LF bytes
+  after accounting only for CRLF checkout conversion. Retain content/formatting
+  drift checks. No node code, schemas or existing workflow files change.
+
 ## [1.37.0] - 2026-10-23
 
 - Expose the existing MOSS description-character setting without moving its

@@ -40,22 +40,31 @@ class Node {
     onSerialize() { return 37; }
 }
 
-test("MOSS profile appends only field 28 and all five old workflow files remain byte-identical", async () => {
+const workflowFingerprint = text => createHash("sha256").update(text.replaceAll("\r\n", "\n")).digest("hex");
+
+test("Workflow fingerprints ignore only Git CRLF checkout policy, not content or other formatting", () => {
+    const lf = '{\n  "value": "literal\\r\\n"\n}\n';
+    assert.equal(workflowFingerprint(lf), workflowFingerprint(lf.replaceAll("\n", "\r\n")));
+    assert.notEqual(workflowFingerprint(lf), workflowFingerprint(lf.replace("  ", " ")));
+    assert.notEqual(workflowFingerprint(lf), workflowFingerprint(lf.replace("literal", "changed")));
+});
+
+test("MOSS profile appends only field 28 and old workflows retain frozen Git bytes under checkout newline policy", async () => {
     assert.equal(core.LEGACY_MOSS_NAMES.length, 27);
     assert.equal(core.MOSS_NAMES.length, 28);
     assert.deepEqual(core.MOSS_NAMES.slice(0, 27), core.LEGACY_MOSS_NAMES);
     assert.equal(core.MOSS_NAMES[8], "max_output_chars");
     assert.equal(core.MOSS_NAMES.at(-1), "authoring_profile");
     const hashes = {
-        caption: "ea27eb7ed6ed66f24251a73d65b404f642714bf7cdd0c67f57d1792ae5391183",
-        layout: "a9b9f9e05b1d2fe0e91130a8e5418dd3e5a941266406b61ca9ec34d8ff471863",
-        spatial: "fb390abb2ef8ee6d096fc92f4815a765858f71209f52b91ffefd3e10a017e8f0",
-        compile_only: "d6cb3f0d25d4428606c1473ddf2047ee9826af497e664a2cf83ca5ac4d106774",
-        compile_error: "b44b6d0817006c586fbb54da0409ebe3c0f94d5e0f208f2da02448c1cfb8591b",
+        caption: "644e339306d024d1ae49682a2adba19ca5662584e22fd4711da3d44cbce77471",
+        layout: "85964dfc7c31a123889ee9dd2091e3a6c8c428ce8ad83616393033bb8abdf0dd",
+        spatial: "4de8a524d8fbadf5a3f5d41ddb134b9c1844fabe0cbb31cf26aa292a1cfcec68",
+        compile_only: "3fdb6f99755578e00317cffe37c74db1835c098f02817d6400480332ec3efb83",
+        compile_error: "4dfb66db8b2f220a7a5d8bb20ff2e66cb408218030f6e77323e1556405a83a2c",
     };
     for (const [stem, expected] of Object.entries(hashes)) {
         const bytes = await readFile(new URL(`../../example_workflows/moss_${stem}_example.json`, import.meta.url));
-        assert.equal(createHash("sha256").update(bytes).digest("hex"), expected, stem);
+        assert.equal(workflowFingerprint(bytes.toString("utf8")), expected, stem);
         assert.equal(JSON.parse(bytes).nodes.find(node => node.type === core.MOSS_ID).widgets_values.length, 27);
     }
 });
