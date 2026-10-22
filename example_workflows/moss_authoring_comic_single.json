@@ -1,0 +1,342 @@
+{
+  "id": "06bdea57-2eca-50c5-8a27-99f6650f5413",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8LLMProviderConfig",
+      "pos": [
+        -520,
+        0
+      ],
+      "size": [
+        440,
+        520
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8LLMProviderConfig",
+        "t8_provider_config_widgets_schema": 1
+      },
+      "widgets_values": [
+        "Local Qwen",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
+        "",
+        "http://127.0.0.1:8080",
+        "AUTO",
+        "",
+        "none",
+        0,
+        0,
+        "frames",
+        1.0,
+        8,
+        1800.0,
+        false
+      ],
+      "widgets_values_named": {
+        "provider": "Local Qwen",
+        "temperature_policy": "AUTO（兼容策略）",
+        "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+        "local_mmproj": "AUTO（自动匹配）",
+        "local_context_size": 32768,
+        "local_max_tokens": 16384,
+        "local_think_mode": "关闭（推荐，速度优先）",
+        "local_reasoning_effort": "medium",
+        "local_video_sample_fps": 2.0,
+        "local_unload_policy": "执行后卸载（推荐）",
+        "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+        "credential_alias": "",
+        "openai_base_url": "",
+        "custom_model": "",
+        "ai_workshop_model": "gemini-3.5-flash",
+        "extra_parameters_json": "",
+        "strata_url": "http://127.0.0.1:8080",
+        "strata_model": "AUTO",
+        "strata_credential_alias": "",
+        "strata_reasoning_effort": "none",
+        "strata_max_tokens": 0,
+        "strata_reasoning_budget_tokens": 0,
+        "strata_video_mode": "frames",
+        "strata_video_sample_fps": 1.0,
+        "strata_video_max_frames": 8,
+        "strata_timeout_s": 1800.0,
+        "strata_allow_private_network": false
+      },
+      "title": "先选择自己的渠道/模型 / Configure your own provider"
+    },
+    {
+      "id": 2,
+      "type": "MOSSImagePromptEnhancerT8",
+      "pos": [
+        40,
+        0
+      ],
+      "size": [
+        540,
+        780
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "api_key",
+          "type": "STRING",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 1,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive_prompt",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "resolved_format",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "draft_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSImagePromptEnhancerT8",
+        "t8_moss_widgets_schema": 2,
+        "t8_moss_widgets_v1": {
+          "prompt": "单张漫画海报：只有一只小红机器人，方脑袋、两只圆眼和短腿，跨过一条小水沟；有节制的动势线，清楚的左右方向，无可见文字。只创作这一张图，不生成整册。",
+          "operation": "生成 / Generate",
+          "output_format": "Layout / 空间排版",
+          "width": 1256,
+          "height": 1672,
+          "output_language": "按需求（默认英文）/ Auto",
+          "api_mode": "本地 GGUF（llama.cpp / Qwen，离线）",
+          "locked_text": "",
+          "max_output_chars": 0,
+          "max_corrections": 1,
+          "llm_max_tokens": 16384,
+          "draft_json": "",
+          "ai_workshop_model": "gemini-3.5-flash",
+          "custom_model": "qwen/qwen3.8-flash-next",
+          "openai_base_url": "",
+          "seed": 0,
+          "control_after_generate": "fixed",
+          "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+          "local_mmproj": "AUTO（自动匹配）",
+          "local_context_size": 32768,
+          "local_max_tokens": 16384,
+          "local_think_mode": "关闭（推荐，速度优先）",
+          "local_reasoning_effort": "medium",
+          "local_unload_policy": "执行后卸载（推荐）",
+          "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+          "recovery_slot": "",
+          "recovery_action": "normal",
+          "authoring_profile": "Comic / 漫画卡通"
+        }
+      },
+      "widgets_values": [
+        "单张漫画海报：只有一只小红机器人，方脑袋、两只圆眼和短腿，跨过一条小水沟；有节制的动势线，清楚的左右方向，无可见文字。只创作这一张图，不生成整册。",
+        "生成 / Generate",
+        "Layout / 空间排版",
+        1256,
+        1672,
+        "按需求（默认英文）/ Auto",
+        "本地 GGUF（llama.cpp / Qwen，离线）",
+        "",
+        0,
+        1,
+        16384,
+        "",
+        "gemini-3.5-flash",
+        "qwen/qwen3.8-flash-next",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "normal",
+        "Comic / 漫画卡通"
+      ],
+      "widgets_values_named": {
+        "prompt": "单张漫画海报：只有一只小红机器人，方脑袋、两只圆眼和短腿，跨过一条小水沟；有节制的动势线，清楚的左右方向，无可见文字。只创作这一张图，不生成整册。",
+        "operation": "生成 / Generate",
+        "output_format": "Layout / 空间排版",
+        "width": 1256,
+        "height": 1672,
+        "output_language": "按需求（默认英文）/ Auto",
+        "api_mode": "本地 GGUF（llama.cpp / Qwen，离线）",
+        "locked_text": "",
+        "max_output_chars": 0,
+        "max_corrections": 1,
+        "llm_max_tokens": 16384,
+        "draft_json": "",
+        "ai_workshop_model": "gemini-3.5-flash",
+        "custom_model": "qwen/qwen3.8-flash-next",
+        "openai_base_url": "",
+        "seed": 0,
+        "control_after_generate": "fixed",
+        "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+        "local_mmproj": "AUTO（自动匹配）",
+        "local_context_size": 32768,
+        "local_max_tokens": 16384,
+        "local_think_mode": "关闭（推荐，速度优先）",
+        "local_reasoning_effort": "medium",
+        "local_unload_policy": "执行后卸载（推荐）",
+        "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+        "recovery_slot": "",
+        "recovery_action": "normal",
+        "authoring_profile": "Comic / 漫画卡通"
+      }
+    },
+    {
+      "id": 3,
+      "type": "T8ShowText",
+      "pos": [
+        700,
+        0
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 4,
+      "type": "Note",
+      "pos": [
+        -520,
+        620
+      ],
+      "size": [
+        460,
+        450
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "【先配置，再运行 / Configure before running】\n共享配置默认 Local Qwen，不包含密钥。请按自己的安装选择云端/本地渠道、模型及预算；云端使用本地凭据别名或环境变量，勿把密钥粘进工作流。有图任务需要支持视觉输入的模型与相应投影器。示例生成器本身不调用模型。\n这里只生成提示词，不生成图片；描述字数是软上限，不是 Tokens，不裁切句子。模型纠正最多每阶段追加一次，并非无限重试。把主节点或 Page 的 positive_prompt 接给 MOSS 提示词输入，width/height 接下游画布；bundle/report/source JSON 不是正向提示词。最终 MOSS 分词长度仍需在实际模型侧检查；示例与结构测试不证明画质或双语语义。\n单图 Comic 是原主节点的可选模式。需要多页+英中同布局时，请用 Director→Page 示例。"
+      ],
+      "title": "使用方法 / Read first"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      1,
+      "T8_LLM_PROVIDER_CONFIG"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

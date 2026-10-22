@@ -1,0 +1,298 @@
+{
+  "id": "8abf6484-2e6c-5472-a90e-aad6b553c225",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MOSSAuthoringPageT8",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        500,
+        560
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "bundle_json",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "bundle_json"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive_prompt",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "resolved_format",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "native_draft_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "source_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "paired_reading",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "unit_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSAuthoringPageT8"
+      },
+      "widgets_values": [
+        "{\"schema_version\":\"t8-moss-authoring-bundle/v1\",\"adapter_revision\":\"t8-moss-authoring/1\",\"complete\":true,\"profile\":\"Comic / 漫画卡通\",\"reference_mode\":\"context\",\"units\":[{\"unit_id\":\"page-1\",\"index\":1,\"width\":1256,\"height\":1672,\"reference_indices\":[],\"available_languages\":[\"en\",\"zh\"],\"sources\":{\"en\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"An original teaching comic page about a small red robot starting a walk.\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"A wide, black-bordered panel on warm ivory paper.\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"One small red robot with a square head, two round eyes and short legs, taking a step to the right.\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"A clean speech balloon with the exact original Chinese words.\",\"text\":\"先走一步。\",\"bbox\":[200,140,1000,360]}]},\"zh\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"原创教学漫画：一只小红机器人开始散步。\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"暖象牙纸面上的一个黑线宽画框。\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"一只小红机器人，方脑袋、两只圆眼睛和短腿，向右迈步。\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"干净对白气泡，保留完整中文原文。\",\"text\":\"先走一步。\",\"bbox\":[200,140,1000,360]}]}},\"sidecar\":{\"item_ids\":[\"frame\",\"robot\",\"speech\"],\"panel_order\":[\"frame\"],\"membership\":{\"robot\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false},\"speech\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false}},\"devices\":[],\"intensity\":\"quiet\",\"layout_signature\":{\"topology\":\"one tall panel\",\"emphasis\":\"the red robot\",\"framing_progression\":\"full-body view\",\"viewpoint\":\"eye level\",\"blocking\":\"robot moving right\",\"density\":\"sparse\",\"entry_exit\":\"rightward exit\",\"information_rhythm\":\"one action with one speech balloon\",\"panel_count\":1},\"state\":{\"identity_anchors\":{\"robot\":\"small red robot; square head; two round eyes; short legs\"},\"scene_anchors\":{\"path\":\"plain ivory ground\"},\"current_state\":{\"robot\":\"starting to walk\"}}}},{\"unit_id\":\"page-2\",\"index\":2,\"width\":1256,\"height\":1672,\"reference_indices\":[],\"available_languages\":[\"en\",\"zh\"],\"sources\":{\"en\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"An original teaching comic page about a small red robot starting a walk.\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"A wide, black-bordered panel on warm ivory paper.\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"One small red robot with a square head, two round eyes and short legs, taking a step to the right.\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"A clean speech balloon with the exact original Chinese words.\",\"text\":\"我们出发！\",\"bbox\":[200,140,1000,360]}]},\"zh\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"原创教学漫画：一只小红机器人开始散步。\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"暖象牙纸面上的一个黑线宽画框。\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"一只小红机器人，方脑袋、两只圆眼睛和短腿，向右迈步。\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"干净对白气泡，保留完整中文原文。\",\"text\":\"我们出发！\",\"bbox\":[200,140,1000,360]}]}},\"sidecar\":{\"item_ids\":[\"frame\",\"robot\",\"speech\"],\"panel_order\":[\"frame\"],\"membership\":{\"robot\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false},\"speech\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false}},\"devices\":[],\"intensity\":\"turning\",\"layout_signature\":{\"topology\":\"one tall panel\",\"emphasis\":\"the red robot\",\"framing_progression\":\"full-body view\",\"viewpoint\":\"eye level\",\"blocking\":\"robot moving right\",\"density\":\"sparse\",\"entry_exit\":\"rightward exit\",\"information_rhythm\":\"one action with one speech balloon\",\"panel_count\":1},\"state\":{\"identity_anchors\":{\"robot\":\"small red robot; square head; two round eyes; short legs\"},\"scene_anchors\":{\"path\":\"plain ivory ground\"},\"current_state\":{\"robot\":\"starting to walk\"}}}}],\"reference_map\":[],\"edited_unit_ids\":[],\"continuity_context\":\"The same small red robot has a square head, two round eyes and short legs on both pages.\",\"report\":{\"logical_generation_calls\":0,\"chat_post_attempts\":0,\"correction_calls\":0,\"stage_records\":[],\"semantics_verified\":false,\"translation_quality\":\"unverified\",\"bilingual_complete\":true,\"image_generation_performed\":false}}",
+        1,
+        "en"
+      ],
+      "title": "Page 1 · en · positive_prompt → MOSS"
+    },
+    {
+      "id": 2,
+      "type": "MOSSAuthoringPageT8",
+      "pos": [
+        0,
+        650
+      ],
+      "size": [
+        500,
+        560
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "bundle_json",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "bundle_json"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive_prompt",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "resolved_format",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "native_draft_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "source_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "paired_reading",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "unit_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSAuthoringPageT8"
+      },
+      "widgets_values": [
+        "{\"schema_version\":\"t8-moss-authoring-bundle/v1\",\"adapter_revision\":\"t8-moss-authoring/1\",\"complete\":true,\"profile\":\"Comic / 漫画卡通\",\"reference_mode\":\"context\",\"units\":[{\"unit_id\":\"page-1\",\"index\":1,\"width\":1256,\"height\":1672,\"reference_indices\":[],\"available_languages\":[\"en\",\"zh\"],\"sources\":{\"en\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"An original teaching comic page about a small red robot starting a walk.\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"A wide, black-bordered panel on warm ivory paper.\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"One small red robot with a square head, two round eyes and short legs, taking a step to the right.\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"A clean speech balloon with the exact original Chinese words.\",\"text\":\"先走一步。\",\"bbox\":[200,140,1000,360]}]},\"zh\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"原创教学漫画：一只小红机器人开始散步。\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"暖象牙纸面上的一个黑线宽画框。\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"一只小红机器人，方脑袋、两只圆眼睛和短腿，向右迈步。\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"干净对白气泡，保留完整中文原文。\",\"text\":\"先走一步。\",\"bbox\":[200,140,1000,360]}]}},\"sidecar\":{\"item_ids\":[\"frame\",\"robot\",\"speech\"],\"panel_order\":[\"frame\"],\"membership\":{\"robot\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false},\"speech\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false}},\"devices\":[],\"intensity\":\"quiet\",\"layout_signature\":{\"topology\":\"one tall panel\",\"emphasis\":\"the red robot\",\"framing_progression\":\"full-body view\",\"viewpoint\":\"eye level\",\"blocking\":\"robot moving right\",\"density\":\"sparse\",\"entry_exit\":\"rightward exit\",\"information_rhythm\":\"one action with one speech balloon\",\"panel_count\":1},\"state\":{\"identity_anchors\":{\"robot\":\"small red robot; square head; two round eyes; short legs\"},\"scene_anchors\":{\"path\":\"plain ivory ground\"},\"current_state\":{\"robot\":\"starting to walk\"}}}},{\"unit_id\":\"page-2\",\"index\":2,\"width\":1256,\"height\":1672,\"reference_indices\":[],\"available_languages\":[\"en\",\"zh\"],\"sources\":{\"en\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"An original teaching comic page about a small red robot starting a walk.\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"A wide, black-bordered panel on warm ivory paper.\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"One small red robot with a square head, two round eyes and short legs, taking a step to the right.\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"A clean speech balloon with the exact original Chinese words.\",\"text\":\"我们出发！\",\"bbox\":[200,140,1000,360]}]},\"zh\":{\"width\":1256,\"height\":1672,\"bbox_coord_space\":\"abs\",\"bbox_format\":\"xyxy\",\"summary\":{\"canvas\":\"multi_panel\",\"caption\":\"原创教学漫画：一只小红机器人开始散步。\"},\"items\":[{\"label\":\"comic_panel\",\"caption\":\"暖象牙纸面上的一个黑线宽画框。\",\"bbox\":[40,40,1216,1632]},{\"label\":\"character\",\"caption\":\"一只小红机器人，方脑袋、两只圆眼睛和短腿，向右迈步。\",\"bbox\":[200,500,760,1450]},{\"label\":\"text\",\"caption\":\"干净对白气泡，保留完整中文原文。\",\"text\":\"我们出发！\",\"bbox\":[200,140,1000,360]}]}},\"sidecar\":{\"item_ids\":[\"frame\",\"robot\",\"speech\"],\"panel_order\":[\"frame\"],\"membership\":{\"robot\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false},\"speech\":{\"panel_ids\":[\"frame\"],\"global_overlay\":false}},\"devices\":[],\"intensity\":\"turning\",\"layout_signature\":{\"topology\":\"one tall panel\",\"emphasis\":\"the red robot\",\"framing_progression\":\"full-body view\",\"viewpoint\":\"eye level\",\"blocking\":\"robot moving right\",\"density\":\"sparse\",\"entry_exit\":\"rightward exit\",\"information_rhythm\":\"one action with one speech balloon\",\"panel_count\":1},\"state\":{\"identity_anchors\":{\"robot\":\"small red robot; square head; two round eyes; short legs\"},\"scene_anchors\":{\"path\":\"plain ivory ground\"},\"current_state\":{\"robot\":\"starting to walk\"}}}}],\"reference_map\":[],\"edited_unit_ids\":[],\"continuity_context\":\"The same small red robot has a square head, two round eyes and short legs on both pages.\",\"report\":{\"logical_generation_calls\":0,\"chat_post_attempts\":0,\"correction_calls\":0,\"stage_records\":[],\"semantics_verified\":false,\"translation_quality\":\"unverified\",\"bilingual_complete\":true,\"image_generation_performed\":false}}",
+        1,
+        "zh"
+      ],
+      "title": "Page 1 · zh · positive_prompt → MOSS"
+    },
+    {
+      "id": 3,
+      "type": "T8ShowText",
+      "pos": [
+        600,
+        0
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 1,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 4,
+      "type": "T8ShowText",
+      "pos": [
+        600,
+        650
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 5,
+      "type": "Note",
+      "pos": [
+        -520,
+        0
+      ],
+      "size": [
+        460,
+        450
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "【纯CPU，可直接运行】没有Provider/LoadImage/模型节点。两个Page各自内置相同的完整合法双语教学bundle；这是手工原稿数据，历史调用数为0。切换页码1/2、语言en/zh，查看positive_prompt、1256×1672、原始source及原生投影draft。漫画源保留comic_panel，原生编译副本转object+tag，不改源稿。\n粘贴新的完整bundle到Page的bundle_json即可；此字段关闭动态提示词。不要让会展开花括号的动态PromptText生成JSON。\n没有图片渲染或语义质量证明。要真正生成MOSS图片，请自行把positive_prompt和宽高接下游模型。"
+      ],
+      "title": "使用方法 / Read first"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

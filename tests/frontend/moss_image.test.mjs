@@ -7,17 +7,21 @@ import * as core from "../../web/js/moss_image_ui.mjs";
 const values = ["A quiet cup.", core.GENERATE, "AUTO / 自动", 1024, 1024, "按需求（默认英文）/ Auto", core.API_MODES[0],
     "", 0, 1, 16384, "", "gemini-3.5-flash", "qwen/qwen3.8-flash-next", "", 0, "randomize",
     "test-model.gguf", "AUTO（自动匹配）", 32768, 16384, "关闭（推荐，速度优先）", "medium",
-    "执行后卸载（推荐）", "AUTO（显存不足时释放）", "t8-moss-test-slot", "normal"];
+    "执行后卸载（推荐）", "AUTO（显存不足时释放）", "t8-moss-test-slot", "normal", core.CLASSIC];
 
-test("MOSS five shipped workflows configure and serialize their exact 27 named values", async () => {
+test("MOSS five legacy workflows keep their exact 27 values and migrate to an appended Classic profile", async () => {
     for (const stem of ["caption", "layout", "spatial", "compile_only", "compile_error"]) {
         const workflow = JSON.parse(await readFile(new URL(`../../example_workflows/moss_${stem}_example.json`, import.meta.url), "utf8"));
         const saved = workflow.nodes.find(n => n.type === core.MOSS_ID);
         const node = new Node(); node.widgets.reverse();
         core.configureMoss(node, saved, Node.prototype.onConfigure, [saved]);
-        for (const name of core.MOSS_NAMES) assert.equal(node.widgets.find(w => w.name === name).value, saved.widgets_values_named[name], `${stem}: ${name}`);
+        for (const name of core.LEGACY_MOSS_NAMES) assert.equal(node.widgets.find(w => w.name === name).value, saved.widgets_values_named[name], `${stem}: ${name}`);
+        assert.equal(node.widgets.find(w => w.name === "authoring_profile").value, core.CLASSIC);
         const again = {}; core.serializeMoss(node, again);
-        assert.deepEqual(again.widgets_values, saved.widgets_values, stem);
+        assert.deepEqual(again.widgets_values.slice(0, 27), saved.widgets_values, stem);
+        assert.equal(again.widgets_values.length, 28);
+        assert.equal(again.widgets_values.at(-1), core.CLASSIC);
+        assert.equal(again.properties[core.MOSS_PROFILE_SCHEMA], 2);
     }
 });
 

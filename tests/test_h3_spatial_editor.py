@@ -106,13 +106,16 @@ class SpatialEditorTests(unittest.TestCase):
     def test_prior_33_nodes_source_and_schemas_untouched(self):
         import subprocess
         from test_directional_skills import ROOT,GIT_ROOT
-        for name in ('nodes.py','h3_visual_marker.py','seedance20.py','moss_image.py','music3.py','yue2.py','qwen_image21.py','web/js/minimax_h3_prompt_enhancer.js'):
+        # MOSS now has a separately audited opt-in authoring append; its prior
+        # schema/request/bounded contracts are frozen in test_moss_authoring.
+        for name in ('nodes.py','h3_visual_marker.py','seedance20.py','music3.py','yue2.py','qwen_image21.py','web/js/minimax_h3_prompt_enhancer.js'):
             old=subprocess.check_output(['git','show','25cc889b8d5d9edb9366995a6f0e5d09ceabae1f:'+name],cwd=GIT_ROOT)
             self.assertEqual((ROOT/name).read_bytes().replace(b'\r\n',b'\n'),old.replace(b'\r\n',b'\n'),name)
         import sys
         nodes=asyncio.run(asyncio.run(sys.modules[h3.__package__].comfy_entrypoint()).get_node_list())
-        self.assertEqual(len(nodes),34);self.assertEqual(nodes[-2],vm.T8H3VisualMarkerConfig)
-        self.assertEqual(nodes[-1],editor.T8H3SpatialMarkerCanvas)
+        self.assertEqual(len(nodes),36);self.assertEqual(nodes[32],vm.T8H3VisualMarkerConfig)
+        self.assertEqual(nodes[33],editor.T8H3SpatialMarkerCanvas)
+        self.assertEqual([n.define_schema().node_id for n in nodes[34:]],['MOSSAuthoringDirectorT8','MOSSAuthoringPageT8'])
 
 
 class PreviewRouteTests(unittest.IsolatedAsyncioTestCase):

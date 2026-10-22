@@ -3,7 +3,31 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
-## [Unreleased]
+## [1.37.0] - 2026-10-23
+
+- Expose the existing MOSS description-character setting without moving its
+  saved position. Append a default-Classic authoring profile; preserve old
+  27-field workflows, six outputs, native compiler and cached-result behavior.
+- Add independently adapted, opt-in single-image Fisher/Comic guidance and soft
+  Unicode-length diagnostics. Automatic Chinese Fisher prefers a useful long
+  expansion; explicit short/language/length constraints win. Complete drafts are
+  never truncated, and character counts do not guarantee the MOSS token budget.
+- Add independent `MOSSAuthoringDirectorT8` and zero-inference
+  `MOSSAuthoringPageT8`. Comic plans up to 16 pages and generates paired
+  English/Chinese captions with shared geometry. Fisher uses one independent
+  unit per reference by default, or one explicitly fused unit; at most ten
+  expanded references are accepted. Generation requires shared provider config.
+- Add typed, explicitly scoped revisions, exact visible-copy preservation,
+  unchanged unselected units, zero-edit/last-good recovery without generation,
+  and bounded same-origin, read-only failed-draft inspection. A failed partial
+  is not a complete/selectable collection and cannot overwrite last-good state.
+- Bound each authoring stage to one optional correction; do not automatically
+  resubmit failed network requests. Preserve existing transport, local-model and
+  Strata ownership/security boundaries. Only Page's positive output goes to the
+  image encoder; collection/source/report outputs remain authoring metadata.
+- Add bilingual node help and practical workflow guidance. Geometry and JSON
+  validation are not translation-semantic, aesthetic or rendered-image
+  acceptance; no real-LLM quality benefit is claimed.
 
 ## [1.36.0] - 2026-10-19
 

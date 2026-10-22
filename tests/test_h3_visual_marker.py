@@ -292,7 +292,8 @@ class VisualMarkerTests(unittest.TestCase):
         old_schema = namespace["define_schema"](h3.MiniMaxH3PromptEnhancer)
         self.assertEqual([x.as_dict() for x in schema.inputs[:-1]], [x.as_dict() for x in old_schema.inputs])
         self.assertEqual([x.as_dict() for x in schema.outputs], [x.as_dict() for x in old_schema.outputs])
-        for path in ("seedance20.py", "moss_image.py", "music3.py", "yue2.py", "qwen_image21.py",
+        # MOSS authoring has its own frozen 1.36 schema/request regression.
+        for path in ("seedance20.py", "music3.py", "yue2.py", "qwen_image21.py",
                      "web/js/minimax_h3_prompt_enhancer.js"):
             old = subprocess.check_output(["git", "show", BASELINE+":"+path], cwd=GIT_ROOT)
             self.assertEqual((ROOT/path).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"), path)
@@ -301,9 +302,10 @@ class VisualMarkerTests(unittest.TestCase):
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         nodes = asyncio.run(extension.get_node_list())
-        self.assertEqual(len(nodes), 34)
-        self.assertEqual(nodes[-2].define_schema().node_id, "T8H3VisualMarkerConfig")
-        self.assertEqual(nodes[-1].define_schema().node_id, "T8H3SpatialMarkerCanvas")
+        self.assertEqual(len(nodes), 36)
+        self.assertEqual(nodes[32].define_schema().node_id, "T8H3VisualMarkerConfig")
+        self.assertEqual(nodes[33].define_schema().node_id, "T8H3SpatialMarkerCanvas")
+        self.assertEqual([n.define_schema().node_id for n in nodes[34:]], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
         for node in nodes:
             if node is not h3.MiniMaxH3PromptEnhancer:
                 self.assertNotIn("visual_marker_config", [i.id for i in node.define_schema().inputs])

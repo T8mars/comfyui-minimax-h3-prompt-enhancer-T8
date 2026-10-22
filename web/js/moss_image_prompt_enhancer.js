@@ -35,6 +35,9 @@ const HELP = "MOSS Image Prompt Enhancer T8\n"
     + "7. 默认最多1次额外纠正，可关为0。硬失败不输出坏JSON或空提示词；可查看失败草稿。软字数超限保留完整结果。\n"
     + "8. MOSS官方编码器含包装后截断至4096 tokens。本节点未运行匹配分词器，不把字符数或LLM预算当防截断证明。\n"
     + "9. 恢复读取当前进程中上次成功完整结果，不重新增强；通常保存1小时，超限/过期不可恢复。\n"
+    + "10. 最大描述字数现位于主界面：0=自动。按Unicode码点统计，含空格标点；Layout只计summary与各项caption，不计可见text、坐标和JSON包装。它是软上限，保留完整稿，不是Token或防截断保证。\n"
+    + "11. Classic保持原版；Comic用于单张/单页漫画；Fisher用于单张通用强化。完整漫画双语/多页和多参考独立稿属于独立编排入口，本节点不会暗中规划整本、翻译或合并多张参考。\n"
+    + "12. Fisher自动语言默认中文；显式语言、短版和字数要求优先。自动中文且未指定长度时，以1500–2500汉字为软创作目标；素材不足不编造凑字，有字数上限时不强加最低长度。\n"
     + "English: Caption is prose; Layout is locally compiled JSON. Only positive_prompt goes to MOSS. Compile-only needs no Key/model. References are LLM context, not native editing. Geometry checks are not rendered-quality or token-budget verification.";
 
 function dialog(content, title = "MOSS / 只读查看") {
@@ -57,6 +60,7 @@ function actions(node) {
     node.t8MossInstalled = true;
     const action = (name, callback) => {
         const widget = node.addWidget("button", name, "", callback, { serialize: false });
+        widget.serialize = false;
         widget.serializeValue = () => undefined; return widget;
     };
     const changed = () => {
@@ -70,7 +74,13 @@ function actions(node) {
     node.t8MossProviderWidget = action("实际渠道 / Effective provider", () => window.alert(effectiveMossMode(node)));
     node.t8MossStatusWidget = action("等待执行 / Ready · Token未核验", () => window.alert(mossStatus(node.t8MossLast, node.t8MossStale)));
     const recovery = addCompletionRecoveryButton(node, MOSS_ID);
-    if (recovery) recovery.label = recovery.name = "🔄 恢复上次成功结果（不重新生成）/ Restore";
+    if (recovery) {
+        recovery.label = recovery.name = "🔄 恢复上次成功结果（不重新生成）/ Restore";
+        recovery.serialize = false;
+        recovery.options ||= {};
+        recovery.options.serialize = false;
+        recovery.serializeValue = () => undefined;
+    }
     action("📝 查看失败草稿（未验证，不接下游）/ Failed draft", async () => {
         node.t8EnsureRecoverySlot?.();
         const slot = node.widgets?.find(w => w.name === "recovery_slot")?.value || "";

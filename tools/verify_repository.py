@@ -295,6 +295,19 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "qwen_image21.py",
         "moss_image.py",
         "moss_image_contract.py",
+        "moss_authoring.py",
+        "moss_authoring_rules.py",
+        "moss_authoring_contract.py",
+        "moss_authoring_bundle.py",
+        "moss_authoring_nodes.py",
+        "moss_authoring_runtime.py",
+        "moss_authoring_state.py",
+        "moss_authoring_routes.py",
+        "web/js/moss_authoring_director.js",
+        "web/js/moss_authoring_ui.mjs",
+        *{f"web/js/docs/{node}/{lang}.md" for node in ("MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8") for lang in ("zh", "en")},
+        "research_sources/moss-authoring.json",
+        *{f"example_workflows/moss_authoring_{name}.{ext}" for name in ("fisher_long", "fisher_short", "comic_single", "comic_two_pages", "fisher_independent", "fisher_fusion", "cpu_page", "fixed_layout_revision") for ext in ("json", "jpg")},
         "moss_image_state.py",
         "moss_image_routes.py",
         "moss_vendor/SKILL.md",
@@ -429,6 +442,7 @@ def run_optional_checks() -> None:
     subprocess.run([sys.executable, "tools/build_marker_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_storyboard_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_workflows.py", "--check"], cwd=ROOT, check=True)
+    subprocess.run([sys.executable, "tools/build_moss_authoring_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run(
         [sys.executable, "tools/build_example_workflows.py", "--check"],

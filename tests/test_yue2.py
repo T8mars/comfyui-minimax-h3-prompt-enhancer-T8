@@ -73,7 +73,7 @@ class YuE2Tests(unittest.TestCase):
         extension = asyncio.run(package.comfy_entrypoint())
         ids = [n.define_schema().node_id for n in asyncio.run(extension.get_node_list())]
         self.assertEqual(ids[24], yue.NODE_ID)
-        self.assertEqual(ids[28:], ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig", "T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas"])
+        self.assertEqual(ids[28:], ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig", "T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas", "MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
         self.assertEqual(len(ids), len(set(ids)))
         schema = yue.YuE2MusicPromptEnhancer.define_schema()
         self.assertEqual(len(schema.outputs), 5)

@@ -16,6 +16,47 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-23: opt-in MOSS authoring and visible character limit
+
+Retain the 27 MOSS names as an immutable prefix; append only `authoring_profile`
+as field 28, default Classic. New saves have `t8_moss_widgets_schema=2` plus
+consistent native/private named maps. A complete valid named 28-map may restore
+without its marker. Old 27-maps reset Classic; positional button tails cannot
+opt in without the marker. Connected numeric nulls project safe UI placeholders
+only with saved link evidence. Resolved values still validate before inference.
+
+`max_output_chars` stays at saved index 8 and keeps its default/range/step; only
+its visibility changes. Native Primitive follows that existing 100-step, unlike
+a computed INT producer; do not confuse its normalization with field shifting.
+The current owned Chrome check covers all 28 actual widget names, external
+prompt/width/height/limit, native API export, save/reload and reconnect at
+1256x1672. Node contracts separately cover linked-null, corrupt maps, old files
+and reordered runtime widgets. An actual upstream GetImageSize INT=80 (not
+Primitive folding) and ResolutionSelector=1256x1672 queue through the real host
+without normalization or field shifting.
+
+Append Director/Page after the old 34 nodes. Director has 17 canonical valued
+widgets, synchronous named restoration, unique in-memory recovery slots and
+three double-nonserializing actions. Page has three native widgets and nine
+outputs; JSON paste disables dynamic prompts. Only its selected positive output
+goes to MOSS. Bundle/source/report are never silently substituted for a positive.
+Director's seed explicitly disables native `control_after_generate`; checking
+only widgets filtered by canonical names would miss that host-added 18th field.
+Connected DOM text keeps a compact labeled row on coexisting-socket hosts;
+legacy converted widgets retain their native serialization hooks.
+The native browser checks old five plus new eight examples, 17/3 field reload,
+actual API exports, reconnect, a Comic two-page queue, cache-only queue, and
+same-origin read-only failed inspection. The eight new exports also queue on an
+owned CPU host using only synthetic loopback provider responses.
+
+Real queues cover V3 image batch expansion/order, Fisher independent/fusion,
+Comic source/translation shared geometry, page-2-only fixed revisions, failed
+translation blocking downstream while retaining English inspection data,
+restore with invalid lazy provider/brief, and zero-edit context with zero calls.
+Tests also cover Local per-stage budgets/lifecycle and whole-task Strata safety.
+No paid inference, real translation-quality, image rendering, RunningHub
+deployment or minimum-version old-frontend visual acceptance is implied.
+
 ### 2026-10-19: Show Text output restoration and copying
 
 `T8ShowText` keeps its existing STRING input/output and read-only DOM preview.

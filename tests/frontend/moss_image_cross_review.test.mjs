@@ -52,7 +52,7 @@ async function extensionNode() {
     const source = await compileExample();
     class Node {
         constructor() {
-            this.widgets = core.MOSS_NAMES.map(name => ({ name, value: source.widgets_values_named[name], type: "text", computeSize: () => [500, 28] }));
+            this.widgets = core.MOSS_NAMES.map(name => ({ name, value: name === "authoring_profile" ? core.CLASSIC : source.widgets_values_named[name], type: "text", computeSize: () => [500, 28] }));
             this.properties = {}; this.size = [540, 0]; this.inputs = []; this.id = 1;
             this.graph = { _nodes: [this], change() {} };
         }

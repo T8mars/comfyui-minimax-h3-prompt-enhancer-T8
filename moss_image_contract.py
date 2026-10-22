@@ -296,7 +296,7 @@ def decode_cached(values):
         fail("invalid_cache", "Stored MOSS contract version differs / 缓存合同版本不兼容。")
     counts = [report.get(name) for name in ("logical_generation_calls", "chat_post_attempts", "correction_calls")]
     allowed_warnings = {"moss_4096_token_budget_unverified", "description_over_limit", "correction_failed_draft_kept",
-                        "eight_pixel_canvas_downstream_unverified"}
+                        "eight_pixel_canvas_downstream_unverified", "fisher_length_target_unmet"}
     warnings = report.get("warnings")
     if (report.get("source_commit") != SOURCE_COMMIT or report.get("operation") not in (GENERATE, COMPILE)
             or any(type(n) is not int for n in counts) or not 0 <= counts[0] <= 2
@@ -310,4 +310,9 @@ def decode_cached(values):
         fail("invalid_cache", "Stored prompt and draft disagree / 缓存结果与草稿不一致。")
     if report.get("canvas") != {"width": int(width), "height": int(height)} or report.get("resolved_format") != actual:
         fail("invalid_cache", "Stored result metadata differs / 缓存元数据不一致。")
+    try:
+        from .moss_authoring import validate_cached_authoring
+    except ImportError:
+        from moss_authoring import validate_cached_authoring
+    validate_cached_authoring(report, compiled)
     return positive, int(width), int(height), actual, draft_text, report_text

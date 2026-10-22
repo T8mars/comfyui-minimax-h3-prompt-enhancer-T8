@@ -11,6 +11,7 @@ from comfy_api.latest import io
 
 from . import moss_image_contract as contract
 from . import moss_image_state as state
+from . import moss_authoring as authoring
 from .completion_recovery import RECOVERY_ACTION_RESTORE, recover_outputs, CompletionRecoveryError
 from .execution_diagnostics import DiagnosticsRun
 from .local_qwen_provider import (
@@ -304,6 +305,13 @@ def _bounded(complete, messages, validator, repairs, counters):
     raise last_error
 
 
+def _authoring_soft_error(error):
+    if isinstance(error, StrataProviderError):
+        return error.category in {"connection", "service_error", "service_busy", "truncated", "empty_content", "structured_output"}
+    return isinstance(error, (contract.MossContractError, PromptEnhancerError, LocalQwenProviderError,
+                              requests.RequestException, ChatCompletionTruncatedError))
+
+
 @strata_execution
 def _generate(current, controls, media, image_map, counters, *, api_mode, provider_request_options, seed):
     def validator(text):
@@ -312,10 +320,18 @@ def _generate(current, controls, media, image_map, counters, *, api_mode, provid
                                       locked_text=controls["locked_text"], max_chars=controls["max_output_chars"])
 
     def messages(parts=None):
+        if controls.get("authoring_profile", authoring.CLASSIC) != authoring.CLASSIC:
+            return authoring.build_messages(controls, [m["label"] for m in media], parts)
         return contract.build_messages(controls["prompt"], output_format=controls["output_format"], width=controls["width"],
                                        height=controls["height"], language=controls["output_language"],
                                        locked_text=controls["locked_text"], max_chars=controls["max_output_chars"],
                                        image_labels=[m["label"] for m in media], media_parts=parts)
+
+    def bounded(complete, message_list):
+        if controls.get("authoring_profile", authoring.CLASSIC) == authoring.CLASSIC:
+            return _bounded(complete, message_list, validator, controls["max_corrections"], counters)
+        policy = authoring.length_policy(controls["authoring_profile"], controls["prompt"], controls["output_language"], controls["max_output_chars"])
+        return authoring.bounded(complete, message_list, validator, controls["max_corrections"], counters, policy, _authoring_soft_error)
 
     model = _model(current)
     if is_local_qwen_api_mode(api_mode):
@@ -328,15 +344,17 @@ def _generate(current, controls, media, image_map, counters, *, api_mode, provid
         local_output_token_budget(initial_messages, settings)  # reject before taking model/VRAM ownership
         with LocalQwenProvider(settings, vision=bool(media)) as provider:
             def complete(message_list, repair):
+                if controls.get("authoring_profile", authoring.CLASSIC) != authoring.CLASSIC:
+                    local_output_token_budget(message_list, settings)
                 counters["logical_generation_calls"] += 1
                 text = provider.complete(message_list, temperature=0.1 if repair else 0.3, seed=seed, require_complete=True)
                 counters["failed_raw"] = text
                 return text
-            result, warning, repair_failed = _bounded(complete, initial_messages, validator, controls["max_corrections"], counters)
+            result, warning, repair_failed = bounded(complete, initial_messages)
     else:
         with _CloudCompletion(current, model, media, counters, validator) as complete:
             try:
-                result, warning, repair_failed = _bounded(complete, messages(complete.parts), validator, controls["max_corrections"], counters)
+                result, warning, repair_failed = bounded(complete, messages(complete.parts))
             except BaseException:
                 counters["failed_raw"] = complete.raw
                 raise
@@ -349,6 +367,8 @@ def _output(values, origin):
     status = {"origin": origin, "operation": report["operation"], "format": values[3], "width": values[1], "height": values[2],
               "calls": report["logical_generation_calls"], "corrections": report["correction_calls"],
               "warnings": report["warnings"], "token_check": "unverified", "draft": values[4]}
+    if "authoring_profile" in report:
+        status.update(authoring_profile=report["authoring_profile"], authoring_length=report["authoring_length"])
     return io.NodeOutput(*values, ui={"t8_moss_image_result": [json.dumps(status, ensure_ascii=False)]})
 
 
@@ -372,7 +392,8 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
                 io.String.Input("api_key", display_name="LLM API Key（本地无需）", optional=True, default="", force_input=True, lazy=True),
                 T8ProviderConfigIO.Input("provider_config", display_name="共享 LLM 渠道配置（可选）", optional=True, lazy=True),
                 io.String.Input("locked_text", display_name="锁定画面文案 / Exact visible text", optional=True, default="", multiline=True, dynamic_prompts=False, advanced=True),
-                io.Int.Input("max_output_chars", display_name="最大描述字数（0=自动）/ Description limit", optional=True, default=0, min=0, max=contract.MAX_DESCRIPTION_CHARS, step=100, advanced=True),
+                io.Int.Input("max_output_chars", display_name="最大描述字数（0=自动）/ Description limit", optional=True, default=0, min=0, max=contract.MAX_DESCRIPTION_CHARS, step=100,
+                             tooltip="Unicode description characters, including punctuation/whitespace; excludes Layout visible text and JSON. Soft maximum, not Tokens; never truncates. 0 = automatic."),
                 io.Int.Input("max_corrections", display_name="最多追加纠正 / Extra correction calls", optional=True, default=1, min=0, max=1, advanced=True),
                 io.Int.Input("llm_max_tokens", display_name="云端生成 Token（含思考，不是MOSS 4096）", optional=True, default=16384, min=256, max=65536, step=1024, advanced=True),
                 io.String.Input("draft_json", display_name="原始草稿 / Draft JSON（仅编译）", optional=True, default="", multiline=True, dynamic_prompts=False, advanced=True, lazy=True),
@@ -390,6 +411,7 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
                 io.Combo.Input("local_comfy_memory_policy", display_name="本地显存策略", options=LOCAL_COMFY_MEMORY_POLICIES, default=LOCAL_COMFY_MEMORY_POLICIES[0], optional=True, advanced=True),
                 io.String.Input("recovery_slot", optional=True, default="", advanced=True, socketless=True),
                 io.String.Input("recovery_action", optional=True, default="normal", advanced=True, socketless=True),
+                io.Combo.Input("authoring_profile", display_name="强化模式 / Authoring profile", options=list(authoring.PROFILES), default=authoring.CLASSIC, optional=True, socketless=True),
             ], outputs=[io.String.Output(display_name="正向提示词 / positive_prompt"), io.Int.Output(display_name="宽 / width"),
                         io.Int.Output(display_name="高 / height"), io.String.Output(display_name="实际格式 / resolved_format"),
                         io.String.Output(display_name="可编辑草稿 / draft_json"), io.String.Output(display_name="诊断报告 / report_json")])
@@ -397,12 +419,14 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
     @classmethod
     def validate_inputs(cls, prompt="", operation=contract.GENERATE, output_format=contract.AUTO, width=1024, height=1024,
                         output_language=contract.LANG_AUTO, max_output_chars=0, max_corrections=1,
-                        draft_json="", recovery_action="normal", **kwargs):
+                        draft_json="", recovery_action="normal", authoring_profile=authoring.CLASSIC, **kwargs):
         if recovery_action == RECOVERY_ACTION_RESTORE:
             return True
         if operation is None:
             return True  # upstream mode is unresolved; execute validates the resolved branch
         try:
+            if operation == contract.GENERATE and authoring_profile is not None:
+                authoring.validate_profile(authoring_profile)
             # Graph validation cannot resolve upstream INT/STRING widgets yet.
             # execute checks every resolved value before any provider/model.
             validate_controls(operation, contract.AUTO if output_format is None else output_format,
@@ -465,7 +489,7 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
                 local_model=DEFAULT_MODEL_FILENAME, local_mmproj=AUTO_MMPROJ, local_context_size=DEFAULT_CONTEXT_SIZE,
                 local_max_tokens=DEFAULT_MAX_TOKENS, local_think_mode=LOCAL_THINK_OFF, local_reasoning_effort="medium",
                 local_unload_policy=LOCAL_UNLOAD_AFTER_RUN, local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0],
-                recovery_slot="", recovery_action="normal", **kwargs):
+                recovery_slot="", recovery_action="normal", authoring_profile=authoring.CLASSIC, **kwargs):
         if recovery_action == RECOVERY_ACTION_RESTORE:
             diagnostics = DiagnosticsRun(NODE_ID, "cache", 1, emit_progress=False)
             try:
@@ -494,12 +518,15 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
                 model, warning, repair_failed, mapping = "none", "", False, []
                 provider_mode = "none"
             else:
+                authoring.validate_profile(authoring_profile)
                 contract.clean_text(prompt, "brief", limit=64000)
                 if not prompt.strip():
                     raise MossImageError("Brief is required / 请填写创作需求。")
                 contract.locked_blocks(locked_text)
                 _canvas_conflict(prompt, width, height)
                 media, mapping = image_plan(reference_inputs(reference_images, kwargs))
+                if authoring_profile == authoring.FISHER and len(media) > 1:
+                    raise MossImageError("Fisher single-image mode cannot merge independent references / Fisher多图默认须逐张处理，请分别连接单图；完整集合入口单独处理独立/融合模式。")
                 current = _resolved_values({"api_mode": api_mode, "api_key": api_key or "", "custom_model": custom_model,
                     "ai_workshop_model": ai_workshop_model, "openai_base_url": openai_base_url,
                     "local_model": local_model, "local_mmproj": local_mmproj, "local_context_size": local_context_size,
@@ -517,6 +544,8 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
                 controls = {"prompt": prompt, "output_format": output_format, "width": width, "height": height,
                             "output_language": output_language, "locked_text": locked_text, "max_output_chars": max_output_chars,
                             "max_corrections": max_corrections}
+                if authoring_profile != authoring.CLASSIC:
+                    controls["authoring_profile"] = authoring_profile
                 result, model, warning, repair_failed = _generate(current, controls, media, mapping, counters,
                     api_mode=current["api_mode"], provider_request_options=current["provider_request_options"], seed=seed)
                 provider_mode = current["api_mode"]
@@ -537,6 +566,10 @@ class MOSSImagePromptEnhancer(io.ComfyNode):
                 **{k: v for k, v in counters.items() if k != "failed_raw"}, **details,
                 "repair_failed": repair_failed, "warnings": warnings, "image_generation_performed": False,
                 "default_model_quality": "requires_live_acceptance"}
+            if operation == contract.GENERATE and authoring_profile != authoring.CLASSIC:
+                policy = authoring.length_policy(authoring_profile, prompt, output_language, max_output_chars)
+                report.update(authoring_profile=authoring_profile, authoring_revision=authoring.REVISION,
+                              authoring_length=authoring.length_metadata(result, policy))
             outputs = positive, out_width, out_height, actual, editable, json.dumps(report, ensure_ascii=False)
             interrupted()
             state.commit(recovery_slot, token, outputs)

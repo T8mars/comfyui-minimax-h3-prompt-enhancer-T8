@@ -1,0 +1,487 @@
+{
+  "id": "89bd7f53-dc8d-5503-a31f-3e7813882d22",
+  "revision": 0,
+  "last_node_id": 7,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8LLMProviderConfig",
+      "pos": [
+        -520,
+        0
+      ],
+      "size": [
+        440,
+        520
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8LLMProviderConfig",
+        "t8_provider_config_widgets_schema": 1
+      },
+      "widgets_values": [
+        "Local Qwen",
+        "AUTO（兼容策略）",
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "",
+        "",
+        "gemini-3.5-flash",
+        "",
+        "http://127.0.0.1:8080",
+        "AUTO",
+        "",
+        "none",
+        0,
+        0,
+        "frames",
+        1.0,
+        8,
+        1800.0,
+        false
+      ],
+      "widgets_values_named": {
+        "provider": "Local Qwen",
+        "temperature_policy": "AUTO（兼容策略）",
+        "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+        "local_mmproj": "AUTO（自动匹配）",
+        "local_context_size": 32768,
+        "local_max_tokens": 16384,
+        "local_think_mode": "关闭（推荐，速度优先）",
+        "local_reasoning_effort": "medium",
+        "local_video_sample_fps": 2.0,
+        "local_unload_policy": "执行后卸载（推荐）",
+        "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+        "credential_alias": "",
+        "openai_base_url": "",
+        "custom_model": "",
+        "ai_workshop_model": "gemini-3.5-flash",
+        "extra_parameters_json": "",
+        "strata_url": "http://127.0.0.1:8080",
+        "strata_model": "AUTO",
+        "strata_credential_alias": "",
+        "strata_reasoning_effort": "none",
+        "strata_max_tokens": 0,
+        "strata_reasoning_budget_tokens": 0,
+        "strata_video_mode": "frames",
+        "strata_video_sample_fps": 1.0,
+        "strata_video_max_frames": 8,
+        "strata_timeout_s": 1800.0,
+        "strata_allow_private_network": false
+      },
+      "title": "先选择自己的渠道/模型 / Configure your own provider"
+    },
+    {
+      "id": 2,
+      "type": "MOSSAuthoringDirectorT8",
+      "pos": [
+        40,
+        0
+      ],
+      "size": [
+        580,
+        1020
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": 1,
+          "shape": 7
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "type": "IMAGE",
+          "link": 2,
+          "shape": 7,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_images.reference_image_1",
+          "type": "IMAGE",
+          "link": 3,
+          "shape": 7,
+          "label": "reference_image_1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bundle_json",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "unit_count",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "paired_reading",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSAuthoringDirectorT8",
+        "t8_moss_authoring_widgets_v1": {
+          "brief": "简短中文描述。根据参考图的几何配色和图形关系创作干净的扁平教学插画，不照搬图中文字。两张参考各自创作独立图，不能把两张图合到一起。",
+          "profile": "Fisher / 通用长版",
+          "width": 1024,
+          "height": 1024,
+          "max_output_chars": 500,
+          "max_corrections": 1,
+          "page_count": 0,
+          "reference_mode": "independent",
+          "descriptive_language": "Auto / 自动（Fisher默认中文）",
+          "locked_text": "",
+          "continuity_context": "",
+          "layout_context_json": "",
+          "preserve_layout": true,
+          "llm_max_tokens": 16384,
+          "seed": 0,
+          "recovery_slot": "",
+          "recovery_action": "normal"
+        }
+      },
+      "widgets_values": [
+        "简短中文描述。根据参考图的几何配色和图形关系创作干净的扁平教学插画，不照搬图中文字。两张参考各自创作独立图，不能把两张图合到一起。",
+        "Fisher / 通用长版",
+        1024,
+        1024,
+        500,
+        1,
+        0,
+        "independent",
+        "Auto / 自动（Fisher默认中文）",
+        "",
+        "",
+        "",
+        true,
+        16384,
+        0,
+        "",
+        "normal"
+      ],
+      "widgets_values_named": {
+        "brief": "简短中文描述。根据参考图的几何配色和图形关系创作干净的扁平教学插画，不照搬图中文字。两张参考各自创作独立图，不能把两张图合到一起。",
+        "profile": "Fisher / 通用长版",
+        "width": 1024,
+        "height": 1024,
+        "max_output_chars": 500,
+        "max_corrections": 1,
+        "page_count": 0,
+        "reference_mode": "independent",
+        "descriptive_language": "Auto / 自动（Fisher默认中文）",
+        "locked_text": "",
+        "continuity_context": "",
+        "layout_context_json": "",
+        "preserve_layout": true,
+        "llm_max_tokens": 16384,
+        "seed": 0,
+        "recovery_slot": "",
+        "recovery_action": "normal"
+      }
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "pos": [
+        -1000,
+        0
+      ],
+      "size": [
+        430,
+        310
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "moss_authoring_fisher_independent.jpg"
+      ],
+      "title": "上传原创教学图或自己的图 / Upload reference"
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        -1000,
+        380
+      ],
+      "size": [
+        430,
+        310
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "moss_authoring_fisher_fusion.jpg"
+      ],
+      "title": "上传原创教学图或自己的图 / Upload reference"
+    },
+    {
+      "id": 5,
+      "type": "MOSSAuthoringPageT8",
+      "pos": [
+        720,
+        0
+      ],
+      "size": [
+        500,
+        560
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "bundle_json",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "bundle_json"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive_prompt",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "resolved_format",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "native_draft_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "source_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "paired_reading",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "unit_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MOSSAuthoringPageT8"
+      },
+      "widgets_values": [
+        "",
+        1,
+        "zh"
+      ],
+      "title": "Page 1 · zh · positive_prompt → MOSS"
+    },
+    {
+      "id": 6,
+      "type": "T8ShowText",
+      "pos": [
+        1320,
+        0
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 5,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "Note",
+      "pos": [
+        -1000,
+        800
+      ],
+      "size": [
+        460,
+        450
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "【先配置，再运行 / Configure before running】\n共享配置默认 Local Qwen，不包含密钥。请按自己的安装选择云端/本地渠道、模型及预算；云端使用本地凭据别名或环境变量，勿把密钥粘进工作流。有图任务需要支持视觉输入的模型与相应投影器。示例生成器本身不调用模型。\n这里只生成提示词，不生成图片；描述字数是软上限，不是 Tokens，不裁切句子。模型纠正最多每阶段追加一次，并非无限重试。把主节点或 Page 的 positive_prompt 接给 MOSS 提示词输入，width/height 接下游画布；bundle/report/source JSON 不是正向提示词。最终 MOSS 分词长度仍需在实际模型侧检查；示例与结构测试不证明画质或双语语义。\n先把本目录 moss_authoring_fisher_independent.jpg 和 moss_authoring_fisher_fusion.jpg分别拖到两个 LoadImage 节点上传，或选择你自己的两张图；示例不自动写入 ComfyUI/input。这两张图片是本项目原创CPU教学示意图，不是真实用户图。\nindependent：两张图→两个独立单元，Page=1/2按上传顺序选择；单图批次会先展开。"
+      ],
+      "title": "使用方法 / Read first"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "T8_LLM_PROVIDER_CONFIG"
+    ],
+    [
+      2,
+      3,
+      0,
+      2,
+      1,
+      "IMAGE"
+    ],
+    [
+      3,
+      4,
+      0,
+      2,
+      2,
+      "IMAGE"
+    ],
+    [
+      4,
+      2,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      5,
+      0,
+      6,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

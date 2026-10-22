@@ -18,6 +18,12 @@
 
 “仅校验编译”无需 API 或模型。最多追加一次纠正；合法首稿不会因可选纠正失败而丢失，硬校验失败则停止下游并可查看失败草稿。4096 目标 Token 未自动测量，不能以字符数保证不截断。[用法、边界与示例](docs/moss-image.md)。原有节点及旧工作流不改。
 
+主节点现在直接显示“最大描述字数”，并可选 `Classic / 原版`（默认）、`Fisher / 通用长版`、`Comic / 漫画卡通`。旧 27 字段位置和六输出不变，新模式只追加在末尾；旧工作流保持 Classic。字数是描述正文的软字符上限，不是 Token，不会截断草稿。Fisher 自动中文长版以约 1500–2500 汉字为软目标，明确短版/上限优先；主 Comic 仍是一张图、一种描述语言。
+
+多页或多参考图请搜索 **MOSS Authoring Director T8**，生成时必接 **T8 LLM Provider Config**。Comic 最多 16 页，先规划再逐页产出共几何的英文/中文稿；Fisher 默认逐参考图独立成稿，只有显式选择 `fusion` 才融合一张。批次展开合计最多 10 张参考图。Director 的 `bundle_json` 接 **MOSS Authoring Page T8**，选页码和语言，再把 Page 的输出 0 正向、1 宽、2 高接下游；整册、报告、源稿绝不直接接正向。[完整接线、修订与调用费用](docs/moss-image.md#整册与多参考图director--page)。这些是独立改编的创作规则，不是 H3/Seedance 分镜配置，也不证明实际成图或翻译质量。
+
+入门示例：[零模型 CPU 选页](example_workflows/moss_authoring_cpu_page.json) · [Comic 两页双语](example_workflows/moss_authoring_comic_two_pages.json) · [两图独立](example_workflows/moss_authoring_fisher_independent.json) / [显式融合](example_workflows/moss_authoring_fisher_fusion.json) · [固定布局修订第二页](example_workflows/moss_authoring_fixed_layout_revision.json)。两图示例需先将 `example_workflows` 中的 `moss_authoring_fisher_independent.jpg`、`moss_authoring_fisher_fusion.jpg` 分别上传至两个 LoadImage；不会自动写入 ComfyUI input。CPU 示例内置手工教学稿，不调用模型，也不是成图效果证明。
+
 画布支持 **8 的倍数**（16–16384），包括 1256×1672；生成、Layout 编译、保存重载和恢复都保持原宽高，不要求改成 16 倍数。下游 latent 可能自行对齐，精确排版请核对最终画布。
 
 ## 新增：Strata 本地服务桥接

@@ -59,6 +59,10 @@ async function connect() {
 
 try {
   const send = await connect();
+  if(mode==='comfy-moss-authoring'){
+    const {runAuthoringBrowser}=await import('./moss_authoring_browser.mjs');
+    await runAuthoringBrowser({send,providerBase:markerProviderBase});
+  }
   if(mode==='comfy-text'){
     const {runTextBrowser}=await import('./text_browser_acceptance.mjs');
     await runTextBrowser({send});
@@ -389,7 +393,12 @@ try {
         widgets:node.widgets.filter(w=>['prompt','width','height','operation','api_mode'].includes(w.name)).map(w=>({name:w.name,type:w.type,hidden:w.hidden,connectionSuppressed:w.connectionSuppressed,size:w.computeSize?.(540),computedHeight:w.computedHeight,y:w.y,domHidden:w.element?.hidden,domDisplay:w.element?.style.display}))});
       await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
       const before=snapshot();
-      for(const [index,name] of ['prompt','width','height'].entries()){
+      if(widget('max_output_chars').hidden||widget('authoring_profile').hidden)throw new Error('Word limit/profile hidden behind Advanced');
+      widget('max_output_chars').value=800;
+      widget('authoring_profile').value=core.FISHER;
+      const nativeNames=node.widgets.filter(w=>core.MOSS_NAMES.includes(w.name)).map(w=>w.name);
+      if(nativeNames.length!==28||new Set(nativeNames).size!==28)throw new Error('Native widget schema does not contain exactly 28 unique fields');
+      for(const [index,name] of ['prompt','width','height','max_output_chars'].entries()){
         if(!node.inputs.some(i=>i.name===name))wi.convertToInput(node,widget(name));
         const source=LiteGraph.createNode(name==='prompt'?'T8PromptText':'PrimitiveNode');
         source.pos=[50,50+index*250];app.graph.add(source);
@@ -401,11 +410,12 @@ try {
       await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
       const connected=snapshot();
       const saved=node.serialize();
-      if(saved.widgets_values.length!==27)throw new Error('Native save includes action tails');
+      if(saved.widgets_values.length!==28||saved.widgets_values[27]!==core.FISHER)throw new Error('Native save includes action tails or loses profile');
       const output=await app.graphToPrompt();
       const request=Object.values(output.output).find(n=>n.class_type===core.MOSS_ID);
       if(!Array.isArray(request?.inputs.prompt)||![request?.inputs.width,request?.inputs.height].every(Number.isInteger))throw new Error('External inputs were lost in API prompt: '+JSON.stringify(request?.inputs));
       if(request.inputs.width!==1256||request.inputs.height!==1672)throw new Error('Eight-pixel canvas was rounded during native serialization');
+      if(request.inputs.max_output_chars!==800||request.inputs.authoring_profile!==core.FISHER)throw new Error('Native API export lost word limit/profile: '+JSON.stringify({max:request.inputs.max_output_chars,profile:request.inputs.authoring_profile,widget:widget('max_output_chars').value}));
       for(let i=0;i<50;i++){widget('operation').value=core.COMPILE;core.refreshMoss(node);widget('operation').value=core.GENERATE;core.refreshMoss(node);}
       await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
       core.refreshMoss(node,true);
@@ -420,6 +430,7 @@ try {
       const after=await app.graphToPrompt();
       const afterInputs=Object.values(after.output).find(n=>n.class_type===core.MOSS_ID)?.inputs;
       if(!Array.isArray(afterInputs?.prompt)||afterInputs.width!==request.inputs.width||afterInputs.height!==request.inputs.height)throw new Error('Reload lost actual external values');
+      if(afterInputs.max_output_chars!==800||afterInputs.authoring_profile!==core.FISHER)throw new Error('Reload shifted appended profile or connected word limit');
       const slot=node.inputs.findIndex(i=>i.name==='prompt');
       const promptLink=app.graph.links.get?.(node.inputs[slot].link)||app.graph.links[node.inputs[slot].link];
       const source=app.graph.getNodeById(promptLink.origin_id);
@@ -434,7 +445,7 @@ try {
       if(!(widget('prompt').hidden||widget('prompt').connectionSuppressed)||reconnected.size[1]>final.size[1]+1)throw new Error('Reconnect expanded hidden prompt');
       if(app.canvas?.ds){app.canvas.ds.scale=.85;app.canvas.ds.offset[0]=80;app.canvas.ds.offset[1]=30;app.canvas.setDirty?.(true,true);}
       const p=document.createElement('pre');p.id='result';p.dataset.status='pass';p.textContent='PASS: real MOSS frontend external STRING/INT wiring and named serialization measured';document.body.append(p);
-      return {before,connected,final,reloaded,reconnected,api_inputs:request.inputs,frontend_version:app.frontendVersion||null};
+      return {before,connected,final,reloaded,reconnected,native_widget_names:nativeNames,api_inputs:request.inputs,frontend_version:app.frontendVersion||null};
     })()` });
     if (check.exceptionDetails) throw new Error(JSON.stringify(check.exceptionDetails));
     process.stdout.write(JSON.stringify(check.result.value) + "\n");

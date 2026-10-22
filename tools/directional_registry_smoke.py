@@ -61,7 +61,20 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 34
+assert len(schemas) == 36
+all_schemas = schemas
+assert [s.node_id for s in schemas[34:]] == ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"]
+assert len(schemas[34].outputs) == 4 and len(schemas[35].outputs) == 9
+assert schemas[35].inputs[0].as_dict()["dynamicPrompts"] is False
+for asset in ("moss_authoring.py", "moss_authoring_runtime.py", "moss_authoring_bundle.py",
+              "moss_authoring_contract.py", "moss_authoring_rules.py", "moss_authoring_state.py",
+              "moss_authoring_routes.py", "web/js/moss_authoring_director.js", "web/js/moss_authoring_ui.mjs"):
+    assert (p / asset).is_file(), asset
+book = json.loads((p / "example_workflows/moss_authoring_cpu_page.json").read_text(encoding="utf-8"))
+page = next(node for node in book["nodes"] if node["type"] == "MOSSAuthoringPageT8")
+selected = node_list[35].execute(*page["widgets_values"]).result
+assert selected[1:3] == (1256, 1672) and json.loads(selected[5])["logical_generation_calls"] == 0
+schemas = schemas[:34]
 assert schemas[-2].node_id == "T8H3VisualMarkerConfig"
 assert schemas[-1].node_id == "T8H3SpatialMarkerCanvas"
 marker = sys.modules[spec.name + ".h3_visual_marker"]
@@ -99,7 +112,6 @@ for target in ("ref2va", "hybrid"):
     assert not h3_sample["properties"].get("widgets_values_named", {}).get("api_key")
 assert not any(name.startswith("h3_t8") for name in sys.modules)
 # Old 32-node order and input prefixes remain under their original gates.
-all_schemas = schemas
 schemas = schemas[:-2]
 assert [s.node_id for s in schemas[-7:-2]] == ["T8LyricWriter", "T8ArrangementPlanner", "QwenImage21PromptEnhancerT8", "T8CombatCameraConfig", "T8SpeechReference"]
 assert schemas[-2].node_id == "MOSSImagePromptEnhancerT8"

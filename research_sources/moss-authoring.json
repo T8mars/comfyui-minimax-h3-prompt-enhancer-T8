@@ -1,0 +1,14 @@
+{
+  "schema_version": "t8-moss-authoring-sources/v1",
+  "adapter_revision": "t8-moss-authoring/1",
+  "status": "User-provided sources; independently adapted rules, not an official MOSS skill or quality certification. Hashes identify inputs, not a redistribution license.",
+  "excluded": ["complete source texts", "example images", "installation archives", "tool/export scripts", "private filesystem paths"],
+  "files": [
+    {"name": "fisher-moss-prompt-expander-完整版.md", "sha256": "ac4b3c289348e4bc4a1c04cc6b12433f014cd152e595cc079cb09acf8ac253b9", "scope": "four composition skeletons, modules, evidence/edit boundaries, detailed Chinese default, ordered independent references"},
+    {"name": "moss-comic-director/SKILL.md", "sha256": "2d30bd586bd0dea79dfd27fd9a45ba2b10b0f4cd17a6a531b5e689bb70738519", "scope": "comic authoring and paired per-page English/Chinese source layouts"},
+    {"name": "moss-comic-director/references/directing.md", "sha256": "0d8318c62f8fcef7aeac9b5a810b9f40ff24c3d281ddb126ec571d6531cd1641", "scope": "story moments, camera, framing, independent elements and visual elaboration"},
+    {"name": "moss-comic-director/references/technique-index.md", "sha256": "645e892f2bebb8937002197489fea92024f5095721b89d689895d50cf5aa2c5d", "scope": "all 50 numbered core mechanisms; optional extended cards not ingested"},
+    {"name": "moss-comic-director/references/multi-page.md", "sha256": "ee521fedd8aef50467b0417b303fa91a786b5d3637d3761f7a27c3508eca58fc", "scope": "explicit continuity, page rhythm, layout variation and local revisions"}
+  ],
+  "adaptation": "No installation, file export, generated tool calls, network research or image generation. Native MOSS JSON is an interface wrapper; pinned moss_vendor remains unchanged."
+}

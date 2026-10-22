@@ -915,7 +915,7 @@ try {
     const ext = appModule.app.extensions.find(e => e.name === "T8.MOSSImagePromptEnhancer");
     const values = ["A quiet cup.",moss.GENERATE,"AUTO / 自动",1024,1024,"按需求（默认英文）/ Auto",moss.API_MODES[0],
       "",0,1,16384,"","gemini-3.5-flash","qwen/qwen3.8-flash-next","",0,"randomize","test-model.gguf","AUTO（自动匹配）",32768,16384,
-      "关闭（推荐，速度优先）","medium","执行后卸载（推荐）","AUTO（显存不足时释放）","t8-moss-browser-slot","normal"];
+      "关闭（推荐，速度优先）","medium","执行后卸载（推荐）","AUTO（显存不足时释放）","t8-moss-browser-slot","normal",moss.CLASSIC];
     class MossNode {
       constructor() {
         this.widgets=moss.MOSS_NAMES.map((name,i)=>({name,value:values[i],type:"text",computeSize:()=>[540,28]}));
@@ -934,16 +934,17 @@ try {
     const count=node.widgets.length;node.onNodeCreated();check(node.widgets.length===count,"MOSS install is idempotent");
     const saved={};node.onSerialize(saved);
     check(!JSON.stringify(saved).includes("BROWSER_PRIVATE_KEY"),"MOSS does not serialize credentials");
-    check(saved.widgets_values.length===27 && Object.keys(saved.widgets_values_named).length===27,"MOSS named and positional field counts agree");
+    check(saved.widgets_values.length===28 && Object.keys(saved.widgets_values_named).length===28,"MOSS named and positional field counts agree");
     const loaded=new MossNode();loaded.onNodeCreated();loaded.widgets.reverse();loaded.onConfigure(saved);
     check(loaded.widgets.find(w=>w.name==="width").value===1024 && loaded.widgets.find(w=>w.name==="api_mode").value===moss.API_MODES[0],"MOSS reordered native widgets restored before RAF");
     for(const stem of ["caption","layout","spatial","compile_only","compile_error"]){
       const workflow=await (await fetch(`../../example_workflows/moss_${stem}_example.json`)).json();
       const example=workflow.nodes.find(n=>n.type===moss.MOSS_ID);
       const instance=new MossNode();instance.onNodeCreated();instance.widgets.reverse();instance.onConfigure(example);
-      check(moss.MOSS_NAMES.filter(name=>name!=="recovery_slot").every(name=>instance.widgets.find(w=>w.name===name).value===example.widgets_values_named[name]),`MOSS ${stem} example restored by real extension hooks`);
+      check(moss.LEGACY_MOSS_NAMES.filter(name=>name!=="recovery_slot").every(name=>instance.widgets.find(w=>w.name===name).value===example.widgets_values_named[name]),`MOSS ${stem} example restored by real extension hooks`);
+      check(instance.widgets.find(w=>w.name==="authoring_profile").value===moss.CLASSIC,`MOSS ${stem} old example defaults Classic`);
       const exported={};instance.onSerialize(exported);
-      check(exported.widgets_values.length===27 && !Object.hasOwn(exported.widgets_values_named,"api_key"),`MOSS ${stem} example reserializes without Key/action tails`);
+      check(exported.widgets_values.length===28 && !Object.hasOwn(exported.widgets_values_named,"api_key"),`MOSS ${stem} example reserializes without Key/action tails`);
     }
     const initial=node.size[1];
     for(let i=0;i<100;i++){node.widgets.find(w=>w.name==="operation").value=moss.COMPILE;moss.refreshMoss(node);node.widgets.find(w=>w.name==="operation").value=moss.GENERATE;moss.refreshMoss(node);}
@@ -970,6 +971,39 @@ try {
     node.widgets.find(w=>w.name==="width").callback?.(1024);
     check(node.t8MossStale && moss.mossStatus(node.t8MossLast,true).includes("未核验"),"MOSS changed configuration marks last result stale and token budget unverified");
     const after={};node.onSerialize(after);check(!JSON.stringify(after).includes(malicious),"MOSS last result is not a hidden second serialized input");
+  }
+  {
+    const core=await import('../../web/js/moss_authoring_ui.mjs');
+    const {app}=await import('../../scripts/app.js');
+    await import('../../web/js/moss_authoring_director.js');
+    const ext=app.extensions.find(e=>e.name==='T8.MOSSAuthoringDirector');
+    class Director {
+      constructor(){this.widgets=core.DIRECTOR_NAMES.map(name=>({name,value:core.DIRECTOR_DEFAULTS[name],type:'text'}));this.properties={};this.graph={_nodes:[this],change(){}};this.id=1600;}
+      addWidget(type,name,value,callback,options){const w={type,name,value,callback,options};this.widgets.push(w);return w;}
+      setDirtyCanvas(){}
+      onConfigure(data){data.widgets_values?.forEach((v,i)=>{if(this.widgets[i])this.widgets[i].value=v});return 17;}
+    }
+    await ext.beforeRegisterNodeDef(Director,{name:core.DIRECTOR_ID});
+    const node=new Director();node.onNodeCreated();
+    const count=node.widgets.length;node.onNodeCreated();
+    check(node.widgets.length===count,'Director hooks idempotent');
+    node.widgets.find(w=>w.name==='width').value=1256;node.widgets.find(w=>w.name==='height').value=1672;
+    const saved={};node.onSerialize(saved);
+    check(saved.widgets_values.length===17&&Object.keys(saved.widgets_values_named).length===17,'Director seventeen fields exclude action buttons');
+    check(node.widgets.filter(w=>w.type==='button').every(w=>w.serialize===false&&w.options.serialize===false),'Director both serialization flags disabled');
+    const loaded=new Director();loaded.onNodeCreated();loaded.widgets.reverse();
+    check(loaded.onConfigure(saved)===17&&loaded.widgets.find(w=>w.name==='width').value===1256,'Director restores reordered native values synchronously');
+    const api=(await import('../../scripts/api.js')).api,originalFetch=api.fetchApi;
+    const raw='<img src=x onerror="window.DIRECTOR_XSS=true">';
+    api.fetchApi=async()=>new Response(JSON.stringify({schema_version:'t8-moss-authoring-inspection/v1',inspection_only:true,complete:false,raw,units:[],stage_records:[]}));
+    try{
+      await loaded.widgets.find(w=>/Inspect failed draft/.test(w.name)).callback();
+      const dialog=Array.from(document.querySelectorAll('dialog')).find(d=>d.textContent.includes('inspection_only'));
+      check(dialog&&JSON.parse(dialog.querySelector('pre').textContent).raw===raw&&!dialog.querySelector('img')&&!window.DIRECTOR_XSS,'Director read-only inspection renders literal text');
+      loaded.onRemoved();check(!document.body.contains(dialog),'Director removal closes its dialog');
+    } finally {api.fetchApi=originalFetch;}
+    const after={};node.onSerialize(after);
+    check(!JSON.stringify(after).includes('DIRECTOR_XSS'),'Director never serializes inspection output');
   }
 } catch (error) {
   failures.push(error?.stack || String(error));

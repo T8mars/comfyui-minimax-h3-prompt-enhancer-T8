@@ -2,15 +2,21 @@ import { restoreNamedWidgetValues, serializeNamedWidgetValues, syncNamedWidgetSe
 
 export const MOSS_ID = "MOSSImagePromptEnhancerT8";
 export const MOSS_STATE = "t8_moss_widgets_v1";
+export const MOSS_PROFILE_SCHEMA = "t8_moss_widgets_schema";
+export const CLASSIC = "Classic / 原版";
+export const COMIC = "Comic / 漫画卡通";
+export const FISHER = "Fisher / 通用长版";
+export const MOSS_PROFILES = [CLASSIC, COMIC, FISHER];
 export const GENERATE = "生成 / Generate";
 export const COMPILE = "仅校验编译 / Compile only";
-export const MOSS_NAMES = [
+export const LEGACY_MOSS_NAMES = [
     "prompt", "operation", "output_format", "width", "height", "output_language", "api_mode",
     "locked_text", "max_output_chars", "max_corrections", "llm_max_tokens", "draft_json",
     "ai_workshop_model", "custom_model", "openai_base_url", "seed", "control_after_generate",
     "local_model", "local_mmproj", "local_context_size", "local_max_tokens", "local_think_mode",
     "local_reasoning_effort", "local_unload_policy", "local_comfy_memory_policy", "recovery_slot", "recovery_action",
 ];
+export const MOSS_NAMES = [...LEGACY_MOSS_NAMES, "authoring_profile"];
 export const API_MODES = ["贞贞平价小屋（推荐）", "贞贞的AI工坊（图片/视频）", "OpenAI兼容接口（备用）",
     "本地 GGUF（llama.cpp / Qwen，离线）", "Strata 本地服务（桥接）"];
 const FORMATS = ["AUTO / 自动", "Caption / 自然描述", "Layout / 空间排版"];
@@ -19,8 +25,11 @@ const SEED_CONTROLS = ["fixed", "increment", "decrement", "randomize"];
 const LINKED_TEXT_NAMES = new Set(["prompt", "draft_json", "locked_text", "custom_model", "openai_base_url"]);
 const WORKSHOP_MODELS = ["gemini-3.5-flash", "Custom（自定义）"];
 const ENUMS = { operation: [GENERATE, COMPILE], output_format: FORMATS, output_language: LANGUAGES,
-    api_mode: API_MODES, control_after_generate: SEED_CONTROLS, recovery_action: ["normal", "restore_last"] };
+    api_mode: API_MODES, control_after_generate: SEED_CONTROLS, recovery_action: ["normal", "restore_last"],
+    authoring_profile: MOSS_PROFILES };
 const INTS = new Set(["width", "height", "max_output_chars", "max_corrections", "llm_max_tokens", "seed", "local_context_size", "local_max_tokens"]);
+const LINKED_NUMBER_DEFAULTS = { width: 1024, height: 1024, max_output_chars: 0, max_corrections: 1,
+    llm_max_tokens: 16384, seed: 0, local_context_size: 32768, local_max_tokens: 16384 };
 const ADVANCED = new Set(MOSS_NAMES.slice(7));
 export const CANVAS_PRESETS = {
     "1:1": [1024, 1024], "3:4": [960, 1280], "4:3": [1280, 960],
@@ -40,10 +49,24 @@ function valueValid(name, value) {
     return typeof value === "string";
 }
 
-function validatedMap(object) {
+function hasSavedLink(data, name) {
+    return Array.isArray(data?.inputs) && data.inputs.some(input => input?.link != null
+        && (input.name === name || input.widget?.name === name));
+}
+
+function validatedMap(object, data) {
     if (!object || typeof object !== "object" || Array.isArray(object)) return null;
-    if (!MOSS_NAMES.every(name => Object.hasOwn(object, name) && valueValid(name, object[name]))) return null;
-    const mapped = new Map(MOSS_NAMES.map(name => [name, object[name]]));
+    const values = { ...object };
+    // A connected number may have no saved native widget value. Normalize only
+    // an explicit null with saved link evidence; never silently repair a bad
+    // offline value or infer a link from a socket's mere existence.
+    for (const name of INTS) if (Object.hasOwn(values, name) && values[name] === null && hasSavedLink(data, name)) {
+        values[name] = LINKED_NUMBER_DEFAULTS[name];
+    }
+    if (!LEGACY_MOSS_NAMES.every(name => Object.hasOwn(values, name) && valueValid(name, values[name]))) return null;
+    if (Object.hasOwn(values, "authoring_profile") && !valueValid("authoring_profile", values.authoring_profile)) return null;
+    const mapped = new Map(LEGACY_MOSS_NAMES.map(name => [name, values[name]]));
+    mapped.set("authoring_profile", values.authoring_profile ?? CLASSIC);
     for (const name of LINKED_TEXT_NAMES) if (mapped.get(name) == null) mapped.set(name, "");
     mapped.set("recovery_action", "normal");
     return mapped;
@@ -51,7 +74,7 @@ function validatedMap(object) {
 
 export function savedMossValues(data) {
     for (const source of [data?.properties?.[MOSS_STATE], data?.widgets_values_named]) {
-        const mapped = validatedMap(source);
+        const mapped = validatedMap(source, data);
         if (mapped) return mapped;
     }
     if (!Array.isArray(data?.widgets_values)) return null;
@@ -59,19 +82,26 @@ export function savedMossValues(data) {
     if ([GENERATE, COMPILE].includes(values[0])) values.unshift(""); // omitted linked brief
     // Optional force-input key widget retained by a host is NOT a schema value.
     if (!API_MODES.includes(values[6]) && API_MODES.includes(values[7])) values.splice(6, 1);
-    if (typeof values[7] === "string" && typeof values[8] === "string" && Number.isInteger(values[9])) values.splice(7, 1);
+    if (typeof values[7] === "string" && typeof values[8] === "string"
+        && (Number.isInteger(values[9]) || values[9] === null && hasSavedLink(data, "max_output_chars"))) values.splice(7, 1);
     // A host may remove the linked draft widget as well as the linked brief.
     // Require the Workshop/model/URL/seed discriminators, never a length guess.
     if (WORKSHOP_MODELS.includes(values[11]) && typeof values[12] === "string" && typeof values[13] === "string"
-        && Number.isInteger(values[14]) && (SEED_CONTROLS.includes(values[15]) || typeof values[15] === "string")) {
+        && (Number.isInteger(values[14]) || values[14] === null && hasSavedLink(data, "seed"))
+        && (SEED_CONTROLS.includes(values[15]) || typeof values[15] === "string")) {
         values.splice(11, 0, "");
     }
-    const names = [...MOSS_NAMES];
+    const names = [...LEGACY_MOSS_NAMES];
     if (!SEED_CONTROLS.includes(values[names.indexOf("control_after_generate")])) names.splice(names.indexOf("control_after_generate"), 1);
     if (values.length < names.length) return null;
     const object = Object.fromEntries(names.map((name, i) => [name, values[i]]));
     object.control_after_generate ??= "randomize";
-    return validatedMap(object); // action tails ignored, never mapped to a field
+    // Historical button tails can equal a new profile label. Only an explicit
+    // version marker authorizes the positional 28th value. Complete named maps
+    // above remain sufficient when a host drops that marker.
+    object.authoring_profile = data?.properties?.[MOSS_PROFILE_SCHEMA] === 2
+        && MOSS_PROFILES.includes(values[names.length]) ? values[names.length] : CLASSIC;
+    return validatedMap(object, data); // all other action tails stay unmapped
 }
 
 export function configureMoss(node, data, original, args) {
@@ -81,12 +111,12 @@ export function configureMoss(node, data, original, args) {
         input.widgets_values = (node.widgets || []).map(w => mapped.has(w.name) ? mapped.get(w.name) : w.name === "api_key" ? "" : w.value);
         input.widgets_values_named = Object.fromEntries(mapped);
         if (node.widgets?.some(w => w.name === "api_key")) input.widgets_values_named.api_key = "";
-    } else if (data?.widgets_values || data?.widgets_values_named) {
+    } else if (data?.widgets_values || data?.widgets_values_named || data?.properties?.[MOSS_STATE]) {
         // A malformed/unrecognized array must not reach native positional
         // loading and trigger a model scan with a value from another field.
-        input.widgets_values = (node.widgets || []).map(w => w.name === "api_key" ? "" : w.value);
+        input.widgets_values = (node.widgets || []).map(w => w.name === "api_key" ? "" : w.name === "authoring_profile" ? CLASSIC : w.value);
         input.widgets_values_named = Object.fromEntries((node.widgets || [])
-            .filter(w => MOSS_NAMES.includes(w.name)).map(w => [w.name, w.value]));
+            .filter(w => MOSS_NAMES.includes(w.name)).map(w => [w.name, w.name === "authoring_profile" ? CLASSIC : w.value]));
     }
     const result = original?.apply(node, [input, ...Array.from(args || []).slice(1)]);
     if (mapped) {
@@ -96,6 +126,9 @@ export function configureMoss(node, data, original, args) {
             node.properties ||= {};
             node.properties.t8_completion_recovery_slot = mapped.get("recovery_slot");
         }
+    } else {
+        const profile = node.widgets?.find(w => w.name === "authoring_profile");
+        if (profile) profile.value = CLASSIC;
     }
     const action = node.widgets?.find(w => w.name === "recovery_action");
     if (action) action.value = "normal";
@@ -106,9 +139,10 @@ export function configureMoss(node, data, original, args) {
 export function serializeMoss(node, data) {
     node.t8EnsureRecoverySlot?.();
     data.widgets_values = serializeNamedWidgetValues(node, MOSS_NAMES, (name, value) =>
-        name === "recovery_action" ? "normal" : name === "control_after_generate" ? value ?? "randomize" : value);
+        name === "recovery_action" ? "normal" : name === "control_after_generate" ? value ?? "randomize"
+            : name === "authoring_profile" ? MOSS_PROFILES.includes(value) ? value : CLASSIC : value);
     syncNamedWidgetSerialization(data, MOSS_NAMES);
-    data.properties = { ...(data.properties || {}), [MOSS_STATE]: { ...data.widgets_values_named } };
+    data.properties = { ...(data.properties || {}), [MOSS_STATE]: { ...data.widgets_values_named }, [MOSS_PROFILE_SCHEMA]: 2 };
 }
 
 export function linkedMossProvider(node) {
@@ -170,10 +204,10 @@ export function refreshMoss(node, compact = false) {
         if (ADVANCED.has(widget.name)) show = Boolean(node.t8MossAdvanced);
         if (["recovery_slot", "recovery_action", "control_after_generate"].includes(widget.name)) show = false;
         if (widget.name === "draft_json") show = compile;
-        if (["prompt", "output_format", "output_language", "api_mode"].includes(widget.name)) show = !compile;
+        if (["prompt", "output_format", "output_language", "api_mode", "max_output_chars", "authoring_profile"].includes(widget.name)) show = !compile;
         if (widget.name === "api_key") show = !compile && !local && !strata;
         if (widget.name.startsWith("local_")) show = !compile && local && Boolean(node.t8MossAdvanced);
-        if (["locked_text", "max_output_chars", "max_corrections", "llm_max_tokens", "seed"].includes(widget.name)) show = !compile && Boolean(node.t8MossAdvanced);
+        if (["locked_text", "max_corrections", "llm_max_tokens", "seed"].includes(widget.name)) show = !compile && Boolean(node.t8MossAdvanced);
         if (widget.name === "llm_max_tokens" && (local || strata)) show = false;
         if (["ai_workshop_model", "custom_model", "openai_base_url"].includes(widget.name)) {
             show = !compile && !local && !strata && Boolean(node.t8MossAdvanced)
@@ -217,6 +251,30 @@ export function drawMossLinkedLabels(node, context) {
     context.restore();
 }
 
+function historicalAuthoringSummary(status) {
+    if (!MOSS_PROFILES.includes(status?.authoring_profile)) return "";
+    const profile = `历史强化 / Result profile: ${status.authoring_profile}\n`;
+    const info = status.authoring_length;
+    if (!info || typeof info !== "object" || Array.isArray(info)
+        || info.metric !== "unicode_code_points" || info.hard_enforced !== false
+        || !Number.isInteger(info.description_chars) || info.description_chars < 0 || info.description_chars > 262144
+        || !Number.isInteger(info.han_chars) || info.han_chars < 0 || info.han_chars > info.description_chars
+        || !Number.isInteger(info.max_output_chars) || info.max_output_chars < 0 || info.max_output_chars > 20000
+        || typeof info.status !== "string") return profile;
+    const target = info.target_han_range;
+    if (target !== null && (!Array.isArray(target) || target.length !== 2
+        || target[0] !== 1500 || target[1] !== 2500 || info.max_output_chars !== 0
+        || status.authoring_profile !== FISHER)) return profile;
+    const expected = info.max_output_chars ? info.description_chars > info.max_output_chars ? "over_limit" : "within_limit"
+        : target ? info.han_chars < 1500 ? "below_target" : info.han_chars > 2500 ? "above_target" : "within_target" : "automatic";
+    if (info.status !== expected) return profile;
+    const maximum = info.max_output_chars ? ` · 软上限 / Soft cap ${info.max_output_chars}` : " · 自动 / Automatic";
+    const preference = target ? " · 汉字软目标 / Han target 1500–2500" : "";
+    const warning = info.status === "over_limit" ? " · ⚠ 超限，保留完整稿 / Complete draft kept"
+        : ["below_target", "above_target"].includes(info.status) ? " · ⚠ 未达软目标 / Creative target unmet" : "";
+    return profile + `实际描述 / Actual: ${info.description_chars} 码点 / code points · ${info.han_chars} 汉字 / Han${maximum}${preference}${warning}\n`;
+}
+
 export function mossStatus(status, stale = false) {
     if (!status) return "等待执行 / Ready · MOSS 4096 Token预算未核验";
     const format = ["caption", "layout"].includes(status.format) ? status.format : "unknown";
@@ -228,6 +286,7 @@ export function mossStatus(status, stale = false) {
     const alignment = warnings.includes("eight_pixel_canvas_downstream_unverified") ? " · 8像素兼容，核对下游画布 / Check downstream canvas" : "";
     return `${stale ? "⚠ 上次结果，配置已改 / Stale" : status.origin === "cache" ? "恢复原结果 / Restored" : "结构通过，非成图保证 / Structure only"}${warning}\n`
         + `${format} · ${dimensions} · ${calls} 次 LLM · MOSS 4096 Token未核验${alignment}\n`
+        + historicalAuthoringSummary(status)
         + "positive_prompt接正向文本；宽高接最终latent。draft/report不是生成提示词。";
 }
 

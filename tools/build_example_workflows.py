@@ -805,6 +805,7 @@ def check() -> None:
     from build_strata_workflows import STEMS as strata_stems, check as check_strata
     from build_speech_workflows import STEMS as speech_stems, check as check_speech
     from build_moss_workflows import STEMS as moss_stems, check as check_moss
+    from build_moss_authoring_workflows import STEMS as authoring_stems, check as check_authoring
     from build_storyboard_workflows import STEMS as storyboard_stems, check as check_storyboard
     from build_marker_workflows import STEMS as marker_stems, check as check_marker
 
@@ -815,6 +816,7 @@ def check() -> None:
     check_strata()
     check_speech()
     check_moss()
+    check_authoring()
     check_storyboard()
     check_marker()
     expected_counts = {
@@ -823,7 +825,7 @@ def check() -> None:
         "MiniMaxMusic3PromptEnhancerT8": 38,
         "QwenImage21PromptEnhancerT8": 22,
     }
-    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems, *camera_stems, *hybrid_stems, *strata_stems, *speech_stems, *moss_stems, *storyboard_stems, *marker_stems))
+    workflows = sorted(path for path in EXAMPLES.glob("*.json") if path.stem not in (*directional_stems, *quality_stems, *camera_stems, *hybrid_stems, *strata_stems, *speech_stems, *moss_stems, *authoring_stems, *storyboard_stems, *marker_stems))
     if len(workflows) != 20:
         raise RuntimeError(f"Expected 20 example workflows, found {len(workflows)}")
     expected_inputs = {
