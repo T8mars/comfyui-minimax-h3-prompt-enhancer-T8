@@ -1,6 +1,7 @@
 import {app} from '../../../scripts/app.js';
 import {api} from '../../../scripts/api.js';
 import {KINDS, REVIEW_LABELS, configureStyle, serializeStyle, filterEntries, ownerIsCurrent, valueOf} from './visual_style_ui.mjs';
+import {renderVisualPreview} from './visual_style_preview.mjs';
 
 const dialogs = new WeakMap();
 const roles = {director: '导演 / Director', cinematographer: '摄影 / Cinematographer', art_director: '美术 / Art director', team: '团队 / Team'};
@@ -12,10 +13,11 @@ export function openStyleBrowser(node, kind) {
     const initialValue = valueOf(node, name), abort = new AbortController();
     const dialog = make('dialog');
     dialog.setAttribute('aria-label', 'T8 视觉风格浏览 / Visual styles');
-    dialog.style.cssText = 'width:min(900px,94vw);max-height:88vh;overflow:auto;background:#202126;color:#eee;padding:20px;border:1px solid #777;border-radius:10px;pointer-events:auto;';
+    dialog.style.cssText = 'width:min(1180px,94vw);max-height:88vh;overflow:auto;background:#202126;color:#eee;padding:20px;border:1px solid #777;border-radius:10px;pointer-events:auto;';
     let closed = false, epoch = 0, selected = null, entries = [];
+    let disposePreview = () => {};
     const live = () => !closed && ownerIsCurrent(node, graph, root, app.graph);
-    const close = () => {if (closed) return; closed = true; epoch++; abort.abort(); dialog.close(); dialog.remove(); if (dialogs.get(node) === close) dialogs.delete(node);};
+    const close = () => {if (closed) return; closed = true; epoch++; abort.abort(); disposePreview(); dialog.close(); dialog.remove(); if (dialogs.get(node) === close) dialogs.delete(node);};
     dialogs.set(node, close);
     dialog.addEventListener('cancel', event => {event.preventDefault(); close();});
     make('h3', kind === 'color' ? '200 色彩风格 / Color references' : '200 导演与创作者 / Creator references', dialog);
@@ -26,11 +28,15 @@ export function openStyleBrowser(node, kind) {
     const search = make('input', '', toolbar); search.placeholder = '编号 / 中文 / English'; search.setAttribute('aria-label', '搜索风格 / Search');
     const category = make('select', '', toolbar); category.setAttribute('aria-label', '分类 / Category'); make('option', '全部分类 / All categories', category).value = '';
     const status = make('p', '正在读取本地资源 / Loading local resources…', dialog);
-    const body = make('div', '', dialog); body.style.cssText = 'display:grid;grid-template-columns:minmax(180px,1fr) 2fr;gap:16px';
-    const list = make('select', '', body); list.size = 12; list.setAttribute('aria-label', '风格列表 / Styles'); list.style.cssText = 'width:100%;pointer-events:auto';
+    const body = make('div', '', dialog); body.className = 't8-style-browser-body';
+    body.style.cssText = 'display:grid;grid-template-columns:minmax(180px,260px) minmax(0,1fr);gap:16px';
+    const css = make('style', '', dialog);
+    css.textContent = '@media(max-width:760px){dialog .t8-style-browser-body{grid-template-columns:minmax(0,1fr)!important}} .t8-style-preview-controls button,.t8-style-preview-controls select{padding:7px;border:1px solid #637380;border-radius:5px;background:#303d47;color:#eef3f6;cursor:pointer;pointer-events:auto;max-width:100%}.t8-style-preview-controls [aria-pressed=true]{background:#4d6575;border-color:#bfd6e6}.t8-style-illustration input,.t8-style-illustration summary{max-width:100%;pointer-events:auto}';
+    const list = make('select', '', body); list.size = 12; list.setAttribute('aria-label', '风格列表 / Styles'); list.style.cssText = 'width:100%;height:min(440px,45vh);align-self:start;pointer-events:auto';
     const detail = make('div', '', body); detail.style.cssText = 'min-width:0;overflow-wrap:anywhere';
-    const apply = make('button', '应用到当前节点 / Apply selection', dialog); apply.disabled = true;
-    const cancel = make('button', '关闭 / Close', dialog); cancel.onclick = close;
+    const footer = make('div', '', dialog); footer.style.cssText = 'position:sticky;bottom:-20px;background:#202126;padding:12px 0;display:flex;gap:12px;z-index:1;border-top:1px solid #53616c';
+    const apply = make('button', '应用到当前节点 / Apply selection', footer); apply.disabled = true;
+    const cancel = make('button', '关闭 / Close', footer); cancel.onclick = close;
     make('p', '纯本地浏览，无模型调用。适配方法为实验性建议；内容整理不等于模型遵从或成片效果已验证。 / Local-only preview; model and rendered outcomes are unverified.', dialog);
     for (const element of dialog.querySelectorAll('input,select,button')) element.style.pointerEvents = 'auto';
     const fail = () => {
@@ -40,7 +46,7 @@ export function openStyleBrowser(node, kind) {
     };
     const fetchJSON = async path => {const response = await api.fetchApi(`/t8-prompt-enhancer/visual-styles/${path}`, {cache: 'no-store', signal: abort.signal}); if (!response.ok) throw Error('resource'); return response.json();};
     async function preview(id) {
-        const ticket = ++epoch; selected = null; apply.disabled = true; detail.replaceChildren();
+        const ticket = ++epoch; selected = null; apply.disabled = true; disposePreview(); detail.replaceChildren();
         if (!/^\d{3}$/.test(id)) return;
         try {
             const response = await fetchJSON(`${kind}/${id}`);
@@ -49,6 +55,15 @@ export function openStyleBrowser(node, kind) {
             const row = entries.find(row => row.id === id), resource = response.resource;
             if (!row || !resource || resource.id !== id || response.selection !== row.selection) throw Error('identity');
             make('h4', row.selection, detail); make('p', `${row.category} · ${roles[row.creator_role] || row.creator_role} · v${resource.revision}`, detail);
+            // An illustration failure must not block the validated style itself.
+            const illustrationHost = make('div', '', detail);
+            try {
+                disposePreview = renderVisualPreview(illustrationHost, {kind, resource, illustration: response.illustration,
+                    digest: response.digest, scope: valueOf(node, 'scope'), isLive: () => live() && ticket === epoch});
+            } catch (_) {
+                illustrationHost.replaceChildren();
+                make('p', '示意暂不可用；仍可阅读说明并选择风格。 / Illustration unavailable; style selection remains available.', illustrationHost);
+            }
             if (kind === 'color') {
                 const swatches = (colors, title) => {
                     make('p', title, detail);
@@ -71,7 +86,7 @@ export function openStyleBrowser(node, kind) {
         } catch (error) {if (ticket === epoch && error.name !== 'AbortError') fail();}
     }
     function refresh() {
-        epoch++; selected = null; apply.disabled = true; detail.replaceChildren(); list.replaceChildren();
+        epoch++; selected = null; apply.disabled = true; disposePreview(); detail.replaceChildren(); list.replaceChildren();
         const filtered = filterEntries(entries, category.value, search.value);
         for (const row of filtered) make('option', row.selection, list).value = row.id;
         list.selectedIndex = -1; status.textContent = `${filtered.length} / ${entries.length} · 本地资源 / Local resources`;

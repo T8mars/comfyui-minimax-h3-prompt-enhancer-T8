@@ -340,6 +340,8 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "combat_camera.py",
         "storyboard_director.py",
         "visual_styles.py", "visual_style_nodes.py", "visual_style_routes.py",
+        "visual_style_previews.py", "resources/visual_style_previews/catalog.json",
+        "resources/visual_style_previews/creator_diagrams.tsv", "web/js/visual_style_preview.mjs",
         "web/js/visual_style_config.js", "web/js/visual_style_ui.mjs",
         "docs/visual-styles.md", "research_sources/visual-styles-200.json",
         "resources/visual_styles/catalog.json",
@@ -449,6 +451,7 @@ def run_optional_checks() -> None:
     subprocess.run([sys.executable, "tools/build_marker_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_storyboard_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_visual_style_workflows.py", "--check"], cwd=ROOT, check=True)
+    subprocess.run([sys.executable, "tools/build_visual_style_previews.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_authoring_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)

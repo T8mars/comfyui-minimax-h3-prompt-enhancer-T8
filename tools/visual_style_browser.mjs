@@ -60,6 +60,26 @@ export async function runVisualStyleBrowser({send, providerBase, screenshotPath}
                 const apply=[...dialog.querySelectorAll('button')].find(b=>b.textContent.includes('Apply selection'));
                 await until(()=>!apply.disabled);
                 assert(dialog.textContent.includes(kind==='color'?'#1A2332':'Limited source specificity'),'actual preview contents');
+                const illustrated=dialog.querySelector('.t8-style-illustration');
+                assert(illustrated?.querySelectorAll('svg').length===2,'two actual vector scenes');
+                assert(illustrated.textContent.includes('NOT A MODEL OUTPUT')&&illustrated.textContent.includes('not tested'),'illustration provenance labels');
+                const configBefore=JSON.stringify(n.serialize().widgets_values);
+                if(kind==='color'){
+                    const light=illustrated.querySelector('button');light.click();
+                    assert(light.getAttribute('aria-pressed')==='true','local light demonstration');
+                    const scene=illustrated.querySelector('select');scene.value='street';scene.dispatchEvent(new Event('change',{bubbles:true}));
+                    assert(illustrated.querySelectorAll('svg').length===2,'street scene');
+                }else{
+                    const slider=illustrated.querySelector('input[type=range]');slider.value='80';slider.dispatchEvent(new Event('input',{bubbles:true}));
+                    assert(illustrated.querySelector('[data-diagram]').dataset.progress==='80','relative slider');
+                    const play=[...illustrated.querySelectorAll('button')].find(b=>b.textContent.includes('Play'));play.click();
+                    await wait(180);assert(illustrated.querySelector('[data-diagram]').dataset.progress!=='80','real animation advances');play.click();
+                    const stopped=illustrated.querySelector('[data-diagram]').dataset.progress;await wait(100);
+                    assert(illustrated.querySelector('[data-diagram]').dataset.progress===stopped,'pause holds');
+                    illustrated.querySelectorAll('button')[1].click();
+                    assert(illustrated.querySelector('[data-diagram]').dataset.diagram==='handheld','second reviewed method');
+                }
+                assert(JSON.stringify(n.serialize().widgets_values)===configBefore,'preview controls cannot serialize');
                 apply.click();assert(!document.querySelector('dialog[open]'),'apply closes');
                 assert(core.valueOf(n,key).startsWith(kind==='color'?'001 ':'155 '),'selection applies');
                 assert(core.valueOf(n,'mode')===core.OFF,'apply does not silently enable');
@@ -116,6 +136,78 @@ export async function runVisualStyleBrowser({send, providerBase, screenshotPath}
         return {examples:examples.length,queues:output.length,evidence:output};
     })()`});
     if (result.exceptionDetails) throw Error(JSON.stringify(result.exceptionDetails));
+    const evaluate = async expression => {
+        const checked = await send('Runtime.evaluate', {expression, awaitPromise: true, returnByValue: true});
+        if (checked.exceptionDetails) throw Error(JSON.stringify(checked.exceptionDetails));
+        return checked.result.value;
+    };
+    const pointerClick = async selector => {
+        const point = await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el)throw Error('pointer target missing');
+            el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();const x=r.left+r.width/2,y=r.top+r.height/2;
+            if(document.elementFromPoint(x,y)!==el)throw Error('pointer target obscured');return {x,y};})()`);
+        await send('Input.dispatchMouseEvent', {type: 'mouseMoved', ...point});
+        await send('Input.dispatchMouseEvent', {type: 'mousePressed', ...point, button: 'left', clickCount: 1});
+        await send('Input.dispatchMouseEvent', {type: 'mouseReleased', ...point, button: 'left', clickCount: 1});
+    };
+    const capture = async suffix => {
+        if (!screenshotPath) return;
+        const shot = await send('Page.captureScreenshot', {format: 'png'});
+        await writeFile(screenshotPath.replace(/\.png$/, '-' + suffix + '.png'), Buffer.from(shot.data, 'base64'));
+    };
+    await pointerClick('dialog[open] .t8-style-preview-controls button');
+    if (!await evaluate(`document.querySelector('dialog[open] .t8-style-preview-controls button').getAttribute('aria-pressed')==='true'`)) throw Error('native pointer light click failed');
+    await pointerClick('dialog[open] .t8-style-preview-controls button');
+    await capture('color');
+    await evaluate(`(async()=>{
+        const {app}=await import('/scripts/app.js'),{openStyleBrowser}=await import('/extensions/comfyui-minimax-h3-prompt-enhancer-T8/visual_style_config.js');
+        [...document.querySelector('dialog[open]').querySelectorAll('button')].find(b=>b.textContent==='关闭 / Close').click();
+        const n=LiteGraph.createNode('T8CreatorStyleConfig');app.graph.add(n);openStyleBrowser(n,'creator');
+        const wait=ms=>new Promise(done=>setTimeout(done,ms));
+        for(let i=0;i<100;i++){const list=document.querySelector('dialog[open] select[aria-label="风格列表 / Styles"]');
+            if(list?.options.length===200){list.value='155';list.dispatchEvent(new Event('change',{bubbles:true}));break;}await wait(30);}
+        for(let i=0;i<100;i++){if(document.querySelector('[data-diagram="push"]'))return true;await wait(30);}throw Error('creator illustration timeout');
+    })()`);
+    await pointerClick('dialog[open] .t8-style-preview-controls button:nth-child(3)');
+    await wait(220);
+    if (!await evaluate(`document.querySelector('[data-diagram]').dataset.progress!=='50' && document.querySelector('.t8-style-preview-controls button:nth-child(3)').textContent.includes('Pause')`)) throw Error('native pointer play failed');
+    await pointerClick('dialog[open] .t8-style-preview-controls button:nth-child(3)');
+    await capture('creator-motion');
+    await evaluate(`(async()=>{const list=document.querySelector('dialog[open] select[aria-label="风格列表 / Styles"]');
+        list.value='181';list.dispatchEvent(new Event('change',{bubbles:true}));
+        for(let i=0;i<100;i++){if(document.querySelector('[data-diagram="low"]'))return;await new Promise(done=>setTimeout(done,30));}throw Error('low viewpoint timeout');})()`);
+    if (!await evaluate(`document.querySelector('.t8-style-preview-controls button:nth-child(3)').disabled&&document.querySelector('.t8-style-preview-controls input').disabled`)) throw Error('static composition exposes meaningless playback');
+    await capture('creator-low');
+    await pointerClick('dialog[open] .t8-style-preview-controls button:nth-child(2)');
+    if (!await evaluate(`document.querySelector('[data-diagram]').dataset.diagram==='negative'`)) throw Error('native pointer method failed');
+    await capture('creator-negative');
+    const layouts = [];
+    for (const width of [600, 360]) {
+        await send('Emulation.setDeviceMetricsOverride', {width, height: 1000, deviceScaleFactor: 1, mobile: false});
+        await wait(80);
+        layouts.push(await evaluate(`(()=>{const d=document.querySelector('dialog[open]'),r=d.getBoundingClientRect();
+            if(d.scrollWidth>d.clientWidth+1||r.left<0||r.right>innerWidth+1)throw Error('horizontal overflow at '+innerWidth+': '+JSON.stringify({scroll:d.scrollWidth,client:d.clientWidth,left:r.left,right:r.right}));
+            d.querySelector('.t8-style-illustration').scrollIntoView({block:'start'});return {width:innerWidth,dialogWidth:r.width,noOverflow:true};})()`));
+        await capture('narrow-' + width);
+    }
+    await send('Emulation.setDeviceMetricsOverride', {width: 1800, height: 1350, deviceScaleFactor: 1, mobile: false});
+    await evaluate(`document.querySelector('dialog[open]').scrollTop=0`);
+    await evaluate(`(async()=>{const list=document.querySelector('dialog[open] select[aria-label="风格列表 / Styles"]');
+        list.value='155';list.dispatchEvent(new Event('change',{bubbles:true}));
+        for(let i=0;i<100;i++){if(document.querySelector('[data-diagram="push"]'))return;await new Promise(done=>setTimeout(done,30));}throw Error('motion switch timeout');})()`);
+    await pointerClick('dialog[open] .t8-style-preview-controls button:nth-child(3)');
+    await wait(100);
+    await evaluate(`(()=>{globalThis.__closedStylePreview=document.querySelector('.t8-style-illustration');
+        [...document.querySelector('dialog[open]').querySelectorAll('button')].find(b=>b.textContent==='关闭 / Close').click();
+        globalThis.__closedStyleProgress=__closedStylePreview.querySelector('[data-diagram]').dataset.progress;})()`);
+    await wait(180);
+    if (!await evaluate(`!document.querySelector('dialog[open]')&&__closedStylePreview.querySelector('[data-diagram]').dataset.progress===__closedStyleProgress`)) throw Error('closed preview animation continued');
+    // Leave a fresh paused creator example for the harness's final screenshot.
+    await evaluate(`(async()=>{const {app}=await import('/scripts/app.js'),{openStyleBrowser}=await import('/extensions/comfyui-minimax-h3-prompt-enhancer-T8/visual_style_config.js');
+        const n=app.graph._nodes.find(n=>n.comfyClass==='T8CreatorStyleConfig');openStyleBrowser(n,'creator');
+        const wait=ms=>new Promise(done=>setTimeout(done,ms));for(let i=0;i<100;i++){
+            const list=document.querySelector('dialog[open] select[aria-label="风格列表 / Styles"]');if(list?.options.length===200){list.value='022';list.dispatchEvent(new Event('change',{bubbles:true}));break;}await wait(30);}
+        for(let i=0;i<100;i++){if(document.querySelector('[data-diagram="reflection"]'))return;await wait(30);}throw Error('final preview timeout');})()`);
+    result.result.value.visualPreview = {nativePointer: true, closeStopsPlayback: true, layouts};
     if (screenshotPath) await writeFile(screenshotPath.replace(/\.png$/, '-native-exports.json'), JSON.stringify(result.result.value, null, 2));
     process.stdout.write(JSON.stringify({examples: result.result.value.examples, queues: result.result.value.queues}) + '\n');
 }

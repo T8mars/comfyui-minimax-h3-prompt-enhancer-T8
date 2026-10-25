@@ -16,6 +16,20 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-25: display-only visual style illustrations
+
+No schema/compiler/config/resource identity changes. The existing one browse
+button still has both serialization flags disabled, with full 4/3 runtime widget
+counts and 3/2 saved values. Scene/light/method/progress/play controls exist only
+inside the dialog, never in widgets/properties/prompts. All 200 color comparisons
+and 400 curated creator diagrams are display-only, bound to source resource
+SHA256. Missing/stale preview metadata fails independently of valid style data.
+Animations are opt-in and disposed on selection/search/close/configure/removal,
+or stop when hidden/disconnected/owner invalid. Relative progress is not seconds.
+Native browser checks must exercise these controls and assert unchanged native
+serialization, actual SVG output, playback/pause, stale isolation and mobile fit.
+No actual model/video benefit is implied by a diagram or a synthetic queue.
+
 ### 2026-10-25: independent color and creator styles
 
 Append two helpers after the old 36 nodes. Color saves exactly mode/palette/scope;

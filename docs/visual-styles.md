@@ -5,7 +5,7 @@
 ## 怎么用
 
 1. 添加配置节点，点击“浏览风格与帮助”，按分类、编号或中英名称搜索。
-2. 点击列表中的条目看色块或拍法说明，再点“应用到当前节点”。
+2. 点击条目查看直观示意：颜色对照“中性基准/所选配色”，导演可切换两条方法，动态方法可拖动进度或播放；再点“应用到当前节点”。
 3. 把配置节点的模式切为“开启 / On”，接到增强器对应输入口；设置原有 LLM 渠道、自己的 Key 和原始内容，再运行。
 4. 只接颜色、只接导演或两者自由搭配；选导演不会自动选他的色卡。关闭或断开回到旧行为。
 
@@ -16,6 +16,14 @@
 - [两者组合 → H3](../example_workflows/visual_style_combined_h3.json)
 
 原有38个保存字段、输出顺序和旧工作流保持。配置节点的浏览按钮、弹窗、搜索与预览不保存到 `widgets_values`；颜色只保存3项、导演只保存2项。失效历史名称保留，需重新选择，不能静默换成另一条目。
+
+## 直观预览：200 色彩 / 200 创作者
+
+- **色彩**：同一原创矢量室内/街景提供中性和配色并排对照，肤色与衣服固定。保留六主色、候选色与精确说明；场景面积不代表六色比例。可预览原说明的一类光影，初始开关跟随节点的作用范围，但弹窗中的场景/光影开关仅控制示意，不修改节点。
+- **导演**：400条现有方法各有人工对应的构图、机位、空间、动作或节奏图式。选择第1/2条方法，动态示意可拖动相对进度或播放/暂停，默认不播放；静态构图会禁用进度与播放，避免制造原方法没有的运动。灰度画面不暗中采用该导演的色卡。箭头、A/B、物件是解释拍法的教学符号，绝不加入提示词。允许切镜的条目明确提示固定单镜会跳过；其他原有条件仍以完整方法文字为准。
+- **真实生成对比**：当前条目没有经验证的H3/Seedance成片，面板明确显示“未实测”。矢量图不是模型输出、电影剧照、LUT或审美收益证明；不拿同一个样片冒充200种效果。实际比较需要记录模型、版本、完整输入、参数、增强结果并控制相同内容。浏览不会发起生成或付费调用。
+
+全部示意由本地浏览器绘制，离线可用，无外部素材下载，不依赖原资料D盘，不分发原电影剧照。映射以原规则资源SHA256绑定；版本不匹配或示意缺失时显示不可用，已校验的风格说明/选择继续可用。演示播放在关闭、换条目、搜索、切工作流、所属节点失效或页面隐藏时停止；预览进度不是生成时长，不增加时长限制。缩小窗口时改为单列，不更改画布节点尺寸。
 
 ## 两个入口的边界
 
@@ -36,6 +44,8 @@
 ## English quick guide
 
 Add either config, browse/search the local catalog, preview a record, Apply, switch On, and connect its matching optional input on H3 or Seedance 2.0. Each example has one enhancer and blank credentials. Both modifiers are independent, opt-in and experimental; creator selection does not imply color selection.
+
+All 200 palettes have local neutral/colored vector-scene comparisons (interior or street), with locked illustrative skin/clothing and separately toggled lighting demonstrations. These controls do not change the node scope. All 400 creator methods map to reviewed neutral diagrams; dynamic methods allow scrubbing and Play/Pause, while static compositions disable playback. Nothing autoplays or enters saved widgets/prompts. Illustrations are pinned to resource hashes, work offline and fail independently of valid style selection. The real-output section explicitly says untested: these are original teaching diagrams, not rendered H3/Seedance results or film stills. No inference, downloads, new duration cap, or hidden palette selection is involved.
 
 Color references are soft hierarchies, not LUTs or measured pixel ratios. Lighting is separately opt-in and accent swatches are preview-only. Creator entries contain independently adapted presentation methods, not screenplay generation or borrowed movie scenes. Limited-source entries and non-director roles are labeled explicitly. Existing facts, timing, shot counts, dialogue, reference roles and locks take priority. Single-shot mode filters methods requiring cuts. No duration cap or automatic segmentation is added.
 

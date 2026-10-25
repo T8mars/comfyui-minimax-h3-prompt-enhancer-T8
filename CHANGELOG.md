@@ -3,6 +3,19 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.38.1] - 2026-10-25
+
+- Expand the existing style browser with local neutral/colored scene comparisons
+  for 200 palettes and 400 mapped camera, composition and timing illustrations
+  for 200 creator references. Dynamic methods support manual playback/scrubbing;
+  static compositions keep playback disabled.
+- Keep illustration controls outside node serialization and generation prompts.
+  Bind preview metadata to existing resource hashes and allow validated style
+  selection when an illustration is unavailable. Stop animation on close,
+  selection changes, hidden pages or stale owners, and support narrow windows.
+- Preserve node interfaces, style configurations and generation rules. Label
+  illustrations as teaching diagrams; actual model outputs remain untested.
+
 ## [1.38.0] - 2026-10-25
 
 - Add independent, default-Off color and creator presentation configuration

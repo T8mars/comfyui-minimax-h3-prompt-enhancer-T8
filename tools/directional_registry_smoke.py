@@ -67,7 +67,11 @@ assert [s.node_id for s in schemas[-2:]] == ["T8ColorStyleConfig", "T8CreatorSty
 styles = sys.modules[spec.name + ".visual_styles"]
 assert len(styles.load_catalog()[0]["entries"]) == 200
 for group in ("color", "creator"):
-    for i in range(1, 201): styles.load_resource(group, f"{i:03d}")
+    for i in range(1, 201):
+        resource, _, digest = styles.load_resource(group, f"{i:03d}")
+        preview = sys.modules[spec.name + ".visual_style_previews"].illustration_payload(group, resource, digest)
+        assert preview["available"] and not preview["real_output"]
+assert (p / "web/js/visual_style_preview.mjs").is_file()
 for index in (0, 1):
     assert [s.id for s in schemas[index].inputs[-2:]] == ["color_style_config", "creator_style_config"]
     assert all(s.optional and s.lazy for s in schemas[index].inputs[-2:])

@@ -3,6 +3,7 @@ import sys
 from urllib.parse import urlsplit
 from .completion_recovery_routes import _same_origin_request
 from .visual_styles import load_catalog, load_resource, selection_label
+from .visual_style_previews import illustration_payload
 
 _REGISTERED = False
 
@@ -16,8 +17,13 @@ def catalog_payload():
 
 def detail_payload(kind, style_id):
     resource, entry, digest = load_resource(kind, style_id)
+    try:
+        illustration = illustration_payload(kind, resource, digest)
+    except (ValueError, TypeError, OSError, KeyError):
+        illustration = {"available": False, "real_output": False}
     return {"schema_version": "t8-visual-style-detail/v1", "kind": kind, "resource": resource,
-            "selection": selection_label(entry), "digest": digest, "model_calls": 0}
+            "selection": selection_label(entry), "digest": digest, "model_calls": 0,
+            "illustration": illustration}
 
 
 def register_visual_style_routes():
