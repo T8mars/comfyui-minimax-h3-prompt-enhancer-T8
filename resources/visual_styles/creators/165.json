@@ -1,0 +1,25 @@
+{
+  "id": "165",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Relate subject and viewpoint through existing mirrors without duplicating roles.",
+      "text_zh": "借已有镜面联系主体与观察位置，不复制角色。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep existing group positions and gaze relationships without adding identity plots.",
+      "text_zh": "保持已有群像各自位置与目光关系，不增加身份剧情。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

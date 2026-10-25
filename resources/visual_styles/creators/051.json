@@ -1,0 +1,24 @@
+{
+  "id": "051",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use an eye-level medium view to retain the subject's everyday surroundings.",
+      "text_zh": "以平视中景保持人物与日常环境的关系。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Minimize unmotivated viewpoint changes so existing behavior can unfold.",
+      "text_zh": "减少无理由机位变化，让既有行为完整展开。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

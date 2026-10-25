@@ -1,0 +1,25 @@
+{
+  "id": "186",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain existing urban space and subject positions in a calm wide view.",
+      "text_zh": "以冷静宽景保持已有城市空间与人物位置。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Interweave observation only across established lines without new roles or timelines.",
+      "text_zh": "仅在原稿已有多线时交织观察，不新增人物或时间层。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

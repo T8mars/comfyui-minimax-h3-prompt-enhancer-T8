@@ -1,0 +1,26 @@
+{
+  "id": "152",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe the existing subject with this record's slow-push template.",
+      "text_zh": "采用同条来源的缓推模板观察既有主体。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Gently follow existing movement without turning abstract concepts into new characters.",
+      "text_zh": "若已有移动可用轻柔跟随，不把抽象概念变成新角色。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

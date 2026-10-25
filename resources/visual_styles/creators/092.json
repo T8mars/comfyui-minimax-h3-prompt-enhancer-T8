@@ -1,0 +1,26 @@
+{
+  "id": "092",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize existing planar elements by juxtaposition without adding text or projection.",
+      "text_zh": "借已有平面元素的并置组织画面，不添加文字或投影。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine existing surfaces and details without assigning new symbolic meaning.",
+      "text_zh": "近看已有表面与细节，保持原物件意义。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

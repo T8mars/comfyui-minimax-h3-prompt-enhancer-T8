@@ -1,0 +1,26 @@
+{
+  "id": "082",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing groups and space with a wide view without adding performers.",
+      "text_zh": "以广角观察已有群体和空间，不新增表演者。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Make depth in existing crowd movement readable without imposing revelry.",
+      "text_zh": "让现有人群移动的前后层次可辨，不强加狂欢。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

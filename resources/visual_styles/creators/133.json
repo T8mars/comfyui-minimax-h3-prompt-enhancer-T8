@@ -1,0 +1,25 @@
+{
+  "id": "133",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When allowed, circle the existing subject with a traceable path and axis.",
+      "text_zh": "允许时绕行已有主体，保证路线与动作轴可追踪。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Emphasize existing volume from a low angle without adding explosions or equipment.",
+      "text_zh": "从低角度强调已有体积，不新增爆炸或装备。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

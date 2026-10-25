@@ -1,0 +1,26 @@
+{
+  "id": "135",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Clarify established clues and viewpoints without inventing secrets or reversals.",
+      "text_zh": "让既有线索和观察位置清楚，不制造秘密或反转。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use the record's slow-push template on an existing target, preserving reveal timing.",
+      "text_zh": "采用同条模板的缓推观察已有目标，保留揭示时机。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

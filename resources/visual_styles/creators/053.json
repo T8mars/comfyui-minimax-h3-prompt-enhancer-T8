@@ -1,0 +1,24 @@
+{
+  "id": "053",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use coherent tracking and lateral moves for existing action without new spectacle.",
+      "text_zh": "以连贯跟随和侧移交代既有动作，不添加新奇观。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe the established target from a low viewpoint while retaining gaze direction.",
+      "text_zh": "低位观察既有目标，保持主体与观看方向的对应。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "086",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize the existing scene through clear symmetry without adding ritual props.",
+      "text_zh": "以清晰对称关系组织已有场面，不新增仪式道具。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep formations, spacing and individuals readable in existing collective action.",
+      "text_zh": "在已有集体行动中保持队列、间距和个体可辨。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

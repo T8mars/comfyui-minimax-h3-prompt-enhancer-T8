@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#6B8E23",
+      "name_en": "Olive Drab Green",
+      "name_zh": "橄榄绿"
+    },
+    {
+      "code": "E02",
+      "hex": "#B8860B",
+      "name_en": "Dark Goldenrod",
+      "name_zh": "暗金"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B4513",
+      "name_en": "Decay Brown",
+      "name_zh": "腐朽棕"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F2F2F",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6B8E23, #8B4513, #1C1C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6B8E23, #8B4513, #1C1C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "094",
+  "lighting_notes": {
+    "en": "Gentle diffuse key light.",
+    "zh": "温和漫射主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6B8E23",
+      "name_en": "Olive Drab Green",
+      "name_zh": "橄榄绿",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8B4513",
+      "name_en": "Decay Brown",
+      "name_zh": "腐朽棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#B8860B",
+      "name_en": "Dark Goldenrod",
+      "name_zh": "暗金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate Gray",
+      "name_zh": "暗青灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#D2B48C",
+      "name_en": "Tan Silk",
+      "name_zh": "棕绸色",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

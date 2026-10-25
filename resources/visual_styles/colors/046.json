@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8C42",
+      "name_en": "Orange-Red Passion",
+      "name_zh": "橙红热情"
+    },
+    {
+      "code": "E02",
+      "hex": "#7B68EE",
+      "name_en": "Indigo Purple Dream",
+      "name_zh": "靛蓝紫梦"
+    },
+    {
+      "code": "E03",
+      "hex": "#F0E68C",
+      "name_en": "Soft Yellow Hope",
+      "name_zh": "柔黄希望"
+    },
+    {
+      "code": "E04",
+      "hex": "#4A0E0E",
+      "name_en": "Deep Wine Red",
+      "name_zh": "深酒红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C68642, #3A2E5F, #8B5A2B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C68642, #3A2E5F, #8B5A2B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "046",
+  "lighting_notes": {
+    "en": "Soft key and localized fill with readable facial planes.",
+    "zh": "柔和主光与局部填充，面部层次清楚。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C68642",
+      "name_en": "Warm Golden Brown Skin",
+      "name_zh": "暖金褐肤",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#3A2E5F",
+      "name_en": "Twilight Purple-Blue",
+      "name_zh": "暮光紫蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8B5A2B",
+      "name_en": "Deep Brown Warm Skin",
+      "name_zh": "深棕暖肤",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#D4A574",
+      "name_en": "Sunny Golden Brown",
+      "name_zh": "阳光金棕",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#2E5E4E",
+      "name_en": "Ink Green Teal",
+      "name_zh": "墨绿青蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#E8C99B",
+      "name_en": "Warm Sand Gold",
+      "name_zh": "暖沙金",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "166",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Only for established dual lines, keep their observational clues clear without new timelines.",
+      "text_zh": "只有原稿已有双线时，保持两条观察线索清楚，不新建时间层。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-push template without adding period props.",
+      "text_zh": "采用本条缓推模板靠近已有主体，不新增时代道具。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4A148C",
+      "name_en": "酷儿身份",
+      "name_zh": "酷儿身份"
+    },
+    {
+      "code": "E02",
+      "hex": "#E65100",
+      "name_en": "70年代迷狂",
+      "name_zh": "70年代迷狂"
+    },
+    {
+      "code": "E03",
+      "hex": "#F48FB1",
+      "name_en": "禁忌爱情",
+      "name_zh": "禁忌爱情"
+    },
+    {
+      "code": "E04",
+      "hex": "#0D47A1",
+      "name_en": "压抑忧郁",
+      "name_zh": "压抑忧郁"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E65100, #4A148C, #F48FB1. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E65100, #4A148C, #F48FB1；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "166",
+  "lighting_notes": {
+    "en": "Soft warm light retaining existing source motivation.",
+    "zh": "柔和暖光，保留现有光源动机。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E65100",
+      "name_en": "70s Orange",
+      "name_zh": "70s橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#4A148C",
+      "name_en": "Queer Purple",
+      "name_zh": "酷儿紫",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Retro Gold",
+      "name_zh": "复古金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#0D47A1",
+      "name_en": "Melancholy Blue",
+      "name_zh": "忧郁蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#8D6E63",
+      "name_en": "70s Brown",
+      "name_zh": "70s棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#F48FB1",
+      "name_en": "Carol Pink",
+      "name_zh": "卡罗尔粉",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

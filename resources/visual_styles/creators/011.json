@@ -1,0 +1,24 @@
+{
+  "id": "011",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Build directional tension from existing diagonals and nearby detail.",
+      "text_zh": "用已有斜线与近处细节建立方向张力。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine established key actions and objects without adding danger or reactions.",
+      "text_zh": "近看既有关键动作与物件，不添加危险或反应。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

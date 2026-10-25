@@ -1,0 +1,25 @@
+{
+  "id": "148",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Build planar decorative layers from existing geometry without adding patterns.",
+      "text_zh": "以现有几何线条建立平面装饰性层次，不添图案。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize existing spatial relationships symmetrically while retaining identity and aspect ratio.",
+      "text_zh": "对称安排既有空间关系，保持主体身份与画幅。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "180",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing partial clues from the established subjective position without violence additions.",
+      "text_zh": "从已定主观位置观察已有局部线索，不新增暴力。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Permitted fragmentary editing changes presentation only, not facts or causality.",
+      "text_zh": "允许的碎片组接只重组呈现范围，不改变事实与因果。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8A9A8A",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#6A5A4A",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#A89878",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A3A2A",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #7A8A7A, #9A9080, #5A6A5A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #7A8A7A, #9A9080, #5A6A5A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "079",
+  "lighting_notes": {
+    "en": "Natural directional light with soft reflected fill.",
+    "zh": "自然方向光与柔和反射补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#7A8A7A",
+      "name_en": "Mexican Rural Green",
+      "name_zh": "墨西哥乡村绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#9A9080",
+      "name_en": "Earth Brown Gray",
+      "name_zh": "土棕灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5A6A5A",
+      "name_en": "Deep Forest Green Gray",
+      "name_zh": "深林绿灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B8A890",
+      "name_en": "Dry Earth Beige",
+      "name_zh": "干土米",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#D4C8A8",
+      "name_en": "Sunny Wheat",
+      "name_zh": "阳光麦",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3A4A3A",
+      "name_en": "Dark Green Black",
+      "name_zh": "暗绿黑",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

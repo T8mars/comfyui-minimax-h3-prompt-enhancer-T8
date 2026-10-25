@@ -1,0 +1,25 @@
+{
+  "id": "134",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow action in the existing confined space along a feasible camera path.",
+      "text_zh": "在已有狭窄空间跟随动作，保留可通行的机位路径。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Connect established contact, consequence and next movement without extra attacks.",
+      "text_zh": "让既有接触、结果与下一动作相连，不追加攻击。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

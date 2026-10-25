@@ -1,0 +1,25 @@
+{
+  "id": "120",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present existing volume through low angles and symmetry without adding political symbols.",
+      "text_zh": "用低角度和对称关系呈现既有体积，不新增政治符号。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain formations and individual contours in existing collective movement.",
+      "text_zh": "在已有集体动作中保持队列及个体轮廓清晰。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

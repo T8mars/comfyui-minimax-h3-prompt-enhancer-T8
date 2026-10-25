@@ -1,0 +1,24 @@
+{
+  "id": "056",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Let existing participants hand off attention within a continuous view.",
+      "text_zh": "让已有行动者在连续画面中交接注意力。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Move smoothly through existing doors or boundaries without inventing rooms.",
+      "text_zh": "平滑穿过已有门口或空间边界，不创造新房间。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

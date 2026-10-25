@@ -1,0 +1,24 @@
+{
+  "id": "005",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the subject's scale legible against the established environment in a wide view.",
+      "text_zh": "以宽景保持主体与既有大环境的尺度差。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Advance slowly through existing depth without adding monumental objects.",
+      "text_zh": "缓慢推进已有纵深，避免为显壮观新增巨物。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8F00",
+      "name_en": "非洲记忆",
+      "name_zh": "非洲记忆"
+    },
+    {
+      "code": "E02",
+      "hex": "#6D4C41",
+      "name_en": "身体感官",
+      "name_zh": "身体感官"
+    },
+    {
+      "code": "E03",
+      "hex": "#2E7D32",
+      "name_en": "自然原欲",
+      "name_zh": "自然原欲"
+    },
+    {
+      "code": "E04",
+      "hex": "#78909C",
+      "name_en": "巴黎疏离",
+      "name_zh": "巴黎疏离"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8F00, #6D4C41, #1A1A1A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8F00, #6D4C41, #1A1A1A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "200",
+  "lighting_notes": {
+    "en": "Directional soft side light retaining surface layers.",
+    "zh": "有方向的柔侧光，保留表面层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8F00",
+      "name_en": "African Gold",
+      "name_zh": "非洲金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#6D4C41",
+      "name_en": "Skin Brown",
+      "name_zh": "皮肤棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2E7D32",
+      "name_en": "Tropical Green",
+      "name_zh": "热带绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C62828",
+      "name_en": "Blood and Flesh",
+      "name_zh": "血与肉",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#78909C",
+      "name_en": "Paris Gray",
+      "name_zh": "巴黎灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

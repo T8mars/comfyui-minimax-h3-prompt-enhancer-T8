@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#D500F9",
+      "name_en": "杀手美学",
+      "name_zh": "杀手美学"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF1744",
+      "name_en": "复仇怒火",
+      "name_zh": "复仇怒火"
+    },
+    {
+      "code": "E03",
+      "hex": "#00E5FF",
+      "name_en": "冷酷精准",
+      "name_zh": "冷酷精准"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD600",
+      "name_en": "荣耀规则",
+      "name_zh": "荣耀规则"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #D500F9, #00E5FF, #FF1744. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #D500F9, #00E5FF, #FF1744；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "130",
+  "lighting_notes": {
+    "en": "Localized colored sources divide space while keeping subjects readable.",
+    "zh": "局部色光划分空间，主体保持可读。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#D500F9",
+      "name_en": "Neon Purple",
+      "name_zh": "霓虹紫",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00E5FF",
+      "name_en": "Electric Cyan",
+      "name_zh": "电青",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FF1744",
+      "name_en": "Blood Red",
+      "name_zh": "血红",
+      "share": 0.18
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD600",
+      "name_en": "Continental Gold",
+      "name_zh": "金尊黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1A1A2E",
+      "name_en": "Midnight Blue Black",
+      "name_zh": "深夜蓝黑",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#76FF03",
+      "name_en": "Fluorescent Green",
+      "name_zh": "荧光绿",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

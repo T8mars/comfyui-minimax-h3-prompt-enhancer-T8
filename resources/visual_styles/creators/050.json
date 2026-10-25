@@ -1,0 +1,24 @@
+{
+  "id": "050",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action flexibly from street level.",
+      "text_zh": "从街面高度灵活跟随已有行动。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain the subject-exit relationship within an existing small interior.",
+      "text_zh": "在已有狭小室内保留人物与出口的空间关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

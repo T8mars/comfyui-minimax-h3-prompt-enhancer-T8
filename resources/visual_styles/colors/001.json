@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#7B241C",
+      "name_en": "Blood Dark Red",
+      "name_zh": "血暗红"
+    },
+    {
+      "code": "E02",
+      "hex": "#F7DC6F",
+      "name_en": "Vertigo Gold",
+      "name_zh": "眩晕金"
+    },
+    {
+      "code": "E03",
+      "hex": "#283747",
+      "name_en": "Cold Slate Blue",
+      "name_zh": "冷灰蓝"
+    },
+    {
+      "code": "E04",
+      "hex": "#F8B195",
+      "name_en": "Lip Pink Coral",
+      "name_zh": "唇粉橘"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A2332, #3D5A6C, #8B6914. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A2332, #3D5A6C, #8B6914；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "001",
+  "lighting_notes": {
+    "en": "Use side light with defined shadow edges and readable subject detail.",
+    "zh": "侧光形成清晰阴影边缘，保留主体细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A2332",
+      "name_en": "Deep Midnight Blue",
+      "name_zh": "深夜暗蓝",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#3D5A6C",
+      "name_en": "Misty Steel Blue",
+      "name_zh": "雾霭钢蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8B6914",
+      "name_en": "Dark Gold Amber",
+      "name_zh": "暗金琥珀",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#C41E3A",
+      "name_en": "Terror Scarlet",
+      "name_zh": "恐惧猩红",
+      "share": 0.08
+    },
+    {
+      "code": "C05",
+      "hex": "#2E4A38",
+      "name_en": "Deep Ink Green",
+      "name_zh": "深墨绿",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#D4C5A9",
+      "name_en": "Warm Skin Beige",
+      "name_zh": "暖米肤",
+      "share": 0.05
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

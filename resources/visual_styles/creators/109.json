@@ -1,0 +1,26 @@
+{
+  "id": "109",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "If repetition already exists, retain its small differences without inventing a time loop.",
+      "text_zh": "如原稿已有重复，保留其细微变化而不发明时间循环。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Clarify existing nested spaces without turning psychological metaphor into a new setting.",
+      "text_zh": "明确已有空间的内外嵌套，不把心理隐喻变成新场景。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -9,8 +9,10 @@ from typing import Any
 
 try:
     from .strata_provider import current_strata_run
+    from .visual_styles import safe_style_metadata
 except ImportError:
     from strata_provider import current_strata_run
+    from visual_styles import safe_style_metadata
 
 
 RECOVERY_ACTION_NORMAL = "normal"
@@ -146,6 +148,7 @@ def safe_director_metadata(values: Any) -> dict[str, Any]:
         # or raw provenance in recovery/diagnostics.
         result["speech_reference"] = {key: speech[key] for key in (
             "schema_version", "purpose", "source", "status", "cue_count", "timed", "requires_review")}
+    result.update(safe_style_metadata(values))
     return result
 
 

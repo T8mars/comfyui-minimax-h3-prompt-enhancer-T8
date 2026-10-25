@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8B0000",
+      "name_en": "Velvet Red",
+      "name_zh": "丝绒红"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E4A3E",
+      "name_en": "Ink Green Satin",
+      "name_zh": "墨绿缎"
+    },
+    {
+      "code": "E03",
+      "hex": "#DAA520",
+      "name_en": "Goldenrod",
+      "name_zh": "金菊黄"
+    },
+    {
+      "code": "E04",
+      "hex": "#4A2C5A",
+      "name_en": "Dark Violet",
+      "name_zh": "暗紫罗"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8B0000, #2E4A3E, #1C1C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8B0000, #2E4A3E, #1C1C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "097",
+  "lighting_notes": {
+    "en": "Soft diffuse light retaining surface texture.",
+    "zh": "柔和漫射光保留表面纹理。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8B0000",
+      "name_en": "Velvet Red",
+      "name_zh": "丝绒红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E4A3E",
+      "name_en": "Ink Green Satin",
+      "name_zh": "墨绿缎",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#DAA520",
+      "name_en": "Goldenrod",
+      "name_zh": "金菊黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#4A2C5A",
+      "name_en": "Dark Violet",
+      "name_zh": "暗紫罗",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#CD853F",
+      "name_en": "Golden Brown Silk",
+      "name_zh": "金棕绸",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

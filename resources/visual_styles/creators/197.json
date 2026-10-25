@@ -1,0 +1,26 @@
+{
+  "id": "197",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow supplied travel observationally without adding border conflict or music.",
+      "text_zh": "以纪实跟随呈现已给行进，不添加边境冲突或音乐。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain subject-landscape scale without animals or scenery additions.",
+      "text_zh": "保留主体与已有地貌尺度，不增设动物或景观。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#7B1FA2",
+      "name_en": "迷幻噩梦",
+      "name_zh": "迷幻噩梦"
+    },
+    {
+      "code": "E02",
+      "hex": "#C2185B",
+      "name_en": "暴力复仇",
+      "name_zh": "暴力复仇"
+    },
+    {
+      "code": "E03",
+      "hex": "#0D47A1",
+      "name_en": "冰冷愤怒",
+      "name_zh": "冰冷愤怒"
+    },
+    {
+      "code": "E04",
+      "hex": "#FF6F00",
+      "name_en": "烈焰毁灭",
+      "name_zh": "烈焰毁灭"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #7B1FA2, #C2185B, #0D47A1. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #7B1FA2, #C2185B, #0D47A1；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "107",
+  "lighting_notes": {
+    "en": "Motivated localized colored light with retained layers.",
+    "zh": "有动机的局部色光，保留层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#7B1FA2",
+      "name_en": "Synthwave Purple",
+      "name_zh": "合成器紫",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#C2185B",
+      "name_en": "Neon Pink",
+      "name_zh": "霓虹粉",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#0D47A1",
+      "name_en": "Electric Blue",
+      "name_zh": "电蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FF6F00",
+      "name_en": "Blaze Orange",
+      "name_zh": "烈焰橙",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1A1A2E",
+      "name_en": "Midnight Blue Black",
+      "name_zh": "深夜蓝黑",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#880E4F",
+      "name_en": "Deep Magenta",
+      "name_zh": "深玫红",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

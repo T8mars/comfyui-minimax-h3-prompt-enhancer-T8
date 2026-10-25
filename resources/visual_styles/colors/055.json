@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF4500",
+      "name_en": "Red",
+      "name_zh": "烈火红"
+    },
+    {
+      "code": "E02",
+      "hex": "#DAA520",
+      "name_en": "Yellow",
+      "name_zh": "金箔黄"
+    },
+    {
+      "code": "E03",
+      "hex": "#4B0082",
+      "name_en": "Blue",
+      "name_zh": "靛蓝夜"
+    },
+    {
+      "code": "E04",
+      "hex": "#F5F5DC",
+      "name_en": "White",
+      "name_zh": "飞雪白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C8964A, #7A3B1F, #2D3A2E. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C8964A, #7A3B1F, #2D3A2E；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "055",
+  "lighting_notes": {
+    "en": "Backlight with restrained soft fill, without added dust or smoke.",
+    "zh": "背光与适量柔化补光，不新增尘烟。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C8964A",
+      "name_en": "Gold",
+      "name_zh": "大漠金沙",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#7A3B1F",
+      "name_en": "Red",
+      "name_zh": "朱砂赤红",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2D3A2E",
+      "name_en": "Green",
+      "name_zh": "青竹墨绿",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#E8D5A8",
+      "name_en": "White",
+      "name_zh": "宣纸米白",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#5C5448",
+      "name_en": "Gray",
+      "name_zh": "青灰瓦黛",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#D6B98A",
+      "name_en": "Yellow",
+      "name_zh": "土黄赭石",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

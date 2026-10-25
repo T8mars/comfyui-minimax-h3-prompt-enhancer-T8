@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#546E7A",
+      "name_en": "存在焦虑",
+      "name_zh": "存在焦虑"
+    },
+    {
+      "code": "E02",
+      "hex": "#8D6E63",
+      "name_en": "自我怀疑",
+      "name_zh": "自我怀疑"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "温暖回忆",
+      "name_zh": "温暖回忆"
+    },
+    {
+      "code": "E04",
+      "hex": "#37474F",
+      "name_en": "意识深渊",
+      "name_zh": "意识深渊"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #546E7A, #37474F, #78909C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #546E7A, #37474F, #78909C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "109",
+  "lighting_notes": {
+    "en": "Cool-neutral natural light with soft transitions.",
+    "zh": "冷中性自然光，柔和过渡。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#546E7A",
+      "name_en": "Grayish Blue",
+      "name_zh": "灰蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#78909C",
+      "name_en": "Foggy Blue Gray",
+      "name_zh": "雾蓝灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8D6E63",
+      "name_en": "Coffee Brown",
+      "name_zh": "咖啡棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B0BEC5",
+      "name_en": "Silver Blue Gray",
+      "name_zh": "银蓝灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow Memory",
+      "name_zh": "暖黄记忆",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#37474F",
+      "name_en": "Dark Cyan Gray",
+      "name_zh": "深青灰",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

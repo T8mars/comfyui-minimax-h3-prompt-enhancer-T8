@@ -1,0 +1,25 @@
+{
+  "id": "090",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Connect existing participants' actions through continuous tracking without rewriting relationships.",
+      "text_zh": "以连续跟随连接已有多人行动，不重写角色关系。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Let attention transfer among participants with established actions.",
+      "text_zh": "让注意力随既定动作在人群中转移。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

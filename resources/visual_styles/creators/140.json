@@ -1,0 +1,26 @@
+{
+  "id": "140",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Retain existing action and pauses through sustained observation without adding dramatic turns.",
+      "text_zh": "在持续观察中保留原有动作与空白，不补戏剧转折。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use the record's slow-push template to approach the existing subject.",
+      "text_zh": "采用同条模板的缓推，靠近原有观察对象。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

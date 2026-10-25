@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F48FB1",
+      "name_en": "童真忧伤",
+      "name_zh": "童真忧伤"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "温暖怀旧",
+      "name_zh": "温暖怀旧"
+    },
+    {
+      "code": "E03",
+      "hex": "#81C784",
+      "name_en": "自然治愈",
+      "name_zh": "自然治愈"
+    },
+    {
+      "code": "E04",
+      "hex": "#64B5F6",
+      "name_en": "幻想飞翔",
+      "name_zh": "幻想飞翔"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFAB91, #F48FB1, #FFCC80. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFAB91, #F48FB1, #FFCC80；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "142",
+  "lighting_notes": {
+    "en": "Even soft light retains the source's frontal softness; the contradictory flat-light ban is excluded.",
+    "zh": "均匀柔光，保留源中平光倾向；排除矛盾的避免平光条款。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#F48FB1",
+      "name_en": "Pastel Pink",
+      "name_zh": "粉红",
+      "share": 0.18
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Butter Yellow",
+      "name_zh": "奶油黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#81C784",
+      "name_en": "Mint Green",
+      "name_zh": "薄荷绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#64B5F6",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#BA68C8",
+      "name_en": "Lavender Purple",
+      "name_zh": "薰衣草紫",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFAB91",
+      "name_en": "Coral Orange",
+      "name_zh": "珊瑚橙",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

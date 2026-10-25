@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#1B5E20",
+      "name_en": "森林恐惧",
+      "name_zh": "森林恐惧"
+    },
+    {
+      "code": "E02",
+      "hex": "#B71C1C",
+      "name_en": "血腥恐怖",
+      "name_zh": "血腥恐怖"
+    },
+    {
+      "code": "E03",
+      "hex": "#0D47A1",
+      "name_en": "超自然恶",
+      "name_zh": "超自然恶"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "惊魂瞬间",
+      "name_zh": "惊魂瞬间"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1B5E20, #B71C1C, #0D47A1. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1B5E20, #B71C1C, #0D47A1；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "138",
+  "lighting_notes": {
+    "en": "Motivated directional localized sources.",
+    "zh": "有动机的定向局部光源。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1B5E20",
+      "name_en": "Haunted Forest Green",
+      "name_zh": "鬼林绿",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#B71C1C",
+      "name_en": "Blood Plasma Red",
+      "name_zh": "血浆红",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#0D47A1",
+      "name_en": "Cellar Blue",
+      "name_zh": "地窖蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5D4037",
+      "name_en": "Cabin Brown",
+      "name_zh": "木屋棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Lightning Gold",
+      "name_zh": "闪电金",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Darkness",
+      "name_zh": "黑暗",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#DC143C",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD700",
+      "name_en": "Imperial Yellow",
+      "name_zh": "帝王黄"
+    },
+    {
+      "code": "E03",
+      "hex": "#228B22",
+      "name_en": "Forest Green",
+      "name_zh": "翠绿"
+    },
+    {
+      "code": "E04",
+      "hex": "#000000",
+      "name_en": "Ink Black",
+      "name_zh": "墨黑"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C41E3A, #FFD700, #228B22. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C41E3A, #FFD700, #228B22；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "086",
+  "lighting_notes": {
+    "en": "Use localized colored light only within permitted scope, retaining subject identity.",
+    "zh": "允许范围内采用局部色光，保持主体识别。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C41E3A",
+      "name_en": "China Red",
+      "name_zh": "中国红",
+      "share": 0.24
+    },
+    {
+      "code": "C02",
+      "hex": "#FFD700",
+      "name_en": "Imperial Yellow",
+      "name_zh": "帝王黄",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#228B22",
+      "name_en": "Forest Green",
+      "name_zh": "翠绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#000000",
+      "name_en": "Ink Black",
+      "name_zh": "墨黑",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFFFFF",
+      "name_en": "Snow White",
+      "name_zh": "雪白",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#8B4513",
+      "name_en": "Earth Brown",
+      "name_zh": "土棕",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

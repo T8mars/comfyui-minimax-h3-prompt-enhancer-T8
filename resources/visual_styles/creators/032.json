@@ -1,0 +1,24 @@
+{
+  "id": "032",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the principal existing action near the viewing center with clear direction.",
+      "text_zh": "使已有主要动作靠近观看中心，保持运动方向清楚。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "At permitted cuts, connect the same action chain without extra impacts.",
+      "text_zh": "在允许的切点衔接同一动作链，不制造额外撞击。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

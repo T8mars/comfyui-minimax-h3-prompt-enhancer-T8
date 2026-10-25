@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#DAA520",
+      "name_en": "Goldenrod",
+      "name_zh": "金菊黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#4682B4",
+      "name_en": "Steel Blue",
+      "name_zh": "钢蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B4513",
+      "name_en": "Wood Brown",
+      "name_zh": "木棕"
+    },
+    {
+      "code": "E04",
+      "hex": "#556B2F",
+      "name_en": "Dark Olive",
+      "name_zh": "暗橄榄"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8B4513, #DAA520, #1C1C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8B4513, #DAA520, #1C1C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "095",
+  "lighting_notes": {
+    "en": "Soft lateral key light.",
+    "zh": "柔和侧向主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8B4513",
+      "name_en": "Wood Brown",
+      "name_zh": "木棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#DAA520",
+      "name_en": "Goldenrod",
+      "name_zh": "金菊黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#4682B4",
+      "name_en": "Steel Blue",
+      "name_zh": "钢蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#556B2F",
+      "name_en": "Dark Olive",
+      "name_zh": "暗橄榄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#CD853F",
+      "name_en": "Peru Brown",
+      "name_zh": "秘鲁棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

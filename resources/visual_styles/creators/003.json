@@ -1,0 +1,24 @@
+{
+  "id": "003",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe continuously in a fixed medium-wide view, allowing action or waiting to unfold.",
+      "text_zh": "以固定中远景持续观察，允许动作或等待自行展开。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Offset the subject within an existing frame, using negative space for distance.",
+      "text_zh": "把主体偏置于已有门框内，以负空间保留观察距离。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

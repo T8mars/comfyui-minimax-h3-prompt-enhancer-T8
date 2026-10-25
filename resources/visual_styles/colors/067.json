@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5B7D9E",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#B8A882",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#7A8B9C",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#1E3A56",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4A6B8A, #8B9DAF, #C4B896. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4A6B8A, #8B9DAF, #C4B896；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "067",
+  "lighting_notes": {
+    "en": "Even soft light with restrained modeling.",
+    "zh": "均匀柔光，保持层次不过度雕刻。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4A6B8A",
+      "name_en": "Working Class Blue",
+      "name_zh": "工人蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B9DAF",
+      "name_en": "Finnish Gray Blue",
+      "name_zh": "芬兰灰蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#C4B896",
+      "name_en": "Vintage Beige",
+      "name_zh": "复古米黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#6B7D8E",
+      "name_en": "Steel Gray Blue",
+      "name_zh": "钢灰蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#D4C8A8",
+      "name_en": "Old Wall Beige",
+      "name_zh": "旧墙米",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#2E4A66",
+      "name_en": "Deep Sea Blue",
+      "name_zh": "深海蓝",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

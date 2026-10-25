@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#B8860B",
+      "name_en": "Ancient Golden Yellow",
+      "name_zh": "古金黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#483D8B",
+      "name_en": "Dark Slate Blue",
+      "name_zh": "深紫蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B0000",
+      "name_en": "Dark Red Brown",
+      "name_zh": "暗红棕"
+    },
+    {
+      "code": "E04",
+      "hex": "#E6E6FA",
+      "name_en": "Ghost White",
+      "name_zh": "幽灵白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1F1A15, #6B4F2A, #2C3E50. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1F1A15, #6B4F2A, #2C3E50；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "009",
+  "lighting_notes": {
+    "en": "Classical side lighting with mixed edges and detailed shadows.",
+    "zh": "古典侧光结合软硬过渡，暗部留细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1F1A15",
+      "name_en": "Deep Brown Black",
+      "name_zh": "深棕黑",
+      "share": 0.38
+    },
+    {
+      "code": "C02",
+      "hex": "#6B4F2A",
+      "name_en": "Dark Golden Brown",
+      "name_zh": "暗金棕",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#2C3E50",
+      "name_en": "Cold Gray Blue",
+      "name_zh": "冷灰蓝",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#A0522D",
+      "name_en": "Sienna Red Brown",
+      "name_zh": "赭土红棕",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#556B2F",
+      "name_en": "Dark Olive Green",
+      "name_zh": "暗橄榄绿",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#F5DEB3",
+      "name_en": "Wheat Skin Tone",
+      "name_zh": "小麦肤",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

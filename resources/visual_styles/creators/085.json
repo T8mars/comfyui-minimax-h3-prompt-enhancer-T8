@@ -1,0 +1,26 @@
+{
+  "id": "085",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing frames to articulate interior-exterior relationships.",
+      "text_zh": "借已有门窗框景呈现内外空间关系。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain positions and attention directions within an existing group.",
+      "text_zh": "在已有多人画面中保留各自位置和注意力方向。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

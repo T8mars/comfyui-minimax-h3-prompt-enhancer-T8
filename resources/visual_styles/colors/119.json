@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1744",
+      "name_en": "青春毁灭",
+      "name_zh": "青春毁灭"
+    },
+    {
+      "code": "E02",
+      "hex": "#00E5FF",
+      "name_en": "迷幻狂欢",
+      "name_zh": "迷幻狂欢"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF9100",
+      "name_en": "危险活力",
+      "name_zh": "危险活力"
+    },
+    {
+      "code": "E04",
+      "hex": "#EA80FC",
+      "name_en": "梦幻堕落",
+      "name_zh": "梦幻堕落"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF1744, #00E5FF, #121212. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF1744, #00E5FF, #121212；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "119",
+  "lighting_notes": {
+    "en": "Separate localized colored sources from a readable subject.",
+    "zh": "局部色光与可辨主体分离。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF1744",
+      "name_en": "Neon Red",
+      "name_zh": "霓虹红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00E5FF",
+      "name_en": "Electric Cyan",
+      "name_zh": "电青",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FF9100",
+      "name_en": "Orange Pink",
+      "name_zh": "橙粉",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#EA80FC",
+      "name_en": "Purple Pink",
+      "name_zh": "紫粉",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#76FF03",
+      "name_en": "Toxic Green",
+      "name_zh": "毒绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#121212",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

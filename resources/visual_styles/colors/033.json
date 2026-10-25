@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFE000",
+      "name_en": "Sin City Yellow",
+      "name_zh": "罪城黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#1A237E",
+      "name_en": "Dark Night Blue",
+      "name_zh": "暗夜深蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF6D00",
+      "name_en": "Cyber Orange",
+      "name_zh": "赛博橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#F5F5F5",
+      "name_en": "Bone White",
+      "name_zh": "骨白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #000000, #CC0000, #B8860B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #000000, #CC0000, #B8860B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "033",
+  "lighting_notes": {
+    "en": "Hard-edged tonal separation with identification detail retained.",
+    "zh": "清楚的硬边明暗分区，保留识别细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#000000",
+      "name_en": "Ink Pure Black",
+      "name_zh": "纯黑墨底",
+      "share": 0.33
+    },
+    {
+      "code": "C02",
+      "hex": "#CC0000",
+      "name_en": "Sin City Blood Red",
+      "name_zh": "罪城血红",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFFFFF",
+      "name_en": "High Contrast White",
+      "name_zh": "高反差白",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#FF00FF",
+      "name_en": "Digital Neon Magenta",
+      "name_zh": "数码霓虹粉",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#00FFFF",
+      "name_en": "Digital Neon Cyan",
+      "name_zh": "数码霓虹青",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#B8860B",
+      "name_en": "Desert Golden Brown",
+      "name_zh": "荒漠金褐",
+      "share": 0.17
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

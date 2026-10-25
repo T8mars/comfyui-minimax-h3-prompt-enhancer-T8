@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5D4037",
+      "name_en": "历史厚重",
+      "name_zh": "历史厚重"
+    },
+    {
+      "code": "E02",
+      "hex": "#B71C1C",
+      "name_en": "女性悲剧",
+      "name_zh": "女性悲剧"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "人性微光",
+      "name_zh": "人性微光"
+    },
+    {
+      "code": "E04",
+      "hex": "#78909C",
+      "name_en": "命运无常",
+      "name_zh": "命运无常"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #5D4037, #78909C, #D7CCC8. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #5D4037, #78909C, #D7CCC8；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "182",
+  "lighting_notes": {
+    "en": "Soft side light retaining layers and detail.",
+    "zh": "柔和侧光，保留层次与细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#5D4037",
+      "name_en": "Scroll Brown",
+      "name_zh": "卷轴棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#78909C",
+      "name_en": "Rain Fog Gray",
+      "name_zh": "雨雾灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Paper Lantern Gold",
+      "name_zh": "纸灯金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B71C1C",
+      "name_en": "Tragic Red",
+      "name_zh": "悲壮红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1A1A1A",
+      "name_en": "Ink Black",
+      "name_zh": "墨黑",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#D7CCC8",
+      "name_en": "Silk Beige",
+      "name_zh": "绢米",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

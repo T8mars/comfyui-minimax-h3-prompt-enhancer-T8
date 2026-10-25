@@ -1,0 +1,26 @@
+{
+  "id": "188",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Express relationships through supplied physical action without adding dialogue or rituals.",
+      "text_zh": "通过已给身体动作表达关系，不补台词或仪式。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "If water exists, retain reflection-subject relationships without adding islands or temples.",
+      "text_zh": "若已有水面，保留反射与主体关系，不添岛屿或寺庙。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

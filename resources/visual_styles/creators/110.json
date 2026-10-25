@@ -1,0 +1,26 @@
+{
+  "id": "110",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Examine existing object surfaces and contact detail for visible texture.",
+      "text_zh": "近看已有物件表面和接触细节，强调可见质感。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Retain stages of established object action without automatic animation or transformation.",
+      "text_zh": "保留原物件动作的阶段，不自动拟人或变形。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFB347",
+      "name_en": "Yellow",
+      "name_zh": "蜜罐黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#5D4E6D",
+      "name_en": "Purple",
+      "name_zh": "暮色紫"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF6B6B",
+      "name_en": "Coral",
+      "name_zh": "霓虹珊瑚"
+    },
+    {
+      "code": "E04",
+      "hex": "#A8A39D",
+      "name_en": "Gray",
+      "name_zh": "旧墙灰"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8C42, #F7C59F, #E8A87C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8C42, #F7C59F, #E8A87C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "050",
+  "lighting_notes": {
+    "en": "Existing daylight or practical sources with natural contrast.",
+    "zh": "既有日光或实景灯光，保留自然反差。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8C42",
+      "name_en": "Orange",
+      "name_zh": "佛罗里达橙",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#F7C59F",
+      "name_en": "Color 2",
+      "name_zh": "肌肤蜜桃",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD166",
+      "name_en": "Yellow",
+      "name_zh": "阳光柠檬黄",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#2E4057",
+      "name_en": "Blue",
+      "name_zh": "暮光蓝灰",
+      "share": 0.13
+    },
+    {
+      "code": "C05",
+      "hex": "#C73E1D",
+      "name_en": "Red",
+      "name_zh": "落日烧红",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#E8A87C",
+      "name_en": "Tangerine",
+      "name_zh": "晚霞粉橘",
+      "share": 0.17
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5D4037",
+      "name_en": "创伤记忆",
+      "name_zh": "创伤记忆"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "血色历史",
+      "name_zh": "血色历史"
+    },
+    {
+      "code": "E03",
+      "hex": "#2E7D32",
+      "name_en": "丛林求生",
+      "name_zh": "丛林求生"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "生命微光",
+      "name_zh": "生命微光"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #5D4037, #2E7D32, #BCAAA4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #5D4037, #2E7D32, #BCAAA4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "199",
+  "lighting_notes": {
+    "en": "Existing natural light and gentle environmental bounce.",
+    "zh": "已有自然光与温和环境反射。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#5D4037",
+      "name_en": "Earth Yellow Brown",
+      "name_zh": "土黄棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E7D32",
+      "name_en": "Jungle Green",
+      "name_zh": "丛林绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78909C",
+      "name_en": "Rainy Season Gray",
+      "name_zh": "雨季灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C62828",
+      "name_en": "Blood Red",
+      "name_zh": "血红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Candle Gold",
+      "name_zh": "烛火金",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "Earth Beige",
+      "name_zh": "土米",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

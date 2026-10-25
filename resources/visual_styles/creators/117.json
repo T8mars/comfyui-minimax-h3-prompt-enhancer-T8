@@ -1,0 +1,25 @@
+{
+  "id": "117",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Explore the existing route in a continuous slow move without adding spaces.",
+      "text_zh": "连续缓移探索已有路径，不因风格选择增设空间。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Let established movement and pauses unfold coherently without adding dreams or time loops.",
+      "text_zh": "让原有动作与停留连贯展开，不新写梦境或时间循环。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

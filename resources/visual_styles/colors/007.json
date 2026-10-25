@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6B35",
+      "name_en": "Siren Orange",
+      "name_zh": "警灯橙"
+    },
+    {
+      "code": "E02",
+      "hex": "#1E90FF",
+      "name_en": "Synth Blue",
+      "name_zh": "合成器蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B0000",
+      "name_en": "Dark Blood Red",
+      "name_zh": "暗血红"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFFF99",
+      "name_en": "Flashlight Yellow",
+      "name_zh": "手电黄"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0B1D2E, #1A405E, #B8860B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0B1D2E, #1A405E, #B8860B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "007",
+  "lighting_notes": {
+    "en": "One dominant lighting direction with firm shadow boundaries.",
+    "zh": "单一主光方向，较硬阴影边界。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0B1D2E",
+      "name_en": "Deep Ocean Blue Black",
+      "name_zh": "深海暗蓝黑",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#1A405E",
+      "name_en": "Deep Navy Blue",
+      "name_zh": "深海军蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#B8860B",
+      "name_en": "Dark Gold Amber",
+      "name_zh": "暗金琥珀",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#6B2222",
+      "name_en": "Dark Blood Red Brown",
+      "name_zh": "暗红血褐",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#2D4A3E",
+      "name_en": "Swamp Deep Green",
+      "name_zh": "沼泽深绿",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#C8B696",
+      "name_en": "Parchment Beige",
+      "name_zh": "羊皮纸米",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

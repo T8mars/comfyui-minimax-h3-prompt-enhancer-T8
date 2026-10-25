@@ -1,0 +1,26 @@
+{
+  "id": "125",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Relate subject and surroundings through existing water or mirror reflections.",
+      "text_zh": "借已有水面或镜面联系主体和周围空间。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe along an existing route without adding mythic characters or scenery.",
+      "text_zh": "沿已有穿行路线观察，不加入神话角色或景物。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

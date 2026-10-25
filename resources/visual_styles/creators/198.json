@@ -1,0 +1,26 @@
+{
+  "id": "198",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing street-level action handheld without adding political events.",
+      "text_zh": "用手持纪实跟随已有街面行动，不添政治事件。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep subject-urban space relationships readable without adding social identities.",
+      "text_zh": "让既有主体与城市空间关系可读，不新增社会身份。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

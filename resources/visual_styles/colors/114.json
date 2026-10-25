@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E91E63",
+      "name_en": "身体越界",
+      "name_zh": "身体越界"
+    },
+    {
+      "code": "E02",
+      "hex": "#00BCD4",
+      "name_en": "临床冷漠",
+      "name_zh": "临床冷漠"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD600",
+      "name_en": "神话仪式",
+      "name_zh": "神话仪式"
+    },
+    {
+      "code": "E04",
+      "hex": "#795548",
+      "name_en": "肉体凡胎",
+      "name_zh": "肉体凡胎"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E91E63, #00BCD4, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E91E63, #00BCD4, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "114",
+  "lighting_notes": {
+    "en": "Directional studio-style key light with restrained fill.",
+    "zh": "定向工作室式主光，适量补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E91E63",
+      "name_en": "Flesh Pink",
+      "name_zh": "肉体粉",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00BCD4",
+      "name_en": "Medical Blue",
+      "name_zh": "医学蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD600",
+      "name_en": "Gold Platinum Yellow",
+      "name_zh": "金铂黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#795548",
+      "name_en": "Skin Brown",
+      "name_zh": "皮肤棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#9C27B0",
+      "name_en": "Deep Purple",
+      "name_zh": "深紫",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

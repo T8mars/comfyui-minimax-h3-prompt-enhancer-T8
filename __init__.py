@@ -21,6 +21,8 @@ from .prompt_inspector import T8PromptInspector
 from .performance_director import T8PerformanceDirectorConfig
 from .combat_camera import T8CombatCameraConfig
 from .storyboard_director import T8StoryboardDirectorConfig
+from .visual_style_nodes import T8ColorStyleConfig, T8CreatorStyleConfig
+from .visual_style_routes import register_visual_style_routes
 from .h3_visual_marker import T8H3VisualMarkerConfig
 from .h3_spatial_editor import T8H3SpatialMarkerCanvas
 from .h3_spatial_editor_routes import register_spatial_editor_routes
@@ -44,6 +46,7 @@ register_strata_routes()
 register_moss_image_routes()
 register_moss_authoring_routes()
 register_spatial_editor_routes()
+register_visual_style_routes()
 
 
 class T8PromptEnhancerExtension(ComfyExtension):
@@ -73,6 +76,8 @@ class T8PromptEnhancerExtension(ComfyExtension):
             T8H3SpatialMarkerCanvas,
             MOSSAuthoringDirector,
             MOSSAuthoringPage,
+            T8ColorStyleConfig,
+            T8CreatorStyleConfig,
         ]
 
 
@@ -95,6 +100,8 @@ __all__ = [
     "T8PerformanceDirectorConfig",
     "T8CombatCameraConfig",
     "T8StoryboardDirectorConfig",
+    "T8ColorStyleConfig",
+    "T8CreatorStyleConfig",
     "T8H3VisualMarkerConfig",
     "T8H3SpatialMarkerCanvas",
     "T8SpeechReference",

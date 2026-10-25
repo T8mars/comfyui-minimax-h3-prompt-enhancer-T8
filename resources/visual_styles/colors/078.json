@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5A5A50",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#8A806A",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#707068",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A2A22",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6A6A60, #4A4A42, #8A8A7A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6A6A60, #4A4A42, #8A8A7A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "078",
+  "lighting_notes": {
+    "en": "Documentary available light preserving location contrast.",
+    "zh": "纪实可用光，保持现场明暗。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6A6A60",
+      "name_en": "Industrial Rust Gray",
+      "name_zh": "工业锈灰",
+      "share": 0.24
+    },
+    {
+      "code": "C02",
+      "hex": "#4A4A42",
+      "name_en": "Deep Iron Rust",
+      "name_zh": "深铁锈",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8A8A7A",
+      "name_en": "Concrete Gray",
+      "name_zh": "水泥灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B8A888",
+      "name_en": "Rust Yellow",
+      "name_zh": "锈黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#3A3A32",
+      "name_en": "Deep Coal Black",
+      "name_zh": "深煤黑",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#AAA088",
+      "name_en": "Dusty Earth Color",
+      "name_zh": "灰土色",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

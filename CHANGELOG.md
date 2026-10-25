@@ -3,6 +3,22 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.38.0] - 2026-10-25
+
+- Add independent, default-Off color and creator presentation configuration
+  inputs to H3 and Seedance 2.0, with local catalog browsing, finite resource
+  identities, cache fingerprints and historical recovery metadata.
+- Preserve existing workflow fields, outputs, target protocols and correction
+  budgets. Color references are not LUTs; creator methods are not screenplay
+  generation. Model compliance and rendered benefits remain unverified.
+- Include 200 color references and 200 creator records, with explicit limited-source
+  labels, three independent workflows and bilingual help. Selecting a creator
+  never implicitly selects its colors or changes existing story facts.
+- Reject oversized numeric shares and malformed origins with bounded validation
+  errors. Clarify English non-addition rules so they do not prohibit existing facts.
+- Close stale style browsers when a pending resource request fails after the
+  workflow changes; late failures cannot close a newly opened browser.
+
 ## [1.37.1] - 2026-10-23
 
 - Fix the old-workflow fingerprint test on Linux: compare frozen Git LF bytes

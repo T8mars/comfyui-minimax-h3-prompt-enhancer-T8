@@ -1,0 +1,25 @@
+{
+  "id": "103",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Relate a wide environmental view to existing small-object detail.",
+      "text_zh": "从广角环境观察进入已有小物件细节。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Connect established object clues only at permitted cuts without inventing coincidences.",
+      "text_zh": "仅在允许切镜时连接原有物件线索，不编造巧合。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

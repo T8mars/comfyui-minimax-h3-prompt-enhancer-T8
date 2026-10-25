@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1493",
+      "name_en": "Pink",
+      "name_zh": "爱之粉"
+    },
+    {
+      "code": "E02",
+      "hex": "#00BFFF",
+      "name_en": "Blue",
+      "name_zh": "未来蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Gold",
+      "name_zh": "神圣金"
+    },
+    {
+      "code": "E04",
+      "hex": "#8B0000",
+      "name_en": "Red",
+      "name_zh": "暗血红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D1B2A, #FF8C00, #F5DEB3. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D1B2A, #FF8C00, #F5DEB3；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "027",
+  "lighting_notes": {
+    "en": "Soft key light with motivated localized sources.",
+    "zh": "柔和主光结合有动机的局部光源。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D1B2A",
+      "name_en": "Blue",
+      "name_zh": "巴黎深蓝",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#FF8C00",
+      "name_en": "Orange",
+      "name_zh": "法式橙",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#00CED1",
+      "name_en": "Cyan",
+      "name_zh": "未来青",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD700",
+      "name_en": "Yellow",
+      "name_zh": "黄金光",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#DC143C",
+      "name_en": "Red",
+      "name_zh": "法式红",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#F5DEB3",
+      "name_en": "Color 6",
+      "name_zh": "少女肤",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

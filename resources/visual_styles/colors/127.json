@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFD54F",
+      "name_en": "魔幻荣耀",
+      "name_zh": "魔幻荣耀"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E7D32",
+      "name_en": "自然希望",
+      "name_zh": "自然希望"
+    },
+    {
+      "code": "E03",
+      "hex": "#B71C1C",
+      "name_en": "黑暗威胁",
+      "name_zh": "黑暗威胁"
+    },
+    {
+      "code": "E04",
+      "hex": "#5D4037",
+      "name_en": "史诗厚重",
+      "name_zh": "史诗厚重"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFD54F, #2E7D32, #3E2723. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFD54F, #2E7D32, #3E2723；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "127",
+  "lighting_notes": {
+    "en": "Motivated soft directional light.",
+    "zh": "有动机的柔和方向光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FFD54F",
+      "name_en": "Ring Gold",
+      "name_zh": "魔戒金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E7D32",
+      "name_en": "Elf Green",
+      "name_zh": "精灵绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Middle-earth Brown",
+      "name_zh": "中土棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B71C1C",
+      "name_en": "Mordor Red",
+      "name_zh": "魔多红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#0D47A1",
+      "name_en": "Gondor Blue",
+      "name_zh": "刚铎蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Deep Earth Brown",
+      "name_zh": "深土棕",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

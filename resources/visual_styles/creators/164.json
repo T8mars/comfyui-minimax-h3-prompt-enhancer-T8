@@ -1,0 +1,26 @@
+{
+  "id": "164",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-push template without adding letters or music.",
+      "text_zh": "采用本条缓推模板观察既有主体，不新增书信或音乐。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action gently without imposing a youth premise.",
+      "text_zh": "已有行动可用柔和跟随，不自动添加青春设定。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

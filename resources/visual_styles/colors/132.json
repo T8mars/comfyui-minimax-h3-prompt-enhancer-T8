@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#1565C0",
+      "name_en": "硬汉冷酷",
+      "name_zh": "硬汉冷酷"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "街头暴力",
+      "name_zh": "街头暴力"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF8F00",
+      "name_en": "日落终局",
+      "name_zh": "日落终局"
+    },
+    {
+      "code": "E04",
+      "hex": "#455A64",
+      "name_en": "道德灰色",
+      "name_zh": "道德灰色"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1565C0, #C62828, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1565C0, #C62828, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "132",
+  "lighting_notes": {
+    "en": "Firmer side light preserving subject volume.",
+    "zh": "较硬侧光，保留主体体积。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1565C0",
+      "name_en": "Training Day Blue",
+      "name_zh": "训练蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#C62828",
+      "name_en": "Street Blood Red",
+      "name_zh": "街头血",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FF8F00",
+      "name_en": "Sunset Orange",
+      "name_zh": "日落橙",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#455A64",
+      "name_en": "Steel Gray Blue",
+      "name_zh": "钢铁灰蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#5D4037",
+      "name_en": "Street Brown",
+      "name_zh": "街头棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Dark Black",
+      "name_zh": "暗黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

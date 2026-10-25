@@ -1,0 +1,25 @@
+{
+  "id": "149",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Separate existing outer contours from the background without converting to silhouette animation.",
+      "text_zh": "让已有主体外轮廓在背景上清楚分离，不改为剪影动画。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Organize existing role spacing in planar layers without adding cultural patterns.",
+      "text_zh": "以平面层次组织已有角色间距，不新增民族图案。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

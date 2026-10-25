@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C62828",
+      "name_en": "情欲燃烧",
+      "name_zh": "情欲燃烧"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "怀旧追忆",
+      "name_zh": "怀旧追忆"
+    },
+    {
+      "code": "E03",
+      "hex": "#5D4037",
+      "name_en": "岁月沧桑",
+      "name_zh": "岁月沧桑"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFAB91",
+      "name_en": "温柔女性",
+      "name_zh": "温柔女性"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C62828, #FFCC80, #3E2723. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C62828, #FFCC80, #3E2723；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "165",
+  "lighting_notes": {
+    "en": "Gentle warm key light with existing environmental layers.",
+    "zh": "温和暖主光与现有环境层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C62828",
+      "name_en": "Rouge Red",
+      "name_zh": "胭脂红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Nostalgic Yellow",
+      "name_zh": "怀旧黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Old HK Brown",
+      "name_zh": "老香港棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#8D6E63",
+      "name_en": "Years Brown",
+      "name_zh": "岁月棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFAB91",
+      "name_en": "Rouge Pink",
+      "name_zh": "胭脂粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Deep Brown",
+      "name_zh": "深棕",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

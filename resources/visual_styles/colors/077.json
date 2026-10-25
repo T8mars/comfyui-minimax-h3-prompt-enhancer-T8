@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#7A9A8A",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#9AACA2",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#B0A898",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#4A6858",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8AA898, #A8B8A8, #6A8878. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8AA898, #A8B8A8, #6A8878；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "077",
+  "lighting_notes": {
+    "en": "Even frontal fill with readable object boundaries.",
+    "zh": "均匀平光，保留物件边界。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8AA898",
+      "name_en": "Swedish Gray Green",
+      "name_zh": "瑞典灰绿",
+      "share": 0.24
+    },
+    {
+      "code": "C02",
+      "hex": "#A8B8A8",
+      "name_en": "Light Gray Green",
+      "name_zh": "浅灰绿",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#6A8878",
+      "name_en": "Dark Green Gray",
+      "name_zh": "深绿灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C8C0B0",
+      "name_en": "Aged Beige White",
+      "name_zh": "旧米白",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#B8A898",
+      "name_en": "Dead Wood Brown",
+      "name_zh": "枯木棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#5A7868",
+      "name_en": "Dark Moss Green",
+      "name_zh": "暗苔绿",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

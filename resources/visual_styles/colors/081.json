@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#DC143C",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#228B22",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Golden Yellow",
+      "name_zh": "黄金色"
+    },
+    {
+      "code": "E04",
+      "hex": "#000000",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C41E3A, #2E7D32, #4A0E1A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C41E3A, #2E7D32, #4A0E1A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "081",
+  "lighting_notes": {
+    "en": "Layered theatrical directional lighting.",
+    "zh": "有层次的舞台式定向布光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C41E3A",
+      "name_en": "Blood Red",
+      "name_zh": "血红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E7D32",
+      "name_en": "Deep Emerald",
+      "name_zh": "深翠绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFFFFF",
+      "name_en": "Pure White",
+      "name_zh": "纯白",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD700",
+      "name_en": "Golden Yellow",
+      "name_zh": "黄金色",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1A237E",
+      "name_en": "Midnight Blue",
+      "name_zh": "午夜蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#4A0E1A",
+      "name_en": "Deep Wine Red",
+      "name_zh": "深酒红",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

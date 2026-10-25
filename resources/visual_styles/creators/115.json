@@ -1,0 +1,26 @@
+{
+  "id": "115",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing asymmetric lines without deforming architecture.",
+      "text_zh": "借已有不对称线条呈现空间，不使建筑自动变形。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain existing subject isolation and open space without adding grotesque characters.",
+      "text_zh": "保留已有孤立主体与周围留白，不新增怪诞角色。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

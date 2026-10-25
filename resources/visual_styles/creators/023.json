@@ -1,0 +1,24 @@
+{
+  "id": "023",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Only when camera movement is permitted, orbit continuously around the established spatial relationship.",
+      "text_zh": "仅在允许机位移动时，用连续环绕保持既有主体与空间关系。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe from an established subjective or low viewpoint without forcing inversion.",
+      "text_zh": "从既定主观视角或低机位观察，不强制倒置画面。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

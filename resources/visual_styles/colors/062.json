@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F0EDE6",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#6B6863",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#9E9A91",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A2825",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E8E6E0, #B8B5AE, #8A8780. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E8E6E0, #B8B5AE, #8A8780；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "062",
+  "lighting_notes": {
+    "en": "Simple balanced available light.",
+    "zh": "自然可用光，简洁均衡。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E8E6E0",
+      "name_en": "Cool Off-White",
+      "name_zh": "冷灰白",
+      "share": 0.24
+    },
+    {
+      "code": "C02",
+      "hex": "#B8B5AE",
+      "name_en": "Stone Gray",
+      "name_zh": "石灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8A8780",
+      "name_en": "Dark Gray",
+      "name_zh": "暗灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5C5A55",
+      "name_en": "Iron Gray Brown",
+      "name_zh": "铁灰褐",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#3A3835",
+      "name_en": "Deep Charcoal",
+      "name_zh": "深炭灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#C9C2B2",
+      "name_en": "Aged Rice Gray",
+      "name_zh": "旧米灰",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#546E7A",
+      "name_en": "都市疏离",
+      "name_zh": "都市疏离"
+    },
+    {
+      "code": "E02",
+      "hex": "#8D6E63",
+      "name_en": "中产阶级压抑",
+      "name_zh": "中产阶级压抑"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "家庭微温",
+      "name_zh": "家庭微温"
+    },
+    {
+      "code": "E04",
+      "hex": "#0288D1",
+      "name_en": "玻璃般透明",
+      "name_zh": "玻璃般透明"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #546E7A, #455A64, #BCAAA4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #546E7A, #455A64, #BCAAA4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "186",
+  "lighting_notes": {
+    "en": "Existing cool-neutral artificial light retaining subject detail.",
+    "zh": "已有冷中性人工光，主体细节保留。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#546E7A",
+      "name_en": "Taipei Gray Blue",
+      "name_zh": "台北灰蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#455A64",
+      "name_en": "Urban Cold Gray",
+      "name_zh": "都市冷灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8D6E63",
+      "name_en": "Middle Class Brown",
+      "name_zh": "中产棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Warm Lamp Yellow",
+      "name_zh": "暖灯黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#0288D1",
+      "name_en": "Glass Blue",
+      "name_zh": "玻璃蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "Apartment Beige",
+      "name_zh": "公寓米",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

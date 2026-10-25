@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#6A7A7A",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#8A8A7A",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#A0A090",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A3A3A",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #7A8A8A, #9A9A8A, #5A6A6A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #7A8A8A, #9A9A8A, #5A6A6A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "080",
+  "lighting_notes": {
+    "en": "Soft natural light.",
+    "zh": "柔和自然光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#7A8A8A",
+      "name_en": "Northwest Cool Gray Green",
+      "name_zh": "西北冷灰绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#9A9A8A",
+      "name_en": "Misty Gray Green",
+      "name_zh": "雾灰绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5A6A6A",
+      "name_en": "Deep Gray Cyan",
+      "name_zh": "深灰青",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B8B0A0",
+      "name_en": "Old Wood Beige",
+      "name_zh": "旧木米",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#D4CCBC",
+      "name_en": "Foggy Gray White",
+      "name_zh": "雾灰白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3A4A4A",
+      "name_en": "Deep Cyan Black",
+      "name_zh": "深青黑",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

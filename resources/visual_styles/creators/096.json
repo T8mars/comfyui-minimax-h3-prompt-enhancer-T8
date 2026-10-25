@@ -1,0 +1,26 @@
+{
+  "id": "096",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present existing actions and positions as a coherent tableau without adding operatic identity.",
+      "text_zh": "从整体场面呈现已有行动和人物位置，不增加戏曲身份。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use a slow push to examine existing detail while retaining scene scale.",
+      "text_zh": "用缓慢推进观察已有细节，保持原场面规模。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

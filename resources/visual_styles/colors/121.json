@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6D00",
+      "name_en": "毁灭冲击",
+      "name_zh": "毁灭冲击"
+    },
+    {
+      "code": "E02",
+      "hex": "#0D47A1",
+      "name_en": "末日恐惧",
+      "name_zh": "末日恐惧"
+    },
+    {
+      "code": "E03",
+      "hex": "#B71C1C",
+      "name_en": "生存战斗",
+      "name_zh": "生存战斗"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "希望曙光",
+      "name_zh": "希望曙光"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF6D00, #0D47A1, #B71C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF6D00, #0D47A1, #B71C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "121",
+  "lighting_notes": {
+    "en": "Use only existing dynamic sources without adding fire.",
+    "zh": "仅使用已存在的动态光源，不新增火焰。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF6D00",
+      "name_en": "Explosion Orange",
+      "name_zh": "爆炸橙",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#0D47A1",
+      "name_en": "Doomsday Blue",
+      "name_zh": "末日蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#B71C1C",
+      "name_en": "Flame Red",
+      "name_zh": "火焰红",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#37474F",
+      "name_en": "Ruin Gray",
+      "name_zh": "废墟灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Fireball Gold",
+      "name_zh": "火球金",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Dark Black",
+      "name_zh": "暗黑",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

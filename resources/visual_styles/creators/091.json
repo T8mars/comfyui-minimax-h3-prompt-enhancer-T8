@@ -1,0 +1,26 @@
+{
+  "id": "091",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Establish the supplied space before examining existing key details.",
+      "text_zh": "在已给场面中先交代空间，再观察已有关键细节。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When allowed, push slowly toward the established target without adding genre events.",
+      "text_zh": "允许时缓慢推进既有目标，不补类型化事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

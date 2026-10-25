@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E91E63",
+      "name_en": "青春躁动",
+      "name_zh": "青春躁动"
+    },
+    {
+      "code": "E02",
+      "hex": "#F8BBD0",
+      "name_en": "少女心事",
+      "name_zh": "少女心事"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "家庭温暖",
+      "name_zh": "家庭温暖"
+    },
+    {
+      "code": "E04",
+      "hex": "#81C784",
+      "name_en": "成长蜕变",
+      "name_zh": "成长蜕变"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E91E63, #F8BBD0, #FFCC80. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E91E63, #F8BBD0, #FFCC80；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "155",
+  "lighting_notes": {
+    "en": "Soft warm fill retaining original subject colors.",
+    "zh": "柔和暖填充，保留主体原色。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E91E63",
+      "name_en": "Panda Red",
+      "name_zh": "熊猫红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#F8BBD0",
+      "name_en": "Teen Girl Pink",
+      "name_zh": "少女粉",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#81C784",
+      "name_en": "Youth Green",
+      "name_zh": "青春绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#BA68C8",
+      "name_en": "Dreamy Purple",
+      "name_zh": "梦幻紫",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#FFFFFF",
+      "name_en": "Panda White",
+      "name_zh": "熊猫白",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

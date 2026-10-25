@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#BFC7CB",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#3E484B",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#8D989C",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#D4D0C5",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #7D8A8F, #5D6B70, #9DA8AB. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #7D8A8F, #5D6B70, #9DA8AB；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "063",
+  "lighting_notes": {
+    "en": "Soft overcast-style diffusion.",
+    "zh": "阴天般柔和散射光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#7D8A8F",
+      "name_en": "Fog Gray Blue",
+      "name_zh": "雾灰蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#5D6B70",
+      "name_en": "Deep Sea Gray Blue",
+      "name_zh": "深海灰蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#9DA8AB",
+      "name_en": "Silver Mist Gray",
+      "name_zh": "银雾灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B8B09E",
+      "name_en": "Ruins Beige Gray",
+      "name_zh": "废墟米灰",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#4A5558",
+      "name_en": "Dark Stone Cyan",
+      "name_zh": "暗石青",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#C9C4B5",
+      "name_en": "Old Stone Beige",
+      "name_zh": "旧石米",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

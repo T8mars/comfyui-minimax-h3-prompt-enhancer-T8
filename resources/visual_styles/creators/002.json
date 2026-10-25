@@ -1,0 +1,24 @@
+{
+  "id": "002",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Approach established clues with a steady, information-led push.",
+      "text_zh": "用稳定缓推接近已有线索，运动服务信息而非炫技。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Align geometry and subject precisely while retaining searchable background detail.",
+      "text_zh": "精确安排几何线条与主体，保留可搜寻的背景细节。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

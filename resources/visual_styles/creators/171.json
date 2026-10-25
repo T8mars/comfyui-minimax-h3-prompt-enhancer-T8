@@ -1,0 +1,25 @@
+{
+  "id": "171",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Hold existing group behavior and spatial relationships together in a fixed wide view.",
+      "text_zh": "以固定宽景保持已有群体行为和空间关系同框。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Observe supplied reaction or non-reaction without imposing awkward incidents.",
+      "text_zh": "持续观察已给反应或无反应，不强加尴尬事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

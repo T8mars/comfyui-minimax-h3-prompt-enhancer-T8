@@ -1,0 +1,24 @@
+{
+  "id": "055",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track the established action route dynamically, retaining start and end positions in a wide view.",
+      "text_zh": "动态跟随既有动作路线，广角中保持动作的起止位置。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Permitted fast cuts must connect existing action without extra moves or flight.",
+      "text_zh": "允许的快速切镜须衔接原动作，不新增招式或飞行。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

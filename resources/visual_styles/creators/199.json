@@ -1,0 +1,26 @@
+{
+  "id": "199",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present the existing environment from the supplied viewing height without adding children.",
+      "text_zh": "从已给观察高度呈现已有环境，不新增儿童角色。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe existing behavior with the record's documentary-follow template without adding historical events.",
+      "text_zh": "用本条纪实跟随模板观察原有行为，不补历史事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

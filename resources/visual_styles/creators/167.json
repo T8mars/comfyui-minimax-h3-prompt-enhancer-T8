@@ -1,0 +1,25 @@
+{
+  "id": "167",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Let existing pauses and temporal passage remain continuous without adding ghosts.",
+      "text_zh": "让已有停留与时间流逝保持连续，不增设幽灵。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present subject and space from the supplied viewing height without changing age.",
+      "text_zh": "从已给观察高度呈现主体与空间，不替换人物年龄。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "047",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Sustain an existing action or pose without imposing suffering or endurance.",
+      "text_zh": "持续保留已有动作或姿态，不强迫人物痛苦或忍耐。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize the existing group or interior layers into a clear overall composition.",
+      "text_zh": "让已有群体或室内层次形成清晰整体构图。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

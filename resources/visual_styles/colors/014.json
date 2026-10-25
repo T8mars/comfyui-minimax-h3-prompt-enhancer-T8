@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#000000",
+      "name_en": "Absolute Black",
+      "name_zh": "绝对黑"
+    },
+    {
+      "code": "E02",
+      "hex": "#E74C3C",
+      "name_en": "Primal Red",
+      "name_zh": "原初红"
+    },
+    {
+      "code": "E03",
+      "hex": "#85929E",
+      "name_en": "Cold Steel Blue",
+      "name_zh": "冷钢蓝"
+    },
+    {
+      "code": "E04",
+      "hex": "#F4F6F7",
+      "name_en": "Ghost White",
+      "name_zh": "幽灵白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A0A0A, #1C2833, #78281F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A0A0A, #1C2833, #78281F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "014",
+  "lighting_notes": {
+    "en": "Use sparse sources with readable boundaries in dark areas.",
+    "zh": "精简光源，控制大面积暗部的可读边界。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A0A0A",
+      "name_en": "Void Black",
+      "name_zh": "虚空黑",
+      "share": 0.45
+    },
+    {
+      "code": "C02",
+      "hex": "#1C2833",
+      "name_en": "Abyss Blue Gray",
+      "name_zh": "深渊蓝灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78281F",
+      "name_en": "Coagulated Blood Red",
+      "name_zh": "凝固血",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#5D6D7E",
+      "name_en": "Iron Gray Blue",
+      "name_zh": "铁灰蓝",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#AAB7B8",
+      "name_en": "Cold Mist Gray",
+      "name_zh": "冷灰雾",
+      "share": 0.08
+    },
+    {
+      "code": "C06",
+      "hex": "#F5B7B1",
+      "name_en": "Pale Pink Skin",
+      "name_zh": "苍白肤",
+      "share": 0.07
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

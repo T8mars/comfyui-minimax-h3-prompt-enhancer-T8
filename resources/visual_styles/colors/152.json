@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4FC3F7",
+      "name_en": "飞翔自由",
+      "name_zh": "飞翔自由"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "温暖亲情",
+      "name_zh": "温暖亲情"
+    },
+    {
+      "code": "E03",
+      "hex": "#CE93D8",
+      "name_en": "灵魂梦幻",
+      "name_zh": "灵魂梦幻"
+    },
+    {
+      "code": "E04",
+      "hex": "#81C784",
+      "name_en": "新生希望",
+      "name_zh": "新生希望"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4FC3F7, #FFCC80, #90CAF9. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4FC3F7, #FFCC80, #90CAF9；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "152",
+  "lighting_notes": {
+    "en": "Soft warm key light retaining facial or surface planes.",
+    "zh": "柔和暖主光，保留面部或表面层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4FC3F7",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "温暖黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#CE93D8",
+      "name_en": "Dreamy Purple",
+      "name_zh": "梦幻紫",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#81C784",
+      "name_en": "New Life Green",
+      "name_zh": "新生绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#F48FB1",
+      "name_en": "Emotion Pink",
+      "name_zh": "情感粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#90CAF9",
+      "name_en": "Soul Blue",
+      "name_zh": "灵魂蓝",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "038",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain architectural geometry and subject-scale contrast without changing aspect ratio.",
+      "text_zh": "保留既有建筑几何和人物尺度差，不改变画幅。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Intercut only established parallel lines when cuts are allowed; add no timeline.",
+      "text_zh": "仅在已有多线与允许切镜时并行呈现，不新增时间层。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

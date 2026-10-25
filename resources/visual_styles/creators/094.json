@@ -1,0 +1,26 @@
+{
+  "id": "094",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present depth through existing partial spatial relationships while keeping key action visible.",
+      "text_zh": "从已有空间的局部关系呈现层次，关键动作仍须可见。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "If sound exists, retain its established on/offscreen relationship without adding sound.",
+      "text_zh": "若原稿含声音，保持已知声源与画面内外关系，不补声音。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

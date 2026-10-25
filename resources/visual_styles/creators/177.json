@@ -1,0 +1,25 @@
+{
+  "id": "177",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain group positions and object relationships within the existing everyday space.",
+      "text_zh": "在已有生活空间中保持群体位置和物件关系。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Observe existing actions and intervals steadily without family-story additions.",
+      "text_zh": "静观原有动作和间隙，不额外加入家庭故事。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

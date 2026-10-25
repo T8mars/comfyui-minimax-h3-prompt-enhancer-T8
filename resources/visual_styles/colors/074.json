@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#7A8A7A",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#5A6258",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#908A7A",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A3A2A",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6B7B6B, #8B8378, #5A6A5A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6B7B6B, #8B8378, #5A6A5A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "074",
+  "lighting_notes": {
+    "en": "Existing natural light without added glamour lighting.",
+    "zh": "现有自然光，不额外美化布光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6B7B6B",
+      "name_en": "Belgian Gray Green",
+      "name_zh": "比利时灰绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B8378",
+      "name_en": "Industrial Brown Gray",
+      "name_zh": "工业棕灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5A6A5A",
+      "name_en": "Dark Green Gray",
+      "name_zh": "深绿灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#9DA090",
+      "name_en": "Gray Green Stone",
+      "name_zh": "灰绿石",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#B8B0A0",
+      "name_en": "Concrete Beige",
+      "name_zh": "水泥米",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3A4A3A",
+      "name_en": "Dark Green Black",
+      "name_zh": "暗绿黑",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

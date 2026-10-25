@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6B35",
+      "name_en": "Orange",
+      "name_zh": "霓虹橙"
+    },
+    {
+      "code": "E02",
+      "hex": "#00CED1",
+      "name_en": "Cyan",
+      "name_zh": "电子青"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Gold",
+      "name_zh": "广告金"
+    },
+    {
+      "code": "E04",
+      "hex": "#4A0E0E",
+      "name_en": "Red",
+      "name_zh": "深渊红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A0F1A, #1A3A5C, #C9A84C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A0F1A, #1A3A5C, #C9A84C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "021",
+  "lighting_notes": {
+    "en": "Motivated rim light and depth lighting without adding smoke or rain.",
+    "zh": "有动机的逆光与空间光束，不新增烟雨。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A0F1A",
+      "name_en": "Black",
+      "name_zh": "深空夜黑",
+      "share": 0.35
+    },
+    {
+      "code": "C02",
+      "hex": "#1A3A5C",
+      "name_en": "Blue",
+      "name_zh": "雨夜钢蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#C9A84C",
+      "name_en": "Gold",
+      "name_zh": "霓虹暗金",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#8B0000",
+      "name_en": "Red",
+      "name_zh": "暗红血锈",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#2F4F4F",
+      "name_en": "Green",
+      "name_zh": "暗青绿",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#D4A574",
+      "name_en": "Gold",
+      "name_zh": "肤色暖金",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

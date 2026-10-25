@@ -1,0 +1,24 @@
+{
+  "id": "004",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow the established route in an allowed continuous take to connect spaces.",
+      "text_zh": "在允许的连续镜头中跟随既定路径交代空间关联。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing stair geometry or reflections to articulate viewpoints.",
+      "text_zh": "用既有楼梯几何或反射呈现不同观察位置。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

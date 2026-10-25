@@ -1,0 +1,26 @@
+{
+  "id": "079",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Observe established natural change or action without religious additions.",
+      "text_zh": "观察已有自然变化或行动过程，不补宗教事件。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe existing subjects continuously and slowly, retaining environmental duration.",
+      "text_zh": "缓慢连续观察既有主体，保留环境时间感。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "173",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Connect existing everyday actions and pauses naturally without adding life-changing events.",
+      "text_zh": "让已有日常动作与停顿自然衔接，不新增人生转折。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's gentle-follow template along the established route.",
+      "text_zh": "采用本条平缓跟随模板，保留既有行进路线。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

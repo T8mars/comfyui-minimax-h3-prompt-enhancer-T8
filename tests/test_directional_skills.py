@@ -1,3 +1,4 @@
+from visual_style_baseline_projection import without_style_names
 import ast
 import copy
 import inspect
@@ -281,14 +282,14 @@ class DirectionalSkillTests(unittest.TestCase):
             ("nodes.py", h3.MiniMaxH3PromptEnhancer, "enhance_prompt", h3),
             ("seedance20.py", sd.Seedance20PromptEnhancer, "enhance_seedance20_prompt", sd),
         ):
-            names = [item.id for item in cls.define_schema().inputs]
+            names = without_style_names([item.id for item in cls.define_schema().inputs])
             if module is h3:
                 self.assertEqual(names.pop(), "visual_marker_config")
             self.assertEqual(names[-6:], ["director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
             source = subprocess.check_output(["git", "show", f"{BASELINE_COMMIT}:{filename}"], cwd=GIT_ROOT).decode("utf-8")
             definition = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == function)
             old_names = [n.arg for n in definition.args.args]
-            current = list(inspect.signature(getattr(module, function)).parameters)
+            current = without_style_names(list(inspect.signature(getattr(module, function)).parameters))
             if module is h3:
                 self.assertEqual(current.pop(), "visual_marker_config")
             self.assertEqual(current[:len(old_names)], old_names)

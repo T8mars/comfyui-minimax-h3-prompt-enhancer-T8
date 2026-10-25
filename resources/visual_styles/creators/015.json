@@ -1,0 +1,24 @@
+{
+  "id": "015",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Glide toward an existing object while retaining subjective uncertainty.",
+      "text_zh": "平滑滑行接近已有物件，保留主观观察的不确定性。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing reflections or close detail to shift scale without inventing dream events.",
+      "text_zh": "借已有反射或极近细节改变观察尺度，不新增梦境事实。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

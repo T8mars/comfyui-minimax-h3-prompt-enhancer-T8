@@ -1,0 +1,25 @@
+{
+  "id": "185",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use restrained handheld movement for existing natural or human motion.",
+      "text_zh": "以轻微手持跟随已有自然或人物运动。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain subject-environment detail relationships without regional scenery additions.",
+      "text_zh": "保留主体与已有环境细节的联系，不新增地域景物。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

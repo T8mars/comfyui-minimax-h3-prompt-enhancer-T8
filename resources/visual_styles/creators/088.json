@@ -1,0 +1,26 @@
+{
+  "id": "088",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Direct attention within the existing interior while preserving relationships.",
+      "text_zh": "在既有室内安排观察重心，保持原人物关系。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Build clear layers from existing foreground objects and subject positions.",
+      "text_zh": "用已有前景物件和主体位置构成清晰层次。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

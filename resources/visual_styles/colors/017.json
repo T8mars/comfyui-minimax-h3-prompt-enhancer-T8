@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#9B59B6",
+      "name_en": "Noble Purple",
+      "name_zh": "高贵紫"
+    },
+    {
+      "code": "E02",
+      "hex": "#E74C3C",
+      "name_en": "Vengeance Red",
+      "name_zh": "复仇红"
+    },
+    {
+      "code": "E03",
+      "hex": "#1ABC9C",
+      "name_en": "Emerald Green",
+      "name_zh": "翡翠绿"
+    },
+    {
+      "code": "E04",
+      "hex": "#F1C40F",
+      "name_en": "Royal Gold",
+      "name_zh": "皇家金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0E2A24, #3E1F5B, #C9A227. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0E2A24, #3E1F5B, #C9A227；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "017",
+  "lighting_notes": {
+    "en": "Decorative soft light with balanced placement.",
+    "zh": "装饰性柔光与均衡布光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0E2A24",
+      "name_en": "Deep Jade Green Black",
+      "name_zh": "深翡绿黑",
+      "share": 0.38
+    },
+    {
+      "code": "C02",
+      "hex": "#3E1F5B",
+      "name_en": "Deep Velvet Purple",
+      "name_zh": "深紫丝绒",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#C9A227",
+      "name_en": "Ornate Gold",
+      "name_zh": "华丽金",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#7B241C",
+      "name_en": "Crimson Velvet Red",
+      "name_zh": "深红丝绒",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#1F4E5F",
+      "name_en": "Peacock Blue Green",
+      "name_zh": "孔雀蓝绿",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#F7DC6F",
+      "name_en": "Golden Porcelain Skin",
+      "name_zh": "金瓷肤",
+      "share": 0.09
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

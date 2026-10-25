@@ -1,0 +1,25 @@
+{
+  "id": "131",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Examine existing contact points while retaining bodily direction and depth.",
+      "text_zh": "近看原有动作接触点，维持全身方向和前后关系。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Connect existing action with tight permitted cuts without adding jokes or dialogue.",
+      "text_zh": "允许时用紧凑切镜连接原动作，不新增笑点或对白。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

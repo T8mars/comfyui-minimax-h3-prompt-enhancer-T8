@@ -1,0 +1,24 @@
+{
+  "id": "017",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present established positions through precise symmetry or overhead geometry.",
+      "text_zh": "以精确对称或俯视几何呈现既有角色位置。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Reveal existing layers with a lateral move rather than an unmotivated orbit.",
+      "text_zh": "横移逐步揭示已有层次，避免无动机环绕。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

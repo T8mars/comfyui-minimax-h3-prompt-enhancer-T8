@@ -1,0 +1,24 @@
+{
+  "id": "039",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing movement closely with a wide view without inventing hallucinations.",
+      "text_zh": "用广角近距离跟随既有运动，不发明主观幻觉。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Use brisk permitted cuts for established changes without new flashbacks or text.",
+      "text_zh": "允许时用短促切点突出既定变化，不新增闪回或字幕。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

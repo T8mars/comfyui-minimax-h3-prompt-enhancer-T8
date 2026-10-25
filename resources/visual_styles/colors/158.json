@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5D4037",
+      "name_en": "木偶诗意",
+      "name_zh": "木偶诗意"
+    },
+    {
+      "code": "E02",
+      "hex": "#78909C",
+      "name_en": "东欧忧郁",
+      "name_zh": "东欧忧郁"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "童话光芒",
+      "name_zh": "童话光芒"
+    },
+    {
+      "code": "E04",
+      "hex": "#B71C1C",
+      "name_en": "暗黑命运",
+      "name_zh": "暗黑命运"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #5D4037, #78909C, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #5D4037, #78909C, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "158",
+  "lighting_notes": {
+    "en": "Layered theatrical key light.",
+    "zh": "有层次的舞台式主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#5D4037",
+      "name_en": "Puppet Brown",
+      "name_zh": "木偶棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#78909C",
+      "name_en": "Prague Gray",
+      "name_zh": "布拉格灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Stage Gold",
+      "name_zh": "舞台金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2E7D32",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#B71C1C",
+      "name_en": "Dark Red",
+      "name_zh": "暗红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

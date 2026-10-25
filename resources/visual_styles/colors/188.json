@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#006064",
+      "name_en": "沉默压抑",
+      "name_zh": "沉默压抑"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "暴力欲望",
+      "name_zh": "暴力欲望"
+    },
+    {
+      "code": "E03",
+      "hex": "#2E7D32",
+      "name_en": "佛教救赎",
+      "name_zh": "佛教救赎"
+    },
+    {
+      "code": "E04",
+      "hex": "#5D4037",
+      "name_en": "原始本真",
+      "name_zh": "原始本真"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #006064, #5D4037, #2E7D32. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #006064, #5D4037, #2E7D32；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "188",
+  "lighting_notes": {
+    "en": "Use existing reflections to supplement the key.",
+    "zh": "利用已有反光补充主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#006064",
+      "name_en": "Deep Water Teal",
+      "name_zh": "深水青",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#5D4037",
+      "name_en": "Wood Brown",
+      "name_zh": "木头棕",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#2E7D32",
+      "name_en": "Temple Green",
+      "name_zh": "寺庙绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C62828",
+      "name_en": "Blood Red",
+      "name_zh": "血腥红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Buddha Lamp Gold",
+      "name_zh": "佛灯金",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -59,6 +59,10 @@ async function connect() {
 
 try {
   const send = await connect();
+  if(mode==='comfy-visual-styles'){
+    const {runVisualStyleBrowser}=await import('./visual_style_browser.mjs');
+    await runVisualStyleBrowser({send,providerBase:markerProviderBase,screenshotPath});
+  }
   if(mode==='comfy-moss-authoring'){
     const {runAuthoringBrowser}=await import('./moss_authoring_browser.mjs');
     await runAuthoringBrowser({send,providerBase:markerProviderBase});

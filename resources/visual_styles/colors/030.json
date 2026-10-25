@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#29B6F6",
+      "name_en": "AI Ghost Blue",
+      "name_zh": "AI幽蓝"
+    },
+    {
+      "code": "E02",
+      "hex": "#E040FB",
+      "name_en": "Mutation Iridescent",
+      "name_zh": "变异幻彩"
+    },
+    {
+      "code": "E03",
+      "hex": "#D32F2F",
+      "name_en": "Primal Blood",
+      "name_zh": "原始血色"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFCA28",
+      "name_en": "Awakening Gold",
+      "name_zh": "觉醒金光"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #F5F5F0, #2E5339, #546E7A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #F5F5F0, #2E5339, #546E7A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "030",
+  "lighting_notes": {
+    "en": "Broad diffuse key light with retained midtones.",
+    "zh": "大面积漫射主光，保留中间调。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#F5F5F0",
+      "name_en": "Minimalist Pure White",
+      "name_zh": "极简净白",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#2E5339",
+      "name_en": "Deep Forest Green",
+      "name_zh": "深林绿",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#546E7A",
+      "name_en": "Cold Steel Blue-Grey",
+      "name_zh": "冷钢蓝灰",
+      "share": 0.18
+    },
+    {
+      "code": "C04",
+      "hex": "#CE93D8",
+      "name_en": "Iridescent Pink-Purple",
+      "name_zh": "虹彩粉紫",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#C62828",
+      "name_en": "Warning Blood Red",
+      "name_zh": "警示血红",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#E8D5C4",
+      "name_en": "Natural Warm Skin",
+      "name_zh": "素肤暖",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

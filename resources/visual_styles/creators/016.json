@@ -1,0 +1,24 @@
+{
+  "id": "016",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing bodily movement closely while retaining direction and contact.",
+      "text_zh": "近距离跟随原有身体动作，保留方向与接触关系。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Within permitted cuts only, compress repeated observations while preserving action causality.",
+      "text_zh": "仅在已允许切镜中压缩重复观察，保持原动作因果。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

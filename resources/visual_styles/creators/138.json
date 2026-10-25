@@ -1,0 +1,25 @@
+{
+  "id": "138",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Move along the established subjective route when allowed without a new observer.",
+      "text_zh": "允许时沿既定主观路径运动，不创造新的观察者。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the existing target-foreground relationship clear without adding horror events.",
+      "text_zh": "保持既有目标与前景关系清楚，不添加恐怖事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "093",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Use slow sustained observation to preserve duration without inventing memories.",
+      "text_zh": "用缓慢持续观察保留既定时间感，不新增回忆。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain existing interior layers and distances between subjects.",
+      "text_zh": "保持既有室内层次和主体之间的距离。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

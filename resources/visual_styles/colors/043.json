@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F4C430",
+      "name_en": "Memory Gold",
+      "name_zh": "记忆金"
+    },
+    {
+      "code": "E02",
+      "hex": "#4A6FA5",
+      "name_en": "Space Blue",
+      "name_zh": "太空蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#A0522D",
+      "name_en": "Sienna Red",
+      "name_zh": "赭石红"
+    },
+    {
+      "code": "E04",
+      "hex": "#DCDCDC",
+      "name_en": "Silver White",
+      "name_zh": "银白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #D4A574, #B89968, #2C2C2C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #D4A574, #B89968, #2C2C2C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "043",
+  "lighting_notes": {
+    "en": "Continuous natural lighting with even transitions.",
+    "zh": "连续自然光照，过渡平稳。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#D4A574",
+      "name_en": "Warm Gold Memory",
+      "name_zh": "暖金回忆",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#B89968",
+      "name_en": "Earth Yellow Street",
+      "name_zh": "土黄街景",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2C2C2C",
+      "name_en": "Deep Space Black",
+      "name_zh": "深空黑",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#6B8E9A",
+      "name_en": "Cold Steel Blue-Grey",
+      "name_zh": "冷钢蓝灰",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#8B7355",
+      "name_en": "Olive Brown",
+      "name_zh": "橄榄棕",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#E8D5B7",
+      "name_en": "Soft Light Beige",
+      "name_zh": "柔光米白",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

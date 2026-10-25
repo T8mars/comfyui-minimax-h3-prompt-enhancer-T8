@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#2E7D32",
+      "name_en": "诗意生命力",
+      "name_zh": "诗意生命力"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "温暖悲悯",
+      "name_zh": "温暖悲悯"
+    },
+    {
+      "code": "E03",
+      "hex": "#78909C",
+      "name_en": "存在压抑",
+      "name_zh": "存在压抑"
+    },
+    {
+      "code": "E04",
+      "hex": "#C62828",
+      "name_en": "隐忍愤怒",
+      "name_zh": "隐忍愤怒"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #2E7D32, #FFCC80, #C62828. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #2E7D32, #FFCC80, #C62828；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "140",
+  "lighting_notes": {
+    "en": "Soft natural key light.",
+    "zh": "柔和自然主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#2E7D32",
+      "name_en": "Poetry Green",
+      "name_zh": "诗之绿",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78909C",
+      "name_en": "Cold Gray Blue",
+      "name_zh": "冷灰蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#8D6E63",
+      "name_en": "Earth Brown",
+      "name_zh": "土地棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFF9C4",
+      "name_en": "Cream White",
+      "name_zh": "米白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#C62828",
+      "name_en": "Repressed Red",
+      "name_zh": "隐忍红",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

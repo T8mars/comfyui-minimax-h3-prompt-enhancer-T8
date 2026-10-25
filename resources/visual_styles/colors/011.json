@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFFFFF",
+      "name_en": "Blinding White",
+      "name_zh": "刺眼白"
+    },
+    {
+      "code": "E02",
+      "hex": "#333333",
+      "name_en": "Bottomless Gray Black",
+      "name_zh": "无底灰黑"
+    },
+    {
+      "code": "E03",
+      "hex": "#999999",
+      "name_en": "Foggy Gray",
+      "name_zh": "迷雾灰"
+    },
+    {
+      "code": "E04",
+      "hex": "#555555",
+      "name_en": "Steel Gray",
+      "name_zh": "钢铁灰"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1C1C1C, #4A4A4A, #808080. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1C1C1C, #4A4A4A, #808080；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "011",
+  "lighting_notes": {
+    "en": "Firm side light establishes clear tonal separation.",
+    "zh": "较硬侧光形成清楚明暗层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1C1C1C",
+      "name_en": "Pure Deep Black",
+      "name_zh": "纯暗黑",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#4A4A4A",
+      "name_en": "Mid Gray Tone",
+      "name_zh": "中灰调",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#808080",
+      "name_en": "Light Ash Gray",
+      "name_zh": "浅烟灰",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#2C2C2C",
+      "name_en": "Dark Charcoal Gray",
+      "name_zh": "深炭灰",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#666666",
+      "name_en": "Neutral Gray",
+      "name_zh": "中性灰",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#E8E8E8",
+      "name_en": "Cool Light Gray",
+      "name_zh": "冷白灰",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

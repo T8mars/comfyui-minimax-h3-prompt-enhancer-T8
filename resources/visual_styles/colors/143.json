@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8D6E63",
+      "name_en": "平民苦难",
+      "name_zh": "平民苦难"
+    },
+    {
+      "code": "E02",
+      "hex": "#A5D6A7",
+      "name_en": "自然田园",
+      "name_zh": "自然田园"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "家庭温暖",
+      "name_zh": "家庭温暖"
+    },
+    {
+      "code": "E04",
+      "hex": "#90CAF9",
+      "name_en": "夏日回忆",
+      "name_zh": "夏日回忆"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFF9C4, #8D6E63, #A5D6A7. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFF9C4, #8D6E63, #A5D6A7；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "143",
+  "lighting_notes": {
+    "en": "Natural skylight with soft transitions.",
+    "zh": "自然天光与柔和过渡。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8D6E63",
+      "name_en": "Civilian Brown",
+      "name_zh": "平民棕",
+      "share": 0.18
+    },
+    {
+      "code": "C02",
+      "hex": "#A5D6A7",
+      "name_en": "Field Green",
+      "name_zh": "田野绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Sunset Orange",
+      "name_zh": "夕阳橙",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#90CAF9",
+      "name_en": "Summer Blue",
+      "name_zh": "夏日蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#BCAAA4",
+      "name_en": "Earth Yellow",
+      "name_zh": "土黄",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Cream White",
+      "name_zh": "米白",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

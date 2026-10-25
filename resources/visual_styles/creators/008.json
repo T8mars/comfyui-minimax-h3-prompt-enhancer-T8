@@ -1,0 +1,24 @@
+{
+  "id": "008",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing surface or body detail closely without introducing transformation.",
+      "text_zh": "以近景观察已有表面或身体细节，不引入变形。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Maintain a steady observational distance so existing changes remain visible.",
+      "text_zh": "保持冷静稳定的观察距离，让已发生变化自行可见。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

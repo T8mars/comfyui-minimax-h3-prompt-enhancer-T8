@@ -1,0 +1,25 @@
+{
+  "id": "101",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing lines for one-point perspective or strict symmetry without moving locked objects.",
+      "text_zh": "以现有线条形成单点透视或严格对称，不移动锁定物件。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Push slowly through established depth with readable distance changes.",
+      "text_zh": "沿已有纵深缓推，让观察距离变化清楚。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

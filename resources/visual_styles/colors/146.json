@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6D00",
+      "name_en": "万圣节庆",
+      "name_zh": "万圣节庆"
+    },
+    {
+      "code": "E02",
+      "hex": "#4A148C",
+      "name_en": "黑暗奇幻",
+      "name_zh": "黑暗奇幻"
+    },
+    {
+      "code": "E03",
+      "hex": "#1B5E20",
+      "name_en": "诡异魔法",
+      "name_zh": "诡异魔法"
+    },
+    {
+      "code": "E04",
+      "hex": "#B71C1C",
+      "name_en": "暗黑恐惧",
+      "name_zh": "暗黑恐惧"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF6D00, #4A148C, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF6D00, #4A148C, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "146",
+  "lighting_notes": {
+    "en": "Directional cool soft light retaining shadow shapes.",
+    "zh": "有方向的冷柔光，保留阴影形状。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF6D00",
+      "name_en": "Pumpkin Orange",
+      "name_zh": "南瓜橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#4A148C",
+      "name_en": "Deep Purple",
+      "name_zh": "深紫",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#1B5E20",
+      "name_en": "Poison Green",
+      "name_zh": "毒物绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B71C1C",
+      "name_en": "Blood Red",
+      "name_zh": "血红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD600",
+      "name_en": "Moonlight Yellow",
+      "name_zh": "月光黄",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

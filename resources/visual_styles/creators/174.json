@@ -1,0 +1,26 @@
+{
+  "id": "174",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain subject-surrounding distance without adding a loneliness plot.",
+      "text_zh": "保持已给主体与周围空间的距离，不增添孤独剧情。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-push template without changing age or attire.",
+      "text_zh": "采用本条缓推模板观察主体，不替换年龄或服饰。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

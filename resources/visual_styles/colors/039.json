@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#507050",
+      "name_en": "Apocalypse Cold Green",
+      "name_zh": "末日冷绿"
+    },
+    {
+      "code": "E02",
+      "hex": "#C84060",
+      "name_en": "Mumbai Pink-Red",
+      "name_zh": "孟买红粉"
+    },
+    {
+      "code": "E03",
+      "hex": "#E8C830",
+      "name_en": "Ecstasy Gold Yellow",
+      "name_zh": "狂喜金黄"
+    },
+    {
+      "code": "E04",
+      "hex": "#8B1A1A",
+      "name_en": "Virus Blood Red",
+      "name_zh": "病毒血红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #3D5C28, #D4A020, #E04020. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #3D5C28, #D4A020, #E04020；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "039",
+  "lighting_notes": {
+    "en": "Combine existing natural and colored sources without unmotivated lighting jumps.",
+    "zh": "结合已有自然光与局部色光，避免无动机跳变。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#3D5C28",
+      "name_en": "Psychedelic Dirty Green",
+      "name_zh": "迷幻脏绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#D4A020",
+      "name_en": "Mumbai Warm Yellow",
+      "name_zh": "孟买暖黄",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#E04020",
+      "name_en": "Neon Orange-Red",
+      "name_zh": "霓虹橙红",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#3A2E5C",
+      "name_en": "Narcotic Blue-Purple",
+      "name_zh": "毒幻蓝紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#707068",
+      "name_en": "Abandoned Gray",
+      "name_zh": "废弃灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#A07048",
+      "name_en": "Skin Warm Brown",
+      "name_zh": "皮肤暖棕",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

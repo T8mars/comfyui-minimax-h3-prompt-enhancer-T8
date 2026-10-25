@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#607D8B",
+      "name_en": "北欧忧郁",
+      "name_zh": "北欧忧郁"
+    },
+    {
+      "code": "E02",
+      "hex": "#0288D1",
+      "name_en": "内心清澈",
+      "name_zh": "内心清澈"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "青春温暖",
+      "name_zh": "青春温暖"
+    },
+    {
+      "code": "E04",
+      "hex": "#8D6E63",
+      "name_en": "回忆厚重",
+      "name_zh": "回忆厚重"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #607D8B, #0288D1, #2E7D32. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #607D8B, #0288D1, #2E7D32；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "179",
+  "lighting_notes": {
+    "en": "Soft cool ambient light retaining original subject colors.",
+    "zh": "柔和冷环境光，保留主体原色。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#607D8B",
+      "name_en": "Oslo Gray",
+      "name_zh": "奥斯陆灰",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#0288D1",
+      "name_en": "Fjord Blue",
+      "name_zh": "峡湾蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#8D6E63",
+      "name_en": "Vintage Brown",
+      "name_zh": "复古棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFFFFF",
+      "name_en": "Snow White",
+      "name_zh": "雪国白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#2E7D32",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8B0000",
+      "name_en": "Blood Dark Red",
+      "name_zh": "血暗红"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD700",
+      "name_en": "Golden Yellow",
+      "name_zh": "金黄"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF1493",
+      "name_en": "Deep Pink",
+      "name_zh": "深粉"
+    },
+    {
+      "code": "E04",
+      "hex": "#000080",
+      "name_en": "Navy Blue",
+      "name_zh": "海军蓝"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8B0000, #000080, #FFD700. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8B0000, #000080, #FFD700；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "091",
+  "lighting_notes": {
+    "en": "Keep localized colored sources distinct from the key.",
+    "zh": "局部色光与主光层次分明。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8B0000",
+      "name_en": "Blood Dark Red",
+      "name_zh": "血暗红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#000080",
+      "name_en": "Navy Blue",
+      "name_zh": "海军蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD700",
+      "name_en": "Golden Yellow",
+      "name_zh": "金黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate Gray",
+      "name_zh": "暗青灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FF1493",
+      "name_en": "Deep Pink",
+      "name_zh": "深粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

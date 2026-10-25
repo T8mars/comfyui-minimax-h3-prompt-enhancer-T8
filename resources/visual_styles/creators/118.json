@@ -1,0 +1,26 @@
+{
+  "id": "118",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Choose symmetry or imbalance within the existing space.",
+      "text_zh": "在已有空间中选择对称或失衡的构图关系。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine supplied bodily action and distance without adding metaphorical events.",
+      "text_zh": "近看已给身体动作与距离，不加入隐喻事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

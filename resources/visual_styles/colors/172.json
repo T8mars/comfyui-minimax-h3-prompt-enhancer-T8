@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8D6E63",
+      "name_en": "中产阶级压抑",
+      "name_zh": "中产阶级压抑"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "家庭温情",
+      "name_zh": "家庭温情"
+    },
+    {
+      "code": "E03",
+      "hex": "#90A4AE",
+      "name_en": "英伦忧郁",
+      "name_zh": "英伦忧郁"
+    },
+    {
+      "code": "E04",
+      "hex": "#6D4C41",
+      "name_en": "记忆厚重",
+      "name_zh": "记忆厚重"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8D6E63, #90A4AE, #BCAAA4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8D6E63, #90A4AE, #BCAAA4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "172",
+  "lighting_notes": {
+    "en": "Soft interior light retaining window direction and original sources.",
+    "zh": "柔和室内光，保留窗向与原光源。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8D6E63",
+      "name_en": "British Brown",
+      "name_zh": "英伦棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#90A4AE",
+      "name_en": "London Gray",
+      "name_zh": "伦敦灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Lamp Yellow",
+      "name_zh": "台灯黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#6D4C41",
+      "name_en": "Furniture Brown",
+      "name_zh": "家具棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#78909C",
+      "name_en": "Rain Fog Blue",
+      "name_zh": "雨雾蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "British Beige",
+      "name_zh": "英伦米",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

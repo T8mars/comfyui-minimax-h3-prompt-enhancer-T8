@@ -1,0 +1,24 @@
+{
+  "id": "035",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing passages, frames or screen boundaries for spatial layers.",
+      "text_zh": "利用已有通道、门框或屏幕边界形成多层空间。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Push slowly toward the existing subject while retaining enclosed scale.",
+      "text_zh": "缓推接近已有主体，保留封闭空间尺度。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

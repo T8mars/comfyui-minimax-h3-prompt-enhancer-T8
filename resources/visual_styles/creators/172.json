@@ -1,0 +1,25 @@
+{
+  "id": "172",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing furniture, space and people steadily without new furnishings.",
+      "text_zh": "固定观察已有家具、空间与人物，不新增陈设。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain object-defined distances so supplied relationships remain readable.",
+      "text_zh": "保留物件形成的前后距离，使已给人物关系可读。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

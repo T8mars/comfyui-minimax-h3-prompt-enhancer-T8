@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E0E0E0",
+      "name_en": "Lightning White",
+      "name_zh": "闪电白"
+    },
+    {
+      "code": "E02",
+      "hex": "#1565C0",
+      "name_en": "Manhattan Blue",
+      "name_zh": "曼哈顿蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF5722",
+      "name_en": "Blaze Orange",
+      "name_zh": "烈焰橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#D4A017",
+      "name_en": "Desert Gold",
+      "name_zh": "荒漠金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A0A0A, #8B6914, #8B0000. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A0A0A, #8B6914, #8B0000；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "034",
+  "lighting_notes": {
+    "en": "Side-back light emphasizes contour without erasing shadows.",
+    "zh": "侧逆光强调轮廓，暗部不过度抹除。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A0A0A",
+      "name_en": "Deep Ink Black",
+      "name_zh": "深黑墨影",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#8B6914",
+      "name_en": "Dark Gold Bronze",
+      "name_zh": "暗金铜锈",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#8B0000",
+      "name_en": "Blood Rust Red",
+      "name_zh": "血锈红",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#4A5568",
+      "name_en": "Cold Steel Grey",
+      "name_zh": "冷钢灰",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#6B4226",
+      "name_en": "Dust Sepia Brown",
+      "name_zh": "尘褐sepia",
+      "share": 0.13
+    },
+    {
+      "code": "C06",
+      "hex": "#E91E63",
+      "name_en": "Neon Rose",
+      "name_zh": "霓虹玫红",
+      "share": 0.13
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

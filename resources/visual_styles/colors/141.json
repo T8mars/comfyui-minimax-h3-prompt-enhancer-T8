@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E91E63",
+      "name_en": "欲望痴迷",
+      "name_zh": "欲望痴迷"
+    },
+    {
+      "code": "E02",
+      "hex": "#00BCD4",
+      "name_en": "都市疏离",
+      "name_zh": "都市疏离"
+    },
+    {
+      "code": "E03",
+      "hex": "#7B1FA2",
+      "name_en": "梦境迷离",
+      "name_zh": "梦境迷离"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFC107",
+      "name_en": "舞台光芒",
+      "name_zh": "舞台光芒"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E91E63, #00BCD4, #FCE4EC. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E91E63, #00BCD4, #FCE4EC；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "141",
+  "lighting_notes": {
+    "en": "Soft naturalistic key light.",
+    "zh": "柔和写实主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E91E63",
+      "name_en": "Idol Pink",
+      "name_zh": "偶像粉",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00BCD4",
+      "name_en": "Urban Cyan",
+      "name_zh": "都市青",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFC107",
+      "name_en": "Stage Gold",
+      "name_zh": "舞台金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#7B1FA2",
+      "name_en": "Dreamy Purple",
+      "name_zh": "梦幻紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#455A64",
+      "name_en": "Urban Gray",
+      "name_zh": "都市灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FCE4EC",
+      "name_en": "Sakura Pink",
+      "name_zh": "樱花粉",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5D4037",
+      "name_en": "城市苦难",
+      "name_zh": "城市苦难"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "革命激情",
+      "name_zh": "革命激情"
+    },
+    {
+      "code": "E03",
+      "hex": "#808080",
+      "name_en": "社会批判",
+      "name_zh": "社会批判"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFFFFF",
+      "name_en": "希望之光",
+      "name_zh": "希望之光"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #000000, #FFFFFF, #5D4037. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #000000, #FFFFFF, #5D4037；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "198",
+  "lighting_notes": {
+    "en": "Existing street-level natural light.",
+    "zh": "已有街面自然光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#000000",
+      "name_en": "B&W Black",
+      "name_zh": "黑白黑",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFFFFF",
+      "name_en": "B&W White",
+      "name_zh": "白白白",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Calcutta Brown",
+      "name_zh": "加尔各答棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#808080",
+      "name_en": "Mid Gray",
+      "name_zh": "中灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#C62828",
+      "name_en": "Revolution Red",
+      "name_zh": "革命红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "Street Beige",
+      "name_zh": "街道米",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

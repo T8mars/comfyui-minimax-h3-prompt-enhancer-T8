@@ -1,0 +1,26 @@
+{
+  "id": "121",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present established scale through an overall spatial view without adding landmarks or destruction.",
+      "text_zh": "用整体空间视野呈现已有规模，不新增地标或破坏。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use the source template's slow push toward the existing target while retaining orientation.",
+      "text_zh": "采用来源模板的缓推接近既有目标，保持方位。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

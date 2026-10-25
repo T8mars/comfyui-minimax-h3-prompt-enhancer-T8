@@ -61,9 +61,20 @@ spec = importlib.util.spec_from_file_location("registry_drama_smoke", p / "__ini
 package = importlib.util.module_from_spec(spec); sys.modules[spec.name] = package; spec.loader.exec_module(package)
 extension = asyncio.run(package.comfy_entrypoint()); node_list = asyncio.run(extension.get_node_list())
 schemas = [n.define_schema() for n in node_list]
-assert len(schemas) == 36
+assert len(schemas) == 38
 all_schemas = schemas
-assert [s.node_id for s in schemas[34:]] == ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"]
+assert [s.node_id for s in schemas[-2:]] == ["T8ColorStyleConfig", "T8CreatorStyleConfig"]
+styles = sys.modules[spec.name + ".visual_styles"]
+assert len(styles.load_catalog()[0]["entries"]) == 200
+for group in ("color", "creator"):
+    for i in range(1, 201): styles.load_resource(group, f"{i:03d}")
+for index in (0, 1):
+    assert [s.id for s in schemas[index].inputs[-2:]] == ["color_style_config", "creator_style_config"]
+    assert all(s.optional and s.lazy for s in schemas[index].inputs[-2:])
+assert all(not any(s.id in ("color_style_config", "creator_style_config") for s in schema.inputs) for schema in schemas[2:36])
+assert node_list[36].execute().result[0]["mode"] == "off"
+assert node_list[37].execute().result[0]["mode"] == "off"
+assert [s.node_id for s in schemas[34:36]] == ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"]
 assert len(schemas[34].outputs) == 4 and len(schemas[35].outputs) == 9
 assert schemas[35].inputs[0].as_dict()["dynamicPrompts"] is False
 for asset in ("moss_authoring.py", "moss_authoring_runtime.py", "moss_authoring_bundle.py",
@@ -92,7 +103,7 @@ for target in ("ref2va", "hybrid"):
     assert len(canvas["widgets_values"]) == 5 and canvas["widgets_values"][-1] == ""
     assert not any(n["type"] == "MiniMaxH3VisualMarkerPrepareEXPT8" for n in graph["nodes"])
     assert sample.with_suffix(".jpg").is_file()
-assert schemas[0].inputs[-1].id == "visual_marker_config" and schemas[0].inputs[-1].lazy
+assert schemas[0].inputs[-3].id == "visual_marker_config" and schemas[0].inputs[-3].lazy
 assert all("visual_marker_config" not in [i.id for i in s.inputs] for s in schemas[1:])
 assert (p / "docs/h3-visual-marker.md").is_file()
 assert (p / "research_sources/h3-visual-marker.lock.json").is_file()
@@ -151,10 +162,10 @@ assert (p / "research_sources/tudou-emotion.lock.json").is_file()
 assert (p / "web/js/docs/T8PerformanceDirectorConfig/zh.md").is_file()
 assert camera.combat_camera_instruction(None) == ""
 assert camera.combat_camera_instruction(camera.build_combat_camera_config(), "h3")
-assert schemas[0].inputs[-4].id == schemas[1].inputs[-3].id == "combat_camera_config"
-assert schemas[0].inputs[-3].id == schemas[1].inputs[-2].id == "speech_reference"
-assert schemas[0].inputs[-2].id == schemas[1].inputs[-1].id == "storyboard_director_config"
-assert schemas[0].inputs[-2].lazy and schemas[1].inputs[-1].lazy
+assert schemas[0].inputs[-6].id == schemas[1].inputs[-5].id == "combat_camera_config"
+assert schemas[0].inputs[-5].id == schemas[1].inputs[-4].id == "speech_reference"
+assert schemas[0].inputs[-4].id == schemas[1].inputs[-3].id == "storyboard_director_config"
+assert schemas[0].inputs[-4].lazy and schemas[1].inputs[-3].lazy
 assert [s.node_id for s in schemas[:3]] == ["MiniMaxH3PromptEnhancerT8", "Seedance20PromptEnhancerT8", "MiniMaxMusic3PromptEnhancerT8"]
 assert len(schemas[0].outputs) == 6 and len(schemas[1].outputs) == 1
 h3 = sys.modules[spec.name + ".nodes"]

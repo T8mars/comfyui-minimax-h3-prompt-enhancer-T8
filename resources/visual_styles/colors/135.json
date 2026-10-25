@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8F00",
+      "name_en": "复古怀旧",
+      "name_zh": "复古怀旧"
+    },
+    {
+      "code": "E02",
+      "hex": "#6A1B9A",
+      "name_en": "悬疑迷雾",
+      "name_zh": "悬疑迷雾"
+    },
+    {
+      "code": "E03",
+      "hex": "#C62828",
+      "name_en": "罪案血色",
+      "name_zh": "罪案血色"
+    },
+    {
+      "code": "E04",
+      "hex": "#2E7D32",
+      "name_en": "庄园秘密",
+      "name_zh": "庄园秘密"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8F00, #6A1B9A, #5D4037. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8F00, #6A1B9A, #5D4037；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "135",
+  "lighting_notes": {
+    "en": "Soft warm practical lighting.",
+    "zh": "柔和暖实景光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8F00",
+      "name_en": "Vintage Orange",
+      "name_zh": "复古橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#6A1B9A",
+      "name_en": "Mystery Purple",
+      "name_zh": "悬疑紫",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#C62828",
+      "name_en": "Mystery Red",
+      "name_zh": "推理红",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2E7D32",
+      "name_en": "Manor Green",
+      "name_zh": "庄园绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Warm Gold",
+      "name_zh": "暖金",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#5D4037",
+      "name_en": "Wood Brown",
+      "name_zh": "木质棕",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

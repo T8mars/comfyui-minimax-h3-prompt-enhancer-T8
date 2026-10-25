@@ -1,4 +1,5 @@
 """Freeze the 1.36 node prefix and existing examples, with only MOSS opt-in edits."""
+from visual_style_baseline_projection import project_style_ast
 import ast
 import asyncio
 from pathlib import Path
@@ -26,13 +27,16 @@ class AuthoringCompatibility(unittest.TestCase):
         current = asyncio.run(asyncio.run(package.comfy_entrypoint()).get_node_list())
         self.assertEqual(len(previous), 34)
         self.assertEqual(current[:34], previous)
-        self.assertEqual([cls.define_schema().node_id for cls in current[34:]], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
+        self.assertEqual([cls.define_schema().node_id for cls in current[34:36]], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
         for cls in previous:
             module = sys.modules[cls.__module__]
             path = Path(module.__file__).resolve()
             name = path.relative_to(ROOT).as_posix()
             if name == "moss_image.py": continue  # explicit schema/message gates in test_moss_authoring
-            self.assertEqual(path.read_bytes().replace(b"\r\n", b"\n"), frozen(name).replace(b"\r\n", b"\n"), name)
+            if name in ("nodes.py", "seedance20.py"):
+                self.assertEqual(ast.dump(project_style_ast(path.read_text(encoding="utf-8"))), ast.dump(ast.parse(frozen(name))), name)
+            else:
+                self.assertEqual(path.read_bytes().replace(b"\r\n", b"\n"), frozen(name).replace(b"\r\n", b"\n"), name)
 
     def test_every_published_workflow_keeps_its_original_bytes(self):
         names = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", BASELINE, "example_workflows"], cwd=GIT_ROOT).decode().splitlines()

@@ -1,0 +1,26 @@
+{
+  "id": "175",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe the existing subject through clear portrait relationships without imposed emotion.",
+      "text_zh": "以清楚肖像关系观察已有主体，不强迫其情绪。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Retain the established observer-observed relationship without dialogue additions.",
+      "text_zh": "保持既有观看者与被观察者关系，不新增对白。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

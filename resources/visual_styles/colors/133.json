@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6D00",
+      "name_en": "爆炸快感",
+      "name_zh": "爆炸快感"
+    },
+    {
+      "code": "E02",
+      "hex": "#1565C0",
+      "name_en": "英雄主义",
+      "name_zh": "英雄主义"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "黄金时刻",
+      "name_zh": "黄金时刻"
+    },
+    {
+      "code": "E04",
+      "hex": "#B71C1C",
+      "name_en": "肾上腺素",
+      "name_zh": "肾上腺素"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF6D00, #1565C0, #FFD54F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF6D00, #1565C0, #FFD54F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "133",
+  "lighting_notes": {
+    "en": "Motivated backlight without adding explosive light sources.",
+    "zh": "有动机的背光，不新增爆炸光源。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF6D00",
+      "name_en": "Explosion Orange",
+      "name_zh": "爆炸橙",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#1565C0",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Fireball Gold",
+      "name_zh": "火球金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B71C1C",
+      "name_en": "Flame Red",
+      "name_zh": "火焰红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#78909C",
+      "name_en": "Steel Gray",
+      "name_zh": "钢铁灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFFFFF",
+      "name_en": "Highlight White",
+      "name_zh": "高光白",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

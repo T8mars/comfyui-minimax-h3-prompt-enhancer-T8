@@ -1,0 +1,24 @@
+{
+  "id": "040",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track along the established lateral route while retaining exits and action axis.",
+      "text_zh": "沿既有侧向路径跟拍，保持场地出口和行动轴。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use enclosed perspective to establish depth positions without adding tactical overlays.",
+      "text_zh": "用封闭空间的透视关系交代前后位置，不加入战术界面。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F44336",
+      "name_en": "Laser Red Eye",
+      "name_zh": "激光红眼"
+    },
+    {
+      "code": "E02",
+      "hex": "#18FFFF",
+      "name_en": "Underwater Ghost Blue",
+      "name_zh": "水下幽蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#D500F9",
+      "name_en": "Alien Purple Glow",
+      "name_zh": "外星紫辉"
+    },
+    {
+      "code": "E04",
+      "hex": "#2979FF",
+      "name_en": "Electric Blue Hologram",
+      "name_zh": "电蓝全息"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A1929, #37474F, #FFB74D. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A1929, #37474F, #FFB74D；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "031",
+  "lighting_notes": {
+    "en": "Choose side light for existing materials, distinguishing hard and soft surfaces.",
+    "zh": "按已有材质选择侧光，硬表面与柔表面区分。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A1929",
+      "name_en": "Deep Ocean Blue-Black",
+      "name_zh": "深海蓝黑",
+      "share": 0.28
+    },
+    {
+      "code": "C02",
+      "hex": "#37474F",
+      "name_en": "Mechanical Steel Blue",
+      "name_zh": "机械钢蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#B0BEC5",
+      "name_en": "Chrome Silver",
+      "name_zh": "镀铬银",
+      "share": 0.1
+    },
+    {
+      "code": "C04",
+      "hex": "#FF6D00",
+      "name_en": "Fire Orange",
+      "name_zh": "火焰橙",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#00E676",
+      "name_en": "Bioluminescent Cyan-Green",
+      "name_zh": "生物荧光青",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#FFB74D",
+      "name_en": "Warm Golden Interior",
+      "name_zh": "暖金内光",
+      "share": 0.17
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

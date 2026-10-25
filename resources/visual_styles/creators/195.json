@@ -1,0 +1,26 @@
+{
+  "id": "195",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep dialogue participants and exits readable in the existing interior without adding secrets.",
+      "text_zh": "在已有室内保留对话双方及出口位置，不新增秘密。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Make supplied reception and response clear without inventing judgments.",
+      "text_zh": "让已给接收与回应清楚，不替人物补写判断。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

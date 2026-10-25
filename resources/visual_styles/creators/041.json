@@ -1,0 +1,24 @@
+{
+  "id": "041",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When permitted, glide low and wide alongside existing movement.",
+      "text_zh": "允许时以低位广角滑行跟随已有运动。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing natural boundaries and horizon to relate subject and environment.",
+      "text_zh": "借已有自然边界与地平线呈现环境和主体的比例。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

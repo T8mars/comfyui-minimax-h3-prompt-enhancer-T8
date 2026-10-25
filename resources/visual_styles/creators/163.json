@@ -1,0 +1,25 @@
+{
+  "id": "163",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use frontal observation only when permitted without forcing a camera gaze.",
+      "text_zh": "仅在原本允许时采用正面观看，不强制角色直视镜头。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "At permitted cuts, omit redundant observation without changing action order or adding text.",
+      "text_zh": "允许切镜时可省略冗余观察，不改变动作顺序或补文字。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

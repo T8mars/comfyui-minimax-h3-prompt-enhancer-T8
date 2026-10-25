@@ -1,0 +1,25 @@
+{
+  "id": "124",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep existing group movement directions and depth relationships clear.",
+      "text_zh": "在画面纵深中保持已有多人运动方向与前后关系。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow established action continuously, using environmental lines for readability.",
+      "text_zh": "连续跟随既定动作，让环境线条帮助读懂运动。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

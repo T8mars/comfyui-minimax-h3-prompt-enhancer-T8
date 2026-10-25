@@ -1,0 +1,24 @@
+{
+  "id": "028",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain architectural depth and separate layers with existing reflections.",
+      "text_zh": "保留已有城市或建筑纵深，用现有反射分隔空间层次。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve existing pauses through still observation or a slow push without added sound or action.",
+      "text_zh": "用静观或慢推进保留原有停留，不追加声音或动作。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "077",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use a fixed planar view to hold existing spatial layers and people together.",
+      "text_zh": "固定平面构图让已有空间层次与人物位置同框。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Sustain supplied small actions without adding vignettes or stiff acting.",
+      "text_zh": "持续观察已给微动作，不增加独立小故事或僵硬表演。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "conflicting_avoid_excluded",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C62828",
+      "name_en": "革命激情",
+      "name_zh": "革命激情"
+    },
+    {
+      "code": "E02",
+      "hex": "#0D47A1",
+      "name_en": "理性思辨",
+      "name_zh": "理性思辨"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD600",
+      "name_en": "挑衅宣言",
+      "name_zh": "挑衅宣言"
+    },
+    {
+      "code": "E04",
+      "hex": "#000000",
+      "name_en": "冷酷批判",
+      "name_zh": "冷酷批判"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D47A1, #C62828, #FFD600. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D47A1, #C62828, #FFD600；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "163",
+  "lighting_notes": {
+    "en": "Existing street-level natural light.",
+    "zh": "已有街景自然光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D47A1",
+      "name_en": "French Blue",
+      "name_zh": "法国蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#C62828",
+      "name_en": "Revolution Red",
+      "name_zh": "革命红",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD600",
+      "name_en": "Manifesto Yellow",
+      "name_zh": "宣言黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#000000",
+      "name_en": "New Wave Black",
+      "name_zh": "新浪潮黑",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFFFFF",
+      "name_en": "Concept White",
+      "name_zh": "概念白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#2E7D32",
+      "name_en": "Political Green",
+      "name_zh": "政治绿",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

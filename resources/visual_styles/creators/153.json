@@ -1,0 +1,26 @@
+{
+  "id": "153",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain existing environment-subject scale without inventing underwater or space settings.",
+      "text_zh": "保留已有环境与主体的尺度差，不新设海底或太空。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's gentle-follow template, retaining the supplied movement target.",
+      "text_zh": "采用同条来源的平缓跟随，保持已给移动目标。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

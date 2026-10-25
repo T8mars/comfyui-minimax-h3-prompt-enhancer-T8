@@ -1,0 +1,26 @@
+{
+  "id": "161",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain positions and listening relationships in supplied dialogue without new lines.",
+      "text_zh": "保持已给对话双方的位置与倾听关系，不新写台词。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Let existing dialogue and pauses unfold without shortening or rewriting speech for style.",
+      "text_zh": "让原有对话和停顿完整展开，不以风格缩改话语。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

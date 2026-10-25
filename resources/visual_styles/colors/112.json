@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1744",
+      "name_en": "欲望反叛",
+      "name_zh": "欲望反叛"
+    },
+    {
+      "code": "E02",
+      "hex": "#00B0FF",
+      "name_en": "酷儿梦幻",
+      "name_zh": "酷儿梦幻"
+    },
+    {
+      "code": "E03",
+      "hex": "#EA80FC",
+      "name_en": "迷幻仪式",
+      "name_zh": "迷幻仪式"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFEA00",
+      "name_en": "挑衅光芒",
+      "name_zh": "挑衅光芒"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF1744, #00B0FF, #EA80FC. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF1744, #00B0FF, #EA80FC；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "112",
+  "lighting_notes": {
+    "en": "Motivated localized colored lighting.",
+    "zh": "有动机的局部色光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF1744",
+      "name_en": "Flame Red",
+      "name_zh": "火焰红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00B0FF",
+      "name_en": "Neon Blue",
+      "name_zh": "霓虹蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#EA80FC",
+      "name_en": "Psychedelic Purple",
+      "name_zh": "迷幻紫",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFEA00",
+      "name_en": "Lightning Yellow",
+      "name_zh": "霹雳黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#000000",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.16
+    },
+    {
+      "code": "C06",
+      "hex": "#FF9100",
+      "name_en": "Orange Flame",
+      "name_zh": "橙焰",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

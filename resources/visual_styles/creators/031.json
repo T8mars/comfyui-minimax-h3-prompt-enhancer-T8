@@ -1,0 +1,24 @@
+{
+  "id": "031",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track steadily along the established action axis with target and contact readable.",
+      "text_zh": "沿既定动作轴稳定跟随，持续看清目标与接触。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Relate overall scale to existing mechanical detail.",
+      "text_zh": "用环境尺度与已有机械细节建立整体和局部关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

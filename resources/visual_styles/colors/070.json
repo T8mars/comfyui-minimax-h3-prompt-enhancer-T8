@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#7D8F7D",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#5A6A5A",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#B0A896",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A3A2A",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6B7D6B, #8B9A8B, #A89F8A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6B7D6B, #8B9A8B, #A89F8A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "070",
+  "lighting_notes": {
+    "en": "Soft overcast light with natural exposure.",
+    "zh": "柔和阴天光，保持自然曝光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6B7D6B",
+      "name_en": "Pacific Northwest Green",
+      "name_zh": "太平洋西北绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B9A8B",
+      "name_en": "Moss Green Gray",
+      "name_zh": "苔藓绿灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#A89F8A",
+      "name_en": "Deadwood Brown Gray",
+      "name_zh": "枯木棕灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#4A5A4A",
+      "name_en": "Deep Forest Green",
+      "name_zh": "深林绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#C4BCA8",
+      "name_en": "Foggy Forest Beige",
+      "name_zh": "雾林米",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3A4A3A",
+      "name_en": "Dark Pine Green",
+      "name_zh": "暗松绿",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

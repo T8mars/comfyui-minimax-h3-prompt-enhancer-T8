@@ -1,0 +1,25 @@
+{
+  "id": "058",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Allocate geometry and negative space precisely without rearranging locked objects.",
+      "text_zh": "精确分配几何线条和负空间，不重排已锁物件。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Keep existing space legible during continuous movement rather than hiding information.",
+      "text_zh": "连续移动须保持已有空间清晰，不以运动隐藏信息。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded",
+    "source_role_corrected"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

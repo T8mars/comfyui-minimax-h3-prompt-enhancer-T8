@@ -1,0 +1,25 @@
+{
+  "id": "183",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing spatial edges and distant entrances steadily without adding ghosts.",
+      "text_zh": "固定观察已有空间边缘与远处入口，不增设幽灵。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve existing waiting so established changes can be noticed in-frame.",
+      "text_zh": "维持原有等待，让已有变化在画面中被发现。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

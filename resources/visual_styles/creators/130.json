@@ -1,0 +1,25 @@
+{
+  "id": "130",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing combat or action continuously, retaining contact and release.",
+      "text_zh": "连续跟随已有格斗或动作，保持完整接触与脱离过程。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep actor, target and necessary hands together without hiding key causality.",
+      "text_zh": "让行动者、目标和必要手部同框，不用构图隐藏关键因果。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

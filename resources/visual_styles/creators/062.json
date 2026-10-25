@@ -1,0 +1,25 @@
+{
+  "id": "062",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Convey state changes through established hand or object actions.",
+      "text_zh": "用已存在的手部或物件动作传达状态变化。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Limit information through spare details and existing frames without new offscreen events.",
+      "text_zh": "以简洁局部和现有门框限定信息，不新增画外事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

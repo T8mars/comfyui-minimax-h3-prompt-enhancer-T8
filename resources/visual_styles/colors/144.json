@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4FC3F7",
+      "name_en": "思念远方",
+      "name_zh": "思念远方"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF8A65",
+      "name_en": "青春遗憾",
+      "name_zh": "青春遗憾"
+    },
+    {
+      "code": "E03",
+      "hex": "#BA68C8",
+      "name_en": "浪漫梦幻",
+      "name_zh": "浪漫梦幻"
+    },
+    {
+      "code": "E04",
+      "hex": "#7986CB",
+      "name_en": "星空孤独",
+      "name_zh": "星空孤独"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4FC3F7, #FF8A65, #BA68C8. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4FC3F7, #FF8A65, #BA68C8；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "144",
+  "lighting_notes": {
+    "en": "Motivated soft backlight without changing a locked time of day.",
+    "zh": "有动机的柔和背光，不改变锁定时段。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4FC3F7",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FF8A65",
+      "name_en": "Sunset Orange",
+      "name_zh": "夕阳橙",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#BA68C8",
+      "name_en": "Sunset Purple",
+      "name_zh": "晚霞紫",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFF9C4",
+      "name_en": "Sunshine Yellow",
+      "name_zh": "阳光黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#7986CB",
+      "name_en": "Night Sky Blue",
+      "name_zh": "夜空蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#81C784",
+      "name_en": "Youth Green",
+      "name_zh": "青春绿",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

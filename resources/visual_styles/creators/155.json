@@ -1,0 +1,26 @@
+{
+  "id": "155",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-dolly template to approach the existing subject.",
+      "text_zh": "采用本条模板的缓慢推进接近既有主体。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use handheld follow for existing movement without adding age, family or animal premises.",
+      "text_zh": "已有移动时可用手持跟随；不添加少女、家庭或动物设定。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

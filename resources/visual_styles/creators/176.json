@@ -1,0 +1,26 @@
+{
+  "id": "176",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "For existing group movement, retain coherent routes and spatial layers.",
+      "text_zh": "若原稿已有群体移动，让其路径与空间层次连贯。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action with the record's template without adding song or dance.",
+      "text_zh": "用本条跟随模板随既有动作，不自动加入歌舞。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "054",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Establish existing scale before moving closer within the shot or at an allowed cut.",
+      "text_zh": "先让既有环境规模可读，再在同一镜头或允许切点靠近。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize the existing subject through simple symmetry and horizon relationships.",
+      "text_zh": "用简洁对称和地平线关系组织现有主体。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

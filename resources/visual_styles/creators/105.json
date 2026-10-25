@@ -1,0 +1,26 @@
+{
+  "id": "105",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present existing subjects in a clear frontal pictorial arrangement.",
+      "text_zh": "以正面、清楚的图像布局呈现已有主体。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain deliberate spacing among existing poses and objects without symbolic additions.",
+      "text_zh": "保持已有姿态与物件的仪式性间距，不新增符号。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

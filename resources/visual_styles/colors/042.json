@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C0392B",
+      "name_en": "Crimson Pain",
+      "name_zh": "赤红痛楚"
+    },
+    {
+      "code": "E02",
+      "hex": "#F4D03F",
+      "name_en": "Golden Redemption",
+      "name_zh": "金色救赎"
+    },
+    {
+      "code": "E03",
+      "hex": "#566573",
+      "name_en": "Grey-Blue Solitude",
+      "name_zh": "灰蓝孤寂"
+    },
+    {
+      "code": "E04",
+      "hex": "#6E2C00",
+      "name_en": "Deep Brown Earth",
+      "name_zh": "深棕大地"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6B4423, #A87C50, #D9C4A3. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6B4423, #A87C50, #D9C4A3；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "042",
+  "lighting_notes": {
+    "en": "Available natural light with soft window fill.",
+    "zh": "可用自然光与柔和窗光补充。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6B4423",
+      "name_en": "Mud Brown",
+      "name_zh": "泥土棕",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#A87C50",
+      "name_en": "Hide Yellow",
+      "name_zh": "兽皮黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8B261A",
+      "name_en": "Clotted Blood Red",
+      "name_zh": "凝血红",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#D9C4A3",
+      "name_en": "Warm Beige Skin",
+      "name_zh": "暖米肤",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#4A5D6B",
+      "name_en": "Cold Mist Grey-Blue",
+      "name_zh": "冷雾灰蓝",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#E8A84C",
+      "name_en": "Sunset Gold",
+      "name_zh": "夕照金",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -5,6 +5,9 @@ import copy
 
 def project_speech_signature(arguments):
     args = copy.deepcopy(arguments)
+    for name in ('creator_style_config', 'color_style_config'):
+        assert args.args[-1].arg == name and ast.literal_eval(args.defaults[-1]) is None
+        args.args.pop(); args.defaults.pop()
     if args.args and args.args[-1].arg == "visual_marker_config":
         if not isinstance(args.defaults[-1], ast.Constant) or args.defaults[-1].value is not None:
             raise AssertionError("Visual marker default must remain None")
@@ -32,6 +35,12 @@ def project_speech_schema(method):
             if keyword.arg != "inputs" or not isinstance(keyword.value, ast.List):
                 continue
             values = keyword.value.elts
+            for name, constructor in (('creator_style_config', 'CreatorStyleIO.Input'), ('color_style_config', 'ColorStyleIO.Input')):
+                addition = values[-1]
+                assert ast.unparse(addition.func) == constructor and ast.literal_eval(addition.args[0]) == name
+                options = {item.arg: item.value for item in addition.keywords}
+                assert ast.literal_eval(options['optional']) is True and ast.literal_eval(options['lazy']) is True
+                values.pop()
             if values and isinstance(values[-1], ast.Call) and ast.unparse(values[-1].func) == "VisualMarkerConfigIO.Input":
                 marker = values[-1]
                 if len(marker.args) != 1 or ast.literal_eval(marker.args[0]) != "visual_marker_config":

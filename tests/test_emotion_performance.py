@@ -1,6 +1,7 @@
 """CPU contracts, not LLM compliance or rendered emotion measurements."""
 from __future__ import annotations
 
+from visual_style_baseline_projection import without_style_signature
 import copy
 import importlib
 import inspect
@@ -69,7 +70,7 @@ class EmotionPerformanceTests(unittest.TestCase):
             self.assertEqual(direction.coordinated_performance_instruction(**values), old_coordinated(**values))
         for module, filename, args in ((h3, "nodes.py", h3_args), (sd, "seedance20.py", sd_args)):
             old = original_function(filename, "_build_messages", module, BASELINE)
-            signature = inspect.signature(module._build_messages)
+            signature = without_style_signature(inspect.signature(module._build_messages))
             if module is h3:
                 self.assertEqual(list(signature.parameters)[-1], "visual_marker_config")
                 signature = signature.replace(parameters=list(signature.parameters.values())[:-1])

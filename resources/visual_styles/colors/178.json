@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#90CAF9",
+      "name_en": "日常清澈",
+      "name_zh": "日常清澈"
+    },
+    {
+      "code": "E02",
+      "hex": "#A5D6A7",
+      "name_en": "偶然生机",
+      "name_zh": "偶然生机"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "温暖理解",
+      "name_zh": "温暖理解"
+    },
+    {
+      "code": "E04",
+      "hex": "#F8BBD0",
+      "name_en": "想象温柔",
+      "name_zh": "想象温柔"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #78909C, #90CAF9, #A5D6A7. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #78909C, #90CAF9, #A5D6A7；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "178",
+  "lighting_notes": {
+    "en": "Available natural light retaining facial detail.",
+    "zh": "自然可用光，保持面部细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#90CAF9",
+      "name_en": "Everyday Blue",
+      "name_zh": "日常蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C02",
+      "hex": "#A5D6A7",
+      "name_en": "Serendipity Green",
+      "name_zh": "偶然绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#BCAAA4",
+      "name_en": "Life Beige",
+      "name_zh": "生活米",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#F8BBD0",
+      "name_en": "Imagination Pink",
+      "name_zh": "想象粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#78909C",
+      "name_en": "Car Gray",
+      "name_zh": "车中灰",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

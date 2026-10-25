@@ -1,0 +1,24 @@
+{
+  "id": "012",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Reveal established spatial information through smooth tracking.",
+      "text_zh": "通过流畅跟随逐步交代既有空间信息。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing passage perspective or vehicle boundaries to delimit the view.",
+      "text_zh": "以现有通道透视或车内边界限定观察方向。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

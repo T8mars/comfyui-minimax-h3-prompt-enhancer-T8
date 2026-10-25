@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1493",
+      "name_en": "Pink",
+      "name_zh": "欲望粉"
+    },
+    {
+      "code": "E02",
+      "hex": "#00FFFF",
+      "name_en": "Cyan",
+      "name_zh": "毒幻青"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF4500",
+      "name_en": "Red",
+      "name_zh": "暴力橙红"
+    },
+    {
+      "code": "E04",
+      "hex": "#9400D3",
+      "name_en": "Purple",
+      "name_zh": "迷幻紫"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A000F, #FF0000, #0000FF. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A000F, #FF0000, #0000FF；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "023",
+  "lighting_notes": {
+    "en": "Localized directional colored light without automatic strobing.",
+    "zh": "局部定向色光；不自动加入频闪。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A000F",
+      "name_en": "Black",
+      "name_zh": "迷幻深黑",
+      "share": 0.3
+    },
+    {
+      "code": "C02",
+      "hex": "#FF0000",
+      "name_en": "Red",
+      "name_zh": "频闪纯红",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#0000FF",
+      "name_en": "Blue",
+      "name_zh": "电音深蓝",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#FF00FF",
+      "name_en": "Red",
+      "name_zh": "夜店洋红",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD700",
+      "name_en": "Gold",
+      "name_zh": "迷幻金",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#E8BEAC",
+      "name_en": "Color 6",
+      "name_zh": "裸肤",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

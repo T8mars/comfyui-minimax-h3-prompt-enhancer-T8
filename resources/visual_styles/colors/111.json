@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFB300",
+      "name_en": "狂欢热烈",
+      "name_zh": "狂欢热烈"
+    },
+    {
+      "code": "E02",
+      "hex": "#E65100",
+      "name_en": "生命激情",
+      "name_zh": "生命激情"
+    },
+    {
+      "code": "E03",
+      "hex": "#5D4037",
+      "name_en": "忧伤怀旧",
+      "name_zh": "忧伤怀旧"
+    },
+    {
+      "code": "E04",
+      "hex": "#2E7D32",
+      "name_en": "土地家园",
+      "name_zh": "土地家园"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E65100, #FFB300, #5D4037. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E65100, #FFB300, #5D4037；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "111",
+  "lighting_notes": {
+    "en": "Existing warm practical sources form readable layers.",
+    "zh": "已有暖实景光形成可读层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E65100",
+      "name_en": "Flame Orange",
+      "name_zh": "火焰橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFB300",
+      "name_en": "Marigold Yellow",
+      "name_zh": "金盏黄",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Smoky Brown",
+      "name_zh": "烟熏棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2E7D32",
+      "name_en": "Pasture Green",
+      "name_zh": "草原绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#B71C1C",
+      "name_en": "Blood Red",
+      "name_zh": "血红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Deep Wood Brown",
+      "name_zh": "深棕木",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

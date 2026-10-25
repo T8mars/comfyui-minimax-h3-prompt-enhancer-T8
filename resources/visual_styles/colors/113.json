@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#808080",
+      "name_en": "梦境诗意",
+      "name_zh": "梦境诗意"
+    },
+    {
+      "code": "E02",
+      "hex": "#000000",
+      "name_en": "神秘深渊",
+      "name_zh": "神秘深渊"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFFFFF",
+      "name_en": "灵性升华",
+      "name_zh": "灵性升华"
+    },
+    {
+      "code": "E04",
+      "hex": "#404040",
+      "name_en": "内在焦虑",
+      "name_zh": "内在焦虑"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFFFFF, #000000, #808080. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFFFFF, #000000, #808080；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "113",
+  "lighting_notes": {
+    "en": "Clear tonal layers retaining action contours.",
+    "zh": "清楚明暗层次，保留动作轮廓。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FFFFFF",
+      "name_en": "Pure White",
+      "name_zh": "纯白",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#000000",
+      "name_en": "Pure Black",
+      "name_zh": "纯黑",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#808080",
+      "name_en": "Mid Gray",
+      "name_zh": "中灰",
+      "share": 0.18
+    },
+    {
+      "code": "C04",
+      "hex": "#C0C0C0",
+      "name_en": "Silver Gray",
+      "name_zh": "银灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#404040",
+      "name_en": "Dark Gray",
+      "name_zh": "深灰",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#E0E0E0",
+      "name_en": "Light Gray",
+      "name_zh": "浅灰",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

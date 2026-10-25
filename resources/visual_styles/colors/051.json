@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#A9B2B8",
+      "name_en": "Blue",
+      "name_zh": "雾霭蓝"
+    },
+    {
+      "code": "E02",
+      "hex": "#E5D8BE",
+      "name_en": "Gold",
+      "name_zh": "麦浪金"
+    },
+    {
+      "code": "E03",
+      "hex": "#6B5344",
+      "name_en": "Ochre",
+      "name_zh": "焦土褐"
+    },
+    {
+      "code": "E04",
+      "hex": "#9DB0A0",
+      "name_en": "Cyan",
+      "name_zh": "苔原青"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #7A848C, #B5A893, #8C7A6B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #7A848C, #B5A893, #8C7A6B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "051",
+  "lighting_notes": {
+    "en": "Overcast diffusion or soft window light.",
+    "zh": "阴天漫射光或柔和窗光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#7A848C",
+      "name_en": "Blue",
+      "name_zh": "工人灰蓝",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#B5A893",
+      "name_en": "Gray",
+      "name_zh": "朴素暖灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#556B2F",
+      "name_en": "Green",
+      "name_zh": "爱尔兰苔绿",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#C9B896",
+      "name_en": "Yellow",
+      "name_zh": "旧木黄",
+      "share": 0.13
+    },
+    {
+      "code": "C05",
+      "hex": "#8C7A6B",
+      "name_en": "Brown",
+      "name_zh": "石墙棕",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#D4C5A9",
+      "name_en": "Color 6",
+      "name_zh": "阴天肤",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

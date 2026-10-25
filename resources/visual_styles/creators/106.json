@@ -1,0 +1,26 @@
+{
+  "id": "106",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing mirrors and spatial layers to retain viewing relationships.",
+      "text_zh": "借已有镜面与空间层次保持人物观察关系。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine existing material and pose details without new clothing or identity.",
+      "text_zh": "近看已有材质和姿态细节，不增加服装或身份。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

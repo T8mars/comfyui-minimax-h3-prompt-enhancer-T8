@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF3D00",
+      "name_en": "Burst Orange Red",
+      "name_zh": "爆裂橙红"
+    },
+    {
+      "code": "E02",
+      "hex": "#7B1FA2",
+      "name_en": "Intoxication Purple",
+      "name_zh": "迷醉紫"
+    },
+    {
+      "code": "E03",
+      "hex": "#00BCD4",
+      "name_en": "Bitter Cyan",
+      "name_zh": "冷冽青"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "Mania Gold",
+      "name_zh": "癫狂金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #181818, #4A235A, #B03A2E. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #181818, #4A235A, #B03A2E；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "016",
+  "lighting_notes": {
+    "en": "A firmer close-range key with softened transitions where appropriate.",
+    "zh": "近摄较硬主光，必要时柔化过渡。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#181818",
+      "name_en": "Abyss Dark Black",
+      "name_zh": "暗渊黑",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#4A235A",
+      "name_en": "Deep Purple Magenta",
+      "name_zh": "深紫红",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#B03A2E",
+      "name_en": "Deep Blood Red",
+      "name_zh": "深血红",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#1A5276",
+      "name_en": "Deep Cold Blue",
+      "name_zh": "深海冷蓝",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#D4AC0D",
+      "name_en": "Dark Gold",
+      "name_zh": "暗金",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#F1948A",
+      "name_en": "Pale Pink Skin",
+      "name_zh": "苍白粉红肤",
+      "share": 0.09
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

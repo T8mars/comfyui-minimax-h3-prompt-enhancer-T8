@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#1E90FF",
+      "name_en": "Blue",
+      "name_zh": "枪口蓝"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF6B35",
+      "name_en": "Orange",
+      "name_zh": "枪火橙"
+    },
+    {
+      "code": "E03",
+      "hex": "#708090",
+      "name_en": "Gray",
+      "name_zh": "钢灰寂"
+    },
+    {
+      "code": "E04",
+      "hex": "#DAA520",
+      "name_en": "Accent 4",
+      "name_zh": "暖钨灯"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A1628, #2C3E50, #4A90D9. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A1628, #2C3E50, #4A90D9；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "026",
+  "lighting_notes": {
+    "en": "Prioritize existing practical sources with selective readable fill.",
+    "zh": "优先已有实景光源，局部补光保持人物可读。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A1628",
+      "name_en": "Blue",
+      "name_zh": "数码深蓝",
+      "share": 0.35
+    },
+    {
+      "code": "C02",
+      "hex": "#2C3E50",
+      "name_en": "Gray",
+      "name_zh": "城市钢灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#4A90D9",
+      "name_en": "Blue",
+      "name_zh": "电子冷蓝",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#C4A35A",
+      "name_en": "Color 4",
+      "name_zh": "都市暖钨",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#8B4513",
+      "name_en": "Brown",
+      "name_zh": "皮革棕",
+      "share": 0.11
+    },
+    {
+      "code": "C06",
+      "hex": "#B0C4DE",
+      "name_en": "Color 6",
+      "name_zh": "冷钢肤",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

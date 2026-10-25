@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#DAA520",
+      "name_en": "Desert Gold",
+      "name_zh": "沙漠金"
+    },
+    {
+      "code": "E02",
+      "hex": "#8B4513",
+      "name_en": "Saddle Brown",
+      "name_zh": "马鞍棕"
+    },
+    {
+      "code": "E03",
+      "hex": "#CD853F",
+      "name_en": "Peru Brown",
+      "name_zh": "秘鲁棕"
+    },
+    {
+      "code": "E04",
+      "hex": "#0F0F0F",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #DAA520, #8B4513, #CD853F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #DAA520, #8B4513, #CD853F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "098",
+  "lighting_notes": {
+    "en": "Clear direct hard light retaining surface detail.",
+    "zh": "清晰直接硬光，保留表面细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#DAA520",
+      "name_en": "Desert Gold",
+      "name_zh": "沙漠金",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B4513",
+      "name_en": "Saddle Brown",
+      "name_zh": "马鞍棕",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#CD853F",
+      "name_en": "Peru Brown",
+      "name_zh": "秘鲁棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#8B7355",
+      "name_en": "Gray Brown",
+      "name_zh": "灰棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#556B2F",
+      "name_en": "Dark Olive",
+      "name_zh": "暗橄榄",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

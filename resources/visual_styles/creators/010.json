@@ -1,0 +1,24 @@
+{
+  "id": "010",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe established interpersonal distances in a medium view or slow lateral move.",
+      "text_zh": "用中景静观或慢横移观察既有人际距离。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Separate existing roles with existing tables or frames while preserving their relationship and action.",
+      "text_zh": "借已有桌面或门框分隔角色，维持原关系和动作。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

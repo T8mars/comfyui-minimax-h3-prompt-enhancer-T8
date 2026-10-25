@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFB300",
+      "name_en": "日光恐惧",
+      "name_zh": "日光恐惧"
+    },
+    {
+      "code": "E02",
+      "hex": "#8D6E63",
+      "name_en": "家庭压抑",
+      "name_zh": "家庭压抑"
+    },
+    {
+      "code": "E03",
+      "hex": "#B71C1C",
+      "name_en": "血腥暴力",
+      "name_zh": "血腥暴力"
+    },
+    {
+      "code": "E04",
+      "hex": "#33691E",
+      "name_en": "自然恐怖",
+      "name_zh": "自然恐怖"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFB300, #8D6E63, #3E2723. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFB300, #8D6E63, #3E2723；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "108",
+  "lighting_notes": {
+    "en": "Natural daylight retaining highlight and shadow detail.",
+    "zh": "自然日光，保持明处和阴影细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FFB300",
+      "name_en": "Midsommar Gold",
+      "name_zh": "仲夏夜金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8D6E63",
+      "name_en": "Cabin Brown",
+      "name_zh": "木屋棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#33691E",
+      "name_en": "Meadow Green",
+      "name_zh": "青草绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B71C1C",
+      "name_en": "Blood Dark Red",
+      "name_zh": "血暗红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFF9C4",
+      "name_en": "Sunlight Yellow",
+      "name_zh": "日光黄",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Dark Brown Black",
+      "name_zh": "暗棕黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

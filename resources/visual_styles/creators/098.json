@@ -1,0 +1,25 @@
+{
+  "id": "098",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Examine supplied eye or hand action while retaining established confrontation distances.",
+      "text_zh": "近看已给眼部或手部动作，保留对峙空间的真实距离。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve specified waiting without extending it or adding a duel.",
+      "text_zh": "保留已指定的等待，不擅自延长或添加决斗。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

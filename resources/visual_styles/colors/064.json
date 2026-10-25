@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#404040",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#707070",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#A0A0A0",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#0A0A0A",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #2A2A2A, #5A5A5A, #8A8A8A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #2A2A2A, #5A5A5A, #8A8A8A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "064",
+  "lighting_notes": {
+    "en": "Emphasize tonal separation without forcing monochrome.",
+    "zh": "强调清楚的明暗分离，不强制改黑白。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#2A2A2A",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.26
+    },
+    {
+      "code": "C02",
+      "hex": "#5A5A5A",
+      "name_en": "Mid Gray",
+      "name_zh": "中灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8A8A8A",
+      "name_en": "Light Gray",
+      "name_zh": "浅灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B5B5B5",
+      "name_en": "Silver Gray",
+      "name_zh": "银灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#D6D6D6",
+      "name_en": "Ash White",
+      "name_zh": "灰白",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#151515",
+      "name_en": "Pitch Dark",
+      "name_zh": "漆黑暗",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

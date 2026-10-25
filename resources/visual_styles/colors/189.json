@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8D6E63",
+      "name_en": "酒后微醺",
+      "name_zh": "酒后微醺"
+    },
+    {
+      "code": "E02",
+      "hex": "#78909C",
+      "name_en": "日常疏离",
+      "name_zh": "日常疏离"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "暧昧温暖",
+      "name_zh": "暧昧温暖"
+    },
+    {
+      "code": "E04",
+      "hex": "#000000",
+      "name_en": "存在空虚",
+      "name_zh": "存在空虚"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #BCAAA4, #000000, #FFFFFF. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #BCAAA4, #000000, #FFFFFF；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "189",
+  "lighting_notes": {
+    "en": "Available natural light retaining everyday tonal layers.",
+    "zh": "自然可用光，保持日常层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#000000",
+      "name_en": "B&W Black",
+      "name_zh": "黑白黑",
+      "share": 0.18
+    },
+    {
+      "code": "C02",
+      "hex": "#FFFFFF",
+      "name_en": "B&W White",
+      "name_zh": "白白白",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8D6E63",
+      "name_en": "Bar Brown",
+      "name_zh": "酒馆棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#78909C",
+      "name_en": "Seoul Gray",
+      "name_zh": "首尔灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "Street Beige",
+      "name_zh": "街道米",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

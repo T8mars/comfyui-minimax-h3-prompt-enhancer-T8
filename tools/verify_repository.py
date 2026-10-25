@@ -28,7 +28,7 @@ FORBIDDEN_TRACKED = (
 )
 SECRET_RE = re.compile(rb"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{24,}")
 TEXT_SUFFIXES = {
-    ".css", ".html", ".ini", ".js", ".mjs", ".json", ".md", ".py", ".toml", ".txt", ".yaml", ".yml",
+    ".css", ".html", ".ini", ".js", ".mjs", ".json", ".md", ".py", ".toml", ".txt", ".tsv", ".yaml", ".yml",
 }
 PREVIEW_WARNING_BYTES = 80 * 1024 * 1024
 PREVIEW_CONFIRM_BYTES = 85 * 1024 * 1024
@@ -339,6 +339,13 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
         "directional_skills.py",
         "combat_camera.py",
         "storyboard_director.py",
+        "visual_styles.py", "visual_style_nodes.py", "visual_style_routes.py",
+        "web/js/visual_style_config.js", "web/js/visual_style_ui.mjs",
+        "docs/visual-styles.md", "research_sources/visual-styles-200.json",
+        "resources/visual_styles/catalog.json",
+        *{f"resources/visual_styles/{group}/{n:03d}.json" for group in ("colors", "creators") for n in range(1, 201)},
+        *{f"web/js/docs/{node}/{lang}.md" for node in ("T8ColorStyleConfig", "T8CreatorStyleConfig") for lang in ("zh", "en")},
+        *{f"example_workflows/visual_style_{name}.{ext}" for name in ("color_h3", "creator_seedance20", "combined_h3") for ext in ("json", "jpg")},
         "h3_visual_marker.py",
         "web/js/h3_visual_marker.js",
         "web/js/assets/h3-marker-demo-source.svg",
@@ -441,6 +448,7 @@ def verify_registry_package_hygiene(files: list[Path]) -> dict[str, int]:
 def run_optional_checks() -> None:
     subprocess.run([sys.executable, "tools/build_marker_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_storyboard_workflows.py", "--check"], cwd=ROOT, check=True)
+    subprocess.run([sys.executable, "tools/build_visual_style_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_moss_authoring_workflows.py", "--check"], cwd=ROOT, check=True)
     subprocess.run([sys.executable, "tools/build_speech_workflows.py", "--check"], cwd=ROOT, check=True)

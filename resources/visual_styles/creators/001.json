@@ -1,0 +1,24 @@
+{
+  "id": "001",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Make established space, gaze target and reaction readable without revealing facts early.",
+      "text_zh": "依次让已有空间、视线目标和反应可读，不提前揭密。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing frames or reflections to relate observer and target.",
+      "text_zh": "借已有门窗或镜面组织观察位置，保留观看者与目标关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

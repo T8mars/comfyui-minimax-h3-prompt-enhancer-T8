@@ -1,0 +1,25 @@
+{
+  "id": "194",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use window frames to connect inside and outside only in an existing vehicle scene.",
+      "text_zh": "仅在已有车内场景时借窗框连接内外空间。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Retain supplied dialogue and observation continuously without a new journey.",
+      "text_zh": "保留已给对话与观察的连续性，不新增旅途。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

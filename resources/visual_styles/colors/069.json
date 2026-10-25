@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#888888",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#404040",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#C0C0C0",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#101010",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #303030, #707070, #A0A0A0. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #303030, #707070, #A0A0A0；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "069",
+  "lighting_notes": {
+    "en": "Retain clear tonal contrast without forcing black and white.",
+    "zh": "保留清楚亮暗，不强制黑白。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#303030",
+      "name_en": "Deep Charcoal Gray",
+      "name_zh": "深炭灰",
+      "share": 0.24
+    },
+    {
+      "code": "C02",
+      "hex": "#707070",
+      "name_en": "Mid Gray",
+      "name_zh": "中灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#A0A0A0",
+      "name_en": "Silver Gray",
+      "name_zh": "银灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#D0D0D0",
+      "name_en": "Light Gray White",
+      "name_zh": "浅灰白",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#505050",
+      "name_en": "Dark Gray",
+      "name_zh": "暗灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#181818",
+      "name_en": "Pitch Dark",
+      "name_zh": "漆黑暗",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

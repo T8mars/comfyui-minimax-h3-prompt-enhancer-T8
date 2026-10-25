@@ -1,0 +1,25 @@
+{
+  "id": "066",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Divide the view with existing architectural lines and retain distances to empty space.",
+      "text_zh": "借已有建筑线条分割画面，保持人物与空旷处的距离。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Let foreground occlusion limit observation without hiding required action evidence.",
+      "text_zh": "让前景遮挡限制观察，但不遮去必须可见的动作证据。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4FC3F7",
+      "name_en": "温柔凝视",
+      "name_zh": "温柔凝视"
+    },
+    {
+      "code": "E02",
+      "hex": "#A5D6A7",
+      "name_en": "自然生长",
+      "name_zh": "自然生长"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "温暖记忆",
+      "name_zh": "温暖记忆"
+    },
+    {
+      "code": "E04",
+      "hex": "#F8BBD0",
+      "name_en": "初恋心动",
+      "name_zh": "初恋心动"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4FC3F7, #A5D6A7, #FFFFFF. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4FC3F7, #A5D6A7, #FFFFFF；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "175",
+  "lighting_notes": {
+    "en": "Soft side light models nuanced facial or surface planes.",
+    "zh": "柔和侧光呈现细腻面部或表面层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4FC3F7",
+      "name_en": "Watercolor Blue",
+      "name_zh": "水彩蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#A5D6A7",
+      "name_en": "Watercolor Green",
+      "name_zh": "水彩绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#F8BBD0",
+      "name_en": "Watercolor Pink",
+      "name_zh": "水彩粉",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#8D6E63",
+      "name_en": "Portrait Brown",
+      "name_zh": "肖像棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFFFFF",
+      "name_en": "Canvas White",
+      "name_zh": "画布白",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

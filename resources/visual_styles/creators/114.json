@@ -1,0 +1,26 @@
+{
+  "id": "114",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing pose and volume through clear contours without altering the body.",
+      "text_zh": "以清晰轮廓观察已有姿态和体积，不改变身体。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Organize spacing between existing subjects and surrounding objects without adding installations.",
+      "text_zh": "组织已有主体与周围物件的空间间距，不添装置。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

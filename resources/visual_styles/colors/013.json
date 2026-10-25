@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1744",
+      "name_en": "Sin Blood Red",
+      "name_zh": "罪血红红"
+    },
+    {
+      "code": "E02",
+      "hex": "#00E5FF",
+      "name_en": "Psychedelic Cyan",
+      "name_zh": "迷幻青"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "Icon Gold",
+      "name_zh": "圣像金"
+    },
+    {
+      "code": "E04",
+      "hex": "#9E9E9E",
+      "name_en": "Ash Gray",
+      "name_zh": "灰烬灰"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #141414, #2A1A2A, #E74C3C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #141414, #2A1A2A, #E74C3C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "013",
+  "lighting_notes": {
+    "en": "Let existing localized sources create distinct tonal contrast.",
+    "zh": "使用已有局部光源形成明显亮暗反差。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#141414",
+      "name_en": "Asphalt Black",
+      "name_zh": "沥青黑",
+      "share": 0.42
+    },
+    {
+      "code": "C02",
+      "hex": "#2A1A2A",
+      "name_en": "Deep Magenta Black",
+      "name_zh": "深紫红黑",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#E74C3C",
+      "name_en": "Dirty Blood Red",
+      "name_zh": "肮脏红",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#95A5A6",
+      "name_en": "Concrete Gray",
+      "name_zh": "水泥灰",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#F39C12",
+      "name_en": "Dirty Neon Orange",
+      "name_zh": "脏霓虹橙",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#D7BFA6",
+      "name_en": "Haggard Skin Tone",
+      "name_zh": "憔悴肤",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

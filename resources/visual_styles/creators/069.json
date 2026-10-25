@@ -1,0 +1,26 @@
+{
+  "id": "069",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing interior close views or reflections to express viewing distance.",
+      "text_zh": "以已有室内近景或反射呈现双方的观察距离。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use restrained handheld movement around existing speech or action without changing words.",
+      "text_zh": "轻微手持随已有对话或行动，不改变台词。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

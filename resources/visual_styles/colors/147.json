@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFCC80",
+      "name_en": "怀旧温情",
+      "name_zh": "怀旧温情"
+    },
+    {
+      "code": "E02",
+      "hex": "#8D6E63",
+      "name_en": "老城记忆",
+      "name_zh": "老城记忆"
+    },
+    {
+      "code": "E03",
+      "hex": "#90CAF9",
+      "name_en": "雨中忧伤",
+      "name_zh": "雨中忧伤"
+    },
+    {
+      "code": "E04",
+      "hex": "#EF9A9A",
+      "name_en": "温柔爱情",
+      "name_zh": "温柔爱情"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFCC80, #8D6E63, #BCAAA4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFCC80, #8D6E63, #BCAAA4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "147",
+  "lighting_notes": {
+    "en": "Existing warm practical sources with soft fill.",
+    "zh": "已有暖实景光与柔和补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FFCC80",
+      "name_en": "Nostalgic Yellow",
+      "name_zh": "怀旧黄",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8D6E63",
+      "name_en": "Old Town Brown",
+      "name_zh": "老城棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#90CAF9",
+      "name_en": "Rainy Sky Blue",
+      "name_zh": "雨空蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#EF9A9A",
+      "name_en": "Rose Pink",
+      "name_zh": "玫瑰粉",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#A5D6A7",
+      "name_en": "Country Green",
+      "name_zh": "乡村绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "Beige",
+      "name_zh": "米色",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

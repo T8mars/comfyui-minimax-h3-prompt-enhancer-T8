@@ -1,0 +1,24 @@
+{
+  "id": "021",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Place the subject through established environmental depth and scale.",
+      "text_zh": "以既有环境纵深和尺度关系组织主体位置。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use a steady push or track to unfold existing space.",
+      "text_zh": "稳定推进或跟随，逐步展开已经存在的空间。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

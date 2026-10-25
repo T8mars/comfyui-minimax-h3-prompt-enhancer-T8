@@ -1,0 +1,26 @@
+{
+  "id": "191",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine existing everyday objects or operations without automatically adding food.",
+      "text_zh": "近看既有日常物件或操作细节，不自动增加食物。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-push template with existing action stages readable.",
+      "text_zh": "采用本条缓推模板，保持已有动作过程清楚。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F5DEB3",
+      "name_en": "Gold",
+      "name_zh": "暖麦金"
+    },
+    {
+      "code": "E02",
+      "hex": "#6B5D4E",
+      "name_en": "Ochre",
+      "name_zh": "旧木褐"
+    },
+    {
+      "code": "E03",
+      "hex": "#B5651D",
+      "name_en": "Accent 3",
+      "name_zh": "琥珀火"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F3A2A",
+      "name_en": "Green",
+      "name_zh": "苔原绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8B7355, #C9A24A, #5A6B4A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8B7355, #C9A24A, #5A6B4A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "048",
+  "lighting_notes": {
+    "en": "Natural daylight with gentle side lighting.",
+    "zh": "自然日光与柔和侧光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8B7355",
+      "name_en": "Ochre",
+      "name_zh": "荒原褐",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#C9A24A",
+      "name_en": "Yellow",
+      "name_zh": "黄昏金",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5A6B4A",
+      "name_en": "Green",
+      "name_zh": "野草绿",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#E8C090",
+      "name_en": "Color 4",
+      "name_zh": "肌肤麦",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#4A4A44",
+      "name_en": "Gray",
+      "name_zh": "烟煤灰",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#D97A3C",
+      "name_en": "Orange",
+      "name_zh": "落日橙",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

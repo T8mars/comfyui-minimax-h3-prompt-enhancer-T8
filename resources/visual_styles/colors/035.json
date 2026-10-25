@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#B8302A",
+      "name_en": "Alarm Red",
+      "name_zh": "警报红"
+    },
+    {
+      "code": "E02",
+      "hex": "#5AA0C8",
+      "name_en": "Hologram Blue",
+      "name_zh": "全息蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#D4A868",
+      "name_en": "Memory Warm Gold",
+      "name_zh": "记忆暖金"
+    },
+    {
+      "code": "E04",
+      "hex": "#0B0E14",
+      "name_en": "Space Void Black",
+      "name_zh": "太空虚空黑"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A2535, #8A95A5, #3D6B99. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A2535, #8A95A5, #3D6B99；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "035",
+  "lighting_notes": {
+    "en": "Top key light combined with existing lateral practical sources.",
+    "zh": "顶部主光结合已有侧向实景光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A2535",
+      "name_en": "Lunar Base Deep Blue-Gray",
+      "name_zh": "月基深灰蓝",
+      "share": 0.32
+    },
+    {
+      "code": "C02",
+      "hex": "#8A95A5",
+      "name_en": "Cold Metallic Gray",
+      "name_zh": "冷金属灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#3D6B99",
+      "name_en": "Screen Glow Blue",
+      "name_zh": "屏幕蓝光",
+      "share": 0.18
+    },
+    {
+      "code": "C04",
+      "hex": "#C46B2E",
+      "name_en": "Warning Warm Orange",
+      "name_zh": "警报暖橙",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#D9D2C4",
+      "name_en": "Sterile White",
+      "name_zh": "无菌白",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#2E4A3A",
+      "name_en": "Orc Green-Brown",
+      "name_zh": "兽人绿棕",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

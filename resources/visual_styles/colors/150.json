@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#1A237E",
+      "name_en": "武士道魂",
+      "name_zh": "武士道魂"
+    },
+    {
+      "code": "E02",
+      "hex": "#BF360C",
+      "name_en": "战斗激情",
+      "name_zh": "战斗激情"
+    },
+    {
+      "code": "E03",
+      "hex": "#212121",
+      "name_en": "孤独剑客",
+      "name_zh": "孤独剑客"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "能量爆发",
+      "name_zh": "能量爆发"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A237E, #BF360C, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A237E, #BF360C, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "150",
+  "lighting_notes": {
+    "en": "Clear tonal contrast without losing action detail.",
+    "zh": "清楚的亮暗对比，动作细节不丢失。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A237E",
+      "name_en": "Samurai Blue",
+      "name_zh": "武士蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#BF360C",
+      "name_en": "Samurai Red",
+      "name_zh": "武士红",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#212121",
+      "name_en": "Silhouette Black",
+      "name_zh": "剪影黑",
+      "share": 0.18
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Energy Yellow",
+      "name_zh": "能量黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2E7D32",
+      "name_en": "Jungle Green",
+      "name_zh": "丛林绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#78909C",
+      "name_en": "Steel Gray",
+      "name_zh": "钢铁灰",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

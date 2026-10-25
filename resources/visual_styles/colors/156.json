@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E91E63",
+      "name_en": "少年英雄",
+      "name_zh": "少年英雄"
+    },
+    {
+      "code": "E02",
+      "hex": "#00BCD4",
+      "name_en": "未来都市",
+      "name_zh": "未来都市"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD600",
+      "name_en": "漫画活力",
+      "name_zh": "漫画活力"
+    },
+    {
+      "code": "E04",
+      "hex": "#7C4DFF",
+      "name_en": "无限可能",
+      "name_zh": "无限可能"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E91E63, #00BCD4, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E91E63, #00BCD4, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "156",
+  "lighting_notes": {
+    "en": "Localized colored sources and a readable subject key.",
+    "zh": "局部色光与清楚主体主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E91E63",
+      "name_en": "Spider-Verse Pink",
+      "name_zh": "蜘蛛粉",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00BCD4",
+      "name_en": "Cyber Cyan",
+      "name_zh": "赛博青",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD600",
+      "name_en": "Comic Yellow",
+      "name_zh": "漫画黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#7C4DFF",
+      "name_en": "Multiverse Purple",
+      "name_zh": "多元紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#00E676",
+      "name_en": "Neon Green",
+      "name_zh": "霓虹绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Ink Black",
+      "name_zh": "墨黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

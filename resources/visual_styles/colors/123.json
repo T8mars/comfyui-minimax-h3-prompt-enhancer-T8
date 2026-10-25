@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C62828",
+      "name_en": "雄性激情",
+      "name_zh": "雄性激情"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF8F00",
+      "name_en": "荒诞狂欢",
+      "name_zh": "荒诞狂欢"
+    },
+    {
+      "code": "E03",
+      "hex": "#5D4037",
+      "name_en": "大地厚重",
+      "name_zh": "大地厚重"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "阳光灿烂",
+      "name_zh": "阳光灿烂"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C62828, #FF8F00, #5D4037. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C62828, #FF8F00, #5D4037；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "123",
+  "lighting_notes": {
+    "en": "Stronger side light with a clear direction.",
+    "zh": "方向明确的较强侧光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C62828",
+      "name_en": "Chinese Red",
+      "name_zh": "中国红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FF8F00",
+      "name_en": "Loess Gold",
+      "name_zh": "黄土金",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Earth Brown",
+      "name_zh": "大地棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Sunshine Gold",
+      "name_zh": "阳光金",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2E7D32",
+      "name_en": "Military Green",
+      "name_zh": "军绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Deep Earth Brown",
+      "name_zh": "深土棕",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

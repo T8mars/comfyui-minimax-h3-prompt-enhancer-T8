@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#943126",
+      "name_en": "Blood Red",
+      "name_zh": "鲜血红"
+    },
+    {
+      "code": "E02",
+      "hex": "#5DADE2",
+      "name_en": "Neon Blue",
+      "name_zh": "霓虹蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#F7DC6F",
+      "name_en": "Dream Gold",
+      "name_zh": "梦境金"
+    },
+    {
+      "code": "E04",
+      "hex": "#7D3C98",
+      "name_en": "Psychedelic Purple",
+      "name_zh": "迷幻紫"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A0A14, #641E16, #1E3D59. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A0A14, #641E16, #1E3D59；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "015",
+  "lighting_notes": {
+    "en": "Choose soft or hard light for the established scene without inventing reality shifts.",
+    "zh": "按已有场景选择软光或硬光，不自动切换现实层。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A0A14",
+      "name_en": "Velvet Purple Black",
+      "name_zh": "天鹅绒紫黑",
+      "share": 0.38
+    },
+    {
+      "code": "C02",
+      "hex": "#641E16",
+      "name_en": "Deep Wine Red",
+      "name_zh": "深酒红",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#1E3D59",
+      "name_en": "Deep Ocean Blue",
+      "name_zh": "深海蓝",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#B7950B",
+      "name_en": "Vintage Gold",
+      "name_zh": "复古金",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#234F1E",
+      "name_en": "Ink Green Forest",
+      "name_zh": "墨绿森林",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#F5CBA7",
+      "name_en": "Warm Apricot Skin",
+      "name_zh": "暖杏肤",
+      "share": 0.09
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

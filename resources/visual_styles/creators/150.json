@@ -1,0 +1,25 @@
+{
+  "id": "150",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep existing action contours readable against simple background relationships.",
+      "text_zh": "以简洁背景关系保持已有动作轮廓可读。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Present continuous movement in a permitted wide view without compressing time.",
+      "text_zh": "用允许的广角呈现连续运动，不自动压缩时间。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

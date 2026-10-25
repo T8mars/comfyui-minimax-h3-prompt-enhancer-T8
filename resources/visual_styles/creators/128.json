@@ -1,0 +1,26 @@
+{
+  "id": "128",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow an existing run or travel route without adding time-travel events.",
+      "text_zh": "跟随已有奔跑或移动路径，不增设穿越事件。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use the source template's slow approach to the supplied subject and space.",
+      "text_zh": "用来源模板的缓推观察已给主体与空间。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

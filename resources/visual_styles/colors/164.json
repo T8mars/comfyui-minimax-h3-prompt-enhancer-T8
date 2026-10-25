@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F8BBD0",
+      "name_en": "青春悸动",
+      "name_zh": "青春悸动"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "温暖回忆",
+      "name_zh": "温暖回忆"
+    },
+    {
+      "code": "E03",
+      "hex": "#90CAF9",
+      "name_en": "青春忧伤",
+      "name_zh": "青春忧伤"
+    },
+    {
+      "code": "E04",
+      "hex": "#D7CCC8",
+      "name_en": "岁月温柔",
+      "name_zh": "岁月温柔"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #F8BBD0, #FFCC80, #D7CCC8. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #F8BBD0, #FFCC80, #D7CCC8；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "164",
+  "lighting_notes": {
+    "en": "Soft diffuse light with controlled highlight detail.",
+    "zh": "柔和漫射光，控制高光细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#F8BBD0",
+      "name_en": "Sakura Pink",
+      "name_zh": "樱花粉",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Soft Light Yellow",
+      "name_zh": "柔光黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#90CAF9",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#A5D6A7",
+      "name_en": "Youth Green",
+      "name_zh": "青春绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFFFFF",
+      "name_en": "Pure White",
+      "name_zh": "纯白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#D7CCC8",
+      "name_en": "Memory Beige",
+      "name_zh": "回忆米",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

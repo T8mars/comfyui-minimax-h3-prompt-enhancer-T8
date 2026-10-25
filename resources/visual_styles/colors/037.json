@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C83020",
+      "name_en": "Violence Police Red",
+      "name_zh": "暴力警红"
+    },
+    {
+      "code": "E02",
+      "hex": "#3A6A9A",
+      "name_en": "Neon Police Blue",
+      "name_zh": "霓虹警蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#D89030",
+      "name_en": "Explosion Fire Orange",
+      "name_zh": "爆炸火橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#708888",
+      "name_en": "Alien Tech Silver",
+      "name_zh": "外星银"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6B4A32, #C4722E, #5A6B55. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6B4A32, #C4722E, #5A6B55；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "037",
+  "lighting_notes": {
+    "en": "Direct natural light preserving varied surface responses.",
+    "zh": "自然直接光，保留粗细不同的表面响应。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6B4A32",
+      "name_en": "Rust Brown",
+      "name_zh": "铁锈棕",
+      "share": 0.28
+    },
+    {
+      "code": "C02",
+      "hex": "#C4722E",
+      "name_en": "Dirty Slum Orange",
+      "name_zh": "脏橙贫民",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#5A6B55",
+      "name_en": "Alien Grease Green-Gray",
+      "name_zh": "外星油绿灰",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#8A8078",
+      "name_en": "Concrete Dust Gray",
+      "name_zh": "混凝土灰",
+      "share": 0.13
+    },
+    {
+      "code": "C05",
+      "hex": "#C2A06A",
+      "name_en": "Sand Dust Beige",
+      "name_zh": "沙尘米黄",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#2A3A48",
+      "name_en": "Military Police Blue-Gray",
+      "name_zh": "军警蓝灰",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

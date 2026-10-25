@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#D50000",
+      "name_en": "血与火",
+      "name_zh": "血与火"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD600",
+      "name_en": "神圣启示",
+      "name_zh": "神圣启示"
+    },
+    {
+      "code": "E03",
+      "hex": "#4A148C",
+      "name_en": "神秘灵性",
+      "name_zh": "神秘灵性"
+    },
+    {
+      "code": "E04",
+      "hex": "#1B5E20",
+      "name_en": "自然再生",
+      "name_zh": "自然再生"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #D50000, #FFD600, #1B5E20. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #D50000, #FFD600, #1B5E20；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "105",
+  "lighting_notes": {
+    "en": "Localized colored light with clear subject modeling.",
+    "zh": "局部色光，主体明暗关系清楚。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#D50000",
+      "name_en": "Alchemy Red",
+      "name_zh": "炼金红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FFD600",
+      "name_en": "Sacred Gold",
+      "name_zh": "神圣金",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#1B5E20",
+      "name_en": "Occult Green",
+      "name_zh": "秘法绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#4A148C",
+      "name_en": "Spiritual Purple",
+      "name_zh": "灵性紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#01579B",
+      "name_en": "Abyss Blue",
+      "name_zh": "深渊蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Night Black",
+      "name_zh": "暗夜黑",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

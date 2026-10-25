@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#D04020",
+      "name_en": "Thermal Imaging Red",
+      "name_zh": "热成像红"
+    },
+    {
+      "code": "E02",
+      "hex": "#2048B0",
+      "name_en": "Police Light Blue",
+      "name_zh": "警灯蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#5A2020",
+      "name_en": "Submarine Dark Red",
+      "name_zh": "潜艇暗红"
+    },
+    {
+      "code": "E04",
+      "hex": "#2A4A2A",
+      "name_en": "Jungle Wet Green",
+      "name_zh": "丛林湿绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1E3040, #1E2E1A, #2A2A2E. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1E3040, #1E2E1A, #2A2A2E；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "040",
+  "lighting_notes": {
+    "en": "Hard side light with restrained diffuse fill.",
+    "zh": "硬侧光配适量散射补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1E3040",
+      "name_en": "Submarine Steel Blue",
+      "name_zh": "潜艇钢蓝",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#1E2E1A",
+      "name_en": "Jungle Dark Green",
+      "name_zh": "丛林暗绿",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#2A2A2E",
+      "name_en": "Smoke Shadow Black",
+      "name_zh": "烟雾影黑",
+      "share": 0.2
+    },
+    {
+      "code": "C04",
+      "hex": "#C45020",
+      "name_en": "Explosion Warm Orange",
+      "name_zh": "爆炸暖橙",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#9C7860",
+      "name_en": "Tough Guy Sweat Skin",
+      "name_zh": "硬汉汗肤",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#6B6448",
+      "name_en": "Military Khaki",
+      "name_zh": "军事卡其",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

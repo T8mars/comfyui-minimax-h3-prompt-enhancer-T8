@@ -1,0 +1,25 @@
+{
+  "id": "181",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize existing everyday space from an allowed low fixed viewpoint.",
+      "text_zh": "以允许的低位固定机位组织已有日常空间。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain negative space around the subject without adding tea bowls or family relationships.",
+      "text_zh": "保留主体周围负空间，不新增茶碗或家庭关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

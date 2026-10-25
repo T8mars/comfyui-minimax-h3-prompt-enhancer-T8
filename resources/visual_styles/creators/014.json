@@ -1,0 +1,24 @@
+{
+  "id": "014",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the room and boundaries visible in a fixed wide view without mandatory centering.",
+      "text_zh": "用固定宽景保留房间全貌与边界，主体不必居中。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Let waiting persist without filling still passages with reaction inserts.",
+      "text_zh": "允许等待持续，不用反应特写填满静止段。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "029",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Emphasize existing architectural perspective and motion direction without adding destruction.",
+      "text_zh": "强调既有建筑透视与运动方向，不添加破坏。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track existing fast movement while preserving foreground-background scale differences.",
+      "text_zh": "在已有快速运动中跟随主体，保留前后景尺度差。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

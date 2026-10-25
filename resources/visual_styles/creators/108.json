@@ -1,0 +1,25 @@
+{
+  "id": "108",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present the existing interior and subject positions in a stable symmetrical view.",
+      "text_zh": "以稳定对称画面呈现已有室内与人物位置。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Observe established information gradually without new scares or miniature objects.",
+      "text_zh": "渐进观察已有信息，不新增惊吓或微缩物件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

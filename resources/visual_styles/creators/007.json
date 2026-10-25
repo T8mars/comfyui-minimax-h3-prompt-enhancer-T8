@@ -1,0 +1,24 @@
+{
+  "id": "007",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize existing lateral space and corridor depth while retaining offscreen entrances.",
+      "text_zh": "利用现有横向空间和走廊纵深，保留画外入口。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track smoothly within the established viewpoint without inventing an observer.",
+      "text_zh": "在既定主观视点内平稳跟随，不添新的窥视者。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

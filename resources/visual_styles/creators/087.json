@@ -1,0 +1,25 @@
+{
+  "id": "087",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use coherent movement to reveal existing scene layers without adding performers.",
+      "text_zh": "用连贯运动交代已有场面层次，不添舞台人物。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "Tighten permitted cuts while retaining event causality and complete dialogue.",
+      "text_zh": "在允许的切镜内提高节奏，保持事件因果和台词完整。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

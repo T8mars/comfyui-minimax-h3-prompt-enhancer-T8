@@ -1,0 +1,25 @@
+{
+  "id": "080",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow an existing person's walking route continuously.",
+      "text_zh": "沿已有人物行走路径持续跟随。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the person spatially related to supplied surroundings without added identity themes.",
+      "text_zh": "保持人物和已给环境的空间联系，不添加身份主题。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

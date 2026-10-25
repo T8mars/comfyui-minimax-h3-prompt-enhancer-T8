@@ -1,4 +1,5 @@
 """CPU request contracts only: no LLM compliance or rendered-quality claims."""
+from visual_style_baseline_projection import without_style_signature, without_style_inputs
 import ast
 import asyncio
 import copy
@@ -128,7 +129,7 @@ class StoryboardDirectorTests(unittest.TestCase):
                                                (sd, "seedance20.py", sd.Seedance20PromptEnhancer, "enhance_seedance20_prompt")):
             for name in (function, "_build_messages"):
                 previous = original_function(filename, name, module, BASELINE)
-                current = inspect.signature(getattr(module, name))
+                current = without_style_signature(inspect.signature(getattr(module, name)))
                 if module is h3:
                     self.assertEqual(list(current.parameters)[-1], "visual_marker_config")
                     current = current.replace(parameters=list(current.parameters.values())[:-1])
@@ -142,7 +143,7 @@ class StoryboardDirectorTests(unittest.TestCase):
             namespace = dict(vars(module))
             exec(compile(ast.Module(body=[method], type_ignores=[]), filename, "exec"), namespace)
             old_schema = namespace["define_schema"](cls)
-            inputs = cls.define_schema().inputs
+            inputs = without_style_inputs(cls.define_schema().inputs)
             if module is h3:
                 self.assertEqual(inputs[-1].id, "visual_marker_config")
                 inputs = inputs[:-1]
@@ -152,9 +153,9 @@ class StoryboardDirectorTests(unittest.TestCase):
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         ids = [cls.define_schema().node_id for cls in asyncio.run(extension.get_node_list())]
-        self.assertEqual(len(ids), 36)
+        self.assertEqual(len(ids), 38)
         self.assertEqual(ids[32:34], ["T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas"])
-        self.assertEqual(ids[34:], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
+        self.assertEqual(ids[34:36], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
         self.assertEqual(ids[30:32], ["MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig"])
 
     def test_lazy_input_resolves_only_for_normal_execution(self):

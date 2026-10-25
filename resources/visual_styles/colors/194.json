@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFD54F",
+      "name_en": "生命温暖",
+      "name_zh": "生命温暖"
+    },
+    {
+      "code": "E02",
+      "hex": "#8D6E63",
+      "name_en": "土地厚重",
+      "name_zh": "土地厚重"
+    },
+    {
+      "code": "E03",
+      "hex": "#78909C",
+      "name_en": "存在哲思",
+      "name_zh": "存在哲思"
+    },
+    {
+      "code": "E04",
+      "hex": "#A5D6A7",
+      "name_en": "橄榄诗意",
+      "name_zh": "橄榄诗意"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFD54F, #8D6E63, #FFF9C4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFD54F, #8D6E63, #FFF9C4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "194",
+  "lighting_notes": {
+    "en": "Available natural light retaining original window direction.",
+    "zh": "自然可用光，维持原窗口方向。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FFD54F",
+      "name_en": "Iranian Gold",
+      "name_zh": "伊朗金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8D6E63",
+      "name_en": "Earth Brown",
+      "name_zh": "土棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78909C",
+      "name_en": "Sky Gray",
+      "name_zh": "天空灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#A5D6A7",
+      "name_en": "Olive Green",
+      "name_zh": "橄榄绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#BCAAA4",
+      "name_en": "Desert Beige",
+      "name_zh": "沙漠米",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Sunshine Yellow",
+      "name_zh": "阳光黄",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

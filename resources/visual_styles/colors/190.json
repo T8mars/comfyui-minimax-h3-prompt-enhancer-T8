@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#1B5E20",
+      "name_en": "自然神秘",
+      "name_zh": "自然神秘"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD54F",
+      "name_en": "记忆温暖",
+      "name_zh": "记忆温暖"
+    },
+    {
+      "code": "E03",
+      "hex": "#6D4C41",
+      "name_en": "乡愁厚重",
+      "name_zh": "乡愁厚重"
+    },
+    {
+      "code": "E04",
+      "hex": "#006064",
+      "name_en": "超自然深邃",
+      "name_zh": "超自然深邃"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1B5E20, #FFD54F, #6D4C41. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1B5E20, #FFD54F, #6D4C41；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "190",
+  "lighting_notes": {
+    "en": "Existing diffuse ambient light with gentle layers.",
+    "zh": "已有环境漫射光，层次温和。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1B5E20",
+      "name_en": "Tropical Green",
+      "name_zh": "热带绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FFD54F",
+      "name_en": "Tropical Gold",
+      "name_zh": "热带金",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#6D4C41",
+      "name_en": "Wood House Brown",
+      "name_zh": "木屋棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#006064",
+      "name_en": "Cave Teal",
+      "name_zh": "洞穴青",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#A5D6A7",
+      "name_en": "Dawn Green",
+      "name_zh": "晨曦绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#BCAAA4",
+      "name_en": "Earth Beige",
+      "name_zh": "土米",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

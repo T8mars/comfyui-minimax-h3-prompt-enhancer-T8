@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#B01E2E",
+      "name_en": "Crow Blood Crimson",
+      "name_zh": "乌鸦血红"
+    },
+    {
+      "code": "E02",
+      "hex": "#3A7AA5",
+      "name_en": "Neon Rain Blue",
+      "name_zh": "霓虹雨蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#D47A28",
+      "name_en": "Apocalypse Fire Orange",
+      "name_zh": "灾变火焰橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#A07B3C",
+      "name_en": "Gothic Candle Gold",
+      "name_zh": "哥特烛金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0A0A12, #1E1A35, #2C3A50. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0A0A12, #1E1A35, #2C3A50；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "036",
+  "lighting_notes": {
+    "en": "Directional hard light with deeper shadows.",
+    "zh": "有方向的硬光与较深阴影。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0A0A12",
+      "name_en": "Gothic Eternal Night Black",
+      "name_zh": "哥特永夜黑",
+      "share": 0.35
+    },
+    {
+      "code": "C02",
+      "hex": "#1E1A35",
+      "name_en": "Dark Night Purple-Blue",
+      "name_zh": "暗夜紫蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#2C3A50",
+      "name_en": "Rainy Night Steel Blue",
+      "name_zh": "雨夜钢蓝",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#5C1A20",
+      "name_en": "Blood Dark Red",
+      "name_zh": "血色暗红",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#8A8C98",
+      "name_en": "Comic Silver Gray",
+      "name_zh": "漫画银灰",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#C8CCD4",
+      "name_en": "Cold White Moonlight",
+      "name_zh": "冷白月光",
+      "share": 0.07
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

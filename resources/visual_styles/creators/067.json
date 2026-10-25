@@ -1,0 +1,26 @@
+{
+  "id": "067",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize the existing interior in a symmetrical, planar composition.",
+      "text_zh": "以对称、平面化构图组织已有室内。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep supplied action restrained and spaced without forcing expressionless acting.",
+      "text_zh": "保持已给动作的节制和间距，不强迫无表情演出。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "conflicting_avoid_excluded",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

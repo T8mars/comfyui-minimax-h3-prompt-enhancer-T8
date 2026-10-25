@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8F00",
+      "name_en": "时光冒险",
+      "name_zh": "时光冒险"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD54F",
+      "name_en": "怀旧温情",
+      "name_zh": "怀旧温情"
+    },
+    {
+      "code": "E03",
+      "hex": "#1565C0",
+      "name_en": "科技奇迹",
+      "name_zh": "科技奇迹"
+    },
+    {
+      "code": "E04",
+      "hex": "#5D4037",
+      "name_en": "小镇情怀",
+      "name_zh": "小镇情怀"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8F00, #1565C0, #2E7D32. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8F00, #1565C0, #2E7D32；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "128",
+  "lighting_notes": {
+    "en": "Gentle warm key light with natural layers.",
+    "zh": "温和暖主光，层次自然。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8F00",
+      "name_en": "Time Travel Orange",
+      "name_zh": "时光橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#1565C0",
+      "name_en": "Tech Blue",
+      "name_zh": "科技蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Nostalgia Gold",
+      "name_zh": "怀旧金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5D4037",
+      "name_en": "Small Town Brown",
+      "name_zh": "小镇棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#E91E63",
+      "name_en": "Pink",
+      "name_zh": "粉红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#2E7D32",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

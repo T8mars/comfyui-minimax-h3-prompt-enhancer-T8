@@ -1,0 +1,24 @@
+{
+  "id": "026",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing glass and architectural frames to establish viewing distance.",
+      "text_zh": "借现有玻璃和建筑框架建立观察距离。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track or move laterally precisely while maintaining established actor positions.",
+      "text_zh": "精确跟随或横移，持续交代既有行动者位置。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

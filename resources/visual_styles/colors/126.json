@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4FC3F7",
+      "name_en": "自由飞翔",
+      "name_zh": "自由飞翔"
+    },
+    {
+      "code": "E02",
+      "hex": "#66BB6A",
+      "name_en": "自然治愈",
+      "name_zh": "自然治愈"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "温暖回忆",
+      "name_zh": "温暖回忆"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFAB91",
+      "name_en": "勇气成长",
+      "name_zh": "勇气成长"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4FC3F7, #FFF9C4, #66BB6A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4FC3F7, #FFF9C4, #66BB6A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "126",
+  "lighting_notes": {
+    "en": "Soft skylight and natural diffusion.",
+    "zh": "柔和天光与自然漫射。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4FC3F7",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#66BB6A",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Cream Yellow",
+      "name_zh": "奶油黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFAB91",
+      "name_en": "Sunset Orange",
+      "name_zh": "夕照橙",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#CE93D8",
+      "name_en": "Dreamy Purple",
+      "name_zh": "梦幻紫",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Sunny Yellow",
+      "name_zh": "阳光黄",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

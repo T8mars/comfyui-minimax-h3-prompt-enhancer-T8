@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#81C784",
+      "name_en": "自然生机",
+      "name_zh": "自然生机"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "温暖暧昧",
+      "name_zh": "温暖暧昧"
+    },
+    {
+      "code": "E03",
+      "hex": "#90CAF9",
+      "name_en": "理智清明",
+      "name_zh": "理智清明"
+    },
+    {
+      "code": "E04",
+      "hex": "#EF9A9A",
+      "name_en": "爱情微妙",
+      "name_zh": "爱情微妙"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #A5D6A7, #81C784, #FFCC80. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #A5D6A7, #81C784, #FFCC80；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "161",
+  "lighting_notes": {
+    "en": "Soft natural light retaining the original lighting direction.",
+    "zh": "自然柔光，保留场景原照明方向。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#81C784",
+      "name_en": "Spring Summer Green",
+      "name_zh": "春夏绿",
+      "share": 0.18
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Autumn Yellow",
+      "name_zh": "秋日黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#90CAF9",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#BCAAA4",
+      "name_en": "Paris Beige",
+      "name_zh": "巴黎米",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#EF9A9A",
+      "name_en": "Rose Pink",
+      "name_zh": "玫瑰粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#A5D6A7",
+      "name_en": "Meadow Green",
+      "name_zh": "草地绿",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

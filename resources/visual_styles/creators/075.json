@@ -1,0 +1,25 @@
+{
+  "id": "075",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe supplied behavior handheld, responding to existing movement.",
+      "text_zh": "手持观察已给行为，让机位响应已有移动。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Organize action through the existing space's planar relationships without building a stage.",
+      "text_zh": "借既有空间的平面关系组织行动，不新造舞台。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#37474F",
+      "name_en": "都市压抑",
+      "name_zh": "都市压抑"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "暴力恐惧",
+      "name_zh": "暴力恐惧"
+    },
+    {
+      "code": "E03",
+      "hex": "#5D4037",
+      "name_en": "贫穷沉重",
+      "name_zh": "贫穷沉重"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "生存微光",
+      "name_zh": "生存微光"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #37474F, #5D4037, #1A1A1A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #37474F, #5D4037, #1A1A1A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "192",
+  "lighting_notes": {
+    "en": "Existing natural or practical light with documentary tonal layers.",
+    "zh": "现有自然或实景光，保持纪实层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#37474F",
+      "name_en": "Manila Gray",
+      "name_zh": "马尼拉灰",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#5D4037",
+      "name_en": "Slum Brown",
+      "name_zh": "贫民窟棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#C62828",
+      "name_en": "Violence Red",
+      "name_zh": "暴力红",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Street Lamp Yellow",
+      "name_zh": "街灯黄",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2E7D32",
+      "name_en": "Tropical Green",
+      "name_zh": "热带绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Dark Night",
+      "name_zh": "暗黑夜",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

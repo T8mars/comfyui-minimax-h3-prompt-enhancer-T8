@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFEB3B",
+      "name_en": "Nuclear White-Yellow",
+      "name_zh": "核爆白黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#B71C1C",
+      "name_en": "Blood Deep Red",
+      "name_zh": "鲜血深红"
+    },
+    {
+      "code": "E03",
+      "hex": "#6A1B9A",
+      "name_en": "Psychic Purple",
+      "name_zh": "超能紫"
+    },
+    {
+      "code": "E04",
+      "hex": "#B87333",
+      "name_en": "Steam Copper",
+      "name_zh": "蒸汽铜"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D0D0D, #FF3D00, #5D4037. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D0D0D, #FF3D00, #5D4037；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "029",
+  "lighting_notes": {
+    "en": "Firmer directional light clearly separates subject and background.",
+    "zh": "较硬定向光，清楚区分主体与背景。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D0D0D",
+      "name_en": "Apocalypse Deep Black",
+      "name_zh": "末日深黑",
+      "share": 0.28
+    },
+    {
+      "code": "C02",
+      "hex": "#FF3D00",
+      "name_en": "Explosion Orange-Red",
+      "name_zh": "爆炸橙红",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Ruins Grey-Brown",
+      "name_zh": "废墟灰棕",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#D32F2F",
+      "name_en": "Neo-Tokyo Red",
+      "name_zh": "新东京红",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#BF8F3C",
+      "name_en": "Dust Gold",
+      "name_zh": "烟尘金",
+      "share": 0.13
+    },
+    {
+      "code": "C06",
+      "hex": "#1565C0",
+      "name_en": "Energy Blue",
+      "name_zh": "能量蓝",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

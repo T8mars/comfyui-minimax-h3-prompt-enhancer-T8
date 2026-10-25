@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#000000",
+      "name_en": "命运沉重",
+      "name_zh": "命运沉重"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFFFFF",
+      "name_en": "正义希望",
+      "name_zh": "正义希望"
+    },
+    {
+      "code": "E03",
+      "hex": "#808080",
+      "name_en": "人性灰色",
+      "name_zh": "人性灰色"
+    },
+    {
+      "code": "E04",
+      "hex": "#C0C0C0",
+      "name_en": "武士荣耀",
+      "name_zh": "武士荣耀"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #000000, #FFFFFF, #808080. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #000000, #FFFFFF, #808080；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "124",
+  "lighting_notes": {
+    "en": "Clear tonal volume retaining action contours.",
+    "zh": "清楚明暗体积，保留动作轮廓。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#000000",
+      "name_en": "Ink Black",
+      "name_zh": "墨黑",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FFFFFF",
+      "name_en": "Pure White",
+      "name_zh": "纯白",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#808080",
+      "name_en": "Mid Gray",
+      "name_zh": "中灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C0C0C0",
+      "name_en": "Silver Gray",
+      "name_zh": "银灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#404040",
+      "name_en": "Dark Gray",
+      "name_zh": "深灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#E0E0E0",
+      "name_en": "Light Gray",
+      "name_zh": "浅灰",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

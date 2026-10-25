@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F2D299",
+      "name_en": "Yellow",
+      "name_zh": "金穗黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#4A3728",
+      "name_en": "Brown",
+      "name_zh": "深棕褐"
+    },
+    {
+      "code": "E03",
+      "hex": "#D97B3A",
+      "name_en": "Orange",
+      "name_zh": "落日橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#7A8C6B",
+      "name_en": "Cyan",
+      "name_zh": "草原青"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C48A3A, #8B5A2B, #D4A855. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C48A3A, #8B5A2B, #D4A855；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "052",
+  "lighting_notes": {
+    "en": "Soft natural side light with environmental bounce.",
+    "zh": "柔和自然侧光，保持空间反射。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C48A3A",
+      "name_en": "Yellow",
+      "name_zh": "南美赭黄",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B5A2B",
+      "name_en": "Red",
+      "name_zh": "红土褐",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#D4A855",
+      "name_en": "Yellow",
+      "name_zh": "公路金黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5A6B3A",
+      "name_en": "Green",
+      "name_zh": "塞拉多绿",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#E8C68A",
+      "name_en": "Color 5",
+      "name_zh": "焦糖肤",
+      "share": 0.16
+    },
+    {
+      "code": "C06",
+      "hex": "#6B4A3A",
+      "name_en": "Ochre",
+      "name_zh": "旧皮褐",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6347",
+      "name_en": "Orange",
+      "name_zh": "战场血橙"
+    },
+    {
+      "code": "E02",
+      "hex": "#DAA520",
+      "name_en": "Gold",
+      "name_zh": "非洲金"
+    },
+    {
+      "code": "E03",
+      "hex": "#2F4F4F",
+      "name_en": "Blue",
+      "name_zh": "沼泽蓝灰"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFDAB9",
+      "name_en": "Accent 4",
+      "name_zh": "柔光回忆"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #B8864A, #8B5A2B, #3D5A3D. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #B8864A, #8B5A2B, #3D5A3D；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "057",
+  "lighting_notes": {
+    "en": "Softened natural light retaining direction and detail.",
+    "zh": "柔化自然光，保留方向与细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#B8864A",
+      "name_en": "Yellow",
+      "name_zh": "沙漠土黄",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B5A2B",
+      "name_en": "Brown",
+      "name_zh": "焦土棕褐",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#3D5A3D",
+      "name_en": "Green",
+      "name_zh": "沼泽深绿",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#D4B896",
+      "name_en": "Skin Tone",
+      "name_zh": "暖沙肤色",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#5C4033",
+      "name_en": "Brown",
+      "name_zh": "深棕暗影",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#C9A26A",
+      "name_en": "Gold",
+      "name_zh": "金晖夕照",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

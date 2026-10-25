@@ -1,0 +1,24 @@
+{
+  "id": "060",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Contrast an existing expansive environment with the near subject.",
+      "text_zh": "让既有宽阔环境与近处主体形成尺度对照。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Approach an existing portrait or reflection slowly while preserving viewing direction.",
+      "text_zh": "缓慢接近已有肖像或反射，保持原观察方向。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

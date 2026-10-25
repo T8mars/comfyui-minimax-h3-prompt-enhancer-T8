@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#6D4C41",
+      "name_en": "物质记忆",
+      "name_zh": "物质记忆"
+    },
+    {
+      "code": "E02",
+      "hex": "#BF360C",
+      "name_en": "肉身焦虑",
+      "name_zh": "肉身焦虑"
+    },
+    {
+      "code": "E03",
+      "hex": "#827717",
+      "name_en": "自然荒诞",
+      "name_zh": "自然荒诞"
+    },
+    {
+      "code": "E04",
+      "hex": "#37474F",
+      "name_en": "暗黑童话",
+      "name_zh": "暗黑童话"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #6D4C41, #827717, #1B1B1B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #6D4C41, #827717, #1B1B1B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "110",
+  "lighting_notes": {
+    "en": "Naturalistic soft light retaining fine texture.",
+    "zh": "写实柔光，保留细小纹理。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#6D4C41",
+      "name_en": "Old Wood Brown",
+      "name_zh": "旧木棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#827717",
+      "name_en": "Olive Yellow",
+      "name_zh": "橄榄黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#37474F",
+      "name_en": "Dark Cyan Gray",
+      "name_zh": "暗青灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#BF360C",
+      "name_en": "Rust Red",
+      "name_zh": "锈红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#A1887F",
+      "name_en": "Dusty Brown",
+      "name_zh": "尘土棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1B1B1B",
+      "name_en": "Ink Black",
+      "name_zh": "墨黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

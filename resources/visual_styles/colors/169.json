@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E53935",
+      "name_en": "热血喜剧",
+      "name_zh": "热血喜剧"
+    },
+    {
+      "code": "E02",
+      "hex": "#0D47A1",
+      "name_en": "悬疑推理",
+      "name_zh": "悬疑推理"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD600",
+      "name_en": "英式幽默",
+      "name_zh": "英式幽默"
+    },
+    {
+      "code": "E04",
+      "hex": "#6A1B9A",
+      "name_en": "科幻迷幻",
+      "name_zh": "科幻迷幻"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E53935, #0D47A1, #FF6D00. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E53935, #0D47A1, #FF6D00；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "169",
+  "lighting_notes": {
+    "en": "Distinct local sources with subject separation.",
+    "zh": "局部明确的光源与主体分离。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E53935",
+      "name_en": "Cornetto Red",
+      "name_zh": "血与冰淇淋红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#0D47A1",
+      "name_en": "Detective Blue",
+      "name_zh": "警探蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD600",
+      "name_en": "Comedy Yellow",
+      "name_zh": "喜剧黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2E7D32",
+      "name_en": "Zombie Green",
+      "name_zh": "僵尸绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#6A1B9A",
+      "name_en": "Sci-Fi Purple",
+      "name_zh": "科幻紫",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FF6D00",
+      "name_en": "Action Orange",
+      "name_zh": "动作橙",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "158",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present existing roles in stage-like depth without turning them into puppets.",
+      "text_zh": "以舞台式前后层次呈现已有角色，不改成木偶。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep existing action and spatial boundaries clear without adding fairy-tale objects.",
+      "text_zh": "保持既有动作与空间边界清楚，不添加童话物件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

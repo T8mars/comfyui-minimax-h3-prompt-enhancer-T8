@@ -1,0 +1,26 @@
+{
+  "id": "160",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-push template without creating digital space.",
+      "text_zh": "采用本条缓推模板靠近现有主体，不新建数码空间。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's follow template for existing movement without adding family or network plots.",
+      "text_zh": "采用本条跟随模板维持已有运动，不加入家庭或网络剧情。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

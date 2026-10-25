@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1744",
+      "name_en": "狂想激情",
+      "name_zh": "狂想激情"
+    },
+    {
+      "code": "E02",
+      "hex": "#00E5FF",
+      "name_en": "流动自由",
+      "name_zh": "流动自由"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFEA00",
+      "name_en": "青春能量",
+      "name_zh": "青春能量"
+    },
+    {
+      "code": "E04",
+      "hex": "#D500F9",
+      "name_en": "迷幻梦境",
+      "name_zh": "迷幻梦境"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF1744, #00E5FF, #1A1A1A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF1744, #00E5FF, #1A1A1A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "145",
+  "lighting_notes": {
+    "en": "Softened localized colored light without automatic flicker.",
+    "zh": "局部柔化色光，不自动产生闪变。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF1744",
+      "name_en": "Rhapsody Red",
+      "name_zh": "狂想红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00E5FF",
+      "name_en": "Flowing Cyan",
+      "name_zh": "流动青",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFEA00",
+      "name_en": "Energy Yellow",
+      "name_zh": "能量黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#D500F9",
+      "name_en": "Psychedelic Purple",
+      "name_zh": "迷幻紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#76FF03",
+      "name_en": "Explosion Green",
+      "name_zh": "爆发绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

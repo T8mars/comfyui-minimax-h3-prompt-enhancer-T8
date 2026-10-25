@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8F00",
+      "name_en": "温暖怀旧",
+      "name_zh": "温暖怀旧"
+    },
+    {
+      "code": "E02",
+      "hex": "#5D4037",
+      "name_en": "大地厚重",
+      "name_zh": "大地厚重"
+    },
+    {
+      "code": "E03",
+      "hex": "#78909C",
+      "name_en": "幽灵忧郁",
+      "name_zh": "幽灵忧郁"
+    },
+    {
+      "code": "E04",
+      "hex": "#2E7D32",
+      "name_en": "自然生命",
+      "name_zh": "自然生命"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8F00, #5D4037, #3E2723. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8F00, #5D4037, #3E2723；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "167",
+  "lighting_notes": {
+    "en": "Soft directional natural light without changing a locked time of day.",
+    "zh": "柔和自然方向光，不更改锁定时段。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8F00",
+      "name_en": "Texas Gold",
+      "name_zh": "德州金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#5D4037",
+      "name_en": "Earth Brown",
+      "name_zh": "大地棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78909C",
+      "name_en": "Ghost Gray",
+      "name_zh": "幽灵灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2E7D32",
+      "name_en": "Prairie Green",
+      "name_zh": "草原绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Warm Gold",
+      "name_zh": "暖金",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Deep Earth Brown",
+      "name_zh": "深土棕",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

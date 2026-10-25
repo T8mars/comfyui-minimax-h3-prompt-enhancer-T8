@@ -1,0 +1,26 @@
+{
+  "id": "168",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing space from the supplied character height without adding children.",
+      "text_zh": "从已给角色高度观察既有空间，不增加儿童角色。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's follow template for existing behavior without inventing jokes.",
+      "text_zh": "用本条跟随模板呈现已有行为，不制造笑点。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

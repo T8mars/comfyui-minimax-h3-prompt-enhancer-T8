@@ -1,0 +1,26 @@
+{
+  "id": "157",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe the existing subject using this record's slow-push template without changing medium.",
+      "text_zh": "采用本条缓推模板观察既有主体，不更换媒介。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing movement gently without adding animals or adventure.",
+      "text_zh": "若原稿已有移动可平缓跟随，不新增动物或冒险。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

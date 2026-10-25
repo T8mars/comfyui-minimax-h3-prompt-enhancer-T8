@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C41E3A",
+      "name_en": "Warning Scarlet",
+      "name_zh": "警示猩红"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD700",
+      "name_en": "Luxury Gold",
+      "name_zh": "奢华金"
+    },
+    {
+      "code": "E03",
+      "hex": "#0A2463",
+      "name_en": "Abyss Royal Blue",
+      "name_zh": "深渊宝蓝"
+    },
+    {
+      "code": "E04",
+      "hex": "#F5E6D3",
+      "name_en": "Innocent White",
+      "name_zh": "纯洁白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A1418, #8B0000, #C9A227. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A1418, #8B0000, #C9A227；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "004",
+  "lighting_notes": {
+    "en": "Dramatic side light with distinct light and dark regions.",
+    "zh": "戏剧性侧光，明确亮暗分区。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A1418",
+      "name_en": "Deep Midnight Burgundy",
+      "name_zh": "深夜暗紫红",
+      "share": 0.35
+    },
+    {
+      "code": "C02",
+      "hex": "#8B0000",
+      "name_en": "Operatic Deep Red",
+      "name_zh": "歌剧深红",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#C9A227",
+      "name_en": "Opulent Gold",
+      "name_zh": "土豪金",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#1E3A5F",
+      "name_en": "Jewel Dark Cyan Blue",
+      "name_zh": "宝蓝暗青",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#D4AF37",
+      "name_en": "Brass Gold",
+      "name_zh": "黄铜金",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#E8D5B7",
+      "name_en": "Ivory Skin Tone",
+      "name_zh": "象牙肤",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

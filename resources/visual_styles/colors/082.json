@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F5E6C8",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#B22222",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#D2B48C",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2C2C2C",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E8E0D0, #D4A058, #1C1C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E8E0D0, #D4A058, #1C1C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "082",
+  "lighting_notes": {
+    "en": "Soft diffuse key light.",
+    "zh": "柔和漫射主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E8E0D0",
+      "name_en": "Silver Gray White",
+      "name_zh": "银灰白",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#D4A058",
+      "name_en": "Warm Gold",
+      "name_zh": "暖金",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8B0000",
+      "name_en": "Deep Crimson",
+      "name_zh": "深红",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate Gray",
+      "name_zh": "暗青灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#DAA520",
+      "name_en": "Goldenrod",
+      "name_zh": "金菊黄",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

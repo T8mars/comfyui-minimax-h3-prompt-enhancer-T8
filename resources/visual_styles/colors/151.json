@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4A148C",
+      "name_en": "魔法奇幻",
+      "name_zh": "魔法奇幻"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E7D32",
+      "name_en": "自然神秘",
+      "name_zh": "自然神秘"
+    },
+    {
+      "code": "E03",
+      "hex": "#5D4037",
+      "name_en": "手工温度",
+      "name_zh": "手工温度"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "金色希望",
+      "name_zh": "金色希望"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4A148C, #2E7D32, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4A148C, #2E7D32, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "151",
+  "lighting_notes": {
+    "en": "Motivated localized sources with soft subject lighting.",
+    "zh": "有动机的局部光源与柔和主体照明。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4A148C",
+      "name_en": "Magic Purple",
+      "name_zh": "魔法紫",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E7D32",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#5D4037",
+      "name_en": "Wood Brown",
+      "name_zh": "木质棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Magic Gold Light",
+      "name_zh": "魔金光",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#B71C1C",
+      "name_en": "Blood Red",
+      "name_zh": "血红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#00BCD4",
+      "name_en": "临床冷漠",
+      "name_zh": "临床冷漠"
+    },
+    {
+      "code": "E02",
+      "hex": "#E91E63",
+      "name_en": "肉体迷恋",
+      "name_zh": "肉体迷恋"
+    },
+    {
+      "code": "E03",
+      "hex": "#37474F",
+      "name_en": "科技恐惧",
+      "name_zh": "科技恐惧"
+    },
+    {
+      "code": "E04",
+      "hex": "#B71C1C",
+      "name_en": "身体恐怖",
+      "name_zh": "身体恐怖"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #00BCD4, #E91E63, #263238. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #00BCD4, #E91E63, #263238；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "116",
+  "lighting_notes": {
+    "en": "Existing diffuse artificial key light retaining surface detail.",
+    "zh": "已有漫射人工主光，维持表面细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#00BCD4",
+      "name_en": "Clinical Cyan",
+      "name_zh": "临床青",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#E91E63",
+      "name_en": "Flesh Pink",
+      "name_zh": "肉体粉",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#37474F",
+      "name_en": "Dark Cyan Gray",
+      "name_zh": "暗青灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#B71C1C",
+      "name_en": "Flesh Blood Red",
+      "name_zh": "血肉红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#ECEFF1",
+      "name_en": "Cool White",
+      "name_zh": "冷白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#263238",
+      "name_en": "Dark Blue Gray",
+      "name_zh": "深蓝灰",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

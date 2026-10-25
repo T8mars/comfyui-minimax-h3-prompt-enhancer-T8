@@ -1,0 +1,24 @@
+{
+  "id": "033",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize one view with panel-like clarity of subject contours without adding panels.",
+      "text_zh": "借分格般清晰的主体轮廓组织单个画面，不新增画框。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use low angles or detail framing for existing action without adding violence.",
+      "text_zh": "低角度或局部近景强调已有动作，不增加暴力。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

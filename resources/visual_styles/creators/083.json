@@ -1,0 +1,25 @@
+{
+  "id": "083",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep existing groups and spatial order readable in a tableau-like view.",
+      "text_zh": "以整体场面构图保持已有群像及空间秩序。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Sustain observation of the existing scene without historical or class-based plot additions.",
+      "text_zh": "延续现有场面的观察，不添加时代或阶级剧情。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

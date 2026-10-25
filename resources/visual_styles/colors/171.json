@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#78909C",
+      "name_en": "阶级冷漠",
+      "name_zh": "阶级冷漠"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFFFFF",
+      "name_en": "北欧冷静",
+      "name_zh": "北欧冷静"
+    },
+    {
+      "code": "E03",
+      "hex": "#0288D1",
+      "name_en": "自然辽阔",
+      "name_zh": "自然辽阔"
+    },
+    {
+      "code": "E04",
+      "hex": "#546E7A",
+      "name_en": "尴尬不安",
+      "name_zh": "尴尬不安"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #78909C, #FFFFFF, #546E7A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #78909C, #FFFFFF, #546E7A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "171",
+  "lighting_notes": {
+    "en": "Soft ambient light with clear layers.",
+    "zh": "柔和环境光，保持清楚层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#78909C",
+      "name_en": "Nordic Gray",
+      "name_zh": "北欧灰",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFFFFF",
+      "name_en": "Snow White",
+      "name_zh": "雪国白",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#0288D1",
+      "name_en": "Fjord Blue",
+      "name_zh": "峡湾蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#8D6E63",
+      "name_en": "Wood Brown",
+      "name_zh": "木棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2E7D32",
+      "name_en": "Fir Green",
+      "name_zh": "冷杉绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#546E7A",
+      "name_en": "Cold Blue Gray",
+      "name_zh": "冷蓝灰",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

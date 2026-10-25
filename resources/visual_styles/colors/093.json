@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#B8860B",
+      "name_en": "Dark Goldenrod",
+      "name_zh": "暗金"
+    },
+    {
+      "code": "E02",
+      "hex": "#556B2F",
+      "name_en": "Dark Olive Green",
+      "name_zh": "暗橄榄绿"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B7355",
+      "name_en": "Gray Gold Brown",
+      "name_zh": "灰金棕"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F2F2F",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8B7355, #B8860B, #1C1C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8B7355, #B8860B, #1C1C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "093",
+  "lighting_notes": {
+    "en": "Soft diffusion with retained spatial depth.",
+    "zh": "柔和漫射光，保持空间层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8B7355",
+      "name_en": "Gray Gold Brown",
+      "name_zh": "灰金棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#B8860B",
+      "name_en": "Dark Goldenrod",
+      "name_zh": "暗金",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#556B2F",
+      "name_en": "Dark Olive Green",
+      "name_zh": "暗橄榄绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#CD853F",
+      "name_en": "Peru Brown",
+      "name_zh": "秘鲁棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate Gray",
+      "name_zh": "暗青灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1C1C1C",
+      "name_en": "Charcoal Black",
+      "name_zh": "炭黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

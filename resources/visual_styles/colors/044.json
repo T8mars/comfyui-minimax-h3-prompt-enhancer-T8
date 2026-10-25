@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFD700",
+      "name_en": "Fairy Tale Gold",
+      "name_zh": "童话金"
+    },
+    {
+      "code": "E02",
+      "hex": "#4682B4",
+      "name_en": "Deep Sea Blue",
+      "name_zh": "深海蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B0000",
+      "name_en": "Dark Blood Red",
+      "name_zh": "暗红血"
+    },
+    {
+      "code": "E04",
+      "hex": "#556B2F",
+      "name_en": "Moss Green",
+      "name_zh": "苔藓绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #3B220F, #B8860B, #1C1C1C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #3B220F, #B8860B, #1C1C1C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "044",
+  "lighting_notes": {
+    "en": "Soft side light with existing localized practical sources.",
+    "zh": "柔和侧光配已有局部实景光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#3B220F",
+      "name_en": "Deep Amber Brown",
+      "name_zh": "深棕琥珀",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#B8860B",
+      "name_en": "Dark Gold Mythic",
+      "name_zh": "暗金神话",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#1C1C1C",
+      "name_en": "Warm Black Gothic",
+      "name_zh": "暖黑哥特",
+      "share": 0.18
+    },
+    {
+      "code": "C04",
+      "hex": "#D4A574",
+      "name_en": "Earth Golden Brown",
+      "name_zh": "大地金棕",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#8B4513",
+      "name_en": "Sienna Wood",
+      "name_zh": "赭石红木",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#F0E68C",
+      "name_en": "Honey Light Yellow",
+      "name_zh": "蜜光黄",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "100",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Continuous movement must clearly establish existing routes and spatial transitions.",
+      "text_zh": "连续移动须清楚交代已有路线和空间转换。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Organize existing depth within the scene while preserving action continuity.",
+      "text_zh": "在同一场面内组织已有前后层次，保持行动连贯。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "189",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Adjust scale with restrained zoom only when allowed, retaining dialogue positions.",
+      "text_zh": "在允许变焦时克制调整景别，保留既有对话位置。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "For established repeated situations, highlight supplied differences without inventing versions.",
+      "text_zh": "原稿若有重复情境，突出已给差别，不新增版本。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

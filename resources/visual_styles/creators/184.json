@@ -1,0 +1,25 @@
+{
+  "id": "184",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Present established action from a fixed viewpoint without adding violence for style.",
+      "text_zh": "固定机位呈现既定动作，不为强调风格新增暴力。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Retain supplied pauses around action without forcing blank expression or freezing.",
+      "text_zh": "保留动作前后的已给停顿，不强制无表情或定格。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

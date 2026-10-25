@@ -1,0 +1,24 @@
+{
+  "id": "018",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use a spare frontal or offset single-subject composition with open space.",
+      "text_zh": "以简洁正面或偏置单主体构图保留空白。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Sustain observation without forcing emotional change.",
+      "text_zh": "保持静观的持续性，不强制情绪变化。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

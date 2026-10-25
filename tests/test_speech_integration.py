@@ -1,4 +1,5 @@
 """Speech wiring and frozen old paths; inference doubles are not ASR acceptance."""
+from visual_style_baseline_projection import without_style_signature, without_style_inputs
 import asyncio
 import copy
 import importlib
@@ -46,7 +47,7 @@ class SpeechIntegrationTests(unittest.TestCase):
             tree = ast.parse(source)
             for name in (fn, "_build_messages"):
                 old = original_function(filename, name, module, BASELINE)
-                current = inspect.signature(getattr(module, name))
+                current = without_style_signature(inspect.signature(getattr(module, name)))
                 if module is h3:
                     self.assertEqual(list(current.parameters)[-1], "visual_marker_config")
                     current = current.replace(parameters=list(current.parameters.values())[:-1])
@@ -58,7 +59,7 @@ class SpeechIntegrationTests(unittest.TestCase):
             method.decorator_list = []
             namespace = dict(vars(module)); exec(compile(ast.Module(body=[method], type_ignores=[]), filename, "exec"), namespace)
             old_schema, now = namespace["define_schema"](cls), cls.define_schema()
-            inputs = now.inputs
+            inputs = without_style_inputs(now.inputs)
             if module is h3:
                 self.assertEqual(inputs[-1].id, "visual_marker_config")
                 inputs = inputs[:-1]

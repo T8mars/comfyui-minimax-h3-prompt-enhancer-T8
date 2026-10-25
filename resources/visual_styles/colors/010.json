@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#B22222",
+      "name_en": "Dark Brick Red",
+      "name_zh": "暗砖红"
+    },
+    {
+      "code": "E02",
+      "hex": "#708090",
+      "name_en": "Slate Gray",
+      "name_zh": "石板灰"
+    },
+    {
+      "code": "E03",
+      "hex": "#DEB887",
+      "name_en": "Soft Burly Wood Gold",
+      "name_zh": "柔米金"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate Gray",
+      "name_zh": "深青灰"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #3A4A52, #8B8378, #654321. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #3A4A52, #8B8378, #654321；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "010",
+  "lighting_notes": {
+    "en": "Restrained natural softness with low to moderate contrast.",
+    "zh": "含蓄自然柔光，低至中等反差。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#3A4A52",
+      "name_en": "Cool Gray Blue Green",
+      "name_zh": "冷灰蓝绿",
+      "share": 0.35
+    },
+    {
+      "code": "C02",
+      "hex": "#8B8378",
+      "name_en": "Muted Gray Brown",
+      "name_zh": "哑灰棕",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#654321",
+      "name_en": "Deep Wood Brown",
+      "name_zh": "深棕木色",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#A0785A",
+      "name_en": "Camel Brown",
+      "name_zh": "驼色棕",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#4A6741",
+      "name_en": "Dark Moss Green",
+      "name_zh": "暗苔绿",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#E8DCC8",
+      "name_en": "Cream White Skin",
+      "name_zh": "奶白肤",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

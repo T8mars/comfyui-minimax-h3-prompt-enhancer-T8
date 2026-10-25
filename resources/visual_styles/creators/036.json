@@ -1,0 +1,24 @@
+{
+  "id": "036",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "When allowed, use a tilted or low view to emphasize existing architectural lines.",
+      "text_zh": "允许时采用轻度倾斜或低角度，强调现有建筑线条。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain subject-environment relationships through existing reflective surfaces.",
+      "text_zh": "通过已有湿面或镜面保留主体与环境的反射关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

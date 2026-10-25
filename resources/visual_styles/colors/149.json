@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6D00",
+      "name_en": "非洲阳光",
+      "name_zh": "非洲阳光"
+    },
+    {
+      "code": "E02",
+      "hex": "#7B1FA2",
+      "name_en": "东方神秘",
+      "name_zh": "东方神秘"
+    },
+    {
+      "code": "E03",
+      "hex": "#1B5E20",
+      "name_en": "自然生机",
+      "name_zh": "自然生机"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "童话温暖",
+      "name_zh": "童话温暖"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF6D00, #1B5E20, #000000. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF6D00, #1B5E20, #000000；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "149",
+  "lighting_notes": {
+    "en": "Motivated backlight with readable subject fill.",
+    "zh": "有动机的背光与可读主体填充。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF6D00",
+      "name_en": "African Orange",
+      "name_zh": "非洲橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#1B5E20",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#7B1FA2",
+      "name_en": "Oriental Purple",
+      "name_zh": "东方紫",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Desert Gold",
+      "name_zh": "沙漠金",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#00695C",
+      "name_en": "Ocean Teal",
+      "name_zh": "海洋青",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#000000",
+      "name_en": "Silhouette Black",
+      "name_zh": "剪影黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

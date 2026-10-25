@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#DAA520",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#A52A2A",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#8B7355",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#1C1C1C",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #B8860B, #8B0000, #3D2B1F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #B8860B, #8B0000, #3D2B1F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "084",
+  "lighting_notes": {
+    "en": "Gentle directional side lighting.",
+    "zh": "温和定向侧光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#B8860B",
+      "name_en": "Dark Goldenrod",
+      "name_zh": "暗金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8B0000",
+      "name_en": "Imperial Red",
+      "name_zh": "帝国红",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#CD853F",
+      "name_en": "Peru Brown",
+      "name_zh": "秘鲁棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate Green",
+      "name_zh": "墨绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#F4A460",
+      "name_en": "Sandy Brown",
+      "name_zh": "沙橙",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3D2B1F",
+      "name_en": "Deep Wood Brown",
+      "name_zh": "深棕木",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

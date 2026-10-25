@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#0000FF",
+      "name_en": "Jarman Blue",
+      "name_zh": "贾曼蓝"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF0000",
+      "name_en": "Blood Red",
+      "name_zh": "血红色"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Marigold",
+      "name_zh": "金盏黄"
+    },
+    {
+      "code": "E04",
+      "hex": "#228B22",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0000FF, #FF0000, #FFD700. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0000FF, #FF0000, #FFD700；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "092",
+  "lighting_notes": {
+    "en": "Directional key light; monochromatic treatment requires separate color permission.",
+    "zh": "有方向的主光，单色处理仅在另有色彩授权时。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0000FF",
+      "name_en": "Jarman Blue",
+      "name_zh": "贾曼蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FF0000",
+      "name_en": "Blood Red",
+      "name_zh": "血红色",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD700",
+      "name_en": "Marigold",
+      "name_zh": "金盏黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#228B22",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFFFFF",
+      "name_en": "Pure White",
+      "name_zh": "纯白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#000000",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

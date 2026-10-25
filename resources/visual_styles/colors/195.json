@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8D6E63",
+      "name_en": "道德困境",
+      "name_zh": "道德困境"
+    },
+    {
+      "code": "E02",
+      "hex": "#78909C",
+      "name_en": "社会压抑",
+      "name_zh": "社会压抑"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFCC80",
+      "name_en": "家庭温暖",
+      "name_zh": "家庭温暖"
+    },
+    {
+      "code": "E04",
+      "hex": "#5D4037",
+      "name_en": "秘密沉重",
+      "name_zh": "秘密沉重"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8D6E63, #78909C, #A1887F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8D6E63, #78909C, #A1887F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "195",
+  "lighting_notes": {
+    "en": "Soft interior key light retaining original source motivation.",
+    "zh": "柔和室内主光，保留原光源动机。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8D6E63",
+      "name_en": "Tehran Brown",
+      "name_zh": "德黑兰棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#78909C",
+      "name_en": "Moral Gray",
+      "name_zh": "道德灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5D4037",
+      "name_en": "Dark Brown",
+      "name_zh": "暗棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#BCAAA4",
+      "name_en": "Apartment Beige",
+      "name_zh": "公寓米",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#A1887F",
+      "name_en": "Old Wood Brown",
+      "name_zh": "旧木棕",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

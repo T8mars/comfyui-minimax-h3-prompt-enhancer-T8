@@ -1,0 +1,24 @@
+{
+  "id": "037",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action handheld without adding news text or surveillance interfaces.",
+      "text_zh": "用纪实手持跟随已有行动，不加新闻字幕或监控界面。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Juxtapose existing foreground and background to retain real spatial differences.",
+      "text_zh": "把已有前后景并置，保持实际空间差异可读。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF7F50",
+      "name_en": "Accent 1",
+      "name_zh": "日出火"
+    },
+    {
+      "code": "E02",
+      "hex": "#9370DB",
+      "name_en": "Purple",
+      "name_zh": "极光紫"
+    },
+    {
+      "code": "E03",
+      "hex": "#E0FFFF",
+      "name_en": "White",
+      "name_zh": "霜雾白"
+    },
+    {
+      "code": "E04",
+      "hex": "#8B4513",
+      "name_en": "Brown",
+      "name_zh": "土地棕"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E6B86A, #4A6B5C, #2E3138. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E6B86A, #4A6B5C, #2E3138；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "059",
+  "lighting_notes": {
+    "en": "Prioritize available natural light and soft diffusion.",
+    "zh": "优先自然可用光与柔和漫射。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E6B86A",
+      "name_en": "Yellow",
+      "name_zh": "黄金时刻",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#4A6B5C",
+      "name_en": "Green",
+      "name_zh": "苔原冷绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2E3138",
+      "name_en": "Gray",
+      "name_zh": "黎明深灰",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#D9C2A0",
+      "name_en": "Skin Tone",
+      "name_zh": "暖沙肤色",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#6B8E9A",
+      "name_en": "Blue",
+      "name_zh": "冰湖蓝灰",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#9B7E5C",
+      "name_en": "Ochre",
+      "name_zh": "大地赭石",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

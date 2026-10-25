@@ -1,0 +1,26 @@
+{
+  "id": "073",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep existing everyday space and people readable without adding period props.",
+      "text_zh": "让已有生活空间与人物同时可读，不新增时代道具。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe existing movement continuously while retaining real relative positions.",
+      "text_zh": "持续静观已有移动，保留场地中真实的相对位置。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#D4AF37",
+      "name_en": "壮美崇拜",
+      "name_zh": "壮美崇拜"
+    },
+    {
+      "code": "E02",
+      "hex": "#0D47A1",
+      "name_en": "山岳崇高",
+      "name_zh": "山岳崇高"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFFFFF",
+      "name_en": "纯净理想",
+      "name_zh": "纯净理想"
+    },
+    {
+      "code": "E04",
+      "hex": "#5D4037",
+      "name_en": "身体雕塑",
+      "name_zh": "身体雕塑"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #D4AF37, #0D47A1, #3E2723. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #D4AF37, #0D47A1, #3E2723；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "120",
+  "lighting_notes": {
+    "en": "Side light emphasizes existing volume and contours.",
+    "zh": "侧光强调已有体积与轮廓。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#D4AF37",
+      "name_en": "Gold Platinum",
+      "name_zh": "金铂色",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#0D47A1",
+      "name_en": "Mountain Blue",
+      "name_zh": "山岳蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFFFFF",
+      "name_en": "Snow White",
+      "name_zh": "雪白",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5D4037",
+      "name_en": "Bronze Brown",
+      "name_zh": "古铜棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1A237E",
+      "name_en": "Abyss Blue",
+      "name_zh": "深渊蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Dark Brown",
+      "name_zh": "深褐",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

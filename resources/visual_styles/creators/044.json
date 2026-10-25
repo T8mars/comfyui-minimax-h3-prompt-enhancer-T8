@@ -1,0 +1,24 @@
+{
+  "id": "044",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Layer existing arches or passages without inventing a portal.",
+      "text_zh": "用已有拱门或通道建立层层框景，不创造新世界入口。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine visible details of the existing subject without inferring emotion from appearance.",
+      "text_zh": "近看已有主体的可见细节，不由外貌猜测情绪。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

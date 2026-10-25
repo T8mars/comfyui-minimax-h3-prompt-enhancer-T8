@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C62828",
+      "name_en": "血腥暴力",
+      "name_zh": "血腥暴力"
+    },
+    {
+      "code": "E02",
+      "hex": "#37474F",
+      "name_en": "压抑困局",
+      "name_zh": "压抑困局"
+    },
+    {
+      "code": "E03",
+      "hex": "#FF8F00",
+      "name_en": "生存希望",
+      "name_zh": "生存希望"
+    },
+    {
+      "code": "E04",
+      "hex": "#455A64",
+      "name_en": "冷酷现实",
+      "name_zh": "冷酷现实"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C62828, #37474F, #FF8F00. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C62828, #37474F, #FF8F00；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "134",
+  "lighting_notes": {
+    "en": "Existing cool artificial light with readable action detail.",
+    "zh": "现有冷人工光，关键动作细节清楚。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C62828",
+      "name_en": "Blood Splatter Red",
+      "name_zh": "血溅红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#37474F",
+      "name_en": "Slum Gray",
+      "name_zh": "贫民窟灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#FF8F00",
+      "name_en": "Street Lamp Orange",
+      "name_zh": "街灯橙",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#455A64",
+      "name_en": "Concrete Blue Gray",
+      "name_zh": "水泥蓝灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#5D4037",
+      "name_en": "Mud Brown",
+      "name_zh": "泥土棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Dark Black",
+      "name_zh": "暗黑",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

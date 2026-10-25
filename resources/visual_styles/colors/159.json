@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#66BB6A",
+      "name_en": "自然治愈",
+      "name_zh": "自然治愈"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "家庭温暖",
+      "name_zh": "家庭温暖"
+    },
+    {
+      "code": "E03",
+      "hex": "#81D4FA",
+      "name_en": "天空自由",
+      "name_zh": "天空自由"
+    },
+    {
+      "code": "E04",
+      "hex": "#A1887F",
+      "name_en": "怀旧温情",
+      "name_zh": "怀旧温情"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #66BB6A, #FFF9C4, #FFCC80. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #66BB6A, #FFF9C4, #FFCC80；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "159",
+  "lighting_notes": {
+    "en": "Soft diffuse environmental light.",
+    "zh": "柔和漫射环境光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#66BB6A",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#81D4FA",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#A1887F",
+      "name_en": "Wood Grain Brown",
+      "name_zh": "木纹棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#CE93D8",
+      "name_en": "Magic Purple",
+      "name_zh": "魔法紫",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Cream White",
+      "name_zh": "米白",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

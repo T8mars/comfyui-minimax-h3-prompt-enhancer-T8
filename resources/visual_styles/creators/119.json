@@ -1,0 +1,26 @@
+{
+  "id": "119",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use controlled handheld movement for existing group action without imposed chaos.",
+      "text_zh": "受控手持随既有群体行动，不强制造乱。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "View the subject and surroundings from the established height without changing age.",
+      "text_zh": "从既定观察高度呈现主体与周围物件，不替换年龄。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

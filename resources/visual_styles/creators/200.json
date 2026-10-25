@@ -1,0 +1,25 @@
+{
+  "id": "200",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Examine tactile detail in supplied body or object action without identity changes.",
+      "text_zh": "近看已给身体或物件动作的触感细节，不改变身份。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use restrained handheld observation to retain intervals between existing actions without plot additions.",
+      "text_zh": "以克制手持保持现有动作间的留白，不补情节。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

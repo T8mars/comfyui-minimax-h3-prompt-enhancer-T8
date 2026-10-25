@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#7B1FA2",
+      "name_en": "魔法奇幻",
+      "name_zh": "魔法奇幻"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E7D32",
+      "name_en": "自然冒险",
+      "name_zh": "自然冒险"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFA000",
+      "name_en": "80年代怀旧",
+      "name_zh": "80年代怀旧"
+    },
+    {
+      "code": "E04",
+      "hex": "#00695C",
+      "name_en": "深海神秘",
+      "name_zh": "深海神秘"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #7B1FA2, #2E7D32, #FFD54F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #7B1FA2, #2E7D32, #FFD54F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "157",
+  "lighting_notes": {
+    "en": "Soft key light retaining edges and detail.",
+    "zh": "柔和主光，保留边缘与细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#7B1FA2",
+      "name_en": "Fantasy Purple",
+      "name_zh": "奇幻紫",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E7D32",
+      "name_en": "Forest Green",
+      "name_zh": "森林绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFA000",
+      "name_en": "80s Orange",
+      "name_zh": "80s橙",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#00695C",
+      "name_en": "Deep Sea Green",
+      "name_zh": "深海绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#E57373",
+      "name_en": "Pink Red",
+      "name_zh": "粉红红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFD54F",
+      "name_en": "Golden Light",
+      "name_zh": "金光",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

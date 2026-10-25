@@ -1,0 +1,24 @@
+{
+  "id": "024",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Track existing action handheld while retaining terrain and its target.",
+      "text_zh": "手持跟随既有行动，保留地形和动作目标。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the established source of pressure legible in environmental wide views or allowed closer framing.",
+      "text_zh": "在环境宽景与允许的近景中保持主体所处压力来源可见。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

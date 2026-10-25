@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C0392B",
+      "name_en": "Action Red",
+      "name_zh": "行动红"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E86C1",
+      "name_en": "Tactical Blue",
+      "name_zh": "战术蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#B7950B",
+      "name_en": "Dust Gold",
+      "name_zh": "沙尘金"
+    },
+    {
+      "code": "E04",
+      "hex": "#616A6B",
+      "name_en": "Moral Gray",
+      "name_zh": "道德灰"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #17202A, #34495E, #6E5B4B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #17202A, #34495E, #6E5B4B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "020",
+  "lighting_notes": {
+    "en": "Directional available light with firmer shadows.",
+    "zh": "自然定向光与较硬阴影。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#17202A",
+      "name_en": "Deep Night Iron Gray",
+      "name_zh": "深夜铁灰",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#34495E",
+      "name_en": "Tactical Gray Blue",
+      "name_zh": "战术灰蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#6E5B4B",
+      "name_en": "Sand Brown Earth",
+      "name_zh": "沙棕土色",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#7B241C",
+      "name_en": "Dark Blood Red",
+      "name_zh": "暗血红",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#5D6D7E",
+      "name_en": "Steel Gray Blue",
+      "name_zh": "钢灰蓝",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#BDBDBD",
+      "name_en": "Concrete Gray Skin",
+      "name_zh": "水泥灰肤",
+      "share": 0.07
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

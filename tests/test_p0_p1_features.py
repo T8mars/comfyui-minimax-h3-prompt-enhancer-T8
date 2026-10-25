@@ -1,3 +1,4 @@
+from visual_style_baseline_projection import without_style_inputs, without_style_names
 import importlib.util
 import inspect
 import json
@@ -130,7 +131,7 @@ class P0P1FeatureTests(unittest.TestCase):
             ],
         )
         for schema in schemas[:2]:
-            prior_inputs = schema.inputs
+            prior_inputs = without_style_inputs(schema.inputs)
             if schema.node_id == "MiniMaxH3PromptEnhancerT8":
                 self.assertEqual(prior_inputs[-1].id, "visual_marker_config")
                 prior_inputs = prior_inputs[:-1]
@@ -164,9 +165,9 @@ class P0P1FeatureTests(unittest.TestCase):
                 self.assertEqual(names[22:31], ["local_model", "local_mmproj", "local_context_size", "local_max_tokens", "local_think_mode", "local_reasoning_effort", "local_video_sample_fps", "local_unload_policy", "local_comfy_memory_policy"])
 
     def test_new_request_options_are_appended_after_existing_function_parameters(self):
-        h3_names = list(inspect.signature(core_nodes.enhance_prompt).parameters)
+        h3_names = without_style_names(list(inspect.signature(core_nodes.enhance_prompt).parameters))
         self.assertEqual(h3_names.pop(), "visual_marker_config")
-        seedance_names = list(inspect.signature(seedance20.enhance_seedance20_prompt).parameters)
+        seedance_names = without_style_names(list(inspect.signature(seedance20.enhance_seedance20_prompt).parameters))
         self.assertEqual(h3_names[-9:], ["progress_callback", "provider_request_options", "relay_config", "director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
         self.assertEqual(seedance_names[-8:], ["progress_callback", "provider_request_options", "director_skill", "quality_mode", "creation_mode", "combat_camera_config", "speech_reference", "storyboard_director_config"])
 

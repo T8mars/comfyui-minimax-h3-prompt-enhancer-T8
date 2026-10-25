@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#0288D1",
+      "name_en": "冷酷暴力",
+      "name_zh": "冷酷暴力"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "鲜血死亡",
+      "name_zh": "鲜血死亡"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "短暂温情",
+      "name_zh": "短暂温情"
+    },
+    {
+      "code": "E04",
+      "hex": "#37474F",
+      "name_en": "宿命感",
+      "name_zh": "宿命感"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0288D1, #37474F, #C62828. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0288D1, #37474F, #C62828；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "184",
+  "lighting_notes": {
+    "en": "Soft ambient light with restrained tonal separation.",
+    "zh": "柔和环境光，明暗分离克制。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0288D1",
+      "name_en": "Beat Blue",
+      "name_zh": "北野蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#37474F",
+      "name_en": "Sea Gray Blue",
+      "name_zh": "海灰蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#C62828",
+      "name_en": "Blood Red",
+      "name_zh": "鲜血红",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Fireworks Gold",
+      "name_zh": "烟花金",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFF9C4",
+      "name_en": "Sand Beige White",
+      "name_zh": "沙米白",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

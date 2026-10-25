@@ -4,6 +4,10 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
+## New: independent color and creator styles (experimental)
+
+Search `T8 Color Style Config` or `T8 Creator Style Config`. Connect either to H3 / Seedance, browse the local catalog, select, then enable On. Both default Off and combine independently; no MOSS integration, image processing, duration cap or separate planning call. Creator methods are not a screenplay generator, and limited-source entries are labeled. Model and rendered benefits are unverified. [Guide](docs/visual-styles.md) · [Color→H3](example_workflows/visual_style_color_h3.json) · [Creator→Seedance](example_workflows/visual_style_creator_seedance20.json) · [Combined→H3](example_workflows/visual_style_combined_h3.json)
+
 ## New: H3 visual marker authoring (experimental)
 
 `T8H3SpatialMarkerCanvas` now provides upload, actor/target drawing, move/resize, descriptions/actions, undo/redo and local preview. No handwritten JSON or audio plugin is required. [Standalone Ref2VA](example_workflows/h3_spatial_canvas_ref2va.json) / [Hybrid](example_workflows/h3_spatial_canvas_hybrid.json); the previous helper and examples remain compatible.

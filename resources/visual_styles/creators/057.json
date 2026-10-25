@@ -1,0 +1,24 @@
+{
+  "id": "057",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use continuous tracking to show the established route and consequences.",
+      "text_zh": "用优雅连续跟随交代既定路线与行动后果。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep established subject positions legible in symmetrical wide views or existing frames.",
+      "text_zh": "在对称宽景或门框内保持已有主体位置可辨。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "048",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow the existing person closely handheld with readable action and space.",
+      "text_zh": "近距离手持跟随已有人物，保持动作和空间可读。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing occlusions for intimate partial observation without changing aspect ratio.",
+      "text_zh": "借已有遮挡形成亲近的局部观察，不改变画幅。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

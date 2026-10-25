@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C62828",
+      "name_en": "暴力创伤",
+      "name_zh": "暴力创伤"
+    },
+    {
+      "code": "E02",
+      "hex": "#37474F",
+      "name_en": "压抑阴郁",
+      "name_zh": "压抑阴郁"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "记忆闪光",
+      "name_zh": "记忆闪光"
+    },
+    {
+      "code": "E04",
+      "hex": "#5D4037",
+      "name_en": "黑暗心理",
+      "name_zh": "黑暗心理"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C62828, #37474F, #FFD54F. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C62828, #37474F, #FFD54F；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "180",
+  "lighting_notes": {
+    "en": "Localized colored sources with clear tonal layers.",
+    "zh": "局部有色光与清楚明暗层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C62828",
+      "name_en": "Violence Red",
+      "name_zh": "暴力红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#37474F",
+      "name_en": "Glasgow Gray",
+      "name_zh": "格拉斯哥灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Memory Gold",
+      "name_zh": "记忆金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#5D4037",
+      "name_en": "Dark Brown",
+      "name_zh": "黑暗棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1A237E",
+      "name_en": "Deep Night Blue",
+      "name_zh": "深夜蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#000000",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

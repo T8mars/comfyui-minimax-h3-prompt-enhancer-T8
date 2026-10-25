@@ -1,0 +1,25 @@
+{
+  "id": "072",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain the scale difference between subject and existing broad surroundings.",
+      "text_zh": "保持主体与既有辽阔环境的尺度差。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe established confrontation or stillness with a fixed or very slow viewpoint.",
+      "text_zh": "固定或极缓移动观察既有对峙与停留。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

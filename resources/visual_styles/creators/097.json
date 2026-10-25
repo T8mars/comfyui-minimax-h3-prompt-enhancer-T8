@@ -1,0 +1,27 @@
+{
+  "id": "097",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Examine existing textile or material detail without changing clothing or period.",
+      "text_zh": "近看既有织物或材质细节，不更换服装或年代。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain existing object-subject layers and emphasize detail through viewpoint.",
+      "text_zh": "保持既有物件与人物层次，通过观察位置突出细节。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded",
+    "source_role_corrected"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

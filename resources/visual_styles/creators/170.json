@@ -1,0 +1,26 @@
+{
+  "id": "170",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep established dialogue participants or groups spatially readable.",
+      "text_zh": "让既有对话双方或群体的位置保持可读。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Retain supplied dialogue and pauses without manufacturing an argument.",
+      "text_zh": "完整保留已给对白与停顿，不自动制造争吵。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

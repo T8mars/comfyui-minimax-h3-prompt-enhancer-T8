@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#00BCD4",
+      "name_en": "时间迷梦",
+      "name_zh": "时间迷梦"
+    },
+    {
+      "code": "E02",
+      "hex": "#E91E63",
+      "name_en": "爱情执念",
+      "name_zh": "爱情执念"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "温暖回忆",
+      "name_zh": "温暖回忆"
+    },
+    {
+      "code": "E04",
+      "hex": "#37474F",
+      "name_en": "乡愁雨雾",
+      "name_zh": "乡愁雨雾"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #00BCD4, #E91E63, #263238. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #00BCD4, #E91E63, #263238；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "117",
+  "lighting_notes": {
+    "en": "Localized colored light retaining spatial depth.",
+    "zh": "局部色光保持空间层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#00BCD4",
+      "name_en": "Neon Cyan",
+      "name_zh": "霓虹青",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#E91E63",
+      "name_en": "Neon Pink",
+      "name_zh": "霓虹粉",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#37474F",
+      "name_en": "Rain Fog Gray Blue",
+      "name_zh": "雨雾灰蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFD54F",
+      "name_en": "Warm Gold Lamp",
+      "name_zh": "暖金灯",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#1B5E20",
+      "name_en": "Deep Green",
+      "name_zh": "深绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#263238",
+      "name_en": "Night Blue Gray",
+      "name_zh": "暗夜蓝灰",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

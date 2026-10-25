@@ -1,0 +1,27 @@
+{
+  "id": "156",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize attention with panel-like clarity in one view without forcing comic conversion or adding split screens.",
+      "text_zh": "借分格式注意力组织单画面，不强制漫画化或添加分屏。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action with the record's template without adding heroes or universes.",
+      "text_zh": "用同条模板跟随已有动作，不增加英雄或宇宙设定。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded",
+    "source_role_corrected"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

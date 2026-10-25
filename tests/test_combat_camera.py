@@ -1,6 +1,7 @@
 """CPU transport/compatibility contracts; no LLM or rendered-quality claims."""
 from __future__ import annotations
 
+from visual_style_baseline_projection import without_style_names
 import ast
 import asyncio
 import copy
@@ -317,7 +318,7 @@ class CombatCameraTests(unittest.TestCase):
             for function in (name, "_build_messages"):
                 old = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == function)
                 names = [arg.arg for arg in old.args.args]
-                current = list(inspect.signature(getattr(module, function)).parameters)
+                current = without_style_names(list(inspect.signature(getattr(module, function)).parameters))
                 if module is h3:
                     self.assertEqual(current.pop(), "visual_marker_config")
                 self.assertEqual(current, names + ["combat_camera_config", "speech_reference", "storyboard_director_config"])
@@ -327,7 +328,7 @@ class CombatCameraTests(unittest.TestCase):
             namespace = dict(vars(module))
             exec(compile(ast.Module(body=[old_schema], type_ignores=[]), filename, "exec"), namespace)
             old_inputs = [item.id for item in namespace["define_schema"](cls).inputs]
-            current_inputs = [item.id for item in cls.define_schema().inputs]
+            current_inputs = without_style_names([item.id for item in cls.define_schema().inputs])
             if module is h3:
                 self.assertEqual(current_inputs.pop(), "visual_marker_config")
             self.assertEqual(current_inputs, old_inputs + ["combat_camera_config", "speech_reference", "storyboard_director_config"])
@@ -342,7 +343,7 @@ class CombatCameraTests(unittest.TestCase):
         exec(compile(ast.Module(body=[method], type_ignores=[]), "__init__.py", "exec"), namespace)
         old_ids = [cls.define_schema().node_id for cls in asyncio.run(namespace["get_node_list"](extension))]
         self.assertEqual(len(old_ids), 28)
-        self.assertEqual(current_ids, old_ids + ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig", "T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas", "MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
+        self.assertEqual(current_ids, old_ids + ["T8CombatCameraConfig", "T8SpeechReference", "MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig", "T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas", "MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8", "T8ColorStyleConfig", "T8CreatorStyleConfig"])
 
 
 if __name__ == "__main__":

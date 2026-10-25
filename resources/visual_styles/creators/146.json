@@ -1,0 +1,26 @@
+{
+  "id": "146",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Separate existing subject contours from background shapes without adding Gothic architecture.",
+      "text_zh": "保持已有主体轮廓与背景形状分离，不创造哥特建筑。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use the record's slow-push template on existing roles without changing animation technique.",
+      "text_zh": "用同条模板的缓推观察现有角色，不改变动画方式。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

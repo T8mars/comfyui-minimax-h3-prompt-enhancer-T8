@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C0392B",
+      "name_en": "Violent Red",
+      "name_zh": "暴力红"
+    },
+    {
+      "code": "E02",
+      "hex": "#2980B9",
+      "name_en": "Lonely Blue",
+      "name_zh": "孤独蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#F39C12",
+      "name_en": "Ascetic Gold",
+      "name_zh": "禁欲金"
+    },
+    {
+      "code": "E04",
+      "hex": "#7F8C8D",
+      "name_en": "Ash Gray Stillness",
+      "name_zh": "灰寂色"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1B2A3E, #34495E, #8B4513. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1B2A3E, #34495E, #8B4513；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "018",
+  "lighting_notes": {
+    "en": "A single side key with restrained fill.",
+    "zh": "单一侧光，精简补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1B2A3E",
+      "name_en": "Midnight Deep Blue",
+      "name_zh": "午夜深蓝",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#34495E",
+      "name_en": "Slate Blue Gray",
+      "name_zh": "石板蓝灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8B4513",
+      "name_en": "Saddle Brown Wood",
+      "name_zh": "鞍棕木色",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#A93226",
+      "name_en": "Dark Red Suit",
+      "name_zh": "暗红西装",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#7D6608",
+      "name_en": "Dark Golden Brown",
+      "name_zh": "暗金棕",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#D6DBDF",
+      "name_en": "Cool White Skin",
+      "name_zh": "冷白肤",
+      "share": 0.07
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "132",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use the source's handheld-follow template for existing action without adding street conflict.",
+      "text_zh": "采用来源模板的手持跟随已有行动，不增加街头冲突。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use the source's slow approach to the existing subject while retaining surroundings.",
+      "text_zh": "采用来源模板缓慢接近已有主体，保留周边空间。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

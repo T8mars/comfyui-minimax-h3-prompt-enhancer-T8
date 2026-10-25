@@ -1,0 +1,24 @@
+{
+  "id": "020",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow the existing route handheld while maintaining orientation.",
+      "text_zh": "用受控手持跟随已有行动路径，持续保留方位。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Show established relationships among actors, exits and occlusions in a wide view.",
+      "text_zh": "在广角中交代行动者与出口、遮挡的既有关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

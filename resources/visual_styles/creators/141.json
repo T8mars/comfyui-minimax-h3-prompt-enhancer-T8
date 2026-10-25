@@ -1,0 +1,25 @@
+{
+  "id": "141",
+  "methods": [
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "At permitted cuts, connect existing actions or shapes without adding dream layers.",
+      "text_zh": "在已允许的切点用已有动作或形状相接，不新增梦境层。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain subject-reflection relationships through existing mirrors without duplicating characters.",
+      "text_zh": "借已有镜面保留主体与反射的关系，不复制角色。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

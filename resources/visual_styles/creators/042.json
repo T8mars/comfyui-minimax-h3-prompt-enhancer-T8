@@ -1,0 +1,24 @@
+{
+  "id": "042",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow the established path continuously with restrained handheld proximity.",
+      "text_zh": "连续跟随既有路径，以轻微手持保留贴近感。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep depth relationships readable among existing moving participants.",
+      "text_zh": "让已有多人移动在同一空间内保持前后关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

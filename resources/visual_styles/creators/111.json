@@ -1,0 +1,26 @@
+{
+  "id": "111",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Clarify layers and relative positions in existing crowd movement.",
+      "text_zh": "让已有人群运动的层次和相互位置清楚。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When allowed, follow established group movement without adding a band or animals.",
+      "text_zh": "允许时随既定群体移动，不增加乐队或动物。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

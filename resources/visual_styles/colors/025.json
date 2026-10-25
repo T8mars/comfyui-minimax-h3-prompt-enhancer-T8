@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF4500",
+      "name_en": "Orange",
+      "name_zh": "速度橙"
+    },
+    {
+      "code": "E02",
+      "hex": "#00BFFF",
+      "name_en": "Blue",
+      "name_zh": "高空蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Gold",
+      "name_zh": "英雄金"
+    },
+    {
+      "code": "E04",
+      "hex": "#DC143C",
+      "name_en": "Red",
+      "name_zh": "激情红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D1B2A, #FF6B00, #1E90FF. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D1B2A, #FF6B00, #1E90FF；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "025",
+  "lighting_notes": {
+    "en": "Motivated backlight and brighter highlights without losing detail.",
+    "zh": "有动机的背光与较亮高光，避免淹没细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D1B2A",
+      "name_en": "Blue",
+      "name_zh": "深蓝夜幕",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#FF6B00",
+      "name_en": "Orange",
+      "name_zh": "烈焰橙",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#1E90FF",
+      "name_en": "Blue",
+      "name_zh": "电光蓝",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#DAA520",
+      "name_en": "Gold",
+      "name_zh": "暖金阳光",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#8B0000",
+      "name_en": "Red",
+      "name_zh": "深红行动",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#F5DEB3",
+      "name_en": "Color 6",
+      "name_zh": "小麦肤",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

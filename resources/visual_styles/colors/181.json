@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8D6E63",
+      "name_en": "日常禅意",
+      "name_zh": "日常禅意"
+    },
+    {
+      "code": "E02",
+      "hex": "#BCAAA4",
+      "name_en": "温暖亲情",
+      "name_zh": "温暖亲情"
+    },
+    {
+      "code": "E03",
+      "hex": "#78909C",
+      "name_en": "物哀之美",
+      "name_zh": "物哀之美"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFF9C4",
+      "name_en": "时光温柔",
+      "name_zh": "时光温柔"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8D6E63, #BCAAA4, #546E7A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8D6E63, #BCAAA4, #546E7A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "181",
+  "lighting_notes": {
+    "en": "Soft interior light retaining window-light direction.",
+    "zh": "柔和室内光，保持窗光方向。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8D6E63",
+      "name_en": "Tatami Brown",
+      "name_zh": "榻榻米棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#BCAAA4",
+      "name_en": "Washi Beige",
+      "name_zh": "和纸米",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78909C",
+      "name_en": "Garden Gray",
+      "name_zh": "庭院灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#A1887F",
+      "name_en": "Wood Brown",
+      "name_zh": "木造棕",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFF9C4",
+      "name_en": "Warm Lamp Yellow",
+      "name_zh": "暖灯黄",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#546E7A",
+      "name_en": "Twilight Blue Gray",
+      "name_zh": "暮蓝灰",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

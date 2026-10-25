@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#D4782A",
+      "name_en": "Black Hole Warm Orange",
+      "name_zh": "黑洞暖橙"
+    },
+    {
+      "code": "E02",
+      "hex": "#0F1418",
+      "name_en": "Batman Black",
+      "name_zh": "蝙蝠侠黑"
+    },
+    {
+      "code": "E03",
+      "hex": "#B8864A",
+      "name_en": "Dream Amber",
+      "name_zh": "梦境琥珀"
+    },
+    {
+      "code": "E04",
+      "hex": "#A0A8B0",
+      "name_en": "Time Gray-White",
+      "name_zh": "时间灰白"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0C1420, #2A4060, #6E7580. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0C1420, #2A4060, #6E7580；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "038",
+  "lighting_notes": {
+    "en": "A stronger directional key with clear tonal volume.",
+    "zh": "较强定向主光，保持清楚的明暗体积。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0C1420",
+      "name_en": "IMAX Deep Space Blue-Black",
+      "name_zh": "IMAX深空蓝黑",
+      "share": 0.3
+    },
+    {
+      "code": "C02",
+      "hex": "#2A4060",
+      "name_en": "Cold Steel Blue",
+      "name_zh": "冷钢蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#6E7580",
+      "name_en": "Architectural Gray",
+      "name_zh": "建筑灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C9A44C",
+      "name_en": "Cornfield Gold",
+      "name_zh": "玉米金",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#7A5C3E",
+      "name_en": "Warm Brown Wood",
+      "name_zh": "暖棕木色",
+      "share": 0.11
+    },
+    {
+      "code": "C06",
+      "hex": "#060A10",
+      "name_en": "Void Ink Black",
+      "name_zh": "虚空墨黑",
+      "share": 0.09
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

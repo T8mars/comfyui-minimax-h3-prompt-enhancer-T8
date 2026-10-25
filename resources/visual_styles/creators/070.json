@@ -1,0 +1,26 @@
+{
+  "id": "070",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Make the stages of existing everyday work visible without symbolic additions.",
+      "text_zh": "让已有日常劳作的步骤可见，不附加象征物。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Retain established waiting and natural action without inventing plot events.",
+      "text_zh": "保留既有静候和自然动作，不为推进剧情新增事件。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

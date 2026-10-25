@@ -1,0 +1,25 @@
+{
+  "id": "159",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe scale differences from an allowed low or close viewpoint without shrinking characters.",
+      "text_zh": "从已允许的低位或近处观察尺度差，不缩小角色。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Examine existing small objects in relation to their surroundings without a new world.",
+      "text_zh": "近看既有微小物件与环境关系，不引入新世界。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

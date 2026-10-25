@@ -1,0 +1,25 @@
+{
+  "id": "078",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow established action continuously without unmotivated restaging.",
+      "text_zh": "长时间跟随既有行动，避免无动机重新摆拍。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Retain the subject's relation to the existing work or living environment.",
+      "text_zh": "保留人物与已有工作或居住环境的关联。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

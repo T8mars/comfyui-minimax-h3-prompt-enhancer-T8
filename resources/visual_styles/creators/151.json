@@ -1,0 +1,26 @@
+{
+  "id": "151",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use the record's slow approach to existing subject and texture without changing production medium.",
+      "text_zh": "用同条模板缓推观察已有主体与材质，不切换制作媒介。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow established action gently when allowed without adding fantasy characters.",
+      "text_zh": "允许时平缓跟随既有动作，不新增奇幻角色。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

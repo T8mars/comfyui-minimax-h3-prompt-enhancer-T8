@@ -1,0 +1,25 @@
+{
+  "id": "063",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When permitted, pan or move laterally to connect existing spatial positions.",
+      "text_zh": "允许时连续横移或环摇，交代已有空间的相互位置。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve sustained observation within the requested duration without adding historical shifts.",
+      "text_zh": "在既定时长内保留长观察，不自动添加年代转换。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

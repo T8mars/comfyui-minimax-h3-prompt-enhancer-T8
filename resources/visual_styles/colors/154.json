@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E53935",
+      "name_en": "英雄正义",
+      "name_zh": "英雄正义"
+    },
+    {
+      "code": "E02",
+      "hex": "#1565C0",
+      "name_en": "责任担当",
+      "name_zh": "责任担当"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFA000",
+      "name_en": "复古怀旧",
+      "name_zh": "复古怀旧"
+    },
+    {
+      "code": "E04",
+      "hex": "#78909C",
+      "name_en": "机械美学",
+      "name_zh": "机械美学"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E53935, #1565C0, #FFF9C4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E53935, #1565C0, #FFF9C4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "154",
+  "lighting_notes": {
+    "en": "Gentle warm key light retaining environmental layers.",
+    "zh": "温和暖主光，保留环境层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E53935",
+      "name_en": "Super Red",
+      "name_zh": "超人红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#1565C0",
+      "name_en": "Hero Blue",
+      "name_zh": "英雄蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFA000",
+      "name_en": "Retro Orange Yellow",
+      "name_zh": "复古橙黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#78909C",
+      "name_en": "Metal Gray",
+      "name_zh": "金属灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2E7D32",
+      "name_en": "Hero Green",
+      "name_zh": "英雄绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1493",
+      "name_en": "Pink",
+      "name_zh": "霓虹粉"
+    },
+    {
+      "code": "E02",
+      "hex": "#00FFFF",
+      "name_en": "Cyan",
+      "name_zh": "电子青"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Gold",
+      "name_zh": "回忆金"
+    },
+    {
+      "code": "E04",
+      "hex": "#8B0000",
+      "name_en": "Red",
+      "name_zh": "暗血红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A0A1F, #C41E3A, #006B54. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A0A1F, #C41E3A, #006B54；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "022",
+  "lighting_notes": {
+    "en": "Localized soft colored fill with skin separated from the environment.",
+    "zh": "局部柔和色光，肤色与环境保持分离。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A0A1F",
+      "name_en": "Purple",
+      "name_zh": "午夜深紫",
+      "share": 0.3
+    },
+    {
+      "code": "C02",
+      "hex": "#C41E3A",
+      "name_en": "Red",
+      "name_zh": "霓虹正红",
+      "share": 0.15
+    },
+    {
+      "code": "C03",
+      "hex": "#006B54",
+      "name_en": "Green",
+      "name_zh": "墨绿翡翠",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#F4A460",
+      "name_en": "Yellow",
+      "name_zh": "暖沙黄",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#4169E1",
+      "name_en": "Blue",
+      "name_zh": "霓虹蓝",
+      "share": 0.13
+    },
+    {
+      "code": "C06",
+      "hex": "#FFDAB9",
+      "name_en": "Color 6",
+      "name_zh": "蜜桃肤",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

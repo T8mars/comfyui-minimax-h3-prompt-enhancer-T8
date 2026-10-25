@@ -1,0 +1,26 @@
+{
+  "id": "196",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe existing behavior handheld without adding political symbols or regional settings.",
+      "text_zh": "以手持观察既有行为，不新增政治符号或地域背景。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow approach while retaining spatial relationships.",
+      "text_zh": "用本条缓推模板接近已有目标，保持空间关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

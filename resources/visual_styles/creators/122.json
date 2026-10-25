@@ -1,0 +1,25 @@
+{
+  "id": "122",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep established opposing positions and action axes readable.",
+      "text_zh": "把已给对峙双方的位置与动作轴保留在可读范围。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Present existing action preparation and outcome without automatic slow motion or added weapons.",
+      "text_zh": "完整呈现已有动作的准备与结果，不擅自慢放或添枪械。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

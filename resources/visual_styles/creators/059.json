@@ -1,0 +1,25 @@
+{
+  "id": "059",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Stay wide and close to the existing subject with permitted continuous movement.",
+      "text_zh": "广角贴近既有主体，在允许范围内保持连贯运动。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the subject and existing natural surroundings in a readable depth relationship.",
+      "text_zh": "把主体与已有自然环境置于同一可读深度关系。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded",
+    "source_role_corrected"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

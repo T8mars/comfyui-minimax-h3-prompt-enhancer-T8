@@ -1,0 +1,25 @@
+{
+  "id": "190",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve existing sustained states through slow observation without adding supernatural events.",
+      "text_zh": "用慢观察保留已有持续状态，不新增超自然事件。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Approach existing surroundings or subjects slowly without turning them into dreams.",
+      "text_zh": "缓慢接近已有环境或主体，不改成梦境。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

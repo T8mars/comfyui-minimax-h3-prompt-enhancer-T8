@@ -1,0 +1,24 @@
+{
+  "id": "046",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Push gently toward the subject while retaining established spatial distances.",
+      "text_zh": "温和推近已有主体，维持双方或主体与空间的距离。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use shallow portrait depth when allowed without requiring a camera gaze.",
+      "text_zh": "允许时用浅景深肖像突出主体，不强制直视镜头。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

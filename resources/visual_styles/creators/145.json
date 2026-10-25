@@ -1,0 +1,26 @@
+{
+  "id": "145",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Organize the camera along established movement without automatic deformation.",
+      "text_zh": "顺着既定运动轨迹组织机位，不让形体自动变形。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing perspective to emphasize motion direction without changing medium.",
+      "text_zh": "用已有空间透视强调运动方向，不强改媒介。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

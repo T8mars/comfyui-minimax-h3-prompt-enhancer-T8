@@ -1,0 +1,24 @@
+{
+  "id": "006",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use frontal centering to emphasize existing pose contours and spacing.",
+      "text_zh": "以正面居中构图强调已有姿态的轮廓与间距。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use a restrained push or fixed observation without imposing a freeze ending.",
+      "text_zh": "低速推近或固定观察，不把结尾变成停格。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

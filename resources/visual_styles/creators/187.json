@@ -1,0 +1,25 @@
+{
+  "id": "187",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe existing everyday actions handheld without social-event additions.",
+      "text_zh": "手持纪实观察既有生活动作，不新增社会事件。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain real subject-environment distances without identity changes.",
+      "text_zh": "保持原有人物与环境的实际距离，不改变角色身份。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

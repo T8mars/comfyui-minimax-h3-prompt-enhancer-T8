@@ -1,0 +1,25 @@
+{
+  "id": "076",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow an existing participant closely while keeping the recipient perceptible.",
+      "text_zh": "近距离跟随已有角色，保持接收者仍可感知。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Clarify individual positions in an existing group without inventing conflict.",
+      "text_zh": "在已有群体场面中交代个人位置，不创造冲突。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

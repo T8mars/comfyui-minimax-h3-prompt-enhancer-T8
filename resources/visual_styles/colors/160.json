@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#00B0FF",
+      "name_en": "数码世界",
+      "name_zh": "数码世界"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFA726",
+      "name_en": "夏日青春",
+      "name_zh": "夏日青春"
+    },
+    {
+      "code": "E03",
+      "hex": "#66BB6A",
+      "name_en": "家庭温暖",
+      "name_zh": "家庭温暖"
+    },
+    {
+      "code": "E04",
+      "hex": "#AB47BC",
+      "name_en": "奇幻成长",
+      "name_zh": "奇幻成长"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #00B0FF, #FFA726, #FFF9C4. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #00B0FF, #FFA726, #FFF9C4；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "160",
+  "lighting_notes": {
+    "en": "Existing local sources with soft subject fill.",
+    "zh": "既有局部光与柔和主体填充。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#00B0FF",
+      "name_en": "Digital Blue",
+      "name_zh": "数码蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFA726",
+      "name_en": "Summer Orange",
+      "name_zh": "夏日橙",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#66BB6A",
+      "name_en": "Summer Green",
+      "name_zh": "夏日绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#AB47BC",
+      "name_en": "Fantasy Purple",
+      "name_zh": "奇幻紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#EF5350",
+      "name_en": "Wolf Girl Red",
+      "name_zh": "狼女红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Sunshine Yellow",
+      "name_zh": "阳光黄",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

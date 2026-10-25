@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6B6B",
+      "name_en": "Flesh Pink Red",
+      "name_zh": "血肉粉红"
+    },
+    {
+      "code": "E02",
+      "hex": "#6B8E23",
+      "name_en": "Pathological Green",
+      "name_zh": "病变绿"
+    },
+    {
+      "code": "E03",
+      "hex": "#4682B4",
+      "name_en": "Tech Blue",
+      "name_zh": "科技蓝"
+    },
+    {
+      "code": "E04",
+      "hex": "#DEB887",
+      "name_en": "Nude Beige",
+      "name_zh": "裸肤色"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #2C3639, #6B7F73, #8B3A3A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #2C3639, #6B7F73, #8B3A3A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "008",
+  "lighting_notes": {
+    "en": "Diffuse key light with selective harder detail light.",
+    "zh": "漫射主光配局部硬光，保留表面纹理。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#2C3639",
+      "name_en": "Clinical Gray Green",
+      "name_zh": "临床灰绿",
+      "share": 0.38
+    },
+    {
+      "code": "C02",
+      "hex": "#6B7F73",
+      "name_en": "Cold Gray Green",
+      "name_zh": "冷灰绿",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#8B3A3A",
+      "name_en": "Flesh Dark Red",
+      "name_zh": "血肉暗红",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#D4A574",
+      "name_en": "Flesh Tone Beige",
+      "name_zh": "肉肤色",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#3D5A50",
+      "name_en": "Deep Fungus Green",
+      "name_zh": "深菌绿",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#B8A082",
+      "name_en": "Parchment Brown",
+      "name_zh": "羊皮纸棕",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

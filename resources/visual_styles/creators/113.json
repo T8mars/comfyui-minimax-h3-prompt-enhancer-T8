@@ -1,0 +1,25 @@
+{
+  "id": "113",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing bodily movement with readable trajectories without adding dance.",
+      "text_zh": "跟随已有身体运动保持动作轨迹可读，不新增舞蹈。"
+    },
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "At permitted cuts, connect existing poses without changing event order.",
+      "text_zh": "允许切镜时用已有姿态衔接，不改变事件顺序。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "102",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "When permitted, emphasize existing perspective with wide and tilted views.",
+      "text_zh": "允许时用广角和倾斜视角强调已有空间透视。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Layer existing foreground and background without adding machinery or clutter.",
+      "text_zh": "以已有前后景层叠组织画面，不添加机械或杂物。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

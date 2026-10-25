@@ -1,0 +1,24 @@
+{
+  "id": "049",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use the existing horizon and open space to establish subject scale.",
+      "text_zh": "用既有地平线和宽阔空间突出主体所处尺度。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Observe existing everyday action steadily, preserving the requested waiting interval.",
+      "text_zh": "固定观察既有生活动作，让等待保持原长度。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

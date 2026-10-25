@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFAB00",
+      "name_en": "Fire Orange-Yellow",
+      "name_zh": "火焰橙黄"
+    },
+    {
+      "code": "E02",
+      "hex": "#1A237E",
+      "name_en": "Night Indigo",
+      "name_zh": "夜幕靛蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#76FF03",
+      "name_en": "Toxic Green",
+      "name_zh": "毒雾绿"
+    },
+    {
+      "code": "E04",
+      "hex": "#795548",
+      "name_en": "Rust Brown Decay",
+      "name_zh": "锈褐decay"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E65100, #3E2723, #C62828. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E65100, #3E2723, #C62828；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "032",
+  "lighting_notes": {
+    "en": "Direct hard light with strong tonal boundaries.",
+    "zh": "直接硬光，保留强亮暗边界。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E65100",
+      "name_en": "Desert Orange",
+      "name_zh": "沙漠橙",
+      "share": 0.26
+    },
+    {
+      "code": "C02",
+      "hex": "#C62828",
+      "name_en": "Blazing Red",
+      "name_zh": "烈焰红",
+      "share": 0.15
+    },
+    {
+      "code": "C03",
+      "hex": "#0D47A1",
+      "name_en": "Deep Sky Blue",
+      "name_zh": "天空深蓝",
+      "share": 0.14
+    },
+    {
+      "code": "C04",
+      "hex": "#8D6E2F",
+      "name_en": "Dust Storm Ochre",
+      "name_zh": "尘暴赭",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#CFD8DC",
+      "name_en": "Chrome War Paint",
+      "name_zh": "铬银战妆",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#3E2723",
+      "name_en": "Wasteland Dark Brown",
+      "name_zh": "废土深棕",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "084",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Explore existing space through graceful continuous movement.",
+      "text_zh": "以优雅连续运动探索既有空间。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain the subject's place in the wider existing environment without changing historical context.",
+      "text_zh": "保持大环境与已有主体的相互位置，不更换历史背景。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

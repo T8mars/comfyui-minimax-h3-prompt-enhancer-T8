@@ -1,0 +1,26 @@
+{
+  "id": "074",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action handheld at close range without losing direction.",
+      "text_zh": "从近处手持跟随既有行动，不丢失方向。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep key hands and action targets visible within compact close framing.",
+      "text_zh": "紧凑近景保留关键手部与行动目标。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded",
+    "source_role_corrected"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

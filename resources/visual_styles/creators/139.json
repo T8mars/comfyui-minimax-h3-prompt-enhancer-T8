@@ -1,0 +1,25 @@
+{
+  "id": "139",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing vertical levels to establish positions without adding social identities.",
+      "text_zh": "用现有上下层空间交代人物位置，不增设社会身份。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Let spatial distance express established relationships without adding class conflict.",
+      "text_zh": "让空间距离承载原有关系，不创造阶级冲突。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

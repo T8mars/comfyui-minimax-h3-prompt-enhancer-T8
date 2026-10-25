@@ -1,0 +1,24 @@
+{
+  "id": "030",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing nested frames and symmetrical passages to preserve spatial order.",
+      "text_zh": "用既有框中框和对称通道保持空间秩序。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Approach the established subject slowly without inventing mutation.",
+      "text_zh": "缓慢接近已有观察对象，不发明异变。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

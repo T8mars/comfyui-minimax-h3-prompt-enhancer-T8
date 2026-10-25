@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#64B5F6",
+      "name_en": "梦幻想象",
+      "name_zh": "梦幻想象"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "温暖回忆",
+      "name_zh": "温暖回忆"
+    },
+    {
+      "code": "E03",
+      "hex": "#F48FB1",
+      "name_en": "纯真爱情",
+      "name_zh": "纯真爱情"
+    },
+    {
+      "code": "E04",
+      "hex": "#A1887F",
+      "name_en": "忧伤怀念",
+      "name_zh": "忧伤怀念"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #64B5F6, #FFCC80, #5C6BC0. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #64B5F6, #FFCC80, #5C6BC0；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "104",
+  "lighting_notes": {
+    "en": "Soft diffuse light retaining object texture.",
+    "zh": "柔和漫射光，保留物件质感。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#64B5F6",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFCC80",
+      "name_en": "Cream Yellow",
+      "name_zh": "奶油黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#A1887F",
+      "name_en": "Mocha Brown",
+      "name_zh": "摩卡棕",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#81C784",
+      "name_en": "Mint Green",
+      "name_zh": "薄荷绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#F48FB1",
+      "name_en": "Rose Pink",
+      "name_zh": "玫瑰粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#5C6BC0",
+      "name_en": "Indigo",
+      "name_zh": "靛蓝",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

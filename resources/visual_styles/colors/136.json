@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#0D47A1",
+      "name_en": "绅士风度",
+      "name_zh": "绅士风度"
+    },
+    {
+      "code": "E02",
+      "hex": "#C62828",
+      "name_en": "暴力优雅",
+      "name_zh": "暴力优雅"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD600",
+      "name_en": "金士荣耀",
+      "name_zh": "金士荣耀"
+    },
+    {
+      "code": "E04",
+      "hex": "#4A148C",
+      "name_en": "酷感神秘",
+      "name_zh": "酷感神秘"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D47A1, #C62828, #78909C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D47A1, #C62828, #78909C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "136",
+  "lighting_notes": {
+    "en": "Motivated localized colored light.",
+    "zh": "有动机的局部色光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D47A1",
+      "name_en": "Suit Blue",
+      "name_zh": "西装蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#C62828",
+      "name_en": "Gentleman Blood Red",
+      "name_zh": "绅士血",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD600",
+      "name_en": "Kingsman Gold",
+      "name_zh": "金士曼金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#4A148C",
+      "name_en": "Kingsman Purple",
+      "name_zh": "王牌紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#000000",
+      "name_en": "Tuxedo Black",
+      "name_zh": "燕尾黑",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#78909C",
+      "name_en": "Cold Steel Gray",
+      "name_zh": "冷钢灰",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

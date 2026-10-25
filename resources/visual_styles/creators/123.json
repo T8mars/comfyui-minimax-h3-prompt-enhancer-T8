@@ -1,0 +1,26 @@
+{
+  "id": "123",
+  "methods": [
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep established group positions and speaking relationships readable.",
+      "text_zh": "让已有群像的相对位置与发言关系可读。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When allowed, push or follow the existing subject without adding a monologue.",
+      "text_zh": "允许时缓推或跟随既有主体，不添加独白。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

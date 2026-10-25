@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#E30613",
+      "name_en": "Almodóvar Red",
+      "name_zh": "阿莫多瓦红"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFB347",
+      "name_en": "Orange Yellow",
+      "name_zh": "橙黄"
+    },
+    {
+      "code": "E03",
+      "hex": "#4169E1",
+      "name_en": "Royal Blue",
+      "name_zh": "皇家蓝"
+    },
+    {
+      "code": "E04",
+      "hex": "#FF69B4",
+      "name_en": "Hot Pink",
+      "name_zh": "热粉"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E30613, #FFB347, #4169E1. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E30613, #FFB347, #4169E1；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "088",
+  "lighting_notes": {
+    "en": "Separate saturated local sources from readable subject key light.",
+    "zh": "饱和局部光源与可读主体主光分开。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E30613",
+      "name_en": "Almodóvar Red",
+      "name_zh": "阿莫多瓦红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FFB347",
+      "name_en": "Orange Yellow",
+      "name_zh": "橙黄",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#4169E1",
+      "name_en": "Royal Blue",
+      "name_zh": "皇家蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#32CD32",
+      "name_en": "Lime Green",
+      "name_zh": "酸橙绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FF69B4",
+      "name_en": "Hot Pink",
+      "name_zh": "热粉",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#8B4513",
+      "name_en": "Wood Brown",
+      "name_zh": "木棕",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

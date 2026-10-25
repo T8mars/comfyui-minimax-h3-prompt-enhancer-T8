@@ -1,0 +1,24 @@
+{
+  "id": "019",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Push toward an established uncertain target, respecting its original reveal timing.",
+      "text_zh": "向已有可疑目标缓推，信息出现时间服从原稿。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Limit visibility through existing doorframes or corridor depth.",
+      "text_zh": "用已有门框或走廊深度限制可见范围。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

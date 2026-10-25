@@ -1,0 +1,26 @@
+{
+  "id": "104",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Examine existing small-scale objects using real scale differences, without adding models.",
+      "text_zh": "近看已有小尺度物件，利用真实尺度差，不新增模型。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Compare before-and-after states only for an established repetition, without inventing a loop.",
+      "text_zh": "只在原稿已有重复时对照前后状态，不发明循环。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

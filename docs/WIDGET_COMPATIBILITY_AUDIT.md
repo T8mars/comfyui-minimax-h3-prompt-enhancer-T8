@@ -16,6 +16,36 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-10-25: independent color and creator styles
+
+Append two helpers after the old 36 nodes. Color saves exactly mode/palette/scope;
+creator saves mode/creator. All five fields are socketless native combos; each
+helper adds one double-nonserializing browse button (actual full widget counts
+4/3). Named and exact positional restoration is synchronous, including reordered
+runtime controls and unknown historical labels; malformed action tails cannot
+enable a style. Main H3/Seedance keep 38 saved fields and six/one outputs, appending
+only two optional lazy config sockets. No MOSS or other target receives them.
+
+Frozen old request messages are byte-identical for None/Off. A narrow AST
+projection verifies every other prior H3/Seedance statement and schema prefix,
+not just selected widget names. Normal execution validates the finite config and
+packaged resource hash before a new checkpoint/provider request. Restore skips
+new lazy producers and keeps historical finite metadata; it does not remap old
+IDs to new content or bypass the host's whole-graph static validation.
+
+Owned CPU queues exercise four arms per target at 3600 seconds, helper caches,
+external typed producers, simulated catalog fingerprint changes through the
+actual V3 hook, poisoned lazy restoration and invalid-config preflight retaining
+the old checkpoint. This is cache-invalidation evidence, not a promise of live
+resource hot reload; upgrade/restart remains the deployment policy.
+
+Owned native Chrome checks full 4/3 widgets, old 38-field save/reload, mode-cycle
+height stability, typed disconnect/reconnect, all three independent examples and
+six native-exported queues, local search/preview/apply, delayed reverse responses,
+workflow switching, native subgraph ownership and deleted-node replacement. The
+two helpers and browser use zero model calls; loopback responses prove engineering
+contracts, not actual LLM compliance or rendered-video improvement.
+
 ### 2026-10-23: opt-in MOSS authoring and visible character limit
 
 Retain the 27 MOSS names as an immutable prefix; append only `authoring_profile`

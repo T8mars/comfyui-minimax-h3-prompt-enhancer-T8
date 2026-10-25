@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#000000",
+      "name_en": "少年叛逆",
+      "name_zh": "少年叛逆"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "浪漫怀旧",
+      "name_zh": "浪漫怀旧"
+    },
+    {
+      "code": "E03",
+      "hex": "#C62828",
+      "name_en": "爱情热烈",
+      "name_zh": "爱情热烈"
+    },
+    {
+      "code": "E04",
+      "hex": "#78909C",
+      "name_en": "巴黎忧郁",
+      "name_zh": "巴黎忧郁"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #000000, #8D6E63, #FFFFFF. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #000000, #8D6E63, #FFFFFF；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "162",
+  "lighting_notes": {
+    "en": "Clear tonal layers without forced monochrome.",
+    "zh": "清楚明暗层次，不强制黑白。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#000000",
+      "name_en": "New Wave Black",
+      "name_zh": "新浪潮黑",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8D6E63",
+      "name_en": "Paris Brown",
+      "name_zh": "巴黎棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Nostalgic Yellow",
+      "name_zh": "怀旧黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#78909C",
+      "name_en": "Paris Gray",
+      "name_zh": "巴黎灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#C62828",
+      "name_en": "Jules Red",
+      "name_zh": "朱尔红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFFFFF",
+      "name_en": "Cinema White",
+      "name_zh": "电影白",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "182",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Connect existing action through continuous lateral observation without extra cuts.",
+      "text_zh": "以连续横向观察连接既有行动，不自动拆成多镜。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain existing lateral spatial layers like an unfolding view without changing period.",
+      "text_zh": "像展开画卷般保留已有空间的横向层次，不更换时代。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

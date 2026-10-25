@@ -1,0 +1,25 @@
+{
+  "id": "061",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Explore existing space with a slow lateral move, retaining layered depth.",
+      "text_zh": "缓慢横移探索已有空间，保留前中后景关系。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Sustain the established state and let its visible small changes unfold.",
+      "text_zh": "延续既定持续状态，让可见的细微变化自然发生。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

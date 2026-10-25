@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8F00",
+      "name_en": "温暖幽默",
+      "name_zh": "温暖幽默"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E7D32",
+      "name_en": "自然温情",
+      "name_zh": "自然温情"
+    },
+    {
+      "code": "E03",
+      "hex": "#E91E63",
+      "name_en": "怪诞可爱",
+      "name_zh": "怪诞可爱"
+    },
+    {
+      "code": "E04",
+      "hex": "#6A1B9A",
+      "name_en": "奇幻冒险",
+      "name_zh": "奇幻冒险"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8F00, #2E7D32, #6A1B9A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8F00, #2E7D32, #6A1B9A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "168",
+  "lighting_notes": {
+    "en": "Gentle natural key light.",
+    "zh": "温和自然主光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8F00",
+      "name_en": "NZ Orange",
+      "name_zh": "新西兰橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#2E7D32",
+      "name_en": "Maori Green",
+      "name_zh": "毛利绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Sunshine Gold",
+      "name_zh": "阳光金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#E91E63",
+      "name_en": "Comedy Pink",
+      "name_zh": "幽默粉",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#00BCD4",
+      "name_en": "Ocean Teal",
+      "name_zh": "海洋青",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#6A1B9A",
+      "name_en": "Thor Purple",
+      "name_zh": "雷神紫",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

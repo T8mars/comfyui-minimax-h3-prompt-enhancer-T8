@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#00B4D8",
+      "name_en": "Electric Blue",
+      "name_zh": "电光蓝"
+    },
+    {
+      "code": "E02",
+      "hex": "#E63946",
+      "name_en": "Explosive Red",
+      "name_zh": "爆裂红"
+    },
+    {
+      "code": "E03",
+      "hex": "#9D4EDD",
+      "name_en": "Psychedelic Purple",
+      "name_zh": "迷幻紫"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD60A",
+      "name_en": "Golden Yellow",
+      "name_zh": "黄金黄"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D1B2A, #1B4965, #E63946. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D1B2A, #1B4965, #E63946；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "006",
+  "lighting_notes": {
+    "en": "Localized colored sources and hard edges with a readable subject.",
+    "zh": "局部色光与硬边光，保持主体可辨。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D1B2A",
+      "name_en": "Deep Ocean Blue Black",
+      "name_zh": "深海暗蓝",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#1B4965",
+      "name_en": "Neon Cold Blue",
+      "name_zh": "霓虹冷蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#E63946",
+      "name_en": "Scarlet Warning Red",
+      "name_zh": "猩红警示",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#FFB703",
+      "name_en": "Electric Gold",
+      "name_zh": "电幻金",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#5F0F40",
+      "name_en": "Magenta Deep Purple",
+      "name_zh": "洋红深紫",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#F1FAEE",
+      "name_en": "Cool White Skin",
+      "name_zh": "冷白肤",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

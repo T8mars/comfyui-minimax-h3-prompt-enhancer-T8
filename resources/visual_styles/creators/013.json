@@ -1,0 +1,24 @@
+{
+  "id": "013",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use controlled handheld proximity to follow existing movement readably.",
+      "text_zh": "以受控手持贴近原有移动，保持动作可辨。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain surroundings from an established street-level or in-vehicle viewpoint.",
+      "text_zh": "从已有街道或车内观察位置保留周围环境。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

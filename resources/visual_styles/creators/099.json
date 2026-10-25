@@ -1,0 +1,25 @@
+{
+  "id": "099",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing frames and negative space to retain subject-environment distance.",
+      "text_zh": "借已有框景和负空间保留人物与环境的距离。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Observe existing everyday action steadily without adding plot turns.",
+      "text_zh": "静观既有日常行动，不增剧情转折。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

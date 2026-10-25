@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#A0522D",
+      "name_en": "Ochre Red Anger",
+      "name_zh": "赭红愤怒"
+    },
+    {
+      "code": "E02",
+      "hex": "#556B2F",
+      "name_en": "Olive Drab Green",
+      "name_zh": "橄榄军绿"
+    },
+    {
+      "code": "E03",
+      "hex": "#DEB887",
+      "name_en": "Warm Gold Tenderness",
+      "name_zh": "暖金温柔"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F4F4F",
+      "name_en": "Cold Steel Grey",
+      "name_zh": "冷钢灰"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #3D2817, #8B6239, #6B4423. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #3D2817, #8B6239, #6B4423；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "047",
+  "lighting_notes": {
+    "en": "Directional soft side light with nuanced tonal layers.",
+    "zh": "有方向的柔侧光，保留细腻明暗层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#3D2817",
+      "name_en": "Deep Brown Oil Painting",
+      "name_zh": "深棕油画",
+      "share": 0.25
+    },
+    {
+      "code": "C02",
+      "hex": "#8B6239",
+      "name_en": "Ochre Warm Skin",
+      "name_zh": "赭石暖肤",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#6B4423",
+      "name_en": "Earthy Red-Brown",
+      "name_zh": "泥土红棕",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#B8860B",
+      "name_en": "Dark Gold Historical",
+      "name_zh": "暗金历史",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#2C2418",
+      "name_en": "Warm Brown Ink Black",
+      "name_zh": "暖棕墨黑",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#D4A574",
+      "name_en": "Warm Earth Gold",
+      "name_zh": "暖土金",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#00FF00",
+      "name_en": "Green",
+      "name_zh": "夜视绿"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF4500",
+      "name_en": "Orange",
+      "name_zh": "爆炸橙"
+    },
+    {
+      "code": "E03",
+      "hex": "#708090",
+      "name_en": "Gray",
+      "name_zh": "战术灰"
+    },
+    {
+      "code": "E04",
+      "hex": "#DAA520",
+      "name_en": "Gold",
+      "name_zh": "沙漠金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0F1B0F, #4A5D23, #C4A35A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0F1B0F, #4A5D23, #C4A35A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "024",
+  "lighting_notes": {
+    "en": "Available light retaining the edges of direct daylight.",
+    "zh": "自然可用光，保留直接日光的边缘。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0F1B0F",
+      "name_en": "Green",
+      "name_zh": "夜视深绿",
+      "share": 0.3
+    },
+    {
+      "code": "C02",
+      "hex": "#4A5D23",
+      "name_en": "Green",
+      "name_zh": "军绿橄榄",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#C4A35A",
+      "name_en": "Yellow",
+      "name_zh": "沙漠土黄",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#1E3A5F",
+      "name_en": "Blue",
+      "name_zh": "战术冷蓝",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#8B0000",
+      "name_en": "Red",
+      "name_zh": "暗红血锈",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#B8A88A",
+      "name_en": "Color 6",
+      "name_zh": "沙尘肤",
+      "share": 0.13
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

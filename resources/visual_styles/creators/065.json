@@ -1,0 +1,25 @@
+{
+  "id": "065",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use a fixed viewpoint and existing frames to relate subject and unoccupied space.",
+      "text_zh": "用固定机位与已有门框呈现主体和空置空间。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve established waiting or solitude without added dialogue or action.",
+      "text_zh": "完整保留已有等待或独处，不补对白或动作。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

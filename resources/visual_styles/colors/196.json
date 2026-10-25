@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#C62828",
+      "name_en": "革命激情",
+      "name_zh": "革命激情"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD54F",
+      "name_en": "生命坚韧",
+      "name_zh": "生命坚韧"
+    },
+    {
+      "code": "E03",
+      "hex": "#1565C0",
+      "name_en": "自由渴望",
+      "name_zh": "自由渴望"
+    },
+    {
+      "code": "E04",
+      "hex": "#2E7D32",
+      "name_en": "希望绿意",
+      "name_zh": "希望绿意"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C62828, #FFD54F, #1565C0. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C62828, #FFD54F, #1565C0；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "196",
+  "lighting_notes": {
+    "en": "Localized colored key light with readable key content.",
+    "zh": "局部有色主光，关键内容可读。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C62828",
+      "name_en": "Revolution Red",
+      "name_zh": "革命红",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#FFD54F",
+      "name_en": "Desert Gold",
+      "name_zh": "沙漠金",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#1565C0",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#2E7D32",
+      "name_en": "Life Green",
+      "name_zh": "生命绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#6D4C41",
+      "name_en": "Land Brown",
+      "name_zh": "土地棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FF6D00",
+      "name_en": "Sunset Orange",
+      "name_zh": "落日橙",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

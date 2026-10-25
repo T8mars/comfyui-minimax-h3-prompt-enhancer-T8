@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFE6B3",
+      "name_en": "Accent 1",
+      "name_zh": "双日辉光"
+    },
+    {
+      "code": "E02",
+      "hex": "#1A2430",
+      "name_en": "Black",
+      "name_zh": "星夜蓝黑"
+    },
+    {
+      "code": "E03",
+      "hex": "#E07030",
+      "name_en": "Orange",
+      "name_zh": "熔岩橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#B8A67C",
+      "name_en": "Gold",
+      "name_zh": "旧共和国金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #E8A954, #C25A2A, #4A4035. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #E8A954, #C25A2A, #4A4035；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "054",
+  "lighting_notes": {
+    "en": "Motivated natural side-back light and practical sources.",
+    "zh": "有动机的自然侧背光与实景光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#E8A954",
+      "name_en": "Gold",
+      "name_zh": "塔图因砂金",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#C25A2A",
+      "name_en": "Orange",
+      "name_zh": "双日落橙",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2A3A4C",
+      "name_en": "Blue",
+      "name_zh": "深空蓝灰",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#7A6448",
+      "name_en": "Ochre",
+      "name_zh": "沙堡褐",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#D4C3A0",
+      "name_en": "Color 5",
+      "name_zh": "沙粒肤",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#4A4035",
+      "name_en": "Ochre",
+      "name_zh": "绝地褐",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

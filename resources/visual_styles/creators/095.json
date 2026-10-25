@@ -1,0 +1,25 @@
+{
+  "id": "095",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use permitted wide-angle or offset close framing to retain space around the subject.",
+      "text_zh": "用允许的广角与偏置近景保留人物周围空间。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Organize attention through existing foreground-background staging without new scenery.",
+      "text_zh": "以已有场面的舞台式前后位置组织观看，不新增布景。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

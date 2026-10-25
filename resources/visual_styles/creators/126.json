@@ -1,0 +1,26 @@
+{
+  "id": "126",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep scale relationships between the existing subject and natural space clear.",
+      "text_zh": "把已有主体与自然空间的尺度关系保留清楚。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use the record's gentle follow template without forcing flight or animation.",
+      "text_zh": "采用同条模板的平缓跟随，不强制飞行或变为动画。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

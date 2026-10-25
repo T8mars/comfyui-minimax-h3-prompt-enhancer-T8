@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#2E7D32",
+      "name_en": "阶级青苔",
+      "name_zh": "阶级青苔"
+    },
+    {
+      "code": "E02",
+      "hex": "#5D4037",
+      "name_en": "地下压抑",
+      "name_zh": "地下压抑"
+    },
+    {
+      "code": "E03",
+      "hex": "#78909C",
+      "name_en": "雨日悲伤",
+      "name_zh": "雨日悲伤"
+    },
+    {
+      "code": "E04",
+      "hex": "#C62828",
+      "name_en": "暴力爆发",
+      "name_zh": "暴力爆发"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #2E7D32, #5D4037, #263238. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #2E7D32, #5D4037, #263238；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "139",
+  "lighting_notes": {
+    "en": "Separate existing warm and cool sources while retaining skin and object colors.",
+    "zh": "已有冷暖光源分区，肤色与物件保持原样。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#2E7D32",
+      "name_en": "Moss Green",
+      "name_zh": "青苔绿",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#5D4037",
+      "name_en": "Basement Brown",
+      "name_zh": "地下室棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#78909C",
+      "name_en": "Rain Fog Gray Blue",
+      "name_zh": "雨雾灰蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C62828",
+      "name_en": "Blood Red",
+      "name_zh": "血色红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FFD54F",
+      "name_en": "Warm Gold Lamp",
+      "name_zh": "暖金灯",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#263238",
+      "name_en": "Night Blue Gray",
+      "name_zh": "深夜蓝灰",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

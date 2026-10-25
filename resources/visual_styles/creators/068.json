@@ -1,0 +1,25 @@
+{
+  "id": "068",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep the subject relatively small within the established landscape view.",
+      "text_zh": "在已有地貌宽景中保持人物尺度较小。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe established events calmly without amplifying violence.",
+      "text_zh": "以冷静观察呈现已有事件，不额外强化暴力。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

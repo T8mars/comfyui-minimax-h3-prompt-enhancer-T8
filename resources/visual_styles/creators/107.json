@@ -1,0 +1,25 @@
+{
+  "id": "107",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Concentrate attention through existing symmetrical relationships.",
+      "text_zh": "以既有对称关系集中观看重心。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Keep established action phases clear without automatic slow motion or added violence.",
+      "text_zh": "让原有动作阶段清楚呈现，不自动慢放或添加暴力。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#4A6B5C",
+      "name_en": "Morbid Green",
+      "name_zh": "病态绿"
+    },
+    {
+      "code": "E02",
+      "hex": "#D4C64A",
+      "name_en": "Rotten Yellow",
+      "name_zh": "腐朽黄"
+    },
+    {
+      "code": "E03",
+      "hex": "#2C3E50",
+      "name_en": "Abyss Blue Gray",
+      "name_zh": "深渊蓝灰"
+    },
+    {
+      "code": "E04",
+      "hex": "#7B241C",
+      "name_en": "Coagulated Blood",
+      "name_zh": "凝结血"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A2E2A, #3D4F4F, #A89C3E. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A2E2A, #3D4F4F, #A89C3E；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "002",
+  "lighting_notes": {
+    "en": "Side-back light with detail retained in dark areas.",
+    "zh": "侧逆光与保留细节的暗部层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A2E2A",
+      "name_en": "Swamp Dark Green",
+      "name_zh": "沼泽暗绿",
+      "share": 0.38
+    },
+    {
+      "code": "C02",
+      "hex": "#3D4F4F",
+      "name_en": "Sickly Gray Green",
+      "name_zh": "病灰绿",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#A89C3E",
+      "name_en": "Decay Yellow Amber",
+      "name_zh": "腐黄琥珀",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#6B7B8A",
+      "name_en": "Cold Steel Gray Blue",
+      "name_zh": "冷钢灰蓝",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#8B1A1A",
+      "name_en": "Dark Blood Red",
+      "name_zh": "暗血暗红",
+      "share": 0.09
+    },
+    {
+      "code": "C06",
+      "hex": "#C9C0A5",
+      "name_en": "Dirty Beige Skin",
+      "name_zh": "脏米肤",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

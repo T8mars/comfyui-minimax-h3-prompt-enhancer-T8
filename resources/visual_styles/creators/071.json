@@ -1,0 +1,25 @@
+{
+  "id": "071",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe an existing walking route steadily with coherent entries and exits.",
+      "text_zh": "固定观察既有行走路径，让进出画面保持连贯。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve the supplied action's full timing without extending the clip.",
+      "text_zh": "保持给定动作的完整时间，不自行延长片长。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

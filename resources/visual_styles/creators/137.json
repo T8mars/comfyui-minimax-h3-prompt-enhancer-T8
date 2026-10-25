@@ -1,0 +1,25 @@
+{
+  "id": "137",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize the existing scene as a clearly bounded pictorial whole.",
+      "text_zh": "将已有场面组织成边界清楚的整体画面。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain existing subject, background and object layers without adding exotic decoration.",
+      "text_zh": "保留既有主体、背景与物件的层次，不添加异域装饰。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

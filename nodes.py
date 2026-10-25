@@ -51,6 +51,13 @@ except ImportError:
 _SPEECH_MISSING = object()
 
 try:
+    from . import visual_styles
+    from .visual_style_nodes import ColorStyleIO, CreatorStyleIO
+except ImportError:
+    import visual_styles
+    from visual_style_nodes import ColorStyleIO, CreatorStyleIO
+
+try:
     from .storyboard_director import (T8StoryboardDirectorConfigIO, resolve_storyboard_director_config,
         storyboard_instruction, storyboard_metadata, preserve_storyboard_on_repair)
 except ImportError:
@@ -1504,6 +1511,8 @@ def _build_messages(
     speech_reference: Any = None,
     storyboard_director_config: Any = None,
     visual_marker_config: Any = None,
+    color_style_config: Any = None,
+    creator_style_config: Any = None,
 ) -> list[dict[str, Any]]:
     if isinstance(visual_marker_config, MarkerEvidence):
         marker_evidence = visual_marker_config
@@ -1574,6 +1583,9 @@ def _build_messages(
     storyboard_rule = storyboard_instruction(storyboard_director_config, "h3", fixed_shot_count=shot_count)
     if storyboard_rule:
         system_rules.append(storyboard_rule)
+    style_rule = visual_styles.visual_style_instruction(color_style_config, creator_style_config, "h3", fixed_shot_count=shot_count)
+    if style_rule:
+        system_rules.append(style_rule)
     marker_rule = visual_marker_instruction(marker_evidence)
     if marker_rule:
         system_rules.append(marker_rule)
@@ -1762,7 +1774,7 @@ def _reorder_complete_fields(text: str, task_type: str) -> str:
     return prefix + "\n\n".join(f"{field}: {sections[field]}" for field in fields)
 
 
-def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF, *, combat_camera_config=None, performance_director_config=None, storyboard_director_config=None, visual_marker_config=None):
+def _h3_language_repair_messages(text, language, relay_config, original_messages=None, director_skill=DIRECTOR_OFF, *, combat_camera_config=None, performance_director_config=None, storyboard_director_config=None, visual_marker_config=None, color_style_config=None, creator_style_config=None):
     messages = local_language_repair_messages(text, language)
     if original_messages is not None:
         messages = preserve_director_on_repair(messages, original_messages, director_skill, combat_camera_config=combat_camera_config,
@@ -1770,6 +1782,7 @@ def _h3_language_repair_messages(text, language, relay_config, original_messages
         messages = preserve_hybrid_on_repair(messages, original_messages)
         messages = preserve_storyboard_on_repair(messages, original_messages, storyboard_director_config)
         messages = preserve_visual_marker_on_repair(messages, original_messages, visual_marker_config)
+        messages = visual_styles.preserve_visual_styles_on_repair(messages, original_messages, color_style_config, creator_style_config)
         messages = preserve_speech_on_repair(messages, original_messages)
     if relay_config:
         messages[0]["content"] += (
@@ -1833,6 +1846,8 @@ def _next_relay_correction(
     combat_camera_config=None,
     performance_director_config=None,
     storyboard_director_config=None,
+    color_style_config=None,
+    creator_style_config=None,
 ):
     repair = _relay_repair_messages(text, duration, config, task_type, messages)
     if repair:
@@ -1848,7 +1863,8 @@ def _next_relay_correction(
             )
         return "language", _h3_language_repair_messages(text, language, config, messages, director_skill, combat_camera_config=combat_camera_config,
                                                        performance_director_config=performance_director_config,
-                                                       storyboard_director_config=storyboard_director_config)
+                                                       storyboard_director_config=storyboard_director_config,
+                                                       color_style_config=color_style_config, creator_style_config=creator_style_config)
     return None
 
 
@@ -1903,6 +1919,8 @@ def enhance_prompt(
     speech_reference: Any = None,
     storyboard_director_config: Any = None,
     visual_marker_config: Any = None,
+    color_style_config: Any = None,
+    creator_style_config: Any = None,
 ) -> str:
     try:
         quality_mode = normalize_quality(quality_mode)
@@ -1911,6 +1929,8 @@ def enhance_prompt(
         speech_reference = resolve_speech_reference(speech_reference)
         storyboard_director_config = resolve_storyboard_director_config(storyboard_director_config)
         visual_marker_config = resolve_visual_marker_config(visual_marker_config)
+        color_style_config = visual_styles.resolve_color_style(color_style_config)
+        creator_style_config = visual_styles.resolve_creator_style(creator_style_config)
     except ValueError as error:
         raise PromptEnhancerError(str(error)) from error
     task_type = _canonical_task_type(task_type)
@@ -2007,6 +2027,7 @@ def enhance_prompt(
                                      mode=RELAY if relay_config else NORMAL, shot_count=shot_count)
         metadata.update(camera_metadata(combat_camera_config))
         metadata.update(storyboard_metadata(storyboard_director_config))
+        metadata.update(visual_styles.style_metadata(color_style_config, creator_style_config))
         metadata.update(visual_marker_metadata(marker_evidence))
         if speech_reference is not None:
             metadata["speech_reference"] = speech_metadata(speech_reference)
@@ -2056,6 +2077,7 @@ def enhance_prompt(
                 **({"speech_reference": speech_reference} if speech_reference is not None else {}),
                 **({"storyboard_director_config": storyboard_director_config} if storyboard_director_config is not None else {}),
                 **({"visual_marker_config": marker_evidence} if marker_evidence is not None else {}),
+                **visual_styles.active_config_kwargs(color_style_config, creator_style_config),
             ), effective_local_language)
             required_visual_parts = sum(
                 1 for asset in media_plan if asset.get("kind") in {"image", "video"}
@@ -2099,6 +2121,7 @@ def enhance_prompt(
                 **({"speech_reference": speech_reference} if speech_reference is not None else {}),
                 **({"storyboard_director_config": storyboard_director_config} if storyboard_director_config is not None else {}),
                 **({"visual_marker_config": marker_evidence} if marker_evidence is not None else {}),
+                **visual_styles.active_config_kwargs(color_style_config, creator_style_config),
             ), effective_local_language)
             if any(asset.get("kind") == "video" for asset in media_plan):
                 messages[0]["content"] += (
@@ -2126,6 +2149,7 @@ def enhance_prompt(
                             combat_camera_config=combat_camera_config,
                             performance_director_config=performance_director_config,
                             storyboard_director_config=storyboard_director_config,
+                            color_style_config=color_style_config, creator_style_config=creator_style_config,
                         )
                         if correction is None:
                             break
@@ -2141,7 +2165,8 @@ def enhance_prompt(
                         _h3_language_repair_messages(response_text, effective_local_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config,
                                                     performance_director_config=performance_director_config,
                                                     storyboard_director_config=storyboard_director_config,
-                                                    visual_marker_config=visual_marker_config),
+                                                    visual_marker_config=visual_marker_config,
+                                            color_style_config=color_style_config, creator_style_config=creator_style_config),
                         temperature=0.1,
                         seed=int(seed),
                     )
@@ -2238,6 +2263,7 @@ def enhance_prompt(
             **({"speech_reference": speech_reference} if speech_reference is not None else {}),
             **({"storyboard_director_config": storyboard_director_config} if storyboard_director_config is not None else {}),
             **({"visual_marker_config": marker_evidence} if marker_evidence is not None else {}),
+            **visual_styles.active_config_kwargs(color_style_config, creator_style_config),
         ), effective_cloud_language)
         cloud_attempts: list[int] = []
         response_text = _request_completion(
@@ -2264,6 +2290,7 @@ def enhance_prompt(
                     combat_camera_config=combat_camera_config,
                     performance_director_config=performance_director_config,
                     storyboard_director_config=storyboard_director_config,
+                    color_style_config=color_style_config, creator_style_config=creator_style_config,
                 )
                 if correction is None:
                     break
@@ -2284,7 +2311,8 @@ def enhance_prompt(
                 _h3_language_repair_messages(response_text, effective_cloud_language, relay_config, messages, director_skill, combat_camera_config=combat_camera_config,
                                             performance_director_config=performance_director_config,
                                             storyboard_director_config=storyboard_director_config,
-                                            visual_marker_config=visual_marker_config),
+                                            visual_marker_config=visual_marker_config,
+                                            color_style_config=color_style_config, creator_style_config=creator_style_config),
                 rewrite_mode,
                 chat_url,
                 provider_name,
@@ -2657,6 +2685,10 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     optional=True, lazy=True, tooltip="连接 T8 分镜强化配置；未连接/关闭完全保持原行为。不限时长、不自动拆片，不增加独立规划请求；效果待验证。"),
                 VisualMarkerConfigIO.Input("visual_marker_config", display_name="空间标记增强（可选·实验） / Visual marker",
                     optional=True, lazy=True, tooltip="仅H3普通Ref2VA/Hybrid额外参考图。连接本项目空间标记配置，Prepare.marked_image仍接参考图；关闭不去框，不保证下游编号/成片效果。"),
+                ColorStyleIO.Input("color_style_config", display_name="色彩风格（可选） / Color style", optional=True, lazy=True,
+                    tooltip="连接 T8 色彩风格配置；默认关闭。配色参考而非LUT，不修改原图，不新增规划请求。"),
+                CreatorStyleIO.Input("creator_style_config", display_name="导演风格（可选） / Creator style", optional=True, lazy=True,
+                    tooltip="连接 T8 导演风格参考；不自动采用色卡，不新增剧情，不限制时长。"),
             ],
             outputs=[io.String.Output(display_name="enhanced_prompt"),
                      io.String.Output(display_name="global_prompt"),
@@ -2667,12 +2699,18 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         )
 
     @classmethod
-    def check_lazy_status(cls, speech_reference=_SPEECH_MISSING, recovery_action=RECOVERY_ACTION_NORMAL, storyboard_director_config=_SPEECH_MISSING, visual_marker_config=_SPEECH_MISSING, **kwargs):
+    def check_lazy_status(cls, speech_reference=_SPEECH_MISSING, recovery_action=RECOVERY_ACTION_NORMAL, storyboard_director_config=_SPEECH_MISSING, visual_marker_config=_SPEECH_MISSING, color_style_config=_SPEECH_MISSING, creator_style_config=_SPEECH_MISSING, **kwargs):
         if recovery_action == RECOVERY_ACTION_RESTORE:
             return []
         return (["speech_reference"] if speech_reference is None else []) + (
             ["storyboard_director_config"] if storyboard_director_config is None else []) + (
-            ["visual_marker_config"] if visual_marker_config is None else [])
+            ["visual_marker_config"] if visual_marker_config is None else []) + (
+            ["color_style_config"] if color_style_config is None else []) + (
+            ["creator_style_config"] if creator_style_config is None else [])
+
+    @classmethod
+    def fingerprint_inputs(cls, color_style_config=visual_styles.MISSING, creator_style_config=visual_styles.MISSING, recovery_action=RECOVERY_ACTION_NORMAL, **kwargs):
+        return visual_styles.consumer_fingerprint(color_style_config, creator_style_config, recovery_action)
 
     @classmethod
     def validate_inputs(
@@ -2749,6 +2787,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         speech_reference=None,
         storyboard_director_config=None,
         visual_marker_config=None,
+        color_style_config=None,
+        creator_style_config=None,
     ) -> io.NodeOutput:
         if relay_mode not in (NORMAL, RELAY):
             raise PromptEnhancerError("Unsupported Relay output mode.")
@@ -2819,6 +2859,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
             speech_reference = resolve_speech_reference(speech_reference)
             storyboard_director_config = resolve_storyboard_director_config(storyboard_director_config)
             visual_marker_config = resolve_visual_marker_config(visual_marker_config)
+            color_style_config = visual_styles.resolve_color_style(color_style_config)
+            creator_style_config = visual_styles.resolve_creator_style(creator_style_config)
             resolve_performance_mode(performance_director_config)
             director_skill, effective_shots = prepare_director_skill(director_skill, _normalize_shot_count(shot_count))
         except (DirectionalSkillError, ValueError) as error:
@@ -2828,6 +2870,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
         metadata.update(camera_metadata(combat_camera_config))
         metadata.update(performance_metadata(performance_director_config))
         metadata.update(storyboard_metadata(storyboard_director_config))
+        metadata.update(visual_styles.style_metadata(color_style_config, creator_style_config))
         if speech_reference is not None:
             metadata["speech_reference"] = speech_metadata(speech_reference)
         if _canonical_task_type(task_type) == HYBRID:
@@ -2906,6 +2949,7 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                 **({"speech_reference": speech_reference} if speech_reference is not None else {}),
                 **({"storyboard_director_config": storyboard_director_config} if storyboard_director_config is not None else {}),
                 **({"visual_marker_config": visual_marker_config} if visual_marker_config is not None else {}),
+                **visual_styles.active_config_kwargs(color_style_config, creator_style_config),
             )
             if relay_enabled:
                 compiled = compile_relay_response(result, duration_seconds, relay_config["event_count"], relay_config["time_ranges"], _canonical_task_type(task_type), _effective_output_language(output_language, official_skill_profile))

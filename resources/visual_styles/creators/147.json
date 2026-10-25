@@ -1,0 +1,26 @@
+{
+  "id": "147",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Let supplied physical actions and object relationships carry meaning without dialogue additions.",
+      "text_zh": "让已给肢体动作和物件关系承担表达，不补对白。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep actor contours readable in the existing street or space.",
+      "text_zh": "在现有街景或空间中保持行动者轮廓清楚。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

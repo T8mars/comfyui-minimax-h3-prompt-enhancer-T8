@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF4500",
+      "name_en": "Neon Orange Red",
+      "name_zh": "霓虹橙红"
+    },
+    {
+      "code": "E02",
+      "hex": "#85C1E9",
+      "name_en": "Morning Mist Blue",
+      "name_zh": "晨雾蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#D4AC0D",
+      "name_en": "Vintage Gold",
+      "name_zh": "复古金"
+    },
+    {
+      "code": "E04",
+      "hex": "#78281F",
+      "name_en": "Deep Wine Red",
+      "name_zh": "深酒红"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1C2833, #2E4053, #B7950B. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1C2833, #2E4053, #B7950B；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "012",
+  "lighting_notes": {
+    "en": "Soft light combined with side-back light and layered shadows.",
+    "zh": "柔光结合侧逆光，暗区保留层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1C2833",
+      "name_en": "Night Deep Indigo",
+      "name_zh": "夜色深靛",
+      "share": 0.38
+    },
+    {
+      "code": "C02",
+      "hex": "#2E4053",
+      "name_en": "Navy Blue Black",
+      "name_zh": "藏青蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#B7950B",
+      "name_en": "Dark Gold Amber",
+      "name_zh": "暗金琥珀",
+      "share": 0.13
+    },
+    {
+      "code": "C04",
+      "hex": "#922B21",
+      "name_en": "Deep Red Brown",
+      "name_zh": "深红棕",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#566573",
+      "name_en": "Cold Steel Gray",
+      "name_zh": "冷钢灰",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#D7BDE2",
+      "name_en": "Soft Pink Skin",
+      "name_zh": "柔粉肤",
+      "share": 0.09
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

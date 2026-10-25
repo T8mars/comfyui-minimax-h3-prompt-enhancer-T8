@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFC857",
+      "name_en": "Sacred Gold",
+      "name_zh": "神圣金"
+    },
+    {
+      "code": "E02",
+      "hex": "#7BA05B",
+      "name_en": "Meadow Green",
+      "name_zh": "草甸绿"
+    },
+    {
+      "code": "E03",
+      "hex": "#8C3A1F",
+      "name_en": "Rust Red",
+      "name_zh": "铁锈红"
+    },
+    {
+      "code": "E04",
+      "hex": "#B8D4E3",
+      "name_en": "Sky Blue",
+      "name_zh": "天空蓝"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #D4A574, #8B6F47, #F5E6C8. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #D4A574, #8B6F47, #F5E6C8；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "041",
+  "lighting_notes": {
+    "en": "Soft backlight with natural bounce fill.",
+    "zh": "柔和背光与自然反射补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#D4A574",
+      "name_en": "Wheat Gold",
+      "name_zh": "麦田金",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#8B6F47",
+      "name_en": "Earth Brown",
+      "name_zh": "大地褐",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2F4530",
+      "name_en": "Deep Forest Green",
+      "name_zh": "深林绿",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#E8D5B7",
+      "name_en": "Warm Sand Beige",
+      "name_zh": "暖沙米",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#C25A2A",
+      "name_en": "Sunset Orange",
+      "name_zh": "夕阳橙",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#F5E6C8",
+      "name_en": "Divine Light Gold",
+      "name_zh": "圣光金",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

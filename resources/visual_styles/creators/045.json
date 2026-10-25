@@ -1,0 +1,24 @@
+{
+  "id": "045",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Hold balanced framing so existing environment and subject coexist.",
+      "text_zh": "保持平衡静框，让既有环境与人物并存。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Push or track gently while preserving the natural course of existing action.",
+      "text_zh": "克制推进或轻柔跟随，保留原动作的自然过程。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

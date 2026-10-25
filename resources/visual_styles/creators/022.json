@@ -1,0 +1,24 @@
+{
+  "id": "022",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Layer existing glass, frames or reflections while preserving character relationships.",
+      "text_zh": "借已有玻璃、门框或反射分层，保持原人物关系。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "When permitted, move laterally or observe closely while preserving waiting and motion continuity.",
+      "text_zh": "允许时缓慢横移或近距离观察，维持等待与动作连续。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

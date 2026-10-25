@@ -1,0 +1,25 @@
+{
+  "id": "169",
+  "methods": [
+    {
+      "dimension": "editing",
+      "requires_cuts": true,
+      "text_en": "At permitted cuts, respond to existing action beats without extra action.",
+      "text_zh": "允许切镜时让切点响应已有动作节拍，不新增动作。"
+    },
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "For existing music, respond only to its known rhythm without claiming measured beats.",
+      "text_zh": "若已有音乐，仅让画面响应其已知节奏，不声称测得拍点。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

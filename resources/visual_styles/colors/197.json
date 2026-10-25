@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF8F00",
+      "name_en": "土地热爱",
+      "name_zh": "土地热爱"
+    },
+    {
+      "code": "E02",
+      "hex": "#2E7D32",
+      "name_en": "音乐生命力",
+      "name_zh": "音乐生命力"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFFFFF",
+      "name_en": "苦难纯洁",
+      "name_zh": "苦难纯洁"
+    },
+    {
+      "code": "E04",
+      "hex": "#8D6E63",
+      "name_en": "库尔德身份",
+      "name_zh": "库尔德身份"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF8F00, #8D6E63, #C62828. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF8F00, #8D6E63, #C62828；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "197",
+  "lighting_notes": {
+    "en": "Motivated directional natural light.",
+    "zh": "有动机的自然方向光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF8F00",
+      "name_en": "Kurdish Gold",
+      "name_zh": "库尔德金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8D6E63",
+      "name_en": "Mountain Brown",
+      "name_zh": "山野棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2E7D32",
+      "name_en": "Meadow Green",
+      "name_zh": "草原绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFFFFF",
+      "name_en": "Snow Mountain White",
+      "name_zh": "雪山白",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#78909C",
+      "name_en": "Sky Gray",
+      "name_zh": "天空灰",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#C62828",
+      "name_en": "Blood and Earth",
+      "name_zh": "血与土",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

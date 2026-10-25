@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6F00",
+      "name_en": "荒诞狂想",
+      "name_zh": "荒诞狂想"
+    },
+    {
+      "code": "E02",
+      "hex": "#5D4037",
+      "name_en": "脏乱现实",
+      "name_zh": "脏乱现实"
+    },
+    {
+      "code": "E03",
+      "hex": "#4A148C",
+      "name_en": "梦幻逃离",
+      "name_zh": "梦幻逃离"
+    },
+    {
+      "code": "E04",
+      "hex": "#37474F",
+      "name_en": "官僚压抑",
+      "name_zh": "官僚压抑"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #5D4037, #37474F, #1A1A1A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #5D4037, #37474F, #1A1A1A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "102",
+  "lighting_notes": {
+    "en": "A lower-level warm key with readable subject detail.",
+    "zh": "较低照度的暖主光，保持主体细节。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#5D4037",
+      "name_en": "Dirty Brown",
+      "name_zh": "脏棕",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#37474F",
+      "name_en": "Industrial Gray Blue",
+      "name_zh": "工业灰蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FF6F00",
+      "name_en": "Orange Yellow",
+      "name_zh": "橙黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#4A148C",
+      "name_en": "Deep Purple",
+      "name_zh": "深紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#827717",
+      "name_en": "Olive Yellow Green",
+      "name_zh": "橄榄黄绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Dirty Black",
+      "name_zh": "污黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

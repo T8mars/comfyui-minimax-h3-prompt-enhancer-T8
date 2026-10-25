@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#5F7D6B",
+      "name_en": "Cyan-Green Landscape",
+      "name_zh": "青绿山水"
+    },
+    {
+      "code": "E02",
+      "hex": "#8B7355",
+      "name_en": "Aged Wood Brown",
+      "name_zh": "旧木棕"
+    },
+    {
+      "code": "E03",
+      "hex": "#A89F8A",
+      "name_en": "Gray Rice White",
+      "name_zh": "灰米白"
+    },
+    {
+      "code": "E04",
+      "hex": "#2C3A32",
+      "name_en": "Dark Pine Green",
+      "name_zh": "暗松绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #5F7D6B, #8B7355, #2C3A32. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #5F7D6B, #8B7355, #2C3A32；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "099",
+  "lighting_notes": {
+    "en": "Available natural light with restrained fill.",
+    "zh": "自然可用光，克制补光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#5F7D6B",
+      "name_en": "Cyan-Green Landscape",
+      "name_zh": "青绿山水",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#8B7355",
+      "name_en": "Aged Wood Brown",
+      "name_zh": "旧木棕",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#A89F8A",
+      "name_en": "Gray Rice White",
+      "name_zh": "灰米白",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#4A5D52",
+      "name_en": "Deep Cyan Green",
+      "name_zh": "深青绿",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#CD853F",
+      "name_en": "Amber Brown",
+      "name_zh": "琥珀棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#2C3A32",
+      "name_en": "Dark Pine Green",
+      "name_zh": "暗松绿",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

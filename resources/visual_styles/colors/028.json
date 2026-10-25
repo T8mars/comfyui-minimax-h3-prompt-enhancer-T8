@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF1744",
+      "name_en": "Alert Red",
+      "name_zh": "警报红"
+    },
+    {
+      "code": "E02",
+      "hex": "#76FF03",
+      "name_en": "Data Fluorescent Green",
+      "name_zh": "数据荧光绿"
+    },
+    {
+      "code": "E03",
+      "hex": "#5C6BC0",
+      "name_en": "Philosophical Purple-Grey",
+      "name_zh": "哲学紫灰"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFD54F",
+      "name_en": "Sunset Gold",
+      "name_zh": "夕照金"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0D1117, #37474F, #00C853. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0D1117, #37474F, #00C853；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "028",
+  "lighting_notes": {
+    "en": "Combine top and side sources to retain spatial depth.",
+    "zh": "顶部与侧面光源结合，保持空间层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0D1117",
+      "name_en": "Cyber Deep Black",
+      "name_zh": "赛博深黑",
+      "share": 0.32
+    },
+    {
+      "code": "C02",
+      "hex": "#37474F",
+      "name_en": "Rain City Blue-Grey",
+      "name_zh": "雨城灰蓝",
+      "share": 0.22
+    },
+    {
+      "code": "C03",
+      "hex": "#00C853",
+      "name_en": "Data Green",
+      "name_zh": "数据绿",
+      "share": 0.14
+    },
+    {
+      "code": "C04",
+      "hex": "#00E5FF",
+      "name_en": "Neon Cyan",
+      "name_zh": "霓虹青",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#F0D9B5",
+      "name_en": "Warm Skin Yellow",
+      "name_zh": "暖肤黄",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#607D8B",
+      "name_en": "Mech Grey",
+      "name_zh": "机械灰",
+      "share": 0.1
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

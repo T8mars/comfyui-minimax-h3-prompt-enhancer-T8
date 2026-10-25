@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#8D6E63",
+      "name_en": "岁月沧桑",
+      "name_zh": "岁月沧桑"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFCC80",
+      "name_en": "人文温暖",
+      "name_zh": "人文温暖"
+    },
+    {
+      "code": "E03",
+      "hex": "#78909C",
+      "name_en": "香港记忆",
+      "name_zh": "香港记忆"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFAB91",
+      "name_en": "女性坚韧",
+      "name_zh": "女性坚韧"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFAB91, #8D6E63, #78909C. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFAB91, #8D6E63, #78909C；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "187",
+  "lighting_notes": {
+    "en": "Soft natural light retaining location direction.",
+    "zh": "自然柔光，保留现场照明方向。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8D6E63",
+      "name_en": "HK Brown",
+      "name_zh": "香港棕",
+      "share": 0.18
+    },
+    {
+      "code": "C02",
+      "hex": "#78909C",
+      "name_en": "Harbor Gray",
+      "name_zh": "海港灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFCC80",
+      "name_en": "Warm Yellow",
+      "name_zh": "暖黄",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#BCAAA4",
+      "name_en": "Old Building Beige",
+      "name_zh": "旧楼米",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#A1887F",
+      "name_en": "Years Brown",
+      "name_zh": "岁月棕",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFAB91",
+      "name_en": "Warm Orange",
+      "name_zh": "温情橙",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

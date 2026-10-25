@@ -1,0 +1,26 @@
+{
+  "id": "179",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's slow-push template without adding interior monologue.",
+      "text_zh": "用本条缓推模板观察既有主体，不添加内心独白。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use this record's follow template along the existing urban route.",
+      "text_zh": "用本条跟随模板保留已有城市行进路线。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

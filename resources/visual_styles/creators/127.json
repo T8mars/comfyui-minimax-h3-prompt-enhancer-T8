@@ -1,0 +1,25 @@
+{
+  "id": "127",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Establish existing scale from an allowed higher or more distant view.",
+      "text_zh": "从较高或较远的允许视角交代既有环境规模。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain group directions and individual positions in an existing large scene.",
+      "text_zh": "在已有大场面内保留群体方向和个体位置。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#F48FB1",
+      "name_en": "浪漫梦幻",
+      "name_zh": "浪漫梦幻"
+    },
+    {
+      "code": "E02",
+      "hex": "#64B5F6",
+      "name_en": "雨伞忧伤",
+      "name_zh": "雨伞忧伤"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "港口温情",
+      "name_zh": "港口温情"
+    },
+    {
+      "code": "E04",
+      "hex": "#FFAB91",
+      "name_en": "初恋甜蜜",
+      "name_zh": "初恋甜蜜"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #F48FB1, #64B5F6, #FFFFFF. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #F48FB1, #64B5F6, #FFFFFF；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "176",
+  "lighting_notes": {
+    "en": "Soft key light with even fill.",
+    "zh": "柔和主光与平稳填充。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#F48FB1",
+      "name_en": "Rochefort Pink",
+      "name_zh": "罗什福尔粉",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#64B5F6",
+      "name_en": "Umbrella Blue",
+      "name_zh": "雨伞蓝",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Port Gold",
+      "name_zh": "港口金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#FFAB91",
+      "name_en": "Coral Orange",
+      "name_zh": "珊瑚橙",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#BA68C8",
+      "name_en": "Dreamy Purple",
+      "name_zh": "梦幻紫",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#FFFFFF",
+      "name_en": "Pure White",
+      "name_zh": "纯白",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

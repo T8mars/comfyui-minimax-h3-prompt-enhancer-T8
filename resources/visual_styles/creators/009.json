@@ -1,0 +1,24 @@
+{
+  "id": "009",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use existing doorframes, ceilings and corridors to tighten spatial relationships.",
+      "text_zh": "用已有门框、天花板与走廊收紧空间关系。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Push slowly toward an established target without manufacturing an event.",
+      "text_zh": "缓推接近已有目标，不靠新事件制造紧张。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

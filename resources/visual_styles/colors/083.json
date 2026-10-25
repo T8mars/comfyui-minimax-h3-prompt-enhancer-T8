@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#B8860B",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#800000",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#556B2F",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F2F2F",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #8B0000, #DAA520, #1A1A1A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #8B0000, #DAA520, #1A1A1A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "083",
+  "lighting_notes": {
+    "en": "Soft side light with dimensional layers.",
+    "zh": "有体积层次的柔侧光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#8B0000",
+      "name_en": "Dark Red",
+      "name_zh": "暗红",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#DAA520",
+      "name_en": "Goldenrod",
+      "name_zh": "金菊色",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2F4F4F",
+      "name_en": "Dark Slate",
+      "name_zh": "墨绿青",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#D2B48C",
+      "name_en": "Tan Silk",
+      "name_zh": "棕绸色",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#4A0E1A",
+      "name_en": "Deep Wine",
+      "name_zh": "酒红深",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A1A1A",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

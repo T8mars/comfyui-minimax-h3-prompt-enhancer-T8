@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFF5E0",
+      "name_en": "White",
+      "name_zh": "圣光白"
+    },
+    {
+      "code": "E02",
+      "hex": "#6B6054",
+      "name_en": "Gray",
+      "name_zh": "硝烟灰"
+    },
+    {
+      "code": "E03",
+      "hex": "#E8915A",
+      "name_en": "Orange",
+      "name_zh": "落日橙"
+    },
+    {
+      "code": "E04",
+      "hex": "#1A1A24",
+      "name_en": "Black",
+      "name_zh": "深夜蓝黑"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FFD080, #4A443A, #B85C28. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FFD080, #4A443A, #B85C28；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "053",
+  "lighting_notes": {
+    "en": "Softened backlight and rim lighting.",
+    "zh": "柔化的背光与轮廓光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FFD080",
+      "name_en": "Gold",
+      "name_zh": "神圣晨光金",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#B85C28",
+      "name_en": "Orange",
+      "name_zh": "史诗橙褐",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#2C3E55",
+      "name_en": "Blue",
+      "name_zh": "深幽蓝",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#8A7A5C",
+      "name_en": "Gray",
+      "name_zh": "战火灰土",
+      "share": 0.12
+    },
+    {
+      "code": "C05",
+      "hex": "#E8D4A8",
+      "name_en": "Color 5",
+      "name_zh": "柔焦肤",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#4A443A",
+      "name_en": "Ochre",
+      "name_zh": "暗影褐",
+      "share": 0.2
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

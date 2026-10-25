@@ -1,0 +1,24 @@
+{
+  "id": "027",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use a smooth track or rise to present existing space without adding structures.",
+      "text_zh": "采用平滑推移或升降呈现既有空间，不新增设施。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Organize the existing subject through symmetry and vertical depth.",
+      "text_zh": "以对称和纵向层次组织已有主体。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

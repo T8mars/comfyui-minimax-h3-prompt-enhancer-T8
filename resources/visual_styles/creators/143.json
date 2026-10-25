@@ -1,0 +1,25 @@
+{
+  "id": "143",
+  "methods": [
+    {
+      "dimension": "information",
+      "requires_cuts": false,
+      "text_en": "Keep existing everyday detail and work processes visible without a new theme.",
+      "text_zh": "保持已有日常细节和劳动过程可见，不新增题材。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve supplied natural rhythm through sustained observation without a freeze frame.",
+      "text_zh": "用持续观察保留已给自然节奏，不变成固定停格。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

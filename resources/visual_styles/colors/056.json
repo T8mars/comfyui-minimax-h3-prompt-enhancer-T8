@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FFD700",
+      "name_en": "Yellow",
+      "name_zh": "黄金时刻"
+    },
+    {
+      "code": "E02",
+      "hex": "#8B0000",
+      "name_en": "Red",
+      "name_zh": "暗红血渍"
+    },
+    {
+      "code": "E03",
+      "hex": "#E6E6FA",
+      "name_en": "Purple",
+      "name_zh": "薰衣草紫"
+    },
+    {
+      "code": "E04",
+      "hex": "#2F4F4F",
+      "name_en": "Green",
+      "name_zh": "暗松绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #D4A574, #6B8E4E, #8B4513. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #D4A574, #6B8E4E, #8B4513；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "056",
+  "lighting_notes": {
+    "en": "Soft natural light with classical side-lit layers.",
+    "zh": "柔和自然光与古典侧光层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#D4A574",
+      "name_en": "Gold",
+      "name_zh": "落日暖金",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#6B8E4E",
+      "name_en": "Green",
+      "name_zh": "田园草绿",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8B4513",
+      "name_en": "Brown",
+      "name_zh": "胡桃木棕",
+      "share": 0.15
+    },
+    {
+      "code": "C04",
+      "hex": "#C9B896",
+      "name_en": "Cream",
+      "name_zh": "奶油米色",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#4A6741",
+      "name_en": "Green",
+      "name_zh": "松柏深绿",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#9E7B5E",
+      "name_en": "Red",
+      "name_zh": "陶土砖红",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

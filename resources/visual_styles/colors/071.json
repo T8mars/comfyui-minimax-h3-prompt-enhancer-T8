@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#333333",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#666666",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#999999",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#050505",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1A1A1A, #4A4A4A, #7A7A7A. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1A1A1A, #4A4A4A, #7A7A7A；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "071",
+  "lighting_notes": {
+    "en": "Organize existing illumination into clear tonal layers.",
+    "zh": "用清楚明暗层次组织既有光照。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1A1A1A",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.26
+    },
+    {
+      "code": "C02",
+      "hex": "#4A4A4A",
+      "name_en": "Dark Gray",
+      "name_zh": "暗灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#7A7A7A",
+      "name_en": "Mid Gray",
+      "name_zh": "中灰",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#AAAAAA",
+      "name_en": "Light Gray",
+      "name_zh": "浅灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#D4D4D4",
+      "name_en": "Gray White",
+      "name_zh": "灰白",
+      "share": 0.12
+    },
+    {
+      "code": "C06",
+      "hex": "#0A0A0A",
+      "name_en": "Pitch Black",
+      "name_zh": "漆黑暗",
+      "share": 0.12
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

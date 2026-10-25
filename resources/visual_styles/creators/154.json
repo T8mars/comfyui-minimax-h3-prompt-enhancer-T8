@@ -1,0 +1,25 @@
+{
+  "id": "154",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Present existing action continuously, retaining initiation, contact and continuation.",
+      "text_zh": "连续呈现已有动作，保留起始、接触和后续过程。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Keep relative positions clear in existing group action without adding family identities.",
+      "text_zh": "在已有多人动作中保持相互位置清楚，不新增家庭身份。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

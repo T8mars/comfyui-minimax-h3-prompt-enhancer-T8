@@ -42,7 +42,7 @@ export function recoveryMessage(status) {
         const provenance = meta?.director_skill
             ? `\n原结果来源 / Original result: ${meta.director_skill} v${meta.director_revision || "?"}${meta.authoring_revision ? ` · Authoring v${meta.authoring_revision}` : ""} · ${meta.output_language || "?"} · ${meta.output_mode || "?"}。恢复的是原稿，不是按当前 Skill 重新创作。`
             : "";
-        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta) + storyboardSelectionMessage(meta) + visualMarkerSelectionMessage(meta);
+        return "已找到完整的本地结果检查点。恢复只读取内存，不会调用云端或再次扣费。" + provenance + cameraSelectionMessage(meta) + emotionSelectionMessage(meta) + hybridSelectionMessage(meta) + speechSelectionMessage(meta) + storyboardSelectionMessage(meta) + visualMarkerSelectionMessage(meta) + visualStyleSelectionMessage(meta);
     }
     if (status.state === "ambiguous_partial") {
         return `上次请求返回途中断开，只收到 ${status.partial_chars || 0} 个字符；为防止把截断提示词当成完整结果，节点不会自动输出这段内容，也不会重新扣费。`;
@@ -88,7 +88,7 @@ export async function restoreCompletionResult({
             alertFn?.(recoveryMessage(status));
             return { queued: false, status };
         }
-        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata) || storyboardSelectionMessage(status.creation_metadata) || visualMarkerSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
+        if (status.creation_metadata?.director_skill || cameraSelectionMessage(status.creation_metadata) || emotionSelectionMessage(status.creation_metadata) || hybridSelectionMessage(status.creation_metadata) || speechSelectionMessage(status.creation_metadata) || storyboardSelectionMessage(status.creation_metadata) || visualMarkerSelectionMessage(status.creation_metadata) || visualStyleSelectionMessage(status.creation_metadata)) alertFn?.(recoveryMessage(status));
         beforeQueue?.();
         actionWidget.value = RESTORE_ACTION;
         await queuePrompt(0, 1, [String(node.id)]);
@@ -100,6 +100,23 @@ export async function restoreCompletionResult({
         actionWidget.value = NORMAL_ACTION;
         node.setDirtyCanvas?.(true, true);
     }
+}
+
+export function visualStyleSelectionMessage(meta) {
+    let text = "";
+    for (const kind of ["color", "creator"]) {
+        const block = meta?.[kind + "_style"];
+        const keys = ["style_id", "resource_revision", "resource_sha256", "adapter_revision", ...(kind === "color" ? ["scope"] : [])];
+        if (!block || typeof block !== "object" || Array.isArray(block) || Object.keys(block).length !== keys.length
+            || !keys.every(k => typeof block[k] === "string")
+            || !/^(?:00[1-9]|0[1-9][0-9]|1[0-9]{2}|200)$/.test(block.style_id)
+            || block.resource_revision !== "1.0.0" || block.adapter_revision !== "1.0.0"
+            || !/^[0-9a-f]{64}$/.test(block.resource_sha256)
+            || (kind === "color" && !["color_only", "color_and_light"].includes(block.scope))) continue;
+        text += "\n上次风格选择 / Previous " + kind + " selection: #" + block.style_id + " v" + block.resource_revision
+            + (kind === "color" ? " · " + block.scope : "") + "。恢复原稿，不应用当前选择；记录不代表语义或成片效果验收。";
+    }
+    return text;
 }
 
 function visualMarkerSelectionMessage(meta) {

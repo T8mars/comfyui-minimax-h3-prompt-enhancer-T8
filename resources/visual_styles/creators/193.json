@@ -1,0 +1,26 @@
+{
+  "id": "193",
+  "methods": [
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Preserve the complete supplied everyday action through continuous observation.",
+      "text_zh": "在连续观察中保留已给生活动作的完整过程。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Keep subject and existing natural surroundings together without adding a coming-of-age plot.",
+      "text_zh": "让主体与既有自然环境同框，不新增成长剧情。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

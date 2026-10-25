@@ -1,0 +1,24 @@
+{
+  "id": "052",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Use a traveling viewpoint only for an existing drive or walk.",
+      "text_zh": "仅在既有车行或步行中采用随行视角。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain the existing horizon and distances among traveling subjects.",
+      "text_zh": "保留已有地平线及同行主体的相对距离。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

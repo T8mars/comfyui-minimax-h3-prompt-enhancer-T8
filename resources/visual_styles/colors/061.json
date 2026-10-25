@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#D4CFBE",
+      "name_en": "Accent 1",
+      "name_zh": "候选色 1"
+    },
+    {
+      "code": "E02",
+      "hex": "#3D4F46",
+      "name_en": "Accent 2",
+      "name_zh": "候选色 2"
+    },
+    {
+      "code": "E03",
+      "hex": "#8BA395",
+      "name_en": "Accent 3",
+      "name_zh": "候选色 3"
+    },
+    {
+      "code": "E04",
+      "hex": "#1F2825",
+      "name_en": "Accent 4",
+      "name_zh": "候选色 4"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #4A5D52, #6B7B6E, #8B9A8D. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #4A5D52, #6B7B6E, #8B9A8D；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "061",
+  "lighting_notes": {
+    "en": "Soft diffuse light retaining existing reflections.",
+    "zh": "柔和漫射光，保留已有反光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#4A5D52",
+      "name_en": "Mist Gray Green",
+      "name_zh": "雾灰绿",
+      "share": 0.22
+    },
+    {
+      "code": "C02",
+      "hex": "#6B7B6E",
+      "name_en": "Moss Gray",
+      "name_zh": "苔藓灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8B9A8D",
+      "name_en": "Morning Mist Green",
+      "name_zh": "晨雾绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C4B8A3",
+      "name_en": "Aged Wood Beige",
+      "name_zh": "旧木米",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#5A5248",
+      "name_en": "Earth Brown Gray",
+      "name_zh": "大地棕灰",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#2D3A34",
+      "name_en": "Deep Forest Dark Green",
+      "name_zh": "深林暗绿",
+      "share": 0.14
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

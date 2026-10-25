@@ -1,0 +1,24 @@
+{
+  "id": "034",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present the established pose through low angles and clear contours without inventing heroic identity.",
+      "text_zh": "以低角度和清楚轮廓呈现已有姿态，不增加英雄身份。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Keep important phases of existing action readable without changing speed or duration.",
+      "text_zh": "既有动作的重要阶段保持可读；不擅改速度或延长时长。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

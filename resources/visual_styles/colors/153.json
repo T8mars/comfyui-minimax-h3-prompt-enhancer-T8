@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#006064",
+      "name_en": "深海冒险",
+      "name_zh": "深海冒险"
+    },
+    {
+      "code": "E02",
+      "hex": "#FF8F00",
+      "name_en": "荒原希望",
+      "name_zh": "荒原希望"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD54F",
+      "name_en": "父子情深",
+      "name_zh": "父子情深"
+    },
+    {
+      "code": "E04",
+      "hex": "#78909C",
+      "name_en": "太空孤独",
+      "name_zh": "太空孤独"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #006064, #FF8F00, #1A237E. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #006064, #FF8F00, #1A237E；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "153",
+  "lighting_notes": {
+    "en": "Soft ambient light consistent with the original scene direction.",
+    "zh": "柔和环境光，方向与原场景一致。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#006064",
+      "name_en": "Deep Ocean Teal",
+      "name_zh": "深海青",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FF8F00",
+      "name_en": "Desert Orange",
+      "name_zh": "沙漠橙",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#FFD54F",
+      "name_en": "Clownfish Gold",
+      "name_zh": "小丑鱼橙金",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#78909C",
+      "name_en": "Space Gray",
+      "name_zh": "太空灰",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#2E7D32",
+      "name_en": "Life Green",
+      "name_zh": "生命绿",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#1A237E",
+      "name_en": "Deep Sea Blue",
+      "name_zh": "深海蓝",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

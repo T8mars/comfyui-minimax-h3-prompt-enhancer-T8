@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#1B5E20",
+      "name_en": "自然灵性",
+      "name_zh": "自然灵性"
+    },
+    {
+      "code": "E02",
+      "hex": "#FFD54F",
+      "name_en": "神圣之光",
+      "name_zh": "神圣之光"
+    },
+    {
+      "code": "E03",
+      "hex": "#0D47A1",
+      "name_en": "海洋神秘",
+      "name_zh": "海洋神秘"
+    },
+    {
+      "code": "E04",
+      "hex": "#C62828",
+      "name_en": "牺牲奉献",
+      "name_zh": "牺牲奉献"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #1B5E20, #FFD54F, #0D47A1. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #1B5E20, #FFD54F, #0D47A1；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "148",
+  "lighting_notes": {
+    "en": "Use existing localized colored sources with clear layers.",
+    "zh": "仅使用已有局部色光，保持清楚层次。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#1B5E20",
+      "name_en": "Irish Green",
+      "name_zh": "爱尔兰绿",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#FFD54F",
+      "name_en": "Kells Gold",
+      "name_zh": "凯尔金",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#0D47A1",
+      "name_en": "Deep Sea Blue",
+      "name_zh": "深海蓝",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#C62828",
+      "name_en": "Holy Blood Red",
+      "name_zh": "圣血红",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#6A1B9A",
+      "name_en": "Mystical Purple",
+      "name_zh": "神秘紫",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#FFF9C4",
+      "name_en": "Parchment Yellow",
+      "name_zh": "羊皮纸黄",
+      "share": 0.16
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

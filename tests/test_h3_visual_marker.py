@@ -1,5 +1,6 @@
 """CPU authoring contracts. No model/video-benefit or downstream-binding claims."""
 import asyncio
+from visual_style_baseline_projection import without_style_signature, without_style_inputs, project_style_ast
 import ast
 import copy
 import importlib
@@ -279,7 +280,7 @@ class VisualMarkerTests(unittest.TestCase):
     def test_append_only_interface_and_non_h3_nodes_unmodified(self):
         for name in ("enhance_prompt", "_build_messages"):
             old = inspect.signature(original_function("nodes.py", name, h3, BASELINE))
-            now = inspect.signature(getattr(h3, name))
+            now = without_style_signature(inspect.signature(getattr(h3, name)))
             self.assertEqual(list(now.parameters)[-1], "visual_marker_config")
             self.assertEqual(now.replace(parameters=list(now.parameters.values())[:-1]), old)
         schema = h3.MiniMaxH3PromptEnhancer.define_schema()
@@ -290,22 +291,25 @@ class VisualMarkerTests(unittest.TestCase):
         namespace = dict(vars(h3))
         exec(compile(ast.Module(body=[method], type_ignores=[]), "nodes.py", "exec"), namespace)
         old_schema = namespace["define_schema"](h3.MiniMaxH3PromptEnhancer)
-        self.assertEqual([x.as_dict() for x in schema.inputs[:-1]], [x.as_dict() for x in old_schema.inputs])
+        self.assertEqual([x.as_dict() for x in without_style_inputs(schema.inputs)[:-1]], [x.as_dict() for x in old_schema.inputs])
         self.assertEqual([x.as_dict() for x in schema.outputs], [x.as_dict() for x in old_schema.outputs])
         # MOSS authoring has its own frozen 1.36 schema/request regression.
         for path in ("seedance20.py", "music3.py", "yue2.py", "qwen_image21.py",
                      "web/js/minimax_h3_prompt_enhancer.js"):
             old = subprocess.check_output(["git", "show", BASELINE+":"+path], cwd=GIT_ROOT)
-            self.assertEqual((ROOT/path).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"), path)
-        self.assertEqual([x.id for x in schema.inputs][-2:], ["storyboard_director_config", "visual_marker_config"])
+            if path == "seedance20.py":
+                self.assertEqual(ast.dump(project_style_ast((ROOT/path).read_text(encoding="utf-8"))), ast.dump(ast.parse(old)), path)
+            else:
+                self.assertEqual((ROOT/path).read_bytes().replace(b"\r\n", b"\n"), old.replace(b"\r\n", b"\n"), path)
+        self.assertEqual([x.id for x in without_style_inputs(schema.inputs)][-2:], ["storyboard_director_config", "visual_marker_config"])
         self.assertEqual(len(schema.outputs), 6)
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         nodes = asyncio.run(extension.get_node_list())
-        self.assertEqual(len(nodes), 36)
+        self.assertEqual(len(nodes), 38)
         self.assertEqual(nodes[32].define_schema().node_id, "T8H3VisualMarkerConfig")
         self.assertEqual(nodes[33].define_schema().node_id, "T8H3SpatialMarkerCanvas")
-        self.assertEqual([n.define_schema().node_id for n in nodes[34:]], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
+        self.assertEqual([n.define_schema().node_id for n in nodes[34:36]], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
         for node in nodes:
             if node is not h3.MiniMaxH3PromptEnhancer:
                 self.assertNotIn("visual_marker_config", [i.id for i in node.define_schema().inputs])

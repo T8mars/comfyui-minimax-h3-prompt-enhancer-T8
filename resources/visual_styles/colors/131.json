@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF6D00",
+      "name_en": "爆裂动作",
+      "name_zh": "爆裂动作"
+    },
+    {
+      "code": "E02",
+      "hex": "#00B0FF",
+      "name_en": "冷冽精准",
+      "name_zh": "冷冽精准"
+    },
+    {
+      "code": "E03",
+      "hex": "#00E676",
+      "name_en": "毒笑幽默",
+      "name_zh": "毒笑幽默"
+    },
+    {
+      "code": "E04",
+      "hex": "#D500F9",
+      "name_en": "迷幻快感",
+      "name_zh": "迷幻快感"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #FF6D00, #00B0FF, #212121. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #FF6D00, #00B0FF, #212121；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "131",
+  "lighting_notes": {
+    "en": "Localized directional colored light with controlled background spill.",
+    "zh": "局部定向色光，控制背景干扰。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#FF6D00",
+      "name_en": "Blaze Orange",
+      "name_zh": "烈焰橙",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#00B0FF",
+      "name_en": "Electric Blue",
+      "name_zh": "电光蓝",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#00E676",
+      "name_en": "Toxic Green",
+      "name_zh": "毒绿",
+      "share": 0.16
+    },
+    {
+      "code": "C04",
+      "hex": "#D500F9",
+      "name_en": "Neon Purple",
+      "name_zh": "霓虹紫",
+      "share": 0.14
+    },
+    {
+      "code": "C05",
+      "hex": "#FF1744",
+      "name_en": "Blood Pink Red",
+      "name_zh": "血粉红",
+      "share": 0.14
+    },
+    {
+      "code": "C06",
+      "hex": "#212121",
+      "name_en": "Deep Black",
+      "name_zh": "深黑",
+      "share": 0.18
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

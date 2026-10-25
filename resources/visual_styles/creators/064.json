@@ -1,0 +1,25 @@
+{
+  "id": "064",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Move slowly around existing subjects or spaces along a feasible path.",
+      "text_zh": "缓慢绕行既有主体或空间，保持路径可通行。"
+    },
+    {
+      "dimension": "rhythm",
+      "requires_cuts": false,
+      "text_en": "Sustain supplied action or waiting without imposing a long-take duration.",
+      "text_zh": "让已给动作或静候持续，不自行设置超长镜头时长。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

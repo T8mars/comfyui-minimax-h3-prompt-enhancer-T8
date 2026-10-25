@@ -1,3 +1,4 @@
+from visual_style_baseline_projection import without_style_inputs
 import copy
 import importlib.util
 import json
@@ -346,7 +347,7 @@ class PerformanceDirectorTests(unittest.TestCase):
     def test_core_schemas_preserve_performance_and_provider_order_before_new_character_socket(self):
         for cls in (nodes.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
             schema = cls.define_schema()
-            prior_inputs = schema.inputs
+            prior_inputs = without_style_inputs(schema.inputs)
             if cls is nodes.MiniMaxH3PromptEnhancer:
                 self.assertEqual(prior_inputs[-1].id, "visual_marker_config")
                 prior_inputs = prior_inputs[:-1]

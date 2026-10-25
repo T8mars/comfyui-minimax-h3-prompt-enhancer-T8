@@ -1,0 +1,391 @@
+{
+  "id": "f1f38732-8d5e-5502-b172-253810c7f997",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "T8PromptText",
+      "pos": [
+        0,
+        40
+      ],
+      "size": [
+        420,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "填写贞贞 API Key / Your API key (clear before sharing)"
+    },
+    {
+      "id": 2,
+      "type": "MiniMaxH3PromptEnhancerT8",
+      "pos": [
+        520,
+        60
+      ],
+      "size": [
+        640,
+        1160
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "reference_images.reference_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null,
+          "label": "reference_image_0"
+        },
+        {
+          "name": "reference_videos.reference_video_0",
+          "shape": 7,
+          "type": "VIDEO",
+          "link": null,
+          "label": "reference_video_0"
+        },
+        {
+          "name": "api_key",
+          "shape": 7,
+          "type": "STRING",
+          "link": 1,
+          "label": "API Key"
+        },
+        {
+          "name": "performance_director_config",
+          "shape": 7,
+          "type": "T8_PERFORMANCE_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "provider_config",
+          "shape": 7,
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "label": "共享 LLM 渠道配置（可选）"
+        },
+        {
+          "name": "character_performance_bible",
+          "shape": 7,
+          "type": "T8_CHARACTER_PERFORMANCE_BIBLE",
+          "link": null
+        },
+        {
+          "name": "combat_camera_config",
+          "shape": 7,
+          "type": "T8_COMBAT_CAMERA_CONFIG",
+          "link": null
+        },
+        {
+          "name": "speech_reference",
+          "shape": 7,
+          "type": "T8_SPEECH_REFERENCE",
+          "link": null
+        },
+        {
+          "name": "storyboard_director_config",
+          "shape": 7,
+          "type": "T8_STORYBOARD_DIRECTOR_CONFIG",
+          "link": null
+        },
+        {
+          "name": "visual_marker_config",
+          "shape": 7,
+          "type": "T8_H3_VISUAL_MARKER_CONFIG",
+          "link": null
+        },
+        {
+          "name": "color_style_config",
+          "shape": 7,
+          "type": "T8_COLOR_STYLE_CONFIG",
+          "link": 3
+        },
+        {
+          "name": "creator_style_config",
+          "shape": 7,
+          "type": "T8_CREATOR_STYLE_CONFIG",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "global_prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "local_prompts",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "time_ranges",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "relay_length",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "relay_report",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3PromptEnhancerT8"
+      },
+      "widgets_values": [
+        "60秒，一个连续镜头。成年女子穿红色外套，右手拿车票，沿车站既有通道向前走。她持续移动，结尾仍在通道中；无对白、无新增人物、无字幕，不新增道具。保留红色外套与自然肤色，不改变动作、镜头数和结束状态。",
+        "T2VA（文生音视频）",
+        60,
+        "1",
+        "balanced",
+        0,
+        "中文",
+        "官方增强",
+        "现有兼容（保留中英文）",
+        "无（仅核心规则）",
+        "无（不使用 T8 案例）",
+        "贞贞平价小屋（推荐）",
+        "gemini-3.5-flash",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        "fixed",
+        "Qwen3.8-9B-heretic-uncensored.i1-Q6_K.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        2.0,
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "普通增强 / Normal",
+        0,
+        0,
+        "",
+        "none",
+        "off",
+        "off"
+      ],
+      "title": "仅一个增强器 / One enhancer · h3"
+    },
+    {
+      "id": 3,
+      "type": "T8ShowText",
+      "pos": [
+        1180,
+        100
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2,
+          "label": "待显示文本"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "widgets_values": [],
+      "title": "原生提示词结果 / Native prompt"
+    },
+    {
+      "id": 4,
+      "type": "T8ColorStyleConfig",
+      "title": "先预览，再开启 On / Preview then enable",
+      "pos": [
+        0,
+        400
+      ],
+      "size": [
+        480,
+        220
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "color_style_config",
+          "type": "T8_COLOR_STYLE_CONFIG",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8ColorStyleConfig"
+      },
+      "widgets_values": [
+        "关闭 / Off",
+        "022 王家卫 / Wong Kar-wai",
+        "仅色彩 / Color only"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "T8CreatorStyleConfig",
+      "title": "先预览，再开启 On / Preview then enable",
+      "pos": [
+        0,
+        680
+      ],
+      "size": [
+        480,
+        220
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "creator_style_config",
+          "type": "T8_CREATOR_STYLE_CONFIG",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "T8CreatorStyleConfig"
+      },
+      "widgets_values": [
+        "关闭 / Off",
+        "181 小津安二郎 / YasujiroOzu"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [
+        1180,
+        560
+      ],
+      "size": [
+        480,
+        340
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "properties": {},
+      "widgets_values": [
+        "操作：1.填写你的LLM渠道/API Key；2.点“浏览风格与帮助”；3.选择风格后将配置节点切为开启 / On；4.运行。\n两个入口独立；导演不会自动带入色彩。默认Off用于安全试用。\n每例只有1个增强器，不自动运行两路付费对照。色卡不是LUT，不修改输入图；实验建议不代表真实成片效果。\nConfigure your provider/key, browse, select, enable On, then queue. One enhancer only. Color and creator choices are independent."
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      4,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      4,
+      0,
+      2,
+      12,
+      "T8_COLOR_STYLE_CONFIG"
+    ],
+    [
+      4,
+      5,
+      0,
+      2,
+      13,
+      "T8_CREATOR_STYLE_CONFIG"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

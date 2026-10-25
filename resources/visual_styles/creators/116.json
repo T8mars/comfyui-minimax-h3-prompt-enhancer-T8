@@ -1,0 +1,26 @@
+{
+  "id": "116",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Observe existing body or surface details calmly without adding injury.",
+      "text_zh": "以冷静近景观察已有身体或表面细节，不添加损伤。"
+    },
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Retain the existing space's spare geometry without adding medical equipment.",
+      "text_zh": "保持现有空间的整洁几何关系，不加入医疗器具。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

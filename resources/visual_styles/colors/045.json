@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#98D8C8",
+      "name_en": "Jadeite Green",
+      "name_zh": "翡翠青"
+    },
+    {
+      "code": "E02",
+      "hex": "#F4A460",
+      "name_en": "Sunset Orange",
+      "name_zh": "夕阳橙"
+    },
+    {
+      "code": "E03",
+      "hex": "#1E3A5F",
+      "name_en": "Deep Ocean Blue",
+      "name_zh": "深海蓝"
+    },
+    {
+      "code": "E04",
+      "hex": "#DEB887",
+      "name_en": "Warm Tea Brown",
+      "name_zh": "暖棕茶"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #C2A676, #5A6B4A, #8B7355. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #C2A676, #5A6B4A, #8B7355；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "045",
+  "lighting_notes": {
+    "en": "Diffuse natural key light and gentle side lighting.",
+    "zh": "漫射自然主光与温和侧光。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#C2A676",
+      "name_en": "Jade Warm Yellow",
+      "name_zh": "温润玉黄",
+      "share": 0.2
+    },
+    {
+      "code": "C02",
+      "hex": "#5A6B4A",
+      "name_en": "Bamboo Grey-Green",
+      "name_zh": "竹林青灰",
+      "share": 0.18
+    },
+    {
+      "code": "C03",
+      "hex": "#8B7355",
+      "name_en": "Earth Ochre Brown",
+      "name_zh": "大地赭棕",
+      "share": 0.17
+    },
+    {
+      "code": "C04",
+      "hex": "#E8D5B7",
+      "name_en": "Warm Sand Beige",
+      "name_zh": "暖沙米白",
+      "share": 0.15
+    },
+    {
+      "code": "C05",
+      "hex": "#3D4F3F",
+      "name_en": "Deep Pine Green",
+      "name_zh": "深松绿",
+      "share": 0.15
+    },
+    {
+      "code": "C06",
+      "hex": "#D68C45",
+      "name_en": "Warm Sun Orange",
+      "name_zh": "暖阳橙",
+      "share": 0.15
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

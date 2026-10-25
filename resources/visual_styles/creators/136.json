@@ -1,0 +1,26 @@
+{
+  "id": "136",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Present existing action through clear, panel-like single-frame relationships.",
+      "text_zh": "以分格般清楚的单画面关系呈现已有动作。"
+    },
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Follow existing action with the source template, without adding equipment or spy identities.",
+      "text_zh": "用来源模板的跟随保留动作方向，不新增装备或特工身份。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "limited_method_specificity",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

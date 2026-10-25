@@ -1,0 +1,26 @@
+{
+  "id": "142",
+  "methods": [
+    {
+      "dimension": "framing",
+      "requires_cuts": false,
+      "text_en": "Use frontal symmetry and a clear central axis in the existing space.",
+      "text_zh": "在现有空间中采用正面对称与清晰中心轴。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Organize movement along existing planar directions while retaining spacing.",
+      "text_zh": "沿现有平面方向组织移动，保留人物间距。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "conflicting_avoid_excluded",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}

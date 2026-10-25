@@ -1,0 +1,83 @@
+{
+  "accents": [
+    {
+      "code": "E01",
+      "hex": "#FF0000",
+      "name_en": "Demonic Red",
+      "name_zh": "恶魔红"
+    },
+    {
+      "code": "E02",
+      "hex": "#85C1E9",
+      "name_en": "Ghostly Blue",
+      "name_zh": "幽灵蓝"
+    },
+    {
+      "code": "E03",
+      "hex": "#FFD700",
+      "name_en": "Holy Light Gold",
+      "name_zh": "圣光金"
+    },
+    {
+      "code": "E04",
+      "hex": "#27AE60",
+      "name_en": "Rotting Green",
+      "name_zh": "腐生绿"
+    }
+  ],
+  "color_notes": {
+    "en": "The three highest source weights are #0F1B2E, #283747, #6B2E2E. Retain the six-color relationship as soft guidance; not every color must appear. Four accent candidates add no area quota or permission to recolor locked subjects.",
+    "zh": "来源权重前三色为 #0F1B2E, #283747, #6B2E2E；保留六色相对关系作为软参考，不要求全部出现。四候选色不叠加面积，不授权更改锁定主体颜色。"
+  },
+  "id": "019",
+  "lighting_notes": {
+    "en": "Localized low light and deep shadows with key evidence readable.",
+    "zh": "局部弱光与深阴影，关键内容保持可见。"
+  },
+  "primary": [
+    {
+      "code": "C01",
+      "hex": "#0F1B2E",
+      "name_en": "Deep Night Blue Black",
+      "name_zh": "深夜蓝黑",
+      "share": 0.4
+    },
+    {
+      "code": "C02",
+      "hex": "#283747",
+      "name_en": "Slate Blue Gray",
+      "name_zh": "石板蓝灰",
+      "share": 0.2
+    },
+    {
+      "code": "C03",
+      "hex": "#6B2E2E",
+      "name_en": "Dark Blood Red Brown",
+      "name_zh": "暗红血棕",
+      "share": 0.12
+    },
+    {
+      "code": "C04",
+      "hex": "#B8860B",
+      "name_en": "Dark Gold Candle Yellow",
+      "name_zh": "暗金烛黄",
+      "share": 0.1
+    },
+    {
+      "code": "C05",
+      "hex": "#3D5A4A",
+      "name_en": "Deep Moss Green",
+      "name_zh": "深苔绿",
+      "share": 0.1
+    },
+    {
+      "code": "C06",
+      "hex": "#D5DBDB",
+      "name_en": "Pale Cold Skin",
+      "name_zh": "苍白冷肤",
+      "share": 0.08
+    }
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-color-style-resource/v1"
+}

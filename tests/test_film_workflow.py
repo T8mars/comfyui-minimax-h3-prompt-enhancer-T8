@@ -1,3 +1,4 @@
+from visual_style_baseline_projection import without_style_names
 import importlib.util
 import json
 import sys
@@ -64,9 +65,9 @@ def performance_bible():
 
 class FilmWorkflowTests(unittest.TestCase):
     def test_new_connection_only_inputs_are_appended_after_prior_socket_contracts(self):
-        h3_ids = [item.id for item in h3.MiniMaxH3PromptEnhancer.define_schema().inputs]
+        h3_ids = without_style_names([item.id for item in h3.MiniMaxH3PromptEnhancer.define_schema().inputs])
         self.assertEqual(h3_ids.pop(), "visual_marker_config")
-        seedance_ids = [item.id for item in seedance.Seedance20PromptEnhancer.define_schema().inputs]
+        seedance_ids = without_style_names([item.id for item in seedance.Seedance20PromptEnhancer.define_schema().inputs])
         longform_ids = [item.id for item in creative.T8LongFormPlanner.define_schema().inputs]
         storyboard_ids = [item.id for item in creative.T8StoryboardPack.define_schema().inputs]
         self.assertEqual(
@@ -226,7 +227,7 @@ class FilmWorkflowTests(unittest.TestCase):
 
     def test_character_bible_is_connection_only_for_both_core_nodes(self):
         for node in (h3.MiniMaxH3PromptEnhancer, seedance.Seedance20PromptEnhancer):
-            ids = [item.id for item in node.define_schema().inputs]
+            ids = without_style_names([item.id for item in node.define_schema().inputs])
             if node is h3.MiniMaxH3PromptEnhancer:
                 self.assertEqual(ids.pop(), "visual_marker_config")
             self.assertEqual(ids.pop(), "storyboard_director_config")

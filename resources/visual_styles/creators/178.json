@@ -1,0 +1,25 @@
+{
+  "id": "178",
+  "methods": [
+    {
+      "dimension": "camera",
+      "requires_cuts": false,
+      "text_en": "Observe existing dialogue continuously without replacing listening with extra cuts.",
+      "text_zh": "持续观察既有对话，不用多余切镜替换倾听过程。"
+    },
+    {
+      "dimension": "staging",
+      "requires_cuts": false,
+      "text_en": "Retain speaker and recipient positions within the existing everyday or vehicle space.",
+      "text_zh": "在既有日常或车内空间保留说者与接收者位置。"
+    }
+  ],
+  "review_notes": [
+    "color_kept_separate",
+    "external_protocol_excluded",
+    "generic_avoid_excluded",
+    "source_examples_excluded"
+  ],
+  "revision": "1.0.0",
+  "schema_version": "t8-creator-style-resource/v1"
+}
