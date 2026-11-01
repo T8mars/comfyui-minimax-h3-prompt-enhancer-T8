@@ -7,6 +7,7 @@ same immutable, content-checked packaged resource as the selector nodes.
 from __future__ import annotations
 
 import hashlib
+import colorsys
 import json
 import math
 from pathlib import Path
@@ -14,6 +15,8 @@ import re
 from typing import Any
 
 REVISION = "1.0.0"
+# Resource/config identity stays stable; compilation policy has its own cache revision.
+INSTRUCTION_REVISION = "1.0.2"
 OFF = "关闭 / Off"
 ON = "开启 / On"
 MODES = [OFF, ON]
@@ -27,7 +30,13 @@ ROOT = Path(__file__).resolve().parent / "resources" / "visual_styles"
 CATALOG_SCHEMA = "t8-visual-style-catalog/v1"
 COLOR_SCHEMA = "t8-color-style-config/v1"
 CREATOR_SCHEMA = "t8-creator-style-config/v1"
-MARKER = "T8 OPTIONAL VISUAL PRESENTATION v" + REVISION
+MARKER = "T8 OPTIONAL VISUAL PRESENTATION v" + INSTRUCTION_REVISION
+REPAIR_STYLE_SCOPE = (
+    "VISUAL STYLE LANGUAGE-REPAIR SCOPE: this is translation of the supplied draft, not a new style-generation pass. "
+    "Translate its existing color and presentation descriptions faithfully; do not add a missing palette, camera method, "
+    "object, cut or action to satisfy the earlier generation guide or selected-style reminder. "
+    "Preserve the draft's facts, ordering, exact dialogue, native fields and technical tokens."
+)
 IDS = frozenset(f"{n:03d}" for n in range(1, 201))
 DIMENSIONS = {"framing", "camera", "staging", "rhythm", "information", "editing"}
 REVIEW_CODES = {"source_examples_excluded", "external_protocol_excluded", "color_kept_separate",
@@ -237,13 +246,43 @@ def helper_fingerprint(kind, mode, selection, scope=COLOR_ONLY):
     if mode == OFF:
         return "visual-style-off"
     config = build_style_config(kind, mode, selection, scope)
-    return (REVISION, load_catalog()[1], json.dumps(config, sort_keys=True))
+    return (REVISION, INSTRUCTION_REVISION, load_catalog()[1], json.dumps(config, sort_keys=True))
 
 
 def consumer_fingerprint(color=MISSING, creator=MISSING, recovery_action="normal"):
     if recovery_action == "restore_last" or (color is MISSING and creator is MISSING):
         return False  # Same sentinel as a node without an IS_CHANGED override.
-    return ("t8-visual-catalog", REVISION, load_catalog()[1])
+    return ("t8-visual-catalog", REVISION, INSTRUCTION_REVISION, load_catalog()[1])
+
+
+def _hue_description(hex_value):
+    """Neutral color words from validated RGB, never thematic/emotional swatch names."""
+    rgb = [int(hex_value[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    hue, lightness, saturation = colorsys.rgb_to_hls(*rgb)
+    if saturation < 0.12:
+        if lightness < 0.15:
+            return "黑色 / black"
+        if lightness > 0.85:
+            return "白色 / white"
+        if lightness < 0.35:
+            return "深灰色 / dark gray"
+        if lightness > 0.65:
+            return "浅灰色 / light gray"
+        return "灰色 / gray"
+    for bound, zh, en in ((15, "红色", "red"), (45, "橙色", "orange"), (70, "黄色", "yellow"),
+                          (100, "黄绿色", "yellow green"), (165, "绿色", "green"),
+                          (190, "青绿色", "teal"), (210, "青蓝色", "cyan blue"),
+                          (255, "蓝色", "blue"), (290, "紫色", "purple"),
+                          (335, "紫红色", "magenta"), (361, "红色", "red")):
+        if hue * 360 < bound:
+            break
+    if lightness < 0.25:
+        zh, en = "深" + zh, "deep " + en
+    elif lightness > 0.78:
+        zh, en = "浅" + zh, "pale " + en
+    if saturation < 0.25:
+        zh, en = "灰调" + zh, "muted " + en
+    return zh + " / " + en
 
 
 def visual_style_instruction(color=None, creator=None, target="h3", *, fixed_shot_count=0):
@@ -253,14 +292,17 @@ def visual_style_instruction(color=None, creator=None, target="h3", *, fixed_sho
     if target not in {"h3", "seedance20"}:
         raise _error()
     lines = [MARKER + " (independently adapted, experimental; not an extra planning pass).",
-        "Use only the selected concrete presentation suggestions below, where compatible. Existing scene-directing Skills own scene strategy; acting/Bibles, storyboard, combat and reference contracts retain their roles. Do not pause or replace them. User facts, exact dialogue/text/speaker, identity, media roles, source action order, fixed timing/count, framing locks and ending take priority. These modifiers grant no new authorship.",
-        "Retain the native output grammar and current language. Change neither target duration nor shot count; impose no duration cap, automatic segmentation, new sound, subtitle, character, object, location, era, rendering medium or freeze ending. An already suitable passage may remain unchanged. Do not infer extra traits or film plots from a creator name. Never claim semantic or rendered compliance has been verified."]
+        "ENABLED STYLE APPLICATION: these connected selections are explicit requests to shape the existing scene, not background metadata. Apply each enabled dimension concretely in the final visual description wherever its own compatible opportunity exists. Do not silently skip both selections because the draft already reads fluently or the acting is detailed. If an applicable method or palette relationship is already present, retain its explicit visual evidence rather than adding redundant wording.",
+        "Existing scene-directing Skills own scene strategy; acting/Bibles, storyboard, combat and reference contracts retain their roles. User facts, exact dialogue/text/speaker, identity, media roles, source action order, fixed timing/count, framing locks and ending take priority. These modifiers grant no new story authorship. A generic default such as natural/vlog styling, or an unrequested choice made in a draft, is not a user lock. Distinguish reference identity from background/style retention according to the actual asset role; never treat a first/last-frame or explicitly retained attribute as freely editable.",
+        "COORDINATE DIMENSIONS: an acting instruction to leave unrelated visuals alone limits changes made for acting alone; it does not cancel these separately enabled color/presentation requests. Apply color to eligible existing visual areas and creator methods to eligible presentation while retaining the acting beats. Conversely, color/creator selection must not replace performance, alter dialogue, or bypass an explicit lock.",
+        "Retain the native output grammar and current language. Change neither target duration nor shot count; impose no duration cap, automatic segmentation, new sound, subtitle, character, object, location, era, rendering medium or freeze ending. Do not infer extra traits or film plots from a creator name. Never claim semantic or rendered compliance has been verified."]
     if color:
         data, _, _ = load_resource("color", color["style_id"])
         lines.extend(["COLOR REFERENCE (relative source shares, not measured image coverage or a LUT):",
-            "; ".join(f"{c['code']} {c['hex']} {c['share'] * 100:g}%" for c in data["primary"]),
+            "; ".join(f"{c['code']} {c['hex']} {c['share'] * 100:g}% ({_hue_description(c['hex'])})" for c in data["primary"]),
             data["color_notes"]["en"],
-            "Treat the six colors as an available hierarchy, not six compulsory objects or a whole-frame filter. Use only colors compatible with this scene; do not silently renormalize the source shares into promised pixel coverage. Preserve locked clothing, brand colors, natural skin, reference identity and readable text. Marker-box colors remain reference identifiers, never costume or palette evidence. The four optional accent swatches in the browser are not extra required colors or permission to invent emotion."])
+            "Treat the six colors as an available hierarchy, not six compulsory objects or a whole-frame filter. Use only colors compatible with this scene; do not silently renormalize the source shares into promised pixel coverage. Preserve locked clothing, brand colors, natural skin, reference identity and readable text. Marker-box colors remain reference identifiers, never costume or palette evidence. The four optional accent swatches in the browser are not extra required colors or permission to invent emotion.",
+            "COLOR REALIZATION: where an eligible visual area exists, choose a compatible dominant color and, if useful, a secondary/accent from the selected palette. Name their hues in the requested output language and attach them to existing unlocked surfaces or background regions. Write the resulting color relationship into the normal scene description, not merely 'cinematic', 'warm', 'natural', 'apply the palette' or a creator name. Do not invent a prop or recolor locked skin/clothing to demonstrate compliance. If all relevant colors are explicitly locked, preserve those locks and do not fake a color change."])
         if color["scope"] == "color_and_light":
             lines.extend(["OPTIONAL LIGHTING: " + data["lighting_notes"]["en"],
                 "Only suggest compatible lighting within established source/time/location; locked light sources and directions prevail. Never change daytime to night or add a lamp simply to fit the palette."])
@@ -269,13 +311,16 @@ def visual_style_instruction(color=None, creator=None, target="h3", *, fixed_sho
     if creator:
         data, _, _ = load_resource("creator", creator["style_id"])
         lines.append("CREATOR PRESENTATION ONLY (no automatic palette, lighting or medium transfer):")
-        lines.extend(m["dimension"] + ": " + m["text_en"] for m in data["methods"]
+        lines.append("Each English/Chinese pair below describes the same method, not two actions. Preserve its concrete qualifiers in the selected output language.")
+        lines.extend(m["dimension"] + ": " + m["text_en"] + " [" + m["text_zh"] + "]" for m in data["methods"]
                      if not (fixed_shot_count == 1 and m["requires_cuts"]))
-        lines.append("Use existing space and authorized actions only. Framing may guide attention and pacing without adding story facts, props, cuts, reveals or reactions. Keep established information order and who can perceive each event; a presentation suggestion cannot leak a later secret or change its cause. Do not stop ongoing movement to force a static creator signature.")
+        lines.append("Use existing space and authorized actions only. Framing may guide attention and pacing without adding story facts, props, reveals or reactions. Listed editing methods may use existing permitted cuts, never add cuts beyond the authorized shot plan. An explicit no-cut or continuous-shot request forbids cut-dependent methods even when shot count is AUTO. Keep established information order and who can perceive each event; a presentation suggestion cannot leak a later secret or change its cause. Do not stop ongoing movement to force a static creator signature.")
+        lines.append("CREATOR REALIZATION: choose at least one listed method that is compatible with the actual scene and state how it is executed: the existing subject/space it uses and its framing, camera path, staging or timing. A generic label such as 'cinematic' or a creator's name is not an execution. When a method needs absent glass, a doorway, another subject or a cut, do not invent that prerequisite; use another compatible listed method. If every listed method conflicts with an explicit lock or lacks its required evidence, keep the lock and do not pretend the method was applied.")
     if fixed_shot_count == 1:
         lines.append("Exactly one shot: do not add cuts, montage or an insert; only compatible within-shot suggestions apply.")
     lines.append("H3: retain the selected three/six-field task, vocal syntax and actual Picture/Video roles. In Relay put persistent color/presentation in global, not a new event, and never add action in padding."
                  if target == "h3" else "Seedance: retain current 2.0 natural-language organization and requested sound/text notation; import no H3 fields/tags or absolute per-shot timestamps, and no 2.5 template.")
+    lines.append("Before returning, silently check each enabled dimension separately against the final text: when a compatible opportunity exists, does the text specify its concrete visible realization? If missing, revise that visual passage within this same answer while preserving all locks, dialogue and native fields. Do not substitute an extra heading, palette table or a claim of style success for the actual description.")
     lines.append("Return only the caller's native result. Do not print this guide, HEX tables, percentage charts, creator index or a style-verification report.")
     return "\n".join(lines)
 
@@ -301,4 +346,6 @@ def preserve_visual_styles_on_repair(repair_messages, original_messages, color=N
     source = "\n".join(text)
     if source and source not in result[1]["content"]:
         result[1]["content"] = source + "\n\n" + result[1]["content"]
+    if REPAIR_STYLE_SCOPE not in result[0]["content"]:
+        result[0]["content"] += "\n\n" + REPAIR_STYLE_SCOPE
     return result

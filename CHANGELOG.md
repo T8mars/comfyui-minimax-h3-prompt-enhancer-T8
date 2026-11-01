@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.38.2] - 2026-11-02
+
+- Clarify how enabled color and creator references apply alongside performance
+  direction while preserving explicit scene, identity, dialogue and camera locks.
+  Keep style application within the existing generation request.
+- Add neutral hue and gray-lightness descriptions, retain both existing method
+  translations, and clarify permitted editing versus continuous-shot constraints.
+  Keep palette values, resource identities and workflow interfaces unchanged.
+- Limit language repair to translating the existing result; do not use it to add
+  missing style content. Version instruction caches independently of resource
+  configurations so normal generation can use the revised rules.
+- Add request, cache, scope and compatibility regressions, and document 102 real
+  local GGUF calls. Withdraw tested reminder and weight-priority candidates that
+  broke hard constraints; combined-style adherence remains unproven.
+
 ## [1.38.1] - 2026-10-25
 
 - Expand the existing style browser with local neutral/colored scene comparisons

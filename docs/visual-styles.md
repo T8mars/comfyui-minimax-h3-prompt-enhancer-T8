@@ -39,7 +39,31 @@
 
 配置只携带编号、版本、摘要及作用范围；增强器从已校验的发行资源读取规则，拒绝外部typed配置携带任意提示词、路径或不匹配摘要。资源随发行版固定，更新插件后重启 ComfyUI，不承诺任意修改文件的热更新。恢复操作只还原内存中的旧输出，显示当时的编号/版本，不按当前选择重生成；重启后旧内存记录不在。
 
-这些是实验性提示词建议。资源整理、工程测试或回环响应都不证明真实 LLM 遵从或成片审美收益；开启并不要求明显改稿。请用自己的相同内容进行 Off/只色彩/只导演/组合对照，分别检查硬约束与视觉收益。
+这些是实验性提示词建议。资源整理、工程测试或回环响应都不证明真实 LLM 遵从或成片审美收益；无需为制造差异而大改，但有适用空间时应写清所选维度。请用自己的相同内容进行 Off/只色彩/只导演/组合对照，分别检查硬约束与视觉收益。
+
+## 开启后应该看到什么
+
+开启表示明确要求在兼容范围内落实所选维度。色彩应在最终画面描述中指出可用色相及其对应的未锁定表面/背景；导演应写明至少一种适用方法如何用于现有主体、空间或机位。已经具体体现的方法可以保留；“电影感”“自然”“暖色”等泛词不能代替所选配色与拍法。极致表演负责演技结构，其“不随意改其它画面”的限制不取消用户另外开启的颜色/导演选择。
+
+例如022色卡的深紫、红、深青绿可用于原场景已有且未锁色的区域，人物黑色上衣和自然肤色仍保留。022拍法若没有已知玻璃或反射，不应凭空加镜子；可以选择另一条允许的近距离观察或横移。此处只是如何读结果的例子，不是实测输出，也不要求每次都强行制造差异。颜色选“仅色彩”不会启用彩色灯光，所有可用维度都被明确锁定时仍以锁定内容为准。
+
+曾有版本只传HEX和弱提示，允许“原样不变”，容易被表演细节掩盖；现已增加中性的色相词、逐维度落实与同次回答内的自检要求。色相词由RGB计算，不把“恐惧”等色卡命名转成剧情或情绪。编译规则缓存版本独立更新，原400资源摘要与工作流接口不变。更新后重启ComfyUI，确认使用正常生成而不是“恢复上次结果”，再运行开启/关闭对照；恢复功能会保留旧输出。
+
+节点不会为风格自动增加纠正请求，也不会把色卡机械拼到生成结果后。以上工程修正仍不等于真实模型必然遵从；只看截图无法证明某次远端请求携带了哪些配置。
+
+### 本地 GGUF 对照发现的限制
+
+2026-11-02 用本机 `Qwen3.5-9b-heretic-v2-q8_0.gguf` 做真实文本对照：同一模型、种子、温度及完整首次请求，分别关闭、仅色彩、仅导演、同时开启。使用合成场景，不使用用户截图或凭证；没有生成视频，也没有把回环测试当作模型结果。
+
+在 seed=12 的两个允许调色场景中，原规则的四条启用颜色输出都未写出具体选中色。把简短风格说明加到任务末尾后，部分结果出现了深紫背景，但也出现持续行走被改成定格；再强调两个维度同时落实，甚至把锁定白墙改成紫色。前置说明也出现过漏掉准确台词。因此这些任务说明方案均已撤回，未进入运行逻辑；不能用“配色更明显”抵消硬约束退化。
+
+另用 seed=37 做原版与候选各16条对照，加入未参与调词的商品场景。更强调来源权重的候选把一条锁定杯色 `#C8102E` 改成色卡 `#C41E3A`，因此也撤回该加强规则；不能据一对样本断言某一句是唯一原因。两版都未稳定落实可调区域的配色，撤回后的状态也不能冒充已经通过这次留出评估。
+
+保留的修正针对可核验的信息和边界：深/中/浅灰不再合并成同一描述；导演方法同时携带原中英文，避免遗漏“缓慢”等限定，并明确双语是一种方法；允许已有剪辑点使用对应方法，但 AUTO 也服从用户的一镜到底要求。语言纠正只翻译已有结果，不借机补色或重排机位。资源编号、摘要、配置接口与未开启行为保持。
+
+这些改变不能宣称已让颜色与导演组合稳定生效。首次输出中的说话人/语言标签问题也应与风格分开检查；本次对照不代替完整质量纠正链、真实 Ref2VA 图片验证或成片审美评估。
+
+最终共102次真实本地调用：12次探索、88次正式首次请求对照/回归，以及一次完整增强流程的2次调用。撤回后8条已知案例回归未再次改变锁定杯/桌色，但仍有英文初稿、额外渲染风格或含糊场景描述。另一次完整增强实际触发现有语言纠正，最终中文保留了 `#C8102E` / `#808080`，没有补配色；这只证明该单例修复链可用，不是独立风格收益证明。
 
 ## English quick guide
 
@@ -49,4 +73,8 @@ All 200 palettes have local neutral/colored vector-scene comparisons (interior o
 
 Color references are soft hierarchies, not LUTs or measured pixel ratios. Lighting is separately opt-in and accent swatches are preview-only. Creator entries contain independently adapted presentation methods, not screenplay generation or borrowed movie scenes. Limited-source entries and non-director roles are labeled explicitly. Existing facts, timing, shot counts, dialogue, reference roles and locks take priority. Single-shot mode filters methods requiring cuts. No duration cap or automatic segmentation is added.
 
+Enabled selections now request concrete visible realizations in the native description: neutral hue words on eligible existing areas, and an applicable creator method with a specified framing, camera or timing choice. Acting-only restrictions do not cancel separately enabled style requests. Explicit locks still prevail; no missing prop or light may be invented. The instruction cache revision changes independently of resource/config identities. Restart after updating and use normal generation, since recovery intentionally keeps the previous result. This is a prompt-policy fix, not a verified model-output guarantee or an additional automatic correction call.
+
 Helpers and previews make zero model calls; selected rules join the existing first request. Existing bounded corrections/retries remain. Immutable resources are integrity checked; restart after upgrades. Recovery restores historical output rather than applying today's selection. Engineering acceptance does not establish model compliance, translation accuracy or rendered-video improvement.
+
+A real local GGUF text probe found that stronger task-level style reminders could improve palette visibility while breaking locked colors, motion endings or exact dialogue. Those reminder candidates were withdrawn, as was stronger weight-priority wording after a held-out locked-product color failure. Retained changes preserve neutral gray lightness, bilingual method qualifiers, authorized-cut boundaries and translation-only repair scope. They are fidelity/contract fixes, not proof of stable combined-style adherence or rendered quality.
