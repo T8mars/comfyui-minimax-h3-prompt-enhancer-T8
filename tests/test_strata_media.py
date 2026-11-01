@@ -126,6 +126,7 @@ class StrataMediaTests(unittest.TestCase):
         vars(video).pop("_VideoFromFile__crop",None)
         self.assertAlmostEqual(media.sample_asset(video).frames[-1].timestamp_s,.75)
         component=VideoFromComponents(VideoComponents(images=torch.zeros((4,16,16,3)),frame_rate=Fraction(4)))
+        vars(component).pop("_VideoFromComponents__chroma_subsampling",None)
         vars(component).pop("_VideoFromComponents__color_space",None)
         self.assertAlmostEqual(media.sample_asset(component).frames[-1].timestamp_s,.75)
 

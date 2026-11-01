@@ -35,6 +35,15 @@ class AuthoringCompatibility(unittest.TestCase):
             if name == "moss_image.py": continue  # explicit schema/message gates in test_moss_authoring
             if name in ("nodes.py", "seedance20.py"):
                 self.assertEqual(ast.dump(project_style_ast(path.read_text(encoding="utf-8"))), ast.dump(ast.parse(frozen(name))), name)
+            elif name == "speech_reference.py":
+                # Allow only the audited ComfyUI component-layout fix. Every
+                # other byte of this pre-existing node remains frozen.
+                old_layout = ('        layouts = ({"_VideoFromComponents__components"}, {"_VideoFromComponents__components", "_VideoFromComponents__bit_depth"}, {"_VideoFromComponents__components", "_VideoFromComponents__bit_depth", "_VideoFromComponents__color_space"})\n'
+                              '        if set(state) not in layouts:\n')
+                new_layout = '        if set(state) not in video_adapter.COMPONENT_STATE_LAYOUTS:\n'
+                previous_source = frozen(name).decode("utf-8").replace("\r\n", "\n")
+                self.assertEqual(previous_source.count(old_layout), 1)
+                self.assertEqual(path.read_text(encoding="utf-8"), previous_source.replace(old_layout, new_layout, 1), name)
             else:
                 self.assertEqual(path.read_bytes().replace(b"\r\n", b"\n"), frozen(name).replace(b"\r\n", b"\n"), name)
 

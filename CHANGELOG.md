@@ -3,6 +3,18 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.38.3] - 2026-11-02
+
+- Fix Strata video sampling and speech-reference input on current ComfyUI:
+  recognize the official component object's new encoding-only chroma-subsampling
+  field without materializing or re-encoding the source video.
+- Share the exact audited component layouts across both readers and the sampler.
+  Preserve old layouts, alpha, timestamps and existing audio; continue rejecting
+  unknown structures and visual HDR input that has not been converted to sRGB.
+- Add regressions for current encoding metadata, offline no-audio handling,
+  audio-window fidelity and unsupported layouts; correct the old-host fixture
+  to remove both newer encoding fields.
+
 ## [1.38.2] - 2026-11-02
 
 - Clarify how enabled color and creator references apply alongside performance

@@ -593,8 +593,7 @@ def _video_payload(video, start_s, duration_s):
         _error("ASR does not guess composite VIDEO audio clocks; provide AUDIO or export one official video file.", "source_conflict")
     if kind == "VideoFromComponents":
         state = vars(video)
-        layouts = ({"_VideoFromComponents__components"}, {"_VideoFromComponents__components", "_VideoFromComponents__bit_depth"}, {"_VideoFromComponents__components", "_VideoFromComponents__bit_depth", "_VideoFromComponents__color_space"})
-        if set(state) not in layouts:
+        if set(state) not in video_adapter.COMPONENT_STATE_LAYOUTS:
             _error("Unsupported official VIDEO component state.", "source_conflict")
         audio = getattr(state["_VideoFromComponents__components"], "audio", None)
         if audio is None:

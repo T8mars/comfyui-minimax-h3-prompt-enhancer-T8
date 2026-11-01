@@ -37,7 +37,7 @@ def video_info(video):
         info = {"kind": kind, "duration": duration, "start": start, "crop": crop}
     elif kind == "VideoFromComponents":
         state = set(vars(video))
-        if state not in ({"_VideoFromComponents__components"}, {"_VideoFromComponents__components", "_VideoFromComponents__bit_depth"}, {"_VideoFromComponents__components", "_VideoFromComponents__bit_depth", "_VideoFromComponents__color_space"}):
+        if state not in adapter.COMPONENT_STATE_LAYOUTS:
             raise StrataProviderError("Unsupported official VIDEO component layout.", "media")
         # v0.33 get_components() rebuilds the dataclass without alpha. The exact
         # audited private state holds the original, already existing tensors.

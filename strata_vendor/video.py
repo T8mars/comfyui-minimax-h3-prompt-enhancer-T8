@@ -13,6 +13,16 @@ MAX_FRAMES = 64
 MAX_INPUT_BYTES = 256 * 1024**2
 MAX_DURATION = 3600
 
+# Exact official layouts, from the original components-only object through
+# ComfyUI 17ff1dc (encoding-only chroma_subsampling). Unknown fields still fail.
+_COMPONENT_FIELDS = (
+    '_VideoFromComponents__components', '_VideoFromComponents__bit_depth',
+    '_VideoFromComponents__color_space', '_VideoFromComponents__chroma_subsampling',
+)
+COMPONENT_STATE_LAYOUTS = tuple(
+    frozenset(_COMPONENT_FIELDS[:count]) for count in range(1, len(_COMPONENT_FIELDS) + 1)
+)
+
 
 def shared():
     from . import video_shared
@@ -325,9 +335,7 @@ def sample_input(video=None, images=None, *, fps=24, timestamps_json='', start_s
     name = official_type(video)
     if name == 'VideoFromComponents':
         state = set(vars(video))
-        if state not in ({'_VideoFromComponents__components'},
-                         {'_VideoFromComponents__components', '_VideoFromComponents__bit_depth'},
-                         {'_VideoFromComponents__components', '_VideoFromComponents__bit_depth', '_VideoFromComponents__color_space'}):
+        if state not in COMPONENT_STATE_LAYOUTS:
             raise core.StrataError('Unsupported official VIDEO components state layout')
         components = vars(video)['_VideoFromComponents__components']  # Preserve v0.33 alpha, without materialization.
         if '_VideoFromComponents__color_space' in state and video.get_color_space() != 'sRGB':
