@@ -1,12 +1,16 @@
 # Creator style reference
 
-`On (H3 experimental)` adds concrete execution and source/vocal-preservation hints to the existing H3 request. Ordinary On is unchanged; Seedance treats the new choice as ordinary On. Mixed local text results include missing methods and unwanted sounds. This is opt-in, not automatic validation or an extra model request. Select the experimental mode independently for color and creator.
+Connect `creator_style_config` to H3 / Seedance. It defaults Off. Browse, search, read concrete methods, roles and review notes, Apply, then switch On.
 
-Connect `creator_style_config` to H3 / Seedance, default Off. Browse, search, read concrete methods, roles and review notes, Apply, then switch On. Palette selection is independent. Limited-source entries explicitly disclose generic camera templates rather than unique directing theory.
+Ordinary H3 On requests concrete methods applied to existing subjects, space and camera positions. The legacy On (H3 experimental) choice stays compatible and uses the same current instructions. Palette selection is independent: connect a color config separately to complete unspecified colors on eligible surfaces. To stop applying creator style, switch Off and regenerate.
 
-Presentation suggestions are not screenplay generation or permission to add plot, characters, dialogue, era or medium. Facts, locks, timing, shot count and ending prevail. One-shot mode filters cut-dependent methods; other semantic compatibility requires review. No extra planning call, duration cap or MOSS integration. Restart after upgrades; recovery retains historical output.
+Limited-source entries explicitly disclose generic camera templates rather than unique directing theory. Presentation suggestions are not screenplay generation or permission to add plot, characters, dialogue, era or medium. Facts, locks, timing, shot count and ending prevail. One-shot mode filters cut-dependent methods; other semantic compatibility requires review.
 
-Examples: `visual_style_creator_seedance20.json`, `visual_style_combined_h3.json`. Default Off, blank keys, one enhancer. Model compliance and rendered improvement are unverified.
+Helpers and previews make zero model calls; selected rules join the original request. No separate style request, duration cap or MOSS integration is added. Off and Seedance generation text are unchanged. Restart after upgrades; recovery retains historical output and selection.
+
+Examples: `visual_style_creator_seedance20.json`, `visual_style_combined_h3.json`. Default Off, blank keys, one enhancer.
+
+See the [full guide](https://github.com/T8mars/comfyui-minimax-h3-prompt-enhancer-T8/blob/main/docs/visual-styles.md#style-validation) for prompt-validation progress, model settings and historical limitations. Diagrams do not establish a creator's entire practice or rendered effects.
 
 ## Local visual preview
 

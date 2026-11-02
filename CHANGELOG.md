@@ -3,6 +3,30 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.40.0] - 2026-11-03
+
+- Apply the tested H3 color and creator execution hints with ordinary `On`.
+  The existing experimental choice remains compatible and produces the same
+  H3 request. No new node, widget, resource identity or extra style model call.
+- Invalidate compiled-style caches once; preserve Off requests, Seedance
+  prompts and historical result restoration. Update both helpers' guidance.
+- Clarify that eligible surfaces with unspecified colors should receive a
+  concrete selected color, while explicit color and reference locks prevail.
+  A local 20-case comparison passed all enabled color and creator checks,
+  including ten previous cases and ten previously unseen-output cases.
+- Evaluate visible palette application and concrete creator methods separately
+  from dialogue, character-count and other model errors. A fixed single-seed
+  run with the installed 27B completed 200 paired T2VA text scenarios:
+  190/200 (95%) confirmed both dimensions, excluding all five failures and
+  five uncertain cases. Keep the cohorts separate: known regressions 001–010
+  passed 10/10, first unseen-output cases 011–020 passed 10/10, and direct
+  production continuation 021–200 passed 170/180. Palette checks confirmed
+  197/200; creator-method checks confirmed 193/200. Generic or retained methods
+  do not prove distinctive director signatures or improvement over Off.
+  [Full results and limitations](docs/visual-styles.md#style-validation) retain
+  every non-pass. Rendered video, repeated success per director and actual
+  reference-image Ref2VA effects are not established.
+
 ## [1.39.0] - 2026-11-02
 
 - Add an explicit `On (H3 experimental)` choice to the existing color and

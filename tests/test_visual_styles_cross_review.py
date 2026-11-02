@@ -100,7 +100,7 @@ class VisualStylesCrossReviewTests(unittest.TestCase):
                             repaired = module.preserve_speech_on_repair(repaired, messages)
                             repaired = styles.preserve_visual_styles_on_repair(repaired, messages, color, creator)
                         all_text = "\n".join(primary_text(message["content"]) for message in repaired)
-                        self.assertEqual(all_text.count(styles.MARKER), 1)
+                        self.assertEqual(all_text.count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER), 1)
                         self.assertIn("EXACT_AUDIT_SENTINEL", all_text)
                         self.assertIn(primary_text(messages[1]["content"]), all_text)
                         self.assertTrue(repaired[0]["content"].startswith(messages[0]["content"]))

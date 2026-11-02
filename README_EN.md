@@ -4,9 +4,13 @@
 
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
-## New: independent color and creator styles (experimental)
+## Updated: concrete H3 color and creator execution with ordinary On (1.40.0)
 
-Search `T8 Color Style Config` or `T8 Creator Style Config`. Connect either to H3 / Seedance, browse the local catalog, select, then enable On. Both default Off and combine independently; no MOSS integration, image processing, duration cap or separate planning call. Creator methods are not a screenplay generator, and limited-source entries are labeled. Model and rendered benefits are unverified. [Guide](docs/visual-styles.md) · [Color→H3](example_workflows/visual_style_color_h3.json) · [Creator→Seedance](example_workflows/visual_style_creator_seedance20.json) · [Combined→H3](example_workflows/visual_style_combined_h3.json)
+Ordinary H3 **On** requests concrete palette placement and creator methods in the scene description. Unspecified or undetermined colors on eligible visible surfaces are completed from the selected palette; locked original colors, reference colors and materials remain protected. The legacy **On (H3 experimental)** choice stays compatible and uses the same instructions as ordinary On in this version. Both configs default Off. To stop applying a dimension, switch that config Off and generate again.
+
+Search `T8 Color Style Config` or `T8 Creator Style Config`. Connect either to H3 / Seedance, browse the local catalog, select, then enable On. They combine independently, with 200 palette comparisons and 400 creator-method diagrams; no MOSS integration, image processing or duration cap. Creator methods are not a screenplay generator, and limited-source entries are labeled. Diagrams are not model outputs. [Guide](docs/visual-styles.md) · [Color→H3](example_workflows/visual_style_color_h3.json) · [Creator→Seedance](example_workflows/visual_style_creator_seedance20.json) · [Combined→H3](example_workflows/visual_style_combined_h3.json)
+
+This version keeps the earlier experimental execution instructions and adds the open-color clarification. Off and Seedance generation text are unchanged; no new fields or separate style requests are added. Validation covers palette and method execution in prompt text, while previews remain teaching illustrations. [Validation progress, model settings and historical limitations](docs/visual-styles.md#style-validation) are maintained in the guide.
 
 ## New: H3 visual marker authoring (experimental)
 

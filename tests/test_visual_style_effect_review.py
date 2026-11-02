@@ -71,7 +71,7 @@ class VisualStyleEffectReviewTests(unittest.TestCase):
                         module.local_language_repair_messages('Plain draft.', language), messages, color, creator)
                 self.assertTrue(repaired[0]['content'].endswith(scope))
                 self.assertEqual(repaired[0]['content'].count(scope), 1)
-                self.assertEqual(repaired[0]['content'].count(styles.MARKER), 1)
+                self.assertEqual(repaired[0]['content'].count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER), 1)
                 self.assertIn(source, text_part(repaired[1]))
                 self.assertEqual(styles.preserve_visual_styles_on_repair(repaired, messages, color, creator), repaired)
                 self.assertEqual(messages, before)

@@ -20,6 +20,8 @@ styles = h3.visual_styles
 helpers = importlib.import_module(h3.__package__ + ".visual_style_nodes")
 recovery = importlib.import_module(h3.__package__ + ".completion_recovery")
 BASELINE = "421733faaeef5e997d52520d192e14665ede124e"
+EXECUTION_BASELINE = "3e07bffcf713432b8c291b5c0ec071a2aa526af9"
+OPEN_COLOR_CLARIFICATION = '在原任务与参考素材保留约束允许时，原文只把既有表面的颜色写为未指定或待定、且没有要求保留原色、参考色或未知状态，这就是本次配色应补全的开放属性，不是最终画面必须照抄的状态。请从选中色卡选择兼容颜色，直接写明实际可见表面的最终颜色；不要只保留“颜色未定”，也不要仅用原本锁定且恰好命中色卡的颜色代替开放表面的配色。'
 
 
 def active(kind):
@@ -30,27 +32,59 @@ def ordinary(kind):
     return styles.build_style_config(kind, styles.ON, "022")
 
 
-@lru_cache(maxsize=1)
-def baseline_styles():
+@lru_cache(maxsize=2)
+def baseline_styles(commit=BASELINE):
     """Load actual published guide code, not today's guide behind an old builder."""
     source = subprocess.check_output(
-        ["git", "show", BASELINE + ":visual_styles.py"], cwd=GIT_ROOT
+        ["git", "show", commit + ":visual_styles.py"], cwd=GIT_ROOT
     ).decode("utf-8")
-    module = types.ModuleType("published_visual_styles_1_38_4")
+    module = types.ModuleType("published_visual_styles_" + commit[:12])
     # Packaged resource identities are unchanged; resolve them from the checkout.
     module.__file__ = styles.__file__
     exec(compile(source, str(styles.__file__), "exec"), module.__dict__)
     return module
 
 
-def published_builder(filename, module):
-    function = original_function(filename, "_build_messages", module, BASELINE)
-    function.__globals__["visual_styles"] = baseline_styles()
+def published_builder(filename, module, commit=BASELINE):
+    function = original_function(filename, "_build_messages", module, commit)
+    function.__globals__["visual_styles"] = baseline_styles(commit)
     return function
 
 
 def message_text(messages):
     return "\n".join(primary_text(message["content"]) for message in messages)
+
+
+def without_open_color_clarification(messages, *, color_enabled):
+    """Remove only the reviewed insertion at its exact user-tail location.
+
+    Full-message comparisons still check every other character and media part.
+    Duplicate, absent, or misplaced insertions are errors, never normalized away.
+    """
+    result = copy.deepcopy(messages)
+    count = json.dumps(result, ensure_ascii=False).count(OPEN_COLOR_CLARIFICATION)
+    if not color_enabled:
+        if count:
+            raise AssertionError("Open-color text leaked into an inactive dimension")
+        return result
+    if count != 1 or len(result) < 2 or result[1].get("role") != "user":
+        raise AssertionError("Expected exactly one open-color insertion in the user message")
+    content = result[1]["content"]
+    if isinstance(content, str):
+        text = content
+    elif isinstance(content, list) and content and content[0].get("type") == "text":
+        text = content[0]["text"]
+    else:
+        raise AssertionError("Unexpected H3 primary user text layout")
+    boundary = "\n色彩：" + OPEN_COLOR_CLARIFICATION
+    if text.count(boundary) != 1:
+        raise AssertionError("Open-color insertion moved outside its reviewed color-tail position")
+    stripped = text.replace(boundary, "\n色彩：", 1)
+    if isinstance(content, str):
+        result[1]["content"] = stripped
+    else:
+        content[0]["text"] = stripped
+    return result
 
 
 class H3VisualStyleExecutionTests(unittest.TestCase):
@@ -78,27 +112,37 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
                     self.assertEqual(actual, expected)
                     self.assertNotIn(self.marker(), message_text(actual))
 
-    def test_ordinary_on_uses_the_complete_published_style_guide_and_request(self):
-        published = baseline_styles()
-        self.assertEqual(styles.MARKER, published.MARKER)
-        self.assertFalse(hasattr(published, "ON_EXPERIMENTAL"))
-        old_build = published_builder("nodes.py", h3)
+    def test_on_and_mixed_modes_match_complete_published_experimental_requests(self):
+        published = baseline_styles(EXECUTION_BASELINE)
+        self.assertEqual(styles.EXPERIMENTAL_MARKER, published.EXPERIMENTAL_MARKER)
+        self.assertNotEqual(styles.INSTRUCTION_REVISION, published.INSTRUCTION_REVISION)
+        old_build = published_builder("nodes.py", h3, EXECUTION_BASELINE)
         for kind in ("color", "creator"):
             self.assertEqual(ordinary(kind), published.build_style_config(kind, published.ON, "022"))
         pairs = ((ordinary("color"), None), (None, ordinary("creator")),
-                 (ordinary("color"), ordinary("creator")))
+                 (ordinary("color"), ordinary("creator")),
+                 (active("color"), active("creator")),
+                 (active("color"), ordinary("creator")),
+                 (ordinary("color"), active("creator")))
         for task in h3.TASK_TYPES:
             for language in ("中文", "English"):
-                for color, creator in pairs:
-                    with self.subTest(task=task, language=language, color=bool(color), creator=bool(creator)):
-                        values = h3_args(task_type=task, output_language=language, shot_count=1,
-                                         prompt='原文\r\n旁白：“今天继续。”屏幕文字“标题”不发声。')
-                        expected = old_build(**values, color_style_config=color, creator_style_config=creator)
-                        actual = h3._build_messages(**values, color_style_config=color, creator_style_config=creator)
-                        self.assertEqual(actual, expected)
-                        self.assertEqual(styles.h3_style_execution_reminder(color, creator), "")
-                        self.assertNotIn(styles.EXPERIMENTAL_MARKER, message_text(actual))
-                        self.assertNotIn(self.marker(), message_text(actual))
+                for shots in (0, 1, 3):
+                    for color, creator in pairs:
+                        with self.subTest(task=task, language=language, shots=shots, color=color, creator=creator):
+                            values = h3_args(task_type=task, output_language=language, shot_count=shots,
+                                             prompt='原文\r\n旁白：“今天继续。”屏幕文字“标题”不发声。')
+                            old_color = published.build_style_config("color", published.ON_EXPERIMENTAL, "022") if color else None
+                            old_creator = published.build_style_config("creator", published.ON_EXPERIMENTAL, "022") if creator else None
+                            expected = old_build(**values, color_style_config=old_color, creator_style_config=old_creator)
+                            actual = h3._build_messages(**values, color_style_config=color, creator_style_config=creator)
+                            color_enabled = styles.resolve_color_style(color) is not None
+                            self.assertEqual(without_open_color_clarification(actual, color_enabled=color_enabled), expected)
+                            old_reminder = published.h3_style_execution_reminder(old_color, old_creator)
+                            expected_reminder = old_reminder.replace("\n色彩：", "\n色彩：" + OPEN_COLOR_CLARIFICATION, 1) if color_enabled else old_reminder
+                            self.assertEqual(styles.h3_style_execution_reminder(color, creator), expected_reminder)
+                            self.assertEqual(message_text(actual).count(styles.EXPERIMENTAL_MARKER), 1)
+                            self.assertEqual(message_text(actual).count(self.marker()), 1)
+                            self.assertNotIn(styles.MARKER, message_text(actual))
 
     def test_seedance_experimental_configs_are_identical_to_published_ordinary_on(self):
         old_build = published_builder("seedance20.py", sd)
@@ -123,8 +167,9 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
         old_build = original_function("nodes.py", "_build_messages", h3, BASELINE)
         source = '原文\r\n无人产品画面，画外旁白说：“今天继续。”屏幕文字“保持安静”不发声。'
         values = h3_args(prompt=source, shot_count=1)
-        for color, creator in ((active("color"), None), (None, active("creator")),
-                               (active("color"), active("creator"))):
+        for color, creator in ((ordinary("color"), None), (None, ordinary("creator")),
+                               (ordinary("color"), ordinary("creator")),
+                               (active("color"), ordinary("creator"))):
             snapshot = copy.deepcopy((color, creator))
             before = old_build(**values, color_style_config=color, creator_style_config=creator)
             after = h3._build_messages(**values, color_style_config=color, creator_style_config=creator)
@@ -141,7 +186,8 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
         self.assertNotIn(self.marker(), message_text(seedance))
 
     def test_multimodal_parts_keep_their_original_order_and_values(self):
-        old_build = original_function("nodes.py", "_build_messages", h3, BASELINE)
+        published = baseline_styles(EXECUTION_BASELINE)
+        old_build = published_builder("nodes.py", h3, EXECUTION_BASELINE)
         parts = [
             {"type": "text", "text": "Reference image <Picture 1>"},
             {"type": "image_url", "image_url": {"url": "https://example.invalid/one.png", "detail": "high"}},
@@ -152,18 +198,62 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
                          media_plan=[{"role": "reference_image", "label": "<Picture 1>"},
                                      {"role": "reference_image", "label": "<Picture 2>"}])
         snapshot = copy.deepcopy(values)
-        color, creator = active("color"), active("creator")
-        before = old_build(**values, color_style_config=color, creator_style_config=creator)
+        color, creator = ordinary("color"), active("creator")
+        before = old_build(**values,
+            color_style_config=published.build_style_config("color", published.ON_EXPERIMENTAL, "022"),
+            creator_style_config=published.build_style_config("creator", published.ON_EXPERIMENTAL, "022"))
         after = h3._build_messages(**values, color_style_config=color, creator_style_config=creator)
+        self.assertEqual(without_open_color_clarification(after, color_enabled=True), before)
         self.assertEqual(after[1]["content"][1:], before[1]["content"][1:])
         self.assertEqual(after[1]["content"][1:], parts)
-        self.assertEqual(after[1]["content"][0]["text"], before[1]["content"][0]["text"] + "\n\n" +
-                         styles.h3_style_execution_reminder(color, creator))
+        self.assertEqual(after[1]["content"][0]["text"].count(self.marker()), 1)
         self.assertEqual(values, snapshot)
 
+
+    def test_open_color_clarification_is_h3_color_only_and_exactly_once(self):
+        pairs = ((None, None), (styles.build_style_config("color"), ordinary("creator")),
+                 (None, ordinary("creator")), (None, active("creator")),
+                 (ordinary("color"), None), (active("color"), None),
+                 (ordinary("color"), active("creator")), (active("color"), ordinary("creator")))
+        for color, creator in pairs:
+            enabled = styles.resolve_color_style(color) is not None
+            h3_messages = h3._build_messages(**h3_args(), color_style_config=color, creator_style_config=creator)
+            self.assertEqual(message_text(h3_messages).count(OPEN_COLOR_CLARIFICATION), int(enabled))
+            self.assertNotIn(OPEN_COLOR_CLARIFICATION, h3_messages[0]["content"])
+            snapshot = copy.deepcopy(h3_messages)
+            projected = without_open_color_clarification(h3_messages, color_enabled=enabled)
+            self.assertNotIn(OPEN_COLOR_CLARIFICATION, message_text(projected))
+            self.assertEqual(h3_messages, snapshot)
+            seedance = sd._build_messages(**sd_args(), color_style_config=color, creator_style_config=creator)
+            self.assertNotIn(OPEN_COLOR_CLARIFICATION, message_text(seedance))
+
+    def test_open_color_projection_rejects_missing_duplicate_and_moved_text(self):
+        color, creator = ordinary("color"), ordinary("creator")
+        actual = h3._build_messages(**h3_args(), color_style_config=color, creator_style_config=creator)
+        original = without_open_color_clarification(actual, color_enabled=True)
+        missing = copy.deepcopy(original)
+        duplicate = copy.deepcopy(actual)
+        duplicate[1]["content"] += OPEN_COLOR_CLARIFICATION
+        moved = copy.deepcopy(original)
+        moved[1]["content"] += OPEN_COLOR_CLARIFICATION
+        wrong_role = copy.deepcopy(original)
+        wrong_role[0]["content"] += OPEN_COLOR_CLARIFICATION
+        for changed in (missing, duplicate, moved, wrong_role):
+            with self.assertRaises(AssertionError):
+                without_open_color_clarification(changed, color_enabled=True)
+        with self.assertRaises(AssertionError):
+            without_open_color_clarification(actual, color_enabled=False)
+        # Changes elsewhere remain visible to the complete published-request assertion.
+        changed_source = copy.deepcopy(actual)
+        changed_source[1]["content"] += "unexpected source rewrite"
+        self.assertNotEqual(without_open_color_clarification(changed_source, color_enabled=True), original)
+        changed_system = copy.deepcopy(actual)
+        changed_system[0]["content"] += "unexpected system rule"
+        self.assertNotEqual(without_open_color_clarification(changed_system, color_enabled=True), original)
+
     def test_reminder_keeps_dimensions_separate_and_preserves_speech_authorization(self):
-        color_only = styles.h3_style_execution_reminder(active("color"))
-        creator_only = styles.h3_style_execution_reminder(creator=active("creator"))
+        color_only = styles.h3_style_execution_reminder(ordinary("color"))
+        creator_only = styles.h3_style_execution_reminder(creator=ordinary("creator"))
         self.assertIn("\n色彩：", color_only)
         self.assertNotIn("\n导演：", color_only)
         self.assertIn("\n导演：", creator_only)
@@ -185,20 +275,21 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
         self.assertIn("固定机位", creator_only)
         self.assertIn("缺少必要空间、物件或许可时不用该方法", creator_only)
 
-    def test_mixed_modes_strengthen_only_the_experimental_dimension(self):
-        for color, creator, dimension, excluded in (
-            (active("color"), ordinary("creator"), "色彩", "导演"),
-            (ordinary("color"), active("creator"), "导演", "色彩"),
+    def test_mixed_modes_retain_each_enabled_dimension_once(self):
+        for color, creator in (
+            (active("color"), ordinary("creator")),
+            (ordinary("color"), active("creator")),
+            (ordinary("color"), ordinary("creator")),
         ):
             reminder = styles.h3_style_execution_reminder(color, creator)
-            self.assertEqual(reminder.count("\n" + dimension + "："), 1)
-            self.assertNotIn("\n" + excluded + "：", reminder)
+            self.assertEqual(reminder.count("\n色彩："), 1)
+            self.assertEqual(reminder.count("\n导演："), 1)
             self.assertEqual(reminder.count("\n原生发声："), 1)
             self.assertEqual(reminder.count("\n声音与媒介："), 1)
             messages = h3._build_messages(**h3_args(), color_style_config=color, creator_style_config=creator)
             self.assertEqual(message_text(messages).count(self.marker()), 1)
             self.assertEqual(messages[0]["content"].count(styles.EXPERIMENTAL_MARKER), 1)
-            # Ordinary On retains its source guide; it only opts out of the new tail dimension.
+            # Both mode values carry the same tested instruction without changing saved identity.
             self.assertIn("COLOR REFERENCE", messages[0]["content"])
             self.assertIn("CREATOR PRESENTATION ONLY", messages[0]["content"])
             self.assertTrue(primary_text(messages[1]["content"]).endswith(reminder))
@@ -247,23 +338,28 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
                 bad["color_style"]["execution_mode"] = invalid
                 self.assertEqual(styles.safe_style_metadata(bad), {"creator_style": metadata["creator_style"]})
 
-        metadata = styles.style_metadata(active("color"), active("creator"))
         # Isolated in-memory checkpoint, never a user's live recovery record.
         with patch.object(recovery, "_RECORDS", OrderedDict()):
-            for module, cls, function in (
-                (h3, h3.MiniMaxH3PromptEnhancer, "enhance_prompt"),
-                (sd, sd.Seedance20PromptEnhancer, "enhance_seedance20_prompt"),
-            ):
-                component = cls.define_schema().node_id
-                slot = "test-h3-experimental-restore-" + component
-                self.assertTrue(recovery.begin_recovery_record(component, slot, "test", metadata=metadata))
-                self.assertTrue(recovery.complete_recovery_record(component, slot, ("historical result",)))
-                with patch.object(styles, "load_catalog", side_effect=AssertionError("No historical remap")), \
-                        patch.object(module, function, side_effect=AssertionError("No new model call")):
-                    restored = cls.execute(**execute_inputs(module), recovery_action="restore_last", recovery_slot=slot,
-                                           color_style_config={"invalid_current": True}, creator_style_config={"invalid_current": True})
-                    self.assertEqual(restored[0], "historical result")
-                    self.assertEqual(recovery.recovery_status(component, slot)["creation_metadata"], metadata)
+            for index, (color, creator) in enumerate((
+                (ordinary("color"), ordinary("creator")),
+                (active("color"), active("creator")),
+                (ordinary("color"), active("creator")),
+            )):
+                metadata = styles.style_metadata(color, creator)
+                for module, cls, function in (
+                    (h3, h3.MiniMaxH3PromptEnhancer, "enhance_prompt"),
+                    (sd, sd.Seedance20PromptEnhancer, "enhance_seedance20_prompt"),
+                ):
+                    component = cls.define_schema().node_id
+                    slot = "test-h3-style-restore-" + str(index) + component
+                    self.assertTrue(recovery.begin_recovery_record(component, slot, "test", metadata=metadata))
+                    self.assertTrue(recovery.complete_recovery_record(component, slot, ("historical result",)))
+                    with patch.object(styles, "load_catalog", side_effect=AssertionError("No historical remap")), \
+                            patch.object(module, function, side_effect=AssertionError("No new model call")):
+                        restored = cls.execute(**execute_inputs(module), recovery_action="restore_last", recovery_slot=slot,
+                                               color_style_config={"invalid_current": True}, creator_style_config={"invalid_current": True})
+                        self.assertEqual(restored[0], "historical result")
+                        self.assertEqual(recovery.recovery_status(component, slot)["creation_metadata"], metadata)
 
     def test_mode_changes_invalidate_helper_and_consumer_caches_but_restore_is_exempt(self):
         for kind, cls, selection_name in (
@@ -274,6 +370,9 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
             experimental = cls.fingerprint_inputs(mode=styles.ON_EXPERIMENTAL, **{selection_name: "022"})
             self.assertNotEqual(normal, experimental)
             self.assertEqual(experimental, styles.helper_fingerprint(kind, styles.ON_EXPERIMENTAL, "022"))
+            published = baseline_styles(EXECUTION_BASELINE)
+            self.assertNotEqual(normal, published.helper_fingerprint(kind, published.ON, "022"))
+            self.assertNotEqual(experimental, published.helper_fingerprint(kind, published.ON_EXPERIMENTAL, "022"))
         pairs = ((ordinary("color"), ordinary("creator")),
                  (active("color"), ordinary("creator")),
                  (ordinary("color"), active("creator")),
@@ -303,15 +402,16 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
             result = h3.enhance_prompt(prompt="Keep the red sleeve and the ticket.", duration_seconds=13,
                 shot_count="1", output_language="English", api_mode=mode, session=session,
                 api_key="test-placeholder", openai_base_url="https://example.invalid/v1", custom_model="test-model",
-                color_style_config=active("color"), creator_style_config=active("creator"))
+                color_style_config=ordinary("color"), creator_style_config=ordinary("creator"))
             self.assertEqual(result, draft, "The reminder must not append style text or add a style correction call")
             self.assertEqual(len(session.chat_requests), 1)
             self.assertEqual(session.uploads, [])
             self.assert_execution_and_language_order(session.chat_requests[0]["json"]["messages"])
 
     def test_local_actual_entry_builds_twice_but_calls_once_for_each_dimension(self):
-        for color, creator in ((active("color"), None), (None, active("creator")),
-                               (active("color"), active("creator"))):
+        for color, creator in ((ordinary("color"), None), (None, ordinary("creator")),
+                               (ordinary("color"), ordinary("creator")),
+                               (ordinary("color"), active("creator"))):
             provider = RecordingLocalProvider({}, vision=False, responses=[native_draft()])
             with patch.object(h3, "LocalQwenProvider", return_value=provider), \
                     patch.object(h3, "_build_messages", wraps=h3._build_messages) as builds:
@@ -348,7 +448,7 @@ class H3VisualStyleExecutionTests(unittest.TestCase):
                 self.assertIn("<d>[Chinese] 今天继续。</d>", result)
 
     def test_language_repairs_keep_one_execution_reminder_and_translation_scope_last(self):
-        color, creator = active("color"), active("creator")
+        color, creator = ordinary("color"), active("creator")
         for local in (False, True):
             responses = [native_draft(), native_draft(True)]
             values = dict(prompt='保留原文\r\n“显示文字”与人物红袖口。', output_language="中文",

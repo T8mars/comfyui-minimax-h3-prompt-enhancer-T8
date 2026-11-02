@@ -16,7 +16,7 @@ from typing import Any
 
 REVISION = "1.0.0"
 # Resource/config identity stays stable; compilation policy has its own cache revision.
-INSTRUCTION_REVISION = "1.0.3"
+INSTRUCTION_REVISION = "1.0.5"
 OFF = "关闭 / Off"
 ON = "开启 / On"
 ON_EXPERIMENTAL = "开启（H3强化试验） / On (H3 experimental)"
@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent / "resources" / "visual_styles"
 CATALOG_SCHEMA = "t8-visual-style-catalog/v1"
 COLOR_SCHEMA = "t8-color-style-config/v1"
 CREATOR_SCHEMA = "t8-creator-style-config/v1"
-# Keep ordinary On requests byte-identical; only the new opt-in mode uses v1.0.3.
+# H3 On and its legacy experimental value share the tested v1.0.3 prompt; Seedance keeps v1.0.2.
 MARKER = "T8 OPTIONAL VISUAL PRESENTATION v1.0.2"
 EXPERIMENTAL_MARKER = "T8 OPTIONAL VISUAL PRESENTATION v1.0.3"
 H3_STYLE_EXECUTION_MARKER = "H3 VISUAL STYLE EXECUTION CHECK"
@@ -301,7 +301,7 @@ def _hue_description(hex_value):
 
 
 def _experimental_enabled(color, creator):
-    return any(config is not None and config["mode"] == "on_experimental" for config in (color, creator))
+    return any(config is not None and config["mode"] in {"on", "on_experimental"} for config in (color, creator))
 
 
 def visual_style_instruction(color=None, creator=None, target="h3", *, fixed_shot_count=0):
@@ -357,9 +357,9 @@ def h3_style_execution_reminder(color=None, creator=None):
         return ""
     lines = [H3_STYLE_EXECUTION_MARKER + ":",
         "输出前落实已开启的视觉参考，同时保留原任务事实：人物姿态、位置、动作先后与完成状态、准确台词、身份、镜数、时长和首尾约束不能被视觉建议替代。只在当前任务的正常画面描述中表达兼容的改进，不输出方案、色卡表或验证成功声明。"]
-    if color and color["mode"] == "on_experimental":
-        lines.append("色彩：把选中色相对应到原场景实际可见、未锁色的具体表面；保留该表面的准确范围，床单的许可不等于整张床或人物的许可。与当前构图一起检查可见性，不能把画外区域的配色当作画面效果。保留原有锁定颜色、自然肤色与材质；不为配色新增物件或改换渲染媒介。没有兼容表面时保留原色。")
-    if creator and creator["mode"] == "on_experimental":
+    if color and color["mode"] in {"on", "on_experimental"}:
+        lines.append("色彩：在原任务与参考素材保留约束允许时，原文只把既有表面的颜色写为未指定或待定、且没有要求保留原色、参考色或未知状态，这就是本次配色应补全的开放属性，不是最终画面必须照抄的状态。请从选中色卡选择兼容颜色，直接写明实际可见表面的最终颜色；不要只保留“颜色未定”，也不要仅用原本锁定且恰好命中色卡的颜色代替开放表面的配色。把选中色相对应到原场景实际可见、未锁色的具体表面；保留该表面的准确范围，床单的许可不等于整张床或人物的许可。与当前构图一起检查可见性，不能把画外区域的配色当作画面效果。保留原有锁定颜色、自然肤色与材质；不为配色新增物件或改换渲染媒介。没有兼容表面时保留原色。")
+    if creator and creator["mode"] in {"on", "on_experimental"}:
         lines.append("导演：从所选条目列出的方法中，具体说明兼容方法在原主体、空间和当前镜头内怎样执行；不要只写导演名字或电影感。一镜到底只禁止切镜，不自动禁止运镜；初始视点选择与拍摄中的移动须分别遵守原约束，不能把固定机位解释成允许推拉。缺少必要空间、物件或许可时不用该方法，不补造条件，不改变原动作来适配拍法。")
     lines.extend([
         "原生发声：只对原任务已有或明确授权的台词、歌唱等发声保留稳定ASCII说话人编号，如(S1)，并在实际发声位置使用<d>[英文语言名称]准确原词</d>；普通话用Chinese。保留准确字词、标点、说话人及先后，不以普通引号替代原生格式，也不要把标题、文字标识或任意引文当成对白。保留画外音/离屏说话的原有角色；画面无人不等于没有发声。没有授权发声时，不为满足格式新增说话人或台词。",

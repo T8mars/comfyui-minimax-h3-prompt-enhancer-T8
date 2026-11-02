@@ -22,7 +22,7 @@ export function openStyleBrowser(node, kind) {
     dialog.addEventListener('cancel', event => {event.preventDefault(); close();});
     make('h3', kind === 'color' ? '200 色彩风格 / Color references' : '200 导演与创作者 / Creator references', dialog);
     make('p', '1. 搜索并预览 → 2. 应用选择 → 3. 节点切为开启 / On → 4. 接 H3 或 Seedance 对应配置口。两个入口可独立组合，默认关闭。 / Preview → Apply → switch On → connect the matching input.', dialog);
-    make('p', 'H3可选“开启（H3强化试验）”：在原请求中增加具体表面、拍法、原台词与声音边界提示。普通开启保持原行为；Seedance仍按普通开启。实测仅部分对白格式改善，配色/拍法仍可能遗漏，也可能增加不需要的声音；不是效果保证或自动校验。 / H3 experimental mode adds execution hints; mixed text results, no extra style request, no verified video benefit.', dialog);
+    make('p', 'H3普通“开启 / On”已加入具体配色落点和拍法提示；旧“开启（H3强化试验）”保留同效果兼容。默认仍关闭，Seedance不变，无独立风格请求。要停用，请关闭对应配置并重新生成。 / Ordinary H3 On now includes concrete color/method instructions; legacy experimental On uses the same instructions. Default Off and Seedance stay unchanged. Switch the config Off to disable.', dialog);
     make('p', kind === 'color' ? '这是提示词配色参考，不是 LUT，不修改原图。六色比例是原资料的相对参考；不要求全用，也不保证像素面积。光影仅在选择“色彩 + 光影”时加入。 / Prompt references only; lighting is opt-in.' : '仅提供已有场面的构图、拍法与节奏建议，不是完整编剧器，不新增剧情。不会自动采用同名色卡。 / Presentation methods, not screenplay generation or automatic color transfer.', dialog);
     const toolbar = make('div', '', dialog);
     toolbar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto';
@@ -38,7 +38,7 @@ export function openStyleBrowser(node, kind) {
     const footer = make('div', '', dialog); footer.style.cssText = 'position:sticky;bottom:-20px;background:#202126;padding:12px 0;display:flex;gap:12px;z-index:1;border-top:1px solid #53616c';
     const apply = make('button', '应用到当前节点 / Apply selection', footer); apply.disabled = true;
     const cancel = make('button', '关闭 / Close', footer); cancel.onclick = close;
-    make('p', '纯本地浏览，无模型调用。适配方法为实验性建议；内容整理不等于模型遵从或成片效果已验证。 / Local-only preview; model and rendered outcomes are unverified.', dialog);
+    make('p', '纯本地预览，无模型调用。27B单种子提示词小样本：配色与拍法10个适用场景10/10，另2个边界观察；此分数不计对白、人数和动作时间。200组合扩大测试与成片尚未验证。 / Local preview only. Single-seed 27B text test: 10/10 applicable cases for color and method, plus two boundary observations; dialogue, people and action/timing are not scored. No expanded 200-case or rendered-video validation.', dialog);
     for (const element of dialog.querySelectorAll('input,select,button')) element.style.pointerEvents = 'auto';
     const fail = () => {
         if (!live()) {close(); return;}

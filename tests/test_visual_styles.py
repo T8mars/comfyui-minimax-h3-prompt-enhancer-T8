@@ -103,9 +103,13 @@ class VisualStyleTests(unittest.TestCase):
                 before = module._build_messages(**values)
                 after = module._build_messages(**values, color_style_config=c, creator_style_config=d)
                 rule = styles.visual_style_instruction(c, d, target, fixed_shot_count=1)
-                self.assertEqual(after[0]['content'].count(styles.MARKER), 1)
+                marker = styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER
+                self.assertEqual(after[0]['content'].count(marker), 1)
                 self.assertEqual(after[0]['content'].replace('\n\n' + rule, ''), before[0]['content'])
-                self.assertEqual(after[1:], before[1:])
+                expected_user = copy.deepcopy(before[1:])
+                if module is h3:
+                    expected_user[0]['content'] += '\n\n' + styles.h3_style_execution_reminder(c, d)
+                self.assertEqual(after[1:], expected_user)
                 self.assertIn('no duration cap', rule)
                 self.assertIn('Exactly one shot', rule)
                 if c is None:
@@ -129,9 +133,9 @@ class VisualStyleTests(unittest.TestCase):
             messages = h3._build_messages(**h3_args(), color_style_config=c, creator_style_config=d)
             first = styles.preserve_visual_styles_on_repair(repair, messages, c, d)
             self.assertEqual(first, styles.preserve_visual_styles_on_repair(first, messages, c, d))
-            self.assertEqual(first[0]['content'].count(styles.MARKER), 1)
+            self.assertEqual(first[0]['content'].count(styles.EXPERIMENTAL_MARKER), 1)
             actual = h3._h3_language_repair_messages('draft', 'English', None, messages, color_style_config=c, creator_style_config=d)
-            self.assertEqual(actual[0]['content'].count(styles.MARKER), 1)
+            self.assertEqual(actual[0]['content'].count(styles.EXPERIMENTAL_MARKER), 1)
         self.assertEqual(styles.preserve_visual_styles_on_repair(repair, messages), repair)
 
     def test_cloud_local_budgets_single_requests_and_language_repair(self):
@@ -145,7 +149,7 @@ class VisualStyleTests(unittest.TestCase):
                                     openai_base_url='https://example.invalid/v1', custom_model='test-model'), draft)
                 self.assertEqual(len(session.chat_requests), 1)
                 self.assertEqual(session.uploads, [])
-                self.assertEqual(session.chat_requests[0]['json']['messages'][0]['content'].count(styles.MARKER), 1)
+                self.assertEqual(session.chat_requests[0]['json']['messages'][0]['content'].count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER), 1)
             providers = []
             def factory(settings, *, vision):
                 provider = RecordingLocalProvider(settings, vision=vision, responses=[draft])
@@ -155,7 +159,7 @@ class VisualStyleTests(unittest.TestCase):
                 self.assertEqual(fn(**values, api_mode=module.LOCAL_QWEN_API_MODE, **local_parameters(module)), draft)
                 self.assertEqual(builds.call_count, 2)
                 rules = [module._build_messages(*v.args, **v.kwargs)[0]['content'] for v in list(builds.call_args_list)]
-                self.assertTrue(all(s.count(styles.MARKER) == 1 for s in rules))
+                self.assertTrue(all(s.count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER) == 1 for s in rules))
             self.assertEqual(len(providers[0].calls), 1)
             self.assertTrue(providers[0].closed)
             wrong = native_draft(True) if module is h3 else '女人保留红袖口并拿稳车票继续向前走。' * 20
@@ -163,7 +167,7 @@ class VisualStyleTests(unittest.TestCase):
             with patch.object(module, 'needs_local_language_repair', side_effect=[True]):
                 self.assertEqual(fn(**values, api_mode=module.SEEDANCE_API_MODE, session=session, api_key='test-placeholder'), draft)
             self.assertEqual(len(session.chat_requests), 2)
-            self.assertEqual(session.chat_requests[-1]['json']['messages'][0]['content'].count(styles.MARKER), 1)
+            self.assertEqual(session.chat_requests[-1]['json']['messages'][0]['content'].count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER), 1)
 
     def test_invalid_preflight_preserves_checkpoint_and_restore_skips_current_styles(self):
         for module, cls, function in ((h3, h3.MiniMaxH3PromptEnhancer, 'enhance_prompt'),
@@ -195,7 +199,7 @@ class VisualStyleTests(unittest.TestCase):
             self.assertEqual(len(provider.calls), 2)
             self.assertTrue(provider.closed)
             for call in provider.calls:
-                self.assertEqual(call['messages'][0]['content'].count(styles.MARKER), 1)
+                self.assertEqual(call['messages'][0]['content'].count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER), 1)
 
     def test_relay_format_then_language_corrections_preserve_both_styles(self):
         responses = ['malformed JSON', relay_draft(), relay_draft(True)]
@@ -216,7 +220,7 @@ class VisualStyleTests(unittest.TestCase):
             self.assertEqual(result, responses[-1])
             self.assertEqual(len(calls), 3)
             for messages in calls:
-                self.assertEqual(messages[0]['content'].count(styles.MARKER), 1)
+                self.assertEqual(messages[0]['content'].count(styles.EXPERIMENTAL_MARKER), 1)
                 self.assertIn('COLOR REFERENCE', messages[0]['content'])
                 self.assertIn('CREATOR PRESENTATION ONLY', messages[0]['content'])
 
@@ -263,7 +267,7 @@ class VisualStyleTests(unittest.TestCase):
             repair = session.chat_requests[1]['json']['messages']
             self.assertTrue(all(isinstance(m['content'], str) for m in repair))
             self.assertNotIn('https://assets.example/', json.dumps(repair))
-            self.assertEqual(json.dumps(repair).count(styles.MARKER), 1)
+            self.assertEqual(json.dumps(repair).count(styles.EXPERIMENTAL_MARKER if module is h3 else styles.MARKER), 1)
             if module is h3:
                 self.assertEqual(json.dumps(repair).count('T8_HYBRID_ASSET_ROLES'), 1)
 

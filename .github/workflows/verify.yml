@@ -42,7 +42,7 @@ jobs:
       - name: Fetch frozen MOSS authoring compatibility baseline
         run: git -C _source fetch --no-tags --depth=1 origin e299574ec30df483411ffb9c79dd7138d19d57a6
       - name: Fetch frozen visual-style compatibility baseline
-        run: git -C _source fetch --no-tags --depth=1 origin 5f0029e3f8bf35ce216c8a69769d11ad4bbabd46 421733faaeef5e997d52520d192e14665ede124e
+        run: git -C _source fetch --no-tags --depth=1 origin 5f0029e3f8bf35ce216c8a69769d11ad4bbabd46 421733faaeef5e997d52520d192e14665ede124e 3e07bffcf713432b8c291b5c0ec071a2aa526af9
       - name: Check out ComfyUI
         uses: actions/checkout@v4
         with:

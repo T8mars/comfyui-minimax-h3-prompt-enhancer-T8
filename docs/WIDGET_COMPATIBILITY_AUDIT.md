@@ -16,6 +16,24 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-11-03: ordinary H3 On uses the tested execution hints
+
+Keep the three finite helper modes, Off defaults, 3/2 saved fields, 4/3 full
+runtime widgets, 38-field enhancer layout and all sockets unchanged. Ordinary
+H3 On and the legacy experimental selection now compile the same tested
+execution hints and an explicit open-color clarification; the instruction
+cache revision advances to 1.0.5. Off and
+Seedance request text and historical recovery behavior remain unchanged.
+
+Regression checks compare full H3 messages with the 1.39.0 experimental
+baseline after removing exactly the reviewed color clarification at its user
+tail location, including mixed modes, both languages, shot choices and media
+tasks. Missing, duplicate or misplaced insertions cannot pass that comparison.
+Owned CPU queues passed 24 contracts; native Chrome passed the three examples,
+nine exported queues, persistence, reconnect and preview isolation checks.
+Those use synthetic provider responses and establish compatibility only;
+actual local-model style evaluation is separate.
+
 ### 2026-11-02: explicit H3 experimental style mode
 
 Append one choice to the existing helper `mode` combos; keep all defaults,

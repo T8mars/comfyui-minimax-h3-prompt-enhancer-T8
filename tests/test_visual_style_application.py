@@ -46,7 +46,9 @@ class VisualStyleApplicationTests(unittest.TestCase):
                      'C01 #1A0A1F 30% (深紫色 / deep purple)', 'Layer existing glass',
                      'move laterally or observe closely'):
             self.assertIn(part, system)
-        self.assertEqual(system.count(styles.MARKER), 1)
+        self.assertEqual(system.count(styles.EXPERIMENTAL_MARKER), 1)
+        messages = session.chat_requests[0]['json']['messages']
+        self.assertEqual(messages[1]['content'][0]['text'].count(styles.H3_STYLE_EXECUTION_MARKER), 1)
         self.assertNotIn('An already suitable passage may remain unchanged.', system)
 
     def test_each_target_keeps_acting_and_user_locks_while_enabling_separate_visual_dimensions(self):
@@ -60,7 +62,13 @@ class VisualStyleApplicationTests(unittest.TestCase):
                 messages = module._build_messages(**values, color_style_config=color, creator_style_config=creator)
                 rule = styles.visual_style_instruction(color, creator, target, fixed_shot_count=1)
                 self.assertEqual(messages[0]['content'].replace('\n\n' + rule, ''), before[0]['content'])
-                self.assertEqual(messages[1:], before[1:])
+                expected_user = copy.deepcopy(before[1:])
+                if module is h3:
+                    reminder = styles.h3_style_execution_reminder(color, creator)
+                    self.assertTrue(reminder)
+                    expected_user[0]['content'] += '\n\n' + reminder
+                    self.assertEqual(messages[1]['content'].count(styles.H3_STYLE_EXECUTION_MARKER), 1)
+                self.assertEqual(messages[1:], expected_user)
                 self.assertIn('does not cancel these separately enabled', rule)
                 self.assertIn('explicit lock', rule)
                 self.assertEqual('COLOR REALIZATION' in rule, color is not None)
@@ -90,7 +98,7 @@ class VisualStyleApplicationTests(unittest.TestCase):
         cfg = selected('color')
         current_helper = helpers.T8ColorStyleConfig.fingerprint_inputs(styles.ON, '022')
         current_consumer = h3.MiniMaxH3PromptEnhancer.fingerprint_inputs(color_style_config=None)
-        with patch.object(styles, 'INSTRUCTION_REVISION', '1.0.0'):
+        with patch.object(styles, 'INSTRUCTION_REVISION', '1.0.4'):
             self.assertNotEqual(helpers.T8ColorStyleConfig.fingerprint_inputs(styles.ON, '022'), current_helper)
             self.assertNotEqual(h3.MiniMaxH3PromptEnhancer.fingerprint_inputs(color_style_config=None), current_consumer)
             self.assertEqual(selected('color'), cfg)
@@ -109,7 +117,8 @@ class VisualStyleApplicationTests(unittest.TestCase):
                                       color_style_config=color, creator_style_config=creator)
         repair = h3._h3_language_repair_messages('draft', '中文', None, messages,
                     color_style_config=color, creator_style_config=creator)
-        self.assertEqual(repair[0]['content'].count(styles.MARKER), 1)
+        self.assertEqual(repair[0]['content'].count(styles.EXPERIMENTAL_MARKER), 1)
+        self.assertEqual(repair[1]['content'].count(styles.H3_STYLE_EXECUTION_MARKER), 1)
         self.assertIn('COLOR REALIZATION', repair[0]['content'])
         self.assertIn('CREATOR REALIZATION', repair[0]['content'])
         self.assertIn('exact words “不要走”', repair[1]['content'])

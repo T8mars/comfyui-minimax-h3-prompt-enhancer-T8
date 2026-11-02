@@ -15,7 +15,7 @@ class T8ColorStyleConfig(io.ComfyNode):
         return io.Schema(
             node_id="T8ColorStyleConfig", display_name="T8 Color Style Config（色彩风格配置）",
             category="T8/Utilities",
-            description="独立200色卡参考，接入H3/Seedance；默认关闭。H3强化试验增加执行与保源提示，效果未稳定；Seedance按普通开启。不修改图片、不新增模型请求。 / Optional color reference; experimental hints are H3-only; not a LUT.",
+            description="独立200色卡参考，接入H3/Seedance；默认关闭。普通开启为H3加入具体配色执行提示，旧H3强化试验选项同效果兼容；Seedance保持原行为。不修改图片、不新增独立风格请求。 / H3 On applies concrete color hints; the legacy experimental choice is equivalent. Not a LUT.",
             inputs=[
                 io.Combo.Input("mode", display_name="模式 / Mode", options=styles.MODES, default=styles.OFF, socketless=True),
                 io.Combo.Input("palette", display_name="色彩风格 / Palette", options=styles.style_options(), default=styles.NONE, socketless=True),
@@ -46,7 +46,7 @@ class T8CreatorStyleConfig(io.ComfyNode):
         return io.Schema(
             node_id="T8CreatorStyleConfig", display_name="T8 Creator Style Config（导演风格参考）",
             category="T8/Utilities",
-            description="独立导演/摄影/美术拍法参考，接入H3/Seedance；H3强化试验增加执行与保源提示，效果未稳定；Seedance按普通开启。不自动套颜色、不新增剧情或模型请求。 / Presentation reference; experimental hints are H3-only; not a screenplay generator.",
+            description="独立导演/摄影/美术拍法参考，接入H3/Seedance；默认关闭。普通开启为H3加入具体拍法执行提示，旧H3强化试验选项同效果兼容；Seedance保持原行为。不自动套颜色、不新增独立风格请求。 / H3 On applies concrete camera hints; the legacy experimental choice is equivalent. Not a screenplay generator.",
             inputs=[
                 io.Combo.Input("mode", display_name="模式 / Mode", options=styles.MODES, default=styles.OFF, socketless=True),
                 io.Combo.Input("creator", display_name="导演/创作者 / Creator", options=styles.style_options(), default=styles.NONE, socketless=True),
