@@ -28,6 +28,20 @@ def payloads(text):
 
 
 class VocalProtocolTests(unittest.TestCase):
+    def test_visual_brief_after_source_dialogue_does_not_block_single_voice_numbering(self):
+        source = ('成年女子穿黑色上衣坐在床边，轻轻微笑后说：“今天介绍一次更新。”'
+                  '床单和身后墙面允许改色与调整拍法，保持自然肤色和暖色照明。')
+        text = base('[Shot 1] 深紫色墙面前，女子正面极近景，眼嘴占据画面主要面积。'
+                    '她轻轻微笑后说：<d>[Chinese] 今天介绍一次更新。</d> 说完仍轻轻呼吸。')
+        complete = Mock(side_effect=AssertionError('No extra model call for vocal numbering'))
+        result, metrics = pipeline.h3_quality_result(text, mode=q.QUALITY_OFF,
+            messages=[], complete=complete, task_type='T2VA', duration=13, shot_count=1,
+            language='中文', source=source)
+        self.assertEqual(result, text.replace('<d>', '(S1) <d>', 1))
+        self.assertEqual(payloads(result), payloads(text))
+        self.assertEqual(metrics['correction_calls'], 0)
+        complete.assert_not_called()
+
     def normalize(self, text, **kwargs):
         fixed, changes, unresolved = protocol.normalize_h3_vocals(text, **kwargs)
         self.assertEqual(payloads(text), payloads(fixed))

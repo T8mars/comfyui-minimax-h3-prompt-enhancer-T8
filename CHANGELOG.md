@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.38.4] - 2026-11-02
+
+- Fix quoted source dialogue followed by visual instructions being misread as
+  an additional utterance, which could prevent safe single-speaker numbering
+  and report visual prose as missing speech.
+- Preserve a later unquoted speaker on the same line and colons inside an
+  accepted utterance. Add Chinese and English parsing regressions and a default
+  pipeline check that preserves dialogue and visual text without a model call.
+- Color and creator-style experiments remain under review; this patch does not
+  establish stable combined-style adherence or rendered-video improvements.
+
 ## [1.38.3] - 2026-11-02
 
 - Fix Strata video sampling and speech-reference input on current ComfyUI:

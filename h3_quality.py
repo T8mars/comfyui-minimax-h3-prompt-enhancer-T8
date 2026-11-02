@@ -179,10 +179,24 @@ def protected_text(source: str) -> list[ProtectedText]:
     if not events:
         # Only a complete, explicit unquoted dialogue clause. Ambiguous prose is
         # left to semantic review, not silently converted into invented speech.
-        for match in re.finditer(r"(?:说|说道|喊道|低语|台词|对白|says?|dialogue)\s*[:：]\s*([^\r\n;；]+)", masked, re.I):
-            words = source_body[match.start(1):match.end(1)].strip()
-            if words and re.search(r"[A-Za-z0-9\u3400-\u9fff]", match.group(1)) and not LITERAL_RE.search(words) and not re.search(r"随后|然后|必须|不要|不得|\b(?:then|must|do not)\b", words, re.I):
+        covered_until = 0
+        for prefix in re.finditer(r"(?:说|说道|喊道|低语|台词|对白|says?|dialogue)\s*[:：]", masked, re.I):
+            if prefix.start() < covered_until:
+                continue
+            start = prefix.end()
+            # Skip original whitespace, not a quoted utterance masked as spaces.
+            # A quoted prefix must not consume a later unquoted speaker either.
+            while start < len(source_body) and source_body[start].isspace():
+                start += 1
+            if LITERAL_RE.match(source_body, start):
+                continue
+            boundary = re.search(r"[\r\n;；]", source_body[start:])
+            end = start + boundary.start() if boundary else len(source_body)
+            words = source_body[start:end].strip()
+            if words and re.search(r"[A-Za-z0-9\u3400-\u9fff]", words) and not LITERAL_RE.search(words) and not re.search(r"随后|然后|必须|不要|不得|\b(?:then|must|do not)\b", words, re.I):
                 result.append(ProtectedText(words, "vocal"))
+                # A colon inside the accepted utterance is part of its words.
+                covered_until = end
     return result
 
 

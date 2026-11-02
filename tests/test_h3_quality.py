@@ -214,6 +214,34 @@ class H3QualityTests(unittest.TestCase):
                          retention="<Subject 1>: fully_preserved - supplied words 让开。")
         self.assert_invalid(text, "semantic_exact_text_missing", source="女人说：“让开。”", task_type="Ref2VA")
 
+    def test_visual_instructions_after_quoted_speech_are_not_another_utterance(self):
+        for source, words in (
+            ('女子说：“今天介绍一次更新。”床单与墙面允许配色，镜头保持正面。', '今天介绍一次更新。'),
+            ('She says: "Ready." The wall may be recolored and the camera may move.', 'Ready.'),
+            ('她低语：‘等我。’墙面保持白色。', '等我。'),
+            ('她说：\n“等我。”\n墙面保持白色。', '等我。'),
+        ):
+            with self.subTest(source=source):
+                self.assertEqual([(p.text, p.kind) for p in quality.protected_text(source)], [(words, 'vocal')])
+                correct = base('[Shot 1] ' + vocal(words))
+                report = quality.check_h3(correct, source=source)
+                self.assertNotIn('semantic_exact_text_missing', {issue['code'] for issue in report['issues']})
+
+    def test_quoted_and_separate_unquoted_utterances_both_remain_protected(self):
+        for source, words in (
+            ('她说：“等我。”墙面保持白色。\n他低语：好。', ['等我。', '好。']),
+            ('女人说：“等我。”男人说：走吧。', ['等我。', '走吧。']),
+            ('Alice says: "Wait." Bob says: Go.', ['Wait.', 'Go.']),
+        ):
+            with self.subTest(source=source):
+                self.assertEqual([(p.text, p.kind) for p in quality.protected_text(source)],
+                                 [(word, 'vocal') for word in words])
+
+    def test_colon_inside_an_unquoted_utterance_is_not_a_new_voice(self):
+        source = '女人说：这是他说：别急。'
+        self.assertEqual([(p.text, p.kind) for p in quality.protected_text(source)],
+                         [('这是他说：别急。', 'vocal')])
+
     def test_native_dialogue_speaker_is_preserved(self):
         source = base("[Shot 1] " + vocal("等我。"))
         self.assert_invalid(base("[Shot 1] " + vocal("等我。", speaker="S2")),
