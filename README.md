@@ -4,6 +4,8 @@
 
 ## 新增：独立色彩与导演风格（实验）
 
+1.39.0 在两个配置节点的原有 `mode` 下拉框加入 **开启（H3强化试验）**：为所选维度增加具体执行与保留原事实的提示，直接进入 H3 正常生成请求。普通“开启”保留旧行为，Seedance 按普通开启处理。实测有部分对白格式收益，但配色/拍法仍可能遗漏，也出现了不需要的声音；新模式默认不启用，不代表200种效果已经稳定。
+
 搜索 `T8 Color Style Config` / `T8 Creator Style Config`，分别连接 H3 或 Seedance 的色彩/导演可选输入。两个入口默认关闭、独立组合，带本地分类搜索与预览；不接 MOSS、不改原图、不限制时长、不新增独立规划请求。点击“浏览风格与帮助”可看200种配色的同场景对照，以及200位创作者的400条构图/机位/节奏示意；动态方法可手动播放。导演条目是有来源依据的拍法参考，不是完整编剧器；弱来源有明确标记。示意图不是模型输出，真实模型和成片收益未验证。[使用说明](docs/visual-styles.md) · [颜色→H3](example_workflows/visual_style_color_h3.json) · [导演→Seedance](example_workflows/visual_style_creator_seedance20.json) · [组合→H3](example_workflows/visual_style_combined_h3.json)
 
 ## 新增：H3 空间标记增强（实验）

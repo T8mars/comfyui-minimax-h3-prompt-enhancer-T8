@@ -16,6 +16,17 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-11-02: explicit H3 experimental style mode
+
+Append one choice to the existing helper `mode` combos; keep all defaults,
+input/output IDs, 3/2 saved fields and 4/3 full runtime widgets. Ordinary On/Off
+requests stay unchanged. Unknown mode values remain invalid, never opt in.
+Persist/reload the experimental choice through named and positional workflows,
+including reordered runtime widgets; native API exports must queue the choice
+for both H3 and Seedance. Seedance uses the ordinary visual guide. Recovery
+records the finite experimental selection and restores the old result only.
+The new mode's model hints are experimental, not an adherence validator.
+
 ### 2026-10-25: display-only visual style illustrations
 
 No schema/compiler/config/resource identity changes. The existing one browse

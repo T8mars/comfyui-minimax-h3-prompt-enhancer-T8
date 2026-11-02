@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.39.0] - 2026-11-02
+
+- Add an explicit `On (H3 experimental)` choice to the existing color and
+  creator config modes. It adds execution and source-preservation hints to
+  H3's existing request; ordinary On/Off requests and widget order stay intact.
+  Seedance treats this choice as ordinary On. No additional style model call.
+- Keep experimental color and creator hints independently selectable; preserve
+  offscreen speech authorization, native vocal grammar, exact surface scope,
+  camera locks and the boundary between visual descriptions and sound sources.
+  Record the experimental selection in result recovery metadata.
+- Eight paired local GGUF cases completed through the actual H3 pipeline.
+  Some vocal-format results improved, but colors and methods still went missing;
+  unwanted sounds and camera ambiguity remained. This is an opt-in experiment,
+  not stable all-200 style adherence or a demonstrated rendered-video benefit.
+
 ## [1.38.4] - 2026-11-02
 
 - Fix quoted source dialogue followed by visual instructions being misread as

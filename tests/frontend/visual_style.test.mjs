@@ -44,6 +44,33 @@ test('visual style corrupted maps fall back only to a valid layout; action tail 
         assert.equal(core.valueOf(restored, kind === 'color' ? 'palette' : 'creator'), core.NONE);
     }
 });
+test('explicit H3 experimental mode survives saved and reordered runtime widgets', () => {
+    for (const kind of ['color', 'creator']) {
+        const n = node(kind, true);
+        n.widgets.find(w => w.name === 'mode').value = core.ON_EXPERIMENTAL;
+        n.addWidget('button', 'browse', 'not data', null, {serialize: false});
+        const data = {}; core.serializeStyle(n, data, kind);
+        assert.equal(data.widgets_values[0], core.ON_EXPERIMENTAL);
+        assert.equal(data.widgets_values.length, core.fields(kind).length);
+        for (const source of ['private', 'native', 'positional']) {
+            const saved = structuredClone(data), restored = node(kind, true);
+            if (source !== 'private') saved.properties = {};
+            if (source === 'positional') saved.widgets_values_named = {};
+            core.configureStyle(restored, saved, kind, function(info) {
+                info.widgets_values.forEach((value, i) => this.widgets[i].value = value);
+            });
+            assert.equal(core.valueOf(restored, 'mode'), core.ON_EXPERIMENTAL);
+            assert.equal(core.valueOf(restored, kind === 'color' ? 'palette' : 'creator'), values(kind)[kind === 'color' ? 'palette' : 'creator']);
+        }
+        assert.equal(core.validValues(kind, {...values(kind), mode: 'experimental-unrecognized'}), false);
+    }
+});
+test('historical experimental selection is finite and never relabels a normal result', () => {
+    const block = {style_id: '022', resource_revision: '1.0.0', adapter_revision: '1.0.0', resource_sha256: 'a'.repeat(64)};
+    assert.doesNotMatch(visualStyleSelectionMessage({creator_style: block}), /H3 experimental/);
+    assert.match(visualStyleSelectionMessage({creator_style: {...block, execution_mode: 'h3_experimental'}}), /H3 experimental/);
+    assert.equal(visualStyleSelectionMessage({creator_style: {...block, execution_mode: 'unknown'}}), '');
+});
 test('browser ownership never resolves root/subgraph nodes by shared bare ID', () => {
     const a = {id: 7}, b = {id: 7}, graph = {getNodeById: () => a}, root = {_nodes: [{subgraph: graph}]}; a.graph = graph;
     assert.equal(core.ownerIsCurrent(a, graph, root, root), true);

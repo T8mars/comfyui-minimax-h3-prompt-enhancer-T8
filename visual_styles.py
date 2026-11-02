@@ -16,10 +16,11 @@ from typing import Any
 
 REVISION = "1.0.0"
 # Resource/config identity stays stable; compilation policy has its own cache revision.
-INSTRUCTION_REVISION = "1.0.2"
+INSTRUCTION_REVISION = "1.0.3"
 OFF = "关闭 / Off"
 ON = "开启 / On"
-MODES = [OFF, ON]
+ON_EXPERIMENTAL = "开启（H3强化试验） / On (H3 experimental)"
+MODES = [OFF, ON, ON_EXPERIMENTAL]
 NONE = "未选择 / None"
 COLOR_ONLY = "仅色彩 / Color only"
 COLOR_LIGHT = "色彩 + 光影 / Color + lighting"
@@ -30,7 +31,10 @@ ROOT = Path(__file__).resolve().parent / "resources" / "visual_styles"
 CATALOG_SCHEMA = "t8-visual-style-catalog/v1"
 COLOR_SCHEMA = "t8-color-style-config/v1"
 CREATOR_SCHEMA = "t8-creator-style-config/v1"
-MARKER = "T8 OPTIONAL VISUAL PRESENTATION v" + INSTRUCTION_REVISION
+# Keep ordinary On requests byte-identical; only the new opt-in mode uses v1.0.3.
+MARKER = "T8 OPTIONAL VISUAL PRESENTATION v1.0.2"
+EXPERIMENTAL_MARKER = "T8 OPTIONAL VISUAL PRESENTATION v1.0.3"
+H3_STYLE_EXECUTION_MARKER = "H3 VISUAL STYLE EXECUTION CHECK"
 REPAIR_STYLE_SCOPE = (
     "VISUAL STYLE LANGUAGE-REPAIR SCOPE: this is translation of the supplied draft, not a new style-generation pass. "
     "Translate its existing color and presentation descriptions faithfully; do not add a missing palette, camera method, "
@@ -170,7 +174,7 @@ def build_style_config(kind, mode=OFF, selection=NONE, scope=COLOR_ONLY):
     if mode == OFF:
         return result
     resource, entry, digest = load_resource(kind, selection)
-    result.update(mode="on", style_id=entry["id"], resource_revision=resource["revision"],
+    result.update(mode="on_experimental" if mode == ON_EXPERIMENTAL else "on", style_id=entry["id"], resource_revision=resource["revision"],
                   resource_sha256=digest, adapter_revision=REVISION)
     if kind == "color":
         if type(scope) is not str or scope not in SCOPE_IDS:
@@ -186,7 +190,7 @@ def resolve_style_config(value, kind):
         return None
     schema = COLOR_SCHEMA if kind == "color" else CREATOR_SCHEMA
     if (kind not in {"color", "creator"} or type(value) is not dict
-            or value.get("schema_version") != schema or value.get("mode") not in ("off", "on")):
+            or value.get("schema_version") != schema or value.get("mode") not in ("off", "on", "on_experimental")):
         raise _error()
     if value["mode"] == "off":
         if set(value) != {"schema_version", "mode"}:
@@ -200,7 +204,8 @@ def resolve_style_config(value, kind):
     scope = next((label for label, key in SCOPE_IDS.items() if key == value.get("scope")), None)
     if kind == "color" and scope is None:
         raise _error()
-    canonical = build_style_config(kind, ON, value["style_id"], scope or COLOR_ONLY)
+    mode = ON_EXPERIMENTAL if value["mode"] == "on_experimental" else ON
+    canonical = build_style_config(kind, mode, value["style_id"], scope or COLOR_ONLY)
     if value != canonical:
         raise _error()
     return canonical
@@ -223,6 +228,8 @@ def style_metadata(color=None, creator=None):
     for kind, config in (("color", resolve_color_style(color)), ("creator", resolve_creator_style(creator))):
         if config is not None:
             result[kind + "_style"] = {k: v for k, v in config.items() if k not in {"schema_version", "mode"}}
+            if config["mode"] == "on_experimental":
+                result[kind + "_style"]["execution_mode"] = "h3_experimental"
     return result
 
 
@@ -234,6 +241,10 @@ def safe_style_metadata(values):
     for kind in ("color", "creator"):
         block = values.get(kind + "_style")
         fields = {"style_id", "resource_revision", "resource_sha256", "adapter_revision"} | ({"scope"} if kind == "color" else set())
+        if type(block) is dict and "execution_mode" in block:
+            if block["execution_mode"] != "h3_experimental":
+                continue
+            fields.add("execution_mode")
         if (type(block) is dict and set(block) == fields and all(type(v) is str for v in block.values())
                 and block["style_id"] in IDS and block["resource_revision"] == REVISION
                 and block["adapter_revision"] == REVISION and _SHA.fullmatch(block["resource_sha256"])
@@ -252,7 +263,11 @@ def helper_fingerprint(kind, mode, selection, scope=COLOR_ONLY):
 def consumer_fingerprint(color=MISSING, creator=MISSING, recovery_action="normal"):
     if recovery_action == "restore_last" or (color is MISSING and creator is MISSING):
         return False  # Same sentinel as a node without an IS_CHANGED override.
-    return ("t8-visual-catalog", REVISION, INSTRUCTION_REVISION, load_catalog()[1])
+    base = ("t8-visual-catalog", REVISION, INSTRUCTION_REVISION, load_catalog()[1])
+    # Linked inputs may still be unresolved here; validation happens before use.
+    experimental = tuple(type(config) is dict and config.get("mode") == "on_experimental"
+                         for config in (color, creator))
+    return base + ("h3-experimental", *experimental) if any(experimental) else base
 
 
 def _hue_description(hex_value):
@@ -285,13 +300,18 @@ def _hue_description(hex_value):
     return zh + " / " + en
 
 
+def _experimental_enabled(color, creator):
+    return any(config is not None and config["mode"] == "on_experimental" for config in (color, creator))
+
+
 def visual_style_instruction(color=None, creator=None, target="h3", *, fixed_shot_count=0):
     color, creator = resolve_color_style(color), resolve_creator_style(creator)
     if color is None and creator is None:
         return ""
     if target not in {"h3", "seedance20"}:
         raise _error()
-    lines = [MARKER + " (independently adapted, experimental; not an extra planning pass).",
+    marker = EXPERIMENTAL_MARKER if target == "h3" and _experimental_enabled(color, creator) else MARKER
+    lines = [marker + " (independently adapted, experimental; not an extra planning pass).",
         "ENABLED STYLE APPLICATION: these connected selections are explicit requests to shape the existing scene, not background metadata. Apply each enabled dimension concretely in the final visual description wherever its own compatible opportunity exists. Do not silently skip both selections because the draft already reads fluently or the acting is detailed. If an applicable method or palette relationship is already present, retain its explicit visual evidence rather than adding redundant wording.",
         "Existing scene-directing Skills own scene strategy; acting/Bibles, storyboard, combat and reference contracts retain their roles. User facts, exact dialogue/text/speaker, identity, media roles, source action order, fixed timing/count, framing locks and ending take priority. These modifiers grant no new story authorship. A generic default such as natural/vlog styling, or an unrequested choice made in a draft, is not a user lock. Distinguish reference identity from background/style retention according to the actual asset role; never treat a first/last-frame or explicitly retained attribute as freely editable.",
         "COORDINATE DIMENSIONS: an acting instruction to leave unrelated visuals alone limits changes made for acting alone; it does not cancel these separately enabled color/presentation requests. Apply color to eligible existing visual areas and creator methods to eligible presentation while retaining the acting beats. Conversely, color/creator selection must not replace performance, alter dialogue, or bypass an explicit lock.",
@@ -325,11 +345,34 @@ def visual_style_instruction(color=None, creator=None, target="h3", *, fixed_sho
     return "\n".join(lines)
 
 
+def h3_style_execution_reminder(color=None, creator=None):
+    """Keep enabled visual requests concrete in H3's original generation call.
+
+    This is a model instruction, not an adherence validator or a second pass.
+    In particular it must not create speech from arbitrary quoted source text.
+    """
+    color = resolve_color_style(color)
+    creator = resolve_creator_style(creator)
+    if not _experimental_enabled(color, creator):
+        return ""
+    lines = [H3_STYLE_EXECUTION_MARKER + ":",
+        "输出前落实已开启的视觉参考，同时保留原任务事实：人物姿态、位置、动作先后与完成状态、准确台词、身份、镜数、时长和首尾约束不能被视觉建议替代。只在当前任务的正常画面描述中表达兼容的改进，不输出方案、色卡表或验证成功声明。"]
+    if color and color["mode"] == "on_experimental":
+        lines.append("色彩：把选中色相对应到原场景实际可见、未锁色的具体表面；保留该表面的准确范围，床单的许可不等于整张床或人物的许可。与当前构图一起检查可见性，不能把画外区域的配色当作画面效果。保留原有锁定颜色、自然肤色与材质；不为配色新增物件或改换渲染媒介。没有兼容表面时保留原色。")
+    if creator and creator["mode"] == "on_experimental":
+        lines.append("导演：从所选条目列出的方法中，具体说明兼容方法在原主体、空间和当前镜头内怎样执行；不要只写导演名字或电影感。一镜到底只禁止切镜，不自动禁止运镜；初始视点选择与拍摄中的移动须分别遵守原约束，不能把固定机位解释成允许推拉。缺少必要空间、物件或许可时不用该方法，不补造条件，不改变原动作来适配拍法。")
+    lines.extend([
+        "原生发声：只对原任务已有或明确授权的台词、歌唱等发声保留稳定ASCII说话人编号，如(S1)，并在实际发声位置使用<d>[英文语言名称]准确原词</d>；普通话用Chinese。保留准确字词、标点、说话人及先后，不以普通引号替代原生格式，也不要把标题、文字标识或任意引文当成对白。保留画外音/离屏说话的原有角色；画面无人不等于没有发声。没有授权发声时，不为满足格式新增说话人或台词。",
+        "声音与媒介：原任务已有或要求的声音照常保留，明确静音时保持静音。颜色、灯光、景深或构图本身不生成声音，不写灯光声、色彩声或景深声；风格选择不授权新增声源、音乐、旁白、CG/动画或其它媒介。继续只返回当前H3任务的原生字段；这些提醒不是新的场景事实。",
+    ])
+    return "\n".join(lines)
+
+
 def preserve_visual_styles_on_repair(repair_messages, original_messages, color=None, creator=None):
     if resolve_color_style(color) is None and resolve_creator_style(creator) is None:
         return repair_messages
     system = "\n\n".join(m["content"] for m in original_messages if m.get("role") == "system" and type(m.get("content")) is str)
-    if MARKER not in system:
+    if not any(marker in system for marker in (MARKER, EXPERIMENTAL_MARKER)):
         return repair_messages
     result = [dict(m) for m in repair_messages]
     if not result[0]["content"].startswith(system):

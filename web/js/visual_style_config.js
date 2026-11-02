@@ -22,6 +22,7 @@ export function openStyleBrowser(node, kind) {
     dialog.addEventListener('cancel', event => {event.preventDefault(); close();});
     make('h3', kind === 'color' ? '200 色彩风格 / Color references' : '200 导演与创作者 / Creator references', dialog);
     make('p', '1. 搜索并预览 → 2. 应用选择 → 3. 节点切为开启 / On → 4. 接 H3 或 Seedance 对应配置口。两个入口可独立组合，默认关闭。 / Preview → Apply → switch On → connect the matching input.', dialog);
+    make('p', 'H3可选“开启（H3强化试验）”：在原请求中增加具体表面、拍法、原台词与声音边界提示。普通开启保持原行为；Seedance仍按普通开启。实测仅部分对白格式改善，配色/拍法仍可能遗漏，也可能增加不需要的声音；不是效果保证或自动校验。 / H3 experimental mode adds execution hints; mixed text results, no extra style request, no verified video benefit.', dialog);
     make('p', kind === 'color' ? '这是提示词配色参考，不是 LUT，不修改原图。六色比例是原资料的相对参考；不要求全用，也不保证像素面积。光影仅在选择“色彩 + 光影”时加入。 / Prompt references only; lighting is opt-in.' : '仅提供已有场面的构图、拍法与节奏建议，不是完整编剧器，不新增剧情。不会自动采用同名色卡。 / Presentation methods, not screenplay generation or automatic color transfer.', dialog);
     const toolbar = make('div', '', dialog);
     toolbar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto';

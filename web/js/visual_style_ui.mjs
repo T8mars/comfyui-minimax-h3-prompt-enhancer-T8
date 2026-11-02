@@ -1,6 +1,7 @@
 // Only canonical controls persist; previews and actions never enter workflows.
 export const OFF = '关闭 / Off';
 export const ON = '开启 / On';
+export const ON_EXPERIMENTAL = '开启（H3强化试验） / On (H3 experimental)';
 export const NONE = '未选择 / None';
 export const SCOPES = ['仅色彩 / Color only', '色彩 + 光影 / Color + lighting'];
 export const KINDS = {T8ColorStyleConfig: 'color', T8CreatorStyleConfig: 'creator'};
@@ -11,7 +12,7 @@ const defaults = kind => kind === 'color' ? {mode: OFF, palette: NONE, scope: SC
 export function validValues(kind, values) {
     return values && !Array.isArray(values) && fields(kind).every(name => Object.hasOwn(values, name)
         && typeof values[name] === 'string' && values[name].length > 0 && values[name].length <= 400)
-        && [OFF, ON].includes(values.mode) && (kind !== 'color' || SCOPES.includes(values.scope));
+        && [OFF, ON, ON_EXPERIMENTAL].includes(values.mode) && (kind !== 'color' || SCOPES.includes(values.scope));
 }
 export function serializeStyle(node, data, kind) {
     const values = Object.fromEntries(fields(kind).map(name => [name, valueOf(node, name)]));

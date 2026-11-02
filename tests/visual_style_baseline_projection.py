@@ -61,9 +61,10 @@ def project_style_ast(source):
         def visit_Assign(self, node):
             if len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
                 name = node.targets[0].id
-                if name in NAMES or name == 'style_rule':
+                if name in NAMES or name in ('style_rule', 'style_reminder'):
                     assert isinstance(node.value, ast.Call) and ast.unparse(node.value.func) in (
-                        'visual_styles.resolve_color_style', 'visual_styles.resolve_creator_style', 'visual_styles.visual_style_instruction')
+                        'visual_styles.resolve_color_style', 'visual_styles.resolve_creator_style', 'visual_styles.visual_style_instruction',
+                        'visual_styles.h3_style_execution_reminder')
                     return None
                 if name == 'messages' and isinstance(node.value, ast.Call) and ast.unparse(node.value.func) == 'visual_styles.preserve_visual_styles_on_repair':
                     assert ast.unparse(node.value.args[0]) == 'messages'
@@ -72,7 +73,12 @@ def project_style_ast(source):
 
         def visit_If(self, node):
             if ast.unparse(node.test) == 'style_rule':
+                assert len(node.body) == 1 and not node.orelse
                 assert ast.unparse(node.body[0]) == 'system_rules.append(style_rule)'
+                return None
+            if ast.unparse(node.test) == 'style_reminder':
+                assert len(node.body) == 1 and not node.orelse
+                assert ast.unparse(node.body[0]) == "user_text += '\\n\\n' + style_reminder"
                 return None
             return self.generic_visit(node)
 

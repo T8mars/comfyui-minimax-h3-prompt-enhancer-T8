@@ -107,6 +107,10 @@ export function visualStyleSelectionMessage(meta) {
     for (const kind of ["color", "creator"]) {
         const block = meta?.[kind + "_style"];
         const keys = ["style_id", "resource_revision", "resource_sha256", "adapter_revision", ...(kind === "color" ? ["scope"] : [])];
+        if (block && Object.hasOwn(block, "execution_mode")) {
+            if (block.execution_mode !== "h3_experimental") continue;
+            keys.push("execution_mode");
+        }
         if (!block || typeof block !== "object" || Array.isArray(block) || Object.keys(block).length !== keys.length
             || !keys.every(k => typeof block[k] === "string")
             || !/^(?:00[1-9]|0[1-9][0-9]|1[0-9]{2}|200)$/.test(block.style_id)
@@ -114,7 +118,9 @@ export function visualStyleSelectionMessage(meta) {
             || !/^[0-9a-f]{64}$/.test(block.resource_sha256)
             || (kind === "color" && !["color_only", "color_and_light"].includes(block.scope))) continue;
         text += "\n上次风格选择 / Previous " + kind + " selection: #" + block.style_id + " v" + block.resource_revision
-            + (kind === "color" ? " · " + block.scope : "") + "。恢复原稿，不应用当前选择；记录不代表语义或成片效果验收。";
+            + (kind === "color" ? " · " + block.scope : "")
+            + (block.execution_mode === "h3_experimental" ? " · H3强化试验 / H3 experimental (Seedance: ordinary On)" : "")
+            + "。恢复原稿，不应用当前选择；记录不代表语义或成片效果验收。";
     }
     return text;
 }

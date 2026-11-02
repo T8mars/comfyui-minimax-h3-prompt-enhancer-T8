@@ -1624,6 +1624,9 @@ def _build_messages(
         fact_lookup = template_fact_lookup(prompt, reference_template, reference_context, constraints)
         if fact_lookup:
             user_text += "\n" + fact_lookup
+    style_reminder = visual_styles.h3_style_execution_reminder(color_style_config, creator_style_config)
+    if style_reminder:
+        user_text += "\n\n" + style_reminder
     if media_parts:
         user_content = [{"type": "text", "text": user_text}, *media_parts]
     else:

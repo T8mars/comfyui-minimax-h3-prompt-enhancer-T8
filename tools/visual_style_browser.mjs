@@ -94,6 +94,20 @@ export async function runVisualStyleBrowser({send, providerBase, screenshotPath}
             await queue(name+'-off');for(const n of helpers())set(n,'mode',core.ON);await queue(name+'-on');
             const saved=app.graph.serialize();await app.loadGraphData(saved,false,true);await wait(50);
             for(const n of helpers()){assert(core.valueOf(n,'mode')===core.ON,'on selection reload');assert(n.widgets.length===core.fields(core.KINDS[n.comfyClass]).length+1,'no duplicate actions')}
+            for(const n of helpers()){
+                const mode=n.widgets.find(w=>w.name==='mode');
+                assert(mode.options.values.includes(core.ON_EXPERIMENTAL),'experimental mode in native schema');
+                set(n,'mode',core.ON_EXPERIMENTAL);
+            }
+            const experimental=app.graph.serialize();await app.loadGraphData(experimental,false,true);await wait(50);
+            for(const n of helpers()){
+                const fields=core.fields(core.KINDS[n.comfyClass]);
+                assert(core.valueOf(n,'mode')===core.ON_EXPERIMENTAL,'experimental mode reload');
+                assert(n.widgets.length===fields.length+1,'experimental complete widget count');
+                assert(JSON.stringify(n.widgets.filter(w=>w.type!=='button').map(w=>w.name))===JSON.stringify(fields),'experimental runtime order');
+                assert(n.serialize().widgets_values.length===fields.length,'experimental saved order');
+            }
+            await queue(name+'-h3-experimental');
         }
         // Dialog callbacks cannot apply to a replacement workflow/node with the same local ID.
         const owner=app.graph._nodes.find(n=>core.KINDS[n.comfyClass]),kind=core.KINDS[owner.comfyClass];
@@ -132,7 +146,7 @@ export async function runVisualStyleBrowser({send, providerBase, screenshotPath}
         const lastList=document.querySelector('dialog[open] select[aria-label="风格列表 / Styles"]');lastList.value='001';lastList.dispatchEvent(new Event('change',{bubbles:true}));
         await until(()=>document.querySelector('dialog[open] h4')?.textContent.startsWith('001 '));
         globalThis.__visualStyleEvidence=output;
-        const p=document.createElement('pre');p.id='result';p.dataset.status='pass';p.textContent='PASS: native 4/3 widgets, 38-field reload, local preview/search, reconnect, stale-dialog isolation and 6 native-exported queues';document.body.append(p);
+        const p=document.createElement('pre');p.id='result';p.dataset.status='pass';p.textContent='PASS: native 4/3 widgets, 38-field reload, experimental mode, local preview/search, reconnect, stale-dialog isolation and '+output.length+' native-exported queues';document.body.append(p);
         return {examples:examples.length,queues:output.length,evidence:output};
     })()`});
     if (result.exceptionDetails) throw Error(JSON.stringify(result.exceptionDetails));
