@@ -115,6 +115,77 @@ class AuthoringTests(unittest.TestCase):
         self.assertEqual((info["description_chars"], info["han_chars"], info["status"]), (5, 2, "over_limit"))
         self.assertFalse(info["hard_enforced"])
 
+    def test_fisher_correction_gets_format_escaping_and_exact_error_location(self):
+        caption = 'A cup beside a sign: 今日特调\n"慢一点".\n\nWarm light on the counter.'
+        for fmt in (c.AUTO, c.CAPTION):
+            with self.subTest(fmt=fmt):
+                result, session = self.cloud('{"caption":"unescaped\nparagraph"}',
+                    json.dumps({"caption": caption}, ensure_ascii=False), authoring_profile=a.FISHER,
+                    output_format=fmt, output_language="English", locked_text='今日特调\n"慢一点"')
+                self.assertEqual(result[0], caption)
+                self.assertEqual(len(session.calls), 2)
+                repair = session.calls[1][1]["json"]["messages"][-1]["content"]
+                self.assertIn(a.fisher_response_rule(fmt), repair)
+                self.assertIn("Invalid control character", repair)
+                self.assertIn("line 1, column", repair)
+                self.assertIn(r'encode line breaks as \n', repair)
+                self.assertEqual(json.loads(result[5])["correction_calls"], 1)
+
+    def test_fisher_caption_correction_rejects_hybrid_and_preserves_last_success(self):
+        slot = "t8-fisher-format-last-good"
+        prior, _ = self.cloud('{"caption":"A cup."}', authoring_profile=a.FISHER,
+                             output_language="English", recovery_slot=slot)
+        hybrid = {"caption": "A cup.", **base.layout(1024, 1024)}
+        with self.assertRaises(moss.MossImageError):
+            self.cloud('{"caption":"unfinished}', json.dumps(hybrid), authoring_profile=a.FISHER,
+                       output_format=c.CAPTION, output_language="English", recovery_slot=slot)
+        self.assertEqual(moss.state.draft(slot)["draft"], json.dumps(hybrid))
+        with patch.object(moss, "_generate", side_effect=AssertionError("no new generation")):
+            self.assertEqual(Node.execute(recovery_action="restore_last", recovery_slot=slot).result, prior)
+
+    def test_fisher_explicit_layout_has_no_caption_output_example(self):
+        source = base.layout()
+        result, session = self.cloud('answer: {}', json.dumps(source), authoring_profile=a.FISHER,
+            output_format=c.LAYOUT, width=1536, height=1024, output_language="English")
+        self.assertEqual(result[3], "layout")
+        repair = session.calls[1][1]["json"]["messages"][-1]["content"]
+        self.assertIn("no top-level caption", repair)
+        self.assertNotIn('{"caption":', a.fisher_response_rule(c.LAYOUT))
+        self.assertNotIn("Choose exactly ONE format", a.fisher_response_rule(c.LAYOUT))
+
+    def test_fisher_json_failure_with_zero_corrections_is_not_silently_accepted(self):
+        session = base.Session(base.Response('{"caption":"first\nsecond"}'))
+        with patch.object(moss.requests, "Session", return_value=session):
+            with self.assertRaisesRegex(moss.MossImageError, "Invalid control character"):
+                Node.execute(prompt="A cup.", api_key="test-not-real", authoring_profile=a.FISHER,
+                             max_corrections=0, output_language="English")
+        self.assertEqual(len(session.calls), 1)
+
+    def test_only_local_fisher_requests_json_decoding_on_initial_and_correction(self):
+        seen = []
+        class Local:
+            def __init__(self, settings, *, vision): pass
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def complete(self, messages, **kwargs):
+                seen.append(kwargs)
+                return '{"caption":"Cup."}' if len(seen) == 1 else '{"caption":"A cup."}'
+        for profile in a.PROFILES:
+            seen.clear()
+            with self.subTest(profile=profile), patch.object(moss, "LocalQwenProvider", Local):
+                result = Node.execute(prompt="A cup.", api_mode=moss.LOCAL_QWEN_API_MODE,
+                    authoring_profile=profile, output_language="English", locked_text="A cup.").result
+            self.assertEqual(result[0], "A cup.")
+            self.assertEqual(len(seen), 2)
+            for options in seen:
+                self.assertTrue(options["require_complete"])
+                if profile == a.FISHER:
+                    self.assertEqual(options["response_format"], a.fisher_response_format(c.AUTO, 1024, 1024))
+                else:
+                    self.assertNotIn("response_format", options)
+        _, session = self.cloud('{"caption":"A cup."}', authoring_profile=a.FISHER, output_language="English")
+        self.assertNotIn("response_format", session.calls[0][1]["json"])
+
     def test_default_short_reference_result_can_warn_but_not_be_fabricated_or_destroyed(self):
         result, _ = self.cloud('{"caption":"仅见杯口。"}', 'invalid repair', authoring_profile=a.FISHER)
         report = json.loads(result[5])

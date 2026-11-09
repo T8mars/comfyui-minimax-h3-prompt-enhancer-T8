@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.40.1] - 2026-11-10
+
+- Constrain local MOSS Fisher generation and correction to mutually exclusive
+  native Caption/Layout JSON, with the requested canvas. Preserve the original
+  creative request, node interface, correction budget and strict compiler checks.
+- Include the selected output format and validation details in Fisher correction;
+  report JSON syntax error locations without echoing draft content.
+
 ## [1.40.0] - 2026-11-03
 
 - Apply the tested H3 color and creator execution hints with ordinary `On`.

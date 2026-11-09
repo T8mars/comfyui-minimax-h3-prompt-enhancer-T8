@@ -331,7 +331,10 @@ def _generate(current, controls, media, image_map, counters, *, api_mode, provid
         if controls.get("authoring_profile", authoring.CLASSIC) == authoring.CLASSIC:
             return _bounded(complete, message_list, validator, controls["max_corrections"], counters)
         policy = authoring.length_policy(controls["authoring_profile"], controls["prompt"], controls["output_language"], controls["max_output_chars"])
-        return authoring.bounded(complete, message_list, validator, controls["max_corrections"], counters, policy, _authoring_soft_error)
+        rule = (authoring.fisher_response_rule(controls["output_format"])
+                if controls["authoring_profile"] == authoring.FISHER else "Return one complete native MOSS draft JSON.")
+        return authoring.bounded(complete, message_list, validator, controls["max_corrections"], counters, policy,
+                                _authoring_soft_error, response_rule=rule)
 
     model = _model(current)
     if is_local_qwen_api_mode(api_mode):
@@ -347,7 +350,12 @@ def _generate(current, controls, media, image_map, counters, *, api_mode, provid
                 if controls.get("authoring_profile", authoring.CLASSIC) != authoring.CLASSIC:
                     local_output_token_budget(message_list, settings)
                 counters["logical_generation_calls"] += 1
-                text = provider.complete(message_list, temperature=0.1 if repair else 0.3, seed=seed, require_complete=True)
+                # Local Fisher needs JSON during decoding, including its correction.
+                response = ({"response_format": authoring.fisher_response_format(
+                    controls["output_format"], controls["width"], controls["height"])}
+                            if controls.get("authoring_profile") == authoring.FISHER else {})
+                text = provider.complete(message_list, temperature=0.1 if repair else 0.3, seed=seed,
+                                         require_complete=True, **response)
                 counters["failed_raw"] = text
                 return text
             result, warning, repair_failed = bounded(complete, initial_messages)

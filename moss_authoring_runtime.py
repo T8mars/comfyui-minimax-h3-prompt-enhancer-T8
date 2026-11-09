@@ -406,7 +406,7 @@ def run(current, controls, prepared, counters, progress):
             language = "en" if comic else "zh" if a.descriptive_language(a.FISHER, controls["descriptive_language"], controls["brief"]) == "中文" else "en"
             policy = a.length_policy(controls["profile"], controls["brief"], "English" if comic else controls["descriptive_language"], controls["max_output_chars"])
             result, _warning = active.run(builder, validator, controls["max_corrections"], "source", key, records,
-                policy=policy, response_rule="Return exactly {source,sidecar}, not native compiled coordinates." if comic else "Return one complete native MOSS Caption or Layout draft JSON.")
+                policy=policy, response_rule="Return exactly {source,sidecar}, not native compiled coordinates." if comic else a.fisher_response_rule(native.AUTO))
             payload = result[6]
             unit = {"unit_id": key, "index": index, "width": width, "height": height,
                 "reference_indices": page["reference_indices"], "reference_selection_reason": page["reference_selection_reason"],

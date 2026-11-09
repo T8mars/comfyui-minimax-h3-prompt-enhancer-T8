@@ -16,6 +16,17 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-11-10: Fisher local JSON decoding
+
+Only the MOSS Fisher local generation/correction request gains a native JSON
+Schema. Keep all 28 saved widget fields, six outputs, defaults, linked-input
+validation and frontend serialization unchanged. Classic/Comic local requests
+and cloud request options retain their prior decoding settings. Compile-only
+and historical recovery still bypass generation; incomplete/mixed drafts fail
+without replacing the last valid result. Regression checks cover format-specific
+correction, newline/quote preservation, zero corrections, linked inputs and
+native queued compile/recovery with invalid dependencies.
+
 ### 2026-11-03: ordinary H3 On uses the tested execution hints
 
 Keep the three finite helper modes, Off defaults, 3/2 saved fields, 4/3 full

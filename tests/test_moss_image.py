@@ -134,6 +134,16 @@ class MossContractTests(unittest.TestCase):
         value["items"][0]["bbox"] = [0, 0, 1e999, 200]
         with self.assertRaises(c.MossContractError): c.compile_draft(value, width=1536)
 
+    def test_json_syntax_error_reports_location_without_echoing_draft(self):
+        for raw in ('{"caption":"private wording\nsecond paragraph"}',
+                    '{"caption":"private wording"} trailing', '{"caption":"private wording}'):
+            with self.subTest(raw=raw), self.assertRaises(c.MossContractError) as caught:
+                c.strict_json(raw)
+            self.assertEqual(caught.exception.code, "invalid_json")
+            self.assertIn("line ", str(caught.exception))
+            self.assertIn("column ", str(caught.exception))
+            self.assertNotIn("private wording", str(caught.exception))
+
     def test_mode_and_canvas_are_hard_constraints(self):
         with self.assertRaises(c.MossContractError): c.compile_draft({"caption": "A cup."}, output_format=c.LAYOUT)
         with self.assertRaises(c.MossContractError): c.compile_draft(layout())

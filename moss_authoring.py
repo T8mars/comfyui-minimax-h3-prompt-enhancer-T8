@@ -132,6 +132,46 @@ def validate_cached_authoring(report, result):
         c.fail("invalid_cache", "Stored length counts differ from the draft / 缓存计量与草稿不符。")
 
 
+def fisher_response_format(output_format, width, height):
+    """Constrain local decoding; the native compiler still checks geometry/copy."""
+    selected = c.normalize_format(output_format)
+    c.canvas(width, height)
+    text = {"type": "string", "minLength": 1}
+    strings = {"type": "array", "items": text}
+    caption = {"type": "object", "properties": {"caption": text},
+               "required": ["caption"], "additionalProperties": False}
+    layout = {"type": "object", "properties": {
+        "width": {"const": width}, "height": {"const": height},
+        "bbox_coord_space": {"const": "abs"}, "bbox_format": {"const": "xyxy"},
+        "summary": {"type": "object", "properties": {
+            "caption": text, "meta": strings, "palette": strings,
+            "canvas": {"enum": ["single", "multi_panel", "collage"]}},
+            "required": ["caption"], "additionalProperties": False},
+        "items": {"type": "array", "minItems": 1, "maxItems": c.MAX_ITEMS, "items": {
+            "type": "object", "properties": {
+                "label": {"enum": ["object", "character", "text"]}, "caption": text,
+                "bbox": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4},
+                "text": text, "tags": strings, "palette": strings},
+            "required": ["label", "caption", "bbox"], "additionalProperties": False}}},
+        "required": ["width", "height", "bbox_coord_space", "bbox_format", "summary", "items"],
+        "additionalProperties": False}
+    schema = caption if selected == "caption" else layout if selected == "layout" else {"oneOf": [caption, layout]}
+    return {"type": "json_object", "schema": schema}
+
+
+def fisher_response_rule(output_format):
+    selected = c.normalize_format(output_format)
+    caption = 'Caption has exactly one key: {"caption":"the entire description"}. All paragraphs belong inside this one string; no Layout keys.'
+    layout = ('Layout has width, height, bbox_coord_space="abs", bbox_format="xyxy", summary and flat items, '
+              'using the prescribed native fields. Descriptions go in summary.caption/item.caption; no top-level caption.')
+    shape = caption if selected == "caption" else layout if selected == "layout" else (
+        "Choose exactly ONE format; prefer Caption unless precise spatial/text placement requires Layout. " + caption + " " + layout)
+    return ("Return ONLY one complete JSON object. " + shape + " "
+            r'Use double-quoted JSON keys and strings. Inside strings encode line breaks as \n, quotes as \", and backslashes as \\. '
+            "Escaping is transport syntax: decoded visible text must retain its exact original characters and real line breaks. "
+            "Do not return bare prose, explanations, Markdown, a second object or a Caption/Layout hybrid.")
+
+
 def build_messages(controls, image_labels, media_parts=None):
     profile = validate_profile(controls["authoring_profile"])
     messages = c.build_messages(controls["prompt"], output_format=controls["output_format"],
@@ -184,7 +224,7 @@ def bounded(complete, messages, validator, repairs, counters, policy, keep_error
         "Fix schema errors and description length together. Never truncate or pad. Expand useful visible "
         "detail if below the automatic Fisher Han range; shorten only redundant detail if above the UI cap. "
         "If reference evidence is insufficient, keep accuracy rather than inventing details. Policy: "
-        + json.dumps(policy) + "; problem: " + (problem.code if problem else length_warning(best, policy)))}]
+        + json.dumps(policy) + "; problem: " + (problem.code + ": " + str(problem) if problem else length_warning(best, policy)))}]
     try:
         repaired = validator(complete(correction, True))
         if best is None or candidate_rank(repaired, policy) <= candidate_rank(best, policy):

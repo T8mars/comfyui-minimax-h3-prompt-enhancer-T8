@@ -74,6 +74,9 @@ def strict_json(text: str):
         source = match.group(1)
     try:
         value = json.loads(source, object_pairs_hook=_unique, parse_constant=_constant)
+    except json.JSONDecodeError as error:
+        fail("invalid_json", "Return one complete JSON value without prose / 需要完整 JSON，不接受混合说明或截断内容。 "
+             f"JSON: {error.msg}; line {error.lineno}, column {error.colno} / 第 {error.lineno} 行、第 {error.colno} 列。")
     except (ValueError, RecursionError) as error:
         if isinstance(error, MossContractError):
             raise
