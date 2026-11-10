@@ -1,0 +1,9 @@
+MiniMax-H3-Image is licensed under the MiniMax-H3-Image Community License Agreement, Copyright © 2026 MiniMax. All Rights Reserved.
+
+This directory contains unchanged official prompt and documentation snapshots,
+not model weights. See LICENSE for the applicable agreement and source.json for
+the two upstream commits, original paths, sizes and SHA256 hashes.
+
+T8's provider adapters, optional word target, exact-text controls and validation
+are implemented outside these original files. They do not relicense MiniMax's
+materials or represent use of the dedicated MiniMax-H3-Image-PE model weights.

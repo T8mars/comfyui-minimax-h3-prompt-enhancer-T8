@@ -2,6 +2,16 @@
   <strong>简体中文</strong> | <a href="./README_EN.md">English</a>
 </p>
 
+## 新增：MiniMax H3 Image 提示词扩写（1.41.0）
+
+搜索 **MiniMax H3 Image Prompt Enhancer T8**。独立支持文生图和最多16张有序参考图的图像编辑，
+使用官方 [H3 Image PE](https://huggingface.co/MiniMaxAI/MiniMax-H3-Image-PE) 两套固定版本提示词。
+沿用现有API、本地GGUF和Strata；支持画幅比例、软目标英文词数（0=官方自动，无1000上限）、
+逐字锁定画面文案、最多一次格式纠正与成功结果恢复。英文描述保留中文等原文。
+`expanded_prompt` 接下游H3正向，编辑原图仍需按相同顺序接下游。
+[使用说明](docs/h3-image.md) · [文生图示例](example_workflows/h3_image_t2i_example.json) · [双图编辑示例](example_workflows/h3_image_edit_example.json)。
+结构验证不代表生成图质量或4096 Token精确核验；未捆绑或下载模型。
+
 ## 更新：H3 普通开启落实色彩与导演拍法（1.40.0）
 
 H3 的普通 **开启 / On** 会要求把色彩与导演拍法写到具体画面中。已有可见表面的颜色未指定或待定时，会要求从所选色卡补全；明确锁定的原色、参考色与材质仍保留。旧 **开启（H3强化试验）** 保留兼容，在本版与普通 On 使用相同提示。两项配置默认关闭；如需停用，关闭对应配置并重新生成。
@@ -138,7 +148,7 @@ API 模式选 **Strata 本地服务（桥接）**，使用已经启动的 Strata
 | 模型网盘 | [夸克网盘下载](https://pan.quark.cn/s/c9c267081fbf) |
 | Hugging Face | [t8star](https://huggingface.co/t8star) |
 
-## 五个独立核心节点
+## 独立核心节点
 
 | 节点 | 用途 | 主要任务 |
 | --- | --- | --- |
@@ -147,6 +157,8 @@ API 模式选 **Strata 本地服务（桥接）**，使用已经启动的 Strata
 | `MiniMax Music 3 Prompt & Lyrics Enhancer (T8)` | 生成 Music 3 歌词与音乐描述 | AUTO、生成歌词、严格保留、局部润色、纯器乐 |
 | `YuE2 音乐提示词与歌词创作（T8）` | 生成 YuE2 风格与歌词 | 原创、保留原词、定向改词、纯器乐、可选 ABC 准备 |
 | `Qwen Image 2.1 Prompt Enhancer` | 生成图像提示词 | 文生图、1–10 图像编辑、比例、透明 RGBA |
+| `MOSS Image Prompt Enhancer T8` | 生成 MOSS 原生提示词 | Caption / Layout、Fisher、Comic |
+| `MiniMax H3 Image Prompt Enhancer T8` | 生成 H3 图像提示词 | 文生图、1–16 图编辑、比例、软词数与锁文案 |
 
 本项目目前不包含 Seedance 2.5 提示词节点，也不调用视频或音乐生成、轮询、试听或下载接口。
 

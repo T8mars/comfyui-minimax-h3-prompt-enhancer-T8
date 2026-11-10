@@ -59,6 +59,10 @@ async function connect() {
 
 try {
   const send = await connect();
+  if(mode==='comfy-h3-image'){
+    const {runH3ImageBrowser}=await import('./h3_image_browser.mjs');
+    await runH3ImageBrowser({send,providerBase:markerProviderBase,screenshotPath});
+  }
   if(mode==='comfy-visual-styles'){
     const {runVisualStyleBrowser}=await import('./visual_style_browser.mjs');
     await runVisualStyleBrowser({send,providerBase:markerProviderBase,screenshotPath});

@@ -108,7 +108,8 @@ class MaintenanceTests(unittest.TestCase):
             storyboard_examples = load_tool("t8_storyboard_examples", "build_storyboard_workflows.py")
             marker_examples = load_tool("t8_marker_examples", "build_marker_workflows.py")
             visual_examples = load_tool("t8_visual_examples", "build_visual_style_workflows.py")
-        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS, *camera_examples.generate(), *hybrid_examples.STEMS, *strata_examples.STEMS, *speech_examples.STEMS, *moss_examples.STEMS, *authoring_examples.STEMS, *storyboard_examples.STEMS, *marker_examples.STEMS, *visual_examples.STEMS)
+            h3_image_examples = load_tool("t8_h3_image_examples", "build_h3_image_workflows.py")
+        STEMS = (*directional_examples.STEMS, *quality_examples.STEMS, *camera_examples.generate(), *hybrid_examples.STEMS, *strata_examples.STEMS, *speech_examples.STEMS, *moss_examples.STEMS, *authoring_examples.STEMS, *storyboard_examples.STEMS, *marker_examples.STEMS, *visual_examples.STEMS, *h3_image_examples.STEMS)
         self.assertEqual(len(workflows), 20 + len(STEMS))
         extra = [path for path in workflows if path.stem in STEMS]
         self.assertEqual({path.stem for path in extra}, set(STEMS))
@@ -123,6 +124,7 @@ class MaintenanceTests(unittest.TestCase):
         authoring_examples.check()
         storyboard_examples.check()
         marker_examples.check()
+        h3_image_examples.check()
         for stem in marker_examples.STEMS:
             self.assertTrue((ROOT / "example_workflows" / (stem + ".jpg")).is_file())
         workflows = [path for path in workflows if path.stem not in STEMS]

@@ -120,7 +120,7 @@ class SpatialEditorTests(unittest.TestCase):
                 self.assertEqual((ROOT/name).read_bytes().replace(b'\r\n',b'\n'),old.replace(b'\r\n',b'\n'),name)
         import sys
         nodes=asyncio.run(asyncio.run(sys.modules[h3.__package__].comfy_entrypoint()).get_node_list())
-        self.assertEqual(len(nodes),38);self.assertEqual(nodes[32],vm.T8H3VisualMarkerConfig)
+        self.assertEqual(len(nodes),39);self.assertEqual(nodes[32],vm.T8H3VisualMarkerConfig)
         self.assertEqual(nodes[33],editor.T8H3SpatialMarkerCanvas)
         self.assertEqual([n.define_schema().node_id for n in nodes[34:36]],['MOSSAuthoringDirectorT8','MOSSAuthoringPageT8'])
 

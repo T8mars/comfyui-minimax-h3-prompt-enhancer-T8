@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.41.0] - 2026-11-11
+
+- Add an independent MiniMax H3 Image prompt enhancer for text-to-image and
+  ordered 1–16-image editing, with pinned official PE prompts, existing cloud/
+  local GGUF/Strata providers, soft word targets, ratio controls, exact visible
+  text, one bounded correction and last-success recovery. Include two preview
+  workflows and original geometric references; preserve the old 38-node prefix.
+- Preserve literal think tags inside complete JSON through cloud and both local
+  runtimes. Keep ordinary text reasoning cleanup behavior unchanged.
+- Close final HTTP/JSON chat responses on success and failure; reject corrupted
+  H3 Image recovery reports with controlled errors and consistent statistics.
+  Restore valid named/positional widget data when private state is malformed,
+  split Unicode visible-text line breaks before generation, and label unknown
+  shared providers as determined at execution time.
+
 ## [1.40.2] - 2026-11-10
 
 - Remove H3's legacy 1000-word target ceiling from both the widget and runtime

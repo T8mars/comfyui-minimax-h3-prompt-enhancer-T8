@@ -81,8 +81,9 @@ class VisualStyleTests(unittest.TestCase):
         package = importlib.import_module(h3.__package__)
         extension = asyncio.run(package.comfy_entrypoint())
         classes = asyncio.run(extension.get_node_list())
-        self.assertEqual(len(classes), 38)
-        self.assertEqual([v.define_schema().node_id for v in classes[-2:]], ['T8ColorStyleConfig', 'T8CreatorStyleConfig'])
+        self.assertEqual(len(classes), 39)
+        self.assertEqual([v.define_schema().node_id for v in classes[36:38]], ['T8ColorStyleConfig', 'T8CreatorStyleConfig'])
+        self.assertEqual(classes[38].define_schema().node_id, 'MiniMaxH3ImagePromptEnhancerT8')
 
     def test_configs_are_identity_only_strict_and_errors_do_not_echo(self):
         for kind in ('color', 'creator'):

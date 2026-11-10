@@ -16,6 +16,45 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-11-11: independent H3 Image prompt expansion
+
+The subsequent 20-round bug audit reproduced and fixed malformed private state
+masking valid named/positional values, and an unknown typed provider being labeled
+as the local widget's actual provider. Validate each persistence representation
+before selecting it; unresolved shared providers are explicitly labeled as such.
+No new valued field or action is added. Unicode line separators are treated as
+visible-copy layout boundaries before inference, retaining line spaces/order and
+duplicates; single-paragraph output rejects the same separators. Corrupted cache
+reports fail with controlled errors and cannot claim incorrect counts/provenance.
+HTTP and JSON response objects are closed on all tested final paths.
+
+The owned CPU/Chrome gate additionally exercises corrupt-private → valid-named
+restoration and an actual Unicode locked-line queue, alongside the existing
+workflow/16-image/linked-input/recovery/host-preview gates.
+
+Append `MiniMaxH3ImagePromptEnhancerT8` after the unchanged 38-node prefix.
+It has four STRING outputs, 22 canonical valued widgets and five actions
+(27 full runtime widgets). Seed explicitly disables `control_after_generate`;
+force-input Key, 16-slot Autogrow references and provider config are not saved
+as valued widgets. Both button serialization flags are disabled. Output preview
+uses the existing nonserialized `T8ShowText` instead of adding output widgets.
+
+Named state is projected to actual runtime order before native configure, then
+restored synchronously. Literal blank briefs fail; linked STRING/INT nulls defer
+to execution. Recovery actions are transient: workflow save/load normalizes to
+normal while a live recovery API queue can use restore_last. Copies get unique
+slots on add and serialization, including root/subgraph trees; every saved slot
+representation is synchronized. Current invalid lazy inputs are skipped during
+historical recovery. Pure DOM size refreshes do not feed allocated height back
+into layout repeatedly; allow the host's initial asynchronous layout to settle.
+
+Owned CPU Comfy/Chrome acceptance covered both examples, all 27 runtime widgets,
+22-field save/reload, target values 0/1500/5000/20000, native API export, external
+STRING and actual PrimitiveInt queues, recovery, 16 reference sockets through
+save/reload/queue, and shared-provider override. Providers in this gate return
+synthetic responses. Installed 9B two-case model observations are separate and
+do not establish universal semantic adherence or generated-image quality.
+
 ### 2026-11-10: remove the H3 1000-word target ceiling
 
 Remove only the `description_word_target` legacy ceiling and matching runtime

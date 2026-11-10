@@ -11,6 +11,11 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from .provider_transport import strip_inline_reasoning
+except ImportError:
+    from provider_transport import strip_inline_reasoning
+
+try:
     from .local_gguf_catalog import (
         AUTO_MMPROJ,
         GGUFMetadataError,
@@ -85,11 +90,6 @@ class PythonRuntimeSpec:
     source: str = "ComfyUI Python environment"
 
 
-_THINK_BLOCK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>.*?</think\s*>", re.IGNORECASE | re.DOTALL)
-_LEADING_THINK_END_PATTERN = re.compile(r"^\s*</think\s*>\s*", re.IGNORECASE)
-_UNCLOSED_THINK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>", re.IGNORECASE)
-
-
 def normalize_llama_seed(seed: int) -> int:
     return int(seed) % LLAMA_SEED_MODULUS
 
@@ -127,12 +127,7 @@ def _finalize_local_content(content: Any, *, think_mode: bool) -> str:
     text = content.strip()
     if think_mode:
         return text
-    text = _THINK_BLOCK_PATTERN.sub("", text)
-    text = _LEADING_THINK_END_PATTERN.sub("", text)
-    unclosed = _UNCLOSED_THINK_PATTERN.search(text)
-    if unclosed is not None:
-        text = text[: unclosed.start()]
-    return text.strip()
+    return strip_inline_reasoning(text).strip()
 
 
 def qwen_model_directory() -> Path:

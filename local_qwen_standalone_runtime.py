@@ -21,6 +21,11 @@ from typing import Any
 import requests
 
 try:
+    from .provider_transport import strip_inline_reasoning
+except ImportError:
+    from provider_transport import strip_inline_reasoning
+
+try:
     from .local_gguf_catalog import (
         AUTO_MMPROJ,
         GGUFMetadataError,
@@ -92,9 +97,6 @@ class LocalQwenRuntimeError(RuntimeError):
     pass
 
 
-_THINK_BLOCK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>.*?</think\s*>", re.IGNORECASE | re.DOTALL)
-_LEADING_THINK_END_PATTERN = re.compile(r"^\s*</think\s*>\s*", re.IGNORECASE)
-_UNCLOSED_THINK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>", re.IGNORECASE)
 _REASONING_SWITCH_CACHE: dict[tuple[str, int], bool] = {}
 
 
@@ -139,12 +141,7 @@ def _finalize_local_content(content: Any, *, think_mode: bool) -> str:
     # Some third-party Qwen chat templates ignore enable_thinking=false and
     # leak their private reasoning into message.content. Keep non-thinking
     # mode deterministic at the provider boundary even with those templates.
-    text = _THINK_BLOCK_PATTERN.sub("", text)
-    text = _LEADING_THINK_END_PATTERN.sub("", text)
-    unclosed = _UNCLOSED_THINK_PATTERN.search(text)
-    if unclosed is not None:
-        text = text[: unclosed.start()]
-    return text.strip()
+    return strip_inline_reasoning(text).strip()
 
 
 def _supports_server_reasoning_switch(spec: "RuntimeSpec") -> bool:

@@ -14,6 +14,9 @@ _THINK_BLOCK_PATTERN = re.compile(
 )
 _LEADING_THINK_END_PATTERN = re.compile(r"^\s*</think\s*>\s*", re.IGNORECASE)
 _UNCLOSED_THINK_PATTERN = re.compile(r"<think(?:\s[^>]*)?>", re.IGNORECASE)
+_JSON_FENCE_PATTERN = re.compile(
+    r"\A```(?:json)?[ \t]*\r?\n([\s\S]*?)\r?\n```[ \t]*\Z", re.IGNORECASE
+)
 
 
 @dataclass(frozen=True)
@@ -35,6 +38,23 @@ class _StreamAccumulator:
     finish_reason: str = ""
 
 
+def _complete_json_content(text: str) -> bool:
+    """Recognize a complete JSON artifact without altering its string values.
+
+    This is a preservation gate, not a schema validator. Callers still reject
+    duplicate fields, nonstandard constants and invalid task contracts.
+    """
+    candidate = text.strip()
+    fence = _JSON_FENCE_PATTERN.fullmatch(candidate)
+    if fence:
+        candidate = fence.group(1)
+    try:
+        json.loads(candidate)
+        return True
+    except (ValueError, TypeError, RecursionError):
+        return False
+
+
 def strip_inline_reasoning(content: str) -> str:
     """Remove reasoning traces embedded in OpenAI-compatible message content.
 
@@ -43,6 +63,19 @@ def strip_inline_reasoning(content: str) -> str:
     no think marker is present; when one is present, return only the final text.
     """
     text = str(content)
+    # JSON string literals may themselves be exact visible copy, including
+    # paired or unclosed <think> tags. Never silently delete such user data.
+    if _complete_json_content(text):
+        return text
+    leading = text.lstrip()
+    while True:
+        block = _THINK_BLOCK_PATTERN.match(leading)
+        if block is None:
+            break
+        leading = leading[block.end():].lstrip()
+    leading = _LEADING_THINK_END_PATTERN.sub("", leading)
+    if leading != text and _complete_json_content(leading):
+        return leading.strip()
     cleaned = _THINK_BLOCK_PATTERN.sub("", text)
     cleaned = _LEADING_THINK_END_PATTERN.sub("", cleaned)
     unclosed = _UNCLOSED_THINK_PATTERN.search(cleaned)
@@ -181,7 +214,12 @@ def request_chat_completion(
         break
 
     if response.status_code != 200:
-        http_error(response, attempt)
+        try:
+            http_error(response, attempt)
+        finally:
+            close = getattr(response, "close", None)
+            if callable(close):
+                close()
     content_type = str(getattr(response, "headers", {}).get("Content-Type", "")).lower()
     if streaming and callable(getattr(response, "iter_lines", None)) and "json" not in content_type:
         accumulator = _StreamAccumulator()
@@ -247,22 +285,27 @@ def request_chat_completion(
         on_attempt and on_attempt(attempt, "success")
         return ChatTransportResult(content.strip() if strip_result else content, attempt, accumulator.response_id)
     try:
-        data = response.json()
-    except ValueError as error:
-        raise invalid_json_error() from error
-    try:
-        content = data["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError) as error:
-        raise missing_content_error() from error
-    if require_complete and data["choices"][0].get("finish_reason") in {"length", "max_tokens", "content_filter"}:
-        raise ChatCompletionTruncatedError("LLM output was interrupted: " + str(data["choices"][0]["finish_reason"]))
-    content = _text_content(content)
-    if isinstance(content, str):
-        content = strip_inline_reasoning(content)
-    if not isinstance(content, str) or not content.strip():
-        raise empty_content_error()
-    response_id = str(data.get("id") or "")[:160] if isinstance(data, dict) else ""
-    if on_checkpoint is not None:
-        on_checkpoint(content, True, response_id)
-    on_attempt and on_attempt(attempt, "success")
-    return ChatTransportResult(content.strip() if strip_result else content, attempt, response_id)
+        try:
+            data = response.json()
+        except ValueError as error:
+            raise invalid_json_error() from error
+        try:
+            content = data["choices"][0]["message"]["content"]
+        except (KeyError, IndexError, TypeError) as error:
+            raise missing_content_error() from error
+        if require_complete and data["choices"][0].get("finish_reason") in {"length", "max_tokens", "content_filter"}:
+            raise ChatCompletionTruncatedError("LLM output was interrupted: " + str(data["choices"][0]["finish_reason"]))
+        content = _text_content(content)
+        if isinstance(content, str):
+            content = strip_inline_reasoning(content)
+        if not isinstance(content, str) or not content.strip():
+            raise empty_content_error()
+        response_id = str(data.get("id") or "")[:160] if isinstance(data, dict) else ""
+        if on_checkpoint is not None:
+            on_checkpoint(content, True, response_id)
+        on_attempt and on_attempt(attempt, "success")
+        return ChatTransportResult(content.strip() if strip_result else content, attempt, response_id)
+    finally:
+        close = getattr(response, "close", None)
+        if callable(close):
+            close()

@@ -1,0 +1,64 @@
+{
+  "schema_version": "t8-h3-image-source/v1",
+  "adapter_revision": "1.0.0",
+  "source_commit": "35603d4b63949afa12cb098227fffefedf081afa",
+  "model_source_commit": "622d674eade1bdc87b7aac3a6fbee2b0fa99e28c",
+  "files": {
+    "prompt/t2i/system_prompt.txt": {
+      "sha256": "818ab3f652ec36b3b489b55c29f072f87e14af703cd11a4f3bff75f423d0beac",
+      "bytes": 327,
+      "repository": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "commit": "35603d4b63949afa12cb098227fffefedf081afa",
+      "path": "prompt/t2i/system_prompt.txt"
+    },
+    "prompt/t2i/task_prompt.txt": {
+      "sha256": "890213ad61e143bbd5b7906a802430296e82ca5c61ba16df717dcef5477bbcf4",
+      "bytes": 15821,
+      "repository": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "commit": "35603d4b63949afa12cb098227fffefedf081afa",
+      "path": "prompt/t2i/task_prompt.txt"
+    },
+    "prompt/t2i/request_params.json": {
+      "sha256": "dfc608bf0c02dd6ce7463be636aa8b148aef200513fa4c46e653ee2e5affbe3e",
+      "bytes": 1034,
+      "repository": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "commit": "35603d4b63949afa12cb098227fffefedf081afa",
+      "path": "prompt/t2i/request_params.json"
+    },
+    "prompt/edit/task_prompt.txt": {
+      "sha256": "c5695dbfc07a9e65555cef67d92467c613371cc2039b96f057022246a30a57b2",
+      "bytes": 38489,
+      "repository": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "commit": "35603d4b63949afa12cb098227fffefedf081afa",
+      "path": "prompt/edit/task_prompt.txt"
+    },
+    "prompt/manifest.json": {
+      "sha256": "6b0969322669d9713e33148d36c401f73b18939337ea2384d90dc457430b6a5b",
+      "bytes": 611,
+      "repository": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "commit": "35603d4b63949afa12cb098227fffefedf081afa",
+      "path": "prompt/manifest.json"
+    },
+    "README.md": {
+      "sha256": "b215c9ff2fcc401d34515559cd520f63bfe705df6a9538c9f048e1a6ecaf6e1c",
+      "bytes": 13188,
+      "repository": "MiniMaxAI/MiniMax-H3-Image-PE",
+      "commit": "35603d4b63949afa12cb098227fffefedf081afa",
+      "path": "README.md"
+    },
+    "LICENSE": {
+      "sha256": "edfab8ece9d0ccd39106c4fe44105ce599b27ca7dd22601b736a8e9219cb4d26",
+      "bytes": 18200,
+      "repository": "MiniMaxAI/MiniMax-H3-Image",
+      "commit": "622d674eade1bdc87b7aac3a6fbee2b0fa99e28c",
+      "path": "LICENSE"
+    },
+    "MODEL_README.md": {
+      "sha256": "8e806f74f02aa92f60c27f86cb8e1aa3c7e09cbc78fa729ba9a9da8b577d3bac",
+      "bytes": 22239,
+      "repository": "MiniMaxAI/MiniMax-H3-Image",
+      "commit": "622d674eade1bdc87b7aac3a6fbee2b0fa99e28c",
+      "path": "README.md"
+    }
+  }
+}

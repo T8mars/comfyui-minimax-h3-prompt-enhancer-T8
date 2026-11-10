@@ -23,6 +23,7 @@ from .combat_camera import T8CombatCameraConfig
 from .storyboard_director import T8StoryboardDirectorConfig
 from .visual_style_nodes import T8ColorStyleConfig, T8CreatorStyleConfig
 from .visual_style_routes import register_visual_style_routes
+from .h3_image import MiniMaxH3ImagePromptEnhancer
 from .h3_visual_marker import T8H3VisualMarkerConfig
 from .h3_spatial_editor import T8H3SpatialMarkerCanvas
 from .h3_spatial_editor_routes import register_spatial_editor_routes
@@ -78,6 +79,7 @@ class T8PromptEnhancerExtension(ComfyExtension):
             MOSSAuthoringPage,
             T8ColorStyleConfig,
             T8CreatorStyleConfig,
+            MiniMaxH3ImagePromptEnhancer,
         ]
 
 
@@ -102,6 +104,7 @@ __all__ = [
     "T8StoryboardDirectorConfig",
     "T8ColorStyleConfig",
     "T8CreatorStyleConfig",
+    "MiniMaxH3ImagePromptEnhancer",
     "T8H3VisualMarkerConfig",
     "T8H3SpatialMarkerCanvas",
     "T8SpeechReference",

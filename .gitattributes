@@ -9,3 +9,7 @@ tests/fixtures/h3_hybrid_api_2026-10-06.json -text whitespace=blank-at-eol,blank
 resources/visual_styles/** text eol=lf
 research_sources/visual-styles-200.json text eol=lf
 resources/visual_style_previews/** text eol=lf
+# Official H3 Image resources are verified against their original raw bytes.
+h3_image_vendor/** -text
+# Keep the upstream license's original trailing spaces and byte hash.
+h3_image_vendor/LICENSE -whitespace

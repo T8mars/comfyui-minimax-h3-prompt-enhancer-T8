@@ -157,7 +157,7 @@ class StoryboardDirectorTests(unittest.TestCase):
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         ids = [cls.define_schema().node_id for cls in asyncio.run(extension.get_node_list())]
-        self.assertEqual(len(ids), 38)
+        self.assertEqual(len(ids), 39)
         self.assertEqual(ids[32:34], ["T8H3VisualMarkerConfig", "T8H3SpatialMarkerCanvas"])
         self.assertEqual(ids[34:36], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
         self.assertEqual(ids[30:32], ["MOSSImagePromptEnhancerT8", "T8StoryboardDirectorConfig"])

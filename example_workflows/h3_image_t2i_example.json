@@ -1,0 +1,254 @@
+{
+  "id": "4fac1099-9841-5e8e-bd6d-727047c445b6",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MiniMaxH3ImagePromptEnhancerT8",
+      "pos": [
+        500,
+        60
+      ],
+      "size": [
+        570,
+        570
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ImagePromptEnhancerT8",
+        "t8_h3_image_widgets_v1": {
+          "prompt": "做一张克制的中文咖啡海报：左侧一只白陶杯，右侧标题为‘慢一点，刚刚好’，米白背景，不添加其他文字。",
+          "task_type": "文生图 / Text to image",
+          "aspect_ratio": "4:3",
+          "target_words": 0,
+          "api_mode": "贞贞平价小屋（推荐）",
+          "locked_text": "慢一点，刚刚好",
+          "max_corrections": 1,
+          "llm_max_tokens": 16384,
+          "ai_workshop_model": "gemini-3.5-flash",
+          "custom_model": "qwen/qwen3.8-flash-next",
+          "openai_base_url": "",
+          "seed": 0,
+          "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+          "local_mmproj": "AUTO（自动匹配）",
+          "local_context_size": 32768,
+          "local_max_tokens": 16384,
+          "local_think_mode": "关闭（推荐，速度优先）",
+          "local_reasoning_effort": "medium",
+          "local_unload_policy": "执行后卸载（推荐）",
+          "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+          "recovery_slot": "",
+          "recovery_action": "normal"
+        }
+      },
+      "inputs": [
+        {
+          "name": "api_key",
+          "type": "STRING",
+          "link": 2,
+          "shape": 7
+        },
+        {
+          "name": "provider_config",
+          "type": "T8_LLM_PROVIDER_CONFIG",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "expanded_prompt",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "aspect_ratio",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "official_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "widgets_values": [
+        "做一张克制的中文咖啡海报：左侧一只白陶杯，右侧标题为‘慢一点，刚刚好’，米白背景，不添加其他文字。",
+        "文生图 / Text to image",
+        "4:3",
+        0,
+        "贞贞平价小屋（推荐）",
+        "慢一点，刚刚好",
+        1,
+        16384,
+        "gemini-3.5-flash",
+        "qwen/qwen3.8-flash-next",
+        "",
+        0,
+        "Qwen3.8-27B-Q4_K_M.gguf",
+        "AUTO（自动匹配）",
+        32768,
+        16384,
+        "关闭（推荐，速度优先）",
+        "medium",
+        "执行后卸载（推荐）",
+        "AUTO（显存不足时释放）",
+        "",
+        "normal"
+      ],
+      "widgets_values_named": {
+        "prompt": "做一张克制的中文咖啡海报：左侧一只白陶杯，右侧标题为‘慢一点，刚刚好’，米白背景，不添加其他文字。",
+        "task_type": "文生图 / Text to image",
+        "aspect_ratio": "4:3",
+        "target_words": 0,
+        "api_mode": "贞贞平价小屋（推荐）",
+        "locked_text": "慢一点，刚刚好",
+        "max_corrections": 1,
+        "llm_max_tokens": 16384,
+        "ai_workshop_model": "gemini-3.5-flash",
+        "custom_model": "qwen/qwen3.8-flash-next",
+        "openai_base_url": "",
+        "seed": 0,
+        "local_model": "Qwen3.8-27B-Q4_K_M.gguf",
+        "local_mmproj": "AUTO（自动匹配）",
+        "local_context_size": 32768,
+        "local_max_tokens": 16384,
+        "local_think_mode": "关闭（推荐，速度优先）",
+        "local_reasoning_effort": "medium",
+        "local_unload_policy": "执行后卸载（推荐）",
+        "local_comfy_memory_policy": "AUTO（显存不足时释放）",
+        "recovery_slot": "",
+        "recovery_action": "normal"
+      }
+    },
+    {
+      "id": 2,
+      "type": "T8ShowText",
+      "pos": [
+        1140,
+        60
+      ],
+      "size": [
+        570,
+        570
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "properties": {
+        "Node name for S&R": "T8ShowText"
+      },
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "widgets_values": []
+    },
+    {
+      "id": 3,
+      "type": "T8PromptText",
+      "pos": [
+        20,
+        60
+      ],
+      "size": [
+        400,
+        170
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "properties": {
+        "Node name for S&R": "T8PromptText"
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "widgets_values": [
+        ""
+      ],
+      "title": "API Key（本地无需；勿分享填写后的工作流）"
+    },
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [
+        500,
+        700
+      ],
+      "size": [
+        570,
+        235
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "inputs": [],
+      "outputs": [],
+      "widgets_values": [
+        "仅扩写提示词，不生成图片。expanded_prompt接下游H3正向；原图仍须按Picture编号接下游编辑。\n目标英文词数0=官方自动，字数不是Token；官方英文描述保留中文画面文案。\n图像编辑示例图在example_workflows/h3_image_reference_*.png，请先上传到LoadImage。\n本地选择已安装的GGUF与匹配mmproj；共享provider_config优先。详细说明见docs/h3-image.md。"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      3,
+      0,
+      1,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        80,
+        60
+      ]
+    }
+  },
+  "version": 0.4
+}

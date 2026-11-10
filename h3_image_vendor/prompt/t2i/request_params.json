@@ -1,0 +1,49 @@
+{
+  "reasoning_effort": "xhigh",
+  "temperature": 1.0,
+  "top_p": 0.95,
+  "top_k": 20,
+  "min_p": 0.0,
+  "presence_penalty": 0.0,
+  "repetition_penalty": 1.0,
+  "chat_template_kwargs": {
+    "enable_thinking": true,
+    "preserve_thinking": true
+  },
+  "response_format": {
+    "type": "json_schema",
+    "json_schema": {
+      "name": "expanded_caption_and_aspect_ratio",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "expanded_caption": {
+            "type": "string"
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "enum": [
+              "1:1",
+              "5:4",
+              "4:3",
+              "3:2",
+              "16:9",
+              "21:9",
+              "4:5",
+              "3:4",
+              "2:3",
+              "9:16"
+            ]
+          }
+        },
+        "required": [
+          "expanded_caption",
+          "aspect_ratio"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "max_tokens": 4096
+}

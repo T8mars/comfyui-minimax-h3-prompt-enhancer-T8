@@ -307,10 +307,11 @@ class VisualMarkerTests(unittest.TestCase):
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())
         nodes = asyncio.run(extension.get_node_list())
-        self.assertEqual(len(nodes), 38)
+        self.assertEqual(len(nodes), 39)
         self.assertEqual(nodes[32].define_schema().node_id, "T8H3VisualMarkerConfig")
         self.assertEqual(nodes[33].define_schema().node_id, "T8H3SpatialMarkerCanvas")
         self.assertEqual([n.define_schema().node_id for n in nodes[34:36]], ["MOSSAuthoringDirectorT8", "MOSSAuthoringPageT8"])
+        self.assertEqual(nodes[38].define_schema().node_id, "MiniMaxH3ImagePromptEnhancerT8")
         for node in nodes:
             if node is not h3.MiniMaxH3PromptEnhancer:
                 self.assertNotIn("visual_marker_config", [i.id for i in node.define_schema().inputs])

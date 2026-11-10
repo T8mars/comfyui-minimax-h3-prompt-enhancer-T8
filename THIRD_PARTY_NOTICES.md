@@ -140,3 +140,17 @@ Layouts it validates the unchanged official schema using a temporary envelope,
 then rechecks and centers each box on the real canvas with the official box
 function. It does not modify or re-sign the upstream compiler, round the user's
 dimensions or permit boxes in the envelope's padding.
+
+## MiniMax H3 Image prompt expansion resources
+
+`h3_image_vendor/` contains unchanged text from MiniMaxAI/MiniMax-H3-Image-PE
+commit `35603d4b63949afa12cb098227fffefedf081afa` and MiniMaxAI/MiniMax-H3-Image
+commit `622d674eade1bdc87b7aac3a6fbee2b0fa99e28c`. Raw byte hashes and provenance
+are recorded in `h3_image_vendor/source.json`. These resources retain the
+[MiniMax-H3-Image Community License Agreement](h3_image_vendor/LICENSE),
+including its additional terms; the project's license does not replace it.
+The original README identifies Edit PE as a prompt-only release under development.
+T8's separate adapter adds provider integration, soft word targets and validation;
+no model weights or upstream executable scripts are bundled or downloaded.
+
+MiniMax-H3-Image is licensed under the MiniMax-H3-Image Community License Agreement, Copyright © 2026 MiniMax. All Rights Reserved.

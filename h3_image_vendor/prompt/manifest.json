@@ -1,0 +1,22 @@
+{
+  "t2i": {
+    "files": {
+      "prompt/t2i/system_prompt.txt": {
+        "sha256": "818ab3f652ec36b3b489b55c29f072f87e14af703cd11a4f3bff75f423d0beac"
+      },
+      "prompt/t2i/task_prompt.txt": {
+        "sha256": "890213ad61e143bbd5b7906a802430296e82ca5c61ba16df717dcef5477bbcf4"
+      },
+      "prompt/t2i/request_params.json": {
+        "sha256": "dfc608bf0c02dd6ce7463be636aa8b148aef200513fa4c46e653ee2e5affbe3e"
+      }
+    }
+  },
+  "edit": {
+    "files": {
+      "prompt/edit/task_prompt.txt": {
+        "sha256": "c5695dbfc07a9e65555cef67d92467c613371cc2039b96f057022246a30a57b2"
+      }
+    }
+  }
+}
