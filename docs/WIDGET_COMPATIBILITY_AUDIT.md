@@ -18,6 +18,27 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ### 2026-11-11: independent H3 Image prompt expansion
 
+The subsequent UI/linked-input audit queues all external STRING controls with
+distinct upstream versus fallback sentinels, then verifies the actual provider
+payload through save/reload, disconnect + normal generation and reconnect.
+Native measurements cover socket positions and settled height through Advanced
+cycles. Linked-null ratio restoration uses the schema's `auto` default; an
+explicit empty ratio remains invalid. `T8PromptText` keeps its one-field interface
+but disables dynamic expansion: native export previously turned `http://...`
+into `http:` and interpreted literal JSON/choice braces. The frozen compatibility
+test permits only that one flag change and still compares every other byte.
+
+H3 Image additionally saves a workflow-owner UUID property, without adding any
+widget or output. On add/configure/serialize it rotates the recovery slot when
+the root workflow UUID changes, including actual host Duplicate. Root and native
+subgraphs use the same root owner; unattached nodes defer binding. Legacy slots
+without an owner are invalidated on first binding, as their cached provenance
+cannot be authenticated. Slot and owner properties are synchronized after ensure.
+Actual A-generation → Duplicate → B-generation → A-restore previously returned
+B's content with zero new model calls; the fixed native queue returns A with
+distinct slots. Host workflow switching, two real sibling subgraphs, nonserialized
+preview and real clipboard fallback/CRLF/rapid-click checks pass separately.
+
 The subsequent 20-round bug audit reproduced and fixed malformed private state
 masking valid named/positional values, and an unknown typed provider being labeled
 as the local widget's actual provider. Validate each persistence representation

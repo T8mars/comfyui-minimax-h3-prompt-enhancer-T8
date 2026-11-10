@@ -4,6 +4,8 @@
 
 ## 新增：MiniMax H3 Image 提示词扩写（1.41.0）
 
+1.41.1 修复外接文本中的 URL/JSON/大括号被改写、外接比例断线后的默认值，以及复制整张工作流后的恢复结果串用。
+
 搜索 **MiniMax H3 Image Prompt Enhancer T8**。独立支持文生图和最多16张有序参考图的图像编辑，
 使用官方 [H3 Image PE](https://huggingface.co/MiniMaxAI/MiniMax-H3-Image-PE) 两套固定版本提示词。
 沿用现有API、本地GGUF和Strata；支持画幅比例、软目标英文词数（0=官方自动，无1000上限）、

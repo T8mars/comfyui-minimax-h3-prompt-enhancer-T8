@@ -46,6 +46,12 @@ class AuthoringCompatibility(unittest.TestCase):
                 previous_source = frozen(name).decode("utf-8").replace("\r\n", "\n")
                 self.assertEqual(previous_source.count(old_layout), 1)
                 self.assertEqual(path.read_text(encoding="utf-8"), previous_source.replace(old_layout, new_layout, 1), name)
+            elif name == "text_utilities.py":
+                # Raw STRING sources must not let the host strip URL comments
+                # or expand JSON braces. Only this single widget flag changes.
+                old = frozen(name).decode("utf-8").replace("\r\n", "\n")
+                self.assertEqual(old.count("dynamic_prompts=True,"), 1)
+                self.assertEqual(path.read_text(encoding="utf-8"), old.replace("dynamic_prompts=True,", "dynamic_prompts=False,", 1), name)
             else:
                 self.assertEqual(path.read_bytes().replace(b"\r\n", b"\n"), frozen(name).replace(b"\r\n", b"\n"), name)
 

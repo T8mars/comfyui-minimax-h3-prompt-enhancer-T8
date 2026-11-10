@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.41.1] - 2026-11-11
+
+- Preserve literal URL, JSON, braces and comment-like text from `T8 Prompt Text`
+  by disabling the host's dynamic-prompt expansion. Its single STRING interface
+  is unchanged; `{red|blue}` is now literal text rather than a random choice.
+- Restore `auto` when an externally linked H3 Image ratio was saved as null and
+  is later disconnected. Keep explicit blank literal ratios invalid.
+- Bind H3 Image recovery slots to the root workflow UUID so the host's Duplicate
+  action cannot make one workflow restore another's result. Same-workflow reload
+  retains its owned slot; legacy unowned cache slots are invalidated once.
+
 ## [1.41.0] - 2026-11-11
 
 - Add an independent MiniMax H3 Image prompt enhancer for text-to-image and

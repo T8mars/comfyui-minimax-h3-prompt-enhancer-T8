@@ -21,11 +21,14 @@ export async function runTextBrowser({send}) {
         // Discover the installed host's internal service only in this test.
         // The production extension imports no hashed/private host modules.
         let store,service;
-        for(const url of performance.getEntriesByType('resource').map(e=>e.name).filter(s=>new URL(s).pathname.startsWith('/assets/settingStore-')&&s.endsWith('.js'))){
+        const assetModules=[...new Set(performance.getEntriesByType('resource').map(e=>e.name).filter(s=>new URL(s).pathname.startsWith('/assets/')&&s.endsWith('.js')))];
+        for(const url of assetModules){
             const mod=await import(url);
             const useStore=Object.values(mod).find(v=>typeof v==='function'&&v.$id==='workflow');
             const useService=Object.values(mod).find(v=>typeof v==='function'&&v.name==='useWorkflowService');
-            if(useStore&&useService){store=useStore();service=useService();break;}
+            if(useStore&&!store)store=useStore();
+            if(useService&&!service)service=useService();
+            if(store&&service)break;
         }
         assert(store&&service,'Native workflow store/service discovery');
         await app.loadGraphData({nodes:[],links:[],groups:[],config:{},extra:{},version:.4},false,true);
@@ -66,22 +69,52 @@ export async function runTextBrowser({send}) {
         assert(get().widgets.filter(w=>w.name==='t8_show_text_preview').length===1,'One preview after reload');
         const full=JSON.parse(JSON.stringify(app.nodeOutputs));await app.loadGraphData(saved,false,true);app.nodeOutputs=full;
         assert(get().__t8TextPreview.rawText==='A actual queue\\n中文 result','History-style graph plus host output restore');
+        // Observe actual whole-workflow duplication without invoking an LLM.
+        // The node is added after the sole text queue, so it cannot affect the
+        // recorded backend prompt or introduce an inference request.
+        const enhancer=LiteGraph.createNode('MiniMaxH3ImagePromptEnhancerT8');app.rootGraph.add(enhancer);
+        const enhancerId=enhancer.id,dupGraph=app.graph.serialize();
+        const dupA=store.createTemporary('T8 recovery copy A.json',dupGraph);
+        await service.openWorkflow(dupA);
+        const duplicateSlotA=app.rootGraph.getNodeById(enhancerId).widgets.find(w=>w.name==='recovery_slot').value;
+        assert(typeof service.duplicateWorkflow==='function','Observed host Duplicate workflow action');
+        await service.duplicateWorkflow(dupA);
+        const dupB=store.activeWorkflow;
+        const duplicateSlotB=app.rootGraph.getNodeById(enhancerId).widgets.find(w=>w.name==='recovery_slot').value;
+        assert(dupA.path!==dupB.path,'Two actual separate workflow copies');
+        const duplicateIds=[dupA.activeState.id,dupB.activeState.id];
+        assert(duplicateIds[0]!==duplicateIds[1],'Host Duplicate action assigned a fresh workflow UUID');
+        assert(duplicateSlotA!==duplicateSlotB,'Different native workflow UUIDs must not share one recovery slot');
+        await service.openWorkflow(a);
         // Use the actual native subgraph class/registry and switch the active canvas.
         const child=LiteGraph.createNode('T8ShowText');app.graph.add(child);
         app.graph.convertToSubgraph(new Set([child]));
         const container=app.graph._nodes.find(n=>n.subgraph);
         const sub=container.subgraph,subShow=sub._nodes.find(n=>n.type==='T8ShowText');
         assert(subShow,'Native subgraph preview node');
+        const priorContainers=new Set(app.rootGraph._nodes.filter(n=>n.subgraph));
+        const siblingChild=LiteGraph.createNode('T8ShowText');app.rootGraph.add(siblingChild);
+        app.rootGraph.convertToSubgraph(new Set([siblingChild]));
+        const siblingContainer=app.rootGraph._nodes.find(n=>n.subgraph&&!priorContainers.has(n));
+        const sibling=siblingContainer?.subgraph,siblingShow=sibling?._nodes.find(n=>n.type==='T8ShowText');
+        assert(siblingShow&&sibling.id!==sub.id,'Two actual native sibling subgraphs');
         app.canvas.setGraph(sub);
-        app.nodeOutputs={[showId]:{text:['root only']},[sub.id+':'+subShow.id]:{text:['sub only']}};
+        app.nodeOutputs={[showId]:{text:['root only']},[sub.id+':'+subShow.id]:{text:['sub only']},[sibling.id+':'+siblingShow.id]:{text:['sibling only']}};
         assert(get().__t8TextPreview.rawText==='root only','Root restored while subgraph is open');
         assert(subShow.__t8TextPreview.rawText==='sub only','UUID scoped subgraph restored');
-        app.nodeOutputs={};assert(get().__t8TextPreview.rawText===''&&subShow.__t8TextPreview.rawText==='','Empty snapshot clears old previews');
+        assert(siblingShow.__t8TextPreview.rawText==='sibling only','Sibling output does not leak into active subgraph');
+        app.nodeOutputs={[showId]:{text:['root new']}};
+        assert(get().__t8TextPreview.rawText==='root new'&&subShow.__t8TextPreview.rawText===''&&siblingShow.__t8TextPreview.rawText==='','Bare root output clears absent child outputs');
+        app.nodeOutputs={};assert(get().__t8TextPreview.rawText===''&&subShow.__t8TextPreview.rawText===''&&siblingShow.__t8TextPreview.rawText==='','Empty snapshot clears old previews');
         app.canvas.setGraph(app.rootGraph);
         const state=get().__t8TextPreview,raw='line 1\\r\\n中文 line 2\\r\\n<script>literal</script>';
         get().onExecuted({text:[raw]});assert(state.textarea.value===raw.replaceAll('\\r\\n','\\n'),'Browser textarea normalization reproduced');
         globalThis.__t8TextCopyFixture={state,raw,get};
-        return {missing_hook_reproduced:true,native_queue:true,native_workflow_switch:true,history_restore:true,subgraph_scope:true,preview_serialized:false,paid_calls:0};
+        return {missing_hook_reproduced:true,native_queue:true,native_workflow_switch:true,history_restore:true,subgraph_scope:true,
+            sibling_subgraphs:true,native_local_ids:[subShow.id,siblingShow.id],native_same_local_id:subShow.id===siblingShow.id,
+            duplicate_workflow_slots:[duplicateSlotA,duplicateSlotB],duplicate_workflow_slot_collision:duplicateSlotA===duplicateSlotB,
+            duplicate_workflow_ids:duplicateIds,host_duplicate_action:true,
+            preview_serialized:false,paid_calls:0};
     })()`});
     if(r.exceptionDetails)throw new Error(JSON.stringify(r.exceptionDetails));
     process.stdout.write(JSON.stringify(r.result.value)+'\n');

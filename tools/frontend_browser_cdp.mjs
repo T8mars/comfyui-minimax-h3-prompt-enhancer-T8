@@ -59,6 +59,10 @@ async function connect() {
 
 try {
   const send = await connect();
+  if(mode==='comfy-h3-ui-linked'){
+    const {runH3UILinkedReview}=await import('./h3_ui_linked_browser.mjs');
+    await runH3UILinkedReview({send,providerBase:markerProviderBase,screenshotPath});
+  }
   if(mode==='comfy-h3-image'){
     const {runH3ImageBrowser}=await import('./h3_image_browser.mjs');
     await runH3ImageBrowser({send,providerBase:markerProviderBase,screenshotPath});

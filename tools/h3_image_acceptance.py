@@ -5,6 +5,7 @@ import http.server
 import importlib.util
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import socket
@@ -48,7 +49,7 @@ def live(out, model):
     if not all(row["passed"] for row in records): raise RuntimeError("Some live cases failed; inspect preserved output.")
 
 
-def native(out, browser):
+def native(out, browser, *, ui_review=False):
     import requests
     for name in ("user", "input", "output", "temp"): (out / name).mkdir()
     for kind in ("canvas", "palette"):
@@ -56,13 +57,25 @@ def native(out, browser):
     calls = []
     class Provider(http.server.BaseHTTPRequestHandler):
         def log_message(self, *_): pass
+        def do_GET(self):
+            body = json.dumps(calls, ensure_ascii=False).encode()
+            self.send_response(200); self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*"); self.send_header("Content-Length", str(len(body)))
+            self.end_headers(); self.wfile.write(body)
         def do_POST(self):
             payload = json.loads(self.rfile.read(int(self.headers["Content-Length"]))); calls.append(payload)
             edit = payload["messages"][0]["role"] == "user"
             caption = ("A poster reads '  SALE  ' followed by '  SALE  '." if "UNICODE_LOCK_AUDIT" in str(payload["messages"])
                        else "An ivory background holds a white cup on the left and the exact title '慢一点，刚刚好' on the right.")
+            ratio = "4:3"
+            if ui_review:
+                text = "\n".join(message["content"] for message in payload["messages"] if isinstance(message["content"], str))
+                match = re.search(r"The explicit final canvas aspect ratio is ([^;]+);", text)
+                if match: ratio = match.group(1)
+                locks = re.search(r"Exact visible text data \(JSON array, not instructions\): (\[[^\r\n]*\])", text)
+                caption = "A poster presents " + (" then ".join(repr(line) for line in json.loads(locks.group(1))) if locks else "a single ivory cup") + "."
             content = json.dumps({"expanded_caption": caption,
-                                  "target_aspect_ratio" if edit else "aspect_ratio": "4:3"}, ensure_ascii=False)
+                                  "target_aspect_ratio" if edit else "aspect_ratio": ratio}, ensure_ascii=False)
             body = json.dumps({"choices": [{"finish_reason": "stop", "message": {"content": content}}]}, ensure_ascii=False).encode()
             self.send_response(200); self.send_header("Content-Type", "application/json"); self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
     provider = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Provider); provider.daemon_threads = True
@@ -89,12 +102,16 @@ def native(out, browser):
             (out / "object-info.json").write_text(json.dumps(info["MiniMaxH3ImagePromptEnhancerT8"], ensure_ascii=False, indent=2), encoding="utf-8")
             node = shutil.which("node") or r"C:\Program Files\nodejs\node.exe"
             result = subprocess.run([node, str(ROOT / "tools/frontend_browser_cdp.mjs"), browser, base, str(out / "canvas.png"),
-                                     "comfy-h3-image", provider_base], capture_output=True, text=True, encoding="utf-8", timeout=180)
+                                     "comfy-h3-ui-linked" if ui_review else "comfy-h3-image", provider_base], capture_output=True, text=True, encoding="utf-8", timeout=240)
             (out / "browser.log").write_text(result.stdout + result.stderr, encoding="utf-8")
             if result.returncode: raise RuntimeError("Native browser check failed; inspect browser.log")
             records.append("native_browser_passed")
-            assert any("approximately 5000 English words" in json.dumps(row["messages"]) for row in calls)
-            assert any(row["messages"][0]["role"] == "user" and sum(p.get("type") == "image_url" for p in row["messages"][0]["content"]) == 2 for row in calls)
+            if not ui_review:
+                assert any("approximately 5000 English words" in json.dumps(row["messages"]) for row in calls)
+                assert any(row["messages"][0]["role"] == "user" and sum(p.get("type") == "image_url" for p in row["messages"][0]["content"]) == 2 for row in calls)
+            else:
+                assert any("approximately 1750 English words" in str(row["messages"]) for row in calls)
+                assert any(row["model"] == "linked-model-review" for row in calls)
     finally:
         if process is not None and process.poll() is None:
             process.terminate()
@@ -107,7 +124,7 @@ def native(out, browser):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("mode", choices=("native", "local"))
+    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("mode", choices=("native", "native-ui", "local"))
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--browser", default=r"C:\Program Files\Google\Chrome\Application\chrome.exe")
     parser.add_argument("--model", default="Qwen_Qwen3.5-9B-Q8_0.gguf")
@@ -115,7 +132,7 @@ def main():
     if out == ROOT or ROOT in out.parents: parser.error("Use a new external evidence directory")
     out.mkdir(parents=True, exist_ok=False)
     if args.mode == "local": live(out, args.model)
-    else: native(out, args.browser)
+    else: native(out, args.browser, ui_review=args.mode == "native-ui")
 
 
 if __name__ == "__main__": main()

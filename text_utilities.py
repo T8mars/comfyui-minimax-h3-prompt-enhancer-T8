@@ -19,7 +19,7 @@ class T8PromptText(io.ComfyNode):
                     display_name="文本 / Prompt",
                     multiline=True,
                     default="",
-                    dynamic_prompts=True,
+                    dynamic_prompts=False,
                 ),
             ],
             outputs=[io.String.Output(display_name="text")],

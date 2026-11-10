@@ -3,6 +3,7 @@ import { newRecoverySlot, RECOVERY_SLOT_PROPERTY } from "./completion_recovery_c
 
 export const ID = "MiniMaxH3ImagePromptEnhancerT8";
 export const STATE = "t8_h3_image_widgets_v1";
+export const OWNER_PROPERTY = "t8_h3_image_workflow_owner_v1";
 export const T2I = "文生图 / Text to image", EDIT = "图像编辑 / Image edit";
 export const MODES = ["贞贞平价小屋（推荐）", "贞贞的AI工坊（图片/视频）", "OpenAI兼容接口（备用）",
     "本地 GGUF（llama.cpp / Qwen，离线）", "Strata 本地服务（桥接）"];
@@ -17,7 +18,7 @@ const PROVIDER_MODES = { "Seedance NZ": MODES[0], "T8 AI Workshop": MODES[1], "O
 const widget = (node, name) => node.widgets?.find(w => w.name === name);
 const linked = (node, name) => node.inputs?.some(i => (i.name === name || i.widget?.name === name) && i.link != null);
 
-export function ensureAcrossGraphs(node, root) {
+function graphTree(root) {
     const graphs = new Set(), pending = [root];
     while (pending.length) {
         const graph = pending.pop();
@@ -26,6 +27,26 @@ export function ensureAcrossGraphs(node, root) {
         if (graph.subgraphs?.values) pending.push(...graph.subgraphs.values());
         for (const item of graph._nodes || []) if (item.subgraph) pending.push(item.subgraph);
     }
+    return graphs;
+}
+
+export function ensureWorkflowOwner(node, root) {
+    if (typeof root?.id !== "string" || !root.id || !graphTree(root).has(node.graph)) return;
+    const control = widget(node, "recovery_slot");
+    if (!control) return;
+    node.properties ||= {};
+    if (node.properties[OWNER_PROPERTY] !== root.id) {
+        // A copied workflow has a new root UUID. Legacy slots without an owner
+        // cannot authenticate their old cached result either: start afresh.
+        node.properties[OWNER_PROPERTY] = root.id;
+        control.value = newRecoverySlot();
+        node.properties[RECOVERY_SLOT_PROPERTY] = control.value;
+        node.graph?.change?.();
+    }
+}
+
+export function ensureAcrossGraphs(node, root) {
+    const graphs = graphTree(root);
     if (!graphs.has(node.graph)) return;
     const control = widget(node, "recovery_slot"), slot = node.properties?.[RECOVERY_SLOT_PROPERTY] || control?.value;
     if (!control || !slot) return;
@@ -43,7 +64,8 @@ function checkedValues(raw, data) {
     for (const name of NAMES) {
         if (!Object.hasOwn(raw, name)) return null;
         let value = raw[name];
-        if (value === null && linked(data, name)) value = Object.hasOwn(NUMBERS, name) ? NUMBERS[name] : ENUMS[name]?.[0] ?? "";
+        if (value === null && linked(data, name)) value = Object.hasOwn(NUMBERS, name) ? NUMBERS[name]
+            : name === "aspect_ratio" ? "auto" : ENUMS[name]?.[0] ?? "";
         if (Object.hasOwn(NUMBERS, name) ? !Number.isSafeInteger(value) || value < 0 : typeof value !== "string") return null;
         if (ENUMS[name] && !ENUMS[name].includes(value)) return null;
         map.set(name, value);
@@ -81,6 +103,10 @@ export function configure(node, data, original, args) {
         node.properties ||= {};
         node.properties.t8_completion_recovery_slot = values.get("recovery_slot");
     }
+    if (typeof data?.properties?.[OWNER_PROPERTY] === "string") {
+        node.properties ||= {};
+        node.properties[OWNER_PROPERTY] = data.properties[OWNER_PROPERTY];
+    }
     bindOpenAIProviderPersistence(node);
     commitOpenAIProviderState(node);
     node.t8EnsureRecoverySlot?.();
@@ -93,7 +119,8 @@ export function serialize(node, data) {
     data.widgets_values = NAMES.map(name => name === "recovery_action" ? "normal" : widget(node, name)?.value ?? null);
     syncNamedWidgetSerialization(data, NAMES);
     data.properties = { ...(data.properties || {}), [STATE]: { ...data.widgets_values_named },
-        [RECOVERY_SLOT_PROPERTY]: node.properties?.[RECOVERY_SLOT_PROPERTY] || widget(node, "recovery_slot")?.value || "" };
+        [RECOVERY_SLOT_PROPERTY]: node.properties?.[RECOVERY_SLOT_PROPERTY] || widget(node, "recovery_slot")?.value || "",
+        ...(node.properties?.[OWNER_PROPERTY] ? { [OWNER_PROPERTY]: node.properties[OWNER_PROPERTY] } : {}) };
 }
 
 export function linkedProvider(node) {

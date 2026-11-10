@@ -25,6 +25,7 @@ class TextUtilitiesTests(unittest.TestCase):
         self.assertEqual(schema.node_id, "T8PromptText")
         self.assertEqual(schema.category, "T8/Utilities")
         self.assertEqual(info.input_order["required"], ["text"])
+        self.assertFalse(schema.inputs[0].dynamic_prompts)
         result = text_utilities.T8PromptText.execute("第一行\nsecond line")
         self.assertEqual(result[0], "第一行\nsecond line")
 

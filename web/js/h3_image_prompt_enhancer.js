@@ -2,7 +2,7 @@ import { app } from "../../scripts/app.js";
 import { addCompletionRecoveryButton } from "./completion_recovery_ui.mjs";
 import { showLocalQwenStatus } from "./local_qwen_status.js";
 import { bindOpenAIProviderPersistence } from "./widget_state.mjs";
-import { ID, NAMES, configure, serialize, linkedProvider, providerLabel, refresh, drawLinked, ensureAcrossGraphs } from "./h3_image_ui.mjs";
+import { ID, NAMES, configure, serialize, linkedProvider, providerLabel, refresh, drawLinked, ensureAcrossGraphs, ensureWorkflowOwner } from "./h3_image_ui.mjs";
 
 const HELP = `MiniMax H3 Image 提示词扩写
 1. 文生图：写需求，不连接参考图。图像编辑：每槽接一张图，最多16张；槽位顺序对应 <Picture 1>…，批次请先拆开。
@@ -45,7 +45,12 @@ function install(node) {
     const recovery = addCompletionRecoveryButton(node, ID);
     if (recovery) { recovery.label = recovery.name = "🔄 恢复上次成功结果 / Restore"; recovery.serialize = false; recovery.options.serialize = false; }
     const ensure = node.t8EnsureRecoverySlot;
-    node.t8EnsureRecoverySlot = () => { ensure?.(); ensureAcrossGraphs(node, app.rootGraph || app.graph); };
+    node.t8EnsureRecoverySlot = () => {
+        ensure?.();
+        const root = app.rootGraph || app.graph;
+        ensureWorkflowOwner(node, root);
+        ensureAcrossGraphs(node, root);
+    };
     action("🧩 本地 GGUF 安装与状态 / Local setup", () => showLocalQwenStatus(node));
     action("📖 使用说明与示例 / Help", () => window.alert(HELP));
     bindOpenAIProviderPersistence(node);
