@@ -314,6 +314,29 @@ async function enhancerHarness(filename, target, { realNormalizer = false } = {}
     };
 }
 
+test("H3 targets above 1000 survive runtime reordering and 38-field save/reload", async () => {
+    const harness = await enhancerHarness("minimax_h3_prompt_enhancer.js", "h3", { realNormalizer: true });
+    const graph = JSON.parse(await readFile(new URL("../../example_workflows/minimax_h3_prompt_enhancer_example.json", import.meta.url), "utf8"));
+    const original = graph.nodes.find(n => n.type === "MiniMaxH3PromptEnhancerT8").widgets_values;
+    const index = harness.names.indexOf("description_word_target");
+    assert.ok(index >= 0);
+    for (const target of [0, 1000, 1500, 5000, 20000]) {
+        const saved = [...original];
+        saved[index] = target;
+        const node = harness.configure(saved);
+        assert.equal(harness.values(node).description_word_target, target);
+        node.widgets.reverse();
+        const data = {};
+        node.onSerialize(data);
+        assert.equal(data.widgets_values.length, 38);
+        assert.equal(data.widgets_values[index], target);
+        assert.equal(data.widgets_values_named.description_word_target, target);
+        const restored = harness.configure(data.widgets_values);
+        assert.equal(harness.values(restored).description_word_target, target);
+        assert.equal(harness.values(restored).output_language, harness.values(node).output_language);
+    }
+});
+
 test("Hybrid aliases and linked prompts survive actual H3 normalizer and 38-field hooks", async () => {
     const harness = await enhancerHarness("minimax_h3_prompt_enhancer.js", "h3", { realNormalizer: true });
     assert.equal(harness.names.length, 38);

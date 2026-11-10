@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.40.2] - 2026-11-10
+
+- Remove H3's legacy 1000-word target ceiling from both the widget and runtime
+  validation. Use the frontend's safe integer range to avoid the host's implicit
+  2048 maximum. Preserve 0=auto, the existing nonzero minimum and approximate
+  length semantics; model/context Token budgets still determine actual output.
+
 ## [1.40.1] - 2026-11-10
 
 - Constrain local MOSS Fisher generation and correction to mutually exclusive

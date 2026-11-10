@@ -2,6 +2,7 @@
 import ast
 import subprocess
 from visual_style_baseline_projection import project_style_ast
+from h3_length_baseline_projection import allow_h3_target_ceiling_fix
 import asyncio
 import copy
 import importlib
@@ -38,6 +39,8 @@ class VisualStyleTests(unittest.TestCase):
         for name in ('nodes.py', 'seedance20.py'):
             old = subprocess.check_output(['git', 'show', BASELINE + ':' + name], cwd=GIT_ROOT).decode('utf-8')
             current = (ROOT / name).read_text(encoding='utf-8')
+            if name == 'nodes.py':
+                old = allow_h3_target_ceiling_fix(old)
             self.assertEqual(ast.dump(project_style_ast(current)), ast.dump(ast.parse(old)), name)
 
     def test_none_off_are_frozen_for_every_native_task_language_and_director(self):

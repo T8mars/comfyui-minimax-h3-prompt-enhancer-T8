@@ -996,8 +996,8 @@ def _validate_inputs(
         raise PromptEnhancerError("duration_seconds must be a positive integer.") from error
     if not math.isfinite(normalized_duration) or normalized_duration <= 0:
         raise PromptEnhancerError("duration_seconds must be a positive integer.")
-    if description_word_target != 0 and not 80 <= int(description_word_target) <= 1000:
-        raise PromptEnhancerError("description_word_target must be 0 (auto) or between 80 and 1000.")
+    if description_word_target != 0 and int(description_word_target) < 80:
+        raise PromptEnhancerError("description_word_target must be 0 (auto) or an integer of at least 80.")
 
     if task_type == HYBRID:
         return _hybrid_media_plan(first_frame, last_frame, reference_images, reference_videos,
@@ -1951,7 +1951,7 @@ def enhance_prompt(
         description_word_target = int(description_word_target or 0)
     except (TypeError, ValueError) as error:
         raise PromptEnhancerError(
-            "description_word_target must be 0 (auto) or between 80 and 1000."
+            "description_word_target must be 0 (auto) or an integer of at least 80."
         ) from error
     output_language = str(output_language or "中文")
     prompt_mode = str(prompt_mode or "官方增强")
@@ -2416,7 +2416,8 @@ class MiniMaxH3PromptEnhancer(io.ComfyNode):
                     display_name="目标长度（0=自动）",
                     default=0,
                     min=0,
-                    max=1000,
+                    # Omission makes ComfyUI default to 2048; use JS's safe integer range.
+                    max=9_007_199_254_740_991,
                     step=10,
                     tooltip="0 = automatic. Compatibility mode uses Chinese characters or English words; official strict mode always uses English words.",
                 ),

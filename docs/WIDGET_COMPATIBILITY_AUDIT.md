@@ -16,6 +16,25 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-11-10: remove the H3 1000-word target ceiling
+
+Remove only the `description_word_target` legacy ceiling and matching runtime
+upper-bound check. Native browser testing showed that omitting `max` makes the
+host silently use 2048. Explicitly use JavaScript's maximum safe integer
+(9007199254740991) for the widget range. Keep 0=auto, the nonzero minimum of 80,
+step 10, all input/output
+IDs, the 38 saved widget fields and actual runtime order. Targets above 1000 must
+survive save/reload, native API export and resolved linked INT execution. The
+target remains approximate and never truncates the returned prompt; model output
+and context Token budgets are unchanged. Frozen schema/AST checks allow only
+these exact ceiling/error-message changes, preserving all other prior contracts.
+
+Native Chrome/CPU Comfy acceptance covered 0/1000/1500/2000/5000/20000 through
+38-field save/reload/API export, plus successful literal-1500 and linked
+`PrimitiveInt`-5000 queues. Captured loopback requests retained both targets.
+Responses were synthetic; this verifies value transport, not model length
+compliance. Test-owned browser/server processes were stopped afterward.
+
 ### 2026-11-10: Fisher local JSON decoding
 
 Only the MOSS Fisher local generation/correction request gains a native JSON

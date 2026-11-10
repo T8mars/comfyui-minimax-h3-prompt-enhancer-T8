@@ -1,5 +1,6 @@
 """Freeze the 1.36 node prefix and existing examples, with only MOSS opt-in edits."""
 from visual_style_baseline_projection import project_style_ast
+from h3_length_baseline_projection import allow_h3_target_ceiling_fix
 import ast
 import asyncio
 from pathlib import Path
@@ -34,7 +35,8 @@ class AuthoringCompatibility(unittest.TestCase):
             name = path.relative_to(ROOT).as_posix()
             if name == "moss_image.py": continue  # explicit schema/message gates in test_moss_authoring
             if name in ("nodes.py", "seedance20.py"):
-                self.assertEqual(ast.dump(project_style_ast(path.read_text(encoding="utf-8"))), ast.dump(ast.parse(frozen(name))), name)
+                expected = allow_h3_target_ceiling_fix(frozen(name)) if name == "nodes.py" else frozen(name)
+                self.assertEqual(ast.dump(project_style_ast(path.read_text(encoding="utf-8"))), ast.dump(ast.parse(expected)), name)
             elif name == "speech_reference.py":
                 # Allow only the audited ComfyUI component-layout fix. Every
                 # other byte of this pre-existing node remains frozen.

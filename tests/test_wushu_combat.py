@@ -18,6 +18,7 @@ import numpy as np
 import directional_skills as directing
 from strata_baseline_projection import project_strata_guard, project_strata_ui
 from speech_baseline_projection import project_speech_signature, project_speech_schema
+from h3_length_baseline_projection import allow_h3_target_ceiling_fix
 from test_directional_skills import GIT_ROOT, ROOT, execute_inputs, h3, h3_args, sd, sd_args
 from test_zhenzhen_pov import OfflineGuards
 from combat_camera import CAMERA_STRONG, build_combat_camera_config
@@ -154,7 +155,8 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
         # duration guards/tooltips (covered by test_reference_video_duration).
         for module, path, allowed in ((h3, "nodes.py", {"_build_messages", "_h3_language_repair_messages", "_next_relay_correction", "enhance_prompt"}),
                                       (sd, "seedance20.py", {"_build_messages", "enhance_seedance20_prompt"})):
-            previous = ast.parse(frozen_bytes(path))
+            previous_source = allow_h3_target_ceiling_fix(frozen_bytes(path)) if path == "nodes.py" else frozen_bytes(path)
+            previous = ast.parse(previous_source)
             current = ast.parse((ROOT / path).read_text(encoding="utf-8"))
             current_by_name = {node.name: node for node in current.body if isinstance(node, (ast.FunctionDef, ast.ClassDef))}
             for old_node in previous.body:

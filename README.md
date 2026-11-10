@@ -709,7 +709,7 @@ MV 规则按以下方式工作：
 | `duration_seconds` | 目标时长，任意正整数秒数，节点不设上限；下游模型限制仍然有效 |
 | `shot_count` | `AUTO` 由模型按内容、素材、时长和节奏判断；也可固定为 1–20 个镜头 |
 | `rewrite_mode` | `strict / balanced / creative` |
-| `description_word_target` | `0` 为自动；非零为 80–1000，中文按约数汉字、英文按单词理解 |
+| `description_word_target` | `0` 为自动；非零至少 80，已取消原有 1000 上限，可指定 1500、2000、5000 等目标。中文按约数汉字、英文按单词理解；实际输出仍受模型及 Token 预算影响 |
 | `output_language` | `中文 / English`，默认中文 |
 | `prompt_mode` | `官方增强 / 参考模板融合` |
 | `official_skill_profile` | 界面显示为“H3 核心写作 Skill（始终启用）”；`现有兼容 / 官方 Skill 严格`，默认兼容，严格档位强制英文说明正文 |

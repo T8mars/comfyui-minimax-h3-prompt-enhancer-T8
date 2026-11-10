@@ -1,5 +1,6 @@
 """Speech wiring and frozen old paths; inference doubles are not ASR acceptance."""
 from visual_style_baseline_projection import without_style_signature, without_style_inputs
+from h3_length_baseline_projection import allow_h3_target_widget_range
 import asyncio
 import copy
 import importlib
@@ -63,7 +64,8 @@ class SpeechIntegrationTests(unittest.TestCase):
             if module is h3:
                 self.assertEqual(inputs[-1].id, "visual_marker_config")
                 inputs = inputs[:-1]
-            self.assertEqual([x.as_dict() for x in inputs[:-2]], [x.as_dict() for x in old_schema.inputs])
+            previous_inputs = allow_h3_target_widget_range(old_schema.inputs) if module is h3 else [x.as_dict() for x in old_schema.inputs]
+            self.assertEqual([x.as_dict() for x in inputs[:-2]], previous_inputs)
             self.assertEqual([x.as_dict() for x in now.outputs], [x.as_dict() for x in old_schema.outputs])
             self.assertEqual(inputs[-2].id, "speech_reference")
             self.assertTrue(inputs[-2].optional); self.assertTrue(inputs[-2].lazy)

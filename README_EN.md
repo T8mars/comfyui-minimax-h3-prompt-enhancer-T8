@@ -175,6 +175,7 @@ This project does not currently provide a Seedance 2.5 prompt node. It does not 
 - Includes the complete pinned MiniMax Music 3 `music-caption-rewriter` snapshot: 18 family indexes and 1,000 templates with progressive disclosure.
 - Includes 652 released T8 case records consolidated into 305 stable selectors, including 347 evidence variants, plus two independent community Skills. All 307 non-official selectors include Chinese names, concise suggested inputs, structural anchors, and lightweight GIF previews.
 - Chinese and English prompt output.
+- H3 `description_word_target`: `0` selects automatic length; nonzero targets start at 80 and can exceed the former 1000 limit (for example, 1500, 2000 or 5000). The target is approximate, and actual output still depends on the model and Token budget.
 - `strict`, `balanced`, and `creative` rewrite levels.
 - `AUTO` or fixed 1–20 shot control.
 - Optional user-template fusion with user intent and observable media facts taking priority.

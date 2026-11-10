@@ -1,5 +1,6 @@
 """CPU request contracts only: no LLM compliance or rendered-quality claims."""
 from visual_style_baseline_projection import without_style_signature, without_style_inputs
+from h3_length_baseline_projection import allow_h3_target_widget_range
 import ast
 import asyncio
 import copy
@@ -148,7 +149,10 @@ class StoryboardDirectorTests(unittest.TestCase):
                 self.assertEqual(inputs[-1].id, "visual_marker_config")
                 inputs = inputs[:-1]
             self.assertEqual([x.id for x in inputs], [x.id for x in old_schema.inputs] + [SOCKET])
-            self.assertEqual([x.as_dict() for x in inputs[:-1]], [x.as_dict() for x in old_schema.inputs])
+            previous_inputs = [x.as_dict() for x in old_schema.inputs]
+            if module is h3:
+                previous_inputs = allow_h3_target_widget_range(old_schema.inputs)
+            self.assertEqual([x.as_dict() for x in inputs[:-1]], previous_inputs)
             self.assertEqual([x.as_dict() for x in cls.define_schema().outputs], [x.as_dict() for x in old_schema.outputs])
         package = sys.modules[h3.__package__]
         extension = asyncio.run(package.comfy_entrypoint())

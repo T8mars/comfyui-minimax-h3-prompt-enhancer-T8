@@ -1,6 +1,7 @@
 """CPU authoring contracts. No model/video-benefit or downstream-binding claims."""
 import asyncio
 from visual_style_baseline_projection import without_style_signature, without_style_inputs, project_style_ast
+from h3_length_baseline_projection import allow_h3_target_widget_range
 import ast
 import copy
 import importlib
@@ -291,7 +292,7 @@ class VisualMarkerTests(unittest.TestCase):
         namespace = dict(vars(h3))
         exec(compile(ast.Module(body=[method], type_ignores=[]), "nodes.py", "exec"), namespace)
         old_schema = namespace["define_schema"](h3.MiniMaxH3PromptEnhancer)
-        self.assertEqual([x.as_dict() for x in without_style_inputs(schema.inputs)[:-1]], [x.as_dict() for x in old_schema.inputs])
+        self.assertEqual([x.as_dict() for x in without_style_inputs(schema.inputs)[:-1]], allow_h3_target_widget_range(old_schema.inputs))
         self.assertEqual([x.as_dict() for x in schema.outputs], [x.as_dict() for x in old_schema.outputs])
         # MOSS authoring has its own frozen 1.36 schema/request regression.
         for path in ("seedance20.py", "music3.py", "yue2.py", "qwen_image21.py",

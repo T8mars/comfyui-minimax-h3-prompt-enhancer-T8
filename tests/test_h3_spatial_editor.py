@@ -1,5 +1,6 @@
 """Standalone CPU editor; no sibling imports, models or external network."""
 import asyncio
+from h3_length_baseline_projection import allow_h3_target_ceiling_fix
 import base64
 import importlib
 import io
@@ -111,6 +112,8 @@ class SpatialEditorTests(unittest.TestCase):
         # schema/request/bounded contracts are frozen in test_moss_authoring.
         for name in ('nodes.py','h3_visual_marker.py','seedance20.py','music3.py','yue2.py','qwen_image21.py','web/js/minimax_h3_prompt_enhancer.js'):
             old=subprocess.check_output(['git','show','25cc889b8d5d9edb9366995a6f0e5d09ceabae1f:'+name],cwd=GIT_ROOT)
+            if name == 'nodes.py':
+                old = allow_h3_target_ceiling_fix(old)
             if name in ('nodes.py', 'seedance20.py'):
                 self.assertEqual(ast.dump(project_style_ast((ROOT/name).read_text(encoding='utf-8'))), ast.dump(ast.parse(old)), name)
             else:

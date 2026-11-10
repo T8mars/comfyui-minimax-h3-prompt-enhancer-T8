@@ -1817,7 +1817,7 @@ class PromptEnhancerTests(unittest.TestCase):
             {"duration_seconds": 0},
             {"duration_seconds": -1},
             {"description_word_target": 79},
-            {"description_word_target": 1001},
+            {"description_word_target": -1},
             {"shot_count": -1},
             {"shot_count": 21},
             {"shot_count": "many"},
@@ -1828,6 +1828,24 @@ class PromptEnhancerTests(unittest.TestCase):
                     self.run_enhancer(session, **kwargs)
                 self.assertEqual(session.uploads, [])
                 self.assertEqual(session.chat_requests, [])
+
+    def test_length_target_uses_safe_widget_range_and_is_forwarded_without_truncation(self):
+        widget = next(item for item in nodes.MiniMaxH3PromptEnhancer.define_schema().inputs
+                      if item.id == "description_word_target")
+        self.assertEqual(widget.as_dict()["max"], 9_007_199_254_740_991)
+        self.assertEqual((widget.default, widget.min, widget.step), (0, 0, 10))
+        for target in (1001, 1500, 2000, 5000, 20000, 100000):
+            for task in ("T2VA", "Ref2VA"):
+                with self.subTest(target=target, task=task):
+                    output = reference_output() if task == "Ref2VA" else basic_output()
+                    session = FakeSession(output)
+                    media = {"reference_images": {"reference_image_0": torch.zeros((1, 8, 8, 3))}} if task == "Ref2VA" else {}
+                    self.assertEqual(self.run_enhancer(session, task_type=task, description_word_target=target, **media), output)
+                    self.assertEqual(len(session.chat_requests), 1)
+                    request = session.chat_requests[0]["json"]["messages"][1]["content"]
+                    self.assertIn(f"approximately {target} English words", str(request))
+                    self.assertIn(f"approximately {target} Chinese characters", nodes._length_target_instruction(task, target, "中文"))
+        self.assertIs(nodes.MiniMaxH3PromptEnhancer.validate_inputs(description_word_target=None), True)
 
     def test_video_size_limit_is_applied_only_to_seedance_uploads(self):
         class PathVideo:
