@@ -49,7 +49,7 @@ def live(out, model):
     if not all(row["passed"] for row in records): raise RuntimeError("Some live cases failed; inspect preserved output.")
 
 
-def native(out, browser, *, ui_review=False):
+def native(out, browser, *, ui_review=False, local_picker=False):
     import requests
     for name in ("user", "input", "output", "temp"): (out / name).mkdir()
     for kind in ("canvas", "palette"):
@@ -68,7 +68,7 @@ def native(out, browser, *, ui_review=False):
             caption = ("A poster reads '  SALE  ' followed by '  SALE  '." if "UNICODE_LOCK_AUDIT" in str(payload["messages"])
                        else "An ivory background holds a white cup on the left and the exact title '慢一点，刚刚好' on the right.")
             ratio = "4:3"
-            if ui_review:
+            if ui_review or local_picker:
                 text = "\n".join(message["content"] for message in payload["messages"] if isinstance(message["content"], str))
                 match = re.search(r"The explicit final canvas aspect ratio is ([^;]+);", text)
                 if match: ratio = match.group(1)
@@ -102,11 +102,13 @@ def native(out, browser, *, ui_review=False):
             (out / "object-info.json").write_text(json.dumps(info["MiniMaxH3ImagePromptEnhancerT8"], ensure_ascii=False, indent=2), encoding="utf-8")
             node = shutil.which("node") or r"C:\Program Files\nodejs\node.exe"
             result = subprocess.run([node, str(ROOT / "tools/frontend_browser_cdp.mjs"), browser, base, str(out / "canvas.png"),
-                                     "comfy-h3-ui-linked" if ui_review else "comfy-h3-image", provider_base], capture_output=True, text=True, encoding="utf-8", timeout=240)
+                                     "comfy-h3-local-picker" if local_picker else "comfy-h3-ui-linked" if ui_review else "comfy-h3-image", provider_base], capture_output=True, text=True, encoding="utf-8", timeout=240)
             (out / "browser.log").write_text(result.stdout + result.stderr, encoding="utf-8")
             if result.returncode: raise RuntimeError("Native browser check failed; inspect browser.log")
             records.append("native_browser_passed")
-            if not ui_review:
+            if local_picker:
+                assert any("canvas aspect ratio is 16:9" in str(row["messages"]) for row in calls)
+            elif not ui_review:
                 assert any("approximately 5000 English words" in json.dumps(row["messages"]) for row in calls)
                 assert any(row["messages"][0]["role"] == "user" and sum(p.get("type") == "image_url" for p in row["messages"][0]["content"]) == 2 for row in calls)
             else:
@@ -124,7 +126,7 @@ def native(out, browser, *, ui_review=False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("mode", choices=("native", "native-ui", "local"))
+    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("mode", choices=("native", "native-ui", "local-picker", "local"))
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--browser", default=r"C:\Program Files\Google\Chrome\Application\chrome.exe")
     parser.add_argument("--model", default="Qwen_Qwen3.5-9B-Q8_0.gguf")
@@ -132,7 +134,7 @@ def main():
     if out == ROOT or ROOT in out.parents: parser.error("Use a new external evidence directory")
     out.mkdir(parents=True, exist_ok=False)
     if args.mode == "local": live(out, args.model)
-    else: native(out, args.browser, ui_review=args.mode == "native-ui")
+    else: native(out, args.browser, ui_review=args.mode == "native-ui", local_picker=args.mode == "local-picker")
 
 
 if __name__ == "__main__": main()

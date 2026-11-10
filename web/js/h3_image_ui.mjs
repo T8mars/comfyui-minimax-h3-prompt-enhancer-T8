@@ -167,10 +167,13 @@ function visible(node, w, show) {
 
 export function refresh(node, compact = false) {
     const mode = effectiveMode(node), local = mode === MODES[3], strata = mode === MODES[4], advanced = Boolean(node.t8H3ImageAdvanced);
+    const dimensions = linked(node, "width") || linked(node, "height");
     for (const w of node.widgets || []) {
         if (!NAMES.includes(w.name) && w.name !== "api_key") continue;
         let show = NAMES.indexOf(w.name) < 5 || advanced;
+        if (w.name === "aspect_ratio" && dimensions) show = false;
         if (w.name.startsWith("local_") || w.name === "seed") show = local && advanced;
+        if (["local_model", "local_mmproj"].includes(w.name)) show = local;
         if (w.name === "llm_max_tokens") show = !local && !strata && advanced;
         if (["ai_workshop_model", "custom_model", "openai_base_url"].includes(w.name)) {
             show = !local && !strata && advanced

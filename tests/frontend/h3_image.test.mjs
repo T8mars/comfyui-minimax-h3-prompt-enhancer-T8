@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
+import vm from "node:vm";
 import * as ui from "../../web/js/h3_image_ui.mjs";
 
 const workflow = JSON.parse(await readFile(new URL("../../example_workflows/h3_image_t2i_example.json", import.meta.url), "utf8"));
@@ -84,6 +85,64 @@ test("H3 Image coexisting connected DOM rows keep socket geometry, legacy conver
     other.inputs = [{ name: "prompt", link: 7 }]; old.origType = "text"; old.type = "converted-widget";
     const native = () => "host-value"; old.serializeValue = native;
     ui.refresh(other); assert.equal(old.type, "converted-widget"); assert.equal(old.serializeValue, native);
+});
+
+test("Local GGUF model and projector are selectable without Advanced or a linked prompt", () => {
+    const node = new Node();
+    get(node, "api_mode").value = ui.MODES[3];
+    node.t8H3ImageAdvanced = false;
+    ui.refresh(node);
+    for (const name of ["local_model", "local_mmproj"]) {
+        assert.equal(get(node, name).hidden, false, name);
+        assert.notEqual(get(node, name).type, "converted-widget", name);
+    }
+    assert.equal(get(node, "local_context_size").hidden, true);
+    node.inputs.push({ name: "prompt", link: 11 }); node.updateComputedDisabled = () => {};
+    ui.refresh(node);
+    assert.equal(get(node, "local_model").hidden, false);
+    node.inputs[0].link = null; ui.refresh(node);
+    assert.equal(get(node, "local_model").hidden, false);
+    node.t8H3ImageAdvanced = true; ui.refresh(node);
+    assert.equal(get(node, "local_context_size").hidden, false);
+    get(node, "api_mode").value = ui.MODES[2]; ui.refresh(node);
+    assert.equal(get(node, "local_model").hidden, true);
+});
+
+test("Connected width/height replace the manual ratio row without changing saved fields", () => {
+    const node = new Node();
+    node.inputs.push({ name: "width", link: 12 }, { name: "height", link: 13 });
+    ui.refresh(node); assert.equal(get(node, "aspect_ratio").hidden, true);
+    const saved = {}; ui.serialize(node, saved); assert.equal(saved.widgets_values.length, 22);
+    node.inputs.forEach(input => { input.link = null; });
+    ui.refresh(node); assert.equal(get(node, "aspect_ratio").hidden, false);
+});
+
+test("Native combo callback before value commit refreshes Local pickers on the next frame", async () => {
+    const frames = []; let extension;
+    class NativeNode extends Node {
+        constructor() { super(); get(this, "api_mode").callback = () => 17; }
+        addWidget(type, name, value, callback, options) {
+            const w = { type, name, value, callback, options }; this.widgets.push(w); return w;
+        }
+    }
+    const context = vm.createContext({ ...ui, window: { alert() {} },
+        app: { registerExtension(value) { extension = value; } },
+        requestAnimationFrame(fn) { frames.push(fn); },
+        bindOpenAIProviderPersistence() {}, showLocalQwenStatus() {},
+        addCompletionRecoveryButton(node) { node.t8EnsureRecoverySlot = () => {}; return node.addWidget("button", "Restore", "", () => {}, { serialize: false }); },
+    });
+    const code = (await readFile(new URL("../../web/js/h3_image_prompt_enhancer.js", import.meta.url), "utf8")).replace(/^import .*;\r?$/gm, "");
+    vm.runInContext(code, context);
+    await extension.beforeRegisterNodeDef(NativeNode, { name: ui.ID });
+    const node = new NativeNode(); node.onNodeCreated();
+    while (frames.length) frames.shift()();
+    const mode = get(node, "api_mode");
+    assert.equal(mode.callback(ui.MODES[3]), 17); // actual host invokes this before committing value
+    mode.value = ui.MODES[3];
+    while (frames.length) frames.shift()();
+    assert.equal(get(node, "local_model").hidden, false);
+    assert.equal(get(node, "local_mmproj").hidden, false);
+    assert.equal(node.inputs.length, 0, "No prompt connection is needed to refresh model selection");
 });
 
 test("Both published H3 Image examples wire the caption preview and keep 22 widgets", async () => {

@@ -51,6 +51,28 @@ class H3ImageError(PromptEnhancerError):
     pass
 
 
+def resolve_canvas_ratio(task_type, aspect_ratio, width=0, height=0):
+    """Optional pixel inputs override the legacy ratio; 0/0 preserves old graphs."""
+    for value in (width, height):
+        if type(value) is not int or not 0 <= value <= 9007199254740991:
+            raise H3ImageError("canvas_size: Width and height must be nonnegative integers / 宽高须为非负整数。")
+    if width == height == 0:
+        return aspect_ratio, {"ratio_source": "adaptive" if aspect_ratio == "auto" else "explicit"}
+    if not width or not height:
+        raise H3ImageError("canvas_size: Connect both positive width and height / 请同时连接正数宽度和高度。")
+    divisor = math.gcd(width, height)
+    exact = f"{width // divisor}:{height // divisor}"
+    resolved = exact
+    if task_type == contract.T2I:
+        def distance(ratio):
+            w, h = map(int, ratio.split(":"))
+            return abs(math.log((width / height) / (w / h)))
+        resolved = min(contract.T2I_RATIOS, key=distance)
+    return resolved, {"ratio_source": "dimensions", "canvas_dimensions": {"width": width, "height": height},
+                      "exact_canvas_aspect_ratio": exact, "resolved_canvas_aspect_ratio": resolved,
+                      "ratio_mapped_to_supported": resolved != exact}
+
+
 def image_plan(reference_images=None, extra=None):
     """One image per socket; numeric socket order becomes continuous Picture IDs."""
     slots = {}
@@ -337,7 +359,7 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
                 io.String.Input("prompt", display_name="创作/编辑需求 / Brief", multiline=True, default="", dynamic_prompts=False, lazy=True),
                 io.Combo.Input("task_type", display_name="任务 / Task", options=contract.TASKS, default=contract.T2I),
                 io.String.Input("aspect_ratio", display_name="画幅比例 / Ratio (auto)", default="auto", dynamic_prompts=False,
-                    tooltip="T2I: auto, 1:1, 5:4, 4:3, 3:2, 16:9, 21:9, 4:5, 3:4, 2:3, 9:16. Edit: auto or positive W:H; explicit ratios are preserved exactly. Does not resize downstream images."),
+                    tooltip="Optional width + height inputs take priority and compute the ratio. T2I maps to the closest official ratio; Edit preserves exact reduced W:H. With no dimensions: auto or a supported ratio. Does not resize downstream images."),
                 io.Int.Input("target_words", display_name="目标英文词数（0=官方自动）", default=0, min=0, max=9007199254740991, step=1,
                     tooltip="Approximate caption word target, not Tokens. No 1000 ceiling; never truncates or omits fixed facts to meet a length."),
                 io.Combo.Input("api_mode", display_name="增强渠道 / Provider", options=list(API_MODES), default=SEEDANCE_API_MODE),
@@ -352,8 +374,8 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
                 io.String.Input("custom_model", display_name="增强语言模型 ID / Chat model", optional=True, default=DEFAULT_LLM_MODEL, advanced=True),
                 io.String.Input("openai_base_url", display_name="OpenAI Base URL", optional=True, default="", advanced=True),
                 io.Int.Input("seed", display_name="本地种子 / Local seed", optional=True, default=0, min=0, max=0xffffffff, control_after_generate=False, advanced=True),
-                io.Combo.Input("local_model", display_name="本地 GGUF 模型", options=list_gguf_models(), default=DEFAULT_MODEL_FILENAME, optional=True, advanced=True),
-                io.Combo.Input("local_mmproj", display_name="视觉投影器（编辑时）", options=list_mmproj_models(), default=AUTO_MMPROJ, optional=True, advanced=True),
+                io.Combo.Input("local_model", display_name="本地 GGUF 模型", options=list_gguf_models(), default=DEFAULT_MODEL_FILENAME, optional=True),
+                io.Combo.Input("local_mmproj", display_name="视觉投影器（编辑时）", options=list_mmproj_models(), default=AUTO_MMPROJ, optional=True),
                 io.Int.Input("local_context_size", display_name="本地上下文Token", default=DEFAULT_CONTEXT_SIZE, min=8192, max=65536, step=4096, optional=True, advanced=True),
                 io.Int.Input("local_max_tokens", display_name="本地生成Token（含思考）", default=DEFAULT_MAX_TOKENS, min=256, max=MAX_OUTPUT_TOKENS, step=1024, optional=True, advanced=True),
                 io.Combo.Input("local_think_mode", display_name="本地思考模式", options=LOCAL_THINK_OPTIONS, default=LOCAL_THINK_OFF, optional=True, advanced=True),
@@ -362,27 +384,37 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
                 io.Combo.Input("local_comfy_memory_policy", display_name="本地显存策略", options=LOCAL_COMFY_MEMORY_POLICIES, default=LOCAL_COMFY_MEMORY_POLICIES[0], optional=True, advanced=True),
                 io.String.Input("recovery_slot", optional=True, default="", advanced=True, socketless=True),
                 io.String.Input("recovery_action", optional=True, default="normal", advanced=True, socketless=True),
+                io.Int.Input("width", display_name="画幅宽度 / width", optional=True, default=0, min=0, max=9007199254740991, force_input=True, lazy=True,
+                    tooltip="Connect with height to compute aspect ratio. 0/0 keeps the existing ratio setting."),
+                io.Int.Input("height", display_name="画幅高度 / height", optional=True, default=0, min=0, max=9007199254740991, force_input=True, lazy=True,
+                    tooltip="Connect with width to compute aspect ratio; neither input changes downstream pixel dimensions."),
             ], outputs=[io.String.Output(display_name="扩写正文 / expanded_prompt"), io.String.Output(display_name="画幅比例 / aspect_ratio"),
                         io.String.Output(display_name="官方结构 / official_json"), io.String.Output(display_name="诊断报告 / report_json")])
 
     @classmethod
     def validate_inputs(cls, prompt="", task_type=contract.T2I, aspect_ratio="auto", target_words=0,
-                        locked_text="", max_corrections=1, recovery_action="normal", **kwargs):
+                        locked_text="", max_corrections=1, recovery_action="normal", width=0, height=0, **kwargs):
         if recovery_action == RECOVERY_ACTION_RESTORE:
             return True
         try:
+            actual_task = task_type if task_type is not None else contract.EDIT
+            ratio = "auto" if aspect_ratio is None else aspect_ratio
+            if width is not None and height is not None:
+                ratio, _ = resolve_canvas_ratio(actual_task, ratio, width, height)
+            else:
+                ratio = "auto"  # linked dimensions are unresolved during graph validation
             contract.validate_controls(task_type if task_type is not None else contract.EDIT,
-                "auto" if aspect_ratio is None else aspect_ratio, 0 if target_words is None else target_words,
+                ratio, 0 if target_words is None else target_words,
                 "" if locked_text is None else locked_text, 1 if max_corrections is None else max_corrections)
             if prompt is not None and (not isinstance(prompt, str) or not prompt.strip()):
                 return "brief: Enter a creative/editing brief / 请填写创作或编辑需求。"
             return True
-        except contract.H3ImageContractError as error:
+        except (contract.H3ImageContractError, H3ImageError) as error:
             return str(error)
 
     @classmethod
     def check_lazy_status(cls, prompt=None, reference_images=_MISSING, api_key=_MISSING, provider_config=_MISSING,
-                          recovery_action="normal", api_mode=SEEDANCE_API_MODE, **kwargs):
+                          recovery_action="normal", api_mode=SEEDANCE_API_MODE, width=_MISSING, height=_MISSING, **kwargs):
         if recovery_action == RECOVERY_ACTION_RESTORE:
             return []
         if provider_config is None:
@@ -391,6 +423,8 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
         mode = {PROVIDER_LOCAL: LOCAL_QWEN_API_MODE, "Strata": API_MODES[-1], PROVIDER_OPENAI: OPENAI_API_MODE,
                 PROVIDER_WORKSHOP: AI_WORKSHOP_API_MODE, PROVIDER_SEEDANCE: SEEDANCE_API_MODE}.get(provider, api_mode)
         needs = ["prompt"] if prompt is None else []
+        if width is None: needs.append("width")
+        if height is None: needs.append("height")
         if api_key is None and not is_local_qwen_api_mode(mode) and not is_strata_mode(mode):
             needs.append("api_key")
         if reference_images is None:
@@ -413,7 +447,7 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
                 custom_model=DEFAULT_LLM_MODEL, openai_base_url="", seed=0, local_model=DEFAULT_MODEL_FILENAME,
                 local_mmproj=AUTO_MMPROJ, local_context_size=DEFAULT_CONTEXT_SIZE, local_max_tokens=DEFAULT_MAX_TOKENS,
                 local_think_mode=LOCAL_THINK_OFF, local_reasoning_effort="medium", local_unload_policy=LOCAL_UNLOAD_AFTER_RUN,
-                local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0], recovery_slot="", recovery_action="normal", **kwargs):
+                local_comfy_memory_policy=LOCAL_COMFY_MEMORY_POLICIES[0], recovery_slot="", recovery_action="normal", width=0, height=0, **kwargs):
         if recovery_action == RECOVERY_ACTION_RESTORE:
             return _restore(recovery_slot)
         if recovery_action != "normal":
@@ -422,6 +456,7 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
         counters = {"logical_generation_calls": 0, "chat_post_attempts": 0, "correction_calls": 0}
         diagnostics = DiagnosticsRun(NODE_ID, "generation", 3, emit_progress=False)
         try:
+            aspect_ratio, canvas_metadata = resolve_canvas_ratio(task_type, aspect_ratio, width, height)
             contract.validate_controls(task_type, aspect_ratio, target_words, locked_text, max_corrections)
             if not isinstance(prompt, str) or not prompt.strip():
                 raise H3ImageError("brief: Enter a creative/editing brief / 请填写创作或编辑需求。")
@@ -449,7 +484,7 @@ class MiniMaxH3ImagePromptEnhancer(io.ComfyNode):
                 "source_commit": contract.SOURCE_COMMIT, "task_type": task_type, "origin": "current",
                 "model_source_commit": contract.MODEL_SOURCE_COMMIT, "source_manifest_sha256": contract.SOURCE_MANIFEST_SHA256,
                 "provider_mode": current["api_mode"], "enhancement_model": _provider_label(model),
-                "image_map": mapping, "ratio_source": "adaptive" if aspect_ratio == "auto" else "explicit",
+                "image_map": mapping, **canvas_metadata,
                 "input_aspect_ratio_basis": "ComfyUI input tensor before provider resizing",
                 "output_budgets": budgets, **counters, **details,
                 "image_generation_performed": False, "semantics_verified": False,

@@ -16,6 +16,25 @@ reproduction shape; we have **not** deployed this branch to RunningHub.
 
 ## Required gate for each new or changed node
 
+### 2026-11-11: local model picker and external dimensions
+
+Actual mouse selection reproduced a callback-order defect: the native combo
+invokes its callback before committing value, so synchronous provider refresh
+used the old route until an unrelated connection triggered another refresh.
+Refresh immediately for existing callers and coalesce one post-commit animation
+frame, including shared-config observers. Local model/projector selectors are
+basic fields, visible with Advanced closed and no prompt connection. Test a fresh
+node using actual dropdown mouse events, then select an installed GGUF, reload,
+connect/disconnect prompt and verify the selection remains visible and exported.
+
+Append optional lazy force-input INT width/height sockets after the old schema.
+Keep the 22 canonical saved values and four STRING outputs unchanged. Linked
+None is unresolved during validation; both positive resolved values derive ratio
+before uploads/inference. 0/0 retains the old contract; only one positive value
+fails before the provider. Recovery bypasses current lazy dimensions. Both linked
+dimensions hide the unused manual ratio row. A native PrimitiveInt1920/1080 queue
+must survive reload and return16:9, with the selected local model still saved.
+
 ### 2026-11-11: independent H3 Image prompt expansion
 
 The subsequent UI/linked-input audit queues all external STRING controls with

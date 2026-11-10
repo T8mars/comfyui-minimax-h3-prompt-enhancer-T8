@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.42.0] - 2026-11-11
+
+- Show local GGUF model/projector selectors on the main H3 Image panel. Refresh
+  after native combo value commits, so choosing Local takes effect immediately
+  without connecting a prompt or opening Advanced.
+- Add optional external width/height inputs that compute the target aspect ratio.
+  Both positive values override manual ratio; 0/0 preserves old workflows. T2I
+  uses the closest official ratio, Edit uses exact reduced W:H. Keep 22 saved
+  widget fields and four outputs; connected dimensions hide the manual ratio row.
+
 ## [1.41.1] - 2026-11-11
 
 - Preserve literal URL, JSON, braces and comment-like text from `T8 Prompt Text`
