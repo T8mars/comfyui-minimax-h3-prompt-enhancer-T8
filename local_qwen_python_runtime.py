@@ -533,6 +533,8 @@ class LocalQwenManager:
         with self._lifecycle_lock:
             self._cancel_timer()
             if self._runtime is not None and self._key == key and self._runtime.is_running:
+                # Reusing GGUF must still honor the current Comfy memory policy.
+                _release_comfy_models_if_needed(comfy_memory_policy)
                 return self._runtime
             self.release()
             _release_comfy_models_if_needed(comfy_memory_policy)

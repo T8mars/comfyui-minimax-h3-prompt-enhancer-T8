@@ -945,6 +945,8 @@ class LocalQwenManager:
                     and self._key == runtime_key(spec)
                     and self._server.is_running
                 ):
+                    # Other workflows can load Comfy models while GGUF stays warm.
+                    _release_comfy_models_if_needed(comfy_memory_policy)
                     return self._server
             self.release()
             _release_comfy_models_if_needed(comfy_memory_policy)

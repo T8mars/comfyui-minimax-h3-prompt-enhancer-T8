@@ -540,6 +540,8 @@ The compact 9B Q6_K model passed a real llama.cpp compatibility run with 12/12 d
 
 For responsive use, 24 GB or more VRAM is recommended. A 16 GB GPU can partially offload to system memory with the standalone server's fit strategy; at least 32 GB RAM is recommended in that configuration. CPU-only execution may work but is not expected to be interactive.
 
+When alternating GGUF and video/image workflows, the AUTO memory policy rechecks ComfyUI memory before each local task, including reuse of a warm GGUF. The explicit Keep Comfy models policy still prevents automatic release. ComfyUI's free-memory action does not itself unload this node's warm GGUF; prefer the default unload-after-run policy when alternating large models. Version 1.42.1 fixes a missing memory check on warm reuse. The complete hardware-specific stall reported in issue #25 has not been reproduced on the same GPU and model.
+
 See [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) for pinned revisions, hashes, licenses, and attribution.
 
 ## API-key security

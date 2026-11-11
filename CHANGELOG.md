@@ -3,6 +3,15 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.42.1] - 2026-11-12
+
+- Recheck the selected ComfyUI memory policy before reusing a warm local GGUF.
+  Both standalone and in-process runtimes previously skipped the AUTO memory
+  check on reuse after another workflow loaded video/image models. Keep the
+  existing GGUF instance and honor the explicit Keep Comfy models policy.
+  Regression coverage verifies both distributions without GPU inference; the
+  exact hardware-specific stall reported in issue #25 still needs confirmation.
+
 ## [1.42.0] - 2026-11-11
 
 - Show local GGUF model/projector selectors on the main H3 Image panel. Refresh
