@@ -2,6 +2,9 @@
   <a href="./README.md">简体中文</a> | <strong>English</strong>
 </p>
 
+Version 1.42.2 fixes cloud proxy routing on selected container hosts; see [RunningHub and proxy routing](docs/cloud-network.md).
+Explicit backend proxy settings and `NO_PROXY` are respected; hosts without proxy settings retain direct routing.
+
 # ComfyUI MiniMax H3 / Seedance 2.0 / Music 3 / YuE2 Prompt Enhancer T8
 
 ## Updated: concrete H3 color and creator execution with ordinary On (1.40.0)

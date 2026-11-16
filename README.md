@@ -2,6 +2,9 @@
   <strong>简体中文</strong> | <a href="./README_EN.md">English</a>
 </p>
 
+1.42.2 修复部分容器机器的云端代理兼容，见 [RunningHub 与代理配置](docs/cloud-network.md)。
+明确配置的后端代理与 `NO_PROXY` 会参与云端线路选择；无代理机器保留直连方式。
+
 ## 新增：MiniMax H3 Image 提示词扩写（1.41.0）
 
 1.41.1 修复外接文本中的 URL/JSON/大括号被改写、外接比例断线后的默认值，以及复制整张工作流后的恢复结果串用。

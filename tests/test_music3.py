@@ -691,7 +691,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         success = FakeResponse(200, {"choices": [{"message": {"content": CAPTION}}]})
         session = SequenceSession([requests.exceptions.SSLError("regional TLS"), success])
         environment_proxy = {"https": "http://proxy.example:8080"}
-        with patch.object(music3.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch("time.sleep", return_value=None):
+        with patch.object(music3.requests.utils, "getproxies_environment", return_value={}), patch.object(music3.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch("time.sleep", return_value=None):
             _lyrics, caption, _payload, _report = self.run_enhancer(session)
         self.assertEqual(caption, CAPTION)
         self.assertEqual(len(session.requests), 2)
@@ -723,7 +723,7 @@ class Music3PromptEnhancerTests(unittest.TestCase):
         success = FakeResponse(200, {"choices": [{"message": {"content": "selected"}}]})
         session = SequenceSession([unavailable] * 5 + [success])
         environment_proxy = {"https": "http://proxy.example:8080"}
-        with patch.object(music3.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch("time.sleep", return_value=None) as sleep:
+        with patch.object(music3.requests.utils, "getproxies_environment", return_value={}), patch.object(music3.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch("time.sleep", return_value=None) as sleep:
             result = music3._request_music_completion(
                 session=session,
                 api_key="test-secret-key",

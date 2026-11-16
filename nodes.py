@@ -124,7 +124,7 @@ try:
         T8ProviderConfigIO,
         merge_provider_config,
     )
-    from .provider_transport import request_chat_completion
+    from .provider_transport import request_chat_completion, seedance_prefers_environment_proxy, seedance_preconnect_failure
     from .performance_director import (
         PerformanceDirectorConfigError,
         T8PerformanceDirectorConfigIO,
@@ -161,7 +161,7 @@ except ImportError:
         T8ProviderConfigIO,
         merge_provider_config,
     )
-    from provider_transport import request_chat_completion
+    from provider_transport import request_chat_completion, seedance_prefers_environment_proxy, seedance_preconnect_failure
     from performance_director import (
         PerformanceDirectorConfigError,
         T8PerformanceDirectorConfigIO,
@@ -1147,6 +1147,8 @@ def _is_seedance_chat_endpoint(chat_url: str) -> bool:
 
 
 def _is_retryable_seedance_network_error(error: requests.RequestException) -> bool:
+    if seedance_preconnect_failure(error):
+        return True
     # Proxy/read/stream failures can happen after the provider accepted the
     # paid request. Retrying them blindly may create a second paid generation.
     if isinstance(
@@ -1176,7 +1178,7 @@ def _is_ambiguous_seedance_network_error(error: requests.RequestException) -> bo
             requests.exceptions.ChunkedEncodingError,
             requests.exceptions.ConnectionError,
         ),
-    ) and not isinstance(error, requests.exceptions.ConnectTimeout)
+    ) and not isinstance(error, requests.exceptions.ConnectTimeout) and not seedance_preconnect_failure(error)
 
 
 def _seedance_request_route_kwargs(
@@ -1184,17 +1186,19 @@ def _seedance_request_route_kwargs(
     attempt: int,
     enabled: bool,
 ) -> dict[str, dict[str, str]]:
-    """Try an explicit direct route before falling back to the environment.
+    """Prefer an explicit proxy environment; otherwise keep legacy direct-first.
 
-    Seedance.nz users frequently inherit an unavailable system proxy. The first
-    attempt therefore bypasses it. A safe pre-connection retry may use the
-    environment route. Custom OpenAI-compatible endpoints never inherit this
-    Seedance.nz-only policy.
+    Requests resolves HTTPS_PROXY/ALL_PROXY, lowercase variants and NO_PROXY.
+    System-only proxies retain direct-first for existing desktop workflows.
+    Safe retries alternate routes within the original bounded attempt budget.
+    Other providers never inherit this Seedance.nz-only routing policy.
     """
     if not enabled:
         return {}
     index = max(int(attempt) - 1, 0) % len(SEEDANCE_ROUTE_SEQUENCE)
     route = SEEDANCE_ROUTE_SEQUENCE[index]
+    if seedance_prefers_environment_proxy(url):
+        route = SEEDANCE_ROUTE_SEQUENCE[(index + 1) % len(SEEDANCE_ROUTE_SEQUENCE)]
     if route == "direct":
         return {"proxies": dict(DIRECT_ROUTE_PROXIES)}
     return {"proxies": requests.utils.get_environ_proxies(url)}

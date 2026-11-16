@@ -1944,7 +1944,7 @@ class PromptEnhancerTests(unittest.TestCase):
             success,
         ])
         environment_proxy = {"https": "http://proxy.example:8080"}
-        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch.object(nodes.time, "sleep") as sleep:
+        with patch.object(nodes.requests.utils, "getproxies_environment", return_value={}), patch.object(nodes.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch.object(nodes.time, "sleep") as sleep:
             self.assertEqual(self.run_enhancer(session), expected)
         self.assertEqual(len(session.chat_requests), 3)
         self.assertEqual([args[0] for args, _ in sleep.call_args_list], [0.5, 1.0])
@@ -2075,7 +2075,7 @@ class PromptEnhancerTests(unittest.TestCase):
 
         environment_proxy = {"https": "http://proxy.example:8080"}
         session = RouteAwareUploadSession()
-        with patch.object(nodes.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch.object(nodes.time, "sleep") as sleep:
+        with patch.object(nodes.requests.utils, "getproxies_environment", return_value={}), patch.object(nodes.requests.utils, "get_environ_proxies", return_value=environment_proxy), patch.object(nodes.time, "sleep") as sleep:
             self.run_enhancer(session, task_type="I2VA", first_frame=torch.zeros((1, 1, 1, 3)))
         self.assertEqual(
             [request["proxies"] for request in session.upload_route_kwargs],

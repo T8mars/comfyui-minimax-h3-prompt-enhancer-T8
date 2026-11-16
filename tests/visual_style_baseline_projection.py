@@ -1,6 +1,7 @@
 """Explicitly project only the two audited opt-in presentation additions."""
 import ast
 import copy
+from cloud_route_baseline_projection import project_cloud_route_ast
 
 NAMES = ['color_style_config', 'creator_style_config']
 
@@ -113,4 +114,4 @@ def project_style_ast(source):
             return self.generic_visit(node)
 
     tree = copy.deepcopy(ast.parse(source))
-    return Projection().visit(tree)
+    return Projection().visit(project_cloud_route_ast(tree))

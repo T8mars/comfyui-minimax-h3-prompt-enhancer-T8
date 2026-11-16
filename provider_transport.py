@@ -6,6 +6,43 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 import requests
+from urllib3.exceptions import MaxRetryError, NewConnectionError, ProxyError as PoolProxyError
+
+
+def seedance_prefers_environment_proxy(url: str) -> bool:
+    """Honor explicit proxy env for this URL, including Requests' NO_PROXY rules.
+
+    System-only proxy discovery keeps the legacy direct-first behavior. Do not
+    read/log credentials or URLs outside Requests' existing proxy utilities.
+    """
+    explicit = requests.utils.select_proxy(url, requests.utils.getproxies_environment())
+    return bool(explicit and requests.utils.select_proxy(url, requests.utils.get_environ_proxies(url)))
+
+
+def seedance_preconnect_failure(error: requests.RequestException) -> bool:
+    """Recognize only typed urllib3 connection-creation failures, never read errors.
+
+    A generic ConnectionError/ProxyError may follow an accepted paid POST. Walk
+    only the documented exception wrappers, not arbitrary context/message text.
+    """
+    if not isinstance(error, requests.exceptions.ConnectionError):
+        return False
+    pending = [error]
+    visited = set()
+    while pending and len(visited) < 16:
+        item = pending.pop()
+        if id(item) in visited:
+            continue
+        visited.add(id(item))
+        if isinstance(item, NewConnectionError):
+            return True
+        if isinstance(item, requests.exceptions.ConnectionError):
+            pending.extend(value for value in item.args if isinstance(value, BaseException))
+        elif isinstance(item, MaxRetryError):
+            pending.append(item.reason)
+        elif isinstance(item, PoolProxyError):
+            pending.append(item.original_error)
+    return False
 
 
 _THINK_BLOCK_PATTERN = re.compile(

@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.42.2] - 2026-11-16
+
+- Honor explicit proxy environment settings and NO_PROXY on Seedance cloud
+  media upload and chat requests. Keep legacy direct-first routing when no
+  explicit environment proxy applies, plus the existing bounded retry budget.
+  Only typed connection-establishment failures gain safe route fallback;
+  ambiguous accepted POST/read/stream failures remain non-retryable.
+  Preserve custom-provider and local Strata routing, TLS validation, node
+  interfaces and workflow persistence. Add real loopback HTTPS/CONNECT checks.
+
 ## [1.42.1] - 2026-11-12
 
 - Recheck the selected ComfyUI memory policy before reusing a warm local GGUF.
