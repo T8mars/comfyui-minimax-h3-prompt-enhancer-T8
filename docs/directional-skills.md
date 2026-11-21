@@ -1,6 +1,6 @@
 # 定向创作 Skill / Directional creation Skills
 
-H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。八种方法帮助编排场景，不生成视频，也不替换平台格式。
+H3 与 Seedance 2.0 提示词增强节点提供一个 **定向创作 Skill（T8，非官方）** 下拉项。新建节点默认关闭；不需要新节点或额外连线。九种方法帮助编排场景，不生成视频，也不替换平台格式。
 
 更新插件后重启 ComfyUI 并强制刷新浏览器，再使用新下拉项。旧工作流加载时只补上关闭状态，不改变原来的模型、种子、时长和输出连线。
 
@@ -20,6 +20,7 @@ Restart ComfyUI and hard-refresh the browser after updating. Historical workflow
 | 情境戏剧｜处境与铺垫回收 / Situational drama | 处境、期待与回应的可见关系；可有趣，也可和平、静默或未解决。例：两人搬桌短暂错拍后协调，桌停在门内。 / Visible situation, expectation and response; comedy, peace, silence and unresolved outcomes are all valid. Example: two people coordinate a table move after one brief mismatch. |
 | 贞贞-POV剧情导演 / Zhenzhen POV | 视点归属、观众参与、信息接收及动作结果。例：朋友等观看者指向桌左，再把空白卡片放到所指位置。 / Viewpoint, participation, reception and consequence. Example: a friend waits for the viewer to point left before placing a blank card there. |
 | Jojocodex-武术打斗 / Wushu combat | 身体发力、攻防回应、支撑与下一动作接口，跨镜继承。例：掌推被避开，顺势低扫，对方抬腿避让后站稳。 / Body drive, response, support and next-action continuity. Example: evade a palm push, sweep, then evade and regain support. |
+| 兔子-舞蹈 / Dance | 跟拍点、支撑脚、左右手位、队形和动作续接。 / Grounded footwork, beat accents, formations and motion handoffs. |
 
 直接写人物、场景、动作目标、时长和必须保留的条件即可；不需要填写资产表或模仿来源示例。技能不会自动添加对手、武器、超能力、BUNNY/LoRA 触发词或双语成稿。输出语言仍由原来的语言选项控制。
 
@@ -59,7 +60,20 @@ To use local GGUF or another API, use the existing provider controls or shared p
 
 ## 更新与检查 / Maintenance
 
-这八种技能是插件内置文本资源，随插件代码更新；不在每日案例交接或 GIF 动态资源包中。未知技能 ID 会要求重新选择，不会静默改用其他技能。资源缺失时请更新或重装插件，或者明确选“关闭”。
+这九种技能是插件内置文本资源，随插件代码更新；不在每日案例交接或 GIF 动态资源包中。未知技能 ID 会要求重新选择，不会静默改用其他技能。资源缺失时请更新或重装插件，或者明确选“关闭”。
+
+## 兔子-舞蹈 / Dance
+
+进入 H3 **视频**或 Seedance 2.0 提示词增强器，选择「定向创作 Skill → 兔子-舞蹈」。原来的单人舞、群舞和动作接力案例保留；启用时按定向技能一贯的规则，仅对当前请求暂停案例编排。舞蹈技能管动作和节拍，已接入的分镜或风格配置只能在用户锁定的机位、镜头数、人物及尾态内补充拍法。
+
+- **单段例**：`8秒，固定全身一镜，成年独舞者侧滑接肩胯分离；96 BPM纯器乐，底鼓落脚、军鼓抬右肘；末帧仍向右移动，无跳跃、定格、对白。`
+- **续接例**：上一段在动作进行中结束；取实际尾帧接到下一次的 `first_frame`，选 H3 `I2VA` 或 Seedance `I2V`。写 `0.00秒左脚承重、右膝已抬、双腕交叉在胸前，朝右直接落步接侧滑，不停下来重新起势。` 只描述当前段；如果没连图，就把它作为文字给定的起始体态，不填虚构图片引用。
+
+没有新时长上限，不会自动分片、剪辑或切镜。知道 BPM、重拍和相位就写进去；未知时使用相对节奏。无配乐或静音照原要求。参考视频不等于独立音轨，节点不提取节拍、不测 BPM，也不能保证生成视频逐帧卡点。要剪成连续舞段，仍需核对每一段实际姿态、动势和音乐相位。
+
+Pick **兔子-舞蹈 / Dance** in either video enhancer. For a single clip, give the dancer, existing moves and a visible cue such as “land the slide on the kick, lift the right elbow on the snare.” To author a continuation from a real tail frame, connect it as the next first frame (H3 I2VA / Seedance I2V); describe the starting support, facing and next movement, rather than referring to another prompt. The Skill does not split, render or analyze sound and does not impose a duration or shot count. Keep silence and any supplied audio cues unchanged.
+
+独立示例：[H3](../example_workflows/directional_rabbit_dance_h3.json) / [Seedance](../example_workflows/directional_rabbit_dance_seedance20.json)。Key 留空，每份一个增强节点；质量模式仅检查。切换到本地 GGUF 时选择已装模型，并使用原有渠道设置。参见[来源说明](../directional_skills/rabbit_dance/NOTICE.md)。
 
 ## Jojocodex-武术打斗 / Wushu combat
 

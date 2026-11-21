@@ -152,6 +152,31 @@ test("wushu examples retain 38 named fields and 36-field saves through real enha
     }
 });
 
+test("dance saves the same 38 fields with both prompts and provider controls intact", async () => {
+    for (const [filename, target, type] of [
+        ["minimax_h3_prompt_enhancer.js", "h3", "MiniMaxH3PromptEnhancerT8"],
+        ["seedance20_prompt_enhancer.js", "seedance20", "Seedance20PromptEnhancerT8"],
+    ]) {
+        const harness = await enhancerHarness(filename, target);
+        const graph = JSON.parse(await readFile(new URL(`../../example_workflows/directional_rabbit_dance_${target}.json`, import.meta.url), "utf8"));
+        const stable = graph.nodes.find(node => node.type === type).widgets_values;
+        assert.equal(stable.length, 38);
+        assert.equal(stable[35], "rabbit_dance");
+        const node = harness.configure([...stable]);
+        const values = harness.values(node);
+        assert.equal(values.director_skill, "兔子-舞蹈 / Dance");
+        const exported = {};
+        node.onSerialize(exported);
+        assert.equal(exported.widgets_values.length, 38);
+        assert.equal(exported.widgets_values_named.director_skill, "rabbit_dance");
+        assert.deepEqual(harness.values(harness.configure(exported.widgets_values)), values);
+        const help = directionalSkillDescription("rabbit_dance", target);
+        assert.match(help, /单人街舞/);
+        assert.match(help, /尾帧接首帧/);
+        assert.match(help, /不分析音轨/);
+    }
+});
+
 test("unknown IDs are preserved for validation without activating a skill or exposing the value in help", () => {
     for (const invalid of [0, false, [], {}]) {
         assert.equal(directionalSkillId(invalid), invalid);

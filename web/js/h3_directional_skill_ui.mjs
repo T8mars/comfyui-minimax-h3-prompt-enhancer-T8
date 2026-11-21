@@ -9,6 +9,7 @@ export const DIRECTIONAL_SKILLS = Object.freeze([
     { id: "situational_drama", label: "情境戏剧｜处境与铺垫回收 / Situational drama", summary: "围绕小目标组织应对与期待回收；不默认搞笑或反转。 / Develop a situation and its response; comedy is optional.", example: "例 / Example: 创作两人抬桌过门、礼让错位后协作；无对白 / Create a warm, silent table-moving coordination scene." },
     { id: "zhenzhen_pov", label: "贞贞-POV剧情导演 / Zhenzhen POV", summary: "把视角、选择、动作与结果连起来；贞贞为方法署名，不锁人物或渠道。 / Connect viewpoint, choice and consequence; the credit selects neither identity nor provider.", example: "例 / Example: 朋友等我指向桌左，再把卡片放下 / A friend waits for my leftward point, then places the card." },
     { id: "wushu_combat", label: "Jojocodex-武术打斗 / Wushu combat", summary: "身体发力、避线或接触、支撑变化衔接下一动作；跨镜继承，不强加伤害、胜负或 LoRA。 / Connect body drive, response and support into the next action; retain cut continuity, no forced damage, winner or LoRA.", example: "例 / Example: 两人徒手对练，避开掌推后接低扫，对方抬腿避让再站稳 / Evade a palm push, sweep, then evade and regain support." },
+    { id: "rabbit_dance", label: "兔子-舞蹈 / Dance", summary: "细化脚步、重心和节拍；不分析音轨。 / Footwork, weight and beat cues; no audio analysis.", example: "例 / Example: 单人街舞，军鼓落点抬肘 / Solo street dance, elbow accent on snare.\n续接 / Handoff: 尾帧接首帧，抬膝直接落步 / Start on lifted knee, step down immediately." },
 ]);
 
 export function directionalSkillId(value) {

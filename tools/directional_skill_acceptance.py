@@ -64,7 +64,16 @@ NING_STRESS_CASES = [
 ]
 from tools.drama_acceptance_cases import DRAMA_MAIN_CASES, DRAMA_RISK_CASES
 
-CASE_SUITES = {"legacy": CASES, "ning": NING_CASES, "ning-stress": NING_STRESS_CASES,
+DANCE_CASES = [
+    {"id": "dance_single", "skill": "rabbit_dance", "duration": 8, "shots": "1",
+     "prompt": "8秒，固定全身一镜。成年独舞者穿灰工装裤在空练习室跳街舞：先侧滑，再做一组肩胯分离，结尾向画面右侧继续移动。配乐为96 BPM纯器乐鼓点；侧滑落脚对齐底鼓，右肘抬起对齐军鼓。不加人、跳跃、定格、对白或字幕。"},
+    {"id": "dance_handoff", "skill": "rabbit_dance", "duration": 7, "shots": "1",
+     "prompt": "7秒，固定全身一镜，只写这一段。成年独舞者穿墨绿宽裤，0秒左脚承重、右膝已抬、双腕交叉在胸前，身体朝画面右侧，直接落右脚接着滑步，不重新站立或停顿。末帧左脚刚离地、身体继续朝画面右侧移动。这是文字给定的交接状态，未附参考媒体；延续原有器乐律动，未知BPM，不添对白、歌词或字幕。"},
+    {"id": "dance_ensemble", "skill": "rabbit_dance", "duration": 24, "shots": "1",
+     "prompt": "24秒连续一镜，三位成年舞者穿灰、蓝、棕色西装，分别在左、中、右。同一空舞台练习脚跟脚尖滑步。起始先看清全队形；保持脚步可见，镜头短暂沿中轴靠近领舞，再回全队。结束三人仍同步向自己的右侧滑步。无配乐、对白或字幕，只有鞋底摩擦声。不换人，不切镜，不定格。"},
+]
+
+CASE_SUITES = {"legacy": CASES, "ning": NING_CASES, "ning-stress": NING_STRESS_CASES, "dance": DANCE_CASES,
                "drama-main": DRAMA_MAIN_CASES, "drama-risk": DRAMA_RISK_CASES}
 
 

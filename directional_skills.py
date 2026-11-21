@@ -18,6 +18,7 @@ DIRECTOR_LABELS = {
     "情境戏剧｜处境与铺垫回收 / Situational drama": "situational_drama",
     "贞贞-POV剧情导演 / Zhenzhen POV": "zhenzhen_pov",
     "Jojocodex-武术打斗 / Wushu combat": "wushu_combat",
+    "兔子-舞蹈 / Dance": "rabbit_dance",
 }
 DIRECTOR_OPTIONS = list(DIRECTOR_LABELS)
 # Display-only attribution must not invalidate workflows/API clients that saved
@@ -152,12 +153,16 @@ def director_instruction(value: Any, model_target: str) -> str:
             "extra exchanges, damage, a winner or a freeze. Relay events are not camera cuts. "
             "This check is internal, not another output section or model call."
         )
+    scene_scope = "Apply the method to the existing scene, not its source examples. Do not invent an opponent merely because a Skill is selected, or create weapons/powers from a role name. A minimal unnamed opponent is allowed only when the user actually requests two-sided combat and permits that completion; never claim it comes from a reference image."
+    if skill_id == "rabbit_dance":
+        scene_scope = "Apply dance guidance only to requested dance. Choreography owns movement and rhythm; compatible storyboard, creator style and camera guidance may refine coverage only within the user's framing and cut policy. Do not let them reset the dance, change the cast or add cuts."
+        final_check = "Before returning, verify the explicit duration, number of dancers, cuts, every supplied cue-to-move pairing and numeric BPM, and the requested sound limits. Check that the next move starts from the stated supporting foot and direction, and that the entry and exit are moving when requested. Do not claim analyzed audio, measured beats, rendered sync or seamless stitching. Keep this check internal."
     return "\n".join((
         f"T8 DIRECTIONAL CREATION: {skill_id} v{DIRECTOR_REVISION} (independently adapted local directing methods; non-official).",
         "This is the sole optional scene-directing source for THIS request. Other optional scene presets, case templates and manual template choreography are paused; the platform core always remains authoritative.",
         native,
         "Preserve the user's intent, media evidence and roles, exact dialogue/lyrics/visible text, language selection, fixed duration/count, hard constraints, LOCK anchors and character Bible facts. Do not infer inspected media when it is unavailable.",
-        "Apply the method to the existing scene, not its source examples. Do not invent an opponent merely because a Skill is selected, or create weapons/powers from a role name. A minimal unnamed opponent is allowed only when the user actually requests two-sided combat and permits that completion; never claim it comes from a reference image.",
+        scene_scope,
         "Internally track semantic facts and continuity as needed, without requiring a Chinese master draft, fixed beat table, second language draft, classifier call or external Skill invocation. Output only the platform's native final prompt (or the existing Relay envelope if enabled), never this checklist, an asset ledger, score, Markdown fence, negative-prompt section or extra schema.",
         text,
         final_check,

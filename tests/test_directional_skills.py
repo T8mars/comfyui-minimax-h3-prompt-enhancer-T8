@@ -560,5 +560,48 @@ class DirectionalSkillTests(unittest.TestCase):
         self.assertFalse(torch.cuda.is_initialized())
 
 
+    def test_dance_keeps_timing_and_native_h3_envelopes(self):
+        skill = "rabbit_dance"
+        self.assertEqual(DIRECTOR_OPTIONS[-1], "兔子-舞蹈 / Dance")
+        self.assertEqual(prepare_director_skill(DIRECTOR_OPTIONS[-1], 3), (skill, 3))
+        self.assertEqual(prepare_director_skill(skill, 0), (skill, 0))
+        frame = np.zeros((1, 16, 16, 3), dtype=np.float32)
+        prompt = "24秒，三镜，只有一位舞者。开场左脚承重，右膝已抬，立即落步；无音乐，只听鞋底。最后继续滑步。"
+        for task, frames in (
+            ("T2VA", {}), ("I2VA", {"first_frame": frame}),
+            ("FL2VA", {"first_frame": frame, "last_frame": frame}),
+            ("L2VA", {"last_frame": frame}), ("Ref2VA", {"reference_images": {"reference_image_0": frame}}),
+            (h3.HYBRID, {"first_frame": frame, "reference_images": {"reference_image_0": frame}}),
+        ):
+            with self.subTest(task=task):
+                plan = h3._validate_inputs(prompt, task, 24, "balanced", 0, "中文", "官方增强", "",
+                    frames.get("first_frame"), frames.get("last_frame"), frames.get("reference_images"), None,
+                    h3.COMPAT_SKILL_PROFILE, h3.NO_CREATIVE_PRESET)
+                args = h3_args(prompt=prompt, task_type=task, duration_seconds=24, shot_count=3, media_plan=plan)
+                off = h3._build_messages(**args)
+                on = h3._build_messages(**args, director_skill=skill)
+                self.assertIn(h3.TASK_RULES[task], on[0]["content"])
+                self.assertIn(h3._shot_count_instruction(3), on[0]["content"])
+                self.assertIn("do not create extra clips", on[0]["content"].lower())
+                self.assertEqual(on[1], off[1])
+                self.assertNotIn("<Audio 1>", primary_text(on[1]["content"]))
+                self.assertIn(prompt, primary_text(on[1]["content"]))
+
+    def test_dance_keeps_seedance_native_and_recovery_provenance(self):
+        args = sd_args(prompt="24秒，固定全身一镜，滑步接续，只有脚步声。", duration_seconds=24, shot_count=1)
+        on = sd._build_messages(**args, director_skill="rabbit_dance")
+        self.assertIn("native Seedance 2.0", on[0]["content"])
+        self.assertIn(args["prompt"], primary_text(on[1]["content"]))
+        rule = director_instruction("rabbit_dance", "seedance20")
+        for wrong in ("integrated_multimodal_description:", "subject_definitions:", "[Shot 1]", "<Audio 1>"):
+            self.assertNotIn(wrong, rule)
+        self.assertIn("supporting foot", rule)
+        self.assertIn("An in-motion opening is not a freeze", rule)
+        self.assertIn("Silent or footsteps-only dance stays that way", rule)
+        self.assertEqual(safe_director_metadata({"director_skill": "rabbit_dance", "director_revision": "1.0.0",
+            "effective_shot_count": 3, "authoring_revision": "1.0.0"}),
+            {"director_skill": "rabbit_dance", "director_revision": "1.0.0", "effective_shot_count": 3})
+
+
 if __name__ == "__main__":
     unittest.main()

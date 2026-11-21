@@ -131,8 +131,8 @@ class WushuIntegrationTests(OfflineGuards, unittest.TestCase):
         return OriginalFamily().visit(current)
 
     def test_append_only_choices_no_authoring_or_shot_policy_side_effect(self):
-        self.assertEqual(tuple(directing.DIRECTOR_LABELS.items()),
-                         (*frozen_directing().DIRECTOR_LABELS.items(), (LABEL, SKILL)))
+        expected_prefix = (*frozen_directing().DIRECTOR_LABELS.items(), (LABEL, SKILL))
+        self.assertEqual(tuple(directing.DIRECTOR_LABELS.items())[:len(expected_prefix)], expected_prefix)
         self.assertEqual(directing.AUTHORING_SKILLS, frozen_directing().AUTHORING_SKILLS)
         self.assertFalse(directing.uses_authoring_contract(SKILL))
         for value in (SKILL, LABEL, "  wushu_combat  "):

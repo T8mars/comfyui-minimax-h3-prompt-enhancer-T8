@@ -86,6 +86,8 @@ The existing H3/Seedance nodes offer **Check, one bounded quality correction, an
 
 ## New: H3 / Seedance directional creation Skills
 
+**兔子-舞蹈 / Dance** adds grounded footwork, visible beat accents and motion handoffs through the existing selector in both video enhancers. Off by default; it adds no duration limit, audio analysis or workflow fields. [Guide](docs/directional-skills.md#兔子-舞蹈--dance) · Examples: [H3](example_workflows/directional_rabbit_dance_h3.json) / [Seedance](example_workflows/directional_rabbit_dance_seedance20.json).
+
 **Jojocodex-Wushu combat** adds body drive, contact/evasion, support and next-action continuity, including unfinished movement across cuts. Select it in either existing enhancer; native formats and all cloud/local providers remain unchanged. No forced three-shot plan, injury, winner or LoRA. Off remains default and historical workflows are preserved. [Scope](docs/directional-skills.md#jojocodex-武术打斗--wushu-combat) · Standalone examples: [H3](example_workflows/directional_wushu_combat_h3.json) / [Seedance](example_workflows/directional_wushu_combat_seedance20.json). Engineering regressions are not live LLM or rendered-video acceptance for this Skill.
 
 **Zhenzhen POV** is a seventh independent method for readable viewpoint ownership, viewer participation, reception and consequences. It keeps the existing cloud/local providers, language, duration and native formats. The credit does not select an identity or provider; no LoRA, fixed batch or video workflow is added. Off remains the default. [Usage and limits](docs/directional-skills.md#贞贞-pov剧情导演--zhenzhen-pov) · Standalone examples: [H3](example_workflows/directional_zhenzhen_pov_h3.json) / [Seedance](example_workflows/directional_zhenzhen_pov_seedance20.json).

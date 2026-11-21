@@ -3,6 +3,15 @@
 All notable changes to this project are documented here. Versions follow
 Semantic Versioning and match the versions published to the Comfy Registry.
 
+## [1.43.0] - 2026-11-22
+
+- Add the opt-in `兔子-舞蹈 / Dance` directional Skill to the existing MiniMax H3
+  video and Seedance 2.0 prompt enhancers. Guide footwork, weight transfer,
+  beat accents, formations and in-motion handoffs within each native format.
+- Include two standalone workflows and usage examples. Preserve the existing
+  node interfaces, saved widget order, case IDs and default Off behavior. No
+  new duration cap, audio analysis, extra planning call or automatic clipping.
+
 ## [1.42.2] - 2026-11-16
 
 - Honor explicit proxy environment settings and NO_PROXY on Seedance cloud

@@ -109,6 +109,11 @@ try {
       check(n.widgets.find(w => w.name === "reference_template").value === "saved-template", `${target} wushu retains manual template`);
       check(n.widgets.find(w => w.name === "case_template").label === "原案例", `${target} wushu restores case label`);
     }
+    selected.value = "rabbit_dance"; selected.callback();
+    check(help.element.textContent.includes("尾帧接首帧") && help.element.textContent.includes("不分析音轨"), `${target} dance handoff and audio limits in actual help`);
+    check(help.element.getBoundingClientRect().height === 120 && help.options.serialize === false, `${target} dance help has fixed layout and no saved value`);
+    selected.value = "none"; selected.callback();
+    check(n.widgets.find(w => w.name === "case_template").label === "原案例", `${target} switching dance off restores the case label`);
     selected.value = "zhenzhen_pov"; selected.callback();
     directing.addDirectionalSkillUI(n, selected, { target });
     check(n.widgets.length === count, `${target} directing UI initialization is idempotent`);

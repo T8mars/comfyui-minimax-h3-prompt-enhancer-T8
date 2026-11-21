@@ -32,9 +32,12 @@ CASES = {
         "12秒，一个连续镜头，观看者的眼睛第一人称，不是手持拍摄或自拍。我和一位成年朋友同坐在小桌两侧，眼位相近。朋友的完整脸和桌面交互区都能看清。朋友右手持一张空白卡片停在桌面中间上方，等我选择放哪边。我用空闲右手从画面下方指向观看者画面左侧的桌面；朋友看清指向后，用原持卡手把卡片移到所指位置，触桌后松手，再回看我。我的手自然退出画面，结尾空白卡片留在桌面左侧，不定格。不新增人物、物品、对白、字幕或配乐。声音仅有卡片触桌声，不添加环境声、呼吸或笑声。"),
     "wushu_combat": ("Jojocodex-武术打斗 / Wushu combat", 10,
         "10秒虚构武术对练，固定双人中景，一个连续镜头。已有练功场，红袖成年练习者在左，蓝袖成年练习者在右，全程空手。蓝袖向红袖掌推，红袖侧移避开这次掌推，顺着转身接一次低扫；蓝袖抬起被扫侧的腿避让，另一脚仍支撑地面，随后原抬腿回落站稳，双方继续原地对练。重点写清身体发力、避线、重心与下一动作衔接；两次攻击都没有击中，不增加伤害、武器、能力、人物或胜负，不定格，不加对白、字幕或配乐。声音仅有衣物与脚步摩擦，不添加喘息或环境声。"),
+    "rabbit_dance": ("兔子-舞蹈 / Dance", 8,
+        "8秒，固定全身一镜。成年独舞者穿灰工装裤在空练习室跳街舞：先侧滑，再做一组肩胯分离，结尾向画面右侧继续移动。配乐为96 BPM纯器乐鼓点；侧滑落脚对齐底鼓，右肘抬起对齐军鼓。不加人、跳跃、定格、对白或字幕。"),
 }
 DRAMA_SKILLS = {"drama_scene", "situational_drama"}
-STANDALONE_SKILLS = DRAMA_SKILLS | {"zhenzhen_pov", "wushu_combat"}
+STANDALONE_SKILLS = DRAMA_SKILLS | {"zhenzhen_pov", "wushu_combat", "rabbit_dance"}
+CHECK_ONLY_SKILLS = {"wushu_combat", "rabbit_dance"}
 STEMS = tuple(stem for skill in CASES for stem in (
     (f"directional_{skill}_h3", f"directional_{skill}_seedance20") if skill in STANDALONE_SKILLS
     else (f"directional_{skill}_comparison",)))
@@ -74,7 +77,7 @@ def generate() -> dict[str, dict]:
                 # to the selector or any existing saved workflow.
                 names = [*names, "quality_mode", "creation_mode"]
                 values.update(quality_mode="repair", creation_mode="off")
-                if skill == "wushu_combat":
+                if skill in CHECK_ONLY_SKILLS:
                     values["quality_mode"] = "check"  # Inspect only, no implicit paid correction.
             node["widgets_values"] = [values[name] for name in names]
             node["title"] = f"{kind} · {label}"
@@ -127,7 +130,7 @@ def check() -> None:
             values = dict(zip(names, node["widgets_values"]))
             assert len(node["widgets_values"]) == len(names)
             if values["director_skill"] == "ning_wenwu" or values["director_skill"] in STANDALONE_SKILLS:
-                expected_quality = "check" if values["director_skill"] == "wushu_combat" else "repair"
+                expected_quality = "check" if values["director_skill"] in CHECK_ONLY_SKILLS else "repair"
                 assert len(names) == 38 and values["quality_mode"] == expected_quality and values["creation_mode"] == "off"
             else:
                 assert len(names) == 36 and names[-1] == "director_skill"
